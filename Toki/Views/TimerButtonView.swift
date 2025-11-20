@@ -16,107 +16,112 @@ struct TimerButton: View {
     let onCancel: () -> Void
 
     var body: some View {
-//        switch state {
-//        case .idle:
-//            HStack(spacing: 100) {
-//                Button("취소", action: onCancel)
-//                    .buttonStyle(TimerButtonStyle(tint: Color.plain))
-//                    .disabled(true)
-//                Button("시작", action: onStart)
-//                    .buttonStyle(TimerButtonStyle(tint: Color.positive))
-//            }
-//            
-//        case .finished:
-//            HStack(spacing: 100) {
-//                Button("취소", action: onCancel)
-//                    .buttonStyle(TimerButtonStyle(tint: Color.plain))
-//                Button("시작", action: onStart)
-//                    .buttonStyle(TimerButtonStyle(tint: Color.positive))
-//            }
-//
-//        case .running:
-//            HStack(spacing: 100) {
-//                Button("취소", action: onCancel)
-//                    .buttonStyle(TimerButtonStyle(tint: Color.plain))
-//                Button("일시정지", action: onPause)
-//                    .buttonStyle(TimerButtonStyle(tint: Color.bitNegative))
-//            }
-//
-//        case .paused:
-//            HStack(spacing: 100) {
-//                Button("취소", action: onCancel)
-//                    .buttonStyle(TimerButtonStyle(tint: Color.plain))
-//                Button("재개", action: onResume)
-//                    .buttonStyle(TimerButtonStyle(tint: Color.positive))
-//            }
-//        }
         switch state {
         case .idle:
-            HStack(spacing: 100) {
+            HStack(spacing: 40) {
                 Button(action: onCancel) {
-                    Label("취소", systemImage: "xmark")
-                        .labelStyle(.iconOnly)
+                    VStack(spacing: 4) {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 20))
+                        Text("취소")
+                            .font(.system(size: 12, weight: .medium))
+                    }
                 }
                 .buttonStyle(TimerButtonStyle(tint: Color.plain))
                 .disabled(true)
+                .accessibilityLabel("취소")
 
                 Button(action: onStart) {
-                    Label("시작", systemImage: "play.fill")
-                        .labelStyle(.iconOnly)
+                    VStack(spacing: 4) {
+                        Image(systemName: "play.fill")
+                            .font(.system(size: 20))
+                        Text("시작")
+                            .font(.system(size: 12, weight: .medium))
+                    }
                 }
                 .buttonStyle(TimerButtonStyle(tint: Color.positive))
+                .accessibilityLabel("타이머 시작")
             }
 
         case .finished:
-            HStack(spacing: 100) {
+            HStack(spacing: 40) {
                 Button(action: onCancel) {
-                    Label("취소", systemImage: "xmark")
-                        .labelStyle(.iconOnly)
+                    VStack(spacing: 4) {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 20))
+                        Text("취소")
+                            .font(.system(size: 12, weight: .medium))
+                    }
                 }
                 .buttonStyle(TimerButtonStyle(tint: Color.plain))
+                .accessibilityLabel("취소")
 
                 Button(action: onStart) {
-                    Label("시작", systemImage: "play.fill")
-                        .labelStyle(.iconOnly)
+                    VStack(spacing: 4) {
+                        Image(systemName: "play.fill")
+                            .font(.system(size: 20))
+                        Text("시작")
+                            .font(.system(size: 12, weight: .medium))
+                    }
                 }
                 .buttonStyle(TimerButtonStyle(tint: Color.positive))
+                .accessibilityLabel("타이머 시작")
             }
 
         case .running:
-            HStack(spacing: 100) {
+            HStack(spacing: 40) {
                 Button(action: onCancel) {
-                    Label("취소", systemImage: "xmark")
-                        .labelStyle(.iconOnly)
+                    VStack(spacing: 4) {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 20))
+                        Text("취소")
+                            .font(.system(size: 12, weight: .medium))
+                    }
                 }
                 .buttonStyle(TimerButtonStyle(tint: Color.plain))
+                .accessibilityLabel("타이머 취소")
 
                 Button(action: onPause) {
-                    Label("일시정지", systemImage: "pause.fill")
-                        .labelStyle(.iconOnly)
+                    VStack(spacing: 4) {
+                        Image(systemName: "pause.fill")
+                            .font(.system(size: 20))
+                        Text("일시정지")
+                            .font(.system(size: 12, weight: .medium))
+                    }
                 }
                 .buttonStyle(TimerButtonStyle(tint: Color.bitNegative))
+                .accessibilityLabel("타이머 일시정지")
             }
 
         case .paused:
-            HStack(spacing: 100) {
+            HStack(spacing: 40) {
                 Button(action: onCancel) {
-                    Label("취소", systemImage: "xmark")
-                        .labelStyle(.iconOnly)
+                    VStack(spacing: 4) {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 20))
+                        Text("취소")
+                            .font(.system(size: 12, weight: .medium))
+                    }
                 }
                 .buttonStyle(TimerButtonStyle(tint: Color.plain))
+                .accessibilityLabel("타이머 취소")
 
                 Button(action: onResume) {
-                    Label("재개", systemImage: "playpause.fill")
-                        .labelStyle(.iconOnly)
+                    VStack(spacing: 4) {
+                        Image(systemName: "play.fill")
+                            .font(.system(size: 20))
+                        Text("재개")
+                            .font(.system(size: 12, weight: .medium))
+                    }
                 }
                 .buttonStyle(TimerButtonStyle(tint: Color.positive))
+                .accessibilityLabel("타이머 재개")
             }
         }
 
     }
 }
 
-// TODO: button design
 struct TimerButtonStyle: ButtonStyle {
     var tint: Color
     @Environment(\.isEnabled) private var isEnabled
@@ -124,11 +129,10 @@ struct TimerButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         let pressed = configuration.isPressed
         return configuration.label
-            .font(.system(size: 20, weight: .semibold, design: .rounded))
-            .frame(maxWidth: 47, minHeight: 47)
+            .frame(minWidth: 70, minHeight: 70)
             .foregroundStyle(.white)
             .background(
-                Capsule()
+                Circle()
                     .fill(
                         (isEnabled ? tint : .gray)
                             .opacity(pressed ? 0.7 : 1.0)
