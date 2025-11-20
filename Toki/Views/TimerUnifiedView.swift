@@ -20,21 +20,8 @@ struct TimerUnifiedView: View {
 
     var body: some View {
         NavigationStack {
-            Group {
-                switch screenVM.timerVM.state {
-//                case .idle:
-//                    TimerSetupView()
-//                        .environmentObject(screenVM)
-//
-//                case .running, .paused:
-//                    TimerRunningView()
-//                        .environmentObject(screenVM)
-
-                default:
-                    TimerMainView()
-                        .environmentObject(screenVM)
-                }
-            }
+            TimerMainView()
+                .environmentObject(screenVM)
             .padding()
             .toolbar {
                 // timer template
@@ -49,6 +36,7 @@ struct TimerUnifiedView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
                         NoticeSettingView()
+                            .environmentObject(appStateManager)
                     } label: {
                         Image(systemName: "gearshape")
                     }

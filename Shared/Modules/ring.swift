@@ -8,8 +8,8 @@
 import Foundation
 
 enum RingMode: String, CaseIterable, Identifiable {
-    case sound = "sound"
-    case vibration = "vib"
+    case sound = "소리"
+    case vibration = "진동"
 
     var id: String { rawValue }
 }

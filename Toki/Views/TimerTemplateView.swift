@@ -14,8 +14,10 @@ struct TimerTemplateView: View {
     @Environment(\.modelContext) private var context
 
     @Query(sort: [SortDescriptor(\Timer.createdAt, order: .reverse)])
-
     private var templates: [Timer]
+
+    @State private var editingTimer: Timer?
+    @State private var editName: String = ""
 
     let onSelect: (Timer) -> Void
 
@@ -25,8 +27,8 @@ struct TimerTemplateView: View {
                 if templates.isEmpty {
                     ContentUnavailableView(
                         "저장된 템플릿이 없습니다",
-                        systemImage: "exclamationmark.triangle",
-                        description: Text("컨텐트불가능뷰이거완전신기하당")
+                        systemImage: "clock.badge.questionmark",
+                        description: Text("타이머를 시작하면 자동으로 템플릿이 저장됩니다")
                     )
                     .padding(.top, 40)
                 } else {
@@ -55,6 +57,15 @@ struct TimerTemplateView: View {
                                     )
                                 }
                             }
+                            .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                                Button {
+                                    editingTimer = t
+                                    editName = t.name
+                                } label: {
+                                    Label("편집", systemImage: "pencil")
+                                }
+                                .tint(.blue)
+                            }
                             .swipeActions(
                                 edge: .trailing,
                                 allowsFullSwipe: true
@@ -68,6 +79,31 @@ struct TimerTemplateView: View {
                         }
                     }
                     .listStyle(.insetGrouped)
+                }
+            }
+            .navigationTitle("타이머 템플릿")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+        .sheet(item: $editingTimer) { timer in
+            NavigationView {
+                Form {
+                    TextField("템플릿 이름", text: $editName)
+                }
+                .navigationTitle("템플릿 편집")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("취소") {
+                            editingTimer = nil
+                        }
+                    }
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("저장") {
+                            timer.name = editName
+                            try? context.save()
+                            editingTimer = nil
+                        }
+                    }
                 }
             }
         }

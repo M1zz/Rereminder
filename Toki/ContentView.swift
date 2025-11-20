@@ -11,6 +11,7 @@ import UserNotifications
 
 struct ContentView: View {
     @Environment(\.modelContext) private var context
+    @State private var showOnboarding = !UserDefaults.standard.bool(forKey: "hasSeenOnboarding")
 
     var body: some View {
         TimerUnifiedView()
@@ -22,6 +23,9 @@ struct ContentView: View {
                             print("알림 권한 요청 오류: \(error)")
                         }
                     }
+            }
+            .fullScreenCover(isPresented: $showOnboarding) {
+                OnboardingView(isPresented: $showOnboarding)
             }
     }
 }

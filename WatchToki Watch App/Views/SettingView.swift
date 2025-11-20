@@ -24,15 +24,21 @@ struct SettingView: View {
     
     var body: some View {
         NavigationStack(path: $path) {
-            VStack(spacing: 12) {
+            VStack(spacing: 16) {
+                // 타이틀
+                Text("타이머 시간")
+                    .font(.system(size: 14, weight: .medium, design: .rounded))
+                    .foregroundStyle(.secondary)
+                    .padding(.top, 8)
+
                 TimePicker()
-                
-                Spacer() // ✅ 버튼을 아래로 밀기
-                
+
+                Spacer()
+
                 NextButton()
                     .buttonStyle(.borderedProminent)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .padding(.horizontal, 16)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .padding(.horizontal, 12)
                     .padding(.bottom, 8)
             }
             .onAppear {

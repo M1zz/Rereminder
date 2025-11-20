@@ -23,7 +23,7 @@ final class TimerScreenViewModel: ObservableObject {
     private var context: ModelContext?
     private var bag = Set<AnyCancellable>()
 
-    private let limit: Int = 3
+    private let limit: Int = 10  // 템플릿 개수 제한 확대 (3 → 10)
     
     // broadcast 'timerVM' to 'ContentView'
     init(timerVM: TimerViewModel? = nil) {
