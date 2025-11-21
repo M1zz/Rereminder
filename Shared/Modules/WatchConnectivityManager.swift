@@ -1,0 +1,206 @@
+//
+//  WatchConnectivityManager.swift
+//  Toki
+//
+//  iOS와 Apple Watch 간 타이머 상태 동기화
+//
+
+import Foundation
+import WatchConnectivity
+
+@MainActor
+class WatchConnectivityManager: NSObject, ObservableObject {
+    static let shared = WatchConnectivityManager()
+
+    @Published var isReachable = false
+
+    // 타이머 상태 수신 콜백
+    var onTimerStart: ((TimerSyncData) -> Void)?
+    var onTimerPause: (() -> Void)?
+    var onTimerResume: (() -> Void)?
+    var onTimerStop: (() -> Void)?
+
+    private override init() {
+        super.init()
+
+        if WCSession.isSupported() {
+            let session = WCSession.default
+            session.delegate = self
+            session.activate()
+        }
+    }
+
+    // MARK: - Send Messages
+
+    /// 타이머 시작 메시지 전송
+    func sendTimerStart(duration: TimeInterval, prealertOffsets: [Int]) {
+        guard WCSession.default.isReachable else {
+            print("⚠️ Watch가 연결되지 않았습니다")
+            return
+        }
+
+        let message: [String: Any] = [
+            "action": "start",
+            "duration": duration,
+            "prealertOffsets": prealertOffsets,
+            "timestamp": Date().timeIntervalSince1970
+        ]
+
+        WCSession.default.sendMessage(message, replyHandler: nil) { error in
+            print("❌ 타이머 시작 전송 실패: \(error.localizedDescription)")
+        }
+
+        print("✅ Watch로 타이머 시작 전송: \(duration)초")
+    }
+
+    /// 타이머 일시정지 메시지 전송
+    func sendTimerPause() {
+        guard WCSession.default.isReachable else { return }
+
+        let message = ["action": "pause"]
+        WCSession.default.sendMessage(message, replyHandler: nil) { error in
+            print("❌ 타이머 일시정지 전송 실패: \(error.localizedDescription)")
+        }
+
+        print("✅ Watch로 타이머 일시정지 전송")
+    }
+
+    /// 타이머 재개 메시지 전송
+    func sendTimerResume(remainingDuration: TimeInterval) {
+        guard WCSession.default.isReachable else { return }
+
+        let message: [String: Any] = [
+            "action": "resume",
+            "remainingDuration": remainingDuration,
+            "timestamp": Date().timeIntervalSince1970
+        ]
+
+        WCSession.default.sendMessage(message, replyHandler: nil) { error in
+            print("❌ 타이머 재개 전송 실패: \(error.localizedDescription)")
+        }
+
+        print("✅ Watch로 타이머 재개 전송: \(remainingDuration)초")
+    }
+
+    /// 타이머 중지 메시지 전송
+    func sendTimerStop() {
+        guard WCSession.default.isReachable else { return }
+
+        let message = ["action": "stop"]
+        WCSession.default.sendMessage(message, replyHandler: nil) { error in
+            print("❌ 타이머 중지 전송 실패: \(error.localizedDescription)")
+        }
+
+        print("✅ Watch로 타이머 중지 전송")
+    }
+
+    // MARK: - Application Context (백그라운드 동기화)
+
+    /// 타이머 상태를 Application Context로 전송 (백그라운드에서도 동작)
+    func updateTimerContext(duration: TimeInterval?, remaining: TimeInterval?, state: String) {
+        guard WCSession.default.activationState == .activated else { return }
+
+        var context: [String: Any] = [
+            "state": state,
+            "timestamp": Date().timeIntervalSince1970
+        ]
+
+        if let duration = duration {
+            context["duration"] = duration
+        }
+
+        if let remaining = remaining {
+            context["remaining"] = remaining
+        }
+
+        do {
+            try WCSession.default.updateApplicationContext(context)
+            print("✅ 타이머 상태 Context 업데이트: \(state)")
+        } catch {
+            print("❌ Context 업데이트 실패: \(error.localizedDescription)")
+        }
+    }
+}
+
+// MARK: - WCSessionDelegate
+
+extension WatchConnectivityManager: WCSessionDelegate {
+    nonisolated func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+        Task { @MainActor in
+            if let error = error {
+                print("❌ WCSession 활성화 실패: \(error.localizedDescription)")
+            } else {
+                print("✅ WCSession 활성화 완료: \(activationState.rawValue)")
+            }
+        }
+    }
+
+    #if os(iOS)
+    nonisolated func sessionDidBecomeInactive(_ session: WCSession) {
+        print("⚠️ WCSession 비활성화됨")
+    }
+
+    nonisolated func sessionDidDeactivate(_ session: WCSession) {
+        print("⚠️ WCSession 비활성화 완료")
+        session.activate()
+    }
+    #endif
+
+    nonisolated func sessionReachabilityDidChange(_ session: WCSession) {
+        Task { @MainActor in
+            isReachable = session.isReachable
+            print("📡 Watch 연결 상태: \(session.isReachable ? "연결됨" : "연결 안 됨")")
+        }
+    }
+
+    // MARK: - Receive Messages
+
+    nonisolated func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+        Task { @MainActor in
+            guard let action = message["action"] as? String else { return }
+
+            print("📩 메시지 수신: \(action)")
+
+            switch action {
+            case "start":
+                guard let duration = message["duration"] as? TimeInterval else { return }
+                let prealertOffsets = message["prealertOffsets"] as? [Int] ?? []
+                let timestamp = message["timestamp"] as? TimeInterval ?? Date().timeIntervalSince1970
+
+                let syncData = TimerSyncData(
+                    duration: duration,
+                    prealertOffsets: prealertOffsets,
+                    timestamp: timestamp
+                )
+                onTimerStart?(syncData)
+
+            case "pause":
+                onTimerPause?()
+
+            case "resume":
+                onTimerResume?()
+
+            case "stop":
+                onTimerStop?()
+
+            default:
+                print("⚠️ 알 수 없는 액션: \(action)")
+            }
+        }
+    }
+
+    nonisolated func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
+        Task { @MainActor in
+            print("📦 Application Context 수신: \(applicationContext)")
+            // 필요시 처리
+        }
+    }
+}
+
+// MARK: - Data Models
+
+struct TimerSyncData {
+    let duration: TimeInterval
+    let prealertOffsets: [Int]
+    let timestamp: TimeInterval
+}

@@ -9,8 +9,6 @@ import SwiftUI
 
 struct TimerMainView: View {
     @EnvironmentObject var screenVM: TimerScreenViewModel
-    var size: CGFloat = 240
-    var lineWidth: CGFloat = 20
     private var remaining: TimeInterval { screenVM.remaining }
 
     @State private var showTimeInput = false
@@ -23,121 +21,140 @@ struct TimerMainView: View {
     private var markers: [CGFloat] {
         return screenVM.selectedOffsets
             .sorted()
-            .map { CGFloat($0) / TimeInterval(TimeMapper.maxSeconds) }
+            .map { offset in
+                // offset(초)을 각도로 변환 후 360도 대비 비율로 계산
+                CGFloat(offset) / TimeMapper.secondsPerDegree / 360.0
+            }
     }
 
     var body: some View {
-        VStack(spacing: 24) {
-            statusText
-                .padding(.top, 8)
+        GeometryReader { geometry in
+            let availableHeight = geometry.size.height
+            let availableWidth = geometry.size.width
+            let clockSize = min(availableWidth * 0.85, availableHeight * 0.55)
+            let lineWidth = clockSize * 0.083
+            let spacing = availableHeight * 0.01
+            let buttonSize = clockSize * 0.18
 
-            // 빠른설정 영역 (고정 높이)
-            Group {
-                if screenVM.state != .running {
-                    TimePresetButtons(screenVM: screenVM)
-                        .padding(.horizontal, 4)
-                } else {
-                    // 실행 중일 때 빈 공간으로 높이 유지
-                    Color.clear
-                        .frame(height: 50)
+            VStack(spacing: 0) {
+                // 빠른설정 영역
+                Group {
+                    if screenVM.state != .running {
+                        TimePresetButtons(
+                            screenVM: screenVM,
+                            onShowTimeInput: { showTimeInput = true }
+                        )
+                        .padding(.top, spacing * 2)
+                    } else {
+                        // 실행 중일 때 빈 공간으로 높이 유지
+                        Color.clear
+                            .frame(height: availableHeight * 0.08)
+                    }
                 }
+
+                Spacer()
+
+                clockView(size: clockSize, lineWidth: lineWidth, geometry: geometry, buttonSize: buttonSize)
+
+                Spacer()
+
+                Divider()
+                    .padding(.vertical, spacing * 2)
+
+                prealertSection
+                    .padding(.bottom, spacing * 2)
             }
-
-            Spacer()
-                .frame(height: 8)
-
-            clockView
-
-            Spacer()
-                .frame(height: 8)
-
-            TimerButton(
-                state: screenVM.timerVM.state,
-                onStart: {
-                    screenVM.applyCurrentSettings()
-                    screenVM.start()
-                },
-                onPause: { screenVM.pause() },
-                onResume: { screenVM.resume() },
-                onCancel: { screenVM.cancel() }
-            )
-
-            Divider()
-                .padding(.vertical, 8)
-
-            prealertSection
-                .padding(.bottom, 8)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .sheet(isPresented: $showTimeInput) {
             TimeInputSheet(screenVM: screenVM, isPresented: $showTimeInput)
                 .presentationDetents([.height(300)])
         }
-    }
-
-    private var statusText: some View {
-        Text(stateText)
-            .font(.system(size: 14, weight: .medium, design: .rounded))
-            .foregroundStyle(.secondary)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.leading, 8)
-    }
-
-    private var clockView: some View {
-        ZStack {
-            backgroundCircle
-            progressCircle
-
-            // 타이머 실행 중이고 3분 이상 남았을 때만 >> 표시
-            if screenVM.state == .running && screenVM.timerVM.remaining > 180 {
-                progressIndicator
+        .fullScreenCover(isPresented: $screenVM.showTimerAlert) {
+            TimerAlertView {
+                screenVM.showTimerAlert = false
             }
-
-            clockMarkers
-
-            if screenVM.state != .running {
-                dragPointer
-            }
-
-            if isDragging && screenVM.state != .running {
-                dragTooltip
-            }
-
-            centerTimeDisplay
         }
     }
 
-    private var progressIndicator: some View {
-        let currentProgress = screenVM.timerVM.remaining / TimeMapper.maxAngle / TimeMapper.secondsPerDegree
-        let angle = currentProgress * 360 - 90  // -90은 12시 방향 시작
+    @ViewBuilder
+    private func statusText(fontSize: CGFloat) -> some View {
+        VStack(spacing: 4) {
+            HStack(spacing: 6) {
+                StatusIndicator(state: screenVM.state)
+                Text(stateText)
+                    .font(.system(size: fontSize * 0.45, weight: .medium, design: .rounded))
+                    .foregroundStyle(.primary)
+            }
+        }
+        .offset(y: -fontSize * 0.8)  // 중앙 시간 위쪽에 배치
+    }
 
-        // 화살표를 진행 방향(시계방향) 앞쪽에 배치
-        let indicatorAngle = angle - 10  // 진행 방향보다 10도 앞서서 배치
+    private func clockView(size: CGFloat, lineWidth: CGFloat, geometry: GeometryProxy, buttonSize: CGFloat) -> some View {
+        ZStack {
+            backgroundCircle(size: size, lineWidth: lineWidth)
+            progressCircle(size: size, lineWidth: lineWidth)
+
+            // 타이머 실행 중이고 5분 이상 남았을 때만 >> 표시
+            if screenVM.state == .running && screenVM.timerVM.remaining > 300 {
+                progressIndicator(size: size)
+            }
+
+            clockMarkers(size: size, lineWidth: lineWidth)
+
+            if screenVM.state != .running {
+                dragPointer(size: size, lineWidth: lineWidth)
+            }
+
+            if isDragging && screenVM.state != .running {
+                dragTooltip(size: size, fontSize: min(geometry.size.width, geometry.size.height) * 0.03)
+            }
+
+            let fontSize = min(geometry.size.width, geometry.size.height) * 0.16
+
+            centerTimeDisplay(fontSize: fontSize)
+
+            statusText(fontSize: fontSize)
+
+            // 버튼들을 숫자 아래에 배치
+            buttonRow(buttonSize: buttonSize)
+                .offset(y: fontSize * 1.3)
+        }
+    }
+
+    private func progressIndicator(size: CGFloat) -> some View {
+        // 타이머 진행에 따라 화살표가 움직임 (시작 지점 근처에서 시작)
+        let currentAngle = screenVM.timerVM.remaining / TimeMapper.secondsPerDegree
+
+        // 화살표를 실제 진행 위치보다 약간 앞서서 배치
+        let indicatorAngle = currentAngle - 90 - 5  // 12시 방향(-90)에서 시작
         let radius = size / 2 - 2  // 원 라인 위
-        let xOffset = cos(indicatorAngle * .pi / 180) * radius
-        let yOffset = sin(indicatorAngle * .pi / 180) * radius
+        let xOffset = cos(CGFloat(indicatorAngle) * .pi / 180) * radius
+        let yOffset = sin(CGFloat(indicatorAngle) * .pi / 180) * radius
 
         // 화살표가 시계방향을 가리키도록 회전
         let rotationAngle = indicatorAngle - 90
+        let fontSize = size * 0.083
 
         return ZStack {
             // 배경 (가독성을 위한 그림자)
             Text(">>")
-                .font(.system(size: 20, weight: .heavy, design: .rounded))
+                .font(.system(size: fontSize, weight: .heavy, design: .rounded))
                 .foregroundStyle(.black.opacity(0.3))
-                .rotationEffect(.degrees(rotationAngle))
+                .rotationEffect(.degrees(Double(rotationAngle)))
                 .offset(x: xOffset + 1, y: yOffset + 1)
 
             // 메인 화살표
             Text(">>")
-                .font(.system(size: 20, weight: .heavy, design: .rounded))
+                .font(.system(size: fontSize, weight: .heavy, design: .rounded))
                 .foregroundStyle(.white)
                 .shadow(color: .black.opacity(0.5), radius: 2, x: 0, y: 0)
-                .rotationEffect(.degrees(rotationAngle))
+                .rotationEffect(.degrees(Double(rotationAngle)))
                 .offset(x: xOffset, y: yOffset)
         }
     }
 
-    private var backgroundCircle: some View {
+    private func backgroundCircle(size: CGFloat, lineWidth: CGFloat) -> some View {
         Circle()
             .stroke(
                 .plain.opacity(0.5),
@@ -150,31 +167,58 @@ struct TimerMainView: View {
             .frame(width: size, height: size)
     }
 
-    private var progressCircle: some View {
-        let trimTo: Double
+    private func progressCircle(size: CGFloat, lineWidth: CGFloat) -> some View {
+        let currentAngle: Double
+        let circleColor: Color
+
         if screenVM.state == .running || screenVM.state == .paused {
             // 실행/일시정지 중: 남은 시간 기준으로 표시
-            trimTo = screenVM.timerVM.remaining / TimeMapper.maxAngle / TimeMapper.secondsPerDegree
+            currentAngle = screenVM.timerVM.remaining / TimeMapper.secondsPerDegree
+            circleColor = Color.accentColor
+        } else if screenVM.state == .overtime {
+            // 오버타임: 빨간색 원형 (음수 시간은 각도로 변환하지 않고 0으로 표시)
+            currentAngle = 0
+            circleColor = Color.red
         } else {
             // 대기/완료 상태: 설정된 시간 표시
-            trimTo = screenVM.mainAngle / TimeMapper.maxAngle
+            currentAngle = screenVM.mainAngle
+            circleColor = Color.accentColor
         }
 
-        return Circle()
-            .trim(from: 0, to: trimTo)
-            .stroke(
-                Color.accentColor,
-                style: StrokeStyle(
-                    lineWidth: lineWidth,
-                    lineCap: .round,
-                    lineJoin: .round
+        return ZStack {
+            // 첫 번째 바퀴 (0-360도): 기본 색상
+            Circle()
+                .trim(from: 0, to: min(1.0, max(0, currentAngle) / 360.0))
+                .stroke(
+                    circleColor,
+                    style: StrokeStyle(
+                        lineWidth: lineWidth,
+                        lineCap: .round,
+                        lineJoin: .round
+                    )
                 )
-            )
-            .frame(width: size, height: size)
-            .rotationEffect(.init(degrees: -90))
+                .frame(width: size, height: size)
+                .rotationEffect(.init(degrees: -90))
+
+            // 두 번째 바퀴 (360-720도): 연두색
+            if currentAngle > 360 {
+                Circle()
+                    .trim(from: 0, to: min(1.0, (currentAngle - 360) / 360.0))
+                    .stroke(
+                        Color.green.opacity(0.7),
+                        style: StrokeStyle(
+                            lineWidth: lineWidth,
+                            lineCap: .round,
+                            lineJoin: .round
+                        )
+                    )
+                    .frame(width: size, height: size)
+                    .rotationEffect(.init(degrees: -90))
+            }
+        }
     }
 
-    private var clockMarkers: some View {
+    private func clockMarkers(size: CGFloat, lineWidth: CGFloat) -> some View {
         ClockMarkers(
             remaining: ratio,
             markers: markers,
@@ -187,7 +231,7 @@ struct TimerMainView: View {
         .frame(width: size, height: size)
     }
 
-    private var dragPointer: some View {
+    private func dragPointer(size: CGFloat, lineWidth: CGFloat) -> some View {
         Circle()
             .fill(.white)
             .frame(width: lineWidth, height: lineWidth)
@@ -215,47 +259,53 @@ struct TimerMainView: View {
             }
     }
 
-    private var dragTooltip: some View {
+    private func dragTooltip(size: CGFloat, fontSize: CGFloat) -> some View {
         let timeText = mmss(sec: screenVM.mainSeconds, min: screenVM.mainMinutes)
-        let xOffset = cos(dragTooltipAngle * .pi / 180) * (size / 2 + 40)
-        let yOffset = sin(dragTooltipAngle * .pi / 180) * (size / 2 + 40)
+        let xOffset = cos(dragTooltipAngle * .pi / 180) * (size / 2 + fontSize * 2.5)
+        let yOffset = sin(dragTooltipAngle * .pi / 180) * (size / 2 + fontSize * 2.5)
 
         return Text(timeText)
-            .font(.system(size: 16, weight: .medium, design: .rounded))
-            .padding(.horizontal, 12)
-            .padding(.vertical, 6)
+            .font(.system(size: fontSize, weight: .medium, design: .rounded))
+            .padding(.horizontal, fontSize * 0.75)
+            .padding(.vertical, fontSize * 0.375)
             .background(Color.accentColor)
             .foregroundStyle(.white)
-            .cornerRadius(8)
+            .cornerRadius(fontSize * 0.5)
             .offset(x: xOffset, y: yOffset)
     }
 
-    private var centerTimeDisplay: some View {
-        Text(screenVM.state == .running ? screenVM.timeString(from: screenVM.timerVM.remaining) : mmss(sec: screenVM.mainSeconds, min: screenVM.mainMinutes))
-            .font(.system(size: 44, weight: .bold, design: .rounded))
+    private func centerTimeDisplay(fontSize: CGFloat) -> some View {
+        Text((screenVM.state == .running || screenVM.state == .overtime) ? screenVM.timeString(from: screenVM.timerVM.remaining) : mmss(sec: screenVM.mainSeconds, min: screenVM.mainMinutes))
+            .font(.system(size: fontSize, weight: .bold, design: .rounded))
             .monospacedDigit()
+            .minimumScaleFactor(0.5)
+            .lineLimit(1)
+            .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
             .onTapGesture {
-                if screenVM.state != .running {
+                if screenVM.state != .running && screenVM.state != .overtime {
                     showTimeInput = true
                 }
             }
     }
 
+    @ViewBuilder
     private var prealertSection: some View {
         let mainSeconds = screenVM.mainMinutes * 60 + screenVM.mainSeconds
         let presets = Timer.presetOffsetsSec
 
-        return VStack(alignment: .leading, spacing: 12) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text("예비 알림")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 8) {
+            Text("예비 알림")
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(.secondary)
+                .padding(.leading, 12)
 
-                HStack {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
                     ForEach(presets, id: \.self) { sec in
                         prealertToggle(sec: sec, mainSeconds: mainSeconds)
                     }
                 }
+                .padding(.horizontal, 12)
             }
         }
     }
@@ -263,7 +313,6 @@ struct TimerMainView: View {
     private func prealertToggle(sec: Int, mainSeconds: Int) -> some View {
         let isDisabled = sec >= mainSeconds
         return Toggle(
-            "\(sec/60)분",
             isOn: Binding(
                 get: { screenVM.selectedOffsets.contains(sec) },
                 set: { on in
@@ -275,7 +324,14 @@ struct TimerMainView: View {
                     screenVM.showPrealertToast(for: sec, isEnabled: on)
                 }
             )
-        )
+        ) {
+            Text("\(sec/60)분")
+                .font(.system(size: 14, weight: .medium))
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
+        }
         .toggleStyle(.button)
         .buttonStyle(.bordered)
         .disabled(isDisabled)
@@ -303,13 +359,13 @@ struct TimerMainView: View {
         let radians = atan2(vector.dy, vector.dx)  // 벡터가 x축과 이루는 각도를 구함
         var newAngle = radians * 180 / .pi
         if newAngle < 0 { newAngle = 360 + newAngle }
-        
-        var d = newAngle - screenVM.mainAngle
+
+        var d = newAngle - fmod(screenVM.mainAngle, 360)
         if d > 180 { d -= 360 }
         if d < -180 { d += 360 }
 
         var next = screenVM.mainAngle + d
-        if next > 360 { next = 360 }
+        if next > TimeMapper.maxAngle { next = TimeMapper.maxAngle }
         if next < 0 { next = 0 }
 
         let snapped = snappedAngle(from: next)
@@ -326,6 +382,8 @@ struct TimerMainView: View {
             return .orange
         case .finished:
             return .blue
+        case .overtime:
+            return .red
         }
     }
 
@@ -339,6 +397,118 @@ struct TimerMainView: View {
             return "일시정지됨"
         case .finished:
             return "완료"
+        case .overtime:
+            return "초과 진행 중"
+        }
+    }
+
+    // 왼쪽 버튼 (취소)
+    @ViewBuilder
+    private func leftButton(buttonSize: CGFloat) -> some View {
+        Button(action: { screenVM.cancel() }) {
+            Image(systemName: "xmark")
+                .font(.title2)
+                .imageScale(.medium)
+        }
+        .buttonStyle(TimerButtonStyle(
+            tint: Color.plain,
+            size: buttonSize
+        ))
+        .disabled(screenVM.state == .idle)
+        .accessibilityLabel("타이머 취소")
+    }
+
+    // 오른쪽 버튼 (재생/일시정지)
+    @ViewBuilder
+    private func rightButton(buttonSize: CGFloat) -> some View {
+        switch screenVM.state {
+        case .idle, .finished:
+            Button(action: {
+                screenVM.applyCurrentSettings()
+                screenVM.start()
+            }) {
+                Image(systemName: "play.fill")
+                    .font(.title2)
+                    .imageScale(.medium)
+            }
+            .buttonStyle(TimerButtonStyle(
+                tint: Color.positive,
+                size: buttonSize
+            ))
+            .accessibilityLabel("타이머 시작")
+
+        case .running, .overtime:
+            Button(action: { screenVM.pause() }) {
+                Image(systemName: "pause.fill")
+                    .font(.title2)
+                    .imageScale(.medium)
+            }
+            .buttonStyle(TimerButtonStyle(
+                tint: Color.bitNegative,
+                size: buttonSize
+            ))
+            .accessibilityLabel("타이머 일시정지")
+
+        case .paused:
+            Button(action: { screenVM.resume() }) {
+                Image(systemName: "play.fill")
+                    .font(.title2)
+                    .imageScale(.medium)
+            }
+            .buttonStyle(TimerButtonStyle(
+                tint: Color.positive,
+                size: buttonSize
+            ))
+            .accessibilityLabel("타이머 재개")
+        }
+    }
+
+    // 버튼들을 수평으로 배치
+    @ViewBuilder
+    private func buttonRow(buttonSize: CGFloat) -> some View {
+        HStack(spacing: buttonSize * 0.5) {
+            leftButton(buttonSize: buttonSize)
+            rightButton(buttonSize: buttonSize)
+        }
+    }
+}
+
+// 상태 표시 인디케이터 (깜빡이는 동그라미)
+struct StatusIndicator: View {
+    let state: TimerState
+    @State private var isAnimating = false
+    @ScaledMetric private var size: CGFloat = 12
+
+    var body: some View {
+        Circle()
+            .fill(stateColor)
+            .frame(width: size, height: size)
+            .opacity(shouldBlink ? (isAnimating ? 1.0 : 0.3) : 1.0)
+            .onAppear {
+                if shouldBlink {
+                    withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+                        isAnimating = true
+                    }
+                }
+            }
+    }
+
+    private var shouldBlink: Bool {
+        state == .idle
+    }
+
+    private var stateColor: Color {
+        switch state {
+        case .idle:
+            return .yellow
+        case .running:
+            return .green
+        case .paused:
+            return .orange
+        case .finished:
+            return .blue
+        case .overtime:
+            return .red
         }
     }
 }

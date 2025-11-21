@@ -9,15 +9,16 @@ import SwiftUI
 
 struct TimePresetButtons: View {
     @ObservedObject var screenVM: TimerScreenViewModel
+    var onShowTimeInput: () -> Void = {}
 
-    private let presets = [5, 10, 15, 20, 30, 45, 60]
+    private let presets = [5, 10, 15, 20, 30]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 8) {
             Text("빠른 설정")
-                .font(.subheadline)
+                .font(.subheadline.weight(.medium))
                 .foregroundStyle(.secondary)
-                .padding(.leading, 4)
+                .padding(.leading, 12)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 10) {
@@ -27,15 +28,28 @@ struct TimePresetButtons: View {
                             screenVM.mainSeconds = 0
                         }) {
                             Text("\(minutes)분")
-                                .font(.system(size: 14, weight: .medium, design: .rounded))
-                                .padding(.horizontal, 18)
-                                .padding(.vertical, 10)
+                                .font(.subheadline.weight(.medium))
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 8)
                         }
                         .buttonStyle(.bordered)
                         .tint(isSelected(minutes) ? Color.accentColor : .gray)
                     }
+
+                    // 직접 입력 버튼
+                    Button(action: onShowTimeInput) {
+                        HStack(spacing: 6) {
+                            Image(systemName: "plus.circle.fill")
+                            Text("직접")
+                                .font(.subheadline.weight(.medium))
+                        }
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 8)
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(Color.accentColor)
                 }
-                .padding(.horizontal, 4)
+                .padding(.horizontal, 12)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)

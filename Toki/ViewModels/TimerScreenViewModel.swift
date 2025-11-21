@@ -16,6 +16,7 @@ final class TimerScreenViewModel: ObservableObject {
     @Published var mainSeconds: Int = 0
     @Published var selectedOffsets: Set<Int> = [60, 180, 300]  // prealert settings
     @Published private(set) var configuredMainSeconds: Int = 600
+    @Published var showTimerAlert: Bool = false  // 전체 화면 알림 표시
 
     let timerVM: TimerViewModel
     var showToast: ((String) -> Void)?
@@ -33,6 +34,11 @@ final class TimerScreenViewModel: ObservableObject {
         vm.objectWillChange
             .sink { [weak self] _ in self?.objectWillChange.send() }
             .store(in: &bag)
+
+        // 타이머 종료 시 전체 화면 알림 표시
+        vm.onTimerFinish = { [weak self] in
+            self?.showTimerAlert = true
+        }
     }
 
     func attachContext(_ ctx: ModelContext) {
@@ -69,24 +75,32 @@ final class TimerScreenViewModel: ObservableObject {
         timerVM.start()
     }
 
-    func start() { 
+    func start() {
         showToast?("시작")
-        timerVM.start() 
+        timerVM.start()
     }
-    func pause() { 
+    func pause() {
         showToast?("일시정지")
-        timerVM.pause() 
+        timerVM.pause()
     }
-    func resume() { 
+    func resume() {
         showToast?("재개")
-        timerVM.resume() 
+        timerVM.resume()
     }
 
     func timeString(from interval: TimeInterval) -> String {
-        let total = max(0, Int(interval.rounded()))
-        let m = total / 60
-        let s = total % 60
-        return String(format: "%02d:%02d", m, s)
+        let total = Int(interval.rounded())
+        if total < 0 {
+            // 초과 시간 표시
+            let absTotal = abs(total)
+            let m = absTotal / 60
+            let s = absTotal % 60
+            return String(format: "+%02d:%02d", m, s)
+        } else {
+            let m = total / 60
+            let s = total % 60
+            return String(format: "%02d:%02d", m, s)
+        }
     }
     
     func showPrealertToast(for seconds: Int, isEnabled: Bool) {
@@ -211,8 +225,8 @@ extension TimerScreenViewModel {
 
 enum TimeMapper {
     static let secondsPerDegree = 10.0  // 1° = 10초
-    static let maxSeconds = 3600
-    static let maxAngle = Double(maxSeconds) / secondsPerDegree
+    static let maxSeconds = 7200  // 120분
+    static let maxAngle = Double(maxSeconds) / secondsPerDegree  // 720도 (2바퀴)
     static let tickCount = 60
 
     static func secondsToAngle(from s: Int) -> Double {

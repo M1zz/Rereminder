@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum TimerState: Equatable { case idle, running, paused, finished }
+enum TimerState: Equatable { case idle, running, paused, finished, overtime }
 
 final class TimerEngine {
 
@@ -50,8 +50,8 @@ final class TimerEngine {
     }
 
     func pause() {
-        guard state == .running, let end = endDate else { return }
-        remainingWhenPaused = max(0, end.timeIntervalSinceNow)
+        guard (state == .running || state == .overtime), let end = endDate else { return }
+        remainingWhenPaused = end.timeIntervalSinceNow  // 음수 시간도 허용
         stopTimer()
         state = .paused
     }
@@ -60,7 +60,7 @@ final class TimerEngine {
         guard state == .paused, let r = remainingWhenPaused else { return }
         endDate = Date().addingTimeInterval(r)
         startTimer()
-        state = .running
+        state = r > 0 ? .running : .overtime  // 남은 시간에 따라 상태 결정
     }
 
     func stop() {
@@ -84,25 +84,23 @@ final class TimerEngine {
             guard let self, let end = self.endDate, let cfg = self.config else {
                 return
             }
-            let remain = max(0, end.timeIntervalSinceNow)
+            let remain = end.timeIntervalSinceNow  // 음수 허용
 
             // trigger prealert
             for off in cfg.prealertOffsetsSec {
                 let offInt = Int(off)
-                if !self.firedOffsets.contains(offInt), remain <= off {
+                if !self.firedOffsets.contains(offInt), remain <= off, remain > 0 {
                     self.firedOffsets.insert(offInt)
                     DispatchQueue.main.async { self.onPreAlert?(offInt) }
                 }
             }
 
-            if remain <= 0 {
-                self.stopTimer()
-                self.state = .finished
+            // 0초 도달 시 알림만 보내고 타이머는 계속 진행 (오버타임)
+            if remain <= 0 && self.state == .running {
+                self.state = .overtime
                 DispatchQueue.main.async {
-                    self.onTick?(0)
                     self.onFinish?()
                 }
-                return
             }
 
             DispatchQueue.main.async { self.onTick?(remain) }

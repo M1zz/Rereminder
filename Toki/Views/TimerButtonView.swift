@@ -14,108 +14,105 @@ struct TimerButton: View {
     let onPause: () -> Void
     let onResume: () -> Void
     let onCancel: () -> Void
+    var buttonSize: CGFloat = 70
+
+    @ScaledMetric private var spacing: CGFloat = 40
 
     var body: some View {
         switch state {
         case .idle:
-            HStack(spacing: 40) {
+            HStack(spacing: spacing) {
                 Button(action: onCancel) {
-                    VStack(spacing: 4) {
-                        Image(systemName: "xmark")
-                            .font(.system(size: 20))
-                        Text("취소")
-                            .font(.system(size: 12, weight: .medium))
-                    }
+                    Image(systemName: "xmark")
+                        .font(.title2)
+                        .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.plain))
+                .buttonStyle(TimerButtonStyle(tint: Color.plain, size: buttonSize))
                 .disabled(true)
                 .accessibilityLabel("취소")
 
                 Button(action: onStart) {
-                    VStack(spacing: 4) {
-                        Image(systemName: "play.fill")
-                            .font(.system(size: 20))
-                        Text("시작")
-                            .font(.system(size: 12, weight: .medium))
-                    }
+                    Image(systemName: "play.fill")
+                        .font(.title2)
+                        .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.positive))
+                .buttonStyle(TimerButtonStyle(tint: Color.positive, size: buttonSize))
                 .accessibilityLabel("타이머 시작")
             }
 
         case .finished:
-            HStack(spacing: 40) {
+            HStack(spacing: spacing) {
                 Button(action: onCancel) {
-                    VStack(spacing: 4) {
-                        Image(systemName: "xmark")
-                            .font(.system(size: 20))
-                        Text("취소")
-                            .font(.system(size: 12, weight: .medium))
-                    }
+                    Image(systemName: "xmark")
+                        .font(.title2)
+                        .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.plain))
+                .buttonStyle(TimerButtonStyle(tint: Color.plain, size: buttonSize))
                 .accessibilityLabel("취소")
 
                 Button(action: onStart) {
-                    VStack(spacing: 4) {
-                        Image(systemName: "play.fill")
-                            .font(.system(size: 20))
-                        Text("시작")
-                            .font(.system(size: 12, weight: .medium))
-                    }
+                    Image(systemName: "play.fill")
+                        .font(.title2)
+                        .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.positive))
+                .buttonStyle(TimerButtonStyle(tint: Color.positive, size: buttonSize))
                 .accessibilityLabel("타이머 시작")
             }
 
         case .running:
-            HStack(spacing: 40) {
+            HStack(spacing: spacing) {
                 Button(action: onCancel) {
-                    VStack(spacing: 4) {
-                        Image(systemName: "xmark")
-                            .font(.system(size: 20))
-                        Text("취소")
-                            .font(.system(size: 12, weight: .medium))
-                    }
+                    Image(systemName: "xmark")
+                        .font(.title2)
+                        .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.plain))
+                .buttonStyle(TimerButtonStyle(tint: Color.plain, size: buttonSize))
                 .accessibilityLabel("타이머 취소")
 
                 Button(action: onPause) {
-                    VStack(spacing: 4) {
-                        Image(systemName: "pause.fill")
-                            .font(.system(size: 20))
-                        Text("일시정지")
-                            .font(.system(size: 12, weight: .medium))
-                    }
+                    Image(systemName: "pause.fill")
+                        .font(.title2)
+                        .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.bitNegative))
+                .buttonStyle(TimerButtonStyle(tint: Color.bitNegative, size: buttonSize))
                 .accessibilityLabel("타이머 일시정지")
             }
 
         case .paused:
-            HStack(spacing: 40) {
+            HStack(spacing: spacing) {
                 Button(action: onCancel) {
-                    VStack(spacing: 4) {
-                        Image(systemName: "xmark")
-                            .font(.system(size: 20))
-                        Text("취소")
-                            .font(.system(size: 12, weight: .medium))
-                    }
+                    Image(systemName: "xmark")
+                        .font(.title2)
+                        .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.plain))
+                .buttonStyle(TimerButtonStyle(tint: Color.plain, size: buttonSize))
                 .accessibilityLabel("타이머 취소")
 
                 Button(action: onResume) {
-                    VStack(spacing: 4) {
-                        Image(systemName: "play.fill")
-                            .font(.system(size: 20))
-                        Text("재개")
-                            .font(.system(size: 12, weight: .medium))
-                    }
+                    Image(systemName: "play.fill")
+                        .font(.title2)
+                        .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.positive))
+                .buttonStyle(TimerButtonStyle(tint: Color.positive, size: buttonSize))
                 .accessibilityLabel("타이머 재개")
+            }
+        case .overtime:
+            HStack(spacing: spacing) {
+                Button(action: onCancel) {
+                    Image(systemName: "xmark")
+                        .font(.title2)
+                        .imageScale(.medium)
+                }
+                .buttonStyle(TimerButtonStyle(tint: Color.plain, size: buttonSize))
+                .accessibilityLabel("타이머 취소")
+
+                Button(action: onPause) {
+                    Image(systemName: "pause.fill")
+                        .font(.title2)
+                        .imageScale(.medium)
+                }
+                .buttonStyle(TimerButtonStyle(tint: Color.bitNegative, size: buttonSize))
+                .accessibilityLabel("타이머 일시정지")
             }
         }
 
@@ -124,12 +121,13 @@ struct TimerButton: View {
 
 struct TimerButtonStyle: ButtonStyle {
     var tint: Color
+    var size: CGFloat = 70
     @Environment(\.isEnabled) private var isEnabled
 
     func makeBody(configuration: Configuration) -> some View {
         let pressed = configuration.isPressed
         return configuration.label
-            .frame(minWidth: 70, minHeight: 70)
+            .frame(minWidth: size, minHeight: size)
             .foregroundStyle(.white)
             .background(
                 Circle()

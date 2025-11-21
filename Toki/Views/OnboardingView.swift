@@ -30,59 +30,62 @@ struct OnboardingView: View {
     ]
 
     var body: some View {
-        VStack(spacing: 30) {
-            HStack {
-                Spacer()
-                Button(action: {
-                    UserDefaults.standard.set(true, forKey: "hasSeenOnboarding")
-                    isPresented = false
-                }) {
-                    Text("건너뛰기")
-                        .foregroundStyle(.secondary)
-                }
-                .padding()
-            }
-
-            TabView(selection: $currentPage) {
-                ForEach(0..<pages.count, id: \.self) { index in
-                    OnboardingPageView(page: pages[index])
-                        .tag(index)
-                }
-            }
-            .tabViewStyle(.page(indexDisplayMode: .always))
-            .indexViewStyle(.page(backgroundDisplayMode: .always))
-
-            if currentPage == pages.count - 1 {
-                Button(action: {
-                    UserDefaults.standard.set(true, forKey: "hasSeenOnboarding")
-                    isPresented = false
-                }) {
-                    Text("시작하기")
-                        .font(.headline)
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.accentColor)
-                        .cornerRadius(12)
-                }
-                .padding(.horizontal, 40)
-                .padding(.bottom, 30)
-            } else {
-                Button(action: {
-                    withAnimation {
-                        currentPage += 1
+        GeometryReader { geometry in
+            VStack(spacing: geometry.size.height * 0.02) {
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        UserDefaults.standard.set(true, forKey: "hasSeenOnboarding")
+                        isPresented = false
+                    }) {
+                        Text("건너뛰기")
+                            .foregroundStyle(.secondary)
                     }
-                }) {
-                    Text("다음")
-                        .font(.headline)
-                        .foregroundStyle(.white)
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.accentColor)
-                        .cornerRadius(12)
+                    .padding(.horizontal, geometry.size.width * 0.04)
+                    .padding(.vertical, geometry.size.height * 0.015)
                 }
-                .padding(.horizontal, 40)
-                .padding(.bottom, 30)
+
+                TabView(selection: $currentPage) {
+                    ForEach(0..<pages.count, id: \.self) { index in
+                        OnboardingPageView(page: pages[index], geometry: geometry)
+                            .tag(index)
+                    }
+                }
+                .tabViewStyle(.page(indexDisplayMode: .always))
+                .indexViewStyle(.page(backgroundDisplayMode: .always))
+
+                if currentPage == pages.count - 1 {
+                    Button(action: {
+                        UserDefaults.standard.set(true, forKey: "hasSeenOnboarding")
+                        isPresented = false
+                    }) {
+                        Text("시작하기")
+                            .font(.headline)
+                            .foregroundStyle(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                            .background(Color.accentColor)
+                            .cornerRadius(12)
+                    }
+                    .padding(.horizontal, 40)
+                    .padding(.bottom, 30)
+                } else {
+                    Button(action: {
+                        withAnimation {
+                            currentPage += 1
+                        }
+                    }) {
+                        Text("다음")
+                            .font(.headline)
+                            .foregroundStyle(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 16)
+                            .background(Color.accentColor)
+                            .cornerRadius(12)
+                    }
+                    .padding(.horizontal, 40)
+                    .padding(.bottom, 30)
+                }
             }
         }
     }
@@ -96,25 +99,29 @@ struct OnboardingPage {
 
 struct OnboardingPageView: View {
     let page: OnboardingPage
+    let geometry: GeometryProxy
 
     var body: some View {
         VStack(spacing: 24) {
             Spacer()
 
             Image(systemName: page.icon)
-                .font(.system(size: 80))
+                .font(.system(size: min(geometry.size.width, geometry.size.height) * 0.15))
                 .foregroundStyle(Color.accentColor)
 
             Text(page.title)
-                .font(.title)
-                .fontWeight(.bold)
+                .font(.title.bold())
                 .multilineTextAlignment(.center)
+                .minimumScaleFactor(0.5)
+                .lineLimit(2)
 
             Text(page.description)
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
-                .padding(.horizontal, 40)
+                .padding(.horizontal, geometry.size.width * 0.1)
+                .minimumScaleFactor(0.7)
+                .lineLimit(3)
 
             Spacer()
         }

@@ -12,7 +12,12 @@ import UserNotifications
 struct WatchToki_Watch_AppApp: App {
     @StateObject private var notificationDelegate = NotificationDelegate()
     private let notificationService = NotificationService()
-    
+
+    init() {
+        // WatchConnectivity 초기화
+        _ = WatchConnectivityManager.shared
+    }
+
     var body: some Scene {
         WindowGroup {
             SettingView()
