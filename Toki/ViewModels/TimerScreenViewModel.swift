@@ -39,6 +39,49 @@ final class TimerScreenViewModel: ObservableObject {
         vm.onTimerFinish = { [weak self] in
             self?.showTimerAlert = true
         }
+
+        // Watch로부터 타이머 메시지 수신
+        setupWatchConnectivity()
+    }
+
+    private func setupWatchConnectivity() {
+        let connectivity = WatchConnectivityManager.shared
+
+        // Watch에서 타이머 시작
+        connectivity.onTimerStart = { [weak self] syncData in
+            guard let self = self else { return }
+
+            // 타이머 설정 적용
+            let mainSeconds = Int(syncData.duration)
+            self.mainMinutes = mainSeconds / 60
+            self.mainSeconds = mainSeconds % 60
+            // Watch에서 분 단위로 오는 데이터를 초 단위로 변환
+            self.selectedOffsets = Set(syncData.prealertOffsets.map { $0 * 60 })
+
+            // 타이머 시작
+            self.applyCurrentSettings()
+            self.timerVM.start()
+
+            self.showToast?("⌚️ Watch에서 타이머 시작")
+        }
+
+        // Watch에서 타이머 일시정지
+        connectivity.onTimerPause = { [weak self] in
+            self?.timerVM.pause()
+            self?.showToast?("⌚️ Watch에서 일시정지")
+        }
+
+        // Watch에서 타이머 재개
+        connectivity.onTimerResume = { [weak self] in
+            self?.timerVM.resume()
+            self?.showToast?("⌚️ Watch에서 재개")
+        }
+
+        // Watch에서 타이머 중지
+        connectivity.onTimerStop = { [weak self] in
+            self?.timerVM.stop()
+            self?.showToast?("⌚️ Watch에서 중지")
+        }
     }
 
     func attachContext(_ ctx: ModelContext) {
@@ -71,6 +114,7 @@ final class TimerScreenViewModel: ObservableObject {
         configuredMainSeconds = t.mainSeconds
         mainMinutes = max(0, t.mainSeconds) / 60
         mainSeconds = max(0, t.mainSeconds) % 60
+        selectedOffsets = Set(t.prealertOffsetsSec)  // 예비 알림도 동기화
         showTemplateApplyToast(for: t)
         timerVM.start()
     }

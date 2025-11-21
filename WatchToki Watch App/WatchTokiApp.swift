@@ -11,6 +11,7 @@ import UserNotifications
 @main
 struct WatchToki_Watch_AppApp: App {
     @StateObject private var notificationDelegate = NotificationDelegate()
+    @StateObject private var watchConnectivity = WatchConnectivityManager.shared
     private let notificationService = NotificationService()
 
     init() {
@@ -21,6 +22,7 @@ struct WatchToki_Watch_AppApp: App {
     var body: some Scene {
         WindowGroup {
             SettingView()
+                .environmentObject(watchConnectivity)
                 .onAppear {
                     setupNotifications()
                 }

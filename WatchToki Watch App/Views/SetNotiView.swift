@@ -10,14 +10,13 @@ import UserNotifications
 
 struct SetNotiView: View {
     @ObservedObject var viewModel: SetNotiViewModel
-    
+
     @Binding var path: [NavigationTarget]
-    
-    @State private var selectedMinutes: Int?
+
     @State private var showingCustomSheet = false
     @State private var customMinutes = 1
     @State private var customPresets: [Int] = []
-    
+
     var body: some View {
         let maxMinute = viewModel.maxSelectableTimeModel.minute
 
@@ -30,29 +29,32 @@ struct SetNotiView: View {
 
             presetButtons(maxMinute: maxMinute)
 
-            if let selected = selectedMinutes {
-                Text("\(selected)분 전 알림")
-                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                    .foregroundStyle(.secondary)
-            }
-
-            Spacer()
-
             startButton
+                .padding(.bottom, 20)
         }
         .padding(.horizontal, 12)
-        .padding(.vertical, 8)
+        .padding(.top, 4)
         .background(.clear)
         .sheet(isPresented: $showingCustomSheet) { customMinutesSheet(maxMinute: maxMinute) }
     }
-    
+
     // MARK: - Subviews
-    
+
+    private var selectedMinutesText: String {
+        let sorted = viewModel.selectedMinutes.sorted()
+        if sorted.count == 1 {
+            return "\(sorted[0])분 전 알림"
+        } else {
+            let text = sorted.map { "\($0)분" }.joined(separator: ", ")
+            return "\(text) 전 알림"
+        }
+    }
+
     private func presetButtons(maxMinute: Int) -> some View {
-        let columns = [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)]
+        let columns = [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)]
         // iOS와 동일한 프리셋: 1, 3, 5, 10, 15, 30분
         let defaultPresets = [1, 3, 5, 10, 15, 30]
-        return LazyVGrid(columns: columns, alignment: .center, spacing: 12) {
+        return LazyVGrid(columns: columns, alignment: .center, spacing: 8) {
             ForEach(defaultPresets.filter { $0 <= maxMinute }, id: \.self) { minute in
                 presetCircle(title: "\(minute)", minutes: minute, maxMinute: maxMinute)
             }
@@ -72,47 +74,46 @@ struct SetNotiView: View {
             .opacity(maxMinute < 1 ? 0.4 : 1.0)
             .buttonStyle(.plain)
         }
-        .padding(.top, 4)
+        .padding(.top, 2)
         .background(Color.clear)
     }
-    
-    private var selectionHint: some View {
-        Group {
-            if let selected = selectedMinutes {
-                Text("타이머 완료 \(selected)분 전에 알림이 울립니다.")
-            } else {
-                Text("원하는 알림 시점을 선택하세요.")
-            }
-        }
-        .font(.footnote)
-        .foregroundStyle(.secondary)
-    }
-    
+
     private var startButton: some View {
         Button {
-            guard let _ = selectedMinutes, viewModel.notiTime.minute > 0 else { return }
+            guard !viewModel.selectedMinutes.isEmpty else { return }
             requestNotificationPermissionIfNeeded { _ in
-                schedulePreFinishNotification(after: TimeInterval(viewModel.notiTime.convertedSecond))
+                // 모든 선택된 알림 스케줄
+                for minute in viewModel.selectedMinutes {
+                    let seconds = TimeInterval(minute * 60)
+                    schedulePreFinishNotification(after: seconds, minutes: minute)
+                }
             }
-            path.append(.timerView(mainDuration: viewModel.maxTimeInSeconds, NotificationDuration: viewModel.notiTime.convertedSecond))
+            // selectedMinutes를 배열로 변환해서 전달
+            let prealertOffsets = Array(viewModel.selectedMinutes)
+            path.append(.timerViewMultiple(mainDuration: viewModel.maxTimeInSeconds, prealertOffsets: prealertOffsets))
         } label: {
             Text("타이머 시작")
+                .font(.system(size: 14, weight: .semibold))
                 .frame(maxWidth: .infinity)
         }
         .buttonStyle(.borderedProminent)
         .clipShape(RoundedRectangle(cornerRadius: 10))
-        .padding(.bottom, 4)
-        .disabled(selectedMinutes == nil)
+        .disabled(viewModel.selectedMinutes.isEmpty)
     }
-    
+
     private func presetCircle(title: String, minutes: Int, maxMinute: Int) -> some View {
         let disabled = maxMinute < minutes
+        let isSelected = viewModel.selectedMinutes.contains(minutes)
+
         return Button {
             guard !disabled else { return }
-            selectedMinutes = minutes
-            viewModel.notiTime.minute = minutes
+            if isSelected {
+                viewModel.selectedMinutes.remove(minutes)
+            } else {
+                viewModel.selectedMinutes.insert(minutes)
+            }
         } label: {
-            CircleButton(title: title, subtitle: "분", isSelected: selectedMinutes == minutes, isDisabled: disabled) {
+            CircleButton(title: title, subtitle: "m", isSelected: isSelected, isDisabled: disabled) {
                 // handled by outer Button
             }
             .contentShape(Circle())
@@ -121,7 +122,7 @@ struct SetNotiView: View {
         .opacity(disabled ? 0.4 : 1.0)
         .buttonStyle(.plain)
     }
-    
+
     private func customMinutesSheet(maxMinute: Int) -> some View {
         VStack(spacing: 8) {
             Text("사용자 지정 분")
@@ -147,8 +148,7 @@ struct SetNotiView: View {
 
                 Button("완료") {
                     let clamped = min(max(1, customMinutes), maxMinute)
-                    selectedMinutes = clamped
-                    viewModel.notiTime.minute = clamped
+                    viewModel.selectedMinutes.insert(clamped)
                     let defaultPresets = [1, 3, 5, 10, 15, 30]
                     if !defaultPresets.contains(clamped) && !customPresets.contains(clamped) {
                         customPresets.append(clamped)
@@ -162,7 +162,7 @@ struct SetNotiView: View {
                 .foregroundStyle(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .buttonStyle(.plain)
-                
+
             }
         }
         .padding(8)
@@ -179,15 +179,15 @@ private struct CircleButton: View {
     let action: () -> Void
 
     var body: some View {
-        VStack(spacing: 2) {
+        VStack(spacing: 1) {
             Text(title)
-                .font(.headline).bold()
+                .font(.system(size: 15, weight: .bold, design: .rounded))
             if !subtitle.isEmpty {
                 Text(subtitle)
-                    .font(.caption2)
+                    .font(.system(size: 9, weight: .medium))
             }
         }
-        .frame(width: 56, height: 56)
+        .frame(width: 46, height: 46)
         .background(
             Circle()
                 .fill(isSelected ? Color.accentColor : Color.gray.opacity(0.12))
@@ -233,20 +233,15 @@ private func requestNotificationPermissionIfNeeded(completion: @escaping (Bool) 
     }
 }
 
-private func schedulePreFinishNotification(after seconds: TimeInterval) {
+private func schedulePreFinishNotification(after seconds: TimeInterval, minutes: Int) {
     let content = UNMutableNotificationContent()
-    content.title = "완료 전 알림"
-    if seconds >= 60 {
-        let minutes = Int(seconds) / 60
-        content.body = "\(minutes)분 뒤에 타이머가 완료됩니다."
-    } else {
-        content.body = "\(Int(seconds))초 뒤에 타이머가 완료됩니다."
-    }
+    content.title = "Toki 타이머"
+    content.body = "\(minutes)분 남았습니다"
     content.sound = .default
 
     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: max(1, seconds), repeats: false)
     let request = UNNotificationRequest(
-        identifier: "preFinish-\(UUID().uuidString)",
+        identifier: "prealert-\(minutes)",
         content: content,
         trigger: trigger
     )
@@ -257,19 +252,3 @@ private func schedulePreFinishNotification(after seconds: TimeInterval) {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
