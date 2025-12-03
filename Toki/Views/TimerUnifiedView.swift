@@ -17,6 +17,7 @@ struct TimerUnifiedView: View {
     @StateObject private var appStateManager = AppStateManager()
 
     @State private var showHistory = false
+    @State private var showMessageEditor = false
 
     var body: some View {
         NavigationStack {
@@ -32,11 +33,20 @@ struct TimerUnifiedView: View {
                         Image(systemName: "list.bullet")
                     }
                 }
+                // notification message editor
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showMessageEditor = true
+                    } label: {
+                        Image(systemName: "text.bubble")
+                    }
+                }
                 // notice setting
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
                         NoticeSettingView()
                             .environmentObject(appStateManager)
+                            .environmentObject(screenVM)
                     } label: {
                         Image(systemName: "gearshape")
                     }
@@ -50,12 +60,19 @@ struct TimerUnifiedView: View {
             .presentationDetents(Set<PresentationDetent>([.medium, .large]))
             .presentationDragIndicator(Visibility.visible)
         }
+        .sheet(isPresented: $showMessageEditor) {
+            NotificationMessageSettingView()
+                .environmentObject(screenVM)
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+        }
         .toast(toast)
         .onAppear {
             screenVM.attachContext(context)
             screenVM.timerVM.showToast = { toast.show(Toast($0)) }
             screenVM.showToast = { toast.show(Toast($0)) }
             screenVM.timerVM.appStateManager = appStateManager
+            screenVM.timerVM.modelContext = context
             screenVM.initialConfiguration()
         }
         .onChange(of: scenePhase) { phase in

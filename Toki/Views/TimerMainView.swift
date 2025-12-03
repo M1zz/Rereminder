@@ -58,6 +58,12 @@ struct TimerMainView: View {
 
                 Spacer()
 
+                // 다음 알림 정보 (원 밖 아래쪽)
+                if !screenVM.nextAlertText.isEmpty {
+                    nextAlertInfo
+                        .padding(.vertical, spacing * 3)
+                }
+
                 Divider()
                     .padding(.vertical, spacing * 2)
 
@@ -72,8 +78,26 @@ struct TimerMainView: View {
         }
         .fullScreenCover(isPresented: $screenVM.showTimerAlert) {
             TimerAlertView {
+                print("🎯 TimerAlertView 확인 버튼 클릭 - 닫기")
                 screenVM.showTimerAlert = false
             }
+        }
+        .onChange(of: screenVM.showTimerAlert) { oldValue, newValue in
+            print("🔔 showTimerAlert 변경: \(oldValue) → \(newValue)")
+        }
+        .alert("알림 권한이 필요합니다", isPresented: $screenVM.showPermissionWarning) {
+            Button("설정으로 이동", role: .none) {
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url)
+                }
+            }
+            Button("나중에", role: .cancel) {
+                // 권한 없이 타이머 시작
+                screenVM.showToast?("⚠️ 알림 권한 없이 시작됨")
+                screenVM.timerVM.start()
+            }
+        } message: {
+            Text("타이머 알림을 받으려면 알림 권한이 필요합니다.\n\n권한이 없으면:\n• 예비 알림을 받을 수 없습니다\n• 종료 알림을 받을 수 없습니다\n• 백그라운드에서 알림이 작동하지 않습니다\n\n설정에서 알림 권한을 켜주세요.")
         }
     }
 
@@ -102,11 +126,11 @@ struct TimerMainView: View {
 
             clockMarkers(size: size, lineWidth: lineWidth)
 
-            if screenVM.state != .running {
+            if screenVM.state != .running && screenVM.state != .paused {
                 dragPointer(size: size, lineWidth: lineWidth)
             }
 
-            if isDragging && screenVM.state != .running {
+            if isDragging && screenVM.state != .running && screenVM.state != .paused {
                 dragTooltip(size: size, fontSize: min(geometry.size.width, geometry.size.height) * 0.03)
             }
 
@@ -282,10 +306,31 @@ struct TimerMainView: View {
             .lineLimit(1)
             .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
             .onTapGesture {
-                if screenVM.state != .running && screenVM.state != .overtime {
+                if screenVM.state != .running && screenVM.state != .overtime && screenVM.state != .paused {
                     showTimeInput = true
                 }
             }
+    }
+
+    @ViewBuilder
+    private var nextAlertInfo: some View {
+        VStack(spacing: 6) {
+            HStack(spacing: 6) {
+                Image(systemName: "bell.badge")
+                    .font(.system(size: 16, weight: .semibold))
+                Text(screenVM.nextAlertText)
+                    .font(.system(size: 17, weight: .semibold, design: .rounded))
+            }
+            .foregroundStyle(.orange)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 12)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color.orange.opacity(0.1))
+        )
+        .padding(.horizontal, 16)
     }
 
     @ViewBuilder
@@ -402,20 +447,21 @@ struct TimerMainView: View {
         }
     }
 
-    // 왼쪽 버튼 (취소)
+    // 왼쪽 버튼 (취소) - 타이머 시작 후에만 표시
     @ViewBuilder
     private func leftButton(buttonSize: CGFloat) -> some View {
-        Button(action: { screenVM.cancel() }) {
-            Image(systemName: "xmark")
-                .font(.title2)
-                .imageScale(.medium)
+        if screenVM.state != .idle {
+            Button(action: { screenVM.cancel() }) {
+                Image(systemName: "xmark")
+                    .font(.title2)
+                    .imageScale(.medium)
+            }
+            .buttonStyle(TimerButtonStyle(
+                tint: Color.plain,
+                size: buttonSize
+            ))
+            .accessibilityLabel("타이머 취소")
         }
-        .buttonStyle(TimerButtonStyle(
-            tint: Color.plain,
-            size: buttonSize
-        ))
-        .disabled(screenVM.state == .idle)
-        .accessibilityLabel("타이머 취소")
     }
 
     // 오른쪽 버튼 (재생/일시정지)

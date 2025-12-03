@@ -13,9 +13,14 @@ struct NoticeSettingView: View {
     @AppStorage("pushEnabled") private var pushEnabled: Bool = true
     @AppStorage("toastEnabled") private var toastEnabled: Bool = true
     @AppStorage("useAlarmKit") private var useAlarmKit: Bool = true
+    @AppStorage("testModeEnabled") private var testModeEnabled: Bool = false
+    @AppStorage("testModeMultiplier") private var testModeMultiplier: Double = 1.0
     @EnvironmentObject var appStateManager: AppStateManager
+    @EnvironmentObject var screenVM: TimerScreenViewModel
     @State private var showAlarmKitInfo = false
     @State private var showOnboarding = false
+    @State private var showTestModeInfo = false
+    @State private var showPermissionGuide = false
 
     var body: some View {
         Form {
@@ -28,6 +33,73 @@ struct NoticeSettingView: View {
                         }
                     }
                     .pickerStyle(.segmented)
+                }
+            }
+
+            // 권한 거부 경고 배너
+            if appStateManager.notificationAuthStatus == .denied {
+                Section {
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack(spacing: 8) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundStyle(.red)
+                                .font(.title2)
+                            Text("알림 권한이 거부되었습니다")
+                                .font(.headline)
+                                .foregroundStyle(.red)
+                        }
+
+                        Text("알림 권한이 없으면 다음 기능이 제대로 작동하지 않습니다:")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack(alignment: .top, spacing: 8) {
+                                Text("•")
+                                Text("예비 알림 (1분, 3분, 5분 등)")
+                            }
+                            HStack(alignment: .top, spacing: 8) {
+                                Text("•")
+                                Text("타이머 종료 알림")
+                            }
+                            HStack(alignment: .top, spacing: 8) {
+                                Text("•")
+                                Text("백그라운드에서 알림 수신")
+                            }
+                            HStack(alignment: .top, spacing: 8) {
+                                Text("•")
+                                Text("Live Activity (다이나믹 아일랜드)")
+                            }
+                        }
+                        .font(.callout)
+                        .foregroundStyle(.primary)
+
+                        Divider()
+
+                        VStack(spacing: 8) {
+                            Button(action: openSettings) {
+                                HStack {
+                                    Image(systemName: "gearshape.fill")
+                                    Text("설정에서 알림 켜기")
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 12)
+                                .background(Color.red)
+                                .foregroundStyle(.white)
+                                .cornerRadius(10)
+                            }
+
+                            Button(action: { showPermissionGuide = true }) {
+                                HStack {
+                                    Image(systemName: "info.circle")
+                                    Text("권한 설정 방법 보기")
+                                }
+                                .font(.subheadline)
+                                .foregroundStyle(.blue)
+                            }
+                        }
+                    }
+                    .padding(.vertical, 8)
                 }
             }
 
@@ -104,6 +176,53 @@ struct NoticeSettingView: View {
                 Toggle("토스트 메세지 표시", isOn: $toastEnabled)
             }
 
+            Section(header: Text("테스트 모드")) {
+                Toggle(isOn: $testModeEnabled) {
+                    HStack {
+                        Text("빠른 테스트 모드")
+                        Button(action: {
+                            showTestModeInfo.toggle()
+                        }) {
+                            Image(systemName: "info.circle")
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+                .onChange(of: testModeEnabled) { _, newValue in
+                    if !newValue {
+                        testModeMultiplier = 1.0
+                    }
+                }
+
+                if testModeEnabled {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("시간 배수 선택")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+
+                        Picker("시간 배수", selection: $testModeMultiplier) {
+                            Text("1배속 (실시간)").tag(1.0)
+                            Text("10배속").tag(10.0)
+                            Text("30배속").tag(30.0)
+                            Text("60배속").tag(60.0)
+                        }
+                        .pickerStyle(.segmented)
+
+                        VStack(alignment: .leading, spacing: 4) {
+                            if testModeMultiplier == 1.0 {
+                                Text("실시간으로 동작합니다")
+                            } else {
+                                Text("10분 타이머 → 약 \(Int(600 / testModeMultiplier))초 후 종료")
+                                Text("1분 타이머 → 약 \(Int(60 / testModeMultiplier))초 후 종료")
+                            }
+                        }
+                        .font(.caption)
+                        .foregroundStyle(.orange)
+                        .padding(.top, 4)
+                    }
+                }
+            }
+
             Section(header: Text("도움말")) {
                 Button {
                     showOnboarding = true
@@ -173,6 +292,33 @@ struct NoticeSettingView: View {
             Button("확인", role: .cancel) {}
         } message: {
             Text("타이머 전용 알림 시스템입니다.\n\n• 백그라운드에서도 정확한 시간에 알림이 울립니다\n• 자동으로 권한을 관리하여 편리합니다\n• 중복 알림을 방지하여 깔끔합니다\n• 멘토링이나 발표 시 시간 관리에 최적화되어 있습니다\n\n권장: 향상된 알림을 켜두는 것을 추천합니다")
+        }
+        .alert("빠른 테스트 모드란?", isPresented: $showTestModeInfo) {
+            Button("확인", role: .cancel) {}
+        } message: {
+            Text("타이머가 실제로 잘 동작하는지 빠르게 확인할 수 있는 모드입니다.\n\n• 10배속: 10분 타이머가 1분 만에 종료됩니다\n• 30배속: 10분 타이머가 20초 만에 종료됩니다\n• 60배속: 10분 타이머가 10초 만에 종료됩니다\n\n알림, 예비 알림, 오버타임 등 모든 기능을 빠르게 테스트할 수 있습니다.\n\n⚠️ 실제 사용 시에는 반드시 테스트 모드를 꺼주세요!")
+        }
+        .alert("알림 권한 설정 방법", isPresented: $showPermissionGuide) {
+            Button("설정으로 이동", role: .none) {
+                openSettings()
+            }
+            Button("닫기", role: .cancel) {}
+        } message: {
+            Text("""
+            아래 단계를 따라 알림 권한을 켜주세요:
+
+            1. '설정으로 이동' 버튼을 누르세요
+            2. 설정 앱에서 'Toki' 앱을 찾아주세요
+            3. '알림(Notifications)' 메뉴를 선택하세요
+            4. '알림 허용(Allow Notifications)'을 켜주세요
+
+            💡 권장 설정:
+            • 잠금 화면에 표시
+            • 알림 센터에 표시
+            • 배너로 표시
+
+            이렇게 하면 타이머 알림을 놓치지 않고 받을 수 있습니다!
+            """)
         }
         .fullScreenCover(isPresented: $showOnboarding) {
             OnboardingView(isPresented: $showOnboarding)

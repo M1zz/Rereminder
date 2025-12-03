@@ -6,7 +6,9 @@
 //
 
 import UserNotifications
+#if canImport(WatchKit)
 import WatchKit
+#endif
 
 struct NotificationService {
     func scheduleNotification(timeInterval: TimeInterval, title: String, body: String, identifier: String) {
@@ -89,9 +91,11 @@ struct NotificationService {
                 print("알림 예약 실패: \(identifier) - \(error.localizedDescription)")
             } else {
                 print("알림 예약 성공: \(identifier) - \(timeDescription)")
+                #if canImport(WatchKit)
                 DispatchQueue.main.async {
                     WKInterfaceDevice.current().play(.click)
                 }
+                #endif
             }
         }
     }
@@ -117,7 +121,8 @@ class NotificationDelegate: NSObject, ObservableObject, UNUserNotificationCenter
         print("알림 표시: \(notification.request.identifier)")
         
         completionHandler([.sound])
-        
+
+        #if canImport(WatchKit)
         DispatchQueue.main.async {
             let hapticType = notification.request.content.userInfo["haptic"] as? String ?? "click"
             switch hapticType {
@@ -129,5 +134,6 @@ class NotificationDelegate: NSObject, ObservableObject, UNUserNotificationCenter
                 WKInterfaceDevice.current().play(.click)
             }
         }
+        #endif
     }
 }

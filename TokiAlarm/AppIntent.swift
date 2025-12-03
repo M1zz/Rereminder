@@ -16,8 +16,7 @@ struct PauseIntent: LiveActivityIntent {
         // Broadcast notification to pause timer
         NotificationCenter.default.post(
             name: NSNotification.Name("PauseTimerIntent"),
-            object: nil,
-            userInfo: ["alarmID": alarmID]
+            object: nil
         )
         return .result()
     }
@@ -42,8 +41,7 @@ struct ResumeIntent: LiveActivityIntent {
         // Broadcast notification to resume timer
         NotificationCenter.default.post(
             name: NSNotification.Name("ResumeTimerIntent"),
-            object: nil,
-            userInfo: ["alarmID": alarmID]
+            object: nil
         )
         return .result()
     }
@@ -68,8 +66,7 @@ struct StopIntent: LiveActivityIntent {
         // Broadcast notification to stop timer
         NotificationCenter.default.post(
             name: NSNotification.Name("StopTimerIntent"),
-            object: nil,
-            userInfo: ["alarmID": alarmID]
+            object: nil
         )
         return .result()
     }
@@ -93,8 +90,7 @@ struct OpenAlarmAppIntent: LiveActivityIntent {
     func perform() throws -> some IntentResult {
         NotificationCenter.default.post(
             name: NSNotification.Name("StopTimerIntent"),
-            object: nil,
-            userInfo: ["alarmID": alarmID]
+            object: nil
         )
         return .result()
     }

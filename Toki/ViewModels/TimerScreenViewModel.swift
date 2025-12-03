@@ -17,6 +17,9 @@ final class TimerScreenViewModel: ObservableObject {
     @Published var selectedOffsets: Set<Int> = [60, 180, 300]  // prealert settings
     @Published private(set) var configuredMainSeconds: Int = 600
     @Published var showTimerAlert: Bool = false  // 전체 화면 알림 표시
+    @Published var prealertMessages: [Int: String] = [:]  // 예비 알림 커스텀 메시지
+    @Published var finishMessage: String = ""  // 종료 알림 커스텀 메시지
+    @Published var showPermissionWarning: Bool = false  // 권한 경고 표시
 
     let timerVM: TimerViewModel
     var showToast: ((String) -> Void)?
@@ -37,7 +40,9 @@ final class TimerScreenViewModel: ObservableObject {
 
         // 타이머 종료 시 전체 화면 알림 표시
         vm.onTimerFinish = { [weak self] in
+            print("🔔 TimerScreenViewModel: showTimerAlert = true 설정")
             self?.showTimerAlert = true
+            print("🔔 TimerScreenViewModel: showTimerAlert 현재 값 = \(self?.showTimerAlert ?? false)")
         }
 
         // Watch로부터 타이머 메시지 수신
@@ -91,6 +96,49 @@ final class TimerScreenViewModel: ObservableObject {
     var state: TimerState { timerVM.state }
     var remaining: TimeInterval { timerVM.remaining }
 
+    /// 다음 알림까지 남은 시간 텍스트
+    var nextAlertText: String {
+        guard state == .running || state == .overtime else { return "" }
+
+        let remaining = timerVM.remaining
+
+        // 오버타임이면 알림 없음
+        if remaining < 0 {
+            return ""
+        }
+
+        // 예비 알림 중에서 아직 발생하지 않은 것 찾기 (내림차순 정렬)
+        let upcomingAlerts = selectedOffsets
+            .sorted(by: >)  // 큰 것부터 (가장 먼 알림부터)
+            .filter { Double($0) < remaining }
+
+        if let nextAlert = upcomingAlerts.first {
+            let timeUntilNext = remaining - Double(nextAlert)
+            let minutes = Int(timeUntilNext) / 60
+            let seconds = Int(timeUntilNext) % 60
+
+            let alertMinutes = nextAlert / 60
+
+            if minutes > 0 {
+                return "다음: \(alertMinutes)분 알림 (\(minutes)분 \(seconds)초 후)"
+            } else {
+                return "다음: \(alertMinutes)분 알림 (\(seconds)초 후)"
+            }
+        } else {
+            // 모든 예비 알림이 지나갔으면 종료 알림까지 시간
+            let minutes = Int(remaining) / 60
+            let seconds = Int(remaining) % 60
+
+            if minutes > 0 {
+                return "다음: 종료 알림 (\(minutes)분 \(seconds)초 후)"
+            } else if seconds > 0 {
+                return "다음: 종료 알림 (\(seconds)초 후)"
+            } else {
+                return ""
+            }
+        }
+    }
+
     /// 앱 진입시 표시될 타이머 세팅
     func initialConfiguration() {
         justConfigure(save: false, toast: false)
@@ -115,11 +163,20 @@ final class TimerScreenViewModel: ObservableObject {
         mainMinutes = max(0, t.mainSeconds) / 60
         mainSeconds = max(0, t.mainSeconds) % 60
         selectedOffsets = Set(t.prealertOffsetsSec)  // 예비 알림도 동기화
+        prealertMessages = t.prealertMessages  // 커스텀 메시지 불러오기
+        finishMessage = t.finishMessage ?? ""  // 종료 메시지 불러오기
         showTemplateApplyToast(for: t)
         timerVM.start()
     }
 
     func start() {
+        // 권한 확인 후 경고 표시 (향상된 알림 사용 시에만)
+        if timerVM.appStateManager?.notificationAuthStatus == .denied,
+           UserDefaults.standard.bool(forKey: "useAlarmKit") {
+            showPermissionWarning = true
+            return
+        }
+
         showToast?("시작")
         timerVM.start()
     }
@@ -180,7 +237,9 @@ final class TimerScreenViewModel: ObservableObject {
         let temp = Timer(
             name: "dummy time setting",
             mainSeconds: mainSec,
-            prealertOffsetsSec: normalizedOffsets
+            prealertOffsetsSec: normalizedOffsets,
+            prealertMessages: prealertMessages,
+            finishMessage: finishMessage.isEmpty ? nil : finishMessage
         )
         timerVM.configure(from: temp)
         configuredMainSeconds = mainSec
@@ -225,14 +284,18 @@ extension TimerScreenViewModel {
         let currentTop = fetchRecents().first
         if let top = currentTop,
            top.mainSeconds == mainSec,
-           top.prealertOffsetsSec == offsets {
+           top.prealertOffsetsSec == offsets,
+           top.prealertMessages == prealertMessages,
+           top.finishMessage == (finishMessage.isEmpty ? nil : finishMessage) {
             return
         }
 
         let entry = Timer(
             name: makeTemplateName(mainSec: mainSec, offsets: offsets),
             mainSeconds: mainSec,
-            prealertOffsetsSec: offsets
+            prealertOffsetsSec: offsets,
+            prealertMessages: prealertMessages,
+            finishMessage: finishMessage.isEmpty ? nil : finishMessage
         )
         ctx.insert(entry)
         try? ctx.save()

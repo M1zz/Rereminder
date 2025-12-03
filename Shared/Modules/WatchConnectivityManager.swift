@@ -26,7 +26,16 @@ class WatchConnectivityManager: NSObject, ObservableObject {
         if WCSession.isSupported() {
             let session = WCSession.default
             session.delegate = self
+
+            // 페어링 여부와 관계없이 activate는 항상 호출해야 함
             session.activate()
+
+            #if os(iOS)
+            // iOS에서 페어링 상태만 로깅
+            if !session.isPaired {
+                print("ℹ️ Watch가 페어링되지 않음 (iOS 단독 실행 모드)")
+            }
+            #endif
         }
     }
 
@@ -34,9 +43,16 @@ class WatchConnectivityManager: NSObject, ObservableObject {
 
     /// 타이머 시작 메시지 전송
     func sendTimerStart(duration: TimeInterval, prealertOffsets: [Int]) {
+        guard WCSession.isSupported() else { return }
+
+        #if os(iOS)
+        guard WCSession.default.isPaired else {
+            return // Watch가 없어도 iOS는 정상 동작
+        }
+        #endif
+
         guard WCSession.default.isReachable else {
-            print("⚠️ Watch가 연결되지 않았습니다")
-            return
+            return // 연결되지 않아도 조용히 무시
         }
 
         let message: [String: Any] = [
@@ -55,6 +71,12 @@ class WatchConnectivityManager: NSObject, ObservableObject {
 
     /// 타이머 일시정지 메시지 전송
     func sendTimerPause() {
+        guard WCSession.isSupported() else { return }
+
+        #if os(iOS)
+        guard WCSession.default.isPaired else { return }
+        #endif
+
         guard WCSession.default.isReachable else { return }
 
         let message = ["action": "pause"]
@@ -67,6 +89,12 @@ class WatchConnectivityManager: NSObject, ObservableObject {
 
     /// 타이머 재개 메시지 전송
     func sendTimerResume(remainingDuration: TimeInterval) {
+        guard WCSession.isSupported() else { return }
+
+        #if os(iOS)
+        guard WCSession.default.isPaired else { return }
+        #endif
+
         guard WCSession.default.isReachable else { return }
 
         let message: [String: Any] = [
@@ -84,6 +112,12 @@ class WatchConnectivityManager: NSObject, ObservableObject {
 
     /// 타이머 중지 메시지 전송
     func sendTimerStop() {
+        guard WCSession.isSupported() else { return }
+
+        #if os(iOS)
+        guard WCSession.default.isPaired else { return }
+        #endif
+
         guard WCSession.default.isReachable else { return }
 
         let message = ["action": "stop"]
@@ -98,6 +132,12 @@ class WatchConnectivityManager: NSObject, ObservableObject {
 
     /// 타이머 상태를 Application Context로 전송 (백그라운드에서도 동작)
     func updateTimerContext(duration: TimeInterval?, remaining: TimeInterval?, state: String) {
+        guard WCSession.isSupported() else { return }
+
+        #if os(iOS)
+        guard WCSession.default.isPaired else { return }
+        #endif
+
         guard WCSession.default.activationState == .activated else { return }
 
         var context: [String: Any] = [

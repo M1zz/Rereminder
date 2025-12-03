@@ -14,10 +14,31 @@ struct TimerTemplateView: View {
     @Environment(\.modelContext) private var context
 
     @Query(sort: [SortDescriptor(\Timer.createdAt, order: .reverse)])
-    private var templates: [Timer]
+    private var allTemplates: [Timer]
+
+    // 즐겨찾기 먼저, 그 다음 최근 사용 순으로 정렬
+    private var templates: [Timer] {
+        allTemplates.sorted { t1, t2 in
+            // 즐겨찾기가 우선
+            if t1.isFavorite != t2.isFavorite {
+                return t1.isFavorite
+            }
+            // 최근 사용 시간이 있으면 그것으로 정렬
+            if let d1 = t1.lastUsedAt, let d2 = t2.lastUsedAt {
+                return d1 > d2
+            }
+            // 한쪽만 사용 기록이 있으면 그쪽 우선
+            if t1.lastUsedAt != nil { return true }
+            if t2.lastUsedAt != nil { return false }
+            // 둘 다 없으면 생성일로 정렬
+            return t1.createdAt > t2.createdAt
+        }
+    }
 
     @State private var editingTimer: Timer?
     @State private var editName: String = ""
+    @State private var editLabel: String = ""
+    @State private var editColorHex: String = "#007AFF"
 
     let onSelect: (Timer) -> Void
 
@@ -34,48 +55,7 @@ struct TimerTemplateView: View {
                 } else {
                     List {
                         ForEach(templates) { t in
-                            Button {
-                                onSelect(t)
-                                dismiss()
-                            } label: {
-                                let mMain = t.mainSeconds / 60
-                                let sMain = t.mainSeconds % 60
-
-                                let preList = t.prealertOffsetsSec
-                                    .sorted()
-                                    .map { sec -> String in
-                                        let m = sec / 60
-                                        return "\(m)분"
-                                    }
-                                    .joined(separator: ", ")
-
-                                if preList.isEmpty {
-                                    Text("메인 \(mMain)분 \(sMain)초, 예비: 없음")
-                                } else {
-                                    Text(
-                                        "메인 \(mMain)분 \(sMain)초, 예비: \(preList)"
-                                    )
-                                }
-                            }
-                            .swipeActions(edge: .leading, allowsFullSwipe: false) {
-                                Button {
-                                    editingTimer = t
-                                    editName = t.name
-                                } label: {
-                                    Label("편집", systemImage: "pencil")
-                                }
-                                .tint(.blue)
-                            }
-                            .swipeActions(
-                                edge: .trailing,
-                                allowsFullSwipe: true
-                            ) {
-                                Button(role: .destructive) {
-                                    delete(t)
-                                } label: {
-                                    Image(systemName: "trash")
-                                }
-                            }
+                            templateRow(for: t)
                         }
                     }
                     .listStyle(.insetGrouped)
@@ -85,34 +65,211 @@ struct TimerTemplateView: View {
             .navigationBarTitleDisplayMode(.inline)
         }
         .sheet(item: $editingTimer) { timer in
-            NavigationView {
-                Form {
-                    TextField("템플릿 이름", text: $editName)
+            editSheet(for: timer)
+        }
+    }
+
+    @ViewBuilder
+    private func templateRow(for timer: Timer) -> some View {
+        Button {
+            onSelect(timer)
+            dismiss()
+        } label: {
+            HStack(spacing: 12) {
+                // 즐겨찾기 아이콘
+                Button {
+                    toggleFavorite(timer)
+                } label: {
+                    Image(systemName: timer.isFavorite ? "star.fill" : "star")
+                        .foregroundStyle(timer.isFavorite ? .yellow : .gray)
+                        .font(.title3)
                 }
-                .navigationTitle("템플릿 편집")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button("취소") {
-                            editingTimer = nil
+                .buttonStyle(.plain)
+
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(spacing: 8) {
+                        // 레이블 태그
+                        if !timer.label.isEmpty {
+                            Text(timer.label)
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 3)
+                                .background(colorFromHex(timer.colorHex).opacity(0.2))
+                                .foregroundStyle(colorFromHex(timer.colorHex))
+                                .cornerRadius(6)
+                        }
+
+                        // 사용 횟수
+                        if timer.usageCount > 0 {
+                            HStack(spacing: 2) {
+                                Image(systemName: "play.circle.fill")
+                                    .font(.caption2)
+                                Text("\(timer.usageCount)")
+                                    .font(.caption)
+                            }
+                            .foregroundStyle(.secondary)
                         }
                     }
-                    ToolbarItem(placement: .confirmationAction) {
-                        Button("저장") {
-                            timer.name = editName
-                            try? context.save()
-                            editingTimer = nil
+
+                    // 타이머 정보
+                    let mMain = timer.mainSeconds / 60
+                    let sMain = timer.mainSeconds % 60
+                    let preList = timer.prealertOffsetsSec
+                        .sorted()
+                        .map { "\($0/60)분" }
+                        .joined(separator: ", ")
+
+                    Text(sMain > 0 ? "메인 \(mMain)분 \(sMain)초" : "메인 \(mMain)분")
+                        .font(.body)
+                        .fontWeight(.medium)
+                        .foregroundStyle(.primary)
+
+                    if !preList.isEmpty {
+                        Text("예비: \(preList)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.caption)
+                    .foregroundStyle(.tertiary)
+            }
+            .padding(.vertical, 4)
+        }
+        .swipeActions(edge: .leading, allowsFullSwipe: false) {
+            Button {
+                editingTimer = timer
+                editName = timer.name
+                editLabel = timer.label
+                editColorHex = timer.colorHex
+            } label: {
+                Label("편집", systemImage: "pencil")
+            }
+            .tint(.blue)
+        }
+        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+            Button(role: .destructive) {
+                delete(timer)
+            } label: {
+                Image(systemName: "trash")
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func editSheet(for timer: Timer) -> some View {
+        NavigationView {
+            Form {
+                Section(header: Text("이름")) {
+                    TextField("템플릿 이름", text: $editName)
+                }
+
+                Section(header: Text("레이블")) {
+                    TextField("예: 발표, 멘토링, 회의", text: $editLabel)
+
+                    Text("레이블을 설정하면 타이머를 쉽게 구분할 수 있습니다")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+
+                Section(header: Text("레이블 색상")) {
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 12) {
+                            ForEach(Array(Timer.presetColors.keys.sorted()), id: \.self) { label in
+                                if let colorHex = Timer.presetColors[label] {
+                                    colorButton(label: label, colorHex: colorHex)
+                                }
+                            }
                         }
+                        .padding(.vertical, 8)
+                    }
+
+                    HStack {
+                        Text("선택한 색상:")
+                        Circle()
+                            .fill(colorFromHex(editColorHex))
+                            .frame(width: 24, height: 24)
+                        Text(editColorHex)
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            .navigationTitle("템플릿 편집")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("취소") {
+                        editingTimer = nil
+                    }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("저장") {
+                        timer.name = editName
+                        timer.label = editLabel
+                        timer.colorHex = editColorHex
+                        try? context.save()
+                        editingTimer = nil
                     }
                 }
             }
         }
     }
 
-    private func delete(_ t: Timer) {
+    @ViewBuilder
+    private func colorButton(label: String, colorHex: String) -> some View {
+        Button {
+            editLabel = label
+            editColorHex = colorHex
+        } label: {
+            VStack(spacing: 4) {
+                Circle()
+                    .fill(colorFromHex(colorHex))
+                    .frame(width: 40, height: 40)
+                    .overlay(
+                        Circle()
+                            .strokeBorder(editColorHex == colorHex ? Color.primary : Color.clear, lineWidth: 2)
+                    )
+
+                Text(label)
+                    .font(.caption2)
+                    .foregroundStyle(.primary)
+            }
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func toggleFavorite(_ timer: Timer) {
         withAnimation {
-            context.delete(t)
+            timer.isFavorite.toggle()
             try? context.save()
         }
+    }
+
+    private func delete(_ timer: Timer) {
+        withAnimation {
+            context.delete(timer)
+            try? context.save()
+        }
+    }
+
+    private func colorFromHex(_ hex: String) -> Color {
+        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+        var int: UInt64 = 0
+        Scanner(string: hex).scanHexInt64(&int)
+        let r, g, b: UInt64
+        switch hex.count {
+        case 3: // RGB (12-bit)
+            (r, g, b) = ((int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
+        case 6: // RGB (24-bit)
+            (r, g, b) = (int >> 16, int >> 8 & 0xFF, int & 0xFF)
+        default:
+            (r, g, b) = (0, 122, 255) // 기본 파란색
+        }
+        return Color(red: Double(r) / 255, green: Double(g) / 255, blue: Double(b) / 255)
     }
 }

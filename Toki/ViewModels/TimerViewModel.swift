@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import SwiftData
+import ActivityKit
 
 @MainActor
 final class TimerViewModel: ObservableObject {
@@ -16,51 +18,67 @@ final class TimerViewModel: ObservableObject {
     var showToast: ((String) -> Void)?
     var appStateManager: AppStateManager?
     var onTimerFinish: (() -> Void)?  // 타이머 종료 시 전체 화면 알림 콜백
+    var modelContext: ModelContext?  // 기록 저장용
 
     private var currentTemplate: Timer?
-    private var useAlarmKit: Bool {
-        UserDefaults.standard.bool(forKey: "useAlarmKit")
-    }
+    private var timerStartTime: Date?  // 타이머 시작 시간
+    private var currentActivity: Activity<TimerActivityAttributes>?  // Live Activity
 
     init() {
-        // AlarmKit 기본값 true
-        if UserDefaults.standard.object(forKey: "useAlarmKit") == nil {
-            UserDefaults.standard.set(true, forKey: "useAlarmKit")
+        // NotificationCenter observers for Live Activity button actions
+        NotificationCenter.default.addObserver(
+            forName: NSNotification.Name("PauseTimerIntent"),
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.pause()
         }
 
-        engine.onTick = { [weak self] r in self?.remaining = r }
-        engine.onPreAlert = { [weak self] sec in
-            let min = sec / 60
-            ring()
-            let message = "\(min)분 남았습니다"
-            self?.showToast?(message)
+        NotificationCenter.default.addObserver(
+            forName: NSNotification.Name("ResumeTimerIntent"),
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.resume()
+        }
 
-            // AlarmKit 미사용 시에만 푸시 알림
-            if self?.useAlarmKit == false {
-                self?.appStateManager?.sendNotificationIfNeeded(message)
-            }
+        NotificationCenter.default.addObserver(
+            forName: NSNotification.Name("StopTimerIntent"),
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.stop()
+        }
+
+        engine.onTick = { [weak self] r in
+            self?.remaining = r
+            self?.updateLiveActivity()
+        }
+        engine.onPreAlert = { [weak self] sec in
+            guard let self, let template = self.currentTemplate else { return }
+            ring()
+            let message = template.getPrealertMessage(for: sec)
+            self.showToast?(message)
+            self.appStateManager?.sendNotificationIfNeeded(message)
         }
         engine.onFinish = { [weak self] in
             guard let self else { return }
+
+            print("🔔 타이머 종료! onFinish 호출됨")
+
             self.state = .overtime  // 오버타임 상태로 전환 (타이머는 계속 진행)
             ring()
-            let message = "타이머 종료되었습니다"
+            let message = self.currentTemplate?.getFinishMessage() ?? "타이머 종료되었습니다"
             self.showToast?(message)
 
             // 전체 화면 알림 표시
-            self.onTimerFinish?()
-
-            // AlarmKit 미사용 시에만 푸시 알림
-            if self.useAlarmKit == false {
-                self.appStateManager?.sendNotificationIfNeeded(message)
+            DispatchQueue.main.async {
+                print("🔔 전체 화면 알림 표시 시도")
+                self.onTimerFinish?()
             }
 
-            // Live Activity를 alert 모드로 전환
-            if self.useAlarmKit == true {
-                Task {
-                    await TokiAlarmManager.shared.endLiveActivity()
-                }
-            }
+            // 푸시 알림 전송
+            self.appStateManager?.sendNotificationIfNeeded(message)
         }
 
         // Live Activity 인텐트 옵저버
@@ -144,22 +162,22 @@ final class TimerViewModel: ObservableObject {
     }
 
     func start() {
+        // 타이머 시작 시간 기록
+        timerStartTime = Date()
+
+        // 테스트 모드가 켜져 있을 때만 배수 적용
+        let testModeEnabled = UserDefaults.standard.bool(forKey: "testModeEnabled")
+        let multiplier = testModeEnabled
+            ? (UserDefaults.standard.object(forKey: "testModeMultiplier") as? Double ?? 1.0)
+            : 1.0
+        engine.timeMultiplier = multiplier
+
         engine.start()
         state = .running
 
-        // AlarmKit 스케줄 + Live Activity 시작
-        if useAlarmKit, let template = currentTemplate {
-            Task {
-                do {
-                    try await TokiAlarmManager.shared.startTimerWithLiveActivity(
-                        mainDuration: TimeInterval(template.mainSeconds),
-                        prealertOffsets: template.prealertOffsetsSec
-                    )
-                    print("✅ Live Activity 시작 성공")
-                } catch {
-                    print("❌ Live Activity 시작 실패: \(error.localizedDescription)")
-                }
-            }
+        // Live Activity 시작
+        if let template = currentTemplate {
+            startLiveActivity(template: template)
         }
 
         // Watch로 타이머 시작 전송
@@ -175,18 +193,8 @@ final class TimerViewModel: ObservableObject {
         engine.pause()
         state = .paused
 
-        // Live Activity를 일시정지 상태로 업데이트
-        if useAlarmKit, let template = currentTemplate {
-            Task {
-                let totalDuration = TimeInterval(template.mainSeconds)
-                let elapsed = totalDuration - remaining
-                await TokiAlarmManager.shared.pauseTimerWithLiveActivity(
-                    totalDuration: totalDuration,
-                    elapsedDuration: elapsed
-                )
-                print("✅ Live Activity 일시정지 업데이트")
-            }
-        }
+        // Live Activity 업데이트
+        updateLiveActivity()
 
         // Watch로 일시정지 전송
         WatchConnectivityManager.shared.sendTimerPause()
@@ -196,32 +204,109 @@ final class TimerViewModel: ObservableObject {
         engine.resume()
         state = .running
 
-        // Live Activity를 카운트다운 상태로 업데이트
-        if useAlarmKit, remaining > 0 {
-            Task {
-                await TokiAlarmManager.shared.resumeTimerWithLiveActivity(
-                    remainingDuration: remaining
-                )
-                print("✅ Live Activity 재개 업데이트")
-            }
-        }
+        // Live Activity 업데이트
+        updateLiveActivity()
 
         // Watch로 재개 전송
         WatchConnectivityManager.shared.sendTimerResume(remainingDuration: remaining)
     }
 
     func stop() {
+        // 타이머 기록 저장
+        saveTimerRecord(finished: state == .overtime)
+
         engine.stop()
         state = .idle
 
-        // AlarmKit 알람 취소
-        if useAlarmKit {
-            Task {
-                try? await TokiAlarmManager.shared.cancelAllAlarms()
-            }
-        }
+        // Live Activity 종료
+        endLiveActivity()
 
         // Watch로 중지 전송
         WatchConnectivityManager.shared.sendTimerStop()
+
+        // 시작 시간 초기화
+        timerStartTime = nil
+    }
+
+    private func saveTimerRecord(finished: Bool) {
+        guard let template = currentTemplate,
+              let context = modelContext,
+              let startTime = timerStartTime else { return }
+
+        let elapsed = Date().timeIntervalSince(startTime)
+        let elapsedSeconds = Int(elapsed)
+
+        let record = TimerRecord(
+            date: startTime,
+            finished: finished,
+            elapsedSeconds: elapsedSeconds,
+            snapshotMainSeconds: template.mainSeconds,
+            snapshotPrealertOffsetsSec: template.prealertOffsetsSec,
+            template: template
+        )
+
+        context.insert(record)
+
+        // 템플릿의 마지막 사용 시간 업데이트
+        template.lastUsedAt = Date()
+
+        try? context.save()
+        print("✅ 타이머 기록 저장: \(finished ? "완료" : "중단"), 경과 시간: \(elapsedSeconds)초")
+    }
+
+    // MARK: - Live Activity
+
+    private func startLiveActivity(template: Timer) {
+        guard ActivityAuthorizationInfo().areActivitiesEnabled else {
+            print("⚠️ Live Activities가 비활성화되어 있습니다")
+            return
+        }
+
+        let attributes = TimerActivityAttributes(
+            timerName: template.name,
+            totalDuration: TimeInterval(template.mainSeconds),
+            startTime: Date()
+        )
+
+        let initialState = TimerActivityAttributes.ContentState(
+            remainingTime: TimeInterval(template.mainSeconds),
+            isPaused: false,
+            timestamp: Date()
+        )
+
+        do {
+            let activity = try Activity.request(
+                attributes: attributes,
+                content: .init(state: initialState, staleDate: nil)
+            )
+            currentActivity = activity
+        } catch {
+            print("❌ Live Activity 시작 실패: \(error)")
+        }
+    }
+
+    private func updateLiveActivity() {
+        guard let activity = currentActivity else { return }
+
+        let newState = TimerActivityAttributes.ContentState(
+            remainingTime: remaining,
+            isPaused: state == .paused,
+            timestamp: Date()
+        )
+
+        Task {
+            await activity.update(
+                .init(state: newState, staleDate: nil)
+            )
+        }
+    }
+
+    private func endLiveActivity() {
+        guard let activity = currentActivity else { return }
+
+        Task {
+            await activity.end(nil, dismissalPolicy: .immediate)
+            currentActivity = nil
+        }
     }
 }
