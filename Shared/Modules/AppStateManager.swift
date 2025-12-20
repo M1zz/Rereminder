@@ -42,16 +42,50 @@ final class AppStateManager: ObservableObject {
     }
 
     func sendNotificationIfNeeded(_ message: String) {
-        // 백그라운드에서 알림 전송 (주석 해제)
+        // 백그라운드에서 알림 전송
+        print("📱 [알림] sendNotificationIfNeeded 호출됨")
+        print("   - 메시지: \(message)")
+        print("   - 백그라운드 상태: \(isInBackground)")
+        print("   - 알림 권한: \(notificationAuthStatus)")
+
         if isInBackground {
+            print("   ✅ 백그라운드 상태 → 알림 전송 시도")
             pushPrealertNotice(message: message)
+        } else {
+            print("   ⚠️ 포그라운드 상태 → 알림 전송 안함")
+        }
+    }
+
+    // 테스트용: 즉시 알림 전송
+    func sendTestNotification() {
+        print("🧪 [테스트] 테스트 알림 전송 시작")
+        let content = UNMutableNotificationContent()
+        content.title = "Toki 테스트 알림"
+        content.body = "알림이 정상적으로 작동합니다! 🎉"
+        content.sound = .default
+
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("   ❌ 테스트 알림 전송 실패: \(error)")
+            } else {
+                print("   ✅ 테스트 알림 전송 성공")
+            }
         }
     }
 }
 
 private func pushPrealertNotice(message: String) {
     let pushEnabled = UserDefaults.standard.bool(forKey: "pushEnabled")
-    guard pushEnabled else { return }
+    print("📤 [알림 전송] pushPrealertNotice 시작")
+    print("   - pushEnabled: \(pushEnabled)")
+
+    guard pushEnabled else {
+        print("   ⚠️ pushEnabled가 꺼져있음 → 알림 전송 취소")
+        return
+    }
 
     let center = UNUserNotificationCenter.current()
 
@@ -64,5 +98,11 @@ private func pushPrealertNotice(message: String) {
 
     let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
 
-    center.add(request)
+    center.add(request) { error in
+        if let error = error {
+            print("   ❌ 알림 추가 실패: \(error)")
+        } else {
+            print("   ✅ 알림 추가 성공 (1초 후 전송)")
+        }
+    }
 }

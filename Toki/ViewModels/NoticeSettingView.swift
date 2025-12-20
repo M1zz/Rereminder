@@ -12,7 +12,11 @@ struct NoticeSettingView: View {
     @AppStorage("ringMode") private var ringMode: RingMode = .sound
     @AppStorage("pushEnabled") private var pushEnabled: Bool = true
     @AppStorage("toastEnabled") private var toastEnabled: Bool = true
+    #if targetEnvironment(macCatalyst)
+    @AppStorage("useAlarmKit") private var useAlarmKit: Bool = false
+    #else
     @AppStorage("useAlarmKit") private var useAlarmKit: Bool = true
+    #endif
     @AppStorage("testModeEnabled") private var testModeEnabled: Bool = false
     @AppStorage("testModeMultiplier") private var testModeMultiplier: Double = 1.0
     @EnvironmentObject var appStateManager: AppStateManager
@@ -104,6 +108,7 @@ struct NoticeSettingView: View {
             }
 
             Section(header: Text("알림 방식")) {
+                #if !targetEnvironment(macCatalyst)
                 Toggle(isOn: $useAlarmKit) {
                     HStack {
                         Text("향상된 알림 사용 (권장)")
@@ -144,6 +149,14 @@ struct NoticeSettingView: View {
                 } else {
                     Toggle("푸시 알림 보내기", isOn: $pushEnabled)
                 }
+                #else
+                Toggle("푸시 알림 보내기", isOn: $pushEnabled)
+                    .disabled(false)
+
+                Text("macOS에서는 기본 알림만 지원됩니다")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                #endif
 
                 // 알림 권한 상태 표시
                 HStack {
@@ -169,6 +182,27 @@ struct NoticeSettingView: View {
                         Text("알 수 없음")
                             .foregroundStyle(.secondary)
                     }
+                }
+
+                // 테스트 알림 버튼
+                if appStateManager.notificationAuthStatus == .authorized {
+                    Button(action: {
+                        appStateManager.sendTestNotification()
+                    }) {
+                        HStack {
+                            Image(systemName: "bell.badge.fill")
+                                .foregroundStyle(.blue)
+                            Text("테스트 알림 보내기")
+                            Spacer()
+                            Image(systemName: "arrow.right.circle.fill")
+                                .foregroundStyle(.blue)
+                        }
+                    }
+                    .foregroundStyle(.primary)
+
+                    Text("버튼을 누르면 1초 후 테스트 알림이 전송됩니다")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
             }
 
@@ -326,9 +360,17 @@ struct NoticeSettingView: View {
     }
 
     private func openSettings() {
+        #if targetEnvironment(macCatalyst)
+        // macOS에서는 시스템 환경설정의 알림 섹션을 열 수 없으므로 안내 메시지만 표시
+        // 사용자가 수동으로 System Settings > Notifications > Toki로 이동해야 함
+        if let url = URL(string: "x-apple.systempreferences:com.apple.preference.notifications") {
+            UIApplication.shared.open(url)
+        }
+        #else
         if let url = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(url)
         }
+        #endif
     }
 
     private func shareApp() {

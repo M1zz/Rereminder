@@ -5,6 +5,9 @@
 //  Timer metadata for AlarmKit
 //
 
+import Foundation
+
+#if canImport(AlarmKit) && !targetEnvironment(macCatalyst)
 import AlarmKit
 
 struct TokiTimerData: AlarmMetadata {
@@ -16,3 +19,4 @@ struct TokiTimerData: AlarmMetadata {
         self.timerName = timerName
     }
 }
+#endif

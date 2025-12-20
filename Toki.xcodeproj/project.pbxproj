@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2B302B142E4375170089A14A /* WatchToki Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2B302B0A2E4375150089A14A /* WatchToki Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		2B302B142E4375170089A14A /* WatchToki Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2B302B0A2E4375150089A14A /* WatchToki Watch App.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		58AA3EB02ECF5509007D4BBD /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AA3EAF2ECF5509007D4BBD /* WidgetKit.framework */; };
 		58AA3EB22ECF5509007D4BBD /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AA3EB12ECF5509007D4BBD /* SwiftUI.framework */; };
-		58AA3EC32ECF550B007D4BBD /* TokiAlarmExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 58AA3EAD2ECF5509007D4BBD /* TokiAlarmExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		58AA3EC32ECF550B007D4BBD /* TokiAlarmExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 58AA3EAD2ECF5509007D4BBD /* TokiAlarmExtension.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -346,11 +346,13 @@
 /* Begin PBXTargetDependency section */
 		2B302B132E4375170089A14A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = 2B302B092E4375150089A14A /* WatchToki Watch App */;
 			targetProxy = 2B302B122E4375170089A14A /* PBXContainerItemProxy */;
 		};
 		58AA3EC22ECF550B007D4BBD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = 58AA3EAC2ECF5509007D4BBD /* TokiAlarmExtension */;
 			targetProxy = 58AA3EC12ECF550B007D4BBD /* PBXContainerItemProxy */;
 		};
@@ -504,13 +506,13 @@
 				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -540,13 +542,13 @@
 				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = YES;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

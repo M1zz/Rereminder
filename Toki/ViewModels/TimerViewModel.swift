@@ -7,7 +7,10 @@
 
 import SwiftUI
 import SwiftData
+
+#if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
 import ActivityKit
+#endif
 
 @MainActor
 final class TimerViewModel: ObservableObject {
@@ -22,7 +25,10 @@ final class TimerViewModel: ObservableObject {
 
     private var currentTemplate: Timer?
     private var timerStartTime: Date?  // 타이머 시작 시간
+
+    #if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
     private var currentActivity: Activity<TimerActivityAttributes>?  // Live Activity
+    #endif
 
     init() {
         // NotificationCenter observers for Live Activity button actions
@@ -257,6 +263,7 @@ final class TimerViewModel: ObservableObject {
     // MARK: - Live Activity
 
     private func startLiveActivity(template: Timer) {
+        #if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
         guard ActivityAuthorizationInfo().areActivitiesEnabled else {
             print("⚠️ Live Activities가 비활성화되어 있습니다")
             return
@@ -283,9 +290,13 @@ final class TimerViewModel: ObservableObject {
         } catch {
             print("❌ Live Activity 시작 실패: \(error)")
         }
+        #else
+        print("⚠️ Live Activities는 iOS에서만 지원됩니다")
+        #endif
     }
 
     private func updateLiveActivity() {
+        #if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
         guard let activity = currentActivity else { return }
 
         let newState = TimerActivityAttributes.ContentState(
@@ -299,14 +310,17 @@ final class TimerViewModel: ObservableObject {
                 .init(state: newState, staleDate: nil)
             )
         }
+        #endif
     }
 
     private func endLiveActivity() {
+        #if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
         guard let activity = currentActivity else { return }
 
         Task {
             await activity.end(nil, dismissalPolicy: .immediate)
             currentActivity = nil
         }
+        #endif
     }
 }

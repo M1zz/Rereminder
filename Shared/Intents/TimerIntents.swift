@@ -5,9 +5,11 @@
 //  App Intents for AlarmKit timer controls
 //
 
+import Foundation
+
+#if canImport(AlarmKit) && !targetEnvironment(macCatalyst)
 import AppIntents
 import AlarmKit
-import Foundation
 
 // MARK: - Pause Timer Intent
 
@@ -89,3 +91,4 @@ struct StopTimerIntent: LiveActivityIntent {
         return .result()
     }
 }
+#endif

@@ -6,6 +6,8 @@
 //
 
 import Foundation
+
+#if canImport(AlarmKit) && !targetEnvironment(macCatalyst)
 import AlarmKit
 import SwiftUI
 import AppIntents
@@ -69,103 +71,33 @@ class TokiAlarmManager: ObservableObject {
         // 기존 알람 취소
         try await cancelAll()
 
-        // AlarmPresentation 구성 (Apple 샘플과 동일한 패턴)
-        let alertContent = AlarmPresentation.Alert(
-            title: LocalizedStringResource(stringLiteral: finishMessage ?? "타이머 종료"),
-            stopButton: .stopButton
-        )
+        print("⚠️ AlarmKit 타이머 스케줄은 현재 비활성화되어 있습니다")
+        print("   기본 타이머 엔진만 사용합니다")
 
-        let countdownContent = AlarmPresentation.Countdown(
-            title: LocalizedStringResource(stringLiteral: timerName ?? "타이머 진행 중"),
-            pauseButton: .pauseButton
-        )
-
-        let pausedContent = AlarmPresentation.Paused(
-            title: "일시정지됨",
-            resumeButton: .resumeButton
-        )
-
-        let presentation = AlarmPresentation(
-            alert: alertContent,
-            countdown: countdownContent,
-            paused: pausedContent
-        )
-
-        let attributes = AlarmAttributes(
-            presentation: presentation,
-            metadata: TokiTimerData(timerName: timerName),
-            tintColor: .orange
-        )
-
-        // Alarm 스케줄
-        let alarmID = UUID()
-        currentAlarmID = alarmID
-
-        // 타이머: 지금부터 mainDuration 초 후에 알람
-        let fireDate = Date.now.addingTimeInterval(mainDuration)
-
-        let alarmConfiguration = AlarmConfiguration(
-            countdownDuration: .init(preAlert: mainDuration, postAlert: nil),
-            schedule: .fixed(fireDate),
-            attributes: attributes,
-            stopIntent: StopTimerIntent(alarmID: alarmID.uuidString)
-        )
-
-        do {
-            let alarm = try await alarmManager.schedule(id: alarmID, configuration: alarmConfiguration)
-            print("✅ AlarmKit 타이머 스케줄 성공: \(Int(mainDuration))초")
-            print("   - Alarm ID: \(alarm.id)")
-            print("   - Alarm State: \(alarm.state)")
-            print("   - Schedule: \(String(describing: alarm.schedule))")
-            print("   - Fire Date: \(fireDate)")
-        } catch {
-            print("❌ AlarmKit 타이머 스케줄 실패: \(error)")
-            print("   - Error details: \(error.localizedDescription)")
-            throw error
-        }
+        // AlarmKit API 구조가 변경되어 임시로 비활성화
+        // 기본 타이머 기능(TimerEngine)은 정상 작동합니다
     }
 
     // MARK: - Control Methods
 
     func pause() async throws {
-        guard let alarmID = currentAlarmID else {
-            print("⚠️ 일시정지할 알람 ID가 없습니다")
-            return
-        }
-
-        try alarmManager.pause(id: alarmID)
-        print("⏸️ AlarmKit 타이머 일시정지")
+        print("⏸️ AlarmKit 일시정지 (비활성화됨)")
     }
 
     func resume() async throws {
-        guard let alarmID = currentAlarmID else {
-            print("⚠️ 재개할 알람 ID가 없습니다")
-            return
-        }
-
-        try alarmManager.resume(id: alarmID)
-        print("▶️ AlarmKit 타이머 재개")
+        print("▶️ AlarmKit 재개 (비활성화됨)")
     }
 
     func stop() async throws {
-        guard let alarmID = currentAlarmID else {
-            print("⚠️ 중지할 알람 ID가 없습니다")
-            return
-        }
-
-        try alarmManager.stop(id: alarmID)
         currentAlarmID = nil
-        print("⏹️ AlarmKit 타이머 중지")
+        print("⏹️ AlarmKit 중지 (비활성화됨)")
     }
 
     // MARK: - Cancel
 
     func cancelAll() async throws {
-        if let alarmID = currentAlarmID {
-            try alarmManager.cancel(id: alarmID)
-            currentAlarmID = nil
-            print("🗑️ AlarmKit 타이머 취소")
-        }
+        currentAlarmID = nil
+        print("🗑️ AlarmKit 취소 (비활성화됨)")
     }
 }
 
@@ -187,18 +119,58 @@ extension TimerAlarmError: LocalizedError {
     }
 }
 
-// MARK: - AlarmButton Extensions (Apple 샘플과 동일)
-
-extension AlarmButton {
-    static var pauseButton: Self {
-        AlarmButton(text: "일시정지", textColor: .black, systemImageName: "pause.fill")
+#else
+// macOS용 더미 구현
+@MainActor
+class TokiAlarmManager: ObservableObject {
+    enum AuthorizationState {
+        case notDetermined, denied, authorized
     }
 
-    static var resumeButton: Self {
-        AlarmButton(text: "재개", textColor: .black, systemImageName: "play.fill")
+    static let shared = TokiAlarmManager()
+
+    @Published var authorizationState: AuthorizationState = .notDetermined
+
+    private init() {}
+
+    func checkAuthorizationStatus() {
+        print("⚠️ AlarmKit은 macOS에서 지원되지 않습니다")
     }
 
-    static var stopButton: Self {
-        AlarmButton(text: "확인", textColor: .white, systemImageName: "checkmark.circle.fill")
+    func requestAuthorization() async -> Bool {
+        print("⚠️ AlarmKit은 macOS에서 지원되지 않습니다")
+        return false
+    }
+
+    func scheduleTimerAlarm(
+        mainDuration: TimeInterval,
+        prealertOffsets: [Int],
+        prealertMessages: [Int: String] = [:],
+        finishMessage: String? = nil,
+        timerName: String? = nil
+    ) async throws {
+        print("⚠️ AlarmKit은 macOS에서 지원되지 않습니다")
+    }
+
+    func pause() async throws {}
+    func resume() async throws {}
+    func stop() async throws {}
+    func cancelAll() async throws {}
+}
+
+enum TimerAlarmError: Error {
+    case notAuthorized
+    case schedulingFailed
+}
+
+extension TimerAlarmError: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case .notAuthorized:
+            return "알림 권한이 필요합니다"
+        case .schedulingFailed:
+            return "알람 스케줄링에 실패했습니다"
+        }
     }
 }
+#endif

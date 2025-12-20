@@ -6,6 +6,8 @@
 //
 
 import Foundation
+
+#if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
 import ActivityKit
 
 struct TimerActivityAttributes: ActivityAttributes {
@@ -19,3 +21,4 @@ struct TimerActivityAttributes: ActivityAttributes {
     var totalDuration: TimeInterval
     var startTime: Date
 }
+#endif
