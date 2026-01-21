@@ -26,6 +26,16 @@
         }
       }
     },
+    "%lld %@" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld %2$@"
+          }
+        }
+      }
+    },
     "%lld분" : {
       "localizations" : {
         "en" : {
@@ -36,7 +46,18 @@
         }
       }
     },
+    "%lld분 남았습니다" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min remaining"
+          }
+        }
+      }
+    },
     "%lld분 전 알림" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -68,6 +89,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "1 min timer → ends in ~%lld sec"
+          }
+        }
+      }
+    },
+    "3가지 방법으로\n빠르게 설정" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quick setup with\n3 different methods"
           }
         }
       }
@@ -146,6 +178,230 @@
     "On" : {
 
     },
+    "onboarding_desc_1" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keeping precise time during lectures, mentoring, and meetings is a mark of professionalism"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "강연, 멘토링, 회의 시간을 정확하게 지키는 것은 전문성의 기본입니다"
+          }
+        }
+      }
+    },
+    "onboarding_desc_2" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avoid awkward moments from going overtime and keep your audience comfortable"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시간 초과로 인한 당황스러운 상황, 청중의 불편함을 방지하세요"
+          }
+        }
+      }
+    },
+    "onboarding_desc_3" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set as many pre-alerts as you want: 10 min, 5 min, 1 min before the end"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "종료 10분 전, 5분 전, 1분 전 등 원하는 만큼 예비 알림을 설정하세요"
+          }
+        }
+      }
+    },
+    "onboarding_desc_4" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After 00:00, it shows +01:23 so you know exactly how much overtime"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "00:00 이후에도 +01:23처럼 표시되어 정확히 얼마나 초과했는지 확인하세요"
+          }
+        }
+      }
+    },
+    "onboarding_desc_5" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Intuitive circular drag\n• Precise number input\n• Quick presets for instant start"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• 원형 드래그로 직관적 설정\n• 숫자 입력으로 정확한 시간\n• 빠른 프리셋으로 즉시 시작"
+          }
+        }
+      }
+    },
+    "onboarding_scenario_1" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "40-min mentoring session, 5-min alert to wrap up"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "40분 멘토링 세션, 5분 전 알림으로 마무리 준비"
+          }
+        }
+      }
+    },
+    "onboarding_scenario_2" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "30-min presentation with alerts at 10, 5, and 1 min"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "30분 발표, 10분·5분·1분 전 3번의 예비 알림"
+          }
+        }
+      }
+    },
+    "onboarding_scenario_3" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enough time to announce Q&A before ending"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "끝나기 전 충분한 시간을 갖고 Q&A 안내"
+          }
+        }
+      }
+    },
+    "onboarding_scenario_4" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unexpected questions led to 5 min overtime, tracked precisely"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "예상치 못한 질문으로 5분 초과, 정확한 시간 파악"
+          }
+        }
+      }
+    },
+    "onboarding_title_1" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer for Presenters\nand Mentors"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "발표자와 멘토를 위한\n타이머"
+          }
+        }
+      }
+    },
+    "onboarding_title_2" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Never miss\nyour deadline"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "데드라인을 절대\n놓치지 마세요"
+          }
+        }
+      }
+    },
+    "onboarding_title_3" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get multiple alerts\nand finish with ease"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "여러 번 알림받고\n여유있게 마무리"
+          }
+        }
+      }
+    },
+    "onboarding_title_4" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep counting\neven after time's up"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시간이 지나도\n계속 카운트"
+          }
+        }
+      }
+    },
+    "onboarding_title_5" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quick setup with\n3 different methods"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3가지 방법으로\n빠르게 설정"
+          }
+        }
+      }
+    },
     "Pause the running timer" : {
 
     },
@@ -157,6 +413,22 @@
     },
     "Resume Timer" : {
 
+    },
+    "share_app_message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check out Toki - a timer app for mentoring and presentations!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "멘토링과 발표를 위한 타이머 앱 Toki를 확인해보세요!"
+          }
+        }
+      }
     },
     "Start a timer" : {
 
@@ -194,6 +466,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Open Toki app"
+          }
+        }
+      }
+    },
+    "Toki 타이머" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toki Timer"
           }
         }
       }
@@ -268,6 +550,27 @@
         }
       }
     },
+    "대기 중" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ready"
+          }
+        }
+      }
+    },
+    "데드라인을 절대\n놓치지 마세요" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Never miss\nyour deadline"
+          }
+        }
+      }
+    },
     "도움말" : {
       "localizations" : {
         "en" : {
@@ -308,6 +611,16 @@
         }
       }
     },
+    "메시지가 초기화되었습니다" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Messages have been reset"
+          }
+        }
+      }
+    },
     "메인 %lld분" : {
       "localizations" : {
         "en" : {
@@ -340,6 +653,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Reset All Messages"
+          }
+        }
+      }
+    },
+    "발표자와 멘토를 위한\n타이머" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer for Presenters\nand Mentors"
           }
         }
       }
@@ -395,11 +719,22 @@
       }
     },
     "분" : {
+      "comment" : "min",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "min"
+          }
+        }
+      }
+    },
+    "분 전 알림" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "min before alert"
           }
         }
       }
@@ -465,6 +800,7 @@
       }
     },
     "사용자 지정 분" : {
+      "comment" : "Custom Minutes",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -550,6 +886,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Time is up"
+          }
+        }
+      }
+    },
+    "시간이 지나도\n계속 카운트" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep counting\neven after time's up"
           }
         }
       }
@@ -704,6 +1051,17 @@
         }
       }
     },
+    "여러 번 알림받고\n여유있게 마무리" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get multiple alerts\nand finish with ease"
+          }
+        }
+      }
+    },
     "예: 발표, 멘토링, 회의" : {
       "localizations" : {
         "en" : {
@@ -715,6 +1073,7 @@
       }
     },
     "예비 알림" : {
+      "comment" : "Pre-alerts",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -794,6 +1153,16 @@
         }
       }
     },
+    "일시정지됨" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paused"
+          }
+        }
+      }
+    },
     "자동 권한 관리" : {
       "localizations" : {
         "en" : {
@@ -840,6 +1209,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Apply"
+          }
+        }
+      }
+    },
+    "전 알림" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "before alert"
           }
         }
       }
@@ -914,6 +1293,16 @@
         }
       }
     },
+    "초과 진행 중" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overtime"
+          }
+        }
+      }
+    },
     "취소" : {
       "localizations" : {
         "en" : {
@@ -925,6 +1314,7 @@
       }
     },
     "타이머 설정" : {
+      "comment" : "Timer Settings",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -935,6 +1325,7 @@
       }
     },
     "타이머 시간" : {
+      "comment" : "Timer Duration",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -945,6 +1336,7 @@
       }
     },
     "타이머 시작" : {
+      "comment" : "Start Timer",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1220,346 +1612,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "OK"
-          }
-        }
-      }
-    },
-    "대기 중" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ready"
-          }
-        }
-      }
-    },
-    "일시정지됨" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Paused"
-          }
-        }
-      }
-    },
-    "초과 진행 중" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Overtime"
-          }
-        }
-      }
-    },
-    "발표자와 멘토를 위한\n타이머" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Timer for Presenters\nand Mentors"
-          }
-        }
-      }
-    },
-    "데드라인을 절대\n놓치지 마세요" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Never miss\nyour deadline"
-          }
-        }
-      }
-    },
-    "여러 번 알림받고\n여유있게 마무리" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Get multiple alerts\nand finish with ease"
-          }
-        }
-      }
-    },
-    "시간이 지나도\n계속 카운트" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keep counting\neven after time's up"
-          }
-        }
-      }
-    },
-    "3가지 방법으로\n빠르게 설정" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Quick setup with\n3 different methods"
-          }
-        }
-      }
-    },
-    "onboarding_title_1" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Timer for Presenters\nand Mentors"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "발표자와 멘토를 위한\n타이머"
-          }
-        }
-      }
-    },
-    "onboarding_desc_1" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keeping precise time during lectures, mentoring, and meetings is a mark of professionalism"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "강연, 멘토링, 회의 시간을 정확하게 지키는 것은 전문성의 기본입니다"
-          }
-        }
-      }
-    },
-    "onboarding_scenario_1" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "40-min mentoring session, 5-min alert to wrap up"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "40분 멘토링 세션, 5분 전 알림으로 마무리 준비"
-          }
-        }
-      }
-    },
-    "onboarding_title_2" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Never miss\nyour deadline"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "데드라인을 절대\n놓치지 마세요"
-          }
-        }
-      }
-    },
-    "onboarding_desc_2" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Avoid awkward moments from going overtime and keep your audience comfortable"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "시간 초과로 인한 당황스러운 상황, 청중의 불편함을 방지하세요"
-          }
-        }
-      }
-    },
-    "onboarding_scenario_2" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "30-min presentation with alerts at 10, 5, and 1 min"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "30분 발표, 10분·5분·1분 전 3번의 예비 알림"
-          }
-        }
-      }
-    },
-    "onboarding_title_3" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Get multiple alerts\nand finish with ease"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "여러 번 알림받고\n여유있게 마무리"
-          }
-        }
-      }
-    },
-    "onboarding_desc_3" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Set as many pre-alerts as you want: 10 min, 5 min, 1 min before the end"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "종료 10분 전, 5분 전, 1분 전 등 원하는 만큼 예비 알림을 설정하세요"
-          }
-        }
-      }
-    },
-    "onboarding_scenario_3" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enough time to announce Q&A before ending"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "끝나기 전 충분한 시간을 갖고 Q&A 안내"
-          }
-        }
-      }
-    },
-    "onboarding_title_4" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Keep counting\neven after time's up"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "시간이 지나도\n계속 카운트"
-          }
-        }
-      }
-    },
-    "onboarding_desc_4" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "After 00:00, it shows +01:23 so you know exactly how much overtime"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "00:00 이후에도 +01:23처럼 표시되어 정확히 얼마나 초과했는지 확인하세요"
-          }
-        }
-      }
-    },
-    "onboarding_scenario_4" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unexpected questions led to 5 min overtime, tracked precisely"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "예상치 못한 질문으로 5분 초과, 정확한 시간 파악"
-          }
-        }
-      }
-    },
-    "onboarding_title_5" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Quick setup with\n3 different methods"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "3가지 방법으로\n빠르게 설정"
-          }
-        }
-      }
-    },
-    "onboarding_desc_5" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• Intuitive circular drag\n• Precise number input\n• Quick presets for instant start"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "• 원형 드래그로 직관적 설정\n• 숫자 입력으로 정확한 시간\n• 빠른 프리셋으로 즉시 시작"
-          }
-        }
-      }
-    },
-    "share_app_message" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Check out Toki - a timer app for mentoring and presentations!"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "멘토링과 발표를 위한 타이머 앱 Toki를 확인해보세요!"
-          }
-        }
-      }
-    },
-    "분 전 알림" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "min before alert"
-          }
-        }
-      }
-    },
-    "메시지가 초기화되었습니다" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Messages have been reset"
           }
         }
       }

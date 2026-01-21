@@ -22,7 +22,7 @@ struct SetNotiView: View {
 
         VStack(spacing: 16) {
             // 타이틀
-            Text("예비 알림")
+            Text("예비 알림", comment: "Pre-alerts")
                 .font(.system(size: 14, weight: .medium, design: .rounded))
                 .foregroundStyle(.secondary)
                 .padding(.top, 4)
@@ -42,11 +42,13 @@ struct SetNotiView: View {
 
     private var selectedMinutesText: String {
         let sorted = viewModel.selectedMinutes.sorted()
+        let minText = String(localized: "분")
+        let alertText = String(localized: "분 전 알림")
         if sorted.count == 1 {
-            return "\(sorted[0])분 전 알림"
+            return "\(sorted[0]) \(alertText)"
         } else {
-            let text = sorted.map { "\($0)분" }.joined(separator: ", ")
-            return "\(text) 전 알림"
+            let text = sorted.map { "\($0) \(minText)" }.joined(separator: ", ")
+            return "\(text) \(String(localized: "전 알림"))"
         }
     }
 
@@ -92,7 +94,7 @@ struct SetNotiView: View {
             let prealertOffsets = Array(viewModel.selectedMinutes)
             path.append(.timerViewMultiple(mainDuration: viewModel.maxTimeInSeconds, prealertOffsets: prealertOffsets))
         } label: {
-            Text("타이머 시작")
+            Text("타이머 시작", comment: "Start Timer")
                 .font(.system(size: 14, weight: .semibold))
                 .frame(maxWidth: .infinity)
         }
@@ -125,12 +127,12 @@ struct SetNotiView: View {
 
     private func customMinutesSheet(maxMinute: Int) -> some View {
         VStack(spacing: 8) {
-            Text("사용자 지정 분")
+            Text("사용자 지정 분", comment: "Custom Minutes")
                 .font(.headline)
 
             Picker("", selection: $customMinutes) {
                 ForEach(1...max(1, maxMinute), id: \.self) { minute in
-                    Text("\(minute)분").tag(minute)
+                    Text("\(minute) \(String(localized: "분"))").tag(minute)
                 }
             }
             .pickerStyle(.wheel)
@@ -235,8 +237,8 @@ private func requestNotificationPermissionIfNeeded(completion: @escaping (Bool) 
 
 private func schedulePreFinishNotification(after seconds: TimeInterval, minutes: Int) {
     let content = UNMutableNotificationContent()
-    content.title = "Toki 타이머"
-    content.body = "\(minutes)분 남았습니다"
+    content.title = String(localized: "Toki 타이머")
+    content.body = String(localized: "\(minutes)분 남았습니다")
     content.sound = .default
 
     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: max(1, seconds), repeats: false)
