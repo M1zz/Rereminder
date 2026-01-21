@@ -12,4 +12,13 @@ enum RingMode: String, CaseIterable, Identifiable {
     case vibration = "진동"
 
     var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .sound:
+            return String(localized: "소리")
+        case .vibration:
+            return String(localized: "진동")
+        }
+    }
 }

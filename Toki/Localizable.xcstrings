@@ -56,6 +56,64 @@
         }
       }
     },
+    "다음: %lld분 알림 (%lld분 %lld초 후)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next: %1$lld min alert (%2$lld min %3$lld sec left)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "다음: %1$lld분 알림 (%2$lld분 %3$lld초 후)"
+          }
+        }
+      }
+    },
+    "다음: %lld분 알림 (%lld초 후)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next: %1$lld min alert (%2$lld sec left)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "다음: %1$lld분 알림 (%2$lld초 후)"
+          }
+        }
+      }
+    },
+    "다음: 종료 알림 (%lld분 %lld초 후)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next: End alert (%1$lld min %2$lld sec left)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "다음: 종료 알림 (%1$lld분 %2$lld초 후)"
+          }
+        }
+      }
+    },
+    "다음: 종료 알림 (%lld초 후)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next: End alert (%lld sec left)"
+          }
+        }
+      }
+    },
     "%lld분 전 알림" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1273,12 +1331,32 @@
         }
       }
     },
+    "진동" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vibration"
+          }
+        }
+      }
+    },
     "진행 중" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "In Progress"
+          }
+        }
+      }
+    },
+    "소리" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sound"
           }
         }
       }

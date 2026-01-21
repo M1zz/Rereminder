@@ -120,9 +120,9 @@ final class TimerScreenViewModel: ObservableObject {
             let alertMinutes = nextAlert / 60
 
             if minutes > 0 {
-                return "다음: \(alertMinutes)분 알림 (\(minutes)분 \(seconds)초 후)"
+                return String(localized: "다음: \(alertMinutes)분 알림 (\(minutes)분 \(seconds)초 후)")
             } else {
-                return "다음: \(alertMinutes)분 알림 (\(seconds)초 후)"
+                return String(localized: "다음: \(alertMinutes)분 알림 (\(seconds)초 후)")
             }
         } else {
             // 모든 예비 알림이 지나갔으면 종료 알림까지 시간
@@ -130,9 +130,9 @@ final class TimerScreenViewModel: ObservableObject {
             let seconds = Int(remaining) % 60
 
             if minutes > 0 {
-                return "다음: 종료 알림 (\(minutes)분 \(seconds)초 후)"
+                return String(localized: "다음: 종료 알림 (\(minutes)분 \(seconds)초 후)")
             } else if seconds > 0 {
-                return "다음: 종료 알림 (\(seconds)초 후)"
+                return String(localized: "다음: 종료 알림 (\(seconds)초 후)")
             } else {
                 return ""
             }

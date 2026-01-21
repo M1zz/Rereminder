@@ -33,7 +33,7 @@ struct NoticeSettingView: View {
                     Text("알림 스타일")
                     Picker("notice", selection: $ringMode) {
                         ForEach(RingMode.allCases) { mode in
-                            Text(mode.rawValue).tag(mode)
+                            Text(mode.displayName).tag(mode)
                         }
                     }
                     .pickerStyle(.segmented)

@@ -117,7 +117,7 @@ struct TimerTemplateView: View {
                     let sMain = timer.mainSeconds % 60
                     let preList = timer.prealertOffsetsSec
                         .sorted()
-                        .map { "\($0/60)분" }
+                        .map { "\($0/60) \(String(localized: "분"))" }
                         .joined(separator: ", ")
 
                     Text(sMain > 0 ? "메인 \(mMain)분 \(sMain)초" : "메인 \(mMain)분")
