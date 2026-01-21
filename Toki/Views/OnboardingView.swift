@@ -14,38 +14,38 @@ struct OnboardingView: View {
     private let pages: [OnboardingPage] = [
         OnboardingPage(
             icon: "person.3.fill",
-            title: "발표자와 멘토를 위한\n타이머",
-            description: "강연, 멘토링, 회의 시간을 정확하게 지키는 것은 전문성의 기본입니다",
+            titleKey: "onboarding_title_1",
+            descriptionKey: "onboarding_desc_1",
             color: .blue,
-            scenario: "40분 멘토링 세션, 5분 전 알림으로 마무리 준비"
+            scenarioKey: "onboarding_scenario_1"
         ),
         OnboardingPage(
             icon: "clock.badge.checkmark.fill",
-            title: "데드라인을 절대\n놓치지 마세요",
-            description: "시간 초과로 인한 당황스러운 상황, 청중의 불편함을 방지하세요",
+            titleKey: "onboarding_title_2",
+            descriptionKey: "onboarding_desc_2",
             color: .orange,
-            scenario: "30분 발표, 10분·5분·1분 전 3번의 예비 알림"
+            scenarioKey: "onboarding_scenario_2"
         ),
         OnboardingPage(
             icon: "bell.badge.fill",
-            title: "여러 번 알림받고\n여유있게 마무리",
-            description: "종료 10분 전, 5분 전, 1분 전 등 원하는 만큼 예비 알림을 설정하세요",
+            titleKey: "onboarding_title_3",
+            descriptionKey: "onboarding_desc_3",
             color: .green,
-            scenario: "끝나기 전 충분한 시간을 갖고 Q&A 안내"
+            scenarioKey: "onboarding_scenario_3"
         ),
         OnboardingPage(
             icon: "timer",
-            title: "시간이 지나도\n계속 카운트",
-            description: "00:00 이후에도 +01:23처럼 표시되어 정확히 얼마나 초과했는지 확인하세요",
+            titleKey: "onboarding_title_4",
+            descriptionKey: "onboarding_desc_4",
             color: .red,
-            scenario: "예상치 못한 질문으로 5분 초과, 정확한 시간 파악"
+            scenarioKey: "onboarding_scenario_4"
         ),
         OnboardingPage(
             icon: "hand.tap.fill",
-            title: "3가지 방법으로\n빠르게 설정",
-            description: "• 원형 드래그로 직관적 설정\n• 숫자 입력으로 정확한 시간\n• 빠른 프리셋으로 즉시 시작",
+            titleKey: "onboarding_title_5",
+            descriptionKey: "onboarding_desc_5",
             color: .purple,
-            scenario: nil
+            scenarioKey: nil
         )
     ]
 
@@ -145,10 +145,10 @@ struct OnboardingView: View {
 
 struct OnboardingPage {
     let icon: String
-    let title: String
-    let description: String
+    let titleKey: LocalizedStringKey
+    let descriptionKey: LocalizedStringKey
     let color: Color
-    let scenario: String?
+    let scenarioKey: LocalizedStringKey?
 }
 
 struct OnboardingPageView: View {
@@ -188,7 +188,7 @@ struct OnboardingPageView: View {
 
                 VStack(spacing: 16) {
                     // 타이틀
-                    Text(page.title)
+                    Text(page.titleKey)
                         .font(.system(size: 28, weight: .bold, design: .rounded))
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.primary)
@@ -196,7 +196,7 @@ struct OnboardingPageView: View {
                         .minimumScaleFactor(0.8)
 
                     // 설명
-                    Text(page.description)
+                    Text(page.descriptionKey)
                         .font(.system(size: 16))
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
@@ -205,7 +205,7 @@ struct OnboardingPageView: View {
                         .fixedSize(horizontal: false, vertical: true)
 
                     // 시나리오 예시 (있는 경우)
-                    if let scenario = page.scenario {
+                    if let scenarioKey = page.scenarioKey {
                         VStack(spacing: 8) {
                             HStack(spacing: 6) {
                                 Image(systemName: "lightbulb.fill")
@@ -215,7 +215,7 @@ struct OnboardingPageView: View {
                             }
                             .foregroundStyle(page.color)
 
-                            Text(scenario)
+                            Text(scenarioKey)
                                 .font(.system(size: 14))
                                 .foregroundStyle(.secondary)
                                 .multilineTextAlignment(.center)

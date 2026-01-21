@@ -23,7 +23,7 @@ public struct TimerView: View {
                 Circle()
                     .fill(timerViewModel.isPaused ? Color.orange : Color.green)
                     .frame(width: 6, height: 6)
-                Text(timerViewModel.isPaused ? "일시정지" : "진행 중")
+                Text(timerViewModel.isPaused ? String(localized: "일시정지") : String(localized: "진행 중"))
                     .font(.system(size: 11, weight: .medium, design: .rounded))
                     .foregroundStyle(.secondary)
             }

@@ -378,7 +378,7 @@ struct NoticeSettingView: View {
 
         let activityViewController = UIActivityViewController(
             activityItems: [
-                "멘토링과 발표를 위한 타이머 앱 Toki를 확인해보세요!",
+                String(localized: "share_app_message"),
                 appURL
             ],
             applicationActivities: nil

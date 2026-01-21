@@ -370,7 +370,7 @@ struct TimerMainView: View {
                 }
             )
         ) {
-            Text("\(sec/60)분")
+            Text("\(sec/60) \(String(localized: "분"))")
                 .font(.system(size: 14, weight: .medium))
                 .padding(.horizontal, 10)
                 .padding(.vertical, 6)
@@ -432,7 +432,7 @@ struct TimerMainView: View {
         }
     }
 
-    private var stateText: String {
+    private var stateText: LocalizedStringKey {
         switch screenVM.state {
         case .idle:
             return "대기 중"

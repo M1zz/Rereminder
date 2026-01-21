@@ -86,6 +86,20 @@
 			);
 			target = 2B302B092E4375150089A14A /* WatchToki Watch App */;
 		};
+		9CA0A72F2F20B473004ABF40 /* Exceptions for "Toki" folder in "WatchToki Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Localizable.xcstrings,
+			);
+			target = 2B302B092E4375150089A14A /* WatchToki Watch App */;
+		};
+		9CA0A7302F20B473004ABF40 /* Exceptions for "Toki" folder in "TokiAlarmExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Localizable.xcstrings,
+			);
+			target = 58AA3EAC2ECF5509007D4BBD /* TokiAlarmExtension */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -93,6 +107,8 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				58AA3EA82ECF5356007D4BBD /* Exceptions for "Toki" folder in "Toki" target */,
+				9CA0A72F2F20B473004ABF40 /* Exceptions for "Toki" folder in "WatchToki Watch App" target */,
+				9CA0A7302F20B473004ABF40 /* Exceptions for "Toki" folder in "TokiAlarmExtension" target */,
 			);
 			path = Toki;
 			sourceTree = "<group>";
@@ -275,11 +291,12 @@
 				};
 			};
 			buildConfigurationList = 260414C62E1B9FA200CBA29B /* Build configuration list for PBXProject "Toki" */;
-			developmentRegion = en;
+			developmentRegion = ko;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				ko,
 			);
 			mainGroup = 260414C22E1B9FA200CBA29B;
 			minimizedProjectReferenceProxies = 1;
@@ -419,6 +436,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -476,6 +494,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -493,6 +512,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Toki/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "두번알림";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -529,6 +549,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Toki/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "두번알림";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

@@ -4,7 +4,5 @@
 <dict>
 	<key>NSAlarmKitUsageDescription</key>
 	<string>"사용자에게 정확한 알람을 주기위해서 알람을 줍니다."</string>
-	<key>NSSupportsLiveActivities</key>
-	<true/>
 </dict>
 </plist>

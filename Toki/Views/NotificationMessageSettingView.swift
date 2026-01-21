@@ -68,10 +68,10 @@ struct NotificationMessageSettingView: View {
     @ViewBuilder
     private func prealertMessageEditor(for offset: Int) -> some View {
         let minutes = offset / 60
-        let defaultMessage = "\(minutes)분 남았습니다"
+        let defaultMessage = String(localized: "\(minutes)분 남았습니다")
 
         VStack(alignment: .leading, spacing: 8) {
-            Text("\(minutes)분 전 알림")
+            Text("\(minutes) \(String(localized: "분 전 알림"))")
                 .font(.subheadline)
                 .fontWeight(.medium)
 
@@ -91,7 +91,7 @@ struct NotificationMessageSettingView: View {
     private func resetAllMessages() {
         screenVM.prealertMessages.removeAll()
         screenVM.finishMessage = ""
-        screenVM.showToast?("메시지가 초기화되었습니다")
+        screenVM.showToast?(String(localized: "메시지가 초기화되었습니다"))
     }
 }
 
