@@ -72,6 +72,42 @@ git checkout -b feature/이슈번호
 - dev 브랜치로 PR 생성
 - PR 템플릿 참고하여 설명 작성
 
+## 버전 관리
+
+### 중앙 집중식 버전 관리
+모든 타겟(iOS, Watch, Widget)의 버전을 한 곳에서 관리합니다.
+
+**설정 파일**: `Config/Version.xcconfig`
+
+### 버전 업데이트 방법
+
+```bash
+# 현재 버전 확인
+./scripts/update_version.sh --show
+
+# 새 버전 릴리즈 (예: 1.0.7)
+./scripts/update_version.sh 1.0.7
+
+# 빌드 번호만 증가 (TestFlight 업로드 전)
+./scripts/update_version.sh --build-only
+```
+
+### 버전 규칙
+- **MARKETING_VERSION**: 사용자에게 보이는 버전 (예: 1.0.7)
+  - X.Y.Z 형식
+  - Major.Minor.Patch
+- **CURRENT_PROJECT_VERSION**: 빌드 번호 (정수)
+  - TestFlight 업로드마다 증가
+
+### Xcode 설정 (초기 1회)
+자세한 설정 방법은 `Config/README.md` 참고
+
+1. 각 타겟의 Build Settings에서:
+   - MARKETING_VERSION = $(inherited)
+   - CURRENT_PROJECT_VERSION = $(inherited)
+
+2. 프로젝트 Info → Configurations에서 Version.xcconfig 연결
+
 ## 커밋 컨벤션
 
 ```
@@ -242,6 +278,13 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
 ```
 
 ## 버전 히스토리
+
+### v1.0.6 (2026-01-28)
+- **중앙 집중식 버전 관리 시스템 도입**
+  - Version.xcconfig로 모든 타겟의 버전 통합 관리
+  - 버전 업데이트 스크립트 (update_version.sh) 추가
+  - 수동으로 여러 곳을 수정할 필요 없이 한 번에 관리
+  - Config/README.md에 상세 가이드 포함
 
 ### v1.0.6 (2026-01-28)
 - **Live Activity 실시간 타이머 구현**
