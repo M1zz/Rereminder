@@ -297,6 +297,19 @@ struct NoticeSettingView: View {
                 }
                 .foregroundStyle(.primary)
 
+                Button {
+                    ReviewRequestManager.shared.openAppStoreReviewPage()
+                } label: {
+                    HStack {
+                        Label("App Store에서 리뷰 작성", systemImage: "square.and.pencil")
+                        Spacer()
+                        Image(systemName: "arrow.up.right")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .foregroundStyle(.primary)
+
                 Link(destination: URL(string: "mailto:leeo@kakao.com?subject=Toki%20%ED%94%BC%EB%93%9C%EB%B0%B1")!) {
                     HStack {
                         Label("피드백 보내기", systemImage: "envelope.fill")
@@ -305,6 +318,24 @@ struct NoticeSettingView: View {
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
+                }
+
+                // 테스트 모드일 때만 표시
+                if testModeEnabled {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("디버그 정보")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text("타이머 완료 횟수: \(ReviewRequestManager.shared.getCurrentCompletionCount())회")
+                            .font(.caption)
+                            .foregroundStyle(.orange)
+                        Button("완료 횟수 초기화") {
+                            ReviewRequestManager.shared.resetCompletionCount()
+                        }
+                        .font(.caption)
+                        .foregroundStyle(.red)
+                    }
+                    .padding(.vertical, 4)
                 }
             }
 
@@ -403,10 +434,8 @@ struct NoticeSettingView: View {
     }
 
     private func rateApp() {
-        // App Store 리뷰 페이지로 이동
-        if let appStoreURL = URL(string: "https://apps.apple.com/app/toki?action=write-review") {
-            UIApplication.shared.open(appStoreURL)
-        }
+        // 시스템 네이티브 리뷰 요청 팝업 표시
+        ReviewRequestManager.shared.requestReview()
     }
 }
 

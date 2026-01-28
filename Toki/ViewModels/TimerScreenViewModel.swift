@@ -234,8 +234,25 @@ final class TimerScreenViewModel: ObservableObject {
                 .filter { $0 > 0 && $0 < mainSec }
         ).sorted()
 
+        // 타이머 이름 생성 (시간 기반)
+        let timerName: String
+        if mainSec >= 3600 {
+            let hours = mainSec / 3600
+            let minutes = (mainSec % 3600) / 60
+            if minutes > 0 {
+                timerName = "\(hours)시간 \(minutes)분"
+            } else {
+                timerName = "\(hours)시간"
+            }
+        } else if mainSec >= 60 {
+            let minutes = mainSec / 60
+            timerName = "\(minutes)분"
+        } else {
+            timerName = "타이머"
+        }
+
         let temp = Timer(
-            name: "dummy time setting",
+            name: timerName,
             mainSeconds: mainSec,
             prealertOffsetsSec: normalizedOffsets,
             prealertMessages: prealertMessages,

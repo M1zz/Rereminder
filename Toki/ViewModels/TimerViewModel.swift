@@ -58,7 +58,8 @@ final class TimerViewModel: ObservableObject {
 
         engine.onTick = { [weak self] r in
             self?.remaining = r
-            self?.updateLiveActivity()
+            // Live Activity는 Text.timer로 자동 카운트다운되므로
+            // 매번 업데이트할 필요 없음 (상태 변경 시에만 업데이트)
         }
         engine.onPreAlert = { [weak self] sec in
             guard let self, let template = self.currentTemplate else { return }
@@ -258,6 +259,11 @@ final class TimerViewModel: ObservableObject {
 
         try? context.save()
         print("✅ 타이머 기록 저장: \(finished ? "완료" : "중단"), 경과 시간: \(elapsedSeconds)초")
+
+        // 타이머를 완료한 경우 리뷰 요청 체크
+        if finished {
+            ReviewRequestManager.shared.recordTimerCompletion()
+        }
     }
 
     // MARK: - Live Activity
@@ -275,10 +281,13 @@ final class TimerViewModel: ObservableObject {
             startTime: Date()
         )
 
+        let endDate = Date().addingTimeInterval(TimeInterval(template.mainSeconds))
+
         let initialState = TimerActivityAttributes.ContentState(
             remainingTime: TimeInterval(template.mainSeconds),
             isPaused: false,
-            timestamp: Date()
+            timestamp: Date(),
+            endDate: endDate
         )
 
         do {
@@ -287,6 +296,7 @@ final class TimerViewModel: ObservableObject {
                 content: .init(state: initialState, staleDate: nil)
             )
             currentActivity = activity
+            print("✅ Live Activity 시작: \(template.name), 종료 시각: \(endDate)")
         } catch {
             print("❌ Live Activity 시작 실패: \(error)")
         }
@@ -299,10 +309,14 @@ final class TimerViewModel: ObservableObject {
         #if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
         guard let activity = currentActivity else { return }
 
+        // 일시정지 상태가 아닐 때만 endDate 계산
+        let endDate = state == .paused ? nil : Date().addingTimeInterval(remaining)
+
         let newState = TimerActivityAttributes.ContentState(
             remainingTime: remaining,
             isPaused: state == .paused,
-            timestamp: Date()
+            timestamp: Date(),
+            endDate: endDate
         )
 
         Task {

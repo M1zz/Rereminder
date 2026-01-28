@@ -56,64 +56,6 @@
         }
       }
     },
-    "다음: %lld분 알림 (%lld분 %lld초 후)" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Next: %1$lld min alert (%2$lld min %3$lld sec left)"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "다음: %1$lld분 알림 (%2$lld분 %3$lld초 후)"
-          }
-        }
-      }
-    },
-    "다음: %lld분 알림 (%lld초 후)" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Next: %1$lld min alert (%2$lld sec left)"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "다음: %1$lld분 알림 (%2$lld초 후)"
-          }
-        }
-      }
-    },
-    "다음: 종료 알림 (%lld분 %lld초 후)" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Next: End alert (%1$lld min %2$lld sec left)"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "다음: 종료 알림 (%1$lld분 %2$lld초 후)"
-          }
-        }
-      }
-    },
-    "다음: 종료 알림 (%lld초 후)" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Next: End alert (%lld sec left)"
-          }
-        }
-      }
-    },
     "%lld분 전 알림" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -206,6 +148,9 @@
 
     },
     "alarmID" : {
+
+    },
+    "App Store에서 리뷰 작성" : {
 
     },
     "Configuration" : {
@@ -598,6 +543,64 @@
         }
       }
     },
+    "다음: %lld분 알림 (%lld분 %lld초 후)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next: %1$lld min alert (%2$lld min %3$lld sec left)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "다음: %1$lld분 알림 (%2$lld분 %3$lld초 후)"
+          }
+        }
+      }
+    },
+    "다음: %lld분 알림 (%lld초 후)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next: %1$lld min alert (%2$lld sec left)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "다음: %1$lld분 알림 (%2$lld초 후)"
+          }
+        }
+      }
+    },
+    "다음: 종료 알림 (%lld분 %lld초 후)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next: End alert (%1$lld min %2$lld sec left)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "다음: 종료 알림 (%1$lld분 %2$lld초 후)"
+          }
+        }
+      }
+    },
+    "다음: 종료 알림 (%lld초 후)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next: End alert (%lld sec left)"
+          }
+        }
+      }
+    },
     "닫기" : {
       "localizations" : {
         "en" : {
@@ -638,6 +641,9 @@
           }
         }
       }
+    },
+    "디버그 정보" : {
+
     },
     "레이블" : {
       "localizations" : {
@@ -904,6 +910,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Go to Settings"
+          }
+        }
+      }
+    },
+    "소리" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sound"
           }
         }
       }
@@ -1191,6 +1207,9 @@
         }
       }
     },
+    "완료 횟수 초기화" : {
+
+    },
     "이름" : {
       "localizations" : {
         "en" : {
@@ -1351,16 +1370,6 @@
         }
       }
     },
-    "소리" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sound"
-          }
-        }
-      }
-    },
     "초" : {
       "localizations" : {
         "en" : {
@@ -1443,6 +1452,9 @@
           }
         }
       }
+    },
+    "타이머 완료 횟수: %lld회" : {
+
     },
     "타이머 일시정지" : {
       "localizations" : {
