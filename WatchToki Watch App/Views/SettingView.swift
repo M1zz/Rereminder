@@ -28,7 +28,7 @@ struct SettingView: View {
         NavigationStack(path: $path) {
             VStack(spacing: 16) {
                 // 타이틀
-                Text("타이머 시간", comment: "Timer Duration")
+                Text("Timer Duration", comment: "Timer Duration")
                     .font(.system(size: 14, weight: .medium, design: .rounded))
                     .foregroundStyle(.secondary)
                     .padding(.top, 8)
@@ -60,7 +60,7 @@ struct SettingView: View {
             MinuteWheel(selectedMinute: $settingViewModel.time.minute, range: minuteRange, selectionOffset: 0)
                 .frame(width: 90, height: 90)
             
-            Text("분", comment: "min")
+            Text("min", comment: "min")
                 .font(.system(size: 40, weight: .semibold, design: .rounded))
                 .accessibilityHidden(true)
         }
@@ -80,7 +80,7 @@ struct SettingView: View {
                 ProgressView()
                     .frame(maxWidth: .infinity)
             } else {
-                Text("타이머 설정", comment: "Timer Settings")
+                Text("Timer Settings", comment: "Timer Settings")
                     .frame(maxWidth: .infinity)
             }
         }

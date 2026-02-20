@@ -50,10 +50,10 @@ struct ClockMarkers: View {
         let isUpcoming = t >= remaining
 
         return ZStack {
-            // 얇은 사각형 마크 (높이는 타이머 선 두께와 동일)
+            // 얇은 사각형 마크 (높이는 Timer 선 두께와 동일)
             Rectangle()
                 .fill(Color(red: 1.0, green: 0.6, blue: 0.0))  // 선명한 오렌지색
-                .frame(width: 4, height: dotSize)  // 폭 4 (2배), 높이는 타이머 선 두께
+                .frame(width: 4, height: dotSize)  // 폭 4 (2배), 높이는 Timer 선 두께
                 .rotationEffect(.degrees(angle + 90))  // 원의 중심을 향하도록 먼저 회전
                 .position(
                     x: centerX + CGFloat(cos(theta)) * radius,
@@ -88,7 +88,7 @@ struct ClockMarkers: View {
             ? radius - dotSize * 1.2  // 짝수: 원 안쪽 (더 가까이)
             : radius + dotSize * 1.5  // 홀수: 원 바깥
 
-        return Text("\(minutes)분")
+        return Text("\(minutes)min")
             .font(.system(size: 10, weight: .bold, design: .rounded))
             .foregroundColor(Color(red: 1.0, green: 0.6, blue: 0.0))  // 선명한 오렌지색
             .position(

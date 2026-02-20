@@ -21,8 +21,8 @@ struct PauseIntent: LiveActivityIntent {
         return .result()
     }
 
-    static var title: LocalizedStringResource = "일시정지"
-    static var description = IntentDescription("타이머를 일시정지합니다")
+    static var title: LocalizedStringResource = "Pause"
+    static var description = IntentDescription("Pause the timer")
 
     @Parameter(title: "alarmID")
     var alarmID: String
@@ -46,8 +46,8 @@ struct ResumeIntent: LiveActivityIntent {
         return .result()
     }
 
-    static var title: LocalizedStringResource = "재개"
-    static var description = IntentDescription("타이머를 재개합니다")
+    static var title: LocalizedStringResource = "Resume"
+    static var description = IntentDescription("Resume the timer")
 
     @Parameter(title: "alarmID")
     var alarmID: String
@@ -71,8 +71,8 @@ struct StopIntent: LiveActivityIntent {
         return .result()
     }
 
-    static var title: LocalizedStringResource = "중지"
-    static var description = IntentDescription("타이머를 중지합니다")
+    static var title: LocalizedStringResource = "Stop"
+    static var description = IntentDescription("Stop the timer")
 
     @Parameter(title: "alarmID")
     var alarmID: String
@@ -95,8 +95,8 @@ struct OpenAlarmAppIntent: LiveActivityIntent {
         return .result()
     }
 
-    static var title: LocalizedStringResource = "앱 열기"
-    static var description = IntentDescription("Toki 앱을 엽니다")
+    static var title: LocalizedStringResource = "Open App"
+    static var description = IntentDescription("Open Toki app")
     static var openAppWhenRun = true
 
     @Parameter(title: "alarmID")

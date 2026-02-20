@@ -16,11 +16,11 @@ struct ContentView: View {
     var body: some View {
         TimerUnifiedView()
             .onAppear {
-                // 소리/진동 알림 권한 요청
+                // Sound/Vibration 알림 Request Permission
                 UNUserNotificationCenter.current().requestAuthorization(
                     options: [.alert, .sound, .badge]) { granted, error in
                         if let error = error {
-                            print("알림 권한 요청 오류: \(error)")
+                            print("알림 Request Permission 오류: \(error)")
                         }
                     }
             }

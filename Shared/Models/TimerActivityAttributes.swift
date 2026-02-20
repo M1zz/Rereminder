@@ -2,7 +2,7 @@
 //  TimerActivityAttributes.swift
 //  Toki
 //
-//  ActivityKit 기반 타이머 Live Activity
+//  ActivityKit 기반 Timer Live Activity
 //
 
 import Foundation
@@ -15,7 +15,7 @@ struct TimerActivityAttributes: ActivityAttributes {
         var remainingTime: TimeInterval
         var isPaused: Bool
         var timestamp: Date
-        var endDate: Date?  // 타이머 종료 시각 (자동 카운트다운용)
+        var endDate: Date?  // Timer Finished 시각 (자동 카운트다운용)
     }
 
     var timerName: String

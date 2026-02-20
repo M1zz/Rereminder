@@ -30,4 +30,4 @@ class SetNotiViewModel: ObservableObject {
 
 
 
-// 타이머 시간 제한
+// Timer Duration 제한

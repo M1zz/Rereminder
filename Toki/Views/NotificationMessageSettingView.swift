@@ -15,29 +15,29 @@ struct NotificationMessageSettingView: View {
         NavigationStack {
             Form {
                 Section {
-                    Text("타이머 알림 메시지를 커스터마이징할 수 있습니다.")
+                    Text("Customize your timer notification messages.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
 
-                Section(header: Text("예비 알림 메시지")) {
+                Section(header: Text("Pre-alert Message")) {
                     ForEach(Array(screenVM.selectedOffsets.sorted()), id: \.self) { offset in
                         prealertMessageEditor(for: offset)
                     }
 
                     if screenVM.selectedOffsets.isEmpty {
-                        Text("예비 알림이 설정되지 않았습니다")
+                        Text("No pre-alerts set")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
                 }
 
-                Section(header: Text("종료 알림 메시지")) {
+                Section(header: Text("End Alert Message")) {
                     VStack(alignment: .leading, spacing: 8) {
-                        TextField("타이머 종료되었습니다", text: $screenVM.finishMessage)
+                        TextField("Timer finished", text: $screenVM.finishMessage)
                             .textFieldStyle(.roundedBorder)
 
-                        Text("비워두면 기본 메시지가 사용됩니다: \"타이머 종료되었습니다\"")
+                        Text("Leave empty to use default message: \"Timer finished\"")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -47,17 +47,17 @@ struct NotificationMessageSettingView: View {
                     Button(action: resetAllMessages) {
                         HStack {
                             Image(systemName: "arrow.counterclockwise")
-                            Text("모든 메시지 초기화")
+                            Text("Reset All Messages")
                         }
                         .foregroundStyle(.red)
                     }
                 }
             }
-            .navigationTitle("알림 메시지 설정")
+            .navigationTitle("Notification Message Settings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("완료") {
+                    Button("Done") {
                         dismiss()
                     }
                 }
@@ -68,10 +68,10 @@ struct NotificationMessageSettingView: View {
     @ViewBuilder
     private func prealertMessageEditor(for offset: Int) -> some View {
         let minutes = offset / 60
-        let defaultMessage = String(localized: "\(minutes)분 남았습니다")
+        let defaultMessage = String(localized: "\(minutes) min remaining")
 
         VStack(alignment: .leading, spacing: 8) {
-            Text("\(minutes) \(String(localized: "분 전 알림"))")
+            Text("\(minutes) \(String(localized: "min before alert"))")
                 .font(.subheadline)
                 .fontWeight(.medium)
 
@@ -81,7 +81,7 @@ struct NotificationMessageSettingView: View {
             ))
             .textFieldStyle(.roundedBorder)
 
-            Text("비워두면 기본 메시지가 사용됩니다: \"\(defaultMessage)\"")
+            Text("Leave empty to use default message: \"\(defaultMessage)\"")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }
@@ -91,7 +91,7 @@ struct NotificationMessageSettingView: View {
     private func resetAllMessages() {
         screenVM.prealertMessages.removeAll()
         screenVM.finishMessage = ""
-        screenVM.showToast?(String(localized: "메시지가 초기화되었습니다"))
+        screenVM.showToast?(String(localized: "Messages have been reset"))
     }
 }
 

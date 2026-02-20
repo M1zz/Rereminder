@@ -23,7 +23,7 @@ public struct TimerView: View {
                 Circle()
                     .fill(timerViewModel.isPaused ? Color.orange : Color.green)
                     .frame(width: 6, height: 6)
-                Text(timerViewModel.isPaused ? String(localized: "일시정지") : String(localized: "진행 중"))
+                Text(timerViewModel.isPaused ? String(localized: "Pause") : String(localized: "In Progress"))
                     .font(.system(size: 11, weight: .medium, design: .rounded))
                     .foregroundStyle(.secondary)
             }
@@ -48,12 +48,12 @@ public struct TimerView: View {
                     .rotationEffect(.degrees(-90))
                     .animation(.linear(duration: 1), value: progress)
 
-                // 진행 방향 화살표 (3분 이상 남았을 때만)
+                // 진행 방향 화살표 (3min 이상 남았을 때만)
                 if !timerViewModel.isPaused && timerViewModel.timeRemaining > 180 {
                     progressIndicator
                 }
 
-                // 예비 알림 마커들 (다중)
+                // Pre-alerts 마커들 (다중)
                 ForEach(timerViewModel.prealertOffsets, id: \.self) { offset in
                     let offsetSeconds = offset * 60
                     if timerViewModel.mainDuration > offsetSeconds {
@@ -62,7 +62,7 @@ public struct TimerView: View {
                             .frame(width: 8, height: 8)
                             .offset(alertMarkerOffset(offsetSeconds: offsetSeconds, ringSize: 120))
 
-                        Text("\(offset)분")
+                        Text("\(offset)min")
                             .font(.system(size: 9, weight: .bold, design: .rounded))
                             .foregroundColor(.orange)
                             .offset(alertLabelOffset(offsetSeconds: offsetSeconds, ringSize: 120))
@@ -76,7 +76,7 @@ public struct TimerView: View {
                         .frame(width: 8, height: 8)
                         .offset(alertMarkerOffset(offsetSeconds: timerViewModel.notificationTime, ringSize: 120))
 
-                    Text("\(timerViewModel.notificationTime / 60)분")
+                    Text("\(timerViewModel.notificationTime / 60)min")
                         .font(.system(size: 9, weight: .bold, design: .rounded))
                         .foregroundColor(.orange)
                         .offset(alertLabelOffset(offsetSeconds: timerViewModel.notificationTime, ringSize: 120))
@@ -131,7 +131,7 @@ public struct TimerView: View {
 
     private var progressIndicator: some View {
         let currentProgress = progress
-        let angle = (currentProgress * 360) - 90  // -90은 12시 방향 시작
+        let angle = (currentProgress * 360) - 90  // -90은 12시 방향 Start
 
         // 화살표를 진행 방향(시계방향) 앞쪽에 배치
         let indicatorAngle = angle - 10  // 진행 방향보다 10도 앞서서 배치
@@ -170,7 +170,7 @@ public struct TimerView: View {
     private func alertMarkerOffset(offsetSeconds: Int, ringSize: CGFloat) -> CGSize {
         let radius = ringSize / 2
         let progress = alertMarkerProgress(offsetSeconds: offsetSeconds)
-        // 시계 방향으로 줄어드는 방향 (12시에서 시작)
+        // 시계 방향으로 줄어드는 방향 (12시에서 Start)
         let angle = Angle.degrees(-90 + (360 * progress))
         let x = cos(angle.radians) * radius
         let y = sin(angle.radians) * radius

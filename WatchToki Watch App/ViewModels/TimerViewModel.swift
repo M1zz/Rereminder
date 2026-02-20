@@ -15,13 +15,13 @@ class TimerViewModel: ObservableObject {
     private let notificationService: NotificationService
     let mainDuration: Int
     let notificationTime: Int
-    let prealertOffsets: [Int]  // 여러 개의 예비 알림
+    let prealertOffsets: [Int]  // 여러 개의 Pre-alerts
 
-    private var startDate: Date?        // 타이머 시작 시각
-    private var pauseDate: Date?        // 일시정지한 시각
+    private var startDate: Date?        // Start Timer 시각
+    private var pauseDate: Date?        // Pause한 시각
     private var accumulatedPause: TimeInterval = 0 // 총 정지 시간
 
-    // 단일 알림용 초기화
+    // 단일 알림용 sec기화
     init(mainDuration: Int, notificationDuration: Int, notificationService: NotificationService = .init()) {
         self.mainDuration = mainDuration
         self.timeRemaining = mainDuration
@@ -30,7 +30,7 @@ class TimerViewModel: ObservableObject {
         self.notificationService = notificationService
     }
 
-    // 다중 알림용 초기화
+    // 다중 알림용 sec기화
     init(mainDuration: Int, prealertOffsets: [Int], notificationService: NotificationService = .init()) {
         self.mainDuration = mainDuration
         self.timeRemaining = mainDuration
@@ -48,11 +48,11 @@ class TimerViewModel: ObservableObject {
 
         startTimer()
 
-        // 알림 초기화
+        // 알림 sec기화
         notificationService.removeAllNotifications()
         scheduleNotifications(for: mainDuration)
 
-        // iOS로 타이머 시작 메시지 전송
+        // iOS로 Start Timer 메시지 전송
         Task { @MainActor in
             WatchConnectivityManager.shared.sendTimerStart(
                 duration: TimeInterval(mainDuration),
@@ -70,7 +70,7 @@ class TimerViewModel: ObservableObject {
 
         notificationService.removeAllNotifications()
 
-        // iOS로 타이머 중지 메시지 전송
+        // iOS로 Timer Stop 메시지 전송
         Task { @MainActor in
             WatchConnectivityManager.shared.sendTimerStop()
         }
@@ -85,7 +85,7 @@ class TimerViewModel: ObservableObject {
             stopTimer()
             notificationService.removeAllNotifications()
 
-            // iOS로 타이머 일시정지 메시지 전송
+            // iOS로 Pause Timer 메시지 전송
             Task { @MainActor in
                 WatchConnectivityManager.shared.sendTimerPause()
             }
@@ -96,7 +96,7 @@ class TimerViewModel: ObservableObject {
             }
             self.pauseDate = nil
 
-            // 알림 재설정
+            // 알림 재Settings
             notificationService.removeAllNotifications()
             if timeRemaining > 0 {
                 scheduleNotifications(for: timeRemaining)
@@ -104,7 +104,7 @@ class TimerViewModel: ObservableObject {
 
             startTimer()
 
-            // iOS로 타이머 재개 메시지 전송
+            // iOS로 Resume Timer 메시지 전송
             Task { @MainActor in
                 WatchConnectivityManager.shared.sendTimerResume(remainingDuration: TimeInterval(timeRemaining))
             }
@@ -129,26 +129,26 @@ class TimerViewModel: ObservableObject {
     private func updateTimeRemaining() {
         guard let startDate else { return }
 
-        // 실제 경과 시간 = (현재 - 시작) - 멈췄던 시간
+        // 실제 경과 시간 = (현재 - Start) - 멈췄던 시간
         let elapsed = Date().timeIntervalSince(startDate) - accumulatedPause
         let remaining = mainDuration - Int(elapsed)  // max 제거 - 음수도 허용
 
         self.timeRemaining = remaining
 
-        // 0초가 되어도 타이머는 계속 실행 (음수로 진행)
+        // 0sec가 되어도 Timer는 계속 실행 (음수로 진행)
         // stopTimer()를 호출하지 않음
     }
 
     private func scheduleNotifications(for duration: Int) {
-        // 메인 완료 알림
+        // 메인 Done 알림
         notificationService.scheduleNotification(
             timeInterval: TimeInterval(duration),
-            title: "타이머 종료",
-            body: "설정한 시간이 종료되었습니다.",
+            title: "Timer Finished",
+            body: "Your set time has ended.",
             identifier: "main_timer_notification"
         )
 
-        // 다중 예비 알림
+        // 다중 Pre-alerts
         if !prealertOffsets.isEmpty {
             for offset in prealertOffsets {
                 let offsetSeconds = offset * 60
@@ -156,20 +156,20 @@ class TimerViewModel: ObservableObject {
                     let pointTime = duration - offsetSeconds
                     notificationService.scheduleNotification(
                         timeInterval: TimeInterval(pointTime),
-                        title: "Toki 타이머",
-                        body: "\(offset)분 남았습니다",
+                        title: "Toki Timer",
+                        body: "\(offset) min remaining",
                         identifier: "prealert_\(offset)"
                     )
                 }
             }
         }
-        // 단일 종료 전 알림 (하위 호환성)
+        // 단일 종료 before alert (하위 호환성)
         else if notificationTime > 0 && duration > notificationTime {
             let pointTime = duration - notificationTime
             notificationService.scheduleNotification(
                 timeInterval: TimeInterval(pointTime),
-                title: "지정 알림",
-                body: "완료 \(notificationTime.formattedTimeString) 전입니다.",
+                title: "Custom Alert",
+                body: "\(notificationTime.formattedTimeString) remaining.",
                 identifier: "point_timer_notification"
             )
         }

@@ -17,7 +17,7 @@ final class TimerScreenViewModel: ObservableObject {
     @Published var selectedOffsets: Set<Int> = [60, 180, 300]  // prealert settings
     @Published private(set) var configuredMainSeconds: Int = 600
     @Published var showTimerAlert: Bool = false  // 전체 화면 알림 표시
-    @Published var prealertMessages: [Int: String] = [:]  // 예비 알림 커스텀 메시지
+    @Published var prealertMessages: [Int: String] = [:]  // Pre-alerts 커스텀 메시지
     @Published var finishMessage: String = ""  // 종료 알림 커스텀 메시지
     @Published var showPermissionWarning: Bool = false  // 권한 경고 표시
 
@@ -38,54 +38,54 @@ final class TimerScreenViewModel: ObservableObject {
             .sink { [weak self] _ in self?.objectWillChange.send() }
             .store(in: &bag)
 
-        // 타이머 종료 시 전체 화면 알림 표시
+        // Timer Finished 시 전체 화면 알림 표시
         vm.onTimerFinish = { [weak self] in
-            print("🔔 TimerScreenViewModel: showTimerAlert = true 설정")
+            print("🔔 TimerScreenViewModel: showTimerAlert = true Settings")
             self?.showTimerAlert = true
             print("🔔 TimerScreenViewModel: showTimerAlert 현재 값 = \(self?.showTimerAlert ?? false)")
         }
 
-        // Watch로부터 타이머 메시지 수신
+        // Watch로부터 Timer 메시지 수신
         setupWatchConnectivity()
     }
 
     private func setupWatchConnectivity() {
         let connectivity = WatchConnectivityManager.shared
 
-        // Watch에서 타이머 시작
+        // Watch에서 Start Timer
         connectivity.onTimerStart = { [weak self] syncData in
             guard let self = self else { return }
 
-            // 타이머 설정 적용
+            // Timer Settings Apply
             let mainSeconds = Int(syncData.duration)
             self.mainMinutes = mainSeconds / 60
             self.mainSeconds = mainSeconds % 60
-            // Watch에서 분 단위로 오는 데이터를 초 단위로 변환
+            // Watch에서 min 단위로 오는 데이터를 sec 단위로 변환
             self.selectedOffsets = Set(syncData.prealertOffsets.map { $0 * 60 })
 
-            // 타이머 시작
+            // Start Timer
             self.applyCurrentSettings()
             self.timerVM.start()
 
-            self.showToast?("⌚️ Watch에서 타이머 시작")
+            self.showToast?("⌚️ Timer started from Watch")
         }
 
-        // Watch에서 타이머 일시정지
+        // Watch에서 Pause Timer
         connectivity.onTimerPause = { [weak self] in
             self?.timerVM.pause()
-            self?.showToast?("⌚️ Watch에서 일시정지")
+            self?.showToast?("⌚️ Paused from Watch")
         }
 
-        // Watch에서 타이머 재개
+        // Watch에서 Resume Timer
         connectivity.onTimerResume = { [weak self] in
             self?.timerVM.resume()
-            self?.showToast?("⌚️ Watch에서 재개")
+            self?.showToast?("⌚️ Resumed from Watch")
         }
 
-        // Watch에서 타이머 중지
+        // Watch에서 Timer Stop
         connectivity.onTimerStop = { [weak self] in
             self?.timerVM.stop()
-            self?.showToast?("⌚️ Watch에서 중지")
+            self?.showToast?("⌚️ Stopped from Watch")
         }
     }
 
@@ -96,7 +96,7 @@ final class TimerScreenViewModel: ObservableObject {
     var state: TimerState { timerVM.state }
     var remaining: TimeInterval { timerVM.remaining }
 
-    /// 다음 알림까지 남은 시간 텍스트
+    /// Next 알림까지 남은 시간 텍스트
     var nextAlertText: String {
         guard state == .running || state == .overtime else { return "" }
 
@@ -107,7 +107,7 @@ final class TimerScreenViewModel: ObservableObject {
             return ""
         }
 
-        // 예비 알림 중에서 아직 발생하지 않은 것 찾기 (내림차순 정렬)
+        // Pre-alerts 중에서 아직 발생하지 않은 것 찾기 (내림차순 정렬)
         let upcomingAlerts = selectedOffsets
             .sorted(by: >)  // 큰 것부터 (가장 먼 알림부터)
             .filter { Double($0) < remaining }
@@ -120,49 +120,49 @@ final class TimerScreenViewModel: ObservableObject {
             let alertMinutes = nextAlert / 60
 
             if minutes > 0 {
-                return String(localized: "다음: \(alertMinutes)분 알림 (\(minutes)분 \(seconds)초 후)")
+                return String(localized: "Next: \(alertMinutes) min alert (\(minutes) min \(seconds) sec left)")
             } else {
-                return String(localized: "다음: \(alertMinutes)분 알림 (\(seconds)초 후)")
+                return String(localized: "Next: \(alertMinutes) min alert (\(seconds) sec left)")
             }
         } else {
-            // 모든 예비 알림이 지나갔으면 종료 알림까지 시간
+            // 모든 Pre-alerts이 지나갔으면 종료 알림까지 시간
             let minutes = Int(remaining) / 60
             let seconds = Int(remaining) % 60
 
             if minutes > 0 {
-                return String(localized: "다음: 종료 알림 (\(minutes)분 \(seconds)초 후)")
+                return String(localized: "Next: End alert (\(minutes) min \(seconds) sec left)")
             } else if seconds > 0 {
-                return String(localized: "다음: 종료 알림 (\(seconds)초 후)")
+                return String(localized: "Next: End alert (\(seconds) sec left)")
             } else {
                 return ""
             }
         }
     }
 
-    /// 앱 진입시 표시될 타이머 세팅
+    /// 앱 진입시 표시될 Timer 세팅
     func initialConfiguration() {
         justConfigure(save: false, toast: false)
     }
 
-    /// 타이머의 설정을 '적용' 하는 경우
+    /// Timer의 Settings을 'Apply' 하는 경우
     func applyCurrentSettings() {
         justConfigure(save: true, toast: true)
     }
 
-    /// 타이머를 '취소' 하는 경우
+    /// Timer를 'Cancel' 하는 경우
     func cancel() {
-        showToast?("취소")
+        showToast?("Cancel")
         timerVM.stop()
         justConfigure(save: false, toast: false)
     }
 
-    /// 내역에서 타이머를 선택하여 '적용'하는 경우
+    /// 내역에서 Timer를 선택하여 'Apply'하는 경우
     func apply(template t: Timer) {
         timerVM.configure(from: t)
         configuredMainSeconds = t.mainSeconds
         mainMinutes = max(0, t.mainSeconds) / 60
         mainSeconds = max(0, t.mainSeconds) % 60
-        selectedOffsets = Set(t.prealertOffsetsSec)  // 예비 알림도 동기화
+        selectedOffsets = Set(t.prealertOffsetsSec)  // Pre-alerts도 동기화
         prealertMessages = t.prealertMessages  // 커스텀 메시지 불러오기
         finishMessage = t.finishMessage ?? ""  // 종료 메시지 불러오기
         showTemplateApplyToast(for: t)
@@ -170,29 +170,29 @@ final class TimerScreenViewModel: ObservableObject {
     }
 
     func start() {
-        // 권한 확인 후 경고 표시 (향상된 알림 사용 시에만)
+        // 권한 OK 후 경고 표시 (향상된 알림 사용 시에만)
         if timerVM.appStateManager?.notificationAuthStatus == .denied,
            UserDefaults.standard.bool(forKey: "useAlarmKit") {
             showPermissionWarning = true
             return
         }
 
-        showToast?("시작")
+        showToast?("Start")
         timerVM.start()
     }
     func pause() {
-        showToast?("일시정지")
+        showToast?("Pause")
         timerVM.pause()
     }
     func resume() {
-        showToast?("재개")
+        showToast?("Resume")
         timerVM.resume()
     }
 
     func timeString(from interval: TimeInterval) -> String {
         let total = Int(interval.rounded())
         if total < 0 {
-            // 초과 시간 표시
+            // sec과 시간 표시
             let absTotal = abs(total)
             let m = absTotal / 60
             let s = absTotal % 60
@@ -206,7 +206,7 @@ final class TimerScreenViewModel: ObservableObject {
     
     func showPrealertToast(for seconds: Int, isEnabled: Bool) {
         let minutes = seconds / 60
-        let message = isEnabled ? "\(minutes)분 예비 알림 설정" : "\(minutes)분 예비 알림 해제"
+        let message = isEnabled ? "\(minutes) min pre-alert set" : "\(minutes) min pre-alert off"
         showToast?(message)
     }
     
@@ -214,14 +214,14 @@ final class TimerScreenViewModel: ObservableObject {
         let mMain = template.mainSeconds / 60
         let sMain = template.mainSeconds % 60
         
-        let mainLabel = sMain > 0 ? "메인 \(mMain)분 \(sMain)초" : "메인 \(mMain)분"
-        
+        let mainLabel = sMain > 0 ? "Main \(mMain) min \(sMain) sec" : "Main \(mMain) min"
+
         let preList = template.prealertOffsetsSec
             .sorted()
-            .map { "\($0/60)분" }
+            .map { "\($0/60) min" }
             .joined(separator: ", ")
-        
-        let message = preList.isEmpty ? "\(mainLabel), 예비: 없음" : "\(mainLabel), 예비: \(preList)"
+
+        let message = preList.isEmpty ? "\(mainLabel), Pre-alert: none" : "\(mainLabel), Pre-alert: \(preList)"
         showToast?(message)
     }
 
@@ -234,21 +234,21 @@ final class TimerScreenViewModel: ObservableObject {
                 .filter { $0 > 0 && $0 < mainSec }
         ).sorted()
 
-        // 타이머 이름 생성 (시간 기반)
+        // Timer Name 생성 (시간 기반)
         let timerName: String
         if mainSec >= 3600 {
             let hours = mainSec / 3600
             let minutes = (mainSec % 3600) / 60
             if minutes > 0 {
-                timerName = "\(hours)시간 \(minutes)분"
+                timerName = "\(hours)h \(minutes)min"
             } else {
-                timerName = "\(hours)시간"
+                timerName = "\(hours)h"
             }
         } else if mainSec >= 60 {
             let minutes = mainSec / 60
-            timerName = "\(minutes)분"
+            timerName = "\(minutes)min"
         } else {
-            timerName = "타이머"
+            timerName = "Timer"
         }
 
         let temp = Timer(
@@ -266,10 +266,10 @@ final class TimerScreenViewModel: ObservableObject {
         }
 
         if toast {
-            let mainLabel = secPart > 0 ? "\(mainMinutes)분 \(secPart)초" : "\(mainMinutes)분"
-            let preText = normalizedOffsets.map { "\($0/60)분" }.sorted().joined(separator: ", ")
+            let mainLabel = secPart > 0 ? "\(mainMinutes)min \(secPart)sec" : "\(mainMinutes)min"
+            let preText = normalizedOffsets.map { "\($0/60)min" }.sorted().joined(separator: ", ")
             timerVM.showToast?(
-                "타이머 적용: \(mainLabel)" + (preText.isEmpty ? "" : " / 예비 \(preText)")
+                "Timer applied: \(mainLabel)" + (preText.isEmpty ? "" : " / Pre-alert \(preText)")
             )
         }
     }
@@ -277,10 +277,10 @@ final class TimerScreenViewModel: ObservableObject {
     private func makeTemplateName(mainSec: Int, offsets: [Int]) -> String {
         let m = max(0, mainSec) / 60
         let s = max(0, mainSec) % 60
-        let base = s > 0 ? "메인 \(m)분 \(s)초" : "메인 \(m)분"
+        let base = s > 0 ? "Main \(m) min \(s) sec" : "Main \(m) min"
         if offsets.isEmpty { return base }
         let pre = offsets.map { "\($0/60)" }.joined(separator: "·")
-        return "\(base) / 예비 \(pre)분"
+        return "\(base) / Pre-alert \(pre) min"
     }
 }
 
@@ -348,8 +348,8 @@ extension TimerScreenViewModel {
 }
 
 enum TimeMapper {
-    static let secondsPerDegree = 10.0  // 1° = 10초
-    static let maxSeconds = 7200  // 120분
+    static let secondsPerDegree = 10.0  // 1° = 10sec
+    static let maxSeconds = 7200  // 120min
     static let maxAngle = Double(maxSeconds) / secondsPerDegree  // 720도 (2바퀴)
     static let tickCount = 60
 

@@ -22,7 +22,7 @@ struct SetNotiView: View {
 
         VStack(spacing: 16) {
             // 타이틀
-            Text("예비 알림", comment: "Pre-alerts")
+            Text("Pre-alerts", comment: "Pre-alerts")
                 .font(.system(size: 14, weight: .medium, design: .rounded))
                 .foregroundStyle(.secondary)
                 .padding(.top, 4)
@@ -42,19 +42,19 @@ struct SetNotiView: View {
 
     private var selectedMinutesText: String {
         let sorted = viewModel.selectedMinutes.sorted()
-        let minText = String(localized: "분")
-        let alertText = String(localized: "분 전 알림")
+        let minText = String(localized: "min")
+        let alertText = String(localized: "min before alert")
         if sorted.count == 1 {
             return "\(sorted[0]) \(alertText)"
         } else {
             let text = sorted.map { "\($0) \(minText)" }.joined(separator: ", ")
-            return "\(text) \(String(localized: "전 알림"))"
+            return "\(text) \(String(localized: "before alert"))"
         }
     }
 
     private func presetButtons(maxMinute: Int) -> some View {
         let columns = [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)]
-        // iOS와 동일한 프리셋: 1, 3, 5, 10, 15, 30분
+        // iOS와 동일한 프리셋: 1, 3, 5, 10, 15, 30min
         let defaultPresets = [1, 3, 5, 10, 15, 30]
         return LazyVGrid(columns: columns, alignment: .center, spacing: 8) {
             ForEach(defaultPresets.filter { $0 <= maxMinute }, id: \.self) { minute in
@@ -94,7 +94,7 @@ struct SetNotiView: View {
             let prealertOffsets = Array(viewModel.selectedMinutes)
             path.append(.timerViewMultiple(mainDuration: viewModel.maxTimeInSeconds, prealertOffsets: prealertOffsets))
         } label: {
-            Text("타이머 시작", comment: "Start Timer")
+            Text("Start Timer", comment: "Start Timer")
                 .font(.system(size: 14, weight: .semibold))
                 .frame(maxWidth: .infinity)
         }
@@ -127,19 +127,19 @@ struct SetNotiView: View {
 
     private func customMinutesSheet(maxMinute: Int) -> some View {
         VStack(spacing: 8) {
-            Text("사용자 지정 분", comment: "Custom Minutes")
+            Text("Custom Minutes", comment: "Custom Minutes")
                 .font(.headline)
 
             Picker("", selection: $customMinutes) {
                 ForEach(1...max(1, maxMinute), id: \.self) { minute in
-                    Text("\(minute) \(String(localized: "분"))").tag(minute)
+                    Text("\(minute) \(String(localized: "min"))").tag(minute)
                 }
             }
             .pickerStyle(.wheel)
             .frame(height: 110)
 
             HStack(spacing: 12) {
-                Button("취소") {
+                Button("Cancel") {
                     showingCustomSheet = false
                 }
                 .frame(maxWidth: .infinity)
@@ -148,7 +148,7 @@ struct SetNotiView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .buttonStyle(.plain)
 
-                Button("완료") {
+                Button("Done") {
                     let clamped = min(max(1, customMinutes), maxMinute)
                     viewModel.selectedMinutes.insert(clamped)
                     let defaultPresets = [1, 3, 5, 10, 15, 30]
@@ -237,8 +237,8 @@ private func requestNotificationPermissionIfNeeded(completion: @escaping (Bool) 
 
 private func schedulePreFinishNotification(after seconds: TimeInterval, minutes: Int) {
     let content = UNMutableNotificationContent()
-    content.title = String(localized: "Toki 타이머")
-    content.body = String(localized: "\(minutes)분 남았습니다")
+    content.title = String(localized: "Toki Timer")
+    content.body = String(localized: "\(minutes) min remaining")
     content.sound = .default
 
     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: max(1, seconds), repeats: false)

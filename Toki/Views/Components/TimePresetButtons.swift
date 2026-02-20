@@ -15,7 +15,7 @@ struct TimePresetButtons: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("빠른 설정")
+            Text("Quick Setup")
                 .font(.subheadline.weight(.medium))
                 .foregroundStyle(.secondary)
                 .padding(.leading, 12)
@@ -27,7 +27,7 @@ struct TimePresetButtons: View {
                             screenVM.mainMinutes = minutes
                             screenVM.mainSeconds = 0
                         }) {
-                            Text("\(minutes) \(String(localized: "분"))")
+                            Text("\(minutes) \(String(localized: "min"))")
                                 .font(.subheadline.weight(.medium))
                                 .padding(.horizontal, 12)
                                 .padding(.vertical, 8)
@@ -36,11 +36,11 @@ struct TimePresetButtons: View {
                         .tint(isSelected(minutes) ? Color.accentColor : .gray)
                     }
 
-                    // 직접 입력 버튼
+                    // Custom 입력 버튼
                     Button(action: onShowTimeInput) {
                         HStack(spacing: 6) {
                             Image(systemName: "plus.circle.fill")
-                            Text("직접")
+                            Text("Custom")
                                 .font(.subheadline.weight(.medium))
                         }
                         .padding(.horizontal, 12)

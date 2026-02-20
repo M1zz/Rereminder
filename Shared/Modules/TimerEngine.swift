@@ -20,13 +20,13 @@ final class TimerEngine {
     var onPreAlert: ((Int) -> Void)?
     var onFinish: (() -> Void)?
 
-    /// 테스트 모드용 시간 배수 (기본값 1.0 = 실시간, 10.0 = 10배속)
+    /// Test Mode용 Time Multiplier (기본값 1.0 = 실시간, 10.0 = 10x Speed)
     var timeMultiplier: Double = 1.0
 
     private var config: Configuration?
     private var endDate: Date?
-    private var startDate: Date?  // 시작 시간 (테스트 모드용)
-    private var pausedElapsed: TimeInterval = 0  // 일시정지 전까지 경과 시간
+    private var startDate: Date?  // Start 시간 (Test Mode용)
+    private var pausedElapsed: TimeInterval = 0  // Pause 전까지 경과 시간
     private var remainingWhenPaused: TimeInterval?
     private var firedOffsets = Set<Int>()  // prevent prealert duplication
     private var state: TimerState = .idle
@@ -49,9 +49,9 @@ final class TimerEngine {
         guard let cfg = config else { return }
         firedOffsets.removeAll()
         pausedElapsed = 0
-        // 시작 시간 기록
+        // Start 시간 기록
         startDate = Date()
-        // endDate는 정상적으로 설정 (압축하지 않음)
+        // endDate는 정상적으로 Settings (압축하지 않음)
         endDate = Date().addingTimeInterval(cfg.mainDuration)
         startTimer()
         state = .running
@@ -63,7 +63,7 @@ final class TimerEngine {
               let start = startDate,
               let cfg = config else { return }
 
-        // 현재까지 경과한 시간을 계산 (multiplier 적용)
+        // 현재까지 경과한 시간을 계산 (multiplier Apply)
         let actualElapsed = Date().timeIntervalSince(start)
         pausedElapsed += actualElapsed * timeMultiplier
 
@@ -78,10 +78,10 @@ final class TimerEngine {
         guard state == .paused,
               let r = remainingWhenPaused else { return }
 
-        // 재개 시 새로운 시작 시간 설정
+        // Resume 시 새로운 Start 시간 Settings
         startDate = Date()
 
-        // endDate는 남은 시간 기준으로 설정
+        // endDate는 남은 시간 기준으로 Settings
         endDate = Date().addingTimeInterval(r)
 
         startTimer()
@@ -130,7 +130,7 @@ final class TimerEngine {
                 }
             }
 
-            // 0초 도달 시 알림만 보내고 타이머는 계속 진행 (오버타임)
+            // 0sec 도달 시 알림만 보내고 Timer는 계속 진행 (오버타임)
             if remain <= 0 && self.state == .running {
                 self.state = .overtime
                 DispatchQueue.main.async {

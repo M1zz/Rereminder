@@ -2,7 +2,7 @@
 //  TimerAlertView.swift
 //  Toki
 //
-//  타이머 종료 시 전체 화면 알림
+//  Timer Finished 시 전체 화면 알림
 //
 
 import SwiftUI
@@ -23,7 +23,7 @@ struct TimerAlertView: View {
                 }
 
             VStack(spacing: 40) {
-                // 타이머 아이콘
+                // Timer 아이콘
                 ZStack {
                     Circle()
                         .fill(Color.red.opacity(0.2))
@@ -39,19 +39,19 @@ struct TimerAlertView: View {
 
                 // 메시지
                 VStack(spacing: 16) {
-                    Text("타이머 종료")
+                    Text("Timer Finished")
                         .font(.system(size: 40, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
 
-                    Text("시간이 다 되었습니다")
+                    Text("Time is up")
                         .font(.system(size: 20, weight: .medium))
                         .foregroundColor(.white.opacity(0.8))
                 }
                 .scaleEffect(scale)
 
-                // 확인 버튼
+                // OK 버튼
                 Button(action: onDismiss) {
-                    Text("확인")
+                    Text("OK")
                         .font(.system(size: 24, weight: .semibold, design: .rounded))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -73,11 +73,11 @@ struct TimerAlertView: View {
                 isAnimating = true
             }
 
-            // 진동
+            // Vibration
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.warning)
 
-            // 연속 진동
+            // 연속 Vibration
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 generator.notificationOccurred(.warning)
             }

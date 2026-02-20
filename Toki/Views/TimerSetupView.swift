@@ -18,7 +18,7 @@ struct TimerSetupView: View {
             VStack(spacing: 8) {
                 HStack(spacing: 8) {
                     Picker(
-                        "분",
+                        "min",
                         selection: Binding<Int>(
                             get: { screenVM.mainMinutes },
                             set: { screenVM.mainMinutes = $0 }
@@ -31,7 +31,7 @@ struct TimerSetupView: View {
                     .pickerStyle(.wheel)
                     .frame(width: 60)
                     
-                    Text("분").font(.title3)
+                    Text("min").font(.title3)
                 }
                 .frame(height: 180)
             }
@@ -53,14 +53,14 @@ struct TimerSetupView: View {
                 let presets = Timer.presetOffsetsSec
 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("예비 알림").font(.subheadline).foregroundStyle(
+                    Text("Pre-alerts").font(.subheadline).foregroundStyle(
                         .secondary
                     )
                     HStack {
                         ForEach(presets, id: \.self) { sec in
                             let isDisabled = sec >= mainSeconds
                             Toggle(
-                                "\(sec/60)분",
+                                "\(sec/60)min",
                                 isOn: Binding(
                                     get: {
                                         screenVM.selectedOffsets.contains(

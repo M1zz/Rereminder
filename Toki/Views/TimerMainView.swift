@@ -22,7 +22,7 @@ struct TimerMainView: View {
         return screenVM.selectedOffsets
             .sorted()
             .map { offset in
-                // offset(초)을 각도로 변환 후 360도 대비 비율로 계산
+                // offset(sec)을 각도로 변환 후 360도 대비 비율로 계산
                 CGFloat(offset) / TimeMapper.secondsPerDegree / 360.0
             }
     }
@@ -37,7 +37,7 @@ struct TimerMainView: View {
             let buttonSize = clockSize * 0.18
 
             VStack(spacing: 0) {
-                // 빠른설정 영역
+                // 빠른Settings 영역
                 Group {
                     if screenVM.state != .running {
                         TimePresetButtons(
@@ -58,7 +58,7 @@ struct TimerMainView: View {
 
                 Spacer()
 
-                // 다음 알림 정보 (원 밖 아래쪽)
+                // Next 알림 Info (원 밖 아래쪽)
                 if !screenVM.nextAlertText.isEmpty {
                     nextAlertInfo
                         .padding(.vertical, spacing * 3)
@@ -78,26 +78,26 @@ struct TimerMainView: View {
         }
         .fullScreenCover(isPresented: $screenVM.showTimerAlert) {
             TimerAlertView {
-                print("🎯 TimerAlertView 확인 버튼 클릭 - 닫기")
+                print("🎯 TimerAlertView OK 버튼 클릭 - Close")
                 screenVM.showTimerAlert = false
             }
         }
         .onChange(of: screenVM.showTimerAlert) { oldValue, newValue in
             print("🔔 showTimerAlert 변경: \(oldValue) → \(newValue)")
         }
-        .alert("알림 권한이 필요합니다", isPresented: $screenVM.showPermissionWarning) {
-            Button("설정으로 이동", role: .none) {
+        .alert("Notification permission is required", isPresented: $screenVM.showPermissionWarning) {
+            Button("Go to Settings", role: .none) {
                 if let url = URL(string: UIApplication.openSettingsURLString) {
                     UIApplication.shared.open(url)
                 }
             }
-            Button("나중에", role: .cancel) {
-                // 권한 없이 타이머 시작
-                screenVM.showToast?("⚠️ 알림 권한 없이 시작됨")
+            Button("Later", role: .cancel) {
+                // 권한 없이 Start Timer
+                screenVM.showToast?("⚠️ Started without notification permission")
                 screenVM.timerVM.start()
             }
         } message: {
-            Text("타이머 알림을 받으려면 알림 권한이 필요합니다.\n\n권한이 없으면:\n• 예비 알림을 받을 수 없습니다\n• 종료 알림을 받을 수 없습니다\n• 백그라운드에서 알림이 작동하지 않습니다\n\n설정에서 알림 권한을 켜주세요.")
+            Text("Notification permission is required for timer alerts.\n\nWithout permission:\n• You won't receive pre-alerts\n• You won't receive end alerts\n• Notifications won't work in background\n\nPlease enable notifications in Settings.")
         }
     }
 
@@ -119,7 +119,7 @@ struct TimerMainView: View {
             backgroundCircle(size: size, lineWidth: lineWidth)
             progressCircle(size: size, lineWidth: lineWidth)
 
-            // 타이머 실행 중이고 5분 이상 남았을 때만 >> 표시
+            // Timer 실행 중이고 5min 이상 남았을 때만 >> 표시
             if screenVM.state == .running && screenVM.timerVM.remaining > 300 {
                 progressIndicator(size: size)
             }
@@ -147,11 +147,11 @@ struct TimerMainView: View {
     }
 
     private func progressIndicator(size: CGFloat) -> some View {
-        // 타이머 진행에 따라 화살표가 움직임 (시작 지점 근처에서 시작)
+        // Timer 진행에 따라 화살표가 움직임 (Start 지점 근처에서 Start)
         let currentAngle = screenVM.timerVM.remaining / TimeMapper.secondsPerDegree
 
         // 화살표를 실제 진행 위치보다 약간 앞서서 배치
-        let indicatorAngle = currentAngle - 90 - 5  // 12시 방향(-90)에서 시작
+        let indicatorAngle = currentAngle - 90 - 5  // 12시 방향(-90)에서 Start
         let radius = size / 2 - 2  // 원 라인 위
         let xOffset = cos(CGFloat(indicatorAngle) * .pi / 180) * radius
         let yOffset = sin(CGFloat(indicatorAngle) * .pi / 180) * radius
@@ -196,7 +196,7 @@ struct TimerMainView: View {
         let circleColor: Color
 
         if screenVM.state == .running || screenVM.state == .paused {
-            // 실행/일시정지 중: 남은 시간 기준으로 표시
+            // 실행/Pause 중: 남은 시간 기준으로 표시
             currentAngle = screenVM.timerVM.remaining / TimeMapper.secondsPerDegree
             circleColor = Color.accentColor
         } else if screenVM.state == .overtime {
@@ -204,7 +204,7 @@ struct TimerMainView: View {
             currentAngle = 0
             circleColor = Color.red
         } else {
-            // 대기/완료 상태: 설정된 시간 표시
+            // 대기/Done 상태: Settings된 시간 표시
             currentAngle = screenVM.mainAngle
             circleColor = Color.accentColor
         }
@@ -339,7 +339,7 @@ struct TimerMainView: View {
         let presets = Timer.presetOffsetsSec
 
         VStack(alignment: .leading, spacing: 8) {
-            Text("예비 알림")
+            Text("Pre-alerts")
                 .font(.subheadline.weight(.medium))
                 .foregroundStyle(.secondary)
                 .padding(.leading, 12)
@@ -370,7 +370,7 @@ struct TimerMainView: View {
                 }
             )
         ) {
-            Text("\(sec/60) \(String(localized: "분"))")
+            Text("\(sec/60) \(String(localized: "min"))")
                 .font(.system(size: 14, weight: .medium))
                 .padding(.horizontal, 10)
                 .padding(.vertical, 6)
@@ -435,19 +435,19 @@ struct TimerMainView: View {
     private var stateText: LocalizedStringKey {
         switch screenVM.state {
         case .idle:
-            return "대기 중"
+            return "Ready"
         case .running:
-            return "진행 중"
+            return "In Progress"
         case .paused:
-            return "일시정지됨"
+            return "Paused"
         case .finished:
-            return "완료"
+            return "Done"
         case .overtime:
-            return "초과 진행 중"
+            return "Overtime"
         }
     }
 
-    // 왼쪽 버튼 (취소) - 타이머 시작 후에만 표시
+    // 왼쪽 버튼 (Cancel) - Start Timer 후에만 표시
     @ViewBuilder
     private func leftButton(buttonSize: CGFloat) -> some View {
         if screenVM.state != .idle {
@@ -460,11 +460,11 @@ struct TimerMainView: View {
                 tint: Color.plain,
                 size: buttonSize
             ))
-            .accessibilityLabel("타이머 취소")
+            .accessibilityLabel("Cancel Timer")
         }
     }
 
-    // 오른쪽 버튼 (재생/일시정지)
+    // 오른쪽 버튼 (재생/Pause)
     @ViewBuilder
     private func rightButton(buttonSize: CGFloat) -> some View {
         switch screenVM.state {
@@ -481,7 +481,7 @@ struct TimerMainView: View {
                 tint: Color.positive,
                 size: buttonSize
             ))
-            .accessibilityLabel("타이머 시작")
+            .accessibilityLabel("Start Timer")
 
         case .running, .overtime:
             Button(action: { screenVM.pause() }) {
@@ -493,7 +493,7 @@ struct TimerMainView: View {
                 tint: Color.bitNegative,
                 size: buttonSize
             ))
-            .accessibilityLabel("타이머 일시정지")
+            .accessibilityLabel("Pause Timer")
 
         case .paused:
             Button(action: { screenVM.resume() }) {
@@ -505,7 +505,7 @@ struct TimerMainView: View {
                 tint: Color.positive,
                 size: buttonSize
             ))
-            .accessibilityLabel("타이머 재개")
+            .accessibilityLabel("Resume Timer")
         }
     }
 

@@ -29,9 +29,9 @@ struct PauseTimerIntent: LiveActivityIntent {
     }
 
     func perform() async throws -> some IntentResult {
-        print("⏸️ Intent: 일시정지 요청 - \(alarmID)")
+        print("⏸️ Intent: Pause 요청 - \(alarmID)")
 
-        // AlarmManager를 통해 직접 제어
+        // AlarmManager를 통해 Custom 제어
         try AlarmManager.shared.pause(id: UUID(uuidString: alarmID)!)
 
         return .result()
@@ -56,9 +56,9 @@ struct ResumeTimerIntent: LiveActivityIntent {
     }
 
     func perform() async throws -> some IntentResult {
-        print("▶️ Intent: 재개 요청 - \(alarmID)")
+        print("▶️ Intent: Resume 요청 - \(alarmID)")
 
-        // AlarmManager를 통해 직접 제어
+        // AlarmManager를 통해 Custom 제어
         try AlarmManager.shared.resume(id: UUID(uuidString: alarmID)!)
 
         return .result()
@@ -83,9 +83,9 @@ struct StopTimerIntent: LiveActivityIntent {
     }
 
     func perform() async throws -> some IntentResult {
-        print("⏹️ Intent: 중지 요청 - \(alarmID)")
+        print("⏹️ Intent: Stop 요청 - \(alarmID)")
 
-        // AlarmManager를 통해 직접 제어
+        // AlarmManager를 통해 Custom 제어
         try AlarmManager.shared.stop(id: UUID(uuidString: alarmID)!)
 
         return .result()

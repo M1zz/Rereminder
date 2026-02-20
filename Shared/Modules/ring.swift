@@ -16,9 +16,9 @@ enum RingMode: String, CaseIterable, Identifiable {
     var displayName: String {
         switch self {
         case .sound:
-            return String(localized: "소리")
+            return String(localized: "Sound")
         case .vibration:
-            return String(localized: "진동")
+            return String(localized: "Vibration")
         }
     }
 }

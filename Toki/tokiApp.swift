@@ -10,7 +10,7 @@ import SwiftUI
 @main
 struct tokiApp: App {
     init() {
-        // WatchConnectivity 초기화
+        // WatchConnectivity sec기화
         _ = WatchConnectivityManager.shared
     }
 

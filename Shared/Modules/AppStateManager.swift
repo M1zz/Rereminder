@@ -46,7 +46,7 @@ final class AppStateManager: ObservableObject {
         print("📱 [알림] sendNotificationIfNeeded 호출됨")
         print("   - 메시지: \(message)")
         print("   - 백그라운드 상태: \(isInBackground)")
-        print("   - 알림 권한: \(notificationAuthStatus)")
+        print("   - Notification Permission: \(notificationAuthStatus)")
 
         if isInBackground {
             print("   ✅ 백그라운드 상태 → 알림 전송 시도")
@@ -58,10 +58,10 @@ final class AppStateManager: ObservableObject {
 
     // 테스트용: 즉시 알림 전송
     func sendTestNotification() {
-        print("🧪 [테스트] 테스트 알림 전송 시작")
+        print("🧪 [테스트] 테스트 알림 전송 Start")
         let content = UNMutableNotificationContent()
-        content.title = "Toki 테스트 알림"
-        content.body = "알림이 정상적으로 작동합니다! 🎉"
+        content.title = "Toki Test Notification"
+        content.body = "Notifications are working correctly! 🎉"
         content.sound = .default
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
@@ -79,18 +79,18 @@ final class AppStateManager: ObservableObject {
 
 private func pushPrealertNotice(message: String) {
     let pushEnabled = UserDefaults.standard.bool(forKey: "pushEnabled")
-    print("📤 [알림 전송] pushPrealertNotice 시작")
+    print("📤 [알림 전송] pushPrealertNotice Start")
     print("   - pushEnabled: \(pushEnabled)")
 
     guard pushEnabled else {
-        print("   ⚠️ pushEnabled가 꺼져있음 → 알림 전송 취소")
+        print("   ⚠️ pushEnabled가 꺼져있음 → 알림 전송 Cancel")
         return
     }
 
     let center = UNUserNotificationCenter.current()
 
     let content = UNMutableNotificationContent()
-    content.title = "Toki 타이머"
+    content.title = "Toki Timer"
     content.body = message
     content.sound = .default
 
@@ -102,7 +102,7 @@ private func pushPrealertNotice(message: String) {
         if let error = error {
             print("   ❌ 알림 추가 실패: \(error)")
         } else {
-            print("   ✅ 알림 추가 성공 (1초 후 전송)")
+            print("   ✅ 알림 추가 성공 (1sec later 전송)")
         }
     }
 }

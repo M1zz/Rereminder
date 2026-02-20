@@ -63,11 +63,11 @@ struct OnboardingView: View {
             .ignoresSafeArea()
 
             VStack(spacing: 0) {
-                // 건너뛰기 버튼
+                // Skip 버튼
                 HStack {
                     Spacer()
                     Button(action: skipOnboarding) {
-                        Text("건너뛰기")
+                        Text("Skip")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
@@ -89,7 +89,7 @@ struct OnboardingView: View {
                 VStack(spacing: 12) {
                     if currentPage == pages.count - 1 {
                         Button(action: skipOnboarding) {
-                            Text("시작하기")
+                            Text("Get Started")
                                 .font(.headline)
                                 .foregroundStyle(.white)
                                 .frame(maxWidth: .infinity)
@@ -111,7 +111,7 @@ struct OnboardingView: View {
                             }
                         }) {
                             HStack {
-                                Text("다음")
+                                Text("Next")
                                     .font(.headline)
                                 Image(systemName: "arrow.right")
                                     .font(.headline.weight(.semibold))
@@ -210,7 +210,7 @@ struct OnboardingPageView: View {
                             HStack(spacing: 6) {
                                 Image(systemName: "lightbulb.fill")
                                     .font(.caption)
-                                Text("사용 예시")
+                                Text("Usage Example")
                                     .font(.caption.weight(.semibold))
                             }
                             .foregroundStyle(page.color)

@@ -24,16 +24,16 @@ struct TimeInputSheet: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 24) {
-                Text("시간 직접 입력")
+                Text("Enter Time Manually")
                     .font(.headline)
 
                 HStack(spacing: 16) {
-                    // 분 입력
+                    // min 입력
                     VStack {
-                        Text("분")
+                        Text("min")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
-                        Picker("분", selection: $inputMinutes) {
+                        Picker("min", selection: $inputMinutes) {
                             ForEach(0..<61) { minute in
                                 Text("\(minute)").tag(minute)
                             }
@@ -46,12 +46,12 @@ struct TimeInputSheet: View {
                         .font(.largeTitle)
                         .foregroundStyle(.secondary)
 
-                    // 초 입력
+                    // sec 입력
                     VStack {
-                        Text("초")
+                        Text("sec")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
-                        Picker("초", selection: $inputSeconds) {
+                        Picker("sec", selection: $inputSeconds) {
                             ForEach(0..<60) { second in
                                 Text("\(second)").tag(second)
                             }
@@ -66,7 +66,7 @@ struct TimeInputSheet: View {
                     screenVM.mainSeconds = inputSeconds
                     isPresented = false
                 }) {
-                    Text("적용")
+                    Text("Apply")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding()
@@ -79,7 +79,7 @@ struct TimeInputSheet: View {
             .padding()
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("취소") {
+                    Button("Cancel") {
                         isPresented = false
                     }
                 }

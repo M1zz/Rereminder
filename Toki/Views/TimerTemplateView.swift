@@ -16,7 +16,7 @@ struct TimerTemplateView: View {
     @Query(sort: [SortDescriptor(\Timer.createdAt, order: .reverse)])
     private var allTemplates: [Timer]
 
-    // 즐겨찾기 먼저, 그 다음 최근 사용 순으로 정렬
+    // 즐겨찾기 먼저, 그 Next 최근 사용 순으로 정렬
     private var templates: [Timer] {
         allTemplates.sorted { t1, t2 in
             // 즐겨찾기가 우선
@@ -47,9 +47,9 @@ struct TimerTemplateView: View {
             Group {
                 if templates.isEmpty {
                     ContentUnavailableView(
-                        "저장된 템플릿이 없습니다",
+                        "No saved templates",
                         systemImage: "clock.badge.questionmark",
-                        description: Text("타이머를 시작하면 자동으로 템플릿이 저장됩니다")
+                        description: Text("Templates are automatically saved when you start a timer")
                     )
                     .padding(.top, 40)
                 } else {
@@ -61,7 +61,7 @@ struct TimerTemplateView: View {
                     .listStyle(.insetGrouped)
                 }
             }
-            .navigationTitle("타이머 템플릿")
+            .navigationTitle("Timer Templates")
             .navigationBarTitleDisplayMode(.inline)
         }
         .sheet(item: $editingTimer) { timer in
@@ -88,7 +88,7 @@ struct TimerTemplateView: View {
 
                 VStack(alignment: .leading, spacing: 6) {
                     HStack(spacing: 8) {
-                        // 레이블 태그
+                        // Label 태그
                         if !timer.label.isEmpty {
                             Text(timer.label)
                                 .font(.caption)
@@ -112,21 +112,21 @@ struct TimerTemplateView: View {
                         }
                     }
 
-                    // 타이머 정보
+                    // Timer Info
                     let mMain = timer.mainSeconds / 60
                     let sMain = timer.mainSeconds % 60
                     let preList = timer.prealertOffsetsSec
                         .sorted()
-                        .map { "\($0/60) \(String(localized: "분"))" }
+                        .map { "\($0/60) \(String(localized: "min"))" }
                         .joined(separator: ", ")
 
-                    Text(sMain > 0 ? "메인 \(mMain)분 \(sMain)초" : "메인 \(mMain)분")
+                    Text(sMain > 0 ? "Main \(mMain) min \(sMain) sec" : "Main \(mMain) min")
                         .font(.body)
                         .fontWeight(.medium)
                         .foregroundStyle(.primary)
 
                     if !preList.isEmpty {
-                        Text("예비: \(preList)")
+                        Text("Pre-alert: \(preList)")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -147,7 +147,7 @@ struct TimerTemplateView: View {
                 editLabel = timer.label
                 editColorHex = timer.colorHex
             } label: {
-                Label("편집", systemImage: "pencil")
+                Label("Edit", systemImage: "pencil")
             }
             .tint(.blue)
         }
@@ -164,19 +164,19 @@ struct TimerTemplateView: View {
     private func editSheet(for timer: Timer) -> some View {
         NavigationView {
             Form {
-                Section(header: Text("이름")) {
-                    TextField("템플릿 이름", text: $editName)
+                Section(header: Text("Name")) {
+                    TextField("Template Name", text: $editName)
                 }
 
-                Section(header: Text("레이블")) {
-                    TextField("예: 발표, 멘토링, 회의", text: $editLabel)
+                Section(header: Text("Label")) {
+                    TextField("e.g., Presentation, Mentoring, Meeting", text: $editLabel)
 
-                    Text("레이블을 설정하면 타이머를 쉽게 구분할 수 있습니다")
+                    Text("Labels help you easily distinguish timers")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
 
-                Section(header: Text("레이블 색상")) {
+                Section(header: Text("Label Color")) {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 12) {
                             ForEach(Array(Timer.presetColors.keys.sorted()), id: \.self) { label in
@@ -189,7 +189,7 @@ struct TimerTemplateView: View {
                     }
 
                     HStack {
-                        Text("선택한 색상:")
+                        Text("Selected Color:")
                         Circle()
                             .fill(colorFromHex(editColorHex))
                             .frame(width: 24, height: 24)
@@ -199,16 +199,16 @@ struct TimerTemplateView: View {
                     }
                 }
             }
-            .navigationTitle("템플릿 편집")
+            .navigationTitle("Edit Template")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("취소") {
+                    Button("Cancel") {
                         editingTimer = nil
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("저장") {
+                    Button("Save") {
                         timer.name = editName
                         timer.label = editLabel
                         timer.colorHex = editColorHex

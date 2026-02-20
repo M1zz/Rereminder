@@ -42,7 +42,7 @@ class TokiAlarmManager: ObservableObject {
                 }
                 return state == .authorized
             } catch {
-                print("❌ 알림 권한 요청 실패: \(error)")
+                print("❌ 알림 Request Permission 실패: \(error)")
                 return false
             }
         case .denied:
@@ -63,41 +63,41 @@ class TokiAlarmManager: ObservableObject {
         finishMessage: String? = nil,
         timerName: String? = nil
     ) async throws {
-        // 권한 확인
+        // 권한 OK
         guard await requestAuthorization() else {
             throw TimerAlarmError.notAuthorized
         }
 
-        // 기존 알람 취소
+        // 기존 알람 Cancel
         try await cancelAll()
 
-        print("⚠️ AlarmKit 타이머 스케줄은 현재 비활성화되어 있습니다")
-        print("   기본 타이머 엔진만 사용합니다")
+        print("⚠️ AlarmKit Timer 스케줄은 현재 비활성화되어 있습니다")
+        print("   기본 Timer 엔진만 사용합니다")
 
         // AlarmKit API 구조가 변경되어 임시로 비활성화
-        // 기본 타이머 기능(TimerEngine)은 정상 작동합니다
+        // 기본 Timer 기능(TimerEngine)은 정상 작동합니다
     }
 
     // MARK: - Control Methods
 
     func pause() async throws {
-        print("⏸️ AlarmKit 일시정지 (비활성화됨)")
+        print("⏸️ AlarmKit Pause (비활성화됨)")
     }
 
     func resume() async throws {
-        print("▶️ AlarmKit 재개 (비활성화됨)")
+        print("▶️ AlarmKit Resume (비활성화됨)")
     }
 
     func stop() async throws {
         currentAlarmID = nil
-        print("⏹️ AlarmKit 중지 (비활성화됨)")
+        print("⏹️ AlarmKit Stop (비활성화됨)")
     }
 
     // MARK: - Cancel
 
     func cancelAll() async throws {
         currentAlarmID = nil
-        print("🗑️ AlarmKit 취소 (비활성화됨)")
+        print("🗑️ AlarmKit Cancel (비활성화됨)")
     }
 }
 
@@ -112,9 +112,9 @@ extension TimerAlarmError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .notAuthorized:
-            return "알림 권한이 필요합니다"
+            return "Notification permission is required"
         case .schedulingFailed:
-            return "알람 스케줄링에 실패했습니다"
+            return "Failed to schedule alarm"
         }
     }
 }
@@ -167,9 +167,9 @@ extension TimerAlarmError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .notAuthorized:
-            return "알림 권한이 필요합니다"
+            return "Notification permission is required"
         case .schedulingFailed:
-            return "알람 스케줄링에 실패했습니다"
+            return "Failed to schedule alarm"
         }
     }
 }

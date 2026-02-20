@@ -17,7 +17,7 @@ struct TimerActivityAttributes: ActivityAttributes {
         var remainingTime: TimeInterval
         var isPaused: Bool
         var timestamp: Date
-        var endDate: Date?  // 타이머 종료 시각 (자동 카운트다운용)
+        var endDate: Date?  // Timer Finished 시각 (자동 카운트다운용)
     }
 
     var timerName: String
@@ -99,7 +99,7 @@ struct TokiAlarmLiveActivity: Widget {
     @ViewBuilder
     func timerText(context: ActivityViewContext<TimerActivityAttributes>) -> some View {
         if context.state.isPaused {
-            // 일시정지 상태: 정적 표시
+            // Pause 상태: 정적 표시
             let total = Int(context.state.remainingTime.rounded())
             let hours = total / 3600
             let minutes = (total % 3600) / 60
@@ -181,7 +181,7 @@ struct TokiAlarmLiveActivity: Widget {
 
     func displayName(_ name: String) -> String {
         if name.isEmpty {
-            return "타이머"
+            return "Timer"
         }
         return name
     }

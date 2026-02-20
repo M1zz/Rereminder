@@ -14,7 +14,7 @@ func pushNotice() {
     let center = UNUserNotificationCenter.current()
     
     let content = UNMutableNotificationContent()
-    content.body = "타이머가 종료되었습니다!"
+    content.body = "Timer has finished!"
     content.sound = .default
 
     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)

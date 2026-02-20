@@ -2,7 +2,7 @@
 //  WatchConnectivityManager.swift
 //  Toki
 //
-//  iOS와 Apple Watch 간 타이머 상태 동기화
+//  iOS와 Apple Watch 간 Timer 상태 동기화
 //
 
 import Foundation
@@ -14,7 +14,7 @@ class WatchConnectivityManager: NSObject, ObservableObject {
 
     @Published var isReachable = false
 
-    // 타이머 상태 수신 콜백
+    // Timer 상태 수신 콜백
     var onTimerStart: ((TimerSyncData) -> Void)?
     var onTimerPause: (() -> Void)?
     var onTimerResume: (() -> Void)?
@@ -41,7 +41,7 @@ class WatchConnectivityManager: NSObject, ObservableObject {
 
     // MARK: - Send Messages
 
-    /// 타이머 시작 메시지 전송
+    /// Start Timer 메시지 전송
     func sendTimerStart(duration: TimeInterval, prealertOffsets: [Int]) {
         guard WCSession.isSupported() else { return }
 
@@ -63,13 +63,13 @@ class WatchConnectivityManager: NSObject, ObservableObject {
         ]
 
         WCSession.default.sendMessage(message, replyHandler: nil) { error in
-            print("❌ 타이머 시작 전송 실패: \(error.localizedDescription)")
+            print("❌ Start Timer 전송 실패: \(error.localizedDescription)")
         }
 
-        print("✅ Watch로 타이머 시작 전송: \(duration)초")
+        print("✅ Watch로 Start Timer 전송: \(duration)sec")
     }
 
-    /// 타이머 일시정지 메시지 전송
+    /// Pause Timer 메시지 전송
     func sendTimerPause() {
         guard WCSession.isSupported() else { return }
 
@@ -81,13 +81,13 @@ class WatchConnectivityManager: NSObject, ObservableObject {
 
         let message = ["action": "pause"]
         WCSession.default.sendMessage(message, replyHandler: nil) { error in
-            print("❌ 타이머 일시정지 전송 실패: \(error.localizedDescription)")
+            print("❌ Pause Timer 전송 실패: \(error.localizedDescription)")
         }
 
-        print("✅ Watch로 타이머 일시정지 전송")
+        print("✅ Watch로 Pause Timer 전송")
     }
 
-    /// 타이머 재개 메시지 전송
+    /// Resume Timer 메시지 전송
     func sendTimerResume(remainingDuration: TimeInterval) {
         guard WCSession.isSupported() else { return }
 
@@ -104,13 +104,13 @@ class WatchConnectivityManager: NSObject, ObservableObject {
         ]
 
         WCSession.default.sendMessage(message, replyHandler: nil) { error in
-            print("❌ 타이머 재개 전송 실패: \(error.localizedDescription)")
+            print("❌ Resume Timer 전송 실패: \(error.localizedDescription)")
         }
 
-        print("✅ Watch로 타이머 재개 전송: \(remainingDuration)초")
+        print("✅ Watch로 Resume Timer 전송: \(remainingDuration)sec")
     }
 
-    /// 타이머 중지 메시지 전송
+    /// Timer Stop 메시지 전송
     func sendTimerStop() {
         guard WCSession.isSupported() else { return }
 
@@ -122,15 +122,15 @@ class WatchConnectivityManager: NSObject, ObservableObject {
 
         let message = ["action": "stop"]
         WCSession.default.sendMessage(message, replyHandler: nil) { error in
-            print("❌ 타이머 중지 전송 실패: \(error.localizedDescription)")
+            print("❌ Timer Stop 전송 실패: \(error.localizedDescription)")
         }
 
-        print("✅ Watch로 타이머 중지 전송")
+        print("✅ Watch로 Timer Stop 전송")
     }
 
     // MARK: - Application Context (백그라운드 동기화)
 
-    /// 타이머 상태를 Application Context로 전송 (백그라운드에서도 동작)
+    /// Timer 상태를 Application Context로 전송 (백그라운드에서도 동작)
     func updateTimerContext(duration: TimeInterval?, remaining: TimeInterval?, state: String) {
         guard WCSession.isSupported() else { return }
 
@@ -155,7 +155,7 @@ class WatchConnectivityManager: NSObject, ObservableObject {
 
         do {
             try WCSession.default.updateApplicationContext(context)
-            print("✅ 타이머 상태 Context 업데이트: \(state)")
+            print("✅ Timer 상태 Context 업데이트: \(state)")
         } catch {
             print("❌ Context 업데이트 실패: \(error.localizedDescription)")
         }
@@ -170,7 +170,7 @@ extension WatchConnectivityManager: WCSessionDelegate {
             if let error = error {
                 print("❌ WCSession 활성화 실패: \(error.localizedDescription)")
             } else {
-                print("✅ WCSession 활성화 완료: \(activationState.rawValue)")
+                print("✅ WCSession 활성화 Done: \(activationState.rawValue)")
             }
         }
     }
@@ -181,7 +181,7 @@ extension WatchConnectivityManager: WCSessionDelegate {
     }
 
     nonisolated func sessionDidDeactivate(_ session: WCSession) {
-        print("⚠️ WCSession 비활성화 완료")
+        print("⚠️ WCSession 비활성화 Done")
         session.activate()
     }
     #endif

@@ -30,7 +30,7 @@ struct NoticeSettingView: View {
         Form {
             Section {
                 HStack(spacing: 16){
-                    Text("알림 스타일")
+                    Text("Notification Style")
                     Picker("notice", selection: $ringMode) {
                         ForEach(RingMode.allCases) { mode in
                             Text(mode.displayName).tag(mode)
@@ -48,31 +48,31 @@ struct NoticeSettingView: View {
                             Image(systemName: "exclamationmark.triangle.fill")
                                 .foregroundStyle(.red)
                                 .font(.title2)
-                            Text("알림 권한이 거부되었습니다")
+                            Text("Notification permission denied")
                                 .font(.headline)
                                 .foregroundStyle(.red)
                         }
 
-                        Text("알림 권한이 없으면 다음 기능이 제대로 작동하지 않습니다:")
+                        Text("Without notification permission, the following features won't work properly:")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
 
                         VStack(alignment: .leading, spacing: 6) {
                             HStack(alignment: .top, spacing: 8) {
                                 Text("•")
-                                Text("예비 알림 (1분, 3분, 5분 등)")
+                                Text("Pre-alerts (1 min, 3 min, 5 min, etc.)")
                             }
                             HStack(alignment: .top, spacing: 8) {
                                 Text("•")
-                                Text("타이머 종료 알림")
+                                Text("Timer End Alert")
                             }
                             HStack(alignment: .top, spacing: 8) {
                                 Text("•")
-                                Text("백그라운드에서 알림 수신")
+                                Text("Receive notifications in background")
                             }
                             HStack(alignment: .top, spacing: 8) {
                                 Text("•")
-                                Text("Live Activity (다이나믹 아일랜드)")
+                                Text("Live Activity (Dynamic Island)")
                             }
                         }
                         .font(.callout)
@@ -84,7 +84,7 @@ struct NoticeSettingView: View {
                             Button(action: openSettings) {
                                 HStack {
                                     Image(systemName: "gearshape.fill")
-                                    Text("설정에서 알림 켜기")
+                                    Text("Enable notifications in Settings")
                                 }
                                 .frame(maxWidth: .infinity)
                                 .padding(.vertical, 12)
@@ -96,7 +96,7 @@ struct NoticeSettingView: View {
                             Button(action: { showPermissionGuide = true }) {
                                 HStack {
                                     Image(systemName: "info.circle")
-                                    Text("권한 설정 방법 보기")
+                                    Text("How to enable permissions")
                                 }
                                 .font(.subheadline)
                                 .foregroundStyle(.blue)
@@ -107,11 +107,11 @@ struct NoticeSettingView: View {
                 }
             }
 
-            Section(header: Text("알림 방식")) {
+            Section(header: Text("Notification Method")) {
                 #if !targetEnvironment(macCatalyst)
                 Toggle(isOn: $useAlarmKit) {
                     HStack {
-                        Text("향상된 알림 사용 (권장)")
+                        Text("Use Enhanced Notifications (Recommended)")
                         Button(action: {
                             showAlarmKitInfo.toggle()
                         }) {
@@ -126,60 +126,60 @@ struct NoticeSettingView: View {
                         HStack {
                             Image(systemName: "checkmark.circle.fill")
                                 .foregroundStyle(.green)
-                            Text("백그라운드에서도 정확한 알림")
+                            Text("Accurate notifications in background")
                         }
                         .font(.caption)
 
                         HStack {
                             Image(systemName: "checkmark.circle.fill")
                                 .foregroundStyle(.green)
-                            Text("자동 권한 관리")
+                            Text("Automatic Permission Management")
                         }
                         .font(.caption)
 
                         HStack {
                             Image(systemName: "checkmark.circle.fill")
                                 .foregroundStyle(.green)
-                            Text("중복 알림 방지")
+                            Text("Prevent Duplicate Alerts")
                         }
                         .font(.caption)
                     }
                     .foregroundStyle(.secondary)
                     .padding(.top, 4)
                 } else {
-                    Toggle("푸시 알림 보내기", isOn: $pushEnabled)
+                    Toggle("Send Push Notification", isOn: $pushEnabled)
                 }
                 #else
-                Toggle("푸시 알림 보내기", isOn: $pushEnabled)
+                Toggle("Send Push Notification", isOn: $pushEnabled)
                     .disabled(false)
 
-                Text("macOS에서는 기본 알림만 지원됩니다")
+                Text("Only basic notifications are supported on macOS")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 #endif
 
-                // 알림 권한 상태 표시
+                // Notification Permission 상태 표시
                 HStack {
-                    Text("알림 권한")
+                    Text("Notification Permission")
                     Spacer()
                     switch appStateManager.notificationAuthStatus {
                     case .authorized:
-                        Label("허용됨", systemImage: "checkmark.circle.fill")
+                        Label("Allowed", systemImage: "checkmark.circle.fill")
                             .foregroundStyle(.green)
                     case .denied:
                         Button(action: openSettings) {
-                            Label("거부됨 - 설정으로 이동", systemImage: "xmark.circle.fill")
+                            Label("Denied - Go to Settings", systemImage: "xmark.circle.fill")
                                 .foregroundStyle(.red)
                         }
                     case .notDetermined:
                         Button(action: {
                             appStateManager.requestNotificationPermission()
                         }) {
-                            Label("권한 요청", systemImage: "questionmark.circle.fill")
+                            Label("Request Permission", systemImage: "questionmark.circle.fill")
                                 .foregroundStyle(.orange)
                         }
                     default:
-                        Text("알 수 없음")
+                        Text("Unknown")
                             .foregroundStyle(.secondary)
                     }
                 }
@@ -192,7 +192,7 @@ struct NoticeSettingView: View {
                         HStack {
                             Image(systemName: "bell.badge.fill")
                                 .foregroundStyle(.blue)
-                            Text("테스트 알림 보내기")
+                            Text("Send Test Notification")
                             Spacer()
                             Image(systemName: "arrow.right.circle.fill")
                                 .foregroundStyle(.blue)
@@ -200,20 +200,20 @@ struct NoticeSettingView: View {
                     }
                     .foregroundStyle(.primary)
 
-                    Text("버튼을 누르면 1초 후 테스트 알림이 전송됩니다")
+                    Text("Test notification will be sent 1 second after pressing the button")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
             }
 
             Section {
-                Toggle("토스트 메세지 표시", isOn: $toastEnabled)
+                Toggle("Show Toast Messages", isOn: $toastEnabled)
             }
 
-            Section(header: Text("테스트 모드")) {
+            Section(header: Text("Test Mode")) {
                 Toggle(isOn: $testModeEnabled) {
                     HStack {
-                        Text("빠른 테스트 모드")
+                        Text("Quick Test Mode")
                         Button(action: {
                             showTestModeInfo.toggle()
                         }) {
@@ -230,24 +230,24 @@ struct NoticeSettingView: View {
 
                 if testModeEnabled {
                     VStack(alignment: .leading, spacing: 8) {
-                        Text("시간 배수 선택")
+                        Text("Select Time Multiplier")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
 
-                        Picker("시간 배수", selection: $testModeMultiplier) {
-                            Text("1배속 (실시간)").tag(1.0)
-                            Text("10배속").tag(10.0)
-                            Text("30배속").tag(30.0)
-                            Text("60배속").tag(60.0)
+                        Picker("Time Multiplier", selection: $testModeMultiplier) {
+                            Text("1x Speed (Real-time)").tag(1.0)
+                            Text("10x Speed").tag(10.0)
+                            Text("30x Speed").tag(30.0)
+                            Text("60x Speed").tag(60.0)
                         }
                         .pickerStyle(.segmented)
 
                         VStack(alignment: .leading, spacing: 4) {
                             if testModeMultiplier == 1.0 {
-                                Text("실시간으로 동작합니다")
+                                Text("Works in real-time")
                             } else {
-                                Text("10분 타이머 → 약 \(Int(600 / testModeMultiplier))초 후 종료")
-                                Text("1분 타이머 → 약 \(Int(60 / testModeMultiplier))초 후 종료")
+                                Text("10 min timer → ends in ~\(Int(600 / testModeMultiplier)) sec")
+                                Text("1 min timer → ends in ~\(Int(60 / testModeMultiplier)) sec")
                             }
                         }
                         .font(.caption)
@@ -257,12 +257,12 @@ struct NoticeSettingView: View {
                 }
             }
 
-            Section(header: Text("도움말")) {
+            Section(header: Text("Help")) {
                 Button {
                     showOnboarding = true
                 } label: {
                     HStack {
-                        Label("앱 사용법 보기", systemImage: "book.fill")
+                        Label("View App Tutorial", systemImage: "book.fill")
                         Spacer()
                         Image(systemName: "chevron.right")
                             .font(.caption)
@@ -275,7 +275,7 @@ struct NoticeSettingView: View {
                     shareApp()
                 } label: {
                     HStack {
-                        Label("앱 공유하기", systemImage: "square.and.arrow.up")
+                        Label("Share App", systemImage: "square.and.arrow.up")
                         Spacer()
                         Image(systemName: "chevron.right")
                             .font(.caption)
@@ -288,7 +288,7 @@ struct NoticeSettingView: View {
                     rateApp()
                 } label: {
                     HStack {
-                        Label("별점 주기", systemImage: "star.fill")
+                        Label("Rate App", systemImage: "star.fill")
                         Spacer()
                         Image(systemName: "chevron.right")
                             .font(.caption)
@@ -301,7 +301,7 @@ struct NoticeSettingView: View {
                     ReviewRequestManager.shared.openAppStoreReviewPage()
                 } label: {
                     HStack {
-                        Label("App Store에서 리뷰 작성", systemImage: "square.and.pencil")
+                        Label("Write a Review on App Store", systemImage: "square.and.pencil")
                         Spacer()
                         Image(systemName: "arrow.up.right")
                             .font(.caption)
@@ -312,7 +312,7 @@ struct NoticeSettingView: View {
 
                 Link(destination: URL(string: "mailto:leeo@kakao.com?subject=Toki%20%ED%94%BC%EB%93%9C%EB%B0%B1")!) {
                     HStack {
-                        Label("피드백 보내기", systemImage: "envelope.fill")
+                        Label("Send Feedback", systemImage: "envelope.fill")
                         Spacer()
                         Image(systemName: "arrow.up.right")
                             .font(.caption)
@@ -320,16 +320,16 @@ struct NoticeSettingView: View {
                     }
                 }
 
-                // 테스트 모드일 때만 표시
+                // Test Mode일 때만 표시
                 if testModeEnabled {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("디버그 정보")
+                        Text("Debug Info")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        Text("타이머 완료 횟수: \(ReviewRequestManager.shared.getCurrentCompletionCount())회")
+                        Text("Timer completions: \(ReviewRequestManager.shared.getCurrentCompletionCount())")
                             .font(.caption)
                             .foregroundStyle(.orange)
-                        Button("완료 횟수 초기화") {
+                        Button("Reset Completion Count") {
                             ReviewRequestManager.shared.resetCompletionCount()
                         }
                         .font(.caption)
@@ -339,51 +339,37 @@ struct NoticeSettingView: View {
                 }
             }
 
-            Section(header: Text("정보")) {
+            Section(header: Text("Info")) {
                 HStack {
-                    Text("버전")
+                    Text("Version")
                     Spacer()
                     Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")
                         .foregroundStyle(.secondary)
                 }
             }
         }
-        .navigationTitle("설정")
+        .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             appStateManager.checkNotificationPermission()
         }
-        .alert("향상된 알림이란?", isPresented: $showAlarmKitInfo) {
-            Button("확인", role: .cancel) {}
+        .alert("What are Enhanced Notifications?", isPresented: $showAlarmKitInfo) {
+            Button("OK", role: .cancel) {}
         } message: {
-            Text("타이머 전용 알림 시스템입니다.\n\n• 백그라운드에서도 정확한 시간에 알림이 울립니다\n• 자동으로 권한을 관리하여 편리합니다\n• 중복 알림을 방지하여 깔끔합니다\n• 멘토링이나 발표 시 시간 관리에 최적화되어 있습니다\n\n권장: 향상된 알림을 켜두는 것을 추천합니다")
+            Text("A dedicated notification system for timers.\n\n• Alerts at exact times even in background\n• Automatic permission management for convenience\n• Prevents duplicate notifications\n• Optimized for time management during mentoring or presentations\n\nRecommended: Keep enhanced notifications enabled")
         }
-        .alert("빠른 테스트 모드란?", isPresented: $showTestModeInfo) {
-            Button("확인", role: .cancel) {}
+        .alert("What is Quick Test Mode?", isPresented: $showTestModeInfo) {
+            Button("OK", role: .cancel) {}
         } message: {
-            Text("타이머가 실제로 잘 동작하는지 빠르게 확인할 수 있는 모드입니다.\n\n• 10배속: 10분 타이머가 1분 만에 종료됩니다\n• 30배속: 10분 타이머가 20초 만에 종료됩니다\n• 60배속: 10분 타이머가 10초 만에 종료됩니다\n\n알림, 예비 알림, 오버타임 등 모든 기능을 빠르게 테스트할 수 있습니다.\n\n⚠️ 실제 사용 시에는 반드시 테스트 모드를 꺼주세요!")
+            Text("A mode to quickly verify that the timer works correctly.\n\n• 10x: 10-minute timer finishes in 1 minute\n• 30x: 10-minute timer finishes in 20 seconds\n• 60x: 10-minute timer finishes in 10 seconds\n\nYou can quickly test all features including alerts, pre-alerts, and overtime.\n\n⚠️ Make sure to turn off test mode for actual use!")
         }
-        .alert("알림 권한 설정 방법", isPresented: $showPermissionGuide) {
-            Button("설정으로 이동", role: .none) {
+        .alert("How to Enable Notifications", isPresented: $showPermissionGuide) {
+            Button("Go to Settings", role: .none) {
                 openSettings()
             }
-            Button("닫기", role: .cancel) {}
+            Button("Close", role: .cancel) {}
         } message: {
-            Text("""
-            아래 단계를 따라 알림 권한을 켜주세요:
-
-            1. '설정으로 이동' 버튼을 누르세요
-            2. 설정 앱에서 'Toki' 앱을 찾아주세요
-            3. '알림(Notifications)' 메뉴를 선택하세요
-            4. '알림 허용(Allow Notifications)'을 켜주세요
-
-            💡 권장 설정:
-            • 잠금 화면에 표시
-            • 알림 센터에 표시
-            • 배너로 표시
-
-            이렇게 하면 타이머 알림을 놓치지 않고 받을 수 있습니다!
-            """)
+            Text("Follow these steps to enable notifications:\n\n1. Tap 'Go to Settings' button\n2. Find 'Toki' app in Settings\n3. Select 'Notifications' menu\n4. Turn on 'Allow Notifications'\n\n💡 Recommended settings:\n• Show on Lock Screen\n• Show in Notification Center\n• Show as Banners\n\nThis ensures you never miss timer alerts!")
         }
         .fullScreenCover(isPresented: $showOnboarding) {
             OnboardingView(isPresented: $showOnboarding)
@@ -392,7 +378,7 @@ struct NoticeSettingView: View {
 
     private func openSettings() {
         #if targetEnvironment(macCatalyst)
-        // macOS에서는 시스템 환경설정의 알림 섹션을 열 수 없으므로 안내 메시지만 표시
+        // macOS에서는 시스템 환경Settings의 알림 섹션을 열 수 없으므로 안내 메시지만 표시
         // 사용자가 수동으로 System Settings > Notifications > Toki로 이동해야 함
         if let url = URL(string: "x-apple.systempreferences:com.apple.preference.notifications") {
             UIApplication.shared.open(url)
@@ -422,7 +408,7 @@ struct NoticeSettingView: View {
                 topController = presentedViewController
             }
 
-            // iPad용 popover 설정
+            // iPad용 popover Settings
             if let popoverController = activityViewController.popoverPresentationController {
                 popoverController.sourceView = topController.view
                 popoverController.sourceRect = CGRect(x: topController.view.bounds.midX, y: topController.view.bounds.midY, width: 0, height: 0)
