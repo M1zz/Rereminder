@@ -21,13 +21,58 @@ struct NoticeSettingView: View {
     @AppStorage("testModeMultiplier") private var testModeMultiplier: Double = 1.0
     @EnvironmentObject var appStateManager: AppStateManager
     @EnvironmentObject var screenVM: TimerScreenViewModel
+    @ObservedObject private var store = StoreManager.shared
     @State private var showAlarmKitInfo = false
     @State private var showOnboarding = false
     @State private var showTestModeInfo = false
     @State private var showPermissionGuide = false
+    @State private var showPaywall = false
 
     var body: some View {
         Form {
+            // Pro 상태 섹션
+            Section {
+                if store.isPro {
+                    HStack(spacing: 12) {
+                        Image(systemName: "crown.fill")
+                            .font(.title2)
+                            .foregroundStyle(.orange)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(AppName.pro)
+                                .font(.headline)
+                            Text("All features unlocked")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "checkmark.seal.fill")
+                            .foregroundStyle(.green)
+                    }
+                } else {
+                    Button {
+                        showPaywall = true
+                    } label: {
+                        HStack(spacing: 12) {
+                            Image(systemName: "crown.fill")
+                                .font(.title2)
+                                .foregroundStyle(.orange)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Upgrade to \(AppName.pro)")
+                                    .font(.headline)
+                                    .foregroundStyle(.primary)
+                                Text("Unlock all features · One-time purchase")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+            }
+
             Section {
                 HStack(spacing: 16){
                     Text("Notification Style")
@@ -310,7 +355,7 @@ struct NoticeSettingView: View {
                 }
                 .foregroundStyle(.primary)
 
-                Link(destination: URL(string: "mailto:leeo@kakao.com?subject=Toki%20%ED%94%BC%EB%93%9C%EB%B0%B1")!) {
+                Link(destination: URL(string: "mailto:leeo@kakao.com?subject=Rereminder%20%ED%94%BC%EB%93%9C%EB%B0%B1")!) {
                     HStack {
                         Label("Send Feedback", systemImage: "envelope.fill")
                         Spacer()
@@ -369,11 +414,12 @@ struct NoticeSettingView: View {
             }
             Button("Close", role: .cancel) {}
         } message: {
-            Text("Follow these steps to enable notifications:\n\n1. Tap 'Go to Settings' button\n2. Find 'Toki' app in Settings\n3. Select 'Notifications' menu\n4. Turn on 'Allow Notifications'\n\n💡 Recommended settings:\n• Show on Lock Screen\n• Show in Notification Center\n• Show as Banners\n\nThis ensures you never miss timer alerts!")
+            Text("Follow these steps to enable notifications:\n\n1. Tap 'Go to Settings' button\n2. Find '\(AppName.display)' app in Settings\n3. Select 'Notifications' menu\n4. Turn on 'Allow Notifications'\n\n💡 Recommended settings:\n• Show on Lock Screen\n• Show in Notification Center\n• Show as Banners\n\nThis ensures you never miss timer alerts!")
         }
         .fullScreenCover(isPresented: $showOnboarding) {
             OnboardingView(isPresented: $showOnboarding)
         }
+        .paywallGate(isPresented: $showPaywall)
     }
 
     private func openSettings() {

@@ -2,17 +2,8 @@
   "sourceLanguage": "en",
   "strings": {
     "": {},
+    ":": {},
     "%lld": {},
-    "%lld %@": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$lld %2$@"
-          }
-        }
-      }
-    },
     "%lld / %lld": {
       "localizations": {
         "en": {
@@ -25,6 +16,16 @@
           "stringUnit": {
             "state": "new",
             "value": "%1$lld / %2$lld"
+          }
+        }
+      }
+    },
+    "%lld %@": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld %2$@"
           }
         }
       }
@@ -60,12 +61,25 @@
         }
       }
     },
+    "%lldmin": {},
+    "•": {},
+    ">>": {},
     "1 min timer → ends in ~%lld sec": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
             "value": "1분 타이머 → 약 %lld초 후 종료"
+          }
+        }
+      }
+    },
+    "1x Speed (Real-time)": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1배속 (실시간)"
           }
         }
       }
@@ -90,16 +104,6 @@
         }
       }
     },
-    "1x Speed (Real-time)": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "1배속 (실시간)"
-          }
-        }
-      }
-    },
     "30x Speed": {
       "localizations": {
         "ko": {
@@ -120,8 +124,6 @@
         }
       }
     },
-    ":": {},
-    ">>": {},
     "A an example control that runs a timer.": {},
     "A dedicated notification system for timers.\n\n• Alerts at exact times even in background\n• Automatic permission management for convenience\n• Prevents duplicate notifications\n• Optimized for time management during mentoring or presentations\n\nRecommended: Keep enhanced notifications enabled": {
       "localizations": {
@@ -153,6 +155,7 @@
         }
       }
     },
+    "alarmID": {},
     "Allowed": {
       "localizations": {
         "ko": {
@@ -179,6 +182,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "자동 권한 관리"
+          }
+        }
+      }
+    },
+    "before alert": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "전 알림"
           }
         }
       }
@@ -275,6 +288,16 @@
         }
       }
     },
+    "e.g., Presentation, Mentoring, Meeting": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "예: 발표, 멘토링, 회의"
+          }
+        }
+      }
+    },
     "Edit": {
       "localizations": {
         "ko": {
@@ -337,16 +360,6 @@
         }
       }
     },
-    "Get Started": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "시작하기"
-          }
-        }
-      }
-    },
     "Get multiple alerts\nand finish with ease": {
       "extractionState": "stale",
       "localizations": {
@@ -354,6 +367,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "여러 번 알림받고\n여유있게 마무리"
+          }
+        }
+      }
+    },
+    "Get Started": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "시작하기"
           }
         }
       }
@@ -519,12 +542,43 @@
         }
       }
     },
+    "Main %lld min %lld sec": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Main %1$lld min %2$lld sec"
+          }
+        }
+      }
+    },
     "Messages have been reset": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
             "value": "메시지가 초기화되었습니다"
+          }
+        }
+      }
+    },
+    "min": {
+      "comment": "min",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "분"
+          }
+        }
+      }
+    },
+    "min before alert": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "분 전 알림"
           }
         }
       }
@@ -580,12 +634,42 @@
         }
       }
     },
+    "Next: %lld min alert (%lld min %lld sec left)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Next: %1$lld min alert (%2$lld min %3$lld sec left)"
+          }
+        }
+      }
+    },
+    "Next: %lld min alert (%lld sec left)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Next: %1$lld min alert (%2$lld sec left)"
+          }
+        }
+      }
+    },
     "Next: End alert (%1$lld min %2$lld sec left)": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "new",
             "value": "다음: 종료 알림 (%1$lld분 %2$lld초 후)"
+          }
+        }
+      }
+    },
+    "Next: End alert (%lld min %lld sec left)": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Next: End alert (%1$lld min %2$lld sec left)"
           }
         }
       }
@@ -620,6 +704,7 @@
         }
       }
     },
+    "notice": {},
     "Notification Message Settings": {
       "localizations": {
         "ko": {
@@ -650,7 +735,29 @@
         }
       }
     },
+    "Notification permission denied": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알림 권한이 거부되었습니다"
+          }
+        }
+      }
+    },
+    "Notification permission is required": {},
+    "Notification permission is required for timer alerts.\n\nWithout permission:\n• You won't receive pre-alerts\n• You won't receive end alerts\n• Notifications won't work in background\n\nPlease enable notifications in Settings.": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "타이머 알림을 받으려면 알림 권한이 필요합니다.\n\n권한이 없으면:\n• 예비 알림을 받을 수 없습니다\n• 종료 알림을 받을 수 없습니다\n• 백그라운드에서 알림이 작동하지 않습니다\n\n설정에서 알림 권한을 켜주세요."
+          }
+        }
+      }
+    },
     "Notification Permission Required": {
+      "extractionState": "stale",
       "localizations": {
         "ko": {
           "stringUnit": {
@@ -670,26 +777,7 @@
         }
       }
     },
-    "Notification permission denied": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "알림 권한이 거부되었습니다"
-          }
-        }
-      }
-    },
-    "Notification permission is required for timer alerts.\n\nWithout permission:\n• You won't receive pre-alerts\n• You won't receive end alerts\n• Notifications won't work in background\n\nPlease enable notifications in Settings.": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "타이머 알림을 받으려면 알림 권한이 필요합니다.\n\n권한이 없으면:\n• 예비 알림을 받을 수 없습니다\n• 종료 알림을 받을 수 없습니다\n• 백그라운드에서 알림이 작동하지 않습니다\n\n설정에서 알림 권한을 켜주세요."
-          }
-        }
-      }
-    },
+    "Off": {},
     "OK": {
       "localizations": {
         "ko": {
@@ -700,707 +788,7 @@
         }
       }
     },
-    "Off": {},
     "On": {},
-    "Open App": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "앱 열기"
-          }
-        }
-      }
-    },
-    "Open Toki app": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toki 앱을 엽니다"
-          }
-        }
-      }
-    },
-    "Overtime": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "초과 진행 중"
-          }
-        }
-      }
-    },
-    "Pause": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "일시정지"
-          }
-        }
-      }
-    },
-    "Pause Timer": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "타이머 일시정지"
-          }
-        }
-      }
-    },
-    "Pause the running timer": {},
-    "Pause the timer": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "타이머를 일시정지합니다"
-          }
-        }
-      }
-    },
-    "Paused": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "일시정지됨"
-          }
-        }
-      }
-    },
-    "Pre-alert Message": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "예비 알림 메시지"
-          }
-        }
-      }
-    },
-    "Pre-alert: %@": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "예비: %@"
-          }
-        }
-      }
-    },
-    "Pre-alerts": {
-      "comment": "Pre-alerts",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "예비 알림"
-          }
-        }
-      }
-    },
-    "Pre-alerts (1 min, 3 min, 5 min, etc.)": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "예비 알림 (1분, 3분, 5분 등)"
-          }
-        }
-      }
-    },
-    "Prevent Duplicate Alerts": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "중복 알림 방지"
-          }
-        }
-      }
-    },
-    "Quick Setup": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "빠른 설정"
-          }
-        }
-      }
-    },
-    "Quick Test Mode": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "빠른 테스트 모드"
-          }
-        }
-      }
-    },
-    "Quick setup with\n3 different methods": {
-      "extractionState": "stale",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "3가지 방법으로\n빠르게 설정"
-          }
-        }
-      }
-    },
-    "Rate App": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "별점 주기"
-          }
-        }
-      }
-    },
-    "Ready": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "대기 중"
-          }
-        }
-      }
-    },
-    "Receive notifications in background": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "백그라운드에서 알림 수신"
-          }
-        }
-      }
-    },
-    "Request Permission": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "권한 요청"
-          }
-        }
-      }
-    },
-    "Reset All Messages": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "모든 메시지 초기화"
-          }
-        }
-      }
-    },
-    "Reset Completion Count": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "완료 횟수 초기화"
-          }
-        }
-      }
-    },
-    "Resume": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "재개"
-          }
-        }
-      }
-    },
-    "Resume Timer": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "타이머 재개"
-          }
-        }
-      }
-    },
-    "Resume the paused timer": {},
-    "Resume the timer": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "타이머를 재개합니다"
-          }
-        }
-      }
-    },
-    "Save": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "저장"
-          }
-        }
-      }
-    },
-    "Select Time Multiplier": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "시간 배수 선택"
-          }
-        }
-      }
-    },
-    "Selected Color:": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "선택한 색상:"
-          }
-        }
-      }
-    },
-    "Send Feedback": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "피드백 보내기"
-          }
-        }
-      }
-    },
-    "Send Push Notification": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "푸시 알림 보내기"
-          }
-        }
-      }
-    },
-    "Send Test Notification": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "테스트 알림 보내기"
-          }
-        }
-      }
-    },
-    "Settings": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "설정"
-          }
-        }
-      }
-    },
-    "Share App": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "앱 공유하기"
-          }
-        }
-      }
-    },
-    "Show Toast Messages": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "토스트 메세지 표시"
-          }
-        }
-      }
-    },
-    "Skip": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "건너뛰기"
-          }
-        }
-      }
-    },
-    "Sound": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "소리"
-          }
-        }
-      }
-    },
-    "Start Timer": {
-      "comment": "Start Timer",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "타이머 시작"
-          }
-        }
-      }
-    },
-    "Start a timer": {},
-    "Stop": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "중지"
-          }
-        }
-      }
-    },
-    "Stop Timer": {},
-    "Stop the timer": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "타이머를 중지합니다"
-          }
-        }
-      }
-    },
-    "Template Name": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "템플릿 이름"
-          }
-        }
-      }
-    },
-    "Templates are automatically saved when you start a timer": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "타이머를 시작하면 자동으로 템플릿이 저장됩니다"
-          }
-        }
-      }
-    },
-    "Test Mode": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "테스트 모드"
-          }
-        }
-      }
-    },
-    "Test notification will be sent 1 second after pressing the button": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "버튼을 누르면 1초 후 테스트 알림이 전송됩니다"
-          }
-        }
-      }
-    },
-    "This is an example widget.": {},
-    "Time Multiplier": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "시간 배수"
-          }
-        }
-      }
-    },
-    "Time is up": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "시간이 다 되었습니다"
-          }
-        }
-      }
-    },
-    "Time:": {},
-    "Timer": {},
-    "Timer Duration": {
-      "comment": "Timer Duration",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "타이머 시간"
-          }
-        }
-      }
-    },
-    "Timer End Alert": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "타이머 종료 알림"
-          }
-        }
-      }
-    },
-    "Timer Finished": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "타이머 종료"
-          }
-        }
-      }
-    },
-    "Timer Name": {},
-    "Timer Name Configuration": {},
-    "Timer Settings": {
-      "comment": "Timer Settings",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "타이머 설정"
-          }
-        }
-      }
-    },
-    "Timer Templates": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "타이머 템플릿"
-          }
-        }
-      }
-    },
-    "Timer completions: %lld": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "타이머 완료 횟수: %lld회"
-          }
-        }
-      }
-    },
-    "Timer finished": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "타이머 종료되었습니다"
-          }
-        }
-      }
-    },
-    "Timer for Presenters\nand Mentors": {
-      "extractionState": "stale",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "발표자와 멘토를 위한\n타이머"
-          }
-        }
-      }
-    },
-    "Timer is running": {},
-    "Toki Timer": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Toki 타이머"
-          }
-        }
-      }
-    },
-    "Unknown": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "알 수 없음"
-          }
-        }
-      }
-    },
-    "Usage Example": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "사용 예시"
-          }
-        }
-      }
-    },
-    "Use Enhanced Notifications (Recommended)": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "향상된 알림 사용 (권장)"
-          }
-        }
-      }
-    },
-    "Version": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "버전"
-          }
-        }
-      }
-    },
-    "Vibration": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "진동"
-          }
-        }
-      }
-    },
-    "View App Tutorial": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "앱 사용법 보기"
-          }
-        }
-      }
-    },
-    "What are Enhanced Notifications?": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "향상된 알림이란?"
-          }
-        }
-      }
-    },
-    "What is Quick Test Mode?": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "빠른 테스트 모드란?"
-          }
-        }
-      }
-    },
-    "Without notification permission, the following features won't work properly:": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "알림 권한이 없으면 다음 기능이 제대로 작동하지 않습니다:"
-          }
-        }
-      }
-    },
-    "Works in real-time": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "실시간으로 동작합니다"
-          }
-        }
-      }
-    },
-    "Write a Review on App Store": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "App Store에서 리뷰 작성"
-          }
-        }
-      }
-    },
-    "alarmID": {},
-    "before alert": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "전 알림"
-          }
-        }
-      }
-    },
-    "e.g., Presentation, Mentoring, Meeting": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "예: 발표, 멘토링, 회의"
-          }
-        }
-      }
-    },
-    "min": {
-      "comment": "min",
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "분"
-          }
-        }
-      }
-    },
-    "min before alert": {
-      "localizations": {
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "분 전 알림"
-          }
-        }
-      }
-    },
-    "notice": {},
     "onboarding_desc_1": {
       "localizations": {
         "en": {
@@ -1625,12 +1013,336 @@
         }
       }
     },
+    "Open App": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱 열기"
+          }
+        }
+      }
+    },
+    "Open Toki app": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "두번알림 앱을 엽니다"
+          }
+        }
+      }
+    },
+    "Overtime": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "초과 진행 중"
+          }
+        }
+      }
+    },
+    "Pause": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일시정지"
+          }
+        }
+      }
+    },
+    "Pause the running timer": {},
+    "Pause the timer": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "타이머를 일시정지합니다"
+          }
+        }
+      }
+    },
+    "Pause Timer": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "타이머 일시정지"
+          }
+        }
+      }
+    },
+    "Paused": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "일시정지됨"
+          }
+        }
+      }
+    },
+    "Pre-alert Message": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "예비 알림 메시지"
+          }
+        }
+      }
+    },
+    "Pre-alert: %@": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "예비: %@"
+          }
+        }
+      }
+    },
+    "Pre-alerts": {
+      "comment": "Pre-alerts",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "예비 알림"
+          }
+        }
+      }
+    },
+    "Pre-alerts (1 min, 3 min, 5 min, etc.)": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "예비 알림 (1분, 3분, 5분 등)"
+          }
+        }
+      }
+    },
+    "Prevent Duplicate Alerts": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "중복 알림 방지"
+          }
+        }
+      }
+    },
+    "Quick Setup": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "빠른 설정"
+          }
+        }
+      }
+    },
+    "Quick setup with\n3 different methods": {
+      "extractionState": "stale",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3가지 방법으로\n빠르게 설정"
+          }
+        }
+      }
+    },
+    "Quick Test Mode": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "빠른 테스트 모드"
+          }
+        }
+      }
+    },
+    "Rate App": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "별점 주기"
+          }
+        }
+      }
+    },
+    "Ready": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "대기 중"
+          }
+        }
+      }
+    },
+    "Receive notifications in background": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "백그라운드에서 알림 수신"
+          }
+        }
+      }
+    },
+    "Request Permission": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "권한 요청"
+          }
+        }
+      }
+    },
+    "Reset All Messages": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "모든 메시지 초기화"
+          }
+        }
+      }
+    },
+    "Reset Completion Count": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "완료 횟수 초기화"
+          }
+        }
+      }
+    },
+    "Resume": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "재개"
+          }
+        }
+      }
+    },
+    "Resume the paused timer": {},
+    "Resume the timer": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "타이머를 재개합니다"
+          }
+        }
+      }
+    },
+    "Resume Timer": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "타이머 재개"
+          }
+        }
+      }
+    },
+    "Save": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장"
+          }
+        }
+      }
+    },
     "sec": {
       "localizations": {
         "ko": {
           "stringUnit": {
             "state": "translated",
             "value": "초"
+          }
+        }
+      }
+    },
+    "Select Time Multiplier": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "시간 배수 선택"
+          }
+        }
+      }
+    },
+    "Selected Color:": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "선택한 색상:"
+          }
+        }
+      }
+    },
+    "Send Feedback": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "피드백 보내기"
+          }
+        }
+      }
+    },
+    "Send Push Notification": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "푸시 알림 보내기"
+          }
+        }
+      }
+    },
+    "Send Test Notification": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "테스트 알림 보내기"
+          }
+        }
+      }
+    },
+    "Settings": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "설정"
+          }
+        }
+      }
+    },
+    "Share App": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱 공유하기"
           }
         }
       }
@@ -1651,7 +1363,386 @@
         }
       }
     },
-    "•": {}
+    "Show Toast Messages": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "토스트 메세지 표시"
+          }
+        }
+      }
+    },
+    "Skip": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "건너뛰기"
+          }
+        }
+      }
+    },
+    "Sound": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "소리"
+          }
+        }
+      }
+    },
+    "Start a timer": {},
+    "Start Timer": {
+      "comment": "Start Timer",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "타이머 시작"
+          }
+        }
+      }
+    },
+    "Stop": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "중지"
+          }
+        }
+      }
+    },
+    "Stop the timer": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "타이머를 중지합니다"
+          }
+        }
+      }
+    },
+    "Stop Timer": {},
+    "Template Name": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "템플릿 이름"
+          }
+        }
+      }
+    },
+    "Templates are automatically saved when you start a timer": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "타이머를 시작하면 자동으로 템플릿이 저장됩니다"
+          }
+        }
+      }
+    },
+    "Test Mode": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "테스트 모드"
+          }
+        }
+      }
+    },
+    "Test notification will be sent 1 second after pressing the button": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "버튼을 누르면 1초 후 테스트 알림이 전송됩니다"
+          }
+        }
+      }
+    },
+    "This is an example widget.": {},
+    "Time is up": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "시간이 다 되었습니다"
+          }
+        }
+      }
+    },
+    "Time Multiplier": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "시간 배수"
+          }
+        }
+      }
+    },
+    "Time:": {},
+    "Timer": {},
+    "Timer completions: %lld": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "타이머 완료 횟수: %lld회"
+          }
+        }
+      }
+    },
+    "Timer Duration": {
+      "comment": "Timer Duration",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "타이머 시간"
+          }
+        }
+      }
+    },
+    "Timer End Alert": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "타이머 종료 알림"
+          }
+        }
+      }
+    },
+    "Timer finished": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "타이머 종료되었습니다"
+          }
+        }
+      }
+    },
+    "Timer Finished": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "타이머 종료"
+          }
+        }
+      }
+    },
+    "Timer for Presenters\nand Mentors": {
+      "extractionState": "stale",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "발표자와 멘토를 위한\n타이머"
+          }
+        }
+      }
+    },
+    "Timer is running": {},
+    "Timer Name": {},
+    "Timer Name Configuration": {},
+    "Timer Settings": {
+      "comment": "Timer Settings",
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "타이머 설정"
+          }
+        }
+      }
+    },
+    "Timer Templates": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "타이머 템플릿"
+          }
+        }
+      }
+    },
+    "Toki Timer": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "두번알림 타이머"
+          }
+        }
+      }
+    },
+    "Unknown": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알 수 없음"
+          }
+        }
+      }
+    },
+    "Usage Example": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "사용 예시"
+          }
+        }
+      }
+    },
+    "Use Enhanced Notifications (Recommended)": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "향상된 알림 사용 (권장)"
+          }
+        }
+      }
+    },
+    "Version": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "버전"
+          }
+        }
+      }
+    },
+    "Vibration": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "진동"
+          }
+        }
+      }
+    },
+    "View App Tutorial": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱 사용법 보기"
+          }
+        }
+      }
+    },
+    "What are Enhanced Notifications?": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "향상된 알림이란?"
+          }
+        }
+      }
+    },
+    "What is Quick Test Mode?": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "빠른 테스트 모드란?"
+          }
+        }
+      }
+    },
+    "Without notification permission, the following features won't work properly:": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알림 권한이 없으면 다음 기능이 제대로 작동하지 않습니다:"
+          }
+        }
+      }
+    },
+    "Works in real-time": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "실시간으로 동작합니다"
+          }
+        }
+      }
+    },
+    "Write a Review on App Store": {
+      "localizations": {
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App Store에서 리뷰 작성"
+          }
+        }
+      }
+    },
+    "app_name": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rereminder"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "두번알림"
+          }
+        }
+      }
+    },
+    "app_name_notification": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rereminder Timer"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "두번알림 타이머"
+          }
+        }
+      }
+    },
+    "app_name_pro": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rereminder Pro"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "두번알림 Pro"
+          }
+        }
+      }
+    }
   },
   "version": "1.1"
 }

@@ -4,6 +4,9 @@
 //
 //  Created by POS on 8/25/25.
 //
+//  리팩토링: Watch 콜백은 TimerScreenViewModel에서만 관리
+//  여기서는 순수 타이머 상태 + Live Activity만 담당
+//
 
 import SwiftUI
 import SwiftData
@@ -20,47 +23,24 @@ final class TimerViewModel: ObservableObject {
     let engine = TimerEngine()
     var showToast: ((String) -> Void)?
     var appStateManager: AppStateManager?
-    var onTimerFinish: (() -> Void)?  // Timer Finished 시 전체 화면 알림 콜백
-    var modelContext: ModelContext?  // 기록 Save용
+    var onTimerFinish: (() -> Void)?
+    var modelContext: ModelContext?
 
     private var currentTemplate: Timer?
-    private var timerStartTime: Date?  // Start Timer 시간
+    private var timerStartTime: Date?
 
     #if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
-    private var currentActivity: Activity<TimerActivityAttributes>?  // Live Activity
+    private var currentActivity: Activity<TimerActivityAttributes>?
     #endif
 
     init() {
-        // NotificationCenter observers for Live Activity button actions
-        NotificationCenter.default.addObserver(
-            forName: NSNotification.Name("PauseTimerIntent"),
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            self?.pause()
-        }
-
-        NotificationCenter.default.addObserver(
-            forName: NSNotification.Name("ResumeTimerIntent"),
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            self?.resume()
-        }
-
-        NotificationCenter.default.addObserver(
-            forName: NSNotification.Name("StopTimerIntent"),
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            self?.stop()
-        }
+        // Live Activity 인텐트 옵저버
+        setupLiveActivityObservers()
 
         engine.onTick = { [weak self] r in
             self?.remaining = r
-            // Live Activity는 Text.timer로 자동 카운트다운되므로
-            // 매번 업데이트할 필요 없음 (상태 변경 시에만 업데이트)
         }
+
         engine.onPreAlert = { [weak self] sec in
             guard let self, let template = self.currentTemplate else { return }
             ring()
@@ -68,95 +48,40 @@ final class TimerViewModel: ObservableObject {
             self.showToast?(message)
             self.appStateManager?.sendNotificationIfNeeded(message)
         }
+
         engine.onFinish = { [weak self] in
             guard let self else { return }
-
-            print("🔔 Timer Finished! onFinish 호출됨")
-
-            self.state = .overtime  // 오버타임 상태로 전환 (Timer는 계속 진행)
+            self.state = .overtime
             ring()
             let message = self.currentTemplate?.getFinishMessage() ?? "Timer finished"
             self.showToast?(message)
-
-            // 전체 화면 알림 표시
-            DispatchQueue.main.async {
-                print("🔔 전체 화면 알림 표시 시도")
-                self.onTimerFinish?()
-            }
-
-            // 푸시 알림 전송
+            DispatchQueue.main.async { self.onTimerFinish?() }
             self.appStateManager?.sendNotificationIfNeeded(message)
-        }
-
-        // Live Activity 인텐트 옵저버
-        setupLiveActivityObservers()
-
-        // Watch Connectivity 옵저버
-        setupWatchConnectivity()
-    }
-
-    private func setupWatchConnectivity() {
-        let watchManager = WatchConnectivityManager.shared
-
-        // Watch에서 Start Timer 요청 수신
-        watchManager.onTimerStart = { [weak self] syncData in
-            guard let self else { return }
-
-            let mainSeconds = Int(syncData.duration)
-            let temp = Timer(
-                name: "Started from Watch",
-                mainSeconds: mainSeconds,
-                prealertOffsetsSec: syncData.prealertOffsets
-            )
-            self.configure(from: temp)
-            self.start()
-            print("⌚ Watch에서 Start Timer: \(mainSeconds)sec")
-        }
-
-        // Watch에서 Pause 요청 수신
-        watchManager.onTimerPause = { [weak self] in
-            self?.pause()
-            print("⌚ Watch에서 Pause")
-        }
-
-        // Watch에서 Resume 요청 수신
-        watchManager.onTimerResume = { [weak self] in
-            self?.resume()
-            print("⌚ Watch에서 Resume")
-        }
-
-        // Watch에서 Stop 요청 수신
-        watchManager.onTimerStop = { [weak self] in
-            self?.stop()
-            print("⌚ Watch에서 Stop")
         }
     }
 
     private func setupLiveActivityObservers() {
-        NotificationCenter.default.addObserver(
-            forName: NSNotification.Name("TimerShouldPause"),
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            self?.pause()
-        }
-
-        NotificationCenter.default.addObserver(
-            forName: NSNotification.Name("TimerShouldResume"),
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            self?.resume()
-        }
-
-        NotificationCenter.default.addObserver(
-            forName: NSNotification.Name("TimerShouldStop"),
-            object: nil,
-            queue: .main
-        ) { [weak self] _ in
-            self?.stop()
+        let names = [
+            ("PauseTimerIntent", #selector(handlePause)),
+            ("ResumeTimerIntent", #selector(handleResume)),
+            ("StopTimerIntent", #selector(handleStop)),
+            ("TimerShouldPause", #selector(handlePause)),
+            ("TimerShouldResume", #selector(handleResume)),
+            ("TimerShouldStop", #selector(handleStop)),
+        ]
+        for (name, selector) in names {
+            NotificationCenter.default.addObserver(
+                self, selector: selector,
+                name: NSNotification.Name(name), object: nil
+            )
         }
     }
+
+    @objc private func handlePause() { pause() }
+    @objc private func handleResume() { resume() }
+    @objc private func handleStop() { stop() }
+
+    // MARK: - Configuration
 
     func configure(from template: Timer) {
         currentTemplate = template
@@ -168,11 +93,11 @@ final class TimerViewModel: ObservableObject {
         remaining = TimeInterval(template.mainSeconds)
     }
 
+    // MARK: - Timer Controls
+
     func start() {
-        // Start Timer 시간 기록
         timerStartTime = Date()
 
-        // Test Mode가 켜져 있을 때만 배수 Apply
         let testModeEnabled = UserDefaults.standard.bool(forKey: "testModeEnabled")
         let multiplier = testModeEnabled
             ? (UserDefaults.standard.object(forKey: "testModeMultiplier") as? Double ?? 1.0)
@@ -182,12 +107,12 @@ final class TimerViewModel: ObservableObject {
         engine.start()
         state = .running
 
-        // Live Activity Start
+        // Live Activity
         if let template = currentTemplate {
             startLiveActivity(template: template)
         }
 
-        // Watch로 Start Timer 전송
+        // Watch 동기화 (전송만, 수신 콜백은 TimerScreenViewModel에서 관리)
         if let template = currentTemplate {
             WatchConnectivityManager.shared.sendTimerStart(
                 duration: TimeInterval(template.mainSeconds),
@@ -199,41 +124,27 @@ final class TimerViewModel: ObservableObject {
     func pause() {
         engine.pause()
         state = .paused
-
-        // Live Activity 업데이트
         updateLiveActivity()
-
-        // Watch로 Pause 전송
         WatchConnectivityManager.shared.sendTimerPause()
     }
 
     func resume() {
         engine.resume()
         state = .running
-
-        // Live Activity 업데이트
         updateLiveActivity()
-
-        // Watch로 Resume 전송
         WatchConnectivityManager.shared.sendTimerResume(remainingDuration: remaining)
     }
 
     func stop() {
-        // Timer 기록 Save
         saveTimerRecord(finished: state == .overtime)
-
         engine.stop()
         state = .idle
-
-        // Live Activity 종료
         endLiveActivity()
-
-        // Watch로 Stop 전송
         WatchConnectivityManager.shared.sendTimerStop()
-
-        // Start 시간 sec기화
         timerStartTime = nil
     }
+
+    // MARK: - Timer Record
 
     private func saveTimerRecord(finished: Bool) {
         guard let template = currentTemplate,
@@ -253,14 +164,9 @@ final class TimerViewModel: ObservableObject {
         )
 
         context.insert(record)
-
-        // 템플릿의 마지막 사용 시간 업데이트
         template.lastUsedAt = Date()
-
         try? context.save()
-        print("✅ Timer 기록 Save: \(finished ? "Done" : "중단"), 경과 시간: \(elapsedSeconds)sec")
 
-        // Timer를 Done한 경우 리뷰 요청 체크
         if finished {
             ReviewRequestManager.shared.recordTimerCompletion()
         }
@@ -270,10 +176,7 @@ final class TimerViewModel: ObservableObject {
 
     private func startLiveActivity(template: Timer) {
         #if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
-        guard ActivityAuthorizationInfo().areActivitiesEnabled else {
-            print("⚠️ Live Activities가 비활성화되어 있습니다")
-            return
-        }
+        guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
 
         let attributes = TimerActivityAttributes(
             timerName: template.name,
@@ -282,7 +185,6 @@ final class TimerViewModel: ObservableObject {
         )
 
         let endDate = Date().addingTimeInterval(TimeInterval(template.mainSeconds))
-
         let initialState = TimerActivityAttributes.ContentState(
             remainingTime: TimeInterval(template.mainSeconds),
             isPaused: false,
@@ -296,12 +198,9 @@ final class TimerViewModel: ObservableObject {
                 content: .init(state: initialState, staleDate: nil)
             )
             currentActivity = activity
-            print("✅ Live Activity Start: \(template.name), 종료 시각: \(endDate)")
         } catch {
-            print("❌ Live Activity Start 실패: \(error)")
+            print("❌ Live Activity 시작 실패: \(error)")
         }
-        #else
-        print("⚠️ Live Activities는 iOS에서만 지원됩니다")
         #endif
     }
 
@@ -309,9 +208,7 @@ final class TimerViewModel: ObservableObject {
         #if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
         guard let activity = currentActivity else { return }
 
-        // Pause 상태가 아닐 때만 endDate 계산
         let endDate = state == .paused ? nil : Date().addingTimeInterval(remaining)
-
         let newState = TimerActivityAttributes.ContentState(
             remainingTime: remaining,
             isPaused: state == .paused,
@@ -319,18 +216,13 @@ final class TimerViewModel: ObservableObject {
             endDate: endDate
         )
 
-        Task {
-            await activity.update(
-                .init(state: newState, staleDate: nil)
-            )
-        }
+        Task { await activity.update(.init(state: newState, staleDate: nil)) }
         #endif
     }
 
     private func endLiveActivity() {
         #if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
         guard let activity = currentActivity else { return }
-
         Task {
             await activity.end(nil, dismissalPolicy: .immediate)
             currentActivity = nil

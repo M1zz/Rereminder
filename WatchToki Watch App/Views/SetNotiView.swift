@@ -237,7 +237,7 @@ private func requestNotificationPermissionIfNeeded(completion: @escaping (Bool) 
 
 private func schedulePreFinishNotification(after seconds: TimeInterval, minutes: Int) {
     let content = UNMutableNotificationContent()
-    content.title = String(localized: "Toki Timer")
+    content.title = AppName.notification
     content.body = String(localized: "\(minutes) min remaining")
     content.sound = .default
 

@@ -333,16 +333,29 @@ struct TimerMainView: View {
         .padding(.horizontal, 16)
     }
 
+    @State private var showPaywall = false
+    @State private var paywallFeature: ProGate.Feature?
+
     @ViewBuilder
     private var prealertSection: some View {
         let mainSeconds = screenVM.mainMinutes * 60 + screenVM.mainSeconds
         let presets = Timer.presetOffsetsSec
 
         VStack(alignment: .leading, spacing: 8) {
-            Text("Pre-alerts")
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(.secondary)
-                .padding(.leading, 12)
+            HStack {
+                Text("Pre-alerts")
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(.secondary)
+
+                if !StoreManager.isProUser {
+                    Text("\(screenVM.selectedOffsets.count)/\(ProGate.freePrealertLimit)")
+                        .font(.caption2.weight(.medium))
+                        .foregroundStyle(.secondary)
+                }
+
+                Spacer()
+            }
+            .padding(.leading, 12)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 8) {
@@ -353,15 +366,24 @@ struct TimerMainView: View {
                 .padding(.horizontal, 12)
             }
         }
+        .paywallGate(isPresented: $showPaywall, feature: paywallFeature)
     }
 
     private func prealertToggle(sec: Int, mainSeconds: Int) -> some View {
         let isDisabled = sec >= mainSeconds
+        let isSelected = screenVM.selectedOffsets.contains(sec)
+
         return Toggle(
             isOn: Binding(
-                get: { screenVM.selectedOffsets.contains(sec) },
+                get: { isSelected },
                 set: { on in
                     if on {
+                        // Pro 체크: 이미 제한에 도달했으면 Paywall
+                        if !ProGate.canAddPrealert(currentCount: screenVM.selectedOffsets.count) {
+                            paywallFeature = .unlimitedPrealerts
+                            showPaywall = true
+                            return
+                        }
                         screenVM.selectedOffsets.insert(sec)
                     } else {
                         screenVM.selectedOffsets.remove(sec)
@@ -370,12 +392,23 @@ struct TimerMainView: View {
                 }
             )
         ) {
-            Text("\(sec/60) \(String(localized: "min"))")
-                .font(.system(size: 14, weight: .medium))
-                .padding(.horizontal, 10)
-                .padding(.vertical, 6)
-                .lineLimit(1)
-                .minimumScaleFactor(0.8)
+            HStack(spacing: 4) {
+                Text("\(sec/60) \(String(localized: "min"))")
+                    .font(.system(size: 14, weight: .medium))
+
+                // 제한 초과 프리셋에 잠금 아이콘
+                if !isSelected && !StoreManager.isProUser
+                    && screenVM.selectedOffsets.count >= ProGate.freePrealertLimit
+                    && !isDisabled {
+                    Image(systemName: "lock.fill")
+                        .font(.caption2)
+                        .foregroundStyle(.orange)
+                }
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .lineLimit(1)
+            .minimumScaleFactor(0.8)
         }
         .toggleStyle(.button)
         .buttonStyle(.bordered)
@@ -384,37 +417,23 @@ struct TimerMainView: View {
 
     private func mmss(from sec: Int) -> String {
         let t = max(0, sec)
-        let m = t / 60
-        let s = t % 60
-        return String(format: "%02d:%02d", m, s)
+        return TimeMapper.formatTime(minutes: t / 60, seconds: t % 60)
     }
-    
+
     private func mmss(sec: Int, min: Int) -> String {
-        return String(format: "%02d:%02d", min, sec)
+        TimeMapper.formatTime(minutes: min, seconds: sec)
     }
     
     func snappedAngle(from rawAngle: Double) -> Double {
-        let totalSeconds = rawAngle * TimeMapper.secondsPerDegree
-        let snappedSeconds = (totalSeconds / TimeMapper.secondsPerDegree).rounded() * TimeMapper.secondsPerDegree
-        return snappedSeconds / TimeMapper.secondsPerDegree  // 도(degree) 단위로 환산
+        TimeMapper.snappedAngle(from: rawAngle)
     }
     
     func onDrag(value: DragGesture.Value) {
-        let vector = CGVector(dx: value.location.x, dy: value.location.y)
-        let radians = atan2(vector.dy, vector.dx)  // 벡터가 x축과 이루는 각도를 구함
-        var newAngle = radians * 180 / .pi
-        if newAngle < 0 { newAngle = 360 + newAngle }
-
-        var d = newAngle - fmod(screenVM.mainAngle, 360)
-        if d > 180 { d -= 360 }
-        if d < -180 { d += 360 }
-
-        var next = screenVM.mainAngle + d
-        if next > TimeMapper.maxAngle { next = TimeMapper.maxAngle }
-        if next < 0 { next = 0 }
-
-        let snapped = snappedAngle(from: next)
-        screenVM.mainAngle = snapped
+        let newAngle = TimeMapper.angleDelta(
+            from: value.location,
+            currentAngle: screenVM.mainAngle
+        )
+        screenVM.mainAngle = newAngle
     }
 
     private var stateColor: Color {

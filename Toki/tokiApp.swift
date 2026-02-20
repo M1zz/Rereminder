@@ -9,8 +9,10 @@ import SwiftUI
 
 @main
 struct tokiApp: App {
+    @StateObject private var storeManager = StoreManager.shared
+
     init() {
-        // WatchConnectivity sec기화
+        // WatchConnectivity 초기화
         _ = WatchConnectivityManager.shared
     }
 
@@ -18,7 +20,7 @@ struct tokiApp: App {
         WindowGroup {
             ContentView()
                 .preferredColorScheme(.dark)
-
+                .environmentObject(storeManager)
         }
         .modelContainer(for: [Timer.self, TimerRecord.self])
     }

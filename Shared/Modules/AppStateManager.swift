@@ -60,7 +60,7 @@ final class AppStateManager: ObservableObject {
     func sendTestNotification() {
         print("🧪 [테스트] 테스트 알림 전송 Start")
         let content = UNMutableNotificationContent()
-        content.title = "Toki Test Notification"
+        content.title = AppName.notification
         content.body = "Notifications are working correctly! 🎉"
         content.sound = .default
 
@@ -90,7 +90,7 @@ private func pushPrealertNotice(message: String) {
     let center = UNUserNotificationCenter.current()
 
     let content = UNMutableNotificationContent()
-    content.title = "Toki Timer"
+    content.title = AppName.notification
     content.body = message
     content.sound = .default
 

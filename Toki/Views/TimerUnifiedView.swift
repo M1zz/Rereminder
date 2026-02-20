@@ -77,6 +77,10 @@ struct TimerUnifiedView: View {
         }
         .onChange(of: scenePhase) { phase in
             appStateManager.updateState(phase)
+            // 포그라운드 복귀 시 endDate 기반 재계산
+            if phase == .active {
+                screenVM.timerVM.engine.recalculateOnForeground()
+            }
         }
     }
 }

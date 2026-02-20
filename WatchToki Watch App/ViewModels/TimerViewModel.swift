@@ -156,7 +156,7 @@ class TimerViewModel: ObservableObject {
                     let pointTime = duration - offsetSeconds
                     notificationService.scheduleNotification(
                         timeInterval: TimeInterval(pointTime),
-                        title: "Toki Timer",
+                        title: AppName.notification,
                         body: "\(offset) min remaining",
                         identifier: "prealert_\(offset)"
                     )

@@ -39,6 +39,7 @@ struct TimerTemplateView: View {
     @State private var editName: String = ""
     @State private var editLabel: String = ""
     @State private var editColorHex: String = "#007AFF"
+    @State private var showPaywall = false
 
     let onSelect: (Timer) -> Void
 
@@ -63,6 +64,28 @@ struct TimerTemplateView: View {
             }
             .navigationTitle("Timer Templates")
             .navigationBarTitleDisplayMode(.inline)
+            .safeAreaInset(edge: .bottom) {
+                if !StoreManager.isProUser && templates.count >= ProGate.freeTemplateLimit {
+                    Button {
+                        showPaywall = true
+                    } label: {
+                        HStack(spacing: 8) {
+                            ProBadge(small: true)
+                            Text("Unlock unlimited templates")
+                                .font(.subheadline.weight(.medium))
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                        }
+                        .padding(14)
+                        .background(.ultraThinMaterial)
+                        .cornerRadius(14)
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 8)
+                }
+            }
+            .paywallGate(isPresented: $showPaywall, feature: .unlimitedTemplates)
         }
         .sheet(item: $editingTimer) { timer in
             editSheet(for: timer)
