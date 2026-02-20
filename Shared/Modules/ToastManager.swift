@@ -1,6 +1,6 @@
 //
 //  ToastManager.swift
-//  Toki
+//  Rereminder
 //
 //  Created by POS on 8/25/25.
 //

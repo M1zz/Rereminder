@@ -1,40 +1,40 @@
-# Toki - Claude 개발 워크플로우 문서
+# Rereminder - Claude 개발 워크플로우 문서
 
 ## 프로젝트 개요
-Toki는 iOS, watchOS, 위젯을 지원하는 스마트 타이머 애플리케이션입니다.
+Rereminder(두번알림)는 iOS, watchOS, 위젯을 지원하는 스마트 타이머 애플리케이션입니다.
 사용자가 원하는 시점마다 알림을 받을 수 있으며, 운동, 발표, 스터디 등 시간 관리가 필요한 순간에 활용됩니다.
 
 ## 프로젝트 구조
 
 ```
-toki/
-├── Toki/                      # 메인 iOS 앱
+Rereminder/
+├── Rereminder/                      # 메인 iOS 앱
 │   ├── Views/                 # UI 컴포넌트
 │   │   ├── Components/        # 재사용 가능한 UI 컴포넌트
 │   │   └── *.swift           # 화면별 뷰
 │   ├── ViewModels/           # 뷰모델 (MVVM 패턴)
 │   ├── Assets.xcassets/      # 앱 리소스
-│   └── tokiApp.swift         # 앱 진입점
+│   └── RereminderApp.swift         # 앱 진입점
 │
-├── WatchToki Watch App/      # Apple Watch 앱
+├── RereminderWatch/      # Apple Watch 앱
 │   ├── Views/                # Watch 전용 UI
 │   ├── ViewModels/           # Watch 뷰모델
-│   └── WatchTokiApp.swift    # Watch 앱 진입점
+│   └── RereminderWatchApp.swift    # Watch 앱 진입점
 │
-├── TokiAlarm/                # 위젯 & Live Activity
-│   ├── TokiAlarm.swift       # 위젯 구현
-│   └── TokiAlarmLiveActivity.swift  # Live Activity 구현
+├── RereminderAlarm/                # 위젯 & Live Activity
+│   ├── RereminderAlarm.swift       # 위젯 구현
+│   └── RereminderAlarmLiveActivity.swift  # Live Activity 구현
 │
 └── Shared/                   # 공유 모듈 (iOS, Watch, Widget)
     ├── Models/               # 데이터 모델
     │   ├── Timer.swift       # 타이머 모델
     │   ├── TimerRecord.swift # 타이머 기록
-    │   ├── TokiTimerData.swift
+    │   ├── RereminderTimerData.swift
     │   ├── TimerActivityAttributes.swift
     │   └── AlarmAttributes.swift
     ├── Modules/              # 비즈니스 로직
     │   ├── TimerEngine.swift # 타이머 엔진
-    │   ├── TokiAlarmManager.swift
+    │   ├── RereminderAlarmManager.swift
     │   ├── AppStateManager.swift
     │   ├── WatchConnectivityManager.swift
     │   └── ToastManager.swift
@@ -184,18 +184,18 @@ extension TimerView {
 - **TimerEngine** (`Shared/Modules/TimerEngine.swift`): 타이머 로직의 핵심 엔진
 - **AppStateManager** (`Shared/Modules/AppStateManager.swift`): 앱 상태 관리
 - **WatchConnectivityManager** (`Shared/Modules/WatchConnectivityManager.swift`): iOS-Watch 통신
-- **TokiAlarmManager** (`Shared/Modules/TokiAlarmManager.swift`): 알림 관리
+- **RereminderAlarmManager** (`Shared/Modules/RereminderAlarmManager.swift`): 알림 관리
 - **ReviewRequestManager** (`Shared/Modules/ReviewRequestManager.swift`): 앱스토어 리뷰 요청 관리
 
 ### UI Components
-- **Clock** (`Toki/Views/Components/Clock.swift`): 타이머 시계 UI
-- **TimePresetButtons** (`Toki/Views/Components/TimePresetButtons.swift`): 시간 프리셋 버튼
-- **ToastViewModifier** (`Toki/Views/Components/ToastViewModifier.swift`): 토스트 메시지
+- **Clock** (`Rereminder/Views/Components/Clock.swift`): 타이머 시계 UI
+- **TimePresetButtons** (`Rereminder/Views/Components/TimePresetButtons.swift`): 시간 프리셋 버튼
+- **ToastViewModifier** (`Rereminder/Views/Components/ToastViewModifier.swift`): 토스트 메시지
 
 ### Models
 - **Timer**: 타이머 데이터 구조
 - **TimerRecord**: 타이머 사용 기록
-- **TokiTimerData**: 타이머 공유 데이터
+- **RereminderTimerData**: 타이머 공유 데이터
 - **TimerActivityAttributes**: Live Activity 속성
 
 ## Claude와 작업할 때 가이드라인
@@ -313,10 +313,10 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
 
 - **수정 파일**:
   - `Shared/Models/TimerActivityAttributes.swift`: endDate 추가
-  - `TokiAlarm/TokiAlarmLiveActivity.swift`: 실시간 타이머, UI 최적화, 버튼 간소화
-  - `Toki/ViewModels/TimerViewModel.swift`: Live Activity endDate 처리, 리뷰 요청 체크
-  - `Toki/ViewModels/TimerScreenViewModel.swift`: 타이머 이름 자동 생성 로직
-  - `Toki/ViewModels/NoticeSettingView.swift`: 리뷰 관련 버튼 개선 및 디버그 정보 추가
+  - `RereminderAlarm/RereminderAlarmLiveActivity.swift`: 실시간 타이머, UI 최적화, 버튼 간소화
+  - `Rereminder/ViewModels/TimerViewModel.swift`: Live Activity endDate 처리, 리뷰 요청 체크
+  - `Rereminder/ViewModels/TimerScreenViewModel.swift`: 타이머 이름 자동 생성 로직
+  - `Rereminder/ViewModels/NoticeSettingView.swift`: 리뷰 관련 버튼 개선 및 디버그 정보 추가
 
 ### v1.0.5 (2026-01-28)
 - 초기 claude.md 문서 작성

@@ -1,12 +1,12 @@
-# Toki
+# Rereminder (두번알림)
 **iOS & Apple Watch용 스마트 타이머**
 
-Toki는 원하는 시점마다 알림을 받을 수 있는 타이머 앱입니다.
+Rereminder(두번알림)는 원하는 시점마다 알림을 받을 수 있는 타이머 앱입니다.
 종료 “10분 전”, “5분 전” 같은 알림을 설정할 수 있고, 운동·발표·스터디 등 시간을 세밀하게 관리해야 하는 순간에 유용합니다.
 
 ---
 
-Toki 프로젝트에 기여해주셔서 감사합니다.
+Rereminder 프로젝트에 기여해주셔서 감사합니다.
 
 아래 사항을 참고해주세요.
 - [이슈 작성](#1-이슈-작성)
@@ -23,25 +23,25 @@ Toki 프로젝트에 기여해주셔서 감사합니다.
 
 ### 2. 기여 프로세스
 #### 1단계: 이슈 확인 및 참여
-1. [Issues 탭](https://github.com/M1zz/Toki/issues)에서 현재 진행 중인 이슈들을 확인합니다.
+1. [Issues 탭](https://github.com/M1zz/Rereminder/issues)에서 현재 진행 중인 이슈들을 확인합니다.
 2. 관심 있는 이슈를 찾았다면, 해당 이슈에 댓글을 남겨 참여 의사를 표시합니다.
 3. 이슈 담당자가 당신을 Assignee로 지정하면, 해당 이슈를 해결할 수 있는 권한이 부여됩니다.
 
 #### 2단계: 프로젝트 Fork
-1. GitHub에서 Toki 저장소의 우측 상단에 있는 'Fork' 버튼을 클릭합니다.
-2. Fork가 완료되면, 당신의 GitHub 계정에 Toki 저장소가 복사됩니다.
+1. GitHub에서 Rereminder 저장소의 우측 상단에 있는 'Fork' 버튼을 클릭합니다.
+2. Fork가 완료되면, 당신의 GitHub 계정에 Rereminder 저장소가 복사됩니다.
 
 #### 3단계: 로컬 개발 환경 설정
 1. 로컬 컴퓨터에서 터미널을 엽니다.
 2. 작업할 디렉토리로 이동합니다.
 3. Fork한 저장소를 클론합니다.
 ```
-git clone https://github.com/M1zz/Toki
+git clone https://github.com/M1zz/Rereminder
 ```
-4. Toki 디렉토리로 이동 후, 원본 저장소를 upstream으로 추가합니다.
+4. Rereminder 디렉토리로 이동 후, 원본 저장소를 upstream으로 추가합니다.
 ```
-cd Toki
-git remote add upstream https://github.com/M1zz/Toki
+cd Rereminder
+git remote add upstream https://github.com/M1zz/Rereminder
 ```
 
 #### 4단계: 개발 브랜치 생성

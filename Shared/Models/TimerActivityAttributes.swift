@@ -1,6 +1,6 @@
 //
 //  TimerActivityAttributes.swift
-//  Toki
+//  Rereminder
 //
 //  ActivityKit 기반 Timer Live Activity
 //

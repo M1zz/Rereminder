@@ -1,6 +1,6 @@
 //
 //  AppName.swift
-//  Toki
+//  Rereminder
 //
 //  앱 이름 중앙 관리
 //  영어: Rereminder / 한국어: 두번알림

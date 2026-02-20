@@ -1,6 +1,6 @@
 //
 //  StoreManager.swift
-//  Toki
+//  Rereminder
 //
 //  StoreKit 2 기반 인앱 구매 관리
 //  - 일회성 구매 (Non-consumable)

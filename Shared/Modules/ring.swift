@@ -1,6 +1,6 @@
 //
 //  ring.swift
-//  Toki
+//  Rereminder
 //
 //  Created by xa on 8/28/25.
 //

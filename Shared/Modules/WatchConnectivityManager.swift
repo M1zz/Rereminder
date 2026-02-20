@@ -1,6 +1,6 @@
 //
 //  WatchConnectivityManager.swift
-//  Toki
+//  Rereminder
 //
 //  iOS와 Apple Watch 간 Timer 상태 동기화
 //

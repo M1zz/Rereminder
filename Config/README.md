@@ -2,7 +2,7 @@
 
 ## 개요
 
-Toki 앱의 버전을 중앙에서 관리하기 위한 설정 파일입니다.
+Rereminder 앱의 버전을 중앙에서 관리하기 위한 설정 파일입니다.
 
 ## 파일 구조
 
@@ -43,15 +43,15 @@ CURRENT_PROJECT_VERSION = 2
 ### ⚠️ 중요: 처음 한 번만 설정하면 됩니다
 
 1. **Xcode에서 프로젝트 열기**
-   - `Toki.xcodeproj` 더블클릭
+   - `Rereminder.xcodeproj` 더블클릭
 
 2. **모든 타겟에 xcconfig 적용**
 
-   각 타겟(Toki, WatchToki Watch App, TokiAlarm)에 대해:
+   각 타겟(Rereminder, RereminderWatch, RereminderAlarm)에 대해:
 
    a. 프로젝트 네비게이터에서 프로젝트 파일 선택
 
-   b. 타겟 선택 (Toki, WatchToki Watch App, TokiAlarm)
+   b. 타겟 선택 (Rereminder, RereminderWatch, RereminderAlarm)
 
    c. "Build Settings" 탭 선택
 
@@ -77,7 +77,7 @@ CURRENT_PROJECT_VERSION = 2
 
 4. **빌드하여 확인**
    ```bash
-   xcodebuild -project Toki.xcodeproj -showBuildSettings | grep VERSION
+   xcodebuild -project Rereminder.xcodeproj -showBuildSettings | grep VERSION
    ```
 
 ## 버전 관리 워크플로우

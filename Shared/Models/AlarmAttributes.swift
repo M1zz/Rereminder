@@ -1,6 +1,6 @@
 //
 //  AlarmAttributes.swift
-//  Toki
+//  Rereminder
 //
 //  AlarmKit data models for Live Activity
 //

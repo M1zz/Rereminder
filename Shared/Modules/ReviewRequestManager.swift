@@ -1,6 +1,6 @@
 //
 //  ReviewRequestManager.swift
-//  Toki
+//  Rereminder
 //
 //  리뷰 요청 관리자
 //  Apple 가이드라인 준수: 적절한 시점에 자동으로 리뷰 요청

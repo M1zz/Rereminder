@@ -1,6 +1,6 @@
 //
 //  AngleCalculator.swift
-//  Toki
+//  Rereminder
 //
 //  시간 ↔ 각도 변환 유틸리티 (순수 함수)
 //  TimerScreenViewModel에서 분리
