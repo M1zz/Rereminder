@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rereminder – Smart Timer with Pre-alerts</title>
+    <meta name="description" content="Get notified before your timer ends. Rereminder (두번알림) is a smart timer app for iOS & Apple Watch with customizable pre-alerts.">
+    <meta property="og:title" content="Rereminder – Smart Timer with Pre-alerts">
+    <meta property="og:description" content="Get notified before your timer ends. Perfect for presentations, mentoring, workouts, and more.">
+    <meta property="og:type" content="website">
+    <meta name="apple-itunes-app" content="app-id=6752551268">
+    <link rel="icon" type="image/jpeg" href="app-icon.jpeg">
+    <style>
+        :root {
+            --accent: #007AFF;
+            --bg: #000000;
+            --surface: #111111;
+            --surface2: #1a1a1a;
+            --text: #f5f5f7;
+            --text2: #86868b;
+            --text3: #6e6e73;
+            --border: #2a2a2a;
+            --gradient-start: #007AFF;
+            --gradient-end: #5856D6;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Nav */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            background: rgba(0,0,0,0.72);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-inner {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text);
+        }
+        .nav-brand img {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+        }
+        .nav-brand span {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-links a {
+            color: var(--text2);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text); }
+
+        /* Hero */
+        .hero {
+            padding: 160px 24px 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -200px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0,122,255,0.12) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            font-size: 13px;
+            color: var(--text2);
+            margin-bottom: 32px;
+        }
+        .hero-badge .dot {
+            width: 8px;
+            height: 8px;
+            background: #34C759;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .hero h1 {
+            font-size: clamp(42px, 7vw, 72px);
+            font-weight: 700;
+            letter-spacing: -2px;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: clamp(17px, 2.5vw, 21px);
+            color: var(--text2);
+            max-width: 600px;
+            margin: 0 auto 48px;
+            line-height: 1.5;
+        }
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 32px;
+            background: var(--text);
+            color: var(--bg);
+            border-radius: 14px;
+            text-decoration: none;
+            font-size: 17px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .hero-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 32px rgba(0,122,255,0.3);
+        }
+        .hero-cta svg { width: 20px; height: 20px; }
+
+        /* Features */
+        .features {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 80px 24px;
+        }
+        .features-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+        .features-header h2 {
+            font-size: clamp(28px, 4vw, 40px);
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+        }
+        .features-header p {
+            color: var(--text2);
+            font-size: 17px;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 36px 28px;
+            transition: border-color 0.3s, transform 0.2s;
+        }
+        .feature-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .feature-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+        .feature-card p {
+            color: var(--text2);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 80px 24px;
+        }
+        .how-it-works h2 {
+            text-align: center;
+            font-size: clamp(28px, 4vw, 40px);
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 64px;
+        }
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 32px;
+        }
+        .step {
+            text-align: center;
+            position: relative;
+        }
+        .step-number {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 700;
+            margin: 0 auto 20px;
+        }
+        .step h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .step p {
+            color: var(--text2);
+            font-size: 14px;
+        }
+
+        /* Use Cases */
+        .use-cases {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 80px 24px;
+        }
+        .use-cases h2 {
+            text-align: center;
+            font-size: clamp(28px, 4vw, 40px);
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 48px;
+        }
+        .case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+        .case-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+        }
+        .case-card .emoji { font-size: 32px; margin-bottom: 12px; }
+        .case-card h3 { font-size: 17px; font-weight: 600; margin-bottom: 6px; }
+        .case-card p { color: var(--text2); font-size: 14px; }
+
+        /* Pro Section */
+        .pro-section {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 80px 24px;
+        }
+        .pro-card {
+            background: linear-gradient(135deg, rgba(0,122,255,0.08), rgba(88,86,214,0.08));
+            border: 1px solid rgba(0,122,255,0.2);
+            border-radius: 24px;
+            padding: 48px 40px;
+            text-align: center;
+        }
+        .pro-card h2 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .pro-card h2 .crown { color: #FFD60A; }
+        .pro-card > p {
+            color: var(--text2);
+            font-size: 17px;
+            margin-bottom: 36px;
+        }
+        .pro-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            text-align: left;
+            margin-bottom: 36px;
+        }
+        .pro-feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+        }
+        .pro-feature .check { color: #34C759; font-size: 18px; }
+        .pro-badge-tag {
+            display: inline-block;
+            padding: 10px 28px;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 40px 24px;
+            text-align: center;
+        }
+        .footer-inner {
+            max-width: 1080px;
+            margin: 0 auto;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .footer-links a {
+            color: var(--text3);
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover { color: var(--text); }
+        .footer-copy {
+            color: var(--text3);
+            font-size: 12px;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .pro-features { grid-template-columns: 1fr; }
+            .hero { padding: 140px 20px 80px; }
+            .feature-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+    <div class="nav-inner">
+        <a href="#" class="nav-brand">
+            <img src="app-icon.jpeg" alt="Rereminder">
+            <span>Rereminder</span>
+        </a>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#use-cases">Use Cases</a>
+            <a href="#pro">Pro</a>
+            <a href="https://apps.apple.com/us/app/rereminder/id6752551268" target="_blank">Download</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+    <div class="hero-badge">
+        <span class="dot"></span>
+        Available on iOS & Apple Watch
+    </div>
+    <h1>
+        Know before<br>
+        <span class="gradient">time runs out</span>
+    </h1>
+    <p>
+        Rereminder alerts you <em>before</em> your timer ends.
+        Set pre-alerts at 10 min, 5 min, 1 min — and never get caught off guard.
+    </p>
+    <a href="https://apps.apple.com/us/app/rereminder/id6752551268" class="hero-cta">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Download Free
+    </a>
+</section>
+
+<!-- Features -->
+<section class="features" id="features">
+    <div class="features-header">
+        <h2>Not just a timer.<br>A smarter one.</h2>
+        <p>Every feature is designed to keep you ahead of time.</p>
+    </div>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="feature-icon" style="background: rgba(255,149,0,0.15);">🔔</div>
+            <h3>Pre-alerts</h3>
+            <p>Get notified at 10 min, 5 min, 1 min before your timer ends. You decide when.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background: rgba(255,45,85,0.15);">⏱️</div>
+            <h3>Overtime Tracking</h3>
+            <p>Timer doesn't stop at zero. See exactly how much you went over with +MM:SS counter.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background: rgba(0,122,255,0.15);">🏝️</div>
+            <h3>Live Activity</h3>
+            <p>See your timer on the Dynamic Island and Lock Screen. Always visible, never intrusive.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background: rgba(52,199,89,0.15);">⌚</div>
+            <h3>Apple Watch</h3>
+            <p>Control your timer from your wrist. Start, pause, and get alerts — all synced.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background: rgba(88,86,214,0.15);">💾</div>
+            <h3>Templates</h3>
+            <p>Save your favorite timer setups. One tap to start your 25-min focus session or 1-hour meeting.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon" style="background: rgba(90,200,250,0.15);">🎨</div>
+            <h3>Themes</h3>
+            <p>Pick your accent color. 10 beautiful presets to match your style.</p>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works" id="how-it-works">
+    <h2>Three taps to peace of mind</h2>
+    <div class="steps">
+        <div class="step">
+            <div class="step-number">1</div>
+            <h3>Set your time</h3>
+            <p>Drag the circle or tap a quick preset. 5 min, 10 min, or custom.</p>
+        </div>
+        <div class="step">
+            <div class="step-number">2</div>
+            <h3>Choose pre-alerts</h3>
+            <p>Tap which alerts you want. "5 min before", "1 min before" — your call.</p>
+        </div>
+        <div class="step">
+            <div class="step-number">3</div>
+            <h3>Start & relax</h3>
+            <p>Focus on what matters. Rereminder will tap your shoulder when it's time.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Use Cases -->
+<section class="use-cases" id="use-cases">
+    <h2>Built for real moments</h2>
+    <div class="case-grid">
+        <div class="case-card">
+            <div class="emoji">🎤</div>
+            <h3>Presentations</h3>
+            <p>"5 min left — start wrapping up" so you never get cut off.</p>
+        </div>
+        <div class="case-card">
+            <div class="emoji">🧑‍🏫</div>
+            <h3>Mentoring</h3>
+            <p>Know when your session is ending without watching the clock.</p>
+        </div>
+        <div class="case-card">
+            <div class="emoji">🏋️</div>
+            <h3>Workouts</h3>
+            <p>Pre-alerts for rest intervals. "10 seconds — get ready for next set."</p>
+        </div>
+        <div class="case-card">
+            <div class="emoji">🍳</div>
+            <h3>Cooking</h3>
+            <p>"2 min left — time to add the sauce." Never burn dinner again.</p>
+        </div>
+        <div class="case-card">
+            <div class="emoji">📚</div>
+            <h3>Study Sessions</h3>
+            <p>Pomodoro with pre-alerts. Know when your break is coming.</p>
+        </div>
+        <div class="case-card">
+            <div class="emoji">🤝</div>
+            <h3>Meetings</h3>
+            <p>"10 min remaining" — wrap up action items before time's up.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Pro -->
+<section class="pro-section" id="pro">
+    <div class="pro-card">
+        <h2><span class="crown">👑</span> Rereminder Pro</h2>
+        <p>Pay once, use forever. No subscriptions.</p>
+        <div class="pro-features">
+            <div class="pro-feature"><span class="check">✓</span> Unlimited pre-alerts</div>
+            <div class="pro-feature"><span class="check">✓</span> Custom alert messages</div>
+            <div class="pro-feature"><span class="check">✓</span> Unlimited templates</div>
+            <div class="pro-feature"><span class="check">✓</span> All theme colors</div>
+            <div class="pro-feature"><span class="check">✓</span> Label colors</div>
+            <div class="pro-feature"><span class="check">✓</span> Timer history & stats</div>
+        </div>
+        <span class="pro-badge-tag">One-time purchase</span>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer>
+    <div class="footer-inner">
+        <div class="footer-links">
+            <a href="https://apps.apple.com/us/app/rereminder/id6752551268">App Store</a>
+            <a href="mailto:leeo@kakao.com">Contact</a>
+            <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Terms</a>
+            <a href="https://www.apple.com/legal/privacy/">Privacy</a>
+        </div>
+        <p class="footer-copy">© 2026 Rereminder (두번알림). All rights reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>
