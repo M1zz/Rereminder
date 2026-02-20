@@ -10,30 +10,38 @@ import SwiftUI
 enum NavigationTarget: Hashable {
     case setNotiView
     case timerView(mainDuration: Int, NotificationDuration: Int)
+    case timerViewMultiple(mainDuration: Int, prealertOffsets: [Int])
 }
 
 struct SettingView: View {
     @StateObject private var settingViewModel = SettingViewModel()
     @State private var path: [NavigationTarget] = []
-    
+    @State private var isNavigating = false
+
     var totalTime: Int {
         settingViewModel.time.convertedSecond
     }
-    
+
     private var minuteRange: ClosedRange<Int> { 1...60 }
     
     var body: some View {
         NavigationStack(path: $path) {
-            VStack(spacing: 12) {
+            VStack(spacing: 16) {
+                // 타이틀
+                Text("Timer Duration", comment: "Timer Duration")
+                    .font(.system(size: 14, weight: .medium, design: .rounded))
+                    .foregroundStyle(.secondary)
+                    .padding(.top, 8)
+
                 TimePicker()
-                
-                Spacer() // ✅ 버튼을 아래로 밀기
-                
+
+                Spacer()
+
                 NextButton()
                     .buttonStyle(.borderedProminent)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 8)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .padding(.horizontal, 12)
+                    .padding(.bottom, 24)
             }
             .onAppear {
                 if !(minuteRange.contains(settingViewModel.time.minute)) || settingViewModel.time.minute == 0 {
@@ -52,7 +60,7 @@ struct SettingView: View {
             MinuteWheel(selectedMinute: $settingViewModel.time.minute, range: minuteRange, selectionOffset: 0)
                 .frame(width: 90, height: 90)
             
-            Text("분")
+            Text("min", comment: "min")
                 .font(.system(size: 40, weight: .semibold, design: .rounded))
                 .accessibilityHidden(true)
         }
@@ -60,10 +68,23 @@ struct SettingView: View {
     
     @ViewBuilder
     private func NextButton() -> some View {
-        NavigationLink(value: NavigationTarget.setNotiView) {
-            Text("타이머 설정") // ✅ "다음" 대신 명확한 텍스트
-                .frame(maxWidth: .infinity)
+        Button {
+            isNavigating = true
+            // 짧은 지연 후 네비게이션 (로딩 표시용)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                path.append(.setNotiView)
+                isNavigating = false
+            }
+        } label: {
+            if isNavigating {
+                ProgressView()
+                    .frame(maxWidth: .infinity)
+            } else {
+                Text("Timer Settings", comment: "Timer Settings")
+                    .frame(maxWidth: .infinity)
+            }
         }
+        .disabled(isNavigating)
     }
     
     @ViewBuilder
@@ -82,6 +103,14 @@ struct SettingView: View {
                 ),
                 path: $path
             )
+        case .timerViewMultiple(let mainDuration, let prealertOffsets):
+            TimerView(
+                timerViewModel: TimerViewModel(
+                    mainDuration: mainDuration,
+                    prealertOffsets: prealertOffsets
+                ),
+                path: $path
+            )
         }
     }
     
@@ -91,23 +120,15 @@ struct SettingView: View {
         let selectionOffset: CGFloat
 
         @State private var scrollID: Int?
-        
-        @State private var isUserScrolling: Bool = false
-        @State private var pendingMinute: Int? = nil
-        @State private var snapToken: Int = 0
 
         private let rowHeight: CGFloat = 45
 
         var body: some View {
             ScrollView(.vertical) {
-                VStack(spacing: 0) {
+                LazyVStack(spacing: 0) {
                     ForEach(Array(range), id: \.self) { minute in
-                        Text("\(minute)")
-                            .font(.system(size: minute == selectedMinute ? 40 : 34, weight: minute == selectedMinute ? .semibold : .regular, design: .rounded))
-                            .monospacedDigit()
-                            .foregroundStyle(minute == selectedMinute ? Color.white : Color.gray.opacity(0.5))
+                        MinuteRow(minute: minute, isSelected: minute == selectedMinute)
                             .frame(height: rowHeight)
-                            .frame(maxWidth: .infinity)
                             .id(minute)
                     }
                 }
@@ -119,23 +140,10 @@ struct SettingView: View {
             .contentMargins(.vertical, (90 - rowHeight) / 2, for: .scrollContent)
             .contentMargins(.vertical, selectionOffset, for: .scrollContent)
             .scrollPosition(id: $scrollID)
-            .onScrollPhaseChange { phase, arg   in
-                switch phase {
-                case .idle:
-                    isUserScrolling = false
-                    // when idle, commit pending minute if any
-                    let final = pendingMinute ?? scrollID
-                    if let final, selectedMinute != final {
-                        selectedMinute = final
-                        snapToken &+= 1
-                    }
-                    pendingMinute = nil
-                default:
-                    isUserScrolling = true
-                }
-            }
             .onChange(of: scrollID) { _, newID in
-                if let m = newID { selectedMinute = m }
+                if let m = newID, selectedMinute != m {
+                    selectedMinute = m
+                }
             }
             .onChange(of: selectedMinute) { _, newValue in
                 if scrollID != newValue {
@@ -152,6 +160,20 @@ struct SettingView: View {
             .frame(width: 90, height: 90)
             .clipped()
             .contentShape(Rectangle())
+        }
+    }
+
+    private struct MinuteRow: View {
+        let minute: Int
+        let isSelected: Bool
+
+        var body: some View {
+            Text("\(minute)")
+                .font(.system(size: isSelected ? 40 : 34, weight: isSelected ? .semibold : .regular, design: .rounded))
+                .monospacedDigit()
+                .foregroundStyle(isSelected ? Color.white : Color.gray.opacity(0.5))
+                .frame(maxWidth: .infinity)
+                .animation(.easeInOut(duration: 0.15), value: isSelected)
         }
     }
 }

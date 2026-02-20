@@ -7,7 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2B302B142E4375170089A14A /* WatchToki Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2B302B0A2E4375150089A14A /* WatchToki Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		2B302B142E4375170089A14A /* WatchToki Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2B302B0A2E4375150089A14A /* WatchToki Watch App.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		581D85DC2F48C24200F2F032 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 581D85DB2F48C24200F2F032 /* StoreKit.framework */; };
+		58AA3EB02ECF5509007D4BBD /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AA3EAF2ECF5509007D4BBD /* WidgetKit.framework */; };
+		58AA3EB22ECF5509007D4BBD /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AA3EB12ECF5509007D4BBD /* SwiftUI.framework */; };
+		58AA3EC32ECF550B007D4BBD /* TokiAlarmExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 58AA3EAD2ECF5509007D4BBD /* TokiAlarmExtension.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -17,6 +21,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 2B302B092E4375150089A14A;
 			remoteInfo = "WatchToki Watch App";
+		};
+		58AA3EC12ECF550B007D4BBD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 260414C32E1B9FA200CBA29B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 58AA3EAC2ECF5509007D4BBD;
+			remoteInfo = TokiAlarmExtension;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -32,27 +43,98 @@
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		58AA3EC82ECF550B007D4BBD /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				58AA3EC32ECF550B007D4BBD /* TokiAlarmExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		260414CB2E1B9FA200CBA29B /* Toki.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Toki.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B302B0A2E4375150089A14A /* WatchToki Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WatchToki Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		581D85DB2F48C24200F2F032 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		58AA3EAD2ECF5509007D4BBD /* TokiAlarmExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TokiAlarmExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		58AA3EAF2ECF5509007D4BBD /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		58AA3EB12ECF5509007D4BBD /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		58AA3ECA2ECF5541007D4BBD /* TokiAlarmExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TokiAlarmExtension.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		58AA3EA82ECF5356007D4BBD /* Exceptions for "Toki" folder in "Toki" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 260414CA2E1B9FA200CBA29B /* Toki */;
+		};
+		58AA3EC72ECF550B007D4BBD /* Exceptions for "TokiAlarm" folder in "TokiAlarmExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 58AA3EAC2ECF5509007D4BBD /* TokiAlarmExtension */;
+		};
+		9C1569E52ED04576004A4BB4 /* Exceptions for "Shared" folder in "WatchToki Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Modules/AppName.swift,
+				Modules/WatchConnectivityManager.swift,
+			);
+			target = 2B302B092E4375150089A14A /* WatchToki Watch App */;
+		};
+		9CA0A72F2F20B473004ABF40 /* Exceptions for "Toki" folder in "WatchToki Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Localizable.xcstrings,
+			);
+			target = 2B302B092E4375150089A14A /* WatchToki Watch App */;
+		};
+		9CA0A7302F20B473004ABF40 /* Exceptions for "Toki" folder in "TokiAlarmExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Localizable.xcstrings,
+			);
+			target = 58AA3EAC2ECF5509007D4BBD /* TokiAlarmExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		260414CD2E1B9FA200CBA29B /* Toki */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				58AA3EA82ECF5356007D4BBD /* Exceptions for "Toki" folder in "Toki" target */,
+				9CA0A72F2F20B473004ABF40 /* Exceptions for "Toki" folder in "WatchToki Watch App" target */,
+				9CA0A7302F20B473004ABF40 /* Exceptions for "Toki" folder in "TokiAlarmExtension" target */,
+			);
 			path = Toki;
 			sourceTree = "<group>";
 		};
 		260414E12E1B9FDE00CBA29B /* Shared */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				9C1569E52ED04576004A4BB4 /* Exceptions for "Shared" folder in "WatchToki Watch App" target */,
+			);
 			path = Shared;
 			sourceTree = "<group>";
 		};
 		2B302B0B2E4375150089A14A /* WatchToki Watch App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = "WatchToki Watch App";
+			sourceTree = "<group>";
+		};
+		58AA3EB32ECF5509007D4BBD /* TokiAlarm */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				58AA3EC72ECF550B007D4BBD /* Exceptions for "TokiAlarm" folder in "TokiAlarmExtension" target */,
+			);
+			path = TokiAlarm;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -62,6 +144,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				581D85DC2F48C24200F2F032 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,15 +155,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		58AA3EAA2ECF5509007D4BBD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				58AA3EB22ECF5509007D4BBD /* SwiftUI.framework in Frameworks */,
+				58AA3EB02ECF5509007D4BBD /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		260414C22E1B9FA200CBA29B = {
 			isa = PBXGroup;
 			children = (
+				58AA3ECA2ECF5541007D4BBD /* TokiAlarmExtension.entitlements */,
 				260414E12E1B9FDE00CBA29B /* Shared */,
 				260414CD2E1B9FA200CBA29B /* Toki */,
 				2B302B0B2E4375150089A14A /* WatchToki Watch App */,
+				58AA3EB32ECF5509007D4BBD /* TokiAlarm */,
+				58AA3EAE2ECF5509007D4BBD /* Frameworks */,
 				260414CC2E1B9FA200CBA29B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -90,8 +185,19 @@
 			children = (
 				260414CB2E1B9FA200CBA29B /* Toki.app */,
 				2B302B0A2E4375150089A14A /* WatchToki Watch App.app */,
+				58AA3EAD2ECF5509007D4BBD /* TokiAlarmExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		58AA3EAE2ECF5509007D4BBD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				581D85DB2F48C24200F2F032 /* StoreKit.framework */,
+				58AA3EAF2ECF5509007D4BBD /* WidgetKit.framework */,
+				58AA3EB12ECF5509007D4BBD /* SwiftUI.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -105,11 +211,13 @@
 				260414C82E1B9FA200CBA29B /* Frameworks */,
 				260414C92E1B9FA200CBA29B /* Resources */,
 				2B302B182E4375170089A14A /* Embed Watch Content */,
+				58AA3EC82ECF550B007D4BBD /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				2B302B132E4375170089A14A /* PBXTargetDependency */,
+				58AA3EC22ECF550B007D4BBD /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				260414CD2E1B9FA200CBA29B /* Toki */,
@@ -144,6 +252,28 @@
 			productReference = 2B302B0A2E4375150089A14A /* WatchToki Watch App.app */;
 			productType = "com.apple.product-type.application";
 		};
+		58AA3EAC2ECF5509007D4BBD /* TokiAlarmExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 58AA3EC42ECF550B007D4BBD /* Build configuration list for PBXNativeTarget "TokiAlarmExtension" */;
+			buildPhases = (
+				58AA3EA92ECF5509007D4BBD /* Sources */,
+				58AA3EAA2ECF5509007D4BBD /* Frameworks */,
+				58AA3EAB2ECF5509007D4BBD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				58AA3EB32ECF5509007D4BBD /* TokiAlarm */,
+			);
+			name = TokiAlarmExtension;
+			packageProductDependencies = (
+			);
+			productName = TokiAlarmExtension;
+			productReference = 58AA3EAD2ECF5509007D4BBD /* TokiAlarmExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -151,7 +281,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1640;
+				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 1640;
 				TargetAttributes = {
 					260414CA2E1B9FA200CBA29B = {
@@ -160,14 +290,18 @@
 					2B302B092E4375150089A14A = {
 						CreatedOnToolsVersion = 16.4;
 					};
+					58AA3EAC2ECF5509007D4BBD = {
+						CreatedOnToolsVersion = 26.0;
+					};
 				};
 			};
 			buildConfigurationList = 260414C62E1B9FA200CBA29B /* Build configuration list for PBXProject "Toki" */;
-			developmentRegion = en;
+			developmentRegion = ko;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 				Base,
+				ko,
 			);
 			mainGroup = 260414C22E1B9FA200CBA29B;
 			minimizedProjectReferenceProxies = 1;
@@ -178,6 +312,7 @@
 			targets = (
 				260414CA2E1B9FA200CBA29B /* Toki */,
 				2B302B092E4375150089A14A /* WatchToki Watch App */,
+				58AA3EAC2ECF5509007D4BBD /* TokiAlarmExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -191,6 +326,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		2B302B082E4375150089A14A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		58AA3EAB2ECF5509007D4BBD /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -214,13 +356,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		58AA3EA92ECF5509007D4BBD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
 		2B302B132E4375170089A14A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
+			platformFilter = ios;
 			target = 2B302B092E4375150089A14A /* WatchToki Watch App */;
 			targetProxy = 2B302B122E4375170089A14A /* PBXContainerItemProxy */;
+		};
+		58AA3EC22ECF550B007D4BBD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = ios;
+			target = 58AA3EAC2ECF5509007D4BBD /* TokiAlarmExtension */;
+			targetProxy = 58AA3EC12ECF550B007D4BBD /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -278,13 +434,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -336,12 +493,13 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -351,26 +509,29 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Toki/Toki.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = QGAQ3AY3R3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Toki/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "두번알림";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -385,26 +546,29 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Toki/Toki.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = QGAQ3AY3R3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Toki/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "두번알림";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -420,10 +584,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = QGAQ3AY3R3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "WatchToki-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "두번알림";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.xa.toki;
@@ -431,7 +596,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -449,10 +614,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = QGAQ3AY3R3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "WatchToki-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "두번알림";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.xa.toki;
@@ -460,7 +626,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -469,6 +635,70 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 11.6;
+			};
+			name = Release;
+		};
+		58AA3EC52ECF550B007D4BBD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = TokiAlarmExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = QGAQ3AY3R3;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TokiAlarm/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TokiAlarm;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 2.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.TokiAlarm;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		58AA3EC62ECF550B007D4BBD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = TokiAlarmExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
+				DEVELOPMENT_TEAM = QGAQ3AY3R3;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = TokiAlarm/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = TokiAlarm;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 2.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.TokiAlarm;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -498,6 +728,15 @@
 			buildConfigurations = (
 				2B302B162E4375170089A14A /* Debug */,
 				2B302B172E4375170089A14A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		58AA3EC42ECF550B007D4BBD /* Build configuration list for PBXNativeTarget "TokiAlarmExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				58AA3EC52ECF550B007D4BBD /* Debug */,
+				58AA3EC62ECF550B007D4BBD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

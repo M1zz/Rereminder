@@ -10,34 +10,56 @@ import UserNotifications
 
 struct SetNotiView: View {
     @ObservedObject var viewModel: SetNotiViewModel
-    
+
     @Binding var path: [NavigationTarget]
-    
-    @State private var selectedMinutes: Int?
+
     @State private var showingCustomSheet = false
     @State private var customMinutes = 1
     @State private var customPresets: [Int] = []
-    
+
     var body: some View {
         let maxMinute = viewModel.maxSelectableTimeModel.minute
 
-        VStack(spacing: 12) {
+        VStack(spacing: 16) {
+            // 타이틀
+            Text("Pre-alerts", comment: "Pre-alerts")
+                .font(.system(size: 14, weight: .medium, design: .rounded))
+                .foregroundStyle(.secondary)
+                .padding(.top, 4)
+
             presetButtons(maxMinute: maxMinute)
+
             startButton
+                .padding(.bottom, 20)
         }
-        .padding()
+        .padding(.horizontal, 12)
+        .padding(.top, 4)
         .background(.clear)
         .sheet(isPresented: $showingCustomSheet) { customMinutesSheet(maxMinute: maxMinute) }
     }
-    
+
     // MARK: - Subviews
-    
+
+    private var selectedMinutesText: String {
+        let sorted = viewModel.selectedMinutes.sorted()
+        let minText = String(localized: "min")
+        let alertText = String(localized: "min before alert")
+        if sorted.count == 1 {
+            return "\(sorted[0]) \(alertText)"
+        } else {
+            let text = sorted.map { "\($0) \(minText)" }.joined(separator: ", ")
+            return "\(text) \(String(localized: "before alert"))"
+        }
+    }
+
     private func presetButtons(maxMinute: Int) -> some View {
-        let columns = [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)]
-        return LazyVGrid(columns: columns, alignment: .center, spacing: 12) {
-            presetCircle(title: "1", minutes: 1, maxMinute: maxMinute)
-            presetCircle(title: "5", minutes: 5, maxMinute: maxMinute)
-            presetCircle(title: "10", minutes: 10, maxMinute: maxMinute)
+        let columns = [GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8), GridItem(.flexible(), spacing: 8)]
+        // iOS와 동일한 프리셋: 1, 3, 5, 10, 15, 30min
+        let defaultPresets = [1, 3, 5, 10, 15, 30]
+        return LazyVGrid(columns: columns, alignment: .center, spacing: 8) {
+            ForEach(defaultPresets.filter { $0 <= maxMinute }, id: \.self) { minute in
+                presetCircle(title: "\(minute)", minutes: minute, maxMinute: maxMinute)
+            }
             ForEach(customPresets, id: \.self) { minute in
                 presetCircle(title: "\(minute)", minutes: minute, maxMinute: maxMinute)
             }
@@ -54,47 +76,46 @@ struct SetNotiView: View {
             .opacity(maxMinute < 1 ? 0.4 : 1.0)
             .buttonStyle(.plain)
         }
-        .padding(.top, 4)
+        .padding(.top, 2)
         .background(Color.clear)
     }
-    
-    private var selectionHint: some View {
-        Group {
-            if let selected = selectedMinutes {
-                Text("타이머 완료 \(selected)분 전에 알림이 울립니다.")
-            } else {
-                Text("원하는 알림 시점을 선택하세요.")
-            }
-        }
-        .font(.footnote)
-        .foregroundStyle(.secondary)
-    }
-    
+
     private var startButton: some View {
         Button {
-            guard let _ = selectedMinutes, viewModel.notiTime.minute > 0 else { return }
+            guard !viewModel.selectedMinutes.isEmpty else { return }
             requestNotificationPermissionIfNeeded { _ in
-                schedulePreFinishNotification(after: TimeInterval(viewModel.notiTime.convertedSecond))
+                // 모든 선택된 알림 스케줄
+                for minute in viewModel.selectedMinutes {
+                    let seconds = TimeInterval(minute * 60)
+                    schedulePreFinishNotification(after: seconds, minutes: minute)
+                }
             }
-            path.append(.timerView(mainDuration: viewModel.maxTimeInSeconds, NotificationDuration: viewModel.notiTime.convertedSecond))
+            // selectedMinutes를 배열로 변환해서 전달
+            let prealertOffsets = Array(viewModel.selectedMinutes)
+            path.append(.timerViewMultiple(mainDuration: viewModel.maxTimeInSeconds, prealertOffsets: prealertOffsets))
         } label: {
-            Text("완료 전 알림")
+            Text("Start Timer", comment: "Start Timer")
+                .font(.system(size: 14, weight: .semibold))
+                .frame(maxWidth: .infinity)
         }
         .buttonStyle(.borderedProminent)
-        .clipShape(RoundedRectangle(cornerRadius: 8))
-        .padding(.horizontal, 12)
-        .padding(.bottom, 6)
-        .disabled(selectedMinutes == nil)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .disabled(viewModel.selectedMinutes.isEmpty)
     }
-    
+
     private func presetCircle(title: String, minutes: Int, maxMinute: Int) -> some View {
         let disabled = maxMinute < minutes
+        let isSelected = viewModel.selectedMinutes.contains(minutes)
+
         return Button {
             guard !disabled else { return }
-            selectedMinutes = minutes
-            viewModel.notiTime.minute = minutes
+            if isSelected {
+                viewModel.selectedMinutes.remove(minutes)
+            } else {
+                viewModel.selectedMinutes.insert(minutes)
+            }
         } label: {
-            CircleButton(title: title, subtitle: "분", isSelected: selectedMinutes == minutes, isDisabled: disabled) {
+            CircleButton(title: title, subtitle: "m", isSelected: isSelected, isDisabled: disabled) {
                 // handled by outer Button
             }
             .contentShape(Circle())
@@ -103,22 +124,22 @@ struct SetNotiView: View {
         .opacity(disabled ? 0.4 : 1.0)
         .buttonStyle(.plain)
     }
-    
+
     private func customMinutesSheet(maxMinute: Int) -> some View {
         VStack(spacing: 8) {
-            Text("사용자 지정 분")
+            Text("Custom Minutes", comment: "Custom Minutes")
                 .font(.headline)
 
             Picker("", selection: $customMinutes) {
                 ForEach(1...max(1, maxMinute), id: \.self) { minute in
-                    Text("\(minute)분").tag(minute)
+                    Text("\(minute) \(String(localized: "min"))").tag(minute)
                 }
             }
             .pickerStyle(.wheel)
             .frame(height: 110)
 
             HStack(spacing: 12) {
-                Button("취소") {
+                Button("Cancel") {
                     showingCustomSheet = false
                 }
                 .frame(maxWidth: .infinity)
@@ -127,11 +148,10 @@ struct SetNotiView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .buttonStyle(.plain)
 
-                Button("완료") {
+                Button("Done") {
                     let clamped = min(max(1, customMinutes), maxMinute)
-                    selectedMinutes = clamped
-                    viewModel.notiTime.minute = clamped
-                    let defaultPresets = [1, 5, 10]
+                    viewModel.selectedMinutes.insert(clamped)
+                    let defaultPresets = [1, 3, 5, 10, 15, 30]
                     if !defaultPresets.contains(clamped) && !customPresets.contains(clamped) {
                         customPresets.append(clamped)
                         customPresets.sort()
@@ -144,7 +164,7 @@ struct SetNotiView: View {
                 .foregroundStyle(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .buttonStyle(.plain)
-                
+
             }
         }
         .padding(8)
@@ -161,15 +181,15 @@ private struct CircleButton: View {
     let action: () -> Void
 
     var body: some View {
-        VStack(spacing: 2) {
+        VStack(spacing: 1) {
             Text(title)
-                .font(.headline).bold()
+                .font(.system(size: 15, weight: .bold, design: .rounded))
             if !subtitle.isEmpty {
                 Text(subtitle)
-                    .font(.caption2)
+                    .font(.system(size: 9, weight: .medium))
             }
         }
-        .frame(width: 56, height: 56)
+        .frame(width: 46, height: 46)
         .background(
             Circle()
                 .fill(isSelected ? Color.accentColor : Color.gray.opacity(0.12))
@@ -215,20 +235,15 @@ private func requestNotificationPermissionIfNeeded(completion: @escaping (Bool) 
     }
 }
 
-private func schedulePreFinishNotification(after seconds: TimeInterval) {
+private func schedulePreFinishNotification(after seconds: TimeInterval, minutes: Int) {
     let content = UNMutableNotificationContent()
-    content.title = "완료 전 알림"
-    if seconds >= 60 {
-        let minutes = Int(seconds) / 60
-        content.body = "\(minutes)분 뒤에 타이머가 완료됩니다."
-    } else {
-        content.body = "\(Int(seconds))초 뒤에 타이머가 완료됩니다."
-    }
+    content.title = AppName.notification
+    content.body = String(localized: "\(minutes) min remaining")
     content.sound = .default
 
     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: max(1, seconds), repeats: false)
     let request = UNNotificationRequest(
-        identifier: "preFinish-\(UUID().uuidString)",
+        identifier: "prealert-\(minutes)",
         content: content,
         trigger: trigger
     )
@@ -239,42 +254,3 @@ private func schedulePreFinishNotification(after seconds: TimeInterval) {
         }
     }
 }
-
-
-//}
-
-
-//#Preview {
-//    SetNotiView()
-//}
-
-// 타이머 설정화면이랑 같게
-// 앞에서 시간 입력값 받아서 그것보다 짧게 만들어야 하는데
-// 입력받은 값에서 1분(60초) 적은 값까지로 제한 걸어주기 - 초단위는 삭제하는게 나을지 고민
-
-
-// 백그라운드, 워치꺼져있을 때 도 햅틱알림이 있어야?
-
-// 완료 전 알림이니까 만약 5분전이면 지정한 시간에서 -5분을 빼고 타이머를 만드는 겪 -> 결국 완료 전 알림 타이머
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

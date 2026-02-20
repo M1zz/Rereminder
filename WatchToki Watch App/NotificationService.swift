@@ -6,7 +6,9 @@
 //
 
 import UserNotifications
+#if canImport(WatchKit)
 import WatchKit
+#endif
 
 struct NotificationService {
     func scheduleNotification(timeInterval: TimeInterval, title: String, body: String, identifier: String) {
@@ -20,7 +22,7 @@ struct NotificationService {
         
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if let error = error {
-                print("알림 권한 요청 실패: \(error.localizedDescription)")
+                print("알림 Request Permission 실패: \(error.localizedDescription)")
                 return
             }
             
@@ -30,9 +32,9 @@ struct NotificationService {
                 let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
                 let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
                 
-                self.addRequest(request, identifier: identifier, timeDescription: "\(Int(timeInterval))초 후")
+                self.addRequest(request, identifier: identifier, timeDescription: "\(Int(timeInterval))sec later")
             } else {
-                print("알림 권한이 거부되었습니다.")
+                print("Notification permission denied.")
             }
         }
     }
@@ -44,7 +46,7 @@ struct NotificationService {
         
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if let error = error {
-                print("알림 권한 요청 실패: \(error.localizedDescription)")
+                print("알림 Request Permission 실패: \(error.localizedDescription)")
                 return
             }
             
@@ -60,7 +62,7 @@ struct NotificationService {
                 let dateString = formatter.string(from: date)
                 self.addRequest(request, identifier: identifier, timeDescription: dateString)
             } else {
-                print("알림 권한이 거부되었습니다.")
+                print("Notification permission denied.")
             }
         }
     }
@@ -89,9 +91,11 @@ struct NotificationService {
                 print("알림 예약 실패: \(identifier) - \(error.localizedDescription)")
             } else {
                 print("알림 예약 성공: \(identifier) - \(timeDescription)")
+                #if canImport(WatchKit)
                 DispatchQueue.main.async {
                     WKInterfaceDevice.current().play(.click)
                 }
+                #endif
             }
         }
     }
@@ -99,12 +103,12 @@ struct NotificationService {
     func removeAllNotifications() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         UNUserNotificationCenter.current().removeAllDeliveredNotifications()
-        print("예약된 모든 알림이 취소되었습니다.")
+        print("예약된 모든 알림이 Cancel되었습니다.")
     }
     
     func removeNotification(withIdentifier identifier: String) {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
-        print("알림 취소: \(identifier)")
+        print("알림 Cancel: \(identifier)")
     }
 }
 
@@ -117,7 +121,8 @@ class NotificationDelegate: NSObject, ObservableObject, UNUserNotificationCenter
         print("알림 표시: \(notification.request.identifier)")
         
         completionHandler([.sound])
-        
+
+        #if canImport(WatchKit)
         DispatchQueue.main.async {
             let hapticType = notification.request.content.userInfo["haptic"] as? String ?? "click"
             switch hapticType {
@@ -129,5 +134,6 @@ class NotificationDelegate: NSObject, ObservableObject, UNUserNotificationCenter
                 WKInterfaceDevice.current().play(.click)
             }
         }
+        #endif
     }
 }

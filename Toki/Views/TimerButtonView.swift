@@ -14,121 +14,123 @@ struct TimerButton: View {
     let onPause: () -> Void
     let onResume: () -> Void
     let onCancel: () -> Void
+    var buttonSize: CGFloat = 70
+
+    @ScaledMetric private var spacing: CGFloat = 40
 
     var body: some View {
-//        switch state {
-//        case .idle:
-//            HStack(spacing: 100) {
-//                Button("취소", action: onCancel)
-//                    .buttonStyle(TimerButtonStyle(tint: Color.plain))
-//                    .disabled(true)
-//                Button("시작", action: onStart)
-//                    .buttonStyle(TimerButtonStyle(tint: Color.positive))
-//            }
-//            
-//        case .finished:
-//            HStack(spacing: 100) {
-//                Button("취소", action: onCancel)
-//                    .buttonStyle(TimerButtonStyle(tint: Color.plain))
-//                Button("시작", action: onStart)
-//                    .buttonStyle(TimerButtonStyle(tint: Color.positive))
-//            }
-//
-//        case .running:
-//            HStack(spacing: 100) {
-//                Button("취소", action: onCancel)
-//                    .buttonStyle(TimerButtonStyle(tint: Color.plain))
-//                Button("일시정지", action: onPause)
-//                    .buttonStyle(TimerButtonStyle(tint: Color.bitNegative))
-//            }
-//
-//        case .paused:
-//            HStack(spacing: 100) {
-//                Button("취소", action: onCancel)
-//                    .buttonStyle(TimerButtonStyle(tint: Color.plain))
-//                Button("재개", action: onResume)
-//                    .buttonStyle(TimerButtonStyle(tint: Color.positive))
-//            }
-//        }
         switch state {
         case .idle:
-            HStack(spacing: 100) {
+            HStack(spacing: spacing) {
                 Button(action: onCancel) {
-                    Label("취소", systemImage: "xmark")
-                        .labelStyle(.iconOnly)
+                    Image(systemName: "xmark")
+                        .font(.title2)
+                        .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.plain))
+                .buttonStyle(TimerButtonStyle(tint: Color.plain, size: buttonSize))
                 .disabled(true)
+                .accessibilityLabel("Cancel")
 
                 Button(action: onStart) {
-                    Label("시작", systemImage: "play.fill")
-                        .labelStyle(.iconOnly)
+                    Image(systemName: "play.fill")
+                        .font(.title2)
+                        .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.positive))
+                .buttonStyle(TimerButtonStyle(tint: Color.positive, size: buttonSize))
+                .accessibilityLabel("Start Timer")
             }
 
         case .finished:
-            HStack(spacing: 100) {
+            HStack(spacing: spacing) {
                 Button(action: onCancel) {
-                    Label("취소", systemImage: "xmark")
-                        .labelStyle(.iconOnly)
+                    Image(systemName: "xmark")
+                        .font(.title2)
+                        .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.plain))
+                .buttonStyle(TimerButtonStyle(tint: Color.plain, size: buttonSize))
+                .accessibilityLabel("Cancel")
 
                 Button(action: onStart) {
-                    Label("시작", systemImage: "play.fill")
-                        .labelStyle(.iconOnly)
+                    Image(systemName: "play.fill")
+                        .font(.title2)
+                        .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.positive))
+                .buttonStyle(TimerButtonStyle(tint: Color.positive, size: buttonSize))
+                .accessibilityLabel("Start Timer")
             }
 
         case .running:
-            HStack(spacing: 100) {
+            HStack(spacing: spacing) {
                 Button(action: onCancel) {
-                    Label("취소", systemImage: "xmark")
-                        .labelStyle(.iconOnly)
+                    Image(systemName: "xmark")
+                        .font(.title2)
+                        .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.plain))
+                .buttonStyle(TimerButtonStyle(tint: Color.plain, size: buttonSize))
+                .accessibilityLabel("Cancel Timer")
 
                 Button(action: onPause) {
-                    Label("일시정지", systemImage: "pause.fill")
-                        .labelStyle(.iconOnly)
+                    Image(systemName: "pause.fill")
+                        .font(.title2)
+                        .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.bitNegative))
+                .buttonStyle(TimerButtonStyle(tint: Color.bitNegative, size: buttonSize))
+                .accessibilityLabel("Pause Timer")
             }
 
         case .paused:
-            HStack(spacing: 100) {
+            HStack(spacing: spacing) {
                 Button(action: onCancel) {
-                    Label("취소", systemImage: "xmark")
-                        .labelStyle(.iconOnly)
+                    Image(systemName: "xmark")
+                        .font(.title2)
+                        .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.plain))
+                .buttonStyle(TimerButtonStyle(tint: Color.plain, size: buttonSize))
+                .accessibilityLabel("Cancel Timer")
 
                 Button(action: onResume) {
-                    Label("재개", systemImage: "playpause.fill")
-                        .labelStyle(.iconOnly)
+                    Image(systemName: "play.fill")
+                        .font(.title2)
+                        .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.positive))
+                .buttonStyle(TimerButtonStyle(tint: Color.positive, size: buttonSize))
+                .accessibilityLabel("Resume Timer")
+            }
+        case .overtime:
+            HStack(spacing: spacing) {
+                Button(action: onCancel) {
+                    Image(systemName: "xmark")
+                        .font(.title2)
+                        .imageScale(.medium)
+                }
+                .buttonStyle(TimerButtonStyle(tint: Color.plain, size: buttonSize))
+                .accessibilityLabel("Cancel Timer")
+
+                Button(action: onPause) {
+                    Image(systemName: "pause.fill")
+                        .font(.title2)
+                        .imageScale(.medium)
+                }
+                .buttonStyle(TimerButtonStyle(tint: Color.bitNegative, size: buttonSize))
+                .accessibilityLabel("Pause Timer")
             }
         }
 
     }
 }
 
-// TODO: button design
 struct TimerButtonStyle: ButtonStyle {
     var tint: Color
+    var size: CGFloat = 70
     @Environment(\.isEnabled) private var isEnabled
 
     func makeBody(configuration: Configuration) -> some View {
         let pressed = configuration.isPressed
         return configuration.label
-            .font(.system(size: 20, weight: .semibold, design: .rounded))
-            .frame(maxWidth: 47, minHeight: 47)
+            .frame(minWidth: size, minHeight: size)
             .foregroundStyle(.white)
             .background(
-                Capsule()
+                Circle()
                     .fill(
                         (isEnabled ? tint : .gray)
                             .opacity(pressed ? 0.7 : 1.0)

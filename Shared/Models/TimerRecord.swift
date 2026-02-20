@@ -15,7 +15,7 @@ final class TimerRecord {
     var finished: Bool
     var elapsedSeconds: Int
 
-    // timer templete 저장할 수 있게 값 snapshot
+    // timer templete Save할 수 있게 값 snapshot
     var snapshotMainSeconds: Int
     var snapshotPrealertOffsetsSec: [Int]
 

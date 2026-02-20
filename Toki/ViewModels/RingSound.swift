@@ -8,15 +8,15 @@
 import AudioToolbox
 import AVFoundation
 
-/// 소리 혹은 진동을 재생하는 함수
+/// Sound 혹은 Vibration을 재생하는 함수
 func ring() {
     let ringMode = UserDefaults.standard.string(forKey: "ringMode") ?? RingMode.sound.rawValue
 
     if ringMode == RingMode.vibration.rawValue {
-        /// 진동
+        /// Vibration
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
     } else {
-        /// 소리
+        /// Sound
         let soundID: SystemSoundID = 1005
         AudioServicesPlaySystemSound(soundID)
     }

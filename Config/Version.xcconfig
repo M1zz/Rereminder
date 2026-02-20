@@ -1,0 +1,15 @@
+//
+//  Version.xcconfig
+//  Toki
+//
+//  중앙 버전 관리 파일
+//  모든 타겟(iOS, Watch, Widget)의 버전을 여기서 관리합니다.
+//
+
+// 앱 버전 (사용자에게 보이는 버전)
+// App Store에 표시되는 버전 번호입니다.
+MARKETING_VERSION = 2.0.0
+
+// 빌드 번호 (내부 빌드 번호)
+// 각 빌드마다 증가시켜야 합니다.
+CURRENT_PROJECT_VERSION = 2
