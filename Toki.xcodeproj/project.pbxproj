@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2B302B142E4375170089A14A /* WatchToki Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2B302B0A2E4375150089A14A /* WatchToki Watch App.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		581D85DC2F48C24200F2F032 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 581D85DB2F48C24200F2F032 /* StoreKit.framework */; };
 		58AA3EB02ECF5509007D4BBD /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AA3EAF2ECF5509007D4BBD /* WidgetKit.framework */; };
 		58AA3EB22ECF5509007D4BBD /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AA3EB12ECF5509007D4BBD /* SwiftUI.framework */; };
 		58AA3EC32ECF550B007D4BBD /* TokiAlarmExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 58AA3EAD2ECF5509007D4BBD /* TokiAlarmExtension.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -58,6 +59,7 @@
 /* Begin PBXFileReference section */
 		260414CB2E1B9FA200CBA29B /* Toki.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Toki.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B302B0A2E4375150089A14A /* WatchToki Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WatchToki Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		581D85DB2F48C24200F2F032 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		58AA3EAD2ECF5509007D4BBD /* TokiAlarmExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = TokiAlarmExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		58AA3EAF2ECF5509007D4BBD /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		58AA3EB12ECF5509007D4BBD /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -82,6 +84,7 @@
 		9C1569E52ED04576004A4BB4 /* Exceptions for "Shared" folder in "WatchToki Watch App" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Modules/AppName.swift,
 				Modules/WatchConnectivityManager.swift,
 			);
 			target = 2B302B092E4375150089A14A /* WatchToki Watch App */;
@@ -141,6 +144,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				581D85DC2F48C24200F2F032 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,6 +193,7 @@
 		58AA3EAE2ECF5509007D4BBD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				581D85DB2F48C24200F2F032 /* StoreKit.framework */,
 				58AA3EAF2ECF5509007D4BBD /* WidgetKit.framework */,
 				58AA3EB12ECF5509007D4BBD /* SwiftUI.framework */,
 			);

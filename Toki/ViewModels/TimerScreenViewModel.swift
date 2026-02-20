@@ -17,7 +17,7 @@ import SwiftUI
 final class TimerScreenViewModel: ObservableObject {
     @Published var mainMinutes: Int = 10
     @Published var mainSeconds: Int = 0
-    @Published var selectedOffsets: Set<Int> = [60, 180, 300]
+    @Published var selectedOffsets: Set<Int> = [60, 300]  // 무료 기본 2개 (1분, 5분)
     @Published private(set) var configuredMainSeconds: Int = 600
     @Published var showTimerAlert: Bool = false
     @Published var prealertMessages: [Int: String] = [:]

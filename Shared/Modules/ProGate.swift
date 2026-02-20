@@ -21,7 +21,6 @@ enum ProGate {
         case customFinishMessage      // 커스텀 종료 메시지
         case unlimitedTemplates       // 템플릿 4개 이상 저장
         case labelColors              // 라벨 색상 커스텀 (기본 1색 외)
-        case unlimitedFavorites       // 즐겨찾기 4개 이상
         case timerHistory             // 타이머 사용 통계
 
         var displayName: String {
@@ -31,7 +30,6 @@ enum ProGate {
             case .customFinishMessage:    return "Custom Finish Message"
             case .unlimitedTemplates:     return "Unlimited Templates"
             case .labelColors:            return "Custom Label Colors"
-            case .unlimitedFavorites:     return "Unlimited Favorites"
             case .timerHistory:           return "Timer History & Stats"
             }
         }
@@ -43,7 +41,6 @@ enum ProGate {
             case .customFinishMessage:    return "bell.and.waves.left.and.right.fill"
             case .unlimitedTemplates:     return "square.stack.3d.up.fill"
             case .labelColors:            return "paintpalette.fill"
-            case .unlimitedFavorites:     return "star.fill"
             case .timerHistory:           return "chart.bar.fill"
             }
         }
@@ -53,7 +50,6 @@ enum ProGate {
 
     static let freePrealertLimit = 2
     static let freeTemplateLimit = 3
-    static let freeFavoriteLimit = 3
 
     // MARK: - Gate Checks
 
@@ -69,11 +65,6 @@ enum ProGate {
     /// 템플릿 저장 가능 여부
     static func canSaveTemplate(currentCount: Int) -> Bool {
         StoreManager.isProUser || currentCount < freeTemplateLimit
-    }
-
-    /// 즐겨찾기 추가 가능 여부
-    static func canAddFavorite(currentCount: Int) -> Bool {
-        StoreManager.isProUser || currentCount < freeFavoriteLimit
     }
 
     /// 라벨 색상 사용 가능 여부 (무료는 기본 파란색만)

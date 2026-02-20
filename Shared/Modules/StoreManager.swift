@@ -171,7 +171,7 @@ final class StoreManager: ObservableObject {
 
     // MARK: - Helpers
 
-    private func checkVerified<T>(_ result: VerificationResult<T>) throws -> T {
+    nonisolated private func checkVerified<T>(_ result: VerificationResult<T>) throws -> T {
         switch result {
         case .unverified(_, let error):
             throw error
@@ -227,7 +227,8 @@ extension StoreManager {
     }
 
     /// 빠른 Pro 체크 (저장된 값, 네트워크 불필요)
-    static var isProUser: Bool {
+    /// nonisolated — Keychain/UserDefaults만 읽으므로 어디서든 호출 가능
+    nonisolated static var isProUser: Bool {
         KeychainHelper.load(key: "toki.pro.purchased") ?? UserDefaults.standard.bool(forKey: "toki.pro.purchased")
     }
 }

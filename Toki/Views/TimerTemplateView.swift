@@ -40,6 +40,7 @@ struct TimerTemplateView: View {
     @State private var editLabel: String = ""
     @State private var editColorHex: String = "#007AFF"
     @State private var showPaywall = false
+    @State private var paywallFeature: ProGate.Feature? = .unlimitedTemplates
 
     let onSelect: (Timer) -> Void
 
@@ -67,6 +68,7 @@ struct TimerTemplateView: View {
             .safeAreaInset(edge: .bottom) {
                 if !StoreManager.isProUser && templates.count >= ProGate.freeTemplateLimit {
                     Button {
+                        paywallFeature = .unlimitedTemplates
                         showPaywall = true
                     } label: {
                         HStack(spacing: 8) {
@@ -85,7 +87,7 @@ struct TimerTemplateView: View {
                     .padding(.bottom, 8)
                 }
             }
-            .paywallGate(isPresented: $showPaywall, feature: .unlimitedTemplates)
+            .paywallGate(isPresented: $showPaywall, feature: paywallFeature)
         }
         .sheet(item: $editingTimer) { timer in
             editSheet(for: timer)
@@ -245,22 +247,39 @@ struct TimerTemplateView: View {
 
     @ViewBuilder
     private func colorButton(label: String, colorHex: String) -> some View {
+        let isDefault = colorHex == "#007AFF"
+        let isLocked = !isDefault && !ProGate.canUseColor(colorHex)
+
         Button {
-            editLabel = label
-            editColorHex = colorHex
+            if isLocked {
+                paywallFeature = .labelColors
+                showPaywall = true
+            } else {
+                editLabel = label
+                editColorHex = colorHex
+            }
         } label: {
             VStack(spacing: 4) {
-                Circle()
-                    .fill(colorFromHex(colorHex))
-                    .frame(width: 40, height: 40)
-                    .overlay(
-                        Circle()
-                            .strokeBorder(editColorHex == colorHex ? Color.primary : Color.clear, lineWidth: 2)
-                    )
+                ZStack {
+                    Circle()
+                        .fill(colorFromHex(colorHex))
+                        .frame(width: 40, height: 40)
+                        .overlay(
+                            Circle()
+                                .strokeBorder(editColorHex == colorHex ? Color.primary : Color.clear, lineWidth: 2)
+                        )
+                        .opacity(isLocked ? 0.4 : 1.0)
+
+                    if isLocked {
+                        Image(systemName: "lock.fill")
+                            .font(.caption)
+                            .foregroundStyle(.white)
+                    }
+                }
 
                 Text(label)
                     .font(.caption2)
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(isLocked ? .secondary : .primary)
             }
         }
         .buttonStyle(.plain)

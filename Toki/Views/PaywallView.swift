@@ -83,7 +83,7 @@ struct PaywallView: View {
                 Text("Pay once, use forever")
                     .font(.headline)
             }
-            .foregroundStyle(.accentColor)
+            .foregroundStyle(Color.accentColor)
             .padding(.horizontal, 20)
             .padding(.vertical, 10)
             .background(
@@ -140,7 +140,7 @@ struct PaywallView: View {
                         .frame(width: 60)
                     Text("Pro")
                         .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(.accentColor)
+                        .foregroundStyle(Color.accentColor)
                         .frame(width: 60)
                 }
                 .padding(.horizontal, 16)
@@ -157,8 +157,8 @@ struct PaywallView: View {
                 Divider()
                 comparisonRow("Templates", free: "3", pro: "∞")
                 comparisonRow("Custom Messages", free: false, pro: true)
+                comparisonRow("Label Colors", free: "1", pro: "8")
                 comparisonRow("Timer History", free: false, pro: true)
-                comparisonRow("Label Colors", free: false, pro: true)
             }
             .background(Color(uiColor: .secondarySystemBackground).opacity(0.5))
             .cornerRadius(14)
@@ -192,7 +192,7 @@ struct PaywallView: View {
         } else if let text = value as? String {
             Text(text)
                 .font(.subheadline.weight(.medium))
-                .foregroundStyle(text == "∞" ? .accentColor : .primary)
+                .foregroundStyle(text == "∞" ? Color.accentColor : .primary)
         }
     }
 
@@ -273,7 +273,7 @@ struct PaywallView: View {
         } label: {
             Text("Restore Purchases")
                 .font(.subheadline)
-                .foregroundStyle(.accentColor)
+                .foregroundStyle(Color.accentColor)
         }
     }
 

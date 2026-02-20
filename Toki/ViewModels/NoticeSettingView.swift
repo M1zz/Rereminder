@@ -302,6 +302,34 @@ struct NoticeSettingView: View {
                 }
             }
 
+            Section(header: Text("Appearance")) {
+                NavigationLink {
+                    ThemeSettingView()
+                } label: {
+                    HStack {
+                        Label("Theme", systemImage: "paintpalette.fill")
+                        Spacer()
+                        Circle()
+                            .fill(ThemeManager.shared.accentColor)
+                            .frame(width: 20, height: 20)
+                    }
+                }
+            }
+
+            Section(header: Text("Data")) {
+                NavigationLink {
+                    TimerHistoryView()
+                } label: {
+                    HStack {
+                        Label("Timer History", systemImage: "chart.bar.fill")
+                        Spacer()
+                        if !StoreManager.isProUser {
+                            ProBadge(small: true)
+                        }
+                    }
+                }
+            }
+
             Section(header: Text("Help")) {
                 Button {
                     showOnboarding = true
