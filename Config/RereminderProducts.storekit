@@ -1,12 +1,12 @@
 {
-  "identifier" : "com.Ysoup.TokenMemo.products",
+  "identifier" : "com.xa.toki.products",
   "type" : "Configuration",
   "version" : 3,
   "products" : [
     {
       "displayPrice" : "4900",
       "familyShareable" : true,
-      "id" : "com.Ysoup.TokenMemo.pro",
+      "id" : "com.xa.toki.pro",
       "internalID" : "pro_001",
       "locale" : "ko_KR",
       "localizations" : [
@@ -21,13 +21,13 @@
           "locale" : "en_US"
         }
       ],
-      "productID" : "com.Ysoup.TokenMemo.pro",
+      "productID" : "com.xa.toki.pro",
       "referenceName" : "Rereminder Pro (Lifetime)",
       "type" : "NonConsumable"
     }
   ],
   "settings" : {
-    "_applicationInternalID" : "toki",
+    "_applicationInternalID" : "rereminder",
     "_developerTeamID" : ""
   }
 }

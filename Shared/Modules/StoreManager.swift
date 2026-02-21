@@ -17,7 +17,7 @@ final class StoreManager: ObservableObject {
     // MARK: - Product IDs
 
     enum ProductID: String, CaseIterable {
-        case pro = "com.Ysoup.TokenMemo.pro"
+        case pro = "com.xa.toki.pro"
     }
 
     // MARK: - Published State
@@ -42,14 +42,43 @@ final class StoreManager: ObservableObject {
     // MARK: - Private
 
     private var transactionListener: Task<Void, Error>?
-    private let keychainKey = "toki.pro.purchased"
-    private let defaultsKey = "toki.pro.purchased"
+    private let keychainKey = "rereminder.pro.purchased"
+    private let defaultsKey = "rereminder.pro.purchased"
+
+    // MARK: - Grandfathering
+
+    /// Pro 잠금 도입 전 기존 사용자에게 무료 Pro 부여
+    private static let grandfatherCheckKey = "rereminder.grandfather.checked"
+
+    private func grandfatherExistingUserIfNeeded() {
+        let defaults = UserDefaults.standard
+
+        // 이미 체크 완료된 경우 스킵
+        guard !defaults.bool(forKey: Self.grandfatherCheckKey) else { return }
+        defaults.set(true, forKey: Self.grandfatherCheckKey)
+
+        // 이미 Pro인 경우 스킵
+        guard !isPro else { return }
+
+        // Pro 도입 전에 앱을 사용한 흔적이 있는지 확인
+        let isExistingUser = defaults.string(forKey: "selectedThemeID") != nil
+            || defaults.bool(forKey: "pushEnabled")
+            || defaults.integer(forKey: "timerCompletionCount") > 0
+
+        if isExistingUser {
+            isPro = true
+            savePurchaseState(true)
+        }
+    }
 
     // MARK: - Init
 
     private init() {
         // 저장된 구매 상태 로드
         isPro = loadPurchaseState()
+
+        // 기존 사용자 무료 Pro 부여
+        grandfatherExistingUserIfNeeded()
 
         // Transaction 감시 시작
         transactionListener = listenForTransactions()
@@ -229,6 +258,6 @@ extension StoreManager {
     /// 빠른 Pro 체크 (저장된 값, 네트워크 불필요)
     /// nonisolated — Keychain/UserDefaults만 읽으므로 어디서든 호출 가능
     nonisolated static var isProUser: Bool {
-        KeychainHelper.load(key: "toki.pro.purchased") ?? UserDefaults.standard.bool(forKey: "toki.pro.purchased")
+        KeychainHelper.load(key: "rereminder.pro.purchased") ?? UserDefaults.standard.bool(forKey: "rereminder.pro.purchased")
     }
 }
