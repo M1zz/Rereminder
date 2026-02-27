@@ -1,6 +1,6 @@
 //
 //  AppStateManager.swift
-//  Toki
+//  Rereminder
 //
 //  Created by 광로 on 9/13/25.
 //

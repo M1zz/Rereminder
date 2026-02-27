@@ -1,6 +1,6 @@
 //
 //  Version.xcconfig
-//  Toki
+//  Rereminder
 //
 //  중앙 버전 관리 파일
 //  모든 타겟(iOS, Watch, Widget)의 버전을 여기서 관리합니다.

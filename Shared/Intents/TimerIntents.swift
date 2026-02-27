@@ -1,6 +1,6 @@
 //
 //  TimerIntents.swift
-//  Toki
+//  Rereminder
 //
 //  App Intents for AlarmKit timer controls
 //

@@ -1,6 +1,6 @@
 //
 //  ThemeManager.swift
-//  Toki
+//  Rereminder
 //
 //  앱 전체 키 컬러(액센트) 테마 관리
 //

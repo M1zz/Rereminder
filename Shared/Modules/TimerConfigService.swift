@@ -1,6 +1,6 @@
 //
 //  TimerConfigService.swift
-//  Toki
+//  Rereminder
 //
 //  타이머 템플릿 CRUD & 설정 관리
 //  TimerScreenViewModel에서 분리

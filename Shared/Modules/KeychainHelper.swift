@@ -1,6 +1,6 @@
 //
 //  KeychainHelper.swift
-//  Toki
+//  Rereminder
 //
 //  구매 상태를 Keychain에 저장 (앱 삭제 후 재설치에도 유지)
 //
@@ -18,7 +18,7 @@ enum KeychainHelper {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: key,
-            kSecAttrService as String: Bundle.main.bundleIdentifier ?? "com.Ysoup.Toki",
+            kSecAttrService as String: Bundle.main.bundleIdentifier ?? "com.Ysoup.Rereminder",
         ]
 
         SecItemDelete(query as CFDictionary)
@@ -38,7 +38,7 @@ enum KeychainHelper {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: key,
-            kSecAttrService as String: Bundle.main.bundleIdentifier ?? "com.Ysoup.Toki",
+            kSecAttrService as String: Bundle.main.bundleIdentifier ?? "com.Ysoup.Rereminder",
             kSecReturnData as String: true,
             kSecMatchLimit as String: kSecMatchLimitOne,
         ]
@@ -58,7 +58,7 @@ enum KeychainHelper {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: key,
-            kSecAttrService as String: Bundle.main.bundleIdentifier ?? "com.Ysoup.Toki",
+            kSecAttrService as String: Bundle.main.bundleIdentifier ?? "com.Ysoup.Rereminder",
         ]
         SecItemDelete(query as CFDictionary)
     }

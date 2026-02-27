@@ -1,0 +1,33 @@
+{
+  "identifier" : "com.xa.toki.products",
+  "type" : "Configuration",
+  "version" : 3,
+  "products" : [
+    {
+      "displayPrice" : "4900",
+      "familyShareable" : true,
+      "id" : "com.xa.toki.pro",
+      "internalID" : "pro_001",
+      "locale" : "ko_KR",
+      "localizations" : [
+        {
+          "description" : "모든 기능을 잠금 해제합니다. 한번 구매, 평생 사용.",
+          "displayName" : "두번알림 Pro",
+          "locale" : "ko_KR"
+        },
+        {
+          "description" : "Unlock all features. Pay once, use forever.",
+          "displayName" : "Rereminder Pro",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.xa.toki.pro",
+      "referenceName" : "Rereminder Pro (Lifetime)",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "rereminder",
+    "_developerTeamID" : ""
+  }
+}

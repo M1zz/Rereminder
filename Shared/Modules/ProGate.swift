@@ -1,6 +1,6 @@
 //
 //  ProGate.swift
-//  Toki
+//  Rereminder
 //
 //  무료/Pro 기능 제한 게이트
 //
