@@ -121,8 +121,8 @@ struct TimerTemplateView: View {
                                 .fontWeight(.semibold)
                                 .padding(.horizontal, 8)
                                 .padding(.vertical, 3)
-                                .background(colorFromHex(timer.colorHex).opacity(0.2))
-                                .foregroundStyle(colorFromHex(timer.colorHex))
+                                .background(Color(hex:timer.colorHex).opacity(0.2))
+                                .foregroundStyle(Color(hex:timer.colorHex))
                                 .cornerRadius(6)
                         }
 
@@ -217,7 +217,7 @@ struct TimerTemplateView: View {
                     HStack {
                         Text("Selected Color:")
                         Circle()
-                            .fill(colorFromHex(editColorHex))
+                            .fill(Color(hex:editColorHex))
                             .frame(width: 24, height: 24)
                         Text(editColorHex)
                             .font(.caption)
@@ -267,7 +267,7 @@ struct TimerTemplateView: View {
             VStack(spacing: 4) {
                 ZStack {
                     Circle()
-                        .fill(colorFromHex(colorHex))
+                        .fill(Color(hex:colorHex))
                         .frame(width: 40, height: 40)
                         .overlay(
                             Circle()
@@ -312,19 +312,4 @@ struct TimerTemplateView: View {
         }
     }
 
-    private func colorFromHex(_ hex: String) -> Color {
-        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        var int: UInt64 = 0
-        Scanner(string: hex).scanHexInt64(&int)
-        let r, g, b: UInt64
-        switch hex.count {
-        case 3: // RGB (12-bit)
-            (r, g, b) = ((int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-        case 6: // RGB (24-bit)
-            (r, g, b) = (int >> 16, int >> 8 & 0xFF, int & 0xFF)
-        default:
-            (r, g, b) = (0, 122, 255) // 기본 파란색
-        }
-        return Color(red: Double(r) / 255, green: Double(g) / 255, blue: Double(b) / 255)
-    }
 }

@@ -27,10 +27,7 @@ enum KeychainHelper {
         addQuery[kSecValueData as String] = data
         addQuery[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlock
 
-        let status = SecItemAdd(addQuery as CFDictionary, nil)
-        if status != errSecSuccess {
-            print("⚠️ Keychain 저장 실패: \(status)")
-        }
+        SecItemAdd(addQuery as CFDictionary, nil)
     }
 
     /// Keychain에서 Bool 값 로드

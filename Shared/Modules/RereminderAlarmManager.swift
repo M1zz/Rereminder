@@ -71,33 +71,24 @@ class RereminderAlarmManager: ObservableObject {
         // 기존 알람 Cancel
         try await cancelAll()
 
-        print("⚠️ AlarmKit Timer 스케줄은 현재 비활성화되어 있습니다")
-        print("   기본 Timer 엔진만 사용합니다")
-
         // AlarmKit API 구조가 변경되어 임시로 비활성화
         // 기본 Timer 기능(TimerEngine)은 정상 작동합니다
     }
 
     // MARK: - Control Methods
 
-    func pause() async throws {
-        print("⏸️ AlarmKit Pause (비활성화됨)")
-    }
+    func pause() async throws {}
 
-    func resume() async throws {
-        print("▶️ AlarmKit Resume (비활성화됨)")
-    }
+    func resume() async throws {}
 
     func stop() async throws {
         currentAlarmID = nil
-        print("⏹️ AlarmKit Stop (비활성화됨)")
     }
 
     // MARK: - Cancel
 
     func cancelAll() async throws {
         currentAlarmID = nil
-        print("🗑️ AlarmKit Cancel (비활성화됨)")
     }
 }
 
@@ -133,12 +124,9 @@ class RereminderAlarmManager: ObservableObject {
 
     private init() {}
 
-    func checkAuthorizationStatus() {
-        print("⚠️ AlarmKit은 macOS에서 지원되지 않습니다")
-    }
+    func checkAuthorizationStatus() {}
 
     func requestAuthorization() async -> Bool {
-        print("⚠️ AlarmKit은 macOS에서 지원되지 않습니다")
         return false
     }
 
@@ -148,9 +136,7 @@ class RereminderAlarmManager: ObservableObject {
         prealertMessages: [Int: String] = [:],
         finishMessage: String? = nil,
         timerName: String? = nil
-    ) async throws {
-        print("⚠️ AlarmKit은 macOS에서 지원되지 않습니다")
-    }
+    ) async throws {}
 
     func pause() async throws {}
     func resume() async throws {}

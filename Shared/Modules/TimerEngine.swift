@@ -46,7 +46,7 @@ final class TimerEngine {
     private var timer: DispatchSourceTimer?
 
     // MARK: - Notification IDs
-    private static let notificationPrefix = "toki.timer."
+    private static let notificationPrefix = "rereminder.timer."
 
     // MARK: - Public API
 

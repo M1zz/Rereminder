@@ -42,23 +42,13 @@ final class AppStateManager: ObservableObject {
     }
 
     func sendNotificationIfNeeded(_ message: String) {
-        // 백그라운드에서 알림 전송
-        print("📱 [알림] sendNotificationIfNeeded 호출됨")
-        print("   - 메시지: \(message)")
-        print("   - 백그라운드 상태: \(isInBackground)")
-        print("   - Notification Permission: \(notificationAuthStatus)")
-
         if isInBackground {
-            print("   ✅ 백그라운드 상태 → 알림 전송 시도")
             pushPrealertNotice(message: message)
-        } else {
-            print("   ⚠️ 포그라운드 상태 → 알림 전송 안함")
         }
     }
 
     // 테스트용: 즉시 알림 전송
     func sendTestNotification() {
-        print("🧪 [테스트] 테스트 알림 전송 Start")
         let content = UNMutableNotificationContent()
         content.title = AppName.notification
         content.body = "Notifications are working correctly! 🎉"
@@ -69,9 +59,7 @@ final class AppStateManager: ObservableObject {
 
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
-                print("   ❌ 테스트 알림 전송 실패: \(error)")
-            } else {
-                print("   ✅ 테스트 알림 전송 성공")
+                print("❌ 테스트 알림 전송 실패: \(error)")
             }
         }
     }
@@ -79,11 +67,8 @@ final class AppStateManager: ObservableObject {
 
 private func pushPrealertNotice(message: String) {
     let pushEnabled = UserDefaults.standard.bool(forKey: "pushEnabled")
-    print("📤 [알림 전송] pushPrealertNotice Start")
-    print("   - pushEnabled: \(pushEnabled)")
 
     guard pushEnabled else {
-        print("   ⚠️ pushEnabled가 꺼져있음 → 알림 전송 Cancel")
         return
     }
 
@@ -100,9 +85,7 @@ private func pushPrealertNotice(message: String) {
 
     center.add(request) { error in
         if let error = error {
-            print("   ❌ 알림 추가 실패: \(error)")
-        } else {
-            print("   ✅ 알림 추가 성공 (1sec later 전송)")
+            print("❌ 알림 추가 실패: \(error)")
         }
     }
 }

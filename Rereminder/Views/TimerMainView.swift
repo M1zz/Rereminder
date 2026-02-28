@@ -19,10 +19,8 @@ struct TimerMainView: View {
         return CGFloat(max(0, min(1, remaining / TimeInterval(TimeMapper.maxSeconds))))
     }
     private var markers: [CGFloat] {
-        return screenVM.selectedOffsets
-            .sorted()
+        return screenVM.sortedOffsetsDesc.reversed()
             .map { offset in
-                // offset(sec)을 각도로 변환 후 360도 대비 비율로 계산
                 CGFloat(offset) / TimeMapper.secondsPerDegree / 360.0
             }
     }
@@ -78,12 +76,8 @@ struct TimerMainView: View {
         }
         .fullScreenCover(isPresented: $screenVM.showTimerAlert) {
             TimerAlertView {
-                print("🎯 TimerAlertView OK 버튼 클릭 - Close")
                 screenVM.showTimerAlert = false
             }
-        }
-        .onChange(of: screenVM.showTimerAlert) { oldValue, newValue in
-            print("🔔 showTimerAlert 변경: \(oldValue) → \(newValue)")
         }
         .alert("Notification permission is required", isPresented: $screenVM.showPermissionWarning) {
             Button("Go to Settings", role: .none) {
