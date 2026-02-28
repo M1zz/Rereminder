@@ -84,10 +84,14 @@ struct SetNotiView: View {
         Button {
             guard !viewModel.selectedMinutes.isEmpty else { return }
             requestNotificationPermissionIfNeeded { _ in
-                // 모든 선택된 알림 스케줄
+                // 타이머 종료 N분 전에 알림 (종료 시점 기준으로 계산)
+                let mainDuration = viewModel.maxTimeInSeconds
                 for minute in viewModel.selectedMinutes {
-                    let seconds = TimeInterval(minute * 60)
-                    schedulePreFinishNotification(after: seconds, minutes: minute)
+                    let offsetSeconds = minute * 60
+                    let fireAfter = TimeInterval(mainDuration - offsetSeconds)
+                    if fireAfter > 0 {
+                        schedulePreFinishNotification(after: fireAfter, minutes: minute)
+                    }
                 }
             }
             // selectedMinutes를 배열로 변환해서 전달
