@@ -10,24 +10,33 @@ import Security
 
 enum KeychainHelper {
 
-    /// Bool 값을 Keychain에 저장
-    static func save(key: String, value: Bool) {
+    /// Bool 값을 Keychain에 저장. 실패 시 false 반환.
+    @discardableResult
+    static func save(key: String, value: Bool) -> Bool {
         let data = Data([value ? 1 : 0])
 
-        // 기존 항목 삭제 후 저장
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: key,
             kSecAttrService as String: Bundle.main.bundleIdentifier ?? "com.Ysoup.Rereminder",
         ]
 
+        // 기존 항목 삭제
         SecItemDelete(query as CFDictionary)
 
         var addQuery = query
         addQuery[kSecValueData as String] = data
         addQuery[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlock
 
-        SecItemAdd(addQuery as CFDictionary, nil)
+        let status = SecItemAdd(addQuery as CFDictionary, nil)
+        if status == errSecSuccess {
+            return true
+        }
+
+        // 실패 시 1회 재시도 (삭제 후 다시 저장)
+        SecItemDelete(query as CFDictionary)
+        let retryStatus = SecItemAdd(addQuery as CFDictionary, nil)
+        return retryStatus == errSecSuccess
     }
 
     /// Keychain에서 Bool 값 로드

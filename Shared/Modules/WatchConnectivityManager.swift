@@ -168,7 +168,25 @@ extension WatchConnectivityManager: WCSessionDelegate {
     }
 
     nonisolated func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
-        // 필요시 처리
+        Task { @MainActor in
+            guard let state = applicationContext["state"] as? String else { return }
+
+            switch state {
+            case "running":
+                if let duration = applicationContext["duration"] as? TimeInterval {
+                    let prealertOffsets = applicationContext["prealertOffsets"] as? [Int] ?? []
+                    let timestamp = applicationContext["timestamp"] as? TimeInterval ?? Date().timeIntervalSince1970
+                    let syncData = TimerSyncData(duration: duration, prealertOffsets: prealertOffsets, timestamp: timestamp)
+                    onTimerStart?(syncData)
+                }
+            case "paused":
+                onTimerPause?()
+            case "stopped", "idle":
+                onTimerStop?()
+            default:
+                break
+            }
+        }
     }
 }
 

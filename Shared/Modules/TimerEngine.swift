@@ -34,7 +34,13 @@ final class TimerEngine {
     // MARK: - State
     private(set) var config: Configuration?
     private(set) var endDate: Date?
-    private(set) var state: TimerState = .idle
+    private(set) var state: TimerState = .idle {
+        didSet {
+            // Control Center 위젯 등 Extension과 상태 공유
+            let isRunning = (state == .running || state == .overtime)
+            UserDefaults(suiteName: "group.leeo.toki")?.set(isRunning, forKey: "timerIsRunning")
+        }
+    }
 
     private var startDate: Date?
     private var pausedElapsed: TimeInterval = 0
