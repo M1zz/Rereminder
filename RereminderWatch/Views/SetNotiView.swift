@@ -91,7 +91,7 @@ struct SetNotiView: View {
                 }
             }
             // selectedMinutes를 배열로 변환해서 전달
-            let prealertOffsets = Array(viewModel.selectedMinutes)
+            let prealertOffsets = Array(viewModel.selectedMinutes.map { $0 * 60 })
             path.append(.timerViewMultiple(mainDuration: viewModel.maxTimeInSeconds, prealertOffsets: prealertOffsets))
         } label: {
             Text("Start Timer", comment: "Start Timer")

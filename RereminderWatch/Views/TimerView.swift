@@ -55,17 +55,16 @@ public struct TimerView: View {
 
                 // Pre-alerts 마커들 (다중)
                 ForEach(timerViewModel.prealertOffsets, id: \.self) { offset in
-                    let offsetSeconds = offset * 60
-                    if timerViewModel.mainDuration > offsetSeconds {
+                    if timerViewModel.mainDuration > offset {
                         Circle()
                             .fill(Color.orange)
                             .frame(width: 8, height: 8)
-                            .offset(alertMarkerOffset(offsetSeconds: offsetSeconds, ringSize: 120))
+                            .offset(alertMarkerOffset(offsetSeconds: offset, ringSize: 120))
 
-                        Text("\(offset)min")
+                        Text("\(offset / 60)min")
                             .font(.system(size: 9, weight: .bold, design: .rounded))
                             .foregroundColor(.orange)
-                            .offset(alertLabelOffset(offsetSeconds: offsetSeconds, ringSize: 120))
+                            .offset(alertLabelOffset(offsetSeconds: offset, ringSize: 120))
                     }
                 }
 
