@@ -86,7 +86,9 @@ public struct TimerView: View {
                     .font(.system(size: 36, weight: .bold, design: .rounded))
                     .monospacedDigit()
                     .minimumScaleFactor(0.5)
+                    .accessibilityLabel(String(localized: "Remaining time: \(timerViewModel.timeRemaining.formattedTimeString)"))
             }
+            .accessibilityElement(children: .combine)
 
             Spacer(minLength: 4)
 
@@ -103,6 +105,7 @@ public struct TimerView: View {
                 .buttonStyle(.bordered)
                 .tint(.gray)
                 .frame(height: 20)
+                .accessibilityLabel(String(localized: "Stop timer"))
 
                 Button {
                     timerViewModel.togglePause()
@@ -113,6 +116,7 @@ public struct TimerView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .frame(height: 20)
+                .accessibilityLabel(timerViewModel.isPaused ? String(localized: "Resume timer") : String(localized: "Pause timer"))
             }
             .padding(.bottom, 4)
         }

@@ -127,6 +127,8 @@ struct SetNotiView: View {
         .disabled(disabled)
         .opacity(disabled ? 0.4 : 1.0)
         .buttonStyle(.plain)
+        .accessibilityLabel(String(localized: "\(minutes) minute pre-alert"))
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     private func customMinutesSheet(maxMinute: Int) -> some View {
