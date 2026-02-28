@@ -84,14 +84,18 @@ struct SetNotiView: View {
         Button {
             guard !viewModel.selectedMinutes.isEmpty else { return }
             requestNotificationPermissionIfNeeded { _ in
-                // 모든 선택된 알림 스케줄
+                // 타이머 종료 N분 전에 알림 (종료 시점 기준으로 계산)
+                let mainDuration = viewModel.maxTimeInSeconds
                 for minute in viewModel.selectedMinutes {
-                    let seconds = TimeInterval(minute * 60)
-                    schedulePreFinishNotification(after: seconds, minutes: minute)
+                    let offsetSeconds = minute * 60
+                    let fireAfter = TimeInterval(mainDuration - offsetSeconds)
+                    if fireAfter > 0 {
+                        schedulePreFinishNotification(after: fireAfter, minutes: minute)
+                    }
                 }
             }
             // selectedMinutes를 배열로 변환해서 전달
-            let prealertOffsets = Array(viewModel.selectedMinutes)
+            let prealertOffsets = Array(viewModel.selectedMinutes.map { $0 * 60 })
             path.append(.timerViewMultiple(mainDuration: viewModel.maxTimeInSeconds, prealertOffsets: prealertOffsets))
         } label: {
             Text("Start Timer", comment: "Start Timer")
@@ -123,6 +127,8 @@ struct SetNotiView: View {
         .disabled(disabled)
         .opacity(disabled ? 0.4 : 1.0)
         .buttonStyle(.plain)
+        .accessibilityLabel(String(localized: "\(minutes) minute pre-alert"))
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
 
     private func customMinutesSheet(maxMinute: Int) -> some View {

@@ -58,7 +58,7 @@ final class TimerScreenViewModel: ObservableObject {
             let mainSeconds = Int(syncData.duration)
             self.mainMinutes = mainSeconds / 60
             self.mainSeconds = mainSeconds % 60
-            self.selectedOffsets = Set(syncData.prealertOffsets.map { $0 * 60 })
+            self.selectedOffsets = Set(syncData.prealertOffsets)
             self.applyCurrentSettings()
             self.timerVM.start()
             self.showToast?("⌚️ Timer started from Watch")

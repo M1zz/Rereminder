@@ -206,7 +206,7 @@ final class TimerEngine {
 
             let content = UNMutableNotificationContent()
             content.title = AppName.notification
-            content.body = "\(offInt / 60) min remaining"
+            content.body = String(localized: "\(offInt / 60) min remaining")
             content.sound = .default
 
             let trigger = UNTimeIntervalNotificationTrigger(
@@ -223,7 +223,7 @@ final class TimerEngine {
         if finishFireAfter > 0 {
             let content = UNMutableNotificationContent()
             content.title = AppName.notification
-            content.body = "Timer finished"
+            content.body = String(localized: "Timer finished")
             content.sound = .default
 
             let trigger = UNTimeIntervalNotificationTrigger(

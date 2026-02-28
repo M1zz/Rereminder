@@ -39,19 +39,20 @@ struct TimerAlertView: View {
 
                 // 메시지
                 VStack(spacing: 16) {
-                    Text("Timer Finished")
+                    Text("Timer Finished", comment: "Timer alert title")
                         .font(.system(size: 40, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
 
-                    Text("Time is up")
+                    Text("Time is up", comment: "Timer alert subtitle")
                         .font(.system(size: 20, weight: .medium))
                         .foregroundColor(.white.opacity(0.8))
                 }
                 .scaleEffect(scale)
+                .accessibilityElement(children: .combine)
 
                 // OK 버튼
                 Button(action: onDismiss) {
-                    Text("OK")
+                    Text("OK", comment: "Timer alert dismiss button")
                         .font(.system(size: 24, weight: .semibold, design: .rounded))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
@@ -61,8 +62,10 @@ struct TimerAlertView: View {
                         .padding(.horizontal, 50)
                 }
                 .scaleEffect(scale)
+                .accessibilityLabel(String(localized: "Dismiss timer alert"))
             }
         }
+        .accessibilityAddTraits(.isModal)
         .onAppear {
             // 애니메이션
             withAnimation(.spring(response: 0.6, dampingFraction: 0.6)) {

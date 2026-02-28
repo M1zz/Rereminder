@@ -59,6 +59,8 @@ struct SettingView: View {
         HStack(alignment: .center, spacing: 8) {
             MinuteWheel(selectedMinute: $settingViewModel.time.minute, range: minuteRange, selectionOffset: 0)
                 .frame(width: 90, height: 90)
+                .accessibilityLabel(String(localized: "Timer duration"))
+                .accessibilityValue(String(localized: "\(settingViewModel.time.minute) minutes"))
             
             Text("min", comment: "min")
                 .font(.system(size: 40, weight: .semibold, design: .rounded))

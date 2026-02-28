@@ -24,9 +24,9 @@ struct TimerHistoryView: View {
                     lockedView
                 } else if records.isEmpty {
                     ContentUnavailableView(
-                        "No timer history",
+                        String(localized: "No timer history"),
                         systemImage: "clock.badge.questionmark",
-                        description: Text("History will appear after you use timers")
+                        description: Text("History will appear after you use timers", comment: "History empty state")
                     )
                 } else {
                     List {
@@ -36,7 +36,7 @@ struct TimerHistoryView: View {
                     .listStyle(.insetGrouped)
                 }
             }
-            .navigationTitle("Timer History")
+            .navigationTitle(String(localized: "Timer History"))
             .navigationBarTitleDisplayMode(.inline)
             .paywallGate(isPresented: $showPaywall, feature: .timerHistory)
         }
@@ -53,9 +53,9 @@ struct TimerHistoryView: View {
                 .foregroundStyle(Color.accentColor.opacity(0.6))
 
             VStack(spacing: 8) {
-                Text("Timer History & Stats")
+                Text("Timer History & Stats", comment: "History locked title")
                     .font(.title2.weight(.bold))
-                Text("Track your timer usage patterns\nand improve your time management")
+                Text("Track your timer usage patterns\nand improve your time management", comment: "History locked description")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
@@ -63,9 +63,9 @@ struct TimerHistoryView: View {
 
             // 미리보기 (블러 처리)
             VStack(spacing: 12) {
-                previewStatRow("Total Sessions", value: "\(records.count)")
-                previewStatRow("Completed", value: "\(records.filter(\.finished).count)")
-                previewStatRow("Total Time", value: formatTotalTime())
+                previewStatRow(String(localized: "Total Sessions"), value: "\(records.count)")
+                previewStatRow(String(localized: "Completed"), value: "\(records.filter(\.finished).count)")
+                previewStatRow(String(localized: "Total Time"), value: formatTotalTime())
             }
             .padding(20)
             .background(
@@ -85,7 +85,7 @@ struct TimerHistoryView: View {
             } label: {
                 HStack(spacing: 8) {
                     ProBadge(small: true)
-                    Text("Unlock with Pro")
+                    Text("Unlock with Pro", comment: "History unlock button")
                         .font(.headline)
                 }
                 .foregroundStyle(.white)
@@ -115,21 +115,21 @@ struct TimerHistoryView: View {
     // MARK: - Stats Section (Pro)
 
     private var statsSection: some View {
-        Section(header: Text("Overview")) {
+        Section(header: Text("Overview", comment: "History stats section header")) {
             let completed = records.filter(\.finished)
             let totalElapsed = records.reduce(0) { $0 + $1.elapsedSeconds }
             let avgDuration = records.isEmpty ? 0 : totalElapsed / records.count
             let completionRate = records.isEmpty ? 0.0 : Double(completed.count) / Double(records.count) * 100
 
-            statRow("Total Sessions", value: "\(records.count)", icon: "play.circle.fill", color: .blue)
-            statRow("Completed", value: "\(completed.count)", icon: "checkmark.circle.fill", color: .green)
-            statRow("Completion Rate", value: String(format: "%.0f%%", completionRate), icon: "percent", color: .orange)
-            statRow("Total Time", value: formatTotalTime(), icon: "clock.fill", color: .purple)
-            statRow("Average Duration", value: formatSeconds(avgDuration), icon: "chart.line.uptrend.xyaxis", color: .cyan)
+            statRow(String(localized: "Total Sessions"), value: "\(records.count)", icon: "play.circle.fill", color: .blue)
+            statRow(String(localized: "Completed"), value: "\(completed.count)", icon: "checkmark.circle.fill", color: .green)
+            statRow(String(localized: "Completion Rate"), value: String(format: "%.0f%%", completionRate), icon: "percent", color: .orange)
+            statRow(String(localized: "Total Time"), value: formatTotalTime(), icon: "clock.fill", color: .purple)
+            statRow(String(localized: "Average Duration"), value: formatSeconds(avgDuration), icon: "chart.line.uptrend.xyaxis", color: .cyan)
 
             // 이번 주 사용
             let thisWeek = recordsThisWeek()
-            statRow("This Week", value: "\(thisWeek.count) sessions", icon: "calendar", color: .indigo)
+            statRow(String(localized: "This Week"), value: "\(thisWeek.count) \(String(localized: "sessions"))", icon: "calendar", color: .indigo)
         }
     }
 
@@ -155,7 +155,7 @@ struct TimerHistoryView: View {
     // MARK: - Records List (Pro)
 
     private var recordsSection: some View {
-        Section(header: Text("Recent Records")) {
+        Section(header: Text("Recent Records", comment: "History records section header")) {
             ForEach(records.prefix(50)) { record in
                 recordRow(record)
             }
@@ -201,7 +201,7 @@ struct TimerHistoryView: View {
                 Text(formatSeconds(record.elapsedSeconds))
                     .font(.caption.weight(.medium))
                     .foregroundStyle(.primary)
-                Text(record.finished ? "completed" : "stopped")
+                Text(record.finished ? String(localized: "completed") : String(localized: "stopped"))
                     .font(.caption2)
                     .foregroundStyle(record.finished ? .green : .secondary)
             }

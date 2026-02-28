@@ -87,7 +87,7 @@ final class ReviewRequestManager {
     func openAppStoreReviewPage() {
         #if canImport(UIKit)
         // App Store 리뷰 페이지로 Custom 이동
-        if let appStoreURL = URL(string: "https://apps.apple.com/app/id6503638387?action=write-review") {
+        if let appStoreURL = URL(string: "https://apps.apple.com/app/id6752551268?action=write-review") {
             UIApplication.shared.open(appStoreURL)
             print("📱 App Store 리뷰 페이지 열기")
         }

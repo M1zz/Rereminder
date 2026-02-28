@@ -63,7 +63,11 @@ final class TimerConfigService {
             finishMessage: normalizedFinish
         )
         ctx.insert(entry)
-        try? ctx.save()
+        do {
+            try ctx.save()
+        } catch {
+            print("❌ 타이머 템플릿 저장 실패: \(error)")
+        }
 
         // limit 초과 시 삭제
         let recents = fetchRecents()
@@ -71,7 +75,11 @@ final class TimerConfigService {
             for old in recents.dropFirst(templateLimit) {
                 ctx.delete(old)
             }
-            try? ctx.save()
+            do {
+                try ctx.save()
+            } catch {
+                print("❌ 오래된 템플릿 삭제 실패: \(error)")
+            }
         }
     }
 

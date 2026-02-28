@@ -88,10 +88,7 @@ struct StopIntent: LiveActivityIntent {
 
 struct OpenAlarmAppIntent: LiveActivityIntent {
     func perform() throws -> some IntentResult {
-        NotificationCenter.default.post(
-            name: NSNotification.Name("StopTimerIntent"),
-            object: nil
-        )
+        // 앱만 열고 타이머는 중지하지 않음
         return .result()
     }
 

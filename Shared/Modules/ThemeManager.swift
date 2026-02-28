@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+#if canImport(UIKit)
+import UIKit
+#endif
 
 @MainActor
 final class ThemeManager: ObservableObject {
@@ -58,7 +61,30 @@ final class ThemeManager: ObservableObject {
 
     func select(_ theme: Theme) {
         currentTheme = theme
+        #if canImport(UIKit)
+        Self.applyTintColor(hex: theme.hex)
+        #endif
     }
+
+    /// 앱 시작 시 UIKit tintColor를 즉시 설정하여 SwiftUI .tint() 적용 전 깜빡임 방지
+    static func applyInitialTint() {
+        #if canImport(UIKit)
+        let savedID = UserDefaults.standard.string(forKey: "selectedThemeID") ?? "blue"
+        let hex = Theme.presets.first { $0.id == savedID }?.hex ?? "007AFF"
+        applyTintColor(hex: hex)
+        #endif
+    }
+
+    #if canImport(UIKit)
+    private static func applyTintColor(hex: String) {
+        var int: UInt64 = 0
+        Scanner(string: hex).scanHexInt64(&int)
+        let r = CGFloat((int >> 16) & 0xFF) / 255
+        let g = CGFloat((int >> 8) & 0xFF) / 255
+        let b = CGFloat(int & 0xFF) / 255
+        UIView.appearance().tintColor = UIColor(red: r, green: g, blue: b, alpha: 1)
+    }
+    #endif
 
     func isLocked(_ theme: Theme) -> Bool {
         !StoreManager.isProUser && !Theme.freeIDs.contains(theme.id)

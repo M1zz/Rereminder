@@ -465,7 +465,7 @@ struct NoticeSettingView: View {
     }
 
     private func shareApp() {
-        guard let appURL = URL(string: "https://apps.apple.com/app/toki") else { return }
+        guard let appURL = URL(string: "https://apps.apple.com/app/rereminder-smart-alarm/id6752551268") else { return }
 
         let activityViewController = UIActivityViewController(
             activityItems: [

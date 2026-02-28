@@ -151,7 +151,14 @@ final class StoreManager: ObservableObject {
         purchaseState = .purchasing
 
         // AppStore에 동기화 요청
-        try? await AppStore.sync()
+        do {
+            try await AppStore.sync()
+        } catch {
+            print("❌ AppStore 동기화 실패: \(error)")
+            purchaseState = .failed
+            errorMessage = String(localized: "Failed to sync with App Store. Please check your network connection.")
+            return
+        }
 
         await verifyCurrentEntitlements()
 
@@ -159,7 +166,9 @@ final class StoreManager: ObservableObject {
             purchaseState = .restored
         } else {
             purchaseState = .idle
-            errorMessage = "No purchases to restore"
+            if errorMessage == nil {
+                errorMessage = String(localized: "No purchases to restore")
+            }
         }
     }
 
@@ -168,19 +177,28 @@ final class StoreManager: ObservableObject {
     /// 현재 유효한 구매 내역 확인 (앱 시작 시, 복원 시 호출)
     func verifyCurrentEntitlements() async {
         var foundPro = false
+        var verificationFailed = false
 
         for await result in Transaction.currentEntitlements {
-            if let transaction = try? checkVerified(result) {
+            do {
+                let transaction = try checkVerified(result)
                 if transaction.productID == ProductID.pro.rawValue {
                     foundPro = true
                     await transaction.finish()
                 }
+            } catch {
+                print("❌ 트랜잭션 검증 실패: \(error)")
+                verificationFailed = true
             }
         }
 
         if foundPro != isPro {
             isPro = foundPro
             savePurchaseState(foundPro)
+        }
+
+        if verificationFailed && !foundPro {
+            errorMessage = String(localized: "Purchase verification failed. Please try restoring purchases.")
         }
     }
 

@@ -165,7 +165,11 @@ final class TimerViewModel: ObservableObject {
 
         context.insert(record)
         template.lastUsedAt = Date()
-        try? context.save()
+        do {
+            try context.save()
+        } catch {
+            print("❌ 타이머 기록 저장 실패: \(error)")
+        }
 
         if finished {
             ReviewRequestManager.shared.recordTimerCompletion()

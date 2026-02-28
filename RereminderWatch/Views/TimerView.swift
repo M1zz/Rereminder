@@ -55,17 +55,16 @@ public struct TimerView: View {
 
                 // Pre-alerts 마커들 (다중)
                 ForEach(timerViewModel.prealertOffsets, id: \.self) { offset in
-                    let offsetSeconds = offset * 60
-                    if timerViewModel.mainDuration > offsetSeconds {
+                    if timerViewModel.mainDuration > offset {
                         Circle()
                             .fill(Color.orange)
                             .frame(width: 8, height: 8)
-                            .offset(alertMarkerOffset(offsetSeconds: offsetSeconds, ringSize: 120))
+                            .offset(alertMarkerOffset(offsetSeconds: offset, ringSize: 120))
 
-                        Text("\(offset)min")
+                        Text("\(offset / 60)min")
                             .font(.system(size: 9, weight: .bold, design: .rounded))
                             .foregroundColor(.orange)
-                            .offset(alertLabelOffset(offsetSeconds: offsetSeconds, ringSize: 120))
+                            .offset(alertLabelOffset(offsetSeconds: offset, ringSize: 120))
                     }
                 }
 
@@ -87,7 +86,9 @@ public struct TimerView: View {
                     .font(.system(size: 36, weight: .bold, design: .rounded))
                     .monospacedDigit()
                     .minimumScaleFactor(0.5)
+                    .accessibilityLabel(String(localized: "Remaining time: \(timerViewModel.timeRemaining.formattedTimeString)"))
             }
+            .accessibilityElement(children: .combine)
 
             Spacer(minLength: 4)
 
@@ -104,6 +105,7 @@ public struct TimerView: View {
                 .buttonStyle(.bordered)
                 .tint(.gray)
                 .frame(height: 20)
+                .accessibilityLabel(String(localized: "Stop timer"))
 
                 Button {
                     timerViewModel.togglePause()
@@ -114,6 +116,7 @@ public struct TimerView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .frame(height: 20)
+                .accessibilityLabel(timerViewModel.isPaused ? String(localized: "Resume timer") : String(localized: "Pause timer"))
             }
             .padding(.bottom, 4)
         }
