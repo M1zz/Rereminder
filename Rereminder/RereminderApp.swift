@@ -15,6 +15,9 @@ struct RereminderApp: App {
     init() {
         // WatchConnectivity 초기화
         _ = WatchConnectivityManager.shared
+
+        // 앱 시작 시 UIWindow tintColor를 즉시 설정하여 색상 깜빡임 방지
+        ThemeManager.applyInitialTint()
     }
 
     var body: some Scene {

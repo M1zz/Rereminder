@@ -151,13 +151,12 @@ class TimerViewModel: ObservableObject {
         // 다중 Pre-alerts
         if !prealertOffsets.isEmpty {
             for offset in prealertOffsets {
-                let offsetSeconds = offset * 60
-                if duration > offsetSeconds {
-                    let pointTime = duration - offsetSeconds
+                if duration > offset {
+                    let pointTime = duration - offset
                     notificationService.scheduleNotification(
                         timeInterval: TimeInterval(pointTime),
                         title: AppName.notification,
-                        body: "\(offset) min remaining",
+                        body: "\(offset / 60) min remaining",
                         identifier: "prealert_\(offset)"
                     )
                 }

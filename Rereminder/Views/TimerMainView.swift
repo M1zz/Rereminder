@@ -393,7 +393,7 @@ struct TimerMainView: View {
             )
         ) {
             HStack(spacing: 4) {
-                Text("\(sec/60) \(String(localized: "min"))")
+                Text(String(localized: "\(sec/60) min"))
                     .font(.system(size: 14, weight: .medium))
 
                 // 제한 초과 프리셋에 잠금 아이콘

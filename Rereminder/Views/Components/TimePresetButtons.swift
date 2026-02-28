@@ -27,7 +27,7 @@ struct TimePresetButtons: View {
                             screenVM.mainMinutes = minutes
                             screenVM.mainSeconds = 0
                         }) {
-                            Text("\(minutes) \(String(localized: "min"))")
+                            Text(String(localized: "\(minutes) min"))
                                 .font(.subheadline.weight(.medium))
                                 .padding(.horizontal, 12)
                                 .padding(.vertical, 8)

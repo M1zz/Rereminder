@@ -31,8 +31,11 @@ struct PauseTimerIntent: LiveActivityIntent {
     func perform() async throws -> some IntentResult {
         print("⏸️ Intent: Pause 요청 - \(alarmID)")
 
-        // AlarmManager를 통해 Custom 제어
-        try AlarmManager.shared.pause(id: UUID(uuidString: alarmID)!)
+        guard let uuid = UUID(uuidString: alarmID) else {
+            print("❌ Invalid alarmID: \(alarmID)")
+            return .result()
+        }
+        try AlarmManager.shared.pause(id: uuid)
 
         return .result()
     }
@@ -58,8 +61,11 @@ struct ResumeTimerIntent: LiveActivityIntent {
     func perform() async throws -> some IntentResult {
         print("▶️ Intent: Resume 요청 - \(alarmID)")
 
-        // AlarmManager를 통해 Custom 제어
-        try AlarmManager.shared.resume(id: UUID(uuidString: alarmID)!)
+        guard let uuid = UUID(uuidString: alarmID) else {
+            print("❌ Invalid alarmID: \(alarmID)")
+            return .result()
+        }
+        try AlarmManager.shared.resume(id: uuid)
 
         return .result()
     }
@@ -85,8 +91,11 @@ struct StopTimerIntent: LiveActivityIntent {
     func perform() async throws -> some IntentResult {
         print("⏹️ Intent: Stop 요청 - \(alarmID)")
 
-        // AlarmManager를 통해 Custom 제어
-        try AlarmManager.shared.stop(id: UUID(uuidString: alarmID)!)
+        guard let uuid = UUID(uuidString: alarmID) else {
+            print("❌ Invalid alarmID: \(alarmID)")
+            return .result()
+        }
+        try AlarmManager.shared.stop(id: uuid)
 
         return .result()
     }

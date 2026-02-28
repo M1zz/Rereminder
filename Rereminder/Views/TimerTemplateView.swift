@@ -110,6 +110,7 @@ struct TimerTemplateView: View {
                         .font(.title3)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(timer.isFavorite ? String(localized: "Remove from favorites") : String(localized: "Add to favorites"))
 
                 VStack(alignment: .leading, spacing: 6) {
                     HStack(spacing: 8) {
@@ -142,7 +143,7 @@ struct TimerTemplateView: View {
                     let sMain = timer.mainSeconds % 60
                     let preList = timer.prealertOffsetsSec
                         .sorted()
-                        .map { "\($0/60) \(String(localized: "min"))" }
+                        .map { String(localized: "\($0/60) min") }
                         .joined(separator: ", ")
 
                     Text(sMain > 0 ? "Main \(mMain) min \(sMain) sec" : "Main \(mMain) min")
@@ -237,7 +238,11 @@ struct TimerTemplateView: View {
                         timer.name = editName
                         timer.label = editLabel
                         timer.colorHex = editColorHex
-                        try? context.save()
+                        do {
+                            try context.save()
+                        } catch {
+                            print("❌ 템플릿 편집 저장 실패: \(error)")
+                        }
                         editingTimer = nil
                     }
                 }
@@ -288,14 +293,22 @@ struct TimerTemplateView: View {
     private func toggleFavorite(_ timer: Timer) {
         withAnimation {
             timer.isFavorite.toggle()
-            try? context.save()
+            do {
+                try context.save()
+            } catch {
+                print("❌ 즐겨찾기 저장 실패: \(error)")
+            }
         }
     }
 
     private func delete(_ timer: Timer) {
         withAnimation {
             context.delete(timer)
-            try? context.save()
+            do {
+                try context.save()
+            } catch {
+                print("❌ 템플릿 삭제 실패: \(error)")
+            }
         }
     }
 
