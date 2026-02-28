@@ -53,7 +53,7 @@ struct NotificationService {
             if granted {
                 let content = self.makeContent(title: title, body: body, identifier: identifier)
                 
-                let triggerDate = Calendar.current.dateComponents([.hour, .minute, .second], from: date)
+                let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
                 let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
                 let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
                 
