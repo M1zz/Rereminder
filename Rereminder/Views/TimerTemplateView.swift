@@ -237,7 +237,11 @@ struct TimerTemplateView: View {
                         timer.name = editName
                         timer.label = editLabel
                         timer.colorHex = editColorHex
-                        try? context.save()
+                        do {
+                            try context.save()
+                        } catch {
+                            print("❌ 템플릿 편집 저장 실패: \(error)")
+                        }
                         editingTimer = nil
                     }
                 }
@@ -288,14 +292,22 @@ struct TimerTemplateView: View {
     private func toggleFavorite(_ timer: Timer) {
         withAnimation {
             timer.isFavorite.toggle()
-            try? context.save()
+            do {
+                try context.save()
+            } catch {
+                print("❌ 즐겨찾기 저장 실패: \(error)")
+            }
         }
     }
 
     private func delete(_ timer: Timer) {
         withAnimation {
             context.delete(timer)
-            try? context.save()
+            do {
+                try context.save()
+            } catch {
+                print("❌ 템플릿 삭제 실패: \(error)")
+            }
         }
     }
 
