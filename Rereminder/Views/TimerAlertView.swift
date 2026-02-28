@@ -48,6 +48,7 @@ struct TimerAlertView: View {
                         .foregroundColor(.white.opacity(0.8))
                 }
                 .scaleEffect(scale)
+                .accessibilityElement(children: .combine)
 
                 // OK 버튼
                 Button(action: onDismiss) {
@@ -61,8 +62,10 @@ struct TimerAlertView: View {
                         .padding(.horizontal, 50)
                 }
                 .scaleEffect(scale)
+                .accessibilityLabel(String(localized: "Dismiss timer alert"))
             }
         }
+        .accessibilityAddTraits(.isModal)
         .onAppear {
             // 애니메이션
             withAnimation(.spring(response: 0.6, dampingFraction: 0.6)) {

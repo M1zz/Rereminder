@@ -140,6 +140,9 @@ struct ThemeSettingView: View {
             }
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(preset.name)
+        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityHint(isLocked ? String(localized: "Pro feature, tap to unlock") : String(localized: "Tap to select theme"))
     }
 }
 

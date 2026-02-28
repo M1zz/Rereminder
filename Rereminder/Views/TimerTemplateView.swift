@@ -110,6 +110,7 @@ struct TimerTemplateView: View {
                         .font(.title3)
                 }
                 .buttonStyle(.plain)
+                .accessibilityLabel(timer.isFavorite ? String(localized: "Remove from favorites") : String(localized: "Add to favorites"))
 
                 VStack(alignment: .leading, spacing: 6) {
                     HStack(spacing: 8) {

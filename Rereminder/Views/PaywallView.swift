@@ -49,6 +49,7 @@ struct PaywallView: View {
                             .foregroundStyle(.secondary)
                             .font(.title3)
                     }
+                    .accessibilityLabel(String(localized: "Close"))
                 }
             }
         }
@@ -182,6 +183,17 @@ struct PaywallView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(feature): \(String(localized: "Free")) \(accessibilityValue(free)), \(String(localized: "Pro")) \(accessibilityValue(pro))")
+    }
+
+    private func accessibilityValue(_ value: Any) -> String {
+        if let bool = value as? Bool {
+            return bool ? String(localized: "available") : String(localized: "not available")
+        } else if let text = value as? String {
+            return text
+        }
+        return ""
     }
 
     @ViewBuilder
@@ -242,6 +254,8 @@ struct PaywallView: View {
                     .shadow(color: Color.accentColor.opacity(0.3), radius: 8, y: 4)
                 }
                 .disabled(store.purchaseState == .purchasing)
+                .accessibilityLabel(String(localized: "Upgrade to Pro"))
+                .accessibilityValue(store.proPrice.isEmpty ? "" : store.proPrice)
 
                 // 에러 메시지
                 if let error = store.errorMessage {
