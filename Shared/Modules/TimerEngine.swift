@@ -13,6 +13,7 @@
 
 import Foundation
 import UserNotifications
+import WidgetKit
 
 enum TimerState: Equatable { case idle, running, paused, finished, overtime }
 
@@ -36,9 +37,13 @@ final class TimerEngine {
     private(set) var endDate: Date?
     private(set) var state: TimerState = .idle {
         didSet {
-            // Control Center 위젯 등 Extension과 상태 공유
+            let shared = UserDefaults(suiteName: "group.leeo.toki")
             let isRunning = (state == .running || state == .overtime)
-            UserDefaults(suiteName: "group.leeo.toki")?.set(isRunning, forKey: "timerIsRunning")
+            shared?.set(isRunning, forKey: "timerIsRunning")
+            shared?.set(endDate?.timeIntervalSince1970 ?? 0, forKey: "timerEndDate")
+            shared?.set(config?.mainDuration ?? 0, forKey: "timerMainDuration")
+            shared?.set(state == .paused, forKey: "timerIsPaused")
+            WidgetCenter.shared.reloadAllTimelines()
         }
     }
 
