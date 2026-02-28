@@ -42,7 +42,7 @@ extension RereminderAlarmControl {
         }
 
         func currentValue(configuration: TimerConfiguration) async throws -> Value {
-            let isRunning = true // Check if the timer is running
+            let isRunning = UserDefaults(suiteName: "group.leeo.toki")?.bool(forKey: "timerIsRunning") ?? false
             return RereminderAlarmControl.Value(isRunning: isRunning, name: configuration.timerName)
         }
     }

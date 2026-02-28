@@ -17,7 +17,10 @@ import SwiftUI
 final class TimerScreenViewModel: ObservableObject {
     @Published var mainMinutes: Int = 10
     @Published var mainSeconds: Int = 0
-    @Published var selectedOffsets: Set<Int> = [60, 300]  // 무료 기본 2개 (1분, 5분)
+    @Published var selectedOffsets: Set<Int> = [60, 300] {  // 무료 기본 2개 (1분, 5분)
+        didSet { sortedOffsetsDesc = selectedOffsets.sorted(by: >) }
+    }
+    private(set) var sortedOffsetsDesc: [Int] = [300, 60]
     @Published private(set) var configuredMainSeconds: Int = 600
     @Published var showTimerAlert: Bool = false
     @Published var prealertMessages: [Int: String] = [:]
@@ -80,6 +83,24 @@ final class TimerScreenViewModel: ObservableObject {
         }
     }
 
+    // MARK: - Cold Launch Restore
+
+    /// 앱 시작 시 타이머 상태 복원 시도
+    func restoreTimerIfNeeded() {
+        guard timerVM.state == .idle else { return }
+
+        if timerVM.restoreIfNeeded() {
+            // 복원 성공 — UI 상태 동기화
+            if let cfg = timerVM.engine.config {
+                let mainSec = Int(cfg.mainDuration)
+                mainMinutes = mainSec / 60
+                mainSeconds = mainSec % 60
+                configuredMainSeconds = mainSec
+                selectedOffsets = Set(cfg.prealertOffsetsSec.map { Int($0) })
+            }
+        }
+    }
+
     // MARK: - Context
 
     func attachContext(_ ctx: ModelContext) {
@@ -97,8 +118,7 @@ final class TimerScreenViewModel: ObservableObject {
         let remaining = timerVM.remaining
         if remaining < 0 { return "" }
 
-        let upcomingAlerts = selectedOffsets
-            .sorted(by: >)
+        let upcomingAlerts = sortedOffsetsDesc
             .filter { Double($0) < remaining }
 
         if let nextAlert = upcomingAlerts.first {

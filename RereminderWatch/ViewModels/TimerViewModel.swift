@@ -116,8 +116,8 @@ class TimerViewModel: ObservableObject {
     private func startTimer() {
         guard timer == nil else { return }
 
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            self.updateTimeRemaining()
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+            self?.updateTimeRemaining()
         }
     }
 

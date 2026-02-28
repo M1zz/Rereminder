@@ -14,6 +14,7 @@ struct TimerHistoryView: View {
     private var records: [TimerRecord]
 
     @State private var showPaywall = false
+    @State private var displayLimit = 50
 
     private var isPro: Bool { StoreManager.isProUser }
 
@@ -156,8 +157,22 @@ struct TimerHistoryView: View {
 
     private var recordsSection: some View {
         Section(header: Text("Recent Records", comment: "History records section header")) {
-            ForEach(records.prefix(50)) { record in
+            ForEach(records.prefix(displayLimit)) { record in
                 recordRow(record)
+            }
+
+            if records.count > displayLimit {
+                Button {
+                    displayLimit += 50
+                } label: {
+                    HStack {
+                        Spacer()
+                        Text(String(localized: "Show more (\(records.count - displayLimit) remaining)"))
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        Spacer()
+                    }
+                }
             }
         }
     }

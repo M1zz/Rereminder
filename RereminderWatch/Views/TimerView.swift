@@ -129,7 +129,8 @@ public struct TimerView: View {
 
     private var progress: Double {
         guard timerViewModel.mainDuration > 0 else { return 0 }
-        return Double(timerViewModel.timeRemaining) / Double(timerViewModel.mainDuration)
+        let raw = Double(timerViewModel.timeRemaining) / Double(timerViewModel.mainDuration)
+        return max(0, min(1, raw))
     }
 
     private var progressIndicator: some View {

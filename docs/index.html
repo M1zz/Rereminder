@@ -8,6 +8,8 @@
     <meta property="og:title" content="Rereminder – Smart Timer with Pre-alerts">
     <meta property="og:description" content="Get notified before your timer ends. Perfect for presentations, mentoring, workouts, and more.">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://m1zz.github.io/Rereminder/">
+    <meta property="og:image" content="https://m1zz.github.io/Rereminder/app-icon.jpeg">
     <meta name="apple-itunes-app" content="app-id=6752551268">
     <link rel="icon" type="image/jpeg" href="app-icon.jpeg">
     <style>
@@ -382,9 +384,61 @@
             font-size: 12px;
         }
 
+        /* Hamburger button */
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+        }
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--text);
+            margin: 5px 0;
+            border-radius: 2px;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+        /* Mobile menu overlay */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 68px;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 99;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+        }
+        .mobile-menu.active { display: flex; }
+        .mobile-menu a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: 500;
+        }
+        .mobile-menu .lang-btn {
+            margin-top: 8px;
+            font-size: 15px;
+            padding: 8px 20px;
+        }
+
         /* Mobile */
         @media (max-width: 768px) {
             .nav-links { display: none; }
+            .hamburger { display: block; }
             .pro-features { grid-template-columns: 1fr; }
             .hero { padding: 140px 20px 80px; }
             .feature-grid { grid-template-columns: 1fr; }
@@ -408,8 +462,20 @@
             <a href="https://apps.apple.com/us/app/rereminder/id6752551268" target="_blank" data-i18n="nav.download">Download</a>
             <button class="lang-btn" id="lang-toggle">한국어</button>
         </div>
+        <button class="hamburger" id="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
     </div>
 </nav>
+
+<div class="mobile-menu" id="mobile-menu">
+    <a href="#features" data-i18n="nav.features">Features</a>
+    <a href="#how-it-works" data-i18n="nav.howItWorks">How It Works</a>
+    <a href="#use-cases" data-i18n="nav.useCases">Use Cases</a>
+    <a href="#pro">Pro</a>
+    <a href="https://apps.apple.com/us/app/rereminder/id6752551268" target="_blank" data-i18n="nav.download">Download</a>
+    <button class="lang-btn" id="mobile-lang-toggle">한국어</button>
+</div>
 
 <!-- Hero -->
 <section class="hero">
@@ -706,8 +772,9 @@ function setLang(lang) {
     var descEl = document.querySelector('meta[name="description"]');
     if (descEl) descEl.setAttribute('content', descMap[lang]);
 
-    var btn = document.getElementById('lang-toggle');
-    btn.textContent = lang === 'en' ? '한국어' : 'English';
+    var btnText = lang === 'en' ? '한국어' : 'English';
+    document.getElementById('lang-toggle').textContent = btnText;
+    document.getElementById('mobile-lang-toggle').textContent = btnText;
 }
 
 function detectLang() {
@@ -720,6 +787,30 @@ function detectLang() {
 
 document.getElementById('lang-toggle').addEventListener('click', function() {
     setLang(currentLang === 'en' ? 'ko' : 'en');
+});
+
+// Hamburger menu
+var hamburger = document.getElementById('hamburger');
+var mobileMenu = document.getElementById('mobile-menu');
+
+hamburger.addEventListener('click', function() {
+    hamburger.classList.toggle('active');
+    mobileMenu.classList.toggle('active');
+});
+
+// Close mobile menu when a link is clicked
+mobileMenu.querySelectorAll('a').forEach(function(link) {
+    link.addEventListener('click', function() {
+        hamburger.classList.remove('active');
+        mobileMenu.classList.remove('active');
+    });
+});
+
+// Mobile language toggle
+document.getElementById('mobile-lang-toggle').addEventListener('click', function() {
+    setLang(currentLang === 'en' ? 'ko' : 'en');
+    hamburger.classList.remove('active');
+    mobileMenu.classList.remove('active');
 });
 
 setLang(detectLang());

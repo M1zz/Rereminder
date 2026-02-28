@@ -33,14 +33,6 @@ struct RereminderWatchApp: App {
         UNUserNotificationCenter.current().delegate = notificationDelegate
         
         // Notification Permission 미리 요청
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-            DispatchQueue.main.async {
-                if granted {
-                    print("워치 Notification Permission 승인됨")
-                } else {
-                    print("워치 Notification Permission 거부됨: \(error?.localizedDescription ?? "알 수 없는 오류")")
-                }
-            }
-        }
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
     }
 }
