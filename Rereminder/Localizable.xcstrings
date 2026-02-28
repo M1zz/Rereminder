@@ -956,6 +956,16 @@
         }
       }
     },
+    "No active timer" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "활성 타이머 없음"
+          }
+        }
+      }
+    },
     "Off" : {
 
     },
@@ -1510,6 +1520,16 @@
         }
       }
     },
+    "Running" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "실행 중"
+          }
+        }
+      }
+    },
     "Save" : {
       "localizations" : {
         "ko" : {
@@ -1625,6 +1645,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "토스트 메세지 표시"
+          }
+        }
+      }
+    },
+    "Shows current timer status" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "현재 타이머 상태를 표시합니다"
           }
         }
       }

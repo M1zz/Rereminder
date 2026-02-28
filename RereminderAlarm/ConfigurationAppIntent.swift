@@ -2,16 +2,8 @@
 //  ConfigurationAppIntent.swift
 //  RereminderAlarm
 //
-//  Created by hyunho lee on 11/20/25.
+//  위젯은 StaticConfiguration으로 변경됨.
+//  이 파일은 더 이상 사용되지 않습니다.
 //
 
-import AppIntents
-import WidgetKit
-
-struct ConfigurationAppIntent: WidgetConfigurationIntent {
-    static var title: LocalizedStringResource = "Configuration"
-    static var description = IntentDescription("This is an example widget.")
-
-    @Parameter(title: "Favorite Emoji", default: "😃")
-    var favoriteEmoji: String
-}
+import Foundation
