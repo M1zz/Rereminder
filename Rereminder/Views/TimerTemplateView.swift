@@ -143,7 +143,7 @@ struct TimerTemplateView: View {
                     let sMain = timer.mainSeconds % 60
                     let preList = timer.prealertOffsetsSec
                         .sorted()
-                        .map { "\($0/60) \(String(localized: "min"))" }
+                        .map { String(localized: "\($0/60) min") }
                         .joined(separator: ", ")
 
                     Text(sMain > 0 ? "Main \(mMain) min \(sMain) sec" : "Main \(mMain) min")
