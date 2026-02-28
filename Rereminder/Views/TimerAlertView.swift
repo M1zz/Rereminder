@@ -39,11 +39,11 @@ struct TimerAlertView: View {
 
                 // 메시지
                 VStack(spacing: 16) {
-                    Text("Timer Finished")
+                    Text("Timer Finished", comment: "Timer alert title")
                         .font(.system(size: 40, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
 
-                    Text("Time is up")
+                    Text("Time is up", comment: "Timer alert subtitle")
                         .font(.system(size: 20, weight: .medium))
                         .foregroundColor(.white.opacity(0.8))
                 }
@@ -51,7 +51,7 @@ struct TimerAlertView: View {
 
                 // OK 버튼
                 Button(action: onDismiss) {
-                    Text("OK")
+                    Text("OK", comment: "Timer alert dismiss button")
                         .font(.system(size: 24, weight: .semibold, design: .rounded))
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity)
