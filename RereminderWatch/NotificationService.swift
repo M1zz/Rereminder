@@ -90,7 +90,6 @@ struct NotificationService {
             if let error = error {
                 print("알림 예약 실패: \(identifier) - \(error.localizedDescription)")
             } else {
-                print("알림 예약 성공: \(identifier) - \(timeDescription)")
                 #if canImport(WatchKit)
                 DispatchQueue.main.async {
                     WKInterfaceDevice.current().play(.click)
@@ -103,12 +102,10 @@ struct NotificationService {
     func removeAllNotifications() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         UNUserNotificationCenter.current().removeAllDeliveredNotifications()
-        print("예약된 모든 알림이 Cancel되었습니다.")
     }
-    
+
     func removeNotification(withIdentifier identifier: String) {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
-        print("알림 Cancel: \(identifier)")
     }
 }
 
@@ -118,8 +115,6 @@ class NotificationDelegate: NSObject, ObservableObject, UNUserNotificationCenter
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
     ) {
-        print("알림 표시: \(notification.request.identifier)")
-        
         completionHandler([.sound])
 
         #if canImport(WatchKit)

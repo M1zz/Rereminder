@@ -75,10 +75,10 @@ struct TimerUnifiedView: View {
             screenVM.timerVM.modelContext = context
             screenVM.initialConfiguration()
         }
-        .onChange(of: scenePhase) { phase in
-            appStateManager.updateState(phase)
+        .onChange(of: scenePhase) { _, newPhase in
+            appStateManager.updateState(newPhase)
             // 포그라운드 복귀 시 endDate 기반 재계산
-            if phase == .active {
+            if newPhase == .active {
                 screenVM.timerVM.engine.recalculateOnForeground()
             }
         }

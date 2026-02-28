@@ -19,9 +19,8 @@ struct TimerRunningView: View {
     }
     private var markers: [CGFloat] {
         guard totalSec > 0 else { return [] }
-        return screenVM.selectedOffsets
+        return screenVM.sortedOffsetsDesc.reversed()
             .filter { 0 < $0 && $0 < totalSec }
-            .sorted()
             .map { CGFloat($0) / CGFloat(totalSec) }
     }
 

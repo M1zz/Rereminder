@@ -18,9 +18,6 @@ struct TimerAlertView: View {
             // 배경
             Color.black.opacity(0.9)
                 .ignoresSafeArea()
-                .onAppear {
-                    print("🎯 TimerAlertView가 화면에 표시되었습니다!")
-                }
 
             VStack(spacing: 40) {
                 // Timer 아이콘
