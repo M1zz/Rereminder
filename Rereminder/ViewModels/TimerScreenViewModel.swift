@@ -83,6 +83,24 @@ final class TimerScreenViewModel: ObservableObject {
         }
     }
 
+    // MARK: - Cold Launch Restore
+
+    /// 앱 시작 시 타이머 상태 복원 시도
+    func restoreTimerIfNeeded() {
+        guard timerVM.state == .idle else { return }
+
+        if timerVM.restoreIfNeeded() {
+            // 복원 성공 — UI 상태 동기화
+            if let cfg = timerVM.engine.config {
+                let mainSec = Int(cfg.mainDuration)
+                mainMinutes = mainSec / 60
+                mainSeconds = mainSec % 60
+                configuredMainSeconds = mainSec
+                selectedOffsets = Set(cfg.prealertOffsetsSec.map { Int($0) })
+            }
+        }
+    }
+
     // MARK: - Context
 
     func attachContext(_ ctx: ModelContext) {

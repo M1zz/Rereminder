@@ -35,14 +35,19 @@ final class TimerEngine {
     // MARK: - State
     private(set) var config: Configuration?
     private(set) var endDate: Date?
+    private static let sharedSuiteName = "group.leeo.toki"
+
     private(set) var state: TimerState = .idle {
         didSet {
-            let shared = UserDefaults(suiteName: "group.leeo.toki")
+            let shared = UserDefaults(suiteName: Self.sharedSuiteName)
             let isRunning = (state == .running || state == .overtime)
             shared?.set(isRunning, forKey: "timerIsRunning")
             shared?.set(endDate?.timeIntervalSince1970 ?? 0, forKey: "timerEndDate")
             shared?.set(config?.mainDuration ?? 0, forKey: "timerMainDuration")
             shared?.set(state == .paused, forKey: "timerIsPaused")
+            shared?.set(startDate?.timeIntervalSince1970 ?? 0, forKey: "timerStartDate")
+            let offsets = config?.prealertOffsetsSec.map { Int($0) } ?? []
+            shared?.set(offsets, forKey: "timerPrealertOffsets")
             WidgetCenter.shared.reloadAllTimelines()
         }
     }
@@ -129,6 +134,77 @@ final class TimerEngine {
         remainingWhenPaused = nil
         firedOffsets.removeAll()
         state = .idle
+    }
+
+    /// Cold launch 시 App Group에서 타이머 상태 복원
+    /// 복원 성공 시 true 반환, 복원할 상태가 없으면 false
+    @discardableResult
+    func restoreFromSharedState() -> Bool {
+        let shared = UserDefaults(suiteName: Self.sharedSuiteName)
+        let isRunning = shared?.bool(forKey: "timerIsRunning") ?? false
+        let isPaused = shared?.bool(forKey: "timerIsPaused") ?? false
+
+        guard isRunning || isPaused else { return false }
+
+        let mainDuration = shared?.double(forKey: "timerMainDuration") ?? 0
+        guard mainDuration > 0 else { return false }
+
+        let endEpoch = shared?.double(forKey: "timerEndDate") ?? 0
+        let startEpoch = shared?.double(forKey: "timerStartDate") ?? 0
+        let offsets = (shared?.array(forKey: "timerPrealertOffsets") as? [Int]) ?? []
+
+        guard endEpoch > 0, startEpoch > 0 else { return false }
+
+        // 설정 복원
+        let dur = mainDuration
+        let offsetTIs = offsets
+            .filter { $0 > 0 && $0 < Int(dur) }
+            .sorted(by: >)
+            .map(TimeInterval.init)
+        config = .init(mainDuration: dur, prealertOffsetsSec: offsetTIs)
+
+        let restoredEndDate = Date(timeIntervalSince1970: endEpoch)
+        let restoredStartDate = Date(timeIntervalSince1970: startEpoch)
+
+        if isPaused {
+            // 일시정지 상태 복원: endDate는 "재개 시 남은 시간"을 담고 있음
+            let remaining = restoredEndDate.timeIntervalSinceNow
+            startDate = nil
+            endDate = restoredEndDate
+            pausedElapsed = dur - max(0, remaining)
+            remainingWhenPaused = max(0, remaining)
+            state = .paused
+            onTick?(max(0, remaining))
+            return true
+        }
+
+        // 실행 중 복원
+        startDate = restoredStartDate
+        endDate = restoredEndDate
+        pausedElapsed = 0
+        firedOffsets.removeAll()
+
+        let remaining = restoredEndDate.timeIntervalSinceNow
+
+        // 이미 지나간 pre-alert 마킹
+        for off in offsetTIs {
+            let offInt = Int(off)
+            if remaining <= off {
+                firedOffsets.insert(offInt)
+            }
+        }
+
+        if remaining <= 0 {
+            state = .overtime
+            onTick?(remaining)
+            DispatchQueue.main.async { self.onFinish?() }
+        } else {
+            state = .running
+            onTick?(remaining)
+            startUITick()
+        }
+
+        return true
     }
 
     /// 앱이 포그라운드로 돌아왔을 때 호출 — endDate 기반 재계산

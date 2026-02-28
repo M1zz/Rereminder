@@ -81,6 +81,36 @@ final class TimerViewModel: ObservableObject {
     @objc private func handleResume() { resume() }
     @objc private func handleStop() { stop() }
 
+    // MARK: - Cold Launch Restore
+
+    /// App Group에서 타이머 상태를 복원 (cold launch 시)
+    /// 복원 성공 시 true 반환
+    @discardableResult
+    func restoreIfNeeded() -> Bool {
+        guard state == .idle else { return false }
+
+        let restored = engine.restoreFromSharedState()
+        guard restored else { return false }
+
+        state = engine.state
+        remaining = max(0, engine.endDate?.timeIntervalSinceNow ?? 0)
+
+        // 실행 중이면 Live Activity도 복원
+        if state == .running || state == .overtime {
+            if let cfg = engine.config {
+                let temp = Timer(
+                    name: "",
+                    mainSeconds: Int(cfg.mainDuration),
+                    prealertOffsetsSec: cfg.prealertOffsetsSec.map { Int($0) }
+                )
+                currentTemplate = temp
+                startLiveActivity(template: temp)
+            }
+        }
+
+        return true
+    }
+
     // MARK: - Configuration
 
     func configure(from template: Timer) {

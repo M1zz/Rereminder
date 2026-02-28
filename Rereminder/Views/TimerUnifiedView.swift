@@ -74,6 +74,7 @@ struct TimerUnifiedView: View {
             screenVM.timerVM.appStateManager = appStateManager
             screenVM.timerVM.modelContext = context
             screenVM.initialConfiguration()
+            screenVM.restoreTimerIfNeeded()
         }
         .onChange(of: scenePhase) { _, newPhase in
             appStateManager.updateState(newPhase)
