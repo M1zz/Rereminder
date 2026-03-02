@@ -14,6 +14,8 @@ struct TimerMainView: View {
     @State private var showTimeInput = false
     @State private var isDragging = false
     @State private var dragTooltipAngle: Double = 0
+    @State private var draggingMarkerOffset: Int? = nil
+    @State private var markerDragAngle: Double = 0
 
     private var ratio: CGFloat {
         return CGFloat(max(0, min(1, remaining / TimeInterval(TimeMapper.maxSeconds))))
@@ -124,8 +126,16 @@ struct TimerMainView: View {
                 dragPointer(size: size, lineWidth: lineWidth)
             }
 
+            if screenVM.state != .running && screenVM.state != .paused {
+                markerDragHandles(size: size, lineWidth: lineWidth)
+            }
+
             if isDragging && screenVM.state != .running && screenVM.state != .paused {
                 dragTooltip(size: size, fontSize: min(geometry.size.width, geometry.size.height) * 0.03)
+            }
+
+            if draggingMarkerOffset != nil {
+                markerDragTooltip(size: size, fontSize: min(geometry.size.width, geometry.size.height) * 0.03)
             }
 
             let fontSize = min(geometry.size.width, geometry.size.height) * 0.16
@@ -253,10 +263,25 @@ struct TimerMainView: View {
     }
 
     private func clockMarkers(size: CGFloat, lineWidth: CGFloat) -> some View {
-        ClockMarkers(
+        let sortedOffsets = Array(screenVM.selectedOffsets.sorted())
+        let draggingIdx: Int? = if let offset = draggingMarkerOffset {
+            sortedOffsets.firstIndex(of: offset)
+        } else {
+            nil
+        }
+        let dragRatio: CGFloat? = if draggingMarkerOffset != nil {
+            CGFloat(markerDragAngle * TimeMapper.secondsPerDegree)
+                / (TimeMapper.secondsPerDegree * 360.0)
+        } else {
+            nil
+        }
+
+        return ClockMarkers(
             remaining: ratio,
             markers: markers,
-            markerOffsets: Array(screenVM.selectedOffsets.sorted()),
+            markerOffsets: sortedOffsets,
+            draggingIndex: draggingIdx,
+            draggingRatio: dragRatio,
             dotSize: lineWidth,
             inset: 0,
             upcoming: true,
@@ -303,6 +328,72 @@ struct TimerMainView: View {
             .padding(.horizontal, fontSize * 0.75)
             .padding(.vertical, fontSize * 0.375)
             .background(Color.accentColor)
+            .foregroundStyle(.white)
+            .cornerRadius(fontSize * 0.5)
+            .offset(x: xOffset, y: yOffset)
+    }
+
+    private func markerDragHandles(size: CGFloat, lineWidth: CGFloat) -> some View {
+        let sortedOffsets = Array(screenVM.selectedOffsets.sorted())
+        return ZStack {
+            ForEach(sortedOffsets, id: \.self) { offsetSec in
+                let angle = Double(offsetSec) / TimeMapper.secondsPerDegree
+                let displayAngle = draggingMarkerOffset == offsetSec ? markerDragAngle : angle
+                Circle()
+                    .fill(Color.clear)
+                    .frame(width: lineWidth * 2.5, height: lineWidth * 2.5)
+                    .contentShape(Circle())
+                    .offset(x: size / 2)
+                    .rotationEffect(.degrees(displayAngle))
+                    .gesture(
+                        DragGesture()
+                            .onChanged { value in
+                                let currentAngle: Double
+                                if draggingMarkerOffset == offsetSec {
+                                    currentAngle = markerDragAngle
+                                } else {
+                                    draggingMarkerOffset = offsetSec
+                                    currentAngle = Double(offsetSec) / TimeMapper.secondsPerDegree
+                                }
+                                var newAngle = TimeMapper.angleDelta(
+                                    from: value.location,
+                                    currentAngle: currentAngle
+                                )
+                                let mainSec = screenVM.mainMinutes * 60 + screenVM.mainSeconds
+                                let maxAngle = Double(mainSec - 10) / TimeMapper.secondsPerDegree
+                                newAngle = max(0, min(newAngle, max(0, maxAngle)))
+                                markerDragAngle = newAngle
+                            }
+                            .onEnded { _ in
+                                guard let dragOffset = draggingMarkerOffset else { return }
+                                let newSec = TimeMapper.angleToSeconds(from: markerDragAngle)
+                                let mainSec = screenVM.mainMinutes * 60 + screenVM.mainSeconds
+                                screenVM.selectedOffsets.remove(dragOffset)
+                                if newSec > 0 && newSec < mainSec {
+                                    screenVM.selectedOffsets.insert(newSec)
+                                }
+                                draggingMarkerOffset = nil
+                            }
+                    )
+                    .rotationEffect(.init(degrees: -90))
+            }
+        }
+    }
+
+    private func markerDragTooltip(size: CGFloat, fontSize: CGFloat) -> some View {
+        let dragSec = TimeMapper.angleToSeconds(from: markerDragAngle)
+        let mins = dragSec / 60
+        let secs = dragSec % 60
+        let timeText = String(format: "%d:%02d", mins, secs)
+        let tooltipAngle = markerDragAngle - 90
+        let xOffset = cos(tooltipAngle * .pi / 180) * (size / 2 + fontSize * 2.5)
+        let yOffset = sin(tooltipAngle * .pi / 180) * (size / 2 + fontSize * 2.5)
+
+        return Text(timeText)
+            .font(.system(size: fontSize, weight: .medium, design: .rounded))
+            .padding(.horizontal, fontSize * 0.75)
+            .padding(.vertical, fontSize * 0.375)
+            .background(Color.orange)
             .foregroundStyle(.white)
             .cornerRadius(fontSize * 0.5)
             .offset(x: xOffset, y: yOffset)
