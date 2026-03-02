@@ -25,21 +25,26 @@ struct TimerUnifiedView: View {
         screenVM.state == .idle || screenVM.state == .finished
     }
 
+    /// Free 사용자가 Presentation 선택 시 페이월 표시, 모드 변경 차단
+    private var modeBinding: Binding<AppMode> {
+        Binding(
+            get: { screenVM.currentMode },
+            set: { newMode in
+                if newMode == .presentation && !ProGate.canUsePresentationMode {
+                    showProPaywall = true
+                } else {
+                    screenVM.currentMode = newMode
+                }
+            }
+        )
+    }
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
                 // idle 상태일 때 모드 전환 Picker
                 if isIdle {
-                    Picker("Mode", selection: Binding(
-                        get: { screenVM.currentMode },
-                        set: { newMode in
-                            if newMode == .presentation && !ProGate.canUsePresentationMode {
-                                showProPaywall = true
-                            } else {
-                                screenVM.currentMode = newMode
-                            }
-                        }
-                    )) {
+                    Picker("Mode", selection: modeBinding) {
                         Text("Timer").tag(AppMode.timer)
                         Text("Presentation").tag(AppMode.presentation)
                     }
