@@ -18,6 +18,7 @@ final class TimerRecord {
     // timer templete Save할 수 있게 값 snapshot
     var snapshotMainSeconds: Int
     var snapshotPrealertOffsetsSec: [Int]
+    var isPresentation: Bool = false
 
     var template: Timer?
 
@@ -28,6 +29,7 @@ final class TimerRecord {
         elapsedSeconds: Int,
         snapshotMainSeconds: Int,
         snapshotPrealertOffsetsSec: [Int],
+        isPresentation: Bool = false,
         template: Timer?
     ) {
         self.id = id
@@ -36,6 +38,7 @@ final class TimerRecord {
         self.elapsedSeconds = max(0, elapsedSeconds)
         self.snapshotMainSeconds = snapshotMainSeconds
         self.snapshotPrealertOffsetsSec = snapshotPrealertOffsetsSec.sorted()
+        self.isPresentation = isPresentation
         self.template = template
     }
 }

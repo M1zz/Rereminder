@@ -29,7 +29,7 @@ struct TimerButton: View {
                 }
                 .buttonStyle(TimerButtonStyle(tint: Color.plain, size: buttonSize))
                 .disabled(true)
-                .accessibilityLabel("Cancel")
+                .accessibilityLabel(String(localized: "Cancel"))
 
                 Button(action: onStart) {
                     Image(systemName: "play.fill")
@@ -37,7 +37,7 @@ struct TimerButton: View {
                         .imageScale(.medium)
                 }
                 .buttonStyle(TimerButtonStyle(tint: Color.positive, size: buttonSize))
-                .accessibilityLabel("Start Timer")
+                .accessibilityLabel(String(localized: "Start Timer"))
             }
 
         case .finished:
@@ -48,7 +48,7 @@ struct TimerButton: View {
                         .imageScale(.medium)
                 }
                 .buttonStyle(TimerButtonStyle(tint: Color.plain, size: buttonSize))
-                .accessibilityLabel("Cancel")
+                .accessibilityLabel(String(localized: "Cancel"))
 
                 Button(action: onStart) {
                     Image(systemName: "play.fill")
@@ -56,7 +56,7 @@ struct TimerButton: View {
                         .imageScale(.medium)
                 }
                 .buttonStyle(TimerButtonStyle(tint: Color.positive, size: buttonSize))
-                .accessibilityLabel("Start Timer")
+                .accessibilityLabel(String(localized: "Start Timer"))
             }
 
         case .running:
@@ -67,7 +67,7 @@ struct TimerButton: View {
                         .imageScale(.medium)
                 }
                 .buttonStyle(TimerButtonStyle(tint: Color.plain, size: buttonSize))
-                .accessibilityLabel("Cancel Timer")
+                .accessibilityLabel(String(localized: "Cancel Timer"))
 
                 Button(action: onPause) {
                     Image(systemName: "pause.fill")
@@ -75,7 +75,7 @@ struct TimerButton: View {
                         .imageScale(.medium)
                 }
                 .buttonStyle(TimerButtonStyle(tint: Color.bitNegative, size: buttonSize))
-                .accessibilityLabel("Pause Timer")
+                .accessibilityLabel(String(localized: "Pause Timer"))
             }
 
         case .paused:
@@ -86,7 +86,7 @@ struct TimerButton: View {
                         .imageScale(.medium)
                 }
                 .buttonStyle(TimerButtonStyle(tint: Color.plain, size: buttonSize))
-                .accessibilityLabel("Cancel Timer")
+                .accessibilityLabel(String(localized: "Cancel Timer"))
 
                 Button(action: onResume) {
                     Image(systemName: "play.fill")
@@ -94,7 +94,7 @@ struct TimerButton: View {
                         .imageScale(.medium)
                 }
                 .buttonStyle(TimerButtonStyle(tint: Color.positive, size: buttonSize))
-                .accessibilityLabel("Resume Timer")
+                .accessibilityLabel(String(localized: "Resume Timer"))
             }
         case .overtime:
             HStack(spacing: spacing) {
@@ -104,7 +104,7 @@ struct TimerButton: View {
                         .imageScale(.medium)
                 }
                 .buttonStyle(TimerButtonStyle(tint: Color.plain, size: buttonSize))
-                .accessibilityLabel("Cancel Timer")
+                .accessibilityLabel(String(localized: "Cancel Timer"))
 
                 Button(action: onPause) {
                     Image(systemName: "pause.fill")
@@ -112,7 +112,7 @@ struct TimerButton: View {
                         .imageScale(.medium)
                 }
                 .buttonStyle(TimerButtonStyle(tint: Color.bitNegative, size: buttonSize))
-                .accessibilityLabel("Pause Timer")
+                .accessibilityLabel(String(localized: "Pause Timer"))
             }
         }
 

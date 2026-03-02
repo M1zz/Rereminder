@@ -53,7 +53,7 @@ final class AppStateManager: ObservableObject {
         let content = UNMutableNotificationContent()
         content.title = AppName.notification
         content.body = message
-        content.sound = .default
+        content.sound = RingMode.notificationSound
 
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)

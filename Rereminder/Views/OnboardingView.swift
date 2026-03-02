@@ -41,9 +41,16 @@ struct OnboardingView: View {
             scenarioKey: "onboarding_scenario_4"
         ),
         OnboardingPage(
-            icon: "hand.tap.fill",
+            icon: "rectangle.split.3x1.fill",
             titleKey: "onboarding_title_5",
             descriptionKey: "onboarding_desc_5",
+            color: .cyan,
+            scenarioKey: "onboarding_scenario_5"
+        ),
+        OnboardingPage(
+            icon: "hand.tap.fill",
+            titleKey: "onboarding_title_6",
+            descriptionKey: "onboarding_desc_6",
             color: .purple,
             scenarioKey: nil
         )

@@ -72,7 +72,7 @@ struct NotificationService {
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
-        content.sound = UNNotificationSound.default
+        content.sound = RingMode.notificationSound
         content.badge = 1
         content.interruptionLevel = .active
         content.relevanceScore = 1.0
@@ -115,7 +115,8 @@ class NotificationDelegate: NSObject, ObservableObject, UNUserNotificationCenter
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
     ) {
-        completionHandler([.sound])
+        let options: UNNotificationPresentationOptions = RingMode.notificationSound != nil ? [.sound] : []
+        completionHandler(options)
 
         #if canImport(WatchKit)
         DispatchQueue.main.async {

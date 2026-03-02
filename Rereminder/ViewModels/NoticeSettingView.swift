@@ -22,6 +22,7 @@ struct NoticeSettingView: View {
     @EnvironmentObject var appStateManager: AppStateManager
     @EnvironmentObject var screenVM: TimerScreenViewModel
     @ObservedObject private var store = StoreManager.shared
+    @ObservedObject private var themeManager = ThemeManager.shared
     @State private var showAlarmKitInfo = false
     @State private var showOnboarding = false
     @State private var showTestModeInfo = false
@@ -82,6 +83,9 @@ struct NoticeSettingView: View {
                         }
                     }
                     .pickerStyle(.segmented)
+                    .onChange(of: ringMode) { _, newMode in
+                        WatchConnectivityManager.shared.sendRingMode(newMode.rawValue)
+                    }
                 }
             }
 
@@ -303,6 +307,16 @@ struct NoticeSettingView: View {
             }
 
             Section(header: Text("Appearance")) {
+                HStack(spacing: 16) {
+                    Text("Mode")
+                    Picker("Mode", selection: $themeManager.appearanceMode) {
+                        ForEach(AppearanceMode.allCases) { mode in
+                            Text(mode.displayName).tag(mode)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
+
                 NavigationLink {
                     ThemeSettingView()
                 } label: {

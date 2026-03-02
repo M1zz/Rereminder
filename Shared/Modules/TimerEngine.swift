@@ -22,6 +22,7 @@ final class TimerEngine {
     struct Configuration: Equatable {
         var mainDuration: TimeInterval
         var prealertOffsetsSec: [TimeInterval]
+        var name: String = ""
     }
 
     // MARK: - Callbacks (UI 업데이트용)
@@ -48,6 +49,7 @@ final class TimerEngine {
             shared?.set(startDate?.timeIntervalSince1970 ?? 0, forKey: "timerStartDate")
             let offsets = config?.prealertOffsetsSec.map { Int($0) } ?? []
             shared?.set(offsets, forKey: "timerPrealertOffsets")
+            shared?.set(config?.name ?? "", forKey: "timerName")
             WidgetCenter.shared.reloadAllTimelines()
         }
     }
@@ -66,13 +68,13 @@ final class TimerEngine {
 
     // MARK: - Public API
 
-    func configure(mainSeconds: Int, prealertOffsetsSec: [Int]) {
+    func configure(mainSeconds: Int, prealertOffsetsSec: [Int], name: String = "") {
         let dur = TimeInterval(max(1, mainSeconds))
         let offsets = prealertOffsetsSec
             .filter { $0 > 0 && $0 < Int(dur) }
             .sorted(by: >)
             .map(TimeInterval.init)
-        config = .init(mainDuration: dur, prealertOffsetsSec: offsets)
+        config = .init(mainDuration: dur, prealertOffsetsSec: offsets, name: name)
         state = .idle
     }
 
@@ -293,8 +295,10 @@ final class TimerEngine {
 
             let content = UNMutableNotificationContent()
             content.title = AppName.notification
-            content.body = String(localized: "\(offInt / 60) min remaining")
-            content.sound = .default
+            content.body = offInt < 60
+                ? String(localized: "\(offInt) sec remaining")
+                : String(localized: "\(offInt / 60) min remaining")
+            content.sound = RingMode.notificationSound
 
             let trigger = UNTimeIntervalNotificationTrigger(
                 timeInterval: fireAfter / timeMultiplier,  // test mode 보정
@@ -311,7 +315,7 @@ final class TimerEngine {
             let content = UNMutableNotificationContent()
             content.title = AppName.notification
             content.body = String(localized: "Timer finished")
-            content.sound = .default
+            content.sound = RingMode.notificationSound
 
             let trigger = UNTimeIntervalNotificationTrigger(
                 timeInterval: finishFireAfter,

@@ -16,6 +16,8 @@ struct TimerWidgetEntry: TimelineEntry {
     let isPaused: Bool
     let endDate: Date?
     let totalDuration: TimeInterval
+    let timerName: String
+    let prealertOffsets: [Int]
 }
 
 // MARK: - Timeline Provider
@@ -29,7 +31,9 @@ struct TimerWidgetProvider: TimelineProvider {
             isRunning: false,
             isPaused: false,
             endDate: nil,
-            totalDuration: 0
+            totalDuration: 0,
+            timerName: "",
+            prealertOffsets: []
         )
     }
 
@@ -48,7 +52,9 @@ struct TimerWidgetProvider: TimelineProvider {
                 isRunning: false,
                 isPaused: false,
                 endDate: nil,
-                totalDuration: 0
+                totalDuration: 0,
+                timerName: "",
+                prealertOffsets: []
             )
             entries.append(finishedEntry)
             completion(Timeline(entries: entries, policy: .atEnd))
@@ -65,6 +71,8 @@ struct TimerWidgetProvider: TimelineProvider {
         let isPaused = shared?.bool(forKey: "timerIsPaused") ?? false
         let endEpoch = shared?.double(forKey: "timerEndDate") ?? 0
         let totalDuration = shared?.double(forKey: "timerMainDuration") ?? 0
+        let timerName = shared?.string(forKey: "timerName") ?? ""
+        let prealertOffsets = (shared?.array(forKey: "timerPrealertOffsets") as? [Int]) ?? []
 
         let endDate: Date? = endEpoch > 0 ? Date(timeIntervalSince1970: endEpoch) : nil
 
@@ -73,7 +81,9 @@ struct TimerWidgetProvider: TimelineProvider {
             isRunning: isRunning,
             isPaused: isPaused,
             endDate: endDate,
-            totalDuration: totalDuration
+            totalDuration: totalDuration,
+            timerName: timerName,
+            prealertOffsets: prealertOffsets
         )
     }
 }
@@ -85,11 +95,26 @@ struct TimerWidgetEntryView: View {
     @Environment(\.widgetFamily) var family
 
     var body: some View {
-        Group {
+        switch family {
+        case .accessoryCircular:
+            accessoryCircularView
+        case .accessoryRectangular:
+            accessoryRectangularView
+        case .accessoryInline:
+            accessoryInlineView
+        case .systemLarge:
             if entry.isRunning || entry.isPaused {
-                activeTimerView
+                largeActiveView
             } else {
                 idleView
+            }
+        default:
+            Group {
+                if entry.isRunning || entry.isPaused {
+                    activeTimerView
+                } else {
+                    idleView
+                }
             }
         }
     }
@@ -109,6 +134,12 @@ struct TimerWidgetEntryView: View {
                     .fontWeight(.medium)
                     .foregroundStyle(entry.isPaused ? .orange : .green)
                 Spacer()
+                if !entry.timerName.isEmpty {
+                    Text(entry.timerName)
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                }
             }
 
             Spacer()
@@ -161,6 +192,82 @@ struct TimerWidgetEntryView: View {
         .frame(height: 4)
     }
 
+    // MARK: - Large Active Timer
+
+    private var largeActiveView: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            // 상단: 상태 + 이름
+            HStack {
+                Image(systemName: entry.isPaused ? "pause.circle.fill" : "timer")
+                    .font(.subheadline)
+                    .foregroundStyle(entry.isPaused ? .orange : .green)
+                Text(entry.isPaused
+                     ? String(localized: "Paused")
+                     : String(localized: "Running"))
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+                    .foregroundStyle(entry.isPaused ? .orange : .green)
+                Spacer()
+                if !entry.timerName.isEmpty {
+                    Text(entry.timerName)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                }
+            }
+
+            // 카운트다운
+            timerDisplay
+                .font(.system(size: 48, design: .rounded))
+                .fontWeight(.bold)
+                .monospacedDigit()
+                .minimumScaleFactor(0.6)
+                .frame(maxWidth: .infinity, alignment: .center)
+
+            // 진행률 바
+            if entry.totalDuration > 0 {
+                progressBar
+            }
+
+            Divider()
+
+            // 사전알림 스케줄
+            if !entry.prealertOffsets.isEmpty, let endDate = entry.endDate {
+                Text(String(localized: "Pre-alerts"))
+                    .font(.caption)
+                    .fontWeight(.semibold)
+                    .foregroundStyle(.secondary)
+
+                ForEach(entry.prealertOffsets.sorted().prefix(5), id: \.self) { offset in
+                    let alertTime = endDate.addingTimeInterval(-TimeInterval(offset))
+                    let hasPassed = alertTime <= Date()
+                    HStack(spacing: 8) {
+                        Image(systemName: hasPassed ? "checkmark.circle.fill" : "bell.circle")
+                            .font(.caption)
+                            .foregroundStyle(hasPassed ? .green : .secondary)
+                        Text(formatOffsetLabel(offset))
+                            .font(.caption)
+                            .foregroundStyle(hasPassed ? .secondary : .primary)
+                        Spacer()
+                        Text(alertTime, style: .time)
+                            .font(.caption2)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+
+            Spacer(minLength: 0)
+        }
+    }
+
+    private func formatOffsetLabel(_ seconds: Int) -> String {
+        if seconds < 60 {
+            return String(localized: "\(seconds) sec before")
+        }
+        let min = seconds / 60
+        return String(localized: "\(min) min before")
+    }
+
     // MARK: - Idle
 
     private var idleView: some View {
@@ -176,6 +283,99 @@ struct TimerWidgetEntryView: View {
             Spacer()
         }
         .frame(maxWidth: .infinity)
+    }
+
+    // MARK: - Lock Screen: Circular
+
+    private var accessoryCircularView: some View {
+        ZStack {
+            if entry.isRunning || entry.isPaused {
+                if let endDate = entry.endDate, entry.totalDuration > 0 {
+                    let remaining = max(0, endDate.timeIntervalSinceNow)
+                    let progress = min(1, remaining / entry.totalDuration)
+                    Gauge(value: progress) {
+                        Image(systemName: "timer")
+                    } currentValueLabel: {
+                        if entry.isPaused {
+                            Text(formatTime(remaining))
+                                .font(.system(size: 11, design: .rounded))
+                        } else {
+                            Text(endDate, style: .timer)
+                                .font(.system(size: 11, design: .rounded))
+                        }
+                    }
+                    .gaugeStyle(.accessoryCircular)
+                } else {
+                    Image(systemName: "timer")
+                }
+            } else {
+                Gauge(value: 0) {
+                    Image(systemName: "timer")
+                }
+                .gaugeStyle(.accessoryCircular)
+            }
+        }
+    }
+
+    // MARK: - Lock Screen: Rectangular
+
+    private var accessoryRectangularView: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            HStack(spacing: 4) {
+                Image(systemName: "timer")
+                    .font(.caption2)
+                Text(entry.isPaused
+                     ? String(localized: "Paused")
+                     : entry.isRunning
+                     ? String(localized: "Running")
+                     : String(localized: "Timer"))
+                    .font(.caption2)
+                    .fontWeight(.medium)
+            }
+
+            if entry.isRunning || entry.isPaused, let endDate = entry.endDate {
+                if entry.isPaused {
+                    let remaining = max(0, endDate.timeIntervalSinceNow)
+                    Text(formatTime(remaining))
+                        .font(.system(size: 22, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+                } else {
+                    Text(endDate, style: .timer)
+                        .font(.system(size: 22, weight: .bold, design: .rounded))
+                        .monospacedDigit()
+                }
+
+                if entry.totalDuration > 0 {
+                    let remaining = max(0, endDate.timeIntervalSinceNow)
+                    let progress = min(1, remaining / entry.totalDuration)
+                    ProgressView(value: progress)
+                        .tint(entry.isPaused ? .orange : .green)
+                }
+            } else {
+                Text(String(localized: "No active timer"))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    // MARK: - Lock Screen: Inline
+
+    private var accessoryInlineView: some View {
+        Group {
+            if entry.isRunning, let endDate = entry.endDate, endDate > Date() {
+                Label {
+                    Text(endDate, style: .timer)
+                } icon: {
+                    Image(systemName: "timer")
+                }
+            } else if entry.isPaused, let endDate = entry.endDate {
+                let remaining = max(0, endDate.timeIntervalSinceNow)
+                Label(formatTime(remaining) + " ⏸", systemImage: "timer")
+            } else {
+                Label(String(localized: "Timer"), systemImage: "timer")
+            }
+        }
     }
 
     // MARK: - Helpers
@@ -204,7 +404,7 @@ struct RereminderAlarm: Widget {
         }
         .configurationDisplayName(String(localized: "Timer"))
         .description(String(localized: "Shows current timer status"))
-        .supportedFamilies([.systemSmall, .systemMedium])
+        .supportedFamilies([.systemSmall, .systemMedium, .systemLarge, .accessoryCircular, .accessoryRectangular, .accessoryInline])
     }
 }
 
@@ -218,13 +418,17 @@ struct RereminderAlarm: Widget {
         isRunning: true,
         isPaused: false,
         endDate: Date().addingTimeInterval(600),
-        totalDuration: 1800
+        totalDuration: 1800,
+        timerName: "Study 25 min",
+        prealertOffsets: [300, 60]
     )
     TimerWidgetEntry(
         date: .now,
         isRunning: false,
         isPaused: false,
         endDate: nil,
-        totalDuration: 0
+        totalDuration: 0,
+        timerName: "",
+        prealertOffsets: []
     )
 }

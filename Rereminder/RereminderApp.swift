@@ -13,6 +13,9 @@ struct RereminderApp: App {
     @StateObject private var themeManager = ThemeManager.shared
 
     init() {
+        // 기존 한국어 ringMode 값 마이그레이션
+        RingMode.migrateIfNeeded()
+
         // WatchConnectivity 초기화
         _ = WatchConnectivityManager.shared
 
@@ -23,7 +26,7 @@ struct RereminderApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .preferredColorScheme(.dark)
+                .preferredColorScheme(themeManager.colorScheme)
                 .tint(themeManager.accentColor)
                 .environmentObject(storeManager)
                 .environmentObject(themeManager)

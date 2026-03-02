@@ -138,6 +138,22 @@ struct TimerMainView: View {
             buttonRow(buttonSize: buttonSize)
                 .offset(y: fontSize * 1.3)
         }
+        .onChange(of: screenVM.state) { _, newState in
+            let announcement: String
+            switch newState {
+            case .running:
+                announcement = String(localized: "Timer started")
+            case .paused:
+                announcement = String(localized: "Timer paused")
+            case .overtime:
+                announcement = String(localized: "Timer finished, overtime counting")
+            case .finished:
+                announcement = String(localized: "Timer stopped")
+            case .idle:
+                announcement = String(localized: "Timer ready")
+            }
+            AccessibilityNotification.Announcement(announcement).post()
+        }
     }
 
     private func progressIndicator(size: CGFloat) -> some View {
@@ -387,7 +403,7 @@ struct TimerMainView: View {
             )
         ) {
             HStack(spacing: 4) {
-                Text(String(localized: "\(sec/60) min"))
+                Text(sec < 60 ? String(localized: "\(sec) sec") : String(localized: "\(sec/60) min"))
                     .font(.system(size: 14, weight: .medium))
 
                 // 제한 초과 프리셋에 잠금 아이콘
@@ -473,7 +489,7 @@ struct TimerMainView: View {
                 tint: Color.plain,
                 size: buttonSize
             ))
-            .accessibilityLabel("Cancel Timer")
+            .accessibilityLabel(String(localized: "Cancel Timer"))
         }
     }
 
@@ -494,7 +510,7 @@ struct TimerMainView: View {
                 tint: Color.positive,
                 size: buttonSize
             ))
-            .accessibilityLabel("Start Timer")
+            .accessibilityLabel(String(localized: "Start Timer"))
 
         case .running, .overtime:
             Button(action: { screenVM.pause() }) {
@@ -506,7 +522,7 @@ struct TimerMainView: View {
                 tint: Color.bitNegative,
                 size: buttonSize
             ))
-            .accessibilityLabel("Pause Timer")
+            .accessibilityLabel(String(localized: "Pause Timer"))
 
         case .paused:
             Button(action: { screenVM.resume() }) {
@@ -518,7 +534,7 @@ struct TimerMainView: View {
                 tint: Color.positive,
                 size: buttonSize
             ))
-            .accessibilityLabel("Resume Timer")
+            .accessibilityLabel(String(localized: "Resume Timer"))
         }
     }
 

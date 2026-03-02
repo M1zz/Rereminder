@@ -17,6 +17,7 @@ struct SettingView: View {
     @StateObject private var settingViewModel = SettingViewModel()
     @State private var path: [NavigationTarget] = []
     @State private var isNavigating = false
+    @State private var restoredTimerVM: TimerViewModel?
 
     var totalTime: Int {
         settingViewModel.time.convertedSecond
@@ -46,6 +47,15 @@ struct SettingView: View {
             .onAppear {
                 if !(minuteRange.contains(settingViewModel.time.minute)) || settingViewModel.time.minute == 0 {
                     settingViewModel.time.minute = 30
+                }
+                // Cold launch 타이머 복원
+                if path.isEmpty, let vm = TimerViewModel.restoreFromSavedState() {
+                    restoredTimerVM = vm
+                }
+            }
+            .fullScreenCover(item: $restoredTimerVM) { vm in
+                NavigationStack {
+                    TimerView(timerViewModel: vm, path: .constant([]))
                 }
             }
             .navigationDestination(for: NavigationTarget.self) { target in

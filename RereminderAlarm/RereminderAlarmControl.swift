@@ -57,12 +57,15 @@ struct TimerConfiguration: ControlConfigurationIntent {
 
 struct StartTimerIntent: SetValueIntent {
     static let title: LocalizedStringResource = "Start a timer"
+    static let openAppWhenRun = true
 
     @Parameter(title: "Timer Name")
     var name: String
 
     @Parameter(title: "Timer is running")
     var value: Bool
+
+    private static let suiteName = "group.leeo.toki"
 
     init() {}
 
@@ -71,7 +74,15 @@ struct StartTimerIntent: SetValueIntent {
     }
 
     func perform() async throws -> some IntentResult {
-        // Start the timer…
+        let shared = UserDefaults(suiteName: Self.suiteName)
+        if value {
+            // 타이머 시작 요청
+            shared?.set("start", forKey: "controlWidgetAction")
+        } else {
+            // 타이머 중지 요청
+            shared?.set("stop", forKey: "controlWidgetAction")
+        }
+        WidgetCenter.shared.reloadAllTimelines()
         return .result()
     }
 }

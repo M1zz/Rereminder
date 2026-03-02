@@ -75,6 +75,24 @@ class WatchConnectivityManager: NSObject, ObservableObject {
         send(["action": "stop"])
     }
 
+    /// iOS ringMode 설정을 Watch로 동기화
+    func sendRingMode(_ mode: String) {
+        guard WCSession.isSupported() else { return }
+
+        #if os(iOS)
+        guard WCSession.default.isPaired,
+              WCSession.default.activationState == .activated else { return }
+        #endif
+
+        do {
+            var context = WCSession.default.applicationContext
+            context["ringMode"] = mode
+            try WCSession.default.updateApplicationContext(context)
+        } catch {
+            print("❌ ringMode 동기화 실패: \(error.localizedDescription)")
+        }
+    }
+
     // MARK: - Application Context (백그라운드 동기화)
 
     /// Timer 상태를 Application Context로 전송 (백그라운드에서도 동작)
@@ -169,6 +187,11 @@ extension WatchConnectivityManager: WCSessionDelegate {
 
     nonisolated func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
         Task { @MainActor in
+            // ringMode 동기화 (Watch에서 수신)
+            if let ringMode = applicationContext["ringMode"] as? String {
+                UserDefaults.standard.set(ringMode, forKey: "ringMode")
+            }
+
             guard let state = applicationContext["state"] as? String else { return }
 
             switch state {
