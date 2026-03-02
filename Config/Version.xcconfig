@@ -12,4 +12,4 @@ MARKETING_VERSION = 2.0.1
 
 // 빌드 번호 (내부 빌드 번호)
 // 각 빌드마다 증가시켜야 합니다.
-CURRENT_PROJECT_VERSION = 1
+CURRENT_PROJECT_VERSION = 3
