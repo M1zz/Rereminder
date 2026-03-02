@@ -152,13 +152,14 @@ struct PaywallView: View {
 
                 // Rows
                 comparisonRow("Timer", free: true, pro: true)
-                comparisonRow("Pre-alerts", free: true, pro: true)
+                comparisonRow("Pre-alerts", free: "1", pro: "∞")
                 comparisonRow("Live Activity", free: true, pro: true)
-                comparisonRow("Apple Watch", free: true, pro: true)
+                comparisonRow("Watch / Widget", free: true, pro: true)
                 Divider()
+                comparisonRow("Presentation Mode", free: false, pro: true)
+                comparisonRow("Overtime Tracking", free: false, pro: true)
                 comparisonRow("Templates", free: "3", pro: "∞")
-                comparisonRow("Custom Messages", free: false, pro: true)
-                comparisonRow("Label Colors", free: "1", pro: "8")
+                comparisonRow("Custom Messages", free: true, pro: true)
                 comparisonRow("Timer History", free: false, pro: true)
             }
             .background(Color(uiColor: .secondarySystemBackground).opacity(0.5))
@@ -301,7 +302,7 @@ struct PaywallView: View {
 
             HStack(spacing: 16) {
                 Link("Terms of Use", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
-                Link("Privacy Policy", destination: URL(string: "https://www.apple.com/legal/privacy/")!)
+                Link("Privacy Policy", destination: URL(string: "https://m1zz.github.io/Rereminder/privacy.html")!)
             }
             .font(.caption2)
             .foregroundStyle(.secondary)
@@ -311,7 +312,7 @@ struct PaywallView: View {
 
 // MARK: - Paywall Trigger Modifier
 
-/// 사용법: .paywallGate(isPresented: $showPaywall, feature: .customPrealertMessage)
+/// 사용법: .paywallGate(isPresented: $showPaywall, feature: .presentationMode)
 struct PaywallGateModifier: ViewModifier {
     @Binding var isPresented: Bool
     var feature: ProGate.Feature?
@@ -355,7 +356,7 @@ struct ProBadge: View {
 }
 
 #Preview("Paywall") {
-    PaywallView(triggeredBy: .customPrealertMessage)
+    PaywallView(triggeredBy: .presentationMode)
 }
 
 #Preview("Pro Badge") {

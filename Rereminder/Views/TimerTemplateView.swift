@@ -252,39 +252,22 @@ struct TimerTemplateView: View {
 
     @ViewBuilder
     private func colorButton(label: String, colorHex: String) -> some View {
-        let isDefault = colorHex == "#007AFF"
-        let isLocked = !isDefault && !ProGate.canUseColor(colorHex)
-
         Button {
-            if isLocked {
-                paywallFeature = .labelColors
-                showPaywall = true
-            } else {
-                editLabel = label
-                editColorHex = colorHex
-            }
+            editLabel = label
+            editColorHex = colorHex
         } label: {
             VStack(spacing: 4) {
-                ZStack {
-                    Circle()
-                        .fill(Color(hex:colorHex))
-                        .frame(width: 40, height: 40)
-                        .overlay(
-                            Circle()
-                                .strokeBorder(editColorHex == colorHex ? Color.primary : Color.clear, lineWidth: 2)
-                        )
-                        .opacity(isLocked ? 0.4 : 1.0)
-
-                    if isLocked {
-                        Image(systemName: "lock.fill")
-                            .font(.caption)
-                            .foregroundStyle(.white)
-                    }
-                }
+                Circle()
+                    .fill(Color(hex:colorHex))
+                    .frame(width: 40, height: 40)
+                    .overlay(
+                        Circle()
+                            .strokeBorder(editColorHex == colorHex ? Color.primary : Color.clear, lineWidth: 2)
+                    )
 
                 Text(label)
                     .font(.caption2)
-                    .foregroundStyle(isLocked ? .secondary : .primary)
+                    .foregroundStyle(.primary)
             }
         }
         .buttonStyle(.plain)

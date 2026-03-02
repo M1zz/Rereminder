@@ -51,12 +51,21 @@ final class TimerViewModel: ObservableObject {
 
         engine.onFinish = { [weak self] in
             guard let self else { return }
-            self.state = .overtime
             ring()
             let message = self.currentTemplate?.getFinishMessage() ?? "Timer finished"
             self.showToast?(message)
-            DispatchQueue.main.async { self.onTimerFinish?() }
             self.appStateManager?.sendNotificationIfNeeded(message)
+
+            if ProGate.canUseOvertime {
+                // Pro: 오버타임 카운트 계속
+                self.state = .overtime
+            } else {
+                // Free: 00:00에서 정지
+                self.state = .finished
+                self.engine.pause()
+                self.endLiveActivity()
+            }
+            DispatchQueue.main.async { self.onTimerFinish?() }
         }
     }
 
@@ -117,7 +126,8 @@ final class TimerViewModel: ObservableObject {
         currentTemplate = template
         engine.configure(
             mainSeconds: template.mainSeconds,
-            prealertOffsetsSec: template.prealertOffsetsSec
+            prealertOffsetsSec: template.prealertOffsetsSec,
+            name: template.name
         )
         state = .idle
         remaining = TimeInterval(template.mainSeconds)
@@ -166,7 +176,7 @@ final class TimerViewModel: ObservableObject {
     }
 
     func stop() {
-        saveTimerRecord(finished: state == .overtime)
+        saveTimerRecord(finished: state == .overtime || state == .finished)
         engine.stop()
         state = .idle
         endLiveActivity()

@@ -13,19 +13,27 @@ import Foundation
 import SwiftData
 import SwiftUI
 
+enum AppMode: String, CaseIterable {
+    case timer, presentation
+}
+
 @MainActor
 final class TimerScreenViewModel: ObservableObject {
     @Published var mainMinutes: Int = 10
     @Published var mainSeconds: Int = 0
-    @Published var selectedOffsets: Set<Int> = [60, 300] {  // 무료 기본 2개 (1분, 5분)
+    @Published var selectedOffsets: Set<Int> = [60] {  // 무료 기본 1개 (1분)
         didSet { sortedOffsetsDesc = selectedOffsets.sorted(by: >) }
     }
-    private(set) var sortedOffsetsDesc: [Int] = [300, 60]
+    private(set) var sortedOffsetsDesc: [Int] = [60]
     @Published private(set) var configuredMainSeconds: Int = 600
     @Published var showTimerAlert: Bool = false
     @Published var prealertMessages: [Int: String] = [:]
     @Published var finishMessage: String = ""
     @Published var showPermissionWarning: Bool = false
+
+    // MARK: - Presentation Mode
+    @Published var currentMode: AppMode = .timer
+    @Published var presentationSections: [PresentationSection] = []
 
     let timerVM: TimerViewModel
     let configService = TimerConfigService()
@@ -107,6 +115,10 @@ final class TimerScreenViewModel: ObservableObject {
         configService.attachContext(ctx)
     }
 
+    func seedTemplatesIfNeeded() {
+        configService.seedIfNeeded()
+    }
+
     // MARK: - Computed State
 
     var state: TimerState { timerVM.state }
@@ -125,12 +137,14 @@ final class TimerScreenViewModel: ObservableObject {
             let timeUntilNext = remaining - Double(nextAlert)
             let minutes = Int(timeUntilNext) / 60
             let seconds = Int(timeUntilNext) % 60
-            let alertMinutes = nextAlert / 60
+            let alertLabel = nextAlert < 60
+                ? String(localized: "\(nextAlert) sec")
+                : String(localized: "\(nextAlert / 60) min")
 
             if minutes > 0 {
-                return String(localized: "Next: \(alertMinutes) min alert (\(minutes) min \(seconds) sec left)")
+                return String(localized: "Next: \(alertLabel) alert (\(minutes) min \(seconds) sec left)")
             } else {
-                return String(localized: "Next: \(alertMinutes) min alert (\(seconds) sec left)")
+                return String(localized: "Next: \(alertLabel) alert (\(seconds) sec left)")
             }
         } else {
             let minutes = Int(remaining) / 60
@@ -254,6 +268,85 @@ final class TimerScreenViewModel: ObservableObject {
                 "Timer applied: \(mainLabel)" + (preText.isEmpty ? "" : " / Pre-alert \(preText)")
             )
         }
+    }
+}
+
+// MARK: - Presentation Mode
+
+extension TimerScreenViewModel {
+    /// 섹션 배열을 기존 pre-alert 시스템으로 변환하여 타이머 시작
+    func startPresentation() {
+        guard !presentationSections.isEmpty else { return }
+
+        let totalSeconds = presentationSections.reduce(0) { $0 + $1.durationSeconds }
+        guard totalSeconds > 0 else { return }
+
+        // 섹션 경계를 remaining time 기준 pre-alert 오프셋으로 변환
+        // 예: Intro(5분) + Main(20분) + Q&A(5분) = 총 30분 (1800초)
+        // → Intro 끝: remaining = 1500초, Main 끝: remaining = 300초
+        var offsets: [Int] = []
+        var messages: [Int: String] = [:]
+        var accumulated = 0
+
+        for (index, section) in presentationSections.enumerated() {
+            accumulated += section.durationSeconds
+            let remainingAtEnd = totalSeconds - accumulated
+
+            // 마지막 섹션은 타이머 종료와 동일하므로 pre-alert 불필요
+            if remainingAtEnd > 0 && section.alertAtEnd {
+                offsets.append(remainingAtEnd)
+                messages[remainingAtEnd] = "\(section.name) complete"
+            }
+
+            // 각 섹션 시작 전 알림은 생략 (체크포인트 방식)
+            _ = index  // suppress unused warning
+        }
+
+        // 기존 타이머 시스템에 적용
+        mainMinutes = totalSeconds / 60
+        mainSeconds = totalSeconds % 60
+        selectedOffsets = Set(offsets)
+        prealertMessages = messages
+        finishMessage = "Presentation complete"
+        configuredMainSeconds = totalSeconds
+
+        let template = Timer(
+            name: makePresentationName(),
+            mainSeconds: totalSeconds,
+            prealertOffsetsSec: offsets.sorted(),
+            prealertMessages: messages,
+            finishMessage: finishMessage,
+            label: "Presentation",
+            colorHex: Timer.presetColors["Presentation"] ?? "#FF3B30",
+            isPresentation: true,
+            sectionsData: try? JSONEncoder().encode(presentationSections)
+        )
+
+        timerVM.configure(from: template)
+        configuredMainSeconds = totalSeconds
+
+        if timerVM.appStateManager?.notificationAuthStatus == .denied,
+           UserDefaults.standard.bool(forKey: "useAlarmKit") {
+            showPermissionWarning = true
+            return
+        }
+
+        timerVM.start()
+    }
+
+    /// 발표 이름 자동 생성
+    private func makePresentationName() -> String {
+        let totalSeconds = presentationSections.reduce(0) { $0 + $1.durationSeconds }
+        let minutes = totalSeconds / 60
+        if minutes >= 60 {
+            let hours = minutes / 60
+            let remainingMinutes = minutes % 60
+            if remainingMinutes > 0 {
+                return "\(hours)h \(remainingMinutes)m Presentation"
+            }
+            return "\(hours)h Presentation"
+        }
+        return "\(minutes)m Presentation"
     }
 }
 
