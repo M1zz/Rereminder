@@ -20,7 +20,7 @@
 			containerPortal = 260414C32E1B9FA200CBA29B /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 2B302B092E4375150089A14A;
-			remoteInfo = "RereminderWatch";
+			remoteInfo = RereminderWatch;
 		};
 		58AA3EC12ECF550B007D4BBD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -58,7 +58,7 @@
 
 /* Begin PBXFileReference section */
 		260414CB2E1B9FA200CBA29B /* Rereminder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rereminder.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		2B302B0A2E4375150089A14A /* RereminderWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RereminderWatch.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2B302B0A2E4375150089A14A /* RereminderWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RereminderWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		581D85DB2F48C24200F2F032 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		58AA3EAD2ECF5509007D4BBD /* RereminderAlarmExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = RereminderAlarmExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		58AA3EAF2ECF5509007D4BBD /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
@@ -86,6 +86,7 @@
 			membershipExceptions = (
 				Modules/AppName.swift,
 				Modules/WatchConnectivityManager.swift,
+				Modules/ring.swift,
 			);
 			target = 2B302B092E4375150089A14A /* RereminderWatch */;
 		};
@@ -126,7 +127,7 @@
 		};
 		2B302B0B2E4375150089A14A /* RereminderWatch */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "RereminderWatch";
+			path = RereminderWatch;
 			sourceTree = "<group>";
 		};
 		58AA3EB32ECF5509007D4BBD /* RereminderAlarm */ = {
@@ -245,10 +246,10 @@
 			fileSystemSynchronizedGroups = (
 				2B302B0B2E4375150089A14A /* RereminderWatch */,
 			);
-			name = "RereminderWatch";
+			name = RereminderWatch;
 			packageProductDependencies = (
 			);
-			productName = "RereminderWatch";
+			productName = RereminderWatch;
 			productReference = 2B302B0A2E4375150089A14A /* RereminderWatch.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -302,6 +303,7 @@
 				en,
 				Base,
 				ko,
+				ja,
 			);
 			mainGroup = 260414C22E1B9FA200CBA29B;
 			minimizedProjectReferenceProxies = 1;
