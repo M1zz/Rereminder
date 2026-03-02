@@ -40,101 +40,127 @@ struct TimerUnifiedView: View {
     }
 
     var body: some View {
+        mainContent
+            .modifier(SheetsModifier(
+                showHistory: $showHistory,
+                showMessageEditor: $showMessageEditor,
+                showProPaywall: $showProPaywall,
+                screenVM: screenVM
+            ))
+            .toast(toast)
+            .onAppear(perform: setupOnAppear)
+            .onChange(of: scenePhase) { oldPhase, newPhase in
+                handleScenePhase(oldPhase, newPhase)
+            }
+            .onChange(of: screenVM.state) { oldState, newState in
+                handleStateChange(oldState, newState)
+            }
+    }
+
+    // MARK: - Sub Views
+
+    private var mainContent: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                // idle 상태일 때 모드 전환 Picker
-                if isIdle {
-                    Picker("Mode", selection: modeBinding) {
-                        Text("Timer").tag(AppMode.timer)
-                        Text("Presentation").tag(AppMode.presentation)
-                    }
-                    .pickerStyle(.segmented)
-                    .padding(.horizontal, 16)
-                    .padding(.top, 8)
-                }
-
-                // 모드에 따른 뷰 분기
-                Group {
-                    switch screenVM.currentMode {
-                    case .timer:
-                        TimerMainView()
-                            .padding()
-                    case .presentation:
-                        PresentationContainerView()
-                    }
-                }
-                .environmentObject(screenVM)
+                modePicker
+                modeContent
             }
             .toolbar {
-                // timer template (타이머 모드에서만)
-                ToolbarItem(placement: .topBarLeading) {
-                    if screenVM.currentMode == .timer {
-                        Button {
-                            showHistory = true
-                        } label: {
-                            Image(systemName: "list.bullet")
-                        }
-                    }
-                }
-                // notification message editor (타이머 모드에서만)
-                ToolbarItem(placement: .topBarTrailing) {
-                    if screenVM.currentMode == .timer {
-                        Button {
-                            showMessageEditor = true
-                        } label: {
-                            Image(systemName: "text.bubble")
-                        }
-                    }
-                }
-                // notice setting
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink {
-                        NoticeSettingView()
-                            .environmentObject(appStateManager)
-                            .environmentObject(screenVM)
-                    } label: {
-                        Image(systemName: "gearshape")
-                    }
+                toolbarLeading
+                toolbarMessageEditor
+                toolbarSettings
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var modePicker: some View {
+        if isIdle {
+            Picker("Mode", selection: modeBinding) {
+                Text("Timer").tag(AppMode.timer)
+                Text("Presentation").tag(AppMode.presentation)
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal, 16)
+            .padding(.top, 8)
+        }
+    }
+
+    private var modeContent: some View {
+        Group {
+            switch screenVM.currentMode {
+            case .timer:
+                TimerMainView()
+                    .padding()
+            case .presentation:
+                PresentationContainerView()
+            }
+        }
+        .environmentObject(screenVM)
+    }
+
+    // MARK: - Toolbar
+
+    private var toolbarLeading: some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            if screenVM.currentMode == .timer {
+                Button {
+                    showHistory = true
+                } label: {
+                    Image(systemName: "list.bullet")
                 }
             }
         }
-        .sheet(isPresented: $showHistory) {
-            TimerTemplateView { selected in
-                screenVM.apply(template: selected)
-            }
-            .presentationDetents(Set<PresentationDetent>([.medium, .large]))
-            .presentationDragIndicator(Visibility.visible)
-        }
-        .sheet(isPresented: $showMessageEditor) {
-            NotificationMessageSettingView()
-                .environmentObject(screenVM)
-                .presentationDetents([.medium, .large])
-                .presentationDragIndicator(.visible)
-        }
-        .toast(toast)
-        .onAppear {
-            screenVM.attachContext(context)
-            screenVM.seedTemplatesIfNeeded()
-            screenVM.timerVM.showToast = { toast.show(Toast($0)) }
-            screenVM.showToast = { toast.show(Toast($0)) }
-            screenVM.timerVM.appStateManager = appStateManager
-            screenVM.timerVM.modelContext = context
-            screenVM.initialConfiguration()
-            screenVM.restoreTimerIfNeeded()
-        }
-        .onChange(of: scenePhase) { _, newPhase in
-            appStateManager.updateState(newPhase)
-            // 포그라운드 복귀 시 endDate 기반 재계산
-            if newPhase == .active {
-                screenVM.timerVM.engine.recalculateOnForeground()
-                handleControlWidgetAction()
+    }
+
+    private var toolbarMessageEditor: some ToolbarContent {
+        ToolbarItem(placement: .topBarTrailing) {
+            if screenVM.currentMode == .timer {
+                Button {
+                    showMessageEditor = true
+                } label: {
+                    Image(systemName: "text.bubble")
+                }
             }
         }
-        .onChange(of: screenVM.state) { _, newState in
-            UIApplication.shared.isIdleTimerDisabled =
-                (newState == .running || newState == .paused || newState == .overtime)
+    }
+
+    private var toolbarSettings: some ToolbarContent {
+        ToolbarItem(placement: .topBarTrailing) {
+            NavigationLink {
+                NoticeSettingView()
+                    .environmentObject(appStateManager)
+                    .environmentObject(screenVM)
+            } label: {
+                Image(systemName: "gearshape")
+            }
         }
-        .paywallGate(isPresented: $showProPaywall, feature: .presentationMode)
+    }
+
+    // MARK: - Actions
+
+    private func setupOnAppear() {
+        screenVM.attachContext(context)
+        screenVM.seedTemplatesIfNeeded()
+        screenVM.timerVM.showToast = { toast.show(Toast($0)) }
+        screenVM.showToast = { toast.show(Toast($0)) }
+        screenVM.timerVM.appStateManager = appStateManager
+        screenVM.timerVM.modelContext = context
+        screenVM.initialConfiguration()
+        screenVM.restoreTimerIfNeeded()
+    }
+
+    private func handleScenePhase(_: ScenePhase, _ newPhase: ScenePhase) {
+        appStateManager.updateState(newPhase)
+        if newPhase == .active {
+            screenVM.timerVM.engine.recalculateOnForeground()
+            handleControlWidgetAction()
+        }
+    }
+
+    private func handleStateChange(_: TimerState, _ newState: TimerState) {
+        UIApplication.shared.isIdleTimerDisabled =
+            (newState == .running || newState == .paused || newState == .overtime)
     }
 
     private func handleControlWidgetAction() {
@@ -145,7 +171,6 @@ struct TimerUnifiedView: View {
         switch action {
         case "start":
             if screenVM.state == .idle || screenVM.state == .finished {
-                // Siri에서 duration을 지정한 경우 적용
                 if let siriDuration = shared?.object(forKey: "siriTimerDuration") as? Int, siriDuration > 0 {
                     shared?.removeObject(forKey: "siriTimerDuration")
                     screenVM.mainMinutes = siriDuration / 60
@@ -169,5 +194,32 @@ struct TimerUnifiedView: View {
         default:
             break
         }
+    }
+}
+
+// MARK: - Sheets Modifier (body 타입체커 부담 분산)
+
+private struct SheetsModifier: ViewModifier {
+    @Binding var showHistory: Bool
+    @Binding var showMessageEditor: Bool
+    @Binding var showProPaywall: Bool
+    let screenVM: TimerScreenViewModel
+
+    func body(content: Content) -> some View {
+        content
+            .sheet(isPresented: $showHistory) {
+                TimerTemplateView { selected in
+                    screenVM.apply(template: selected)
+                }
+                .presentationDetents(Set<PresentationDetent>([.medium, .large]))
+                .presentationDragIndicator(Visibility.visible)
+            }
+            .sheet(isPresented: $showMessageEditor) {
+                NotificationMessageSettingView()
+                    .environmentObject(screenVM)
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.visible)
+            }
+            .paywallGate(isPresented: $showProPaywall, feature: .presentationMode)
     }
 }
