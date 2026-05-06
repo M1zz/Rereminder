@@ -3141,6 +3141,15 @@
     "Track your timer usage patterns\nand improve your time management" : {
       "comment" : "History locked description"
     },
+    "Trial %lld left" : {
+
+    },
+    "Trial: %lld views remaining" : {
+
+    },
+    "Try 5 more times" : {
+
+    },
     "Unknown" : {
       "localizations" : {
         "ja" : {

@@ -74,6 +74,8 @@ final class ReviewRequestManager {
             // 마지막 요청 날짜 기록
             UserDefaults.standard.set(Date(), forKey: lastReviewRequestDateKey)
             UserDefaults.standard.set(true, forKey: hasRequestedReviewKey)
+
+            AnalyticsManager.log(.reviewRequested)
         }
         #endif
     }
@@ -84,6 +86,7 @@ final class ReviewRequestManager {
         // App Store 리뷰 페이지로 Custom 이동
         if let appStoreURL = URL(string: "https://apps.apple.com/app/id6752551268?action=write-review") {
             UIApplication.shared.open(appStoreURL)
+            AnalyticsManager.log(.reviewCompleted)
         }
         #endif
     }

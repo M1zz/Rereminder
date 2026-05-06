@@ -11,6 +11,8 @@ import SwiftUI
 struct TimerSetupView: View {
     @EnvironmentObject var screenVM: TimerScreenViewModel
     @State private var showPaywall = false
+    @State private var paywallStage: ProGate.PaywallStage = .second
+    @State private var pendingPrealertSec: Int?
 
     var body: some View {
         VStack(spacing: 20) {
@@ -65,11 +67,23 @@ struct TimerSetupView: View {
                                     get: { isSelected },
                                     set: { on in
                                         if on {
-                                            if !ProGate.canAddPrealert(currentCount: screenVM.selectedOffsets.count) {
-                                                showPaywall = true
-                                                return
+                                            if screenVM.selectedOffsets.count >= ProGate.freePrealertLimit {
+                                                switch ProGate.evaluate(.unlimitedPrealerts) {
+                                                case .allowed, .allowedWithTrial:
+                                                    screenVM.selectedOffsets.insert(sec)
+                                                case .blocked(let stage):
+                                                    paywallStage = stage
+                                                    pendingPrealertSec = sec
+                                                    showPaywall = true
+                                                    AnalyticsManager.log(.premiumTrialExhausted(
+                                                        feature: .unlimitedPrealerts,
+                                                        stage: stage
+                                                    ))
+                                                    return
+                                                }
+                                            } else {
+                                                screenVM.selectedOffsets.insert(sec)
                                             }
-                                            screenVM.selectedOffsets.insert(sec)
                                         } else {
                                             screenVM.selectedOffsets.remove(sec)
                                         }
@@ -85,6 +99,19 @@ struct TimerSetupView: View {
                 }
             }
         }
-        .paywallGate(isPresented: $showPaywall, feature: .unlimitedPrealerts)
+        .paywallGate(
+            isPresented: $showPaywall,
+            feature: .unlimitedPrealerts,
+            stage: paywallStage,
+            onAcceptExtension: applyPendingPrealert
+        )
+    }
+
+    private func applyPendingPrealert() {
+        if let sec = pendingPrealertSec {
+            screenVM.selectedOffsets.insert(sec)
+            screenVM.showPrealertToast(for: sec, isEnabled: true)
+            pendingPrealertSec = nil
+        }
     }
 }

@@ -56,11 +56,13 @@ final class TimerViewModel: ObservableObject {
             self.showToast?(message)
             self.appStateManager?.sendNotificationIfNeeded(message)
 
-            if ProGate.canUseOvertime {
-                // Pro: 오버타임 카운트 계속
+            switch ProGate.evaluate(.overtimeTracking) {
+            case .allowed, .allowedWithTrial:
+                // Pro 또는 trial 가능: 오버타임 카운트 계속
+                ProGate.recordUsage(.overtimeTracking)
                 self.state = .overtime
-            } else {
-                // Free: 00:00에서 정지
+            case .blocked:
+                // Trial 소진: 00:00에서 정지
                 self.state = .finished
                 self.engine.pause()
                 self.endLiveActivity()
@@ -143,6 +145,12 @@ final class TimerViewModel: ObservableObject {
             ? (UserDefaults.standard.object(forKey: "testModeMultiplier") as? Double ?? 1.0)
             : 1.0
         engine.timeMultiplier = multiplier
+
+        // 5+5 trial 카운트: 2개 이상의 예비 알림으로 시작 시
+        if let template = currentTemplate,
+           template.prealertOffsetsSec.count > ProGate.freePrealertLimit {
+            ProGate.recordUsage(.unlimitedPrealerts)
+        }
 
         engine.start()
         state = .running

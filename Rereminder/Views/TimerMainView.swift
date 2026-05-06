@@ -436,11 +436,14 @@ struct TimerMainView: View {
 
     @State private var showPaywall = false
     @State private var paywallFeature: ProGate.Feature?
+    @State private var paywallStage: ProGate.PaywallStage = .second
+    @State private var pendingPrealertSec: Int?
 
     @ViewBuilder
     private var prealertSection: some View {
         let mainSeconds = screenVM.mainMinutes * 60 + screenVM.mainSeconds
         let presets = Timer.presetOffsetsSec
+        let prealertGate = ProGate.evaluate(.unlimitedPrealerts)
 
         VStack(alignment: .leading, spacing: 8) {
             HStack {
@@ -449,9 +452,16 @@ struct TimerMainView: View {
                     .foregroundStyle(.secondary)
 
                 if !StoreManager.isProUser {
-                    Text("\(screenVM.selectedOffsets.count)/\(ProGate.freePrealertLimit)")
-                        .font(.caption2.weight(.medium))
-                        .foregroundStyle(.secondary)
+                    if let remaining = prealertGate.trialRemaining,
+                       screenVM.selectedOffsets.count >= ProGate.freePrealertLimit {
+                        Text("Trial \(remaining) left")
+                            .font(.caption2.weight(.medium))
+                            .foregroundStyle(.orange)
+                    } else {
+                        Text("\(screenVM.selectedOffsets.count)/\(ProGate.freePrealertLimit)")
+                            .font(.caption2.weight(.medium))
+                            .foregroundStyle(.secondary)
+                    }
                 }
 
                 Spacer()
@@ -467,25 +477,51 @@ struct TimerMainView: View {
                 .padding(.horizontal, 12)
             }
         }
-        .paywallGate(isPresented: $showPaywall, feature: paywallFeature)
+        .paywallGate(
+            isPresented: $showPaywall,
+            feature: paywallFeature,
+            stage: paywallStage,
+            onAcceptExtension: applyPendingPrealert
+        )
+    }
+
+    private func applyPendingPrealert() {
+        if let sec = pendingPrealertSec {
+            screenVM.selectedOffsets.insert(sec)
+            screenVM.showPrealertToast(for: sec, isEnabled: true)
+            pendingPrealertSec = nil
+        }
     }
 
     private func prealertToggle(sec: Int, mainSeconds: Int) -> some View {
         let isDisabled = sec >= mainSeconds
         let isSelected = screenVM.selectedOffsets.contains(sec)
+        let prealertGate = ProGate.evaluate(.unlimitedPrealerts)
 
         return Toggle(
             isOn: Binding(
                 get: { isSelected },
                 set: { on in
                     if on {
-                        // Pro 체크: 이미 제한에 도달했으면 Paywall
-                        if !ProGate.canAddPrealert(currentCount: screenVM.selectedOffsets.count) {
-                            paywallFeature = .unlimitedPrealerts
-                            showPaywall = true
-                            return
+                        // 1번째는 항상 free, 2번째부터 5+5 trial 평가
+                        if screenVM.selectedOffsets.count >= ProGate.freePrealertLimit {
+                            switch ProGate.evaluate(.unlimitedPrealerts) {
+                            case .allowed, .allowedWithTrial:
+                                screenVM.selectedOffsets.insert(sec)
+                            case .blocked(let stage):
+                                paywallFeature = .unlimitedPrealerts
+                                paywallStage = stage
+                                pendingPrealertSec = sec
+                                showPaywall = true
+                                AnalyticsManager.log(.premiumTrialExhausted(
+                                    feature: .unlimitedPrealerts,
+                                    stage: stage
+                                ))
+                                return
+                            }
+                        } else {
+                            screenVM.selectedOffsets.insert(sec)
                         }
-                        screenVM.selectedOffsets.insert(sec)
                     } else {
                         screenVM.selectedOffsets.remove(sec)
                     }
@@ -497,9 +533,10 @@ struct TimerMainView: View {
                 Text(sec < 60 ? String(localized: "\(sec) sec") : String(localized: "\(sec/60) min"))
                     .font(.system(size: 14, weight: .medium))
 
-                // 제한 초과 프리셋에 잠금 아이콘
+                // 제한 초과 프리셋에 잠금 아이콘 (trial 도 소진된 경우)
                 if !isSelected && !StoreManager.isProUser
                     && screenVM.selectedOffsets.count >= ProGate.freePrealertLimit
+                    && !prealertGate.isAllowed
                     && !isDisabled {
                     Image(systemName: "lock.fill")
                         .font(.caption2)

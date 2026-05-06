@@ -93,6 +93,11 @@ final class TimerEngine {
 
         // UI tick 시작
         startUITick()
+
+        AnalyticsManager.log(.timerStarted(
+            durationSeconds: Int(cfg.mainDuration),
+            presetName: cfg.name.isEmpty ? nil : cfg.name
+        ))
     }
 
     func pause() {
@@ -128,6 +133,13 @@ final class TimerEngine {
     }
 
     func stop() {
+        let wasActive = (state == .running || state == .paused)
+        let remainingForCancel: Int = {
+            guard wasActive, let cfg = config, let start = startDate else { return 0 }
+            let elapsed = Date().timeIntervalSince(start) * timeMultiplier + pausedElapsed
+            return max(0, Int(cfg.mainDuration - elapsed))
+        }()
+
         stopUITick()
         cancelScheduledNotifications()
         endDate = nil
@@ -136,6 +148,10 @@ final class TimerEngine {
         remainingWhenPaused = nil
         firedOffsets.removeAll()
         state = .idle
+
+        if wasActive {
+            AnalyticsManager.log(.timerCancelled(remainingSeconds: remainingForCancel))
+        }
     }
 
     /// Cold launch 시 App Group에서 타이머 상태 복원
@@ -267,6 +283,9 @@ final class TimerEngine {
             if remain <= 0 && self.state == .running {
                 self.state = .overtime
                 DispatchQueue.main.async { self.onFinish?() }
+                AnalyticsManager.log(.timerCompleted(
+                    durationSeconds: Int(cfg.mainDuration)
+                ))
             }
 
             DispatchQueue.main.async { self.onTick?(remain) }

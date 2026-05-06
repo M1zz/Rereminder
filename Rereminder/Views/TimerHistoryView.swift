@@ -15,13 +15,15 @@ struct TimerHistoryView: View {
 
     @State private var showPaywall = false
     @State private var displayLimit = 50
+    @State private var paywallStage: ProGate.PaywallStage = .second
+    @State private var historyGate: ProGate.GateResult = .blocked(stage: .first)
 
     private var isPro: Bool { StoreManager.isProUser }
 
     var body: some View {
         NavigationStack {
             Group {
-                if !isPro {
+                if !historyGate.isAllowed {
                     lockedView
                 } else if records.isEmpty {
                     ContentUnavailableView(
@@ -31,6 +33,17 @@ struct TimerHistoryView: View {
                     )
                 } else {
                     List {
+                        if let remaining = historyGate.trialRemaining, !isPro {
+                            Section {
+                                HStack {
+                                    Image(systemName: "sparkles")
+                                        .foregroundStyle(.orange)
+                                    Text("Trial: \(remaining) views remaining")
+                                        .font(.caption.weight(.medium))
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                        }
                         statsSection
                         recordsSection
                     }
@@ -39,7 +52,24 @@ struct TimerHistoryView: View {
             }
             .navigationTitle(String(localized: "Timer History"))
             .navigationBarTitleDisplayMode(.inline)
-            .paywallGate(isPresented: $showPaywall, feature: .timerHistory)
+            .paywallGate(
+                isPresented: $showPaywall,
+                feature: .timerHistory,
+                stage: paywallStage,
+                onAcceptExtension: {
+                    ProGate.recordUsage(.timerHistory)
+                    historyGate = ProGate.evaluate(.timerHistory)
+                }
+            )
+            .onAppear {
+                let result = ProGate.evaluate(.timerHistory)
+                historyGate = result
+                if case .blocked(let stage) = result {
+                    paywallStage = stage
+                } else {
+                    ProGate.recordUsage(.timerHistory)
+                }
+            }
         }
     }
 

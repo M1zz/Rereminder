@@ -19,24 +19,43 @@ struct TimerUnifiedView: View {
     @State private var showHistory = false
     @State private var showMessageEditor = false
     @State private var showProPaywall = false
+    @State private var paywallStage: ProGate.PaywallStage = .second
 
     /// 타이머가 실행 중이 아닐 때만 모드 전환 허용
     private var isIdle: Bool {
         screenVM.state == .idle || screenVM.state == .finished
     }
 
-    /// Free 사용자가 Presentation 선택 시 페이월 표시, 모드 변경 차단
+    /// Free 사용자가 Presentation 선택 시 5+5 trial 평가
     private var modeBinding: Binding<AppMode> {
         Binding(
             get: { screenVM.currentMode },
             set: { newMode in
-                if newMode == .presentation && !ProGate.canUsePresentationMode {
-                    showProPaywall = true
-                } else {
+                guard newMode == .presentation else {
                     screenVM.currentMode = newMode
+                    return
+                }
+                switch ProGate.evaluate(.presentationMode) {
+                case .allowed, .allowedWithTrial:
+                    screenVM.currentMode = newMode
+                    ProGate.recordUsage(.presentationMode)
+                    AnalyticsManager.log(.presentationModeStarted)
+                case .blocked(let stage):
+                    paywallStage = stage
+                    showProPaywall = true
+                    AnalyticsManager.log(.premiumTrialExhausted(
+                        feature: .presentationMode,
+                        stage: stage
+                    ))
                 }
             }
         )
+    }
+
+    private func enterPresentationAfterExtension() {
+        screenVM.currentMode = .presentation
+        ProGate.recordUsage(.presentationMode)
+        AnalyticsManager.log(.presentationModeStarted)
     }
 
     var body: some View {
@@ -45,6 +64,8 @@ struct TimerUnifiedView: View {
                 showHistory: $showHistory,
                 showMessageEditor: $showMessageEditor,
                 showProPaywall: $showProPaywall,
+                paywallStage: paywallStage,
+                onAcceptExtension: enterPresentationAfterExtension,
                 screenVM: screenVM
             ))
             .toast(toast)
@@ -203,6 +224,8 @@ private struct SheetsModifier: ViewModifier {
     @Binding var showHistory: Bool
     @Binding var showMessageEditor: Bool
     @Binding var showProPaywall: Bool
+    let paywallStage: ProGate.PaywallStage
+    let onAcceptExtension: () -> Void
     let screenVM: TimerScreenViewModel
 
     func body(content: Content) -> some View {
@@ -220,6 +243,11 @@ private struct SheetsModifier: ViewModifier {
                     .presentationDetents([.medium, .large])
                     .presentationDragIndicator(.visible)
             }
-            .paywallGate(isPresented: $showProPaywall, feature: .presentationMode)
+            .paywallGate(
+                isPresented: $showProPaywall,
+                feature: .presentationMode,
+                stage: paywallStage,
+                onAcceptExtension: onAcceptExtension
+            )
     }
 }

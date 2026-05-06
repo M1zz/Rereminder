@@ -17,6 +17,14 @@ struct PaywallView: View {
     /// Paywall을 열게 된 기능 (nil이면 일반 업그레이드)
     var triggeredBy: ProGate.Feature?
 
+    /// 페이월 단계 (5+5 모델)
+    var stage: ProGate.PaywallStage = .second
+
+    /// "5번 더 체험" 수락 시 호출 (stage == .first 일 때만 노출)
+    var onAcceptExtension: (() -> Void)?
+
+    @State private var didPurchaseDuringSession = false
+
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -51,6 +59,20 @@ struct PaywallView: View {
                     }
                     .accessibilityLabel(String(localized: "Close"))
                 }
+            }
+        }
+        .onAppear {
+            AnalyticsManager.log(.paywallShown(trigger: triggeredBy))
+        }
+        .onDisappear {
+            AnalyticsManager.log(.paywallDismissed(
+                trigger: triggeredBy,
+                didPurchase: didPurchaseDuringSession
+            ))
+        }
+        .onChange(of: store.purchaseState) { _, newValue in
+            if newValue == .purchased {
+                didPurchaseDuringSession = true
             }
         }
     }
@@ -258,6 +280,29 @@ struct PaywallView: View {
                 .accessibilityLabel(String(localized: "Upgrade to Pro"))
                 .accessibilityValue(store.proPrice.isEmpty ? "" : store.proPrice)
 
+                // 1차 페이월 — "5번 더 체험" 옵션
+                if stage == .first,
+                   let feature = triggeredBy,
+                   feature.supportsTrial {
+                    Button {
+                        AnalyticsManager.log(.paywallOneMoreClicked(trigger: feature))
+                        ProGate.acceptExtendedTrial(feature)
+                        onAcceptExtension?()
+                        dismiss()
+                    } label: {
+                        Text("Try 5 more times")
+                            .font(.subheadline.weight(.medium))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 14)
+                            .foregroundStyle(Color.accentColor)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 14)
+                                    .strokeBorder(Color.accentColor.opacity(0.4), lineWidth: 1)
+                            )
+                    }
+                    .accessibilityLabel(String(localized: "Try 5 more times"))
+                }
+
                 // 에러 메시지
                 if let error = store.errorMessage {
                     Text(error)
@@ -316,20 +361,36 @@ struct PaywallView: View {
 struct PaywallGateModifier: ViewModifier {
     @Binding var isPresented: Bool
     var feature: ProGate.Feature?
+    var stage: ProGate.PaywallStage = .second
+    var onAcceptExtension: (() -> Void)?
 
     func body(content: Content) -> some View {
         content
             .sheet(isPresented: $isPresented) {
-                PaywallView(triggeredBy: feature)
-                    .presentationDetents([.large])
-                    .presentationDragIndicator(.visible)
+                PaywallView(
+                    triggeredBy: feature,
+                    stage: stage,
+                    onAcceptExtension: onAcceptExtension
+                )
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
             }
     }
 }
 
 extension View {
-    func paywallGate(isPresented: Binding<Bool>, feature: ProGate.Feature? = nil) -> some View {
-        modifier(PaywallGateModifier(isPresented: isPresented, feature: feature))
+    func paywallGate(
+        isPresented: Binding<Bool>,
+        feature: ProGate.Feature? = nil,
+        stage: ProGate.PaywallStage = .second,
+        onAcceptExtension: (() -> Void)? = nil
+    ) -> some View {
+        modifier(PaywallGateModifier(
+            isPresented: isPresented,
+            feature: feature,
+            stage: stage,
+            onAcceptExtension: onAcceptExtension
+        ))
     }
 }
 

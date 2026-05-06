@@ -118,6 +118,8 @@ final class StoreManager: ObservableObject {
         purchaseState = .purchasing
         errorMessage = nil
 
+        AnalyticsManager.log(.purchaseStarted(productId: productID.rawValue))
+
         do {
             let result = try await product.purchase()
 
@@ -126,22 +128,39 @@ final class StoreManager: ObservableObject {
                 let transaction = try checkVerified(verification)
                 await handlePurchased(transaction)
                 purchaseState = .purchased
+                AnalyticsManager.log(.purchaseCompleted(productId: productID.rawValue))
 
             case .userCancelled:
                 purchaseState = .idle
+                AnalyticsManager.log(.purchaseFailed(
+                    productId: productID.rawValue,
+                    reason: "user_cancelled"
+                ))
 
             case .pending:
                 // 결제 보류 (가족 승인 등)
                 purchaseState = .idle
                 errorMessage = "Purchase pending approval"
+                AnalyticsManager.log(.purchaseFailed(
+                    productId: productID.rawValue,
+                    reason: "pending"
+                ))
 
             @unknown default:
                 purchaseState = .failed
+                AnalyticsManager.log(.purchaseFailed(
+                    productId: productID.rawValue,
+                    reason: "unknown"
+                ))
             }
         } catch {
             print("❌ 구매 실패: \(error)")
             errorMessage = error.localizedDescription
             purchaseState = .failed
+            AnalyticsManager.log(.purchaseFailed(
+                productId: productID.rawValue,
+                reason: "error"
+            ))
         }
     }
 
@@ -164,6 +183,7 @@ final class StoreManager: ObservableObject {
 
         if isPro {
             purchaseState = .restored
+            AnalyticsManager.log(.purchaseRestored)
         } else {
             purchaseState = .idle
             if errorMessage == nil {

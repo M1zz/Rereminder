@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+#if canImport(FirebaseCore)
+import FirebaseCore
+#endif
 
 @main
 struct RereminderApp: App {
@@ -13,6 +16,10 @@ struct RereminderApp: App {
     @StateObject private var themeManager = ThemeManager.shared
 
     init() {
+        #if canImport(FirebaseCore)
+        FirebaseApp.configure()
+        #endif
+
         // 기존 한국어 ringMode 값 마이그레이션
         RingMode.migrateIfNeeded()
 
