@@ -45,6 +45,19 @@ final class StoreManager: ObservableObject {
     private let keychainKey = "rereminder.pro.purchased"
     private let defaultsKey = "rereminder.pro.purchased"
 
+    // MARK: - TestFlight / Sandbox
+
+    /// TestFlight 또는 sandbox StoreKit 환경에서 실행 중인지 판별.
+    /// Release 빌드에서만 동작하며, Debug 빌드는 항상 false 를 반환하여
+    /// 시뮬레이터/Xcode 디버그에서 paywall 흐름 테스트가 가능하도록 함.
+    nonisolated static var isTestFlightOrSandbox: Bool {
+        #if DEBUG
+        return false
+        #else
+        return Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
+        #endif
+    }
+
     // MARK: - Grandfathering
 
     /// Pro 잠금 도입 전 기존 사용자에게 무료 Pro 부여
@@ -212,12 +225,18 @@ final class StoreManager: ObservableObject {
             }
         }
 
-        if foundPro != isPro {
-            isPro = foundPro
-            savePurchaseState(foundPro)
+        // TestFlight/Sandbox 환경에서는 entitlement 가 없어도 Pro 유지 (verifyCurrentEntitlements 가
+        // 실제 구매 부재로 인해 isPro 를 false 로 되돌리지 않도록 보호)
+        let effectiveFoundPro = foundPro || Self.isTestFlightOrSandbox
+
+        if effectiveFoundPro != isPro {
+            isPro = effectiveFoundPro
+            if !Self.isTestFlightOrSandbox {
+                savePurchaseState(foundPro)
+            }
         }
 
-        if verificationFailed && !foundPro {
+        if verificationFailed && !effectiveFoundPro {
             errorMessage = String(localized: "Purchase verification failed. Please try restoring purchases.")
         }
     }
@@ -266,6 +285,9 @@ final class StoreManager: ObservableObject {
     }
 
     private func loadPurchaseState() -> Bool {
+        // TestFlight/Sandbox 환경에서는 자동으로 Pro 부여 (영속화하지 않음)
+        if Self.isTestFlightOrSandbox { return true }
+
         // Keychain 우선, 없으면 UserDefaults
         if let keychainValue = KeychainHelper.load(key: keychainKey) {
             // UserDefaults도 동기화
@@ -295,7 +317,9 @@ extension StoreManager {
 
     /// 빠른 Pro 체크 (저장된 값, 네트워크 불필요)
     /// nonisolated — Keychain/UserDefaults만 읽으므로 어디서든 호출 가능
+    /// TestFlight/Sandbox 환경에서는 항상 true 를 반환
     nonisolated static var isProUser: Bool {
-        KeychainHelper.load(key: "rereminder.pro.purchased") ?? UserDefaults.standard.bool(forKey: "rereminder.pro.purchased")
+        if isTestFlightOrSandbox { return true }
+        return KeychainHelper.load(key: "rereminder.pro.purchased") ?? UserDefaults.standard.bool(forKey: "rereminder.pro.purchased")
     }
 }
