@@ -17,7 +17,8 @@ enum TrialCounter {
     static let firstStageLimit = 5
     static let secondStageLimit = 10
 
-    private static let defaults = UserDefaults.standard
+    /// 테스트 시 격리된 UserDefaults 주입을 위해 var 로 둠. 프로덕션에서는 변경하지 않음.
+    static var defaults: UserDefaults = .standard
 
     // MARK: - Key
 
