@@ -20,20 +20,20 @@ struct SetNotiView: View {
     var body: some View {
         let maxMinute = viewModel.maxSelectableTimeModel.minute
 
-        VStack(spacing: 16) {
+        VStack(spacing: DSSpacing.lg) {
             // 타이틀
             Text("Pre-alerts", comment: "Pre-alerts")
-                .font(.system(size: 14, weight: .medium, design: .rounded))
+                .dsScaledFont(14, weight: .medium, design: .rounded, relativeTo: .footnote, maxSize: 20)
                 .foregroundStyle(.secondary)
-                .padding(.top, 4)
+                .padding(.top, DSSpacing.xs)
 
             presetButtons(maxMinute: maxMinute)
 
             startButton
-                .padding(.bottom, 20)
+                .padding(.bottom, DSSpacing.xl)
         }
-        .padding(.horizontal, 12)
-        .padding(.top, 4)
+        .padding(.horizontal, DSSpacing.md)
+        .padding(.top, DSSpacing.xs)
         .background(.clear)
         .sheet(isPresented: $showingCustomSheet) { customMinutesSheet(maxMinute: maxMinute) }
     }
@@ -73,8 +73,9 @@ struct SetNotiView: View {
                     .contentShape(Circle())
             }
             .disabled(maxMinute < 1)
-            .opacity(maxMinute < 1 ? 0.4 : 1.0)
+            .opacity(maxMinute < 1 ? DSOpacity.disabled : 1.0)
             .buttonStyle(.plain)
+            .accessibilityLabel(String(localized: "Add custom minutes"))
         }
         .padding(.top, 2)
         .background(Color.clear)
@@ -99,11 +100,11 @@ struct SetNotiView: View {
             path.append(.timerViewMultiple(mainDuration: viewModel.maxTimeInSeconds, prealertOffsets: prealertOffsets))
         } label: {
             Text("Start Timer", comment: "Start Timer")
-                .font(.system(size: 14, weight: .semibold))
+                .dsScaledFont(14, weight: .semibold, relativeTo: .footnote, maxSize: 20)
                 .frame(maxWidth: .infinity)
         }
         .buttonStyle(.borderedProminent)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
+        .clipShape(RoundedRectangle(cornerRadius: DSRadius.sm + 4))
         .disabled(viewModel.selectedMinutes.isEmpty)
     }
 
@@ -189,10 +190,11 @@ private struct CircleButton: View {
     var body: some View {
         VStack(spacing: 1) {
             Text(title)
-                .font(.system(size: 15, weight: .bold, design: .rounded))
+                .dsScaledFont(15, weight: .bold, design: .rounded, relativeTo: .body, maxSize: 20)
+                .minimumScaleFactor(0.6)
             if !subtitle.isEmpty {
                 Text(subtitle)
-                    .font(.system(size: 9, weight: .medium))
+                    .dsScaledFont(9, weight: .medium, relativeTo: .caption2, maxSize: 12)
             }
         }
         .frame(width: 46, height: 46)

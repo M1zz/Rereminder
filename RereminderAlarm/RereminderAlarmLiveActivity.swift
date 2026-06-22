@@ -48,8 +48,8 @@ struct RereminderAlarmLiveActivity: Widget {
                 DynamicIslandExpandedRegion(.bottom) {
                     HStack {
                         timerText(context: context)
-                            .font(.system(size: 28, design: .rounded))
-                            .fontWeight(.bold)
+                            .dsScaledFont(28, weight: .bold, design: .rounded, relativeTo: .title, maxSize: 34)
+                            .minimumScaleFactor(0.7)
                         Spacer()
                         controlButtons(context: context)
                     }
@@ -71,7 +71,7 @@ struct RereminderAlarmLiveActivity: Widget {
     }
 
     func lockScreenView(context: ActivityViewContext<TimerActivityAttributes>) -> some View {
-        VStack(spacing: 12) {
+        VStack(spacing: DSSpacing.md) {
             HStack(alignment: .top) {
                 Text(displayName(context.attributes.timerName))
                     .font(.subheadline)
@@ -82,18 +82,18 @@ struct RereminderAlarmLiveActivity: Widget {
                 Image(systemName: "timer")
                     .font(.body)
                     .fontWeight(.medium)
+                    .accessibilityHidden(true)
             }
 
             HStack {
                 timerText(context: context)
-                    .font(.system(size: 32, design: .rounded))
-                    .fontWeight(.bold)
+                    .dsScaledFont(32, weight: .bold, design: .rounded, relativeTo: .title, maxSize: 38)
                     .minimumScaleFactor(0.8)
                 Spacer()
                 controlButtons(context: context)
             }
         }
-        .padding(.all, 16)
+        .padding(.all, DSSpacing.lg)
     }
 
     @ViewBuilder
@@ -148,7 +148,7 @@ struct RereminderAlarmLiveActivity: Widget {
 
     @ViewBuilder
     func controlButtons(context: ActivityViewContext<TimerActivityAttributes>) -> some View {
-        HStack(spacing: 6) {
+        HStack(spacing: DSSpacing.xs) {
             if context.state.isPaused {
                 Button(intent: ResumeIntent(alarmID: "")) {
                     Image(systemName: "play.fill")
@@ -157,6 +157,7 @@ struct RereminderAlarmLiveActivity: Widget {
                 .tint(.green)
                 .buttonStyle(.borderedProminent)
                 .frame(width: 40, height: 32)
+                .accessibilityLabel(String(localized: "Resume timer"))
             } else {
                 Button(intent: PauseIntent(alarmID: "")) {
                     Image(systemName: "pause.fill")
@@ -165,6 +166,7 @@ struct RereminderAlarmLiveActivity: Widget {
                 .tint(.orange)
                 .buttonStyle(.borderedProminent)
                 .frame(width: 40, height: 32)
+                .accessibilityLabel(String(localized: "Pause timer"))
             }
 
             Button(intent: StopIntent(alarmID: "")) {
@@ -174,6 +176,7 @@ struct RereminderAlarmLiveActivity: Widget {
             .tint(.red)
             .buttonStyle(.borderedProminent)
             .frame(width: 40, height: 32)
+            .accessibilityLabel(String(localized: "Stop timer"))
         }
     }
 

@@ -418,9 +418,9 @@ struct TimerMainView: View {
         VStack(spacing: 6) {
             HStack(spacing: 6) {
                 Image(systemName: "bell.badge")
-                    .font(.system(size: 16, weight: .semibold))
+                    .dsScaledFont(16, weight: .semibold, relativeTo: .body, maxSize: 22)
                 Text(screenVM.nextAlertText)
-                    .font(.system(size: 17, weight: .semibold, design: .rounded))
+                    .dsScaledFont(17, weight: .semibold, design: .rounded, relativeTo: .body, maxSize: 24)
             }
             .foregroundStyle(.orange)
         }
@@ -531,7 +531,7 @@ struct TimerMainView: View {
         ) {
             HStack(spacing: 4) {
                 Text(sec < 60 ? String(localized: "\(sec) sec") : String(localized: "\(sec/60) min"))
-                    .font(.system(size: 14, weight: .medium))
+                    .dsScaledFont(14, weight: .medium, relativeTo: .callout, maxSize: 20)
 
                 // 제한 초과 프리셋에 잠금 아이콘 (trial 도 소진된 경우)
                 if !isSelected && !StoreManager.isProUser
@@ -614,7 +614,7 @@ struct TimerMainView: View {
                     .imageScale(.medium)
             }
             .buttonStyle(TimerButtonStyle(
-                tint: Color.plain,
+                tint: DSColor.plain,
                 size: buttonSize
             ))
             .accessibilityLabel(String(localized: "Cancel Timer"))
@@ -635,7 +635,7 @@ struct TimerMainView: View {
                     .imageScale(.medium)
             }
             .buttonStyle(TimerButtonStyle(
-                tint: Color.positive,
+                tint: DSColor.positive,
                 size: buttonSize
             ))
             .accessibilityLabel(String(localized: "Start Timer"))
@@ -647,7 +647,7 @@ struct TimerMainView: View {
                     .imageScale(.medium)
             }
             .buttonStyle(TimerButtonStyle(
-                tint: Color.bitNegative,
+                tint: DSColor.negativeSoft,
                 size: buttonSize
             ))
             .accessibilityLabel(String(localized: "Pause Timer"))
@@ -659,7 +659,7 @@ struct TimerMainView: View {
                     .imageScale(.medium)
             }
             .buttonStyle(TimerButtonStyle(
-                tint: Color.positive,
+                tint: DSColor.positive,
                 size: buttonSize
             ))
             .accessibilityLabel(String(localized: "Resume Timer"))

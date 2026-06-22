@@ -36,9 +36,9 @@ struct PresentationSetupView: View {
         let seconds = totalSeconds % 60
 
         return HStack {
-            VStack(alignment: .leading, spacing: 2) {
+            VStack(alignment: .leading, spacing: DSSpacing.xxs) {
                 Text("Total Time")
-                    .font(.caption)
+                    .font(DSFont.caption)
                     .foregroundStyle(.secondary)
                 Text(seconds > 0 ? "\(minutes)m \(seconds)s" : "\(minutes)m")
                     .font(.title2.weight(.bold).monospacedDigit())
@@ -47,11 +47,12 @@ struct PresentationSetupView: View {
             Spacer()
 
             Text("\(screenVM.presentationSections.count) sections")
-                .font(.subheadline)
+                .font(DSFont.callout)
                 .foregroundStyle(.secondary)
         }
-        .padding(.horizontal, 20)
-        .padding(.vertical, 12)
+        .padding(.horizontal, DSSpacing.xl)
+        .padding(.vertical, DSSpacing.md)
+        .accessibilityElement(children: .combine)
     }
 
     // MARK: - Section List
@@ -141,14 +142,15 @@ private struct SectionRow: View {
     @State private var secondsText: String = ""
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: DSSpacing.sm) {
             // 섹션 이름
             TextField("Section name", text: $section.name)
                 .font(.body.weight(.medium))
+                .accessibilityLabel(String(localized: "Section name"))
 
-            HStack(spacing: 12) {
+            HStack(spacing: DSSpacing.md) {
                 // 시간 입력
-                HStack(spacing: 4) {
+                HStack(spacing: DSSpacing.xs) {
                     TextField("min", text: $minutesText)
                         .keyboardType(.numberPad)
                         .frame(width: 44)
@@ -157,17 +159,19 @@ private struct SectionRow: View {
                             updateDuration()
                             _ = newValue
                         }
+                        .accessibilityLabel(String(localized: "Minutes"))
                     Text("m")
                         .foregroundStyle(.secondary)
 
                     TextField("sec", text: $secondsText)
                         .keyboardType(.numberPad)
-                        .frame(width: 36)
+                        .frame(width: 44)
                         .multilineTextAlignment(.trailing)
                         .onChange(of: secondsText) { _, newValue in
                             updateDuration()
                             _ = newValue
                         }
+                        .accessibilityLabel(String(localized: "Seconds"))
                     Text("s")
                         .foregroundStyle(.secondary)
                 }
@@ -184,6 +188,7 @@ private struct SectionRow: View {
                 .toggleStyle(.button)
                 .buttonStyle(.bordered)
                 .controlSize(.small)
+                .accessibilityLabel(String(localized: "Alert at section end"))
 
                 // 삭제 버튼
                 Button(role: .destructive, action: onDelete) {
@@ -192,9 +197,10 @@ private struct SectionRow: View {
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
+                .accessibilityLabel(String(localized: "Delete section"))
             }
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, DSSpacing.xs)
         .onAppear {
             let minutes = section.durationSeconds / 60
             let seconds = section.durationSeconds % 60

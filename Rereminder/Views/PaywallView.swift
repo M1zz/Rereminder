@@ -82,7 +82,7 @@ struct PaywallView: View {
     private var headerSection: some View {
         VStack(spacing: 16) {
             Image(systemName: "crown.fill")
-                .font(.system(size: 56))
+                .dsScaledFont(56, relativeTo: .largeTitle, maxSize: 76)
                 .foregroundStyle(
                     LinearGradient(
                         colors: [.yellow, .orange],
@@ -91,9 +91,10 @@ struct PaywallView: View {
                     )
                 )
                 .padding(.top, 20)
+                .accessibilityHidden(true)
 
             Text(AppName.pro)
-                .font(.system(size: 32, weight: .bold, design: .rounded))
+                .dsScaledFont(32, weight: .bold, design: .rounded, relativeTo: .title, maxSize: 44)
 
             Text("Unlock all features")
                 .font(.title3)

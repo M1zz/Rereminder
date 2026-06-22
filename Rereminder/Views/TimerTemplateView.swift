@@ -100,7 +100,7 @@ struct TimerTemplateView: View {
             onSelect(timer)
             dismiss()
         } label: {
-            HStack(spacing: 12) {
+            HStack(spacing: DSSpacing.md) {
                 // 즐겨찾기 아이콘
                 Button {
                     toggleFavorite(timer)
@@ -108,31 +108,33 @@ struct TimerTemplateView: View {
                     Image(systemName: timer.isFavorite ? "star.fill" : "star")
                         .foregroundStyle(timer.isFavorite ? .yellow : .gray)
                         .font(.title3)
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(timer.isFavorite ? String(localized: "Remove from favorites") : String(localized: "Add to favorites"))
 
-                VStack(alignment: .leading, spacing: 6) {
-                    HStack(spacing: 8) {
+                VStack(alignment: .leading, spacing: DSSpacing.xs) {
+                    HStack(spacing: DSSpacing.sm) {
                         // Label 태그
                         if !timer.label.isEmpty {
                             Text(timer.label)
-                                .font(.caption)
+                                .font(DSFont.caption)
                                 .fontWeight(.semibold)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 3)
+                                .padding(.horizontal, DSSpacing.sm)
+                                .padding(.vertical, DSSpacing.xxs + 1)
                                 .background(Color(hex:timer.colorHex).opacity(0.2))
                                 .foregroundStyle(Color(hex:timer.colorHex))
-                                .cornerRadius(6)
+                                .cornerRadius(DSRadius.sm)
                         }
 
                         // 사용 횟수
                         if timer.usageCount > 0 {
-                            HStack(spacing: 2) {
+                            HStack(spacing: DSSpacing.xxs) {
                                 Image(systemName: "play.circle.fill")
                                     .font(.caption2)
                                 Text("\(timer.usageCount)")
-                                    .font(.caption)
+                                    .font(DSFont.caption)
                             }
                             .foregroundStyle(.secondary)
                         }
@@ -147,16 +149,17 @@ struct TimerTemplateView: View {
                         .joined(separator: ", ")
 
                     Text(sMain > 0 ? "Main \(mMain) min \(sMain) sec" : "Main \(mMain) min")
-                        .font(.body)
+                        .font(DSFont.body)
                         .fontWeight(.medium)
                         .foregroundStyle(.primary)
 
                     if !preList.isEmpty {
                         Text("Pre-alert: \(preList)")
-                            .font(.caption)
+                            .font(DSFont.caption)
                             .foregroundStyle(.secondary)
                     }
                 }
+                .accessibilityElement(children: .combine)
 
                 Spacer()
 
@@ -164,8 +167,9 @@ struct TimerTemplateView: View {
                     .font(.caption)
                     .foregroundStyle(.tertiary)
             }
-            .padding(.vertical, 4)
+            .padding(.vertical, DSSpacing.xs)
         }
+        .accessibilityHint(String(localized: "Starts this template"))
         .swipeActions(edge: .leading, allowsFullSwipe: false) {
             Button {
                 editingTimer = timer
@@ -256,21 +260,23 @@ struct TimerTemplateView: View {
             editLabel = label
             editColorHex = colorHex
         } label: {
-            VStack(spacing: 4) {
+            VStack(spacing: DSSpacing.xs) {
                 Circle()
                     .fill(Color(hex:colorHex))
-                    .frame(width: 40, height: 40)
+                    .frame(width: 44, height: 44)
                     .overlay(
                         Circle()
                             .strokeBorder(editColorHex == colorHex ? Color.primary : Color.clear, lineWidth: 2)
                     )
 
                 Text(label)
-                    .font(.caption2)
+                    .font(DSFont.caption2)
                     .foregroundStyle(.primary)
             }
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(String(localized: "\(label) color"))
+        .accessibilityAddTraits(editColorHex == colorHex ? [.isSelected] : [])
     }
 
     private func toggleFavorite(_ timer: Timer) {

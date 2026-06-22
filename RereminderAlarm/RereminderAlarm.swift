@@ -145,10 +145,9 @@ struct TimerWidgetEntryView: View {
             Spacer()
 
             timerDisplay
-                .font(family == .systemSmall
-                      ? .system(size: 28, design: .rounded)
-                      : .system(size: 36, design: .rounded))
-                .fontWeight(.bold)
+                .dsScaledFont(family == .systemSmall ? 28 : 36,
+                              weight: .bold, design: .rounded, relativeTo: .title,
+                              maxSize: family == .systemSmall ? 32 : 42)
                 .monospacedDigit()
                 .minimumScaleFactor(0.6)
 
@@ -218,8 +217,7 @@ struct TimerWidgetEntryView: View {
 
             // 카운트다운
             timerDisplay
-                .font(.system(size: 48, design: .rounded))
-                .fontWeight(.bold)
+                .dsScaledFont(48, weight: .bold, design: .rounded, relativeTo: .largeTitle, maxSize: 56)
                 .monospacedDigit()
                 .minimumScaleFactor(0.6)
                 .frame(maxWidth: .infinity, alignment: .center)

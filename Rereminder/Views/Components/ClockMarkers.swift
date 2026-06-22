@@ -59,7 +59,7 @@ struct ClockMarkers: View {
         return ZStack {
             // 얇은 사각형 마크 (높이는 Timer 선 두께와 동일)
             Rectangle()
-                .fill(Color(red: 1.0, green: 0.6, blue: 0.0))  // 선명한 오렌지색
+                .fill(DSColor.marker)  // 사전 알림 마커 색
                 .frame(width: 4, height: dotSize)  // 폭 4 (2배), 높이는 Timer 선 두께
                 .rotationEffect(.degrees(angle + 90))  // 원의 중심을 향하도록 먼저 회전
                 .position(
@@ -102,7 +102,7 @@ struct ClockMarkers: View {
 
         return Text(label)
             .font(.system(size: 10, weight: .bold, design: .rounded))
-            .foregroundColor(Color(red: 1.0, green: 0.6, blue: 0.0))  // 선명한 오렌지색
+            .foregroundColor(DSColor.marker)  // 사전 알림 마커 색
             .position(
                 x: centerX + CGFloat(cos(theta)) * labelDistance,
                 y: centerY + CGFloat(sin(theta)) * labelDistance

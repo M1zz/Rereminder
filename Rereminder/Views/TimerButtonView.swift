@@ -27,7 +27,7 @@ struct TimerButton: View {
                         .font(.title2)
                         .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.plain, size: buttonSize))
+                .buttonStyle(TimerButtonStyle(tint: DSColor.plain, size: buttonSize))
                 .disabled(true)
                 .accessibilityLabel(String(localized: "Cancel"))
 
@@ -36,7 +36,7 @@ struct TimerButton: View {
                         .font(.title2)
                         .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.positive, size: buttonSize))
+                .buttonStyle(TimerButtonStyle(tint: DSColor.positive, size: buttonSize))
                 .accessibilityLabel(String(localized: "Start Timer"))
             }
 
@@ -47,7 +47,7 @@ struct TimerButton: View {
                         .font(.title2)
                         .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.plain, size: buttonSize))
+                .buttonStyle(TimerButtonStyle(tint: DSColor.plain, size: buttonSize))
                 .accessibilityLabel(String(localized: "Cancel"))
 
                 Button(action: onStart) {
@@ -55,7 +55,7 @@ struct TimerButton: View {
                         .font(.title2)
                         .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.positive, size: buttonSize))
+                .buttonStyle(TimerButtonStyle(tint: DSColor.positive, size: buttonSize))
                 .accessibilityLabel(String(localized: "Start Timer"))
             }
 
@@ -66,7 +66,7 @@ struct TimerButton: View {
                         .font(.title2)
                         .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.plain, size: buttonSize))
+                .buttonStyle(TimerButtonStyle(tint: DSColor.plain, size: buttonSize))
                 .accessibilityLabel(String(localized: "Cancel Timer"))
 
                 Button(action: onPause) {
@@ -74,7 +74,7 @@ struct TimerButton: View {
                         .font(.title2)
                         .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.bitNegative, size: buttonSize))
+                .buttonStyle(TimerButtonStyle(tint: DSColor.negativeSoft, size: buttonSize))
                 .accessibilityLabel(String(localized: "Pause Timer"))
             }
 
@@ -85,7 +85,7 @@ struct TimerButton: View {
                         .font(.title2)
                         .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.plain, size: buttonSize))
+                .buttonStyle(TimerButtonStyle(tint: DSColor.plain, size: buttonSize))
                 .accessibilityLabel(String(localized: "Cancel Timer"))
 
                 Button(action: onResume) {
@@ -93,7 +93,7 @@ struct TimerButton: View {
                         .font(.title2)
                         .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.positive, size: buttonSize))
+                .buttonStyle(TimerButtonStyle(tint: DSColor.positive, size: buttonSize))
                 .accessibilityLabel(String(localized: "Resume Timer"))
             }
         case .overtime:
@@ -103,7 +103,7 @@ struct TimerButton: View {
                         .font(.title2)
                         .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.plain, size: buttonSize))
+                .buttonStyle(TimerButtonStyle(tint: DSColor.plain, size: buttonSize))
                 .accessibilityLabel(String(localized: "Cancel Timer"))
 
                 Button(action: onPause) {
@@ -111,7 +111,7 @@ struct TimerButton: View {
                         .font(.title2)
                         .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.bitNegative, size: buttonSize))
+                .buttonStyle(TimerButtonStyle(tint: DSColor.negativeSoft, size: buttonSize))
                 .accessibilityLabel(String(localized: "Pause Timer"))
             }
         }
@@ -123,6 +123,7 @@ struct TimerButtonStyle: ButtonStyle {
     var tint: Color
     var size: CGFloat = 70
     @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     func makeBody(configuration: Configuration) -> some View {
         let pressed = configuration.isPressed
@@ -133,11 +134,11 @@ struct TimerButtonStyle: ButtonStyle {
                 Circle()
                     .fill(
                         (isEnabled ? tint : .gray)
-                            .opacity(pressed ? 0.7 : 1.0)
+                            .opacity(pressed ? DSOpacity.track + 0.2 : 1.0)
                     )
             )
-            .scaleEffect(pressed ? 0.9 : 1)
-            .animation(.easeOut(duration: 0.12), value: pressed)
+            .scaleEffect(reduceMotion ? 1 : (pressed ? 0.9 : 1))
+            .animation(reduceMotion ? nil : .easeOut(duration: 0.12), value: pressed)
             .opacity(isEnabled ? 1 : 0.6)
     }
 }

@@ -12,6 +12,7 @@ struct PresentationDisplayView: View {
 
     @State private var controlsVisible = true
     @State private var hideTask: Task<Void, Never>?
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private var remaining: TimeInterval { screenVM.remaining }
     private var totalSeconds: Int {
@@ -38,14 +39,44 @@ struct PresentationDisplayView: View {
         return (sections.count - 1, sections.last?.name ?? "", remaining, sections.last?.durationSeconds ?? 0)
     }
 
-    /// 긴급도 기반 색상
-    private var urgencyColor: Color {
-        guard totalSeconds > 0 else { return .green }
+    // MARK: - Urgency (색 + 형태 단서를 함께 제공해 색약 사용자도 구분 가능)
+
+    private enum Urgency: Equatable {
+        case normal, warning, critical
+    }
+
+    private var urgency: Urgency {
+        guard totalSeconds > 0 else { return .normal }
+        if remaining <= 0 { return .critical }
         let ratio = remaining / TimeInterval(totalSeconds)
-        if remaining <= 0 { return .red }
-        if ratio <= 0.10 { return .red }
-        if ratio <= 0.25 { return .orange }
-        return .green
+        if ratio <= 0.10 { return .critical }
+        if ratio <= 0.25 { return .warning }
+        return .normal
+    }
+
+    private var urgencyColor: Color {
+        switch urgency {
+        case .normal: return DSColor.stateRunning
+        case .warning: return DSColor.statePaused
+        case .critical: return DSColor.stateOvertime
+        }
+    }
+
+    /// 긴급도 단계의 형태 단서 (normal 은 표시 안 함)
+    private var urgencySymbol: String? {
+        switch urgency {
+        case .normal: return nil
+        case .warning: return "exclamationmark.circle.fill"
+        case .critical: return "exclamationmark.triangle.fill"
+        }
+    }
+
+    private var urgencyAccessibilityPhrase: String {
+        switch urgency {
+        case .normal: return ""
+        case .warning: return String(localized: "Time is running low")
+        case .critical: return String(localized: "Time is almost up")
+        }
     }
 
     /// 섹션 내 진행률
@@ -60,31 +91,31 @@ struct PresentationDisplayView: View {
             // 배경 그라데이션
             urgencyBackground
                 .ignoresSafeArea()
-                .animation(.easeInOut(duration: 1.0), value: urgencyColor)
+                .dsAnimation(.easeInOut(duration: 1.0), value: urgency)
 
             VStack(spacing: 0) {
                 Spacer()
 
                 // 섹션 정보
                 sectionHeader
-                    .padding(.bottom, 12)
+                    .padding(.bottom, DSSpacing.md)
 
                 // 대형 카운트다운
                 countdownDisplay
-                    .padding(.bottom, 16)
+                    .padding(.bottom, DSSpacing.lg)
 
                 // 섹션 프로그레스 바
                 sectionProgressBar
                     .padding(.horizontal, 40)
-                    .padding(.bottom, 20)
+                    .padding(.bottom, DSSpacing.xl)
 
                 // 총 남은 시간
                 totalRemainingDisplay
-                    .padding(.bottom, 8)
+                    .padding(.bottom, DSSpacing.sm)
 
                 // 다음 섹션 미리보기
                 nextSectionPreview
-                    .padding(.bottom, 20)
+                    .padding(.bottom, DSSpacing.xl)
 
                 Spacer()
 
@@ -104,11 +135,16 @@ struct PresentationDisplayView: View {
             UIApplication.shared.isIdleTimerDisabled = false
             hideTask?.cancel()
         }
+        .onChange(of: urgency) { newValue in
+            // 긴급도 전환을 VoiceOver 로 즉시 안내
+            guard newValue != .normal else { return }
+            let phrase = newValue == .critical
+                ? String(localized: "Time is almost up")
+                : String(localized: "Time is running low")
+            AccessibilityNotification.Announcement(phrase).post()
+        }
         .onTapGesture {
-            withAnimation(.easeInOut(duration: 0.3)) {
-                controlsVisible = true
-            }
-            scheduleHideControls()
+            revealControls()
         }
         .statusBarHidden(true)
     }
@@ -117,7 +153,7 @@ struct PresentationDisplayView: View {
 
     private var urgencyBackground: some View {
         LinearGradient(
-            colors: [urgencyColor.opacity(0.15), Color(.systemBackground)],
+            colors: [urgencyColor.opacity(DSOpacity.faint + 0.05), Color(.systemBackground)],
             startPoint: .top,
             endPoint: .bottom
         )
@@ -128,10 +164,10 @@ struct PresentationDisplayView: View {
     private var sectionHeader: some View {
         let info = currentSectionInfo
         let sections = screenVM.presentationSections
-        return VStack(spacing: 4) {
+        return VStack(spacing: DSSpacing.xs) {
             if !sections.isEmpty {
                 Text("Section \(info.index + 1)/\(sections.count)")
-                    .font(.subheadline.weight(.medium))
+                    .font(DSFont.callout.weight(.medium))
                     .foregroundStyle(.secondary)
                 Text(info.name)
                     .font(.title3.weight(.semibold))
@@ -139,6 +175,10 @@ struct PresentationDisplayView: View {
                     .minimumScaleFactor(0.7)
             }
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(sections.isEmpty
+            ? ""
+            : String(localized: "Section \(info.index + 1) of \(sections.count), \(info.name)"))
     }
 
     // MARK: - Countdown
@@ -149,14 +189,32 @@ struct PresentationDisplayView: View {
         let minutes = Int(displayTime) / 60
         let seconds = Int(displayTime) % 60
 
-        return Text(String(format: "%d:%02d", minutes, seconds))
-            .font(.system(size: 120, weight: .bold, design: .rounded))
-            .monospacedDigit()
-            .minimumScaleFactor(0.5)
-            .lineLimit(1)
-            .foregroundStyle(urgencyColor)
-            .contentTransition(.numericText())
-            .animation(.linear(duration: 0.3), value: Int(displayTime))
+        return HStack(spacing: DSSpacing.sm) {
+            if let symbol = urgencySymbol {
+                Image(systemName: symbol)
+                    .dsScaledFont(40, weight: .bold, relativeTo: .largeTitle, maxSize: 56)
+                    .foregroundStyle(urgencyColor)
+                    .accessibilityHidden(true)
+            }
+            Text(String(format: "%d:%02d", minutes, seconds))
+                .dsScaledFont(120, weight: .bold, design: .rounded, relativeTo: .largeTitle, maxSize: 150)
+                .monospacedDigit()
+                .minimumScaleFactor(0.5)
+                .lineLimit(1)
+                .foregroundStyle(urgencyColor)
+                .contentTransition(.numericText())
+                .dsAnimation(.linear(duration: 0.3), value: Int(displayTime))
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(String(localized: "Section time remaining"))
+        .accessibilityValue(countdownAccessibilityValue(minutes: minutes, seconds: seconds))
+        .accessibilityAddTraits(.updatesFrequently)
+    }
+
+    private func countdownAccessibilityValue(minutes: Int, seconds: Int) -> String {
+        let base = String(localized: "\(minutes) minutes \(seconds) seconds")
+        let phrase = urgencyAccessibilityPhrase
+        return phrase.isEmpty ? base : "\(base), \(phrase)"
     }
 
     // MARK: - Progress Bar
@@ -164,15 +222,18 @@ struct PresentationDisplayView: View {
     private var sectionProgressBar: some View {
         GeometryReader { geo in
             ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 4)
+                RoundedRectangle(cornerRadius: DSSpacing.xs)
                     .fill(Color(.systemGray5))
-                RoundedRectangle(cornerRadius: 4)
+                RoundedRectangle(cornerRadius: DSSpacing.xs)
                     .fill(urgencyColor)
                     .frame(width: geo.size.width * sectionProgress)
-                    .animation(.linear(duration: 0.5), value: sectionProgress)
+                    .dsAnimation(.linear(duration: 0.5), value: sectionProgress)
             }
         }
-        .frame(height: 8)
+        .frame(height: DSSpacing.sm)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(String(localized: "Section progress"))
+        .accessibilityValue(String(localized: "\(Int(sectionProgress * 100)) percent"))
     }
 
     // MARK: - Total Remaining
@@ -182,13 +243,16 @@ struct PresentationDisplayView: View {
         let minutes = Int(total) / 60
         let seconds = Int(total) % 60
 
-        return HStack(spacing: 4) {
+        return HStack(spacing: DSSpacing.xs) {
             Image(systemName: "clock")
-                .font(.caption)
+                .font(DSFont.caption)
             Text("Total: \(String(format: "%d:%02d", minutes, seconds))")
-                .font(.subheadline.monospacedDigit())
+                .font(DSFont.callout.monospacedDigit())
         }
         .foregroundStyle(.secondary)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(String(localized: "Total time remaining"))
+        .accessibilityValue(String(localized: "\(minutes) minutes \(seconds) seconds"))
     }
 
     // MARK: - Next Section Preview
@@ -201,19 +265,21 @@ struct PresentationDisplayView: View {
 
         if nextIndex < sections.count {
             let next = sections[nextIndex]
-            HStack(spacing: 6) {
+            HStack(spacing: DSSpacing.sm) {
                 Image(systemName: "arrow.right.circle")
-                    .font(.caption)
+                    .font(DSFont.caption)
                 Text("Next: \(next.name) (\(next.formattedDuration))")
-                    .font(.caption.weight(.medium))
+                    .font(DSFont.caption.weight(.medium))
             }
             .foregroundStyle(.secondary.opacity(0.8))
-            .padding(.horizontal, 16)
-            .padding(.vertical, 8)
+            .padding(.horizontal, DSSpacing.lg)
+            .padding(.vertical, DSSpacing.sm)
             .background(
-                RoundedRectangle(cornerRadius: 8)
+                RoundedRectangle(cornerRadius: DSSpacing.sm)
                     .fill(Color(.systemGray6))
             )
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel(String(localized: "Next section: \(next.name), \(next.formattedDuration)"))
         }
     }
 
@@ -229,7 +295,8 @@ struct PresentationDisplayView: View {
                     .font(.title2)
                     .imageScale(.medium)
             }
-            .buttonStyle(TimerButtonStyle(tint: Color.plain, size: 60))
+            .buttonStyle(TimerButtonStyle(tint: DSColor.plain, size: 60))
+            .accessibilityLabel(String(localized: "Stop presentation"))
 
             // 일시정지/재개
             switch screenVM.state {
@@ -241,7 +308,8 @@ struct PresentationDisplayView: View {
                         .font(.title2)
                         .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.bitNegative, size: 60))
+                .buttonStyle(TimerButtonStyle(tint: DSColor.negativeSoft, size: 60))
+                .accessibilityLabel(String(localized: "Pause"))
             case .paused:
                 Button {
                     screenVM.resume()
@@ -250,7 +318,8 @@ struct PresentationDisplayView: View {
                         .font(.title2)
                         .imageScale(.medium)
                 }
-                .buttonStyle(TimerButtonStyle(tint: Color.positive, size: 60))
+                .buttonStyle(TimerButtonStyle(tint: DSColor.positive, size: 60))
+                .accessibilityLabel(String(localized: "Resume"))
             default:
                 EmptyView()
             }
@@ -259,14 +328,29 @@ struct PresentationDisplayView: View {
 
     // MARK: - Auto-hide Controls
 
+    private func revealControls() {
+        if reduceMotion {
+            controlsVisible = true
+        } else {
+            withAnimation(.easeInOut(duration: 0.3)) {
+                controlsVisible = true
+            }
+        }
+        scheduleHideControls()
+    }
+
     private func scheduleHideControls() {
         hideTask?.cancel()
         hideTask = Task {
             try? await Task.sleep(for: .seconds(3))
             guard !Task.isCancelled else { return }
             if screenVM.state == .running {
-                withAnimation(.easeInOut(duration: 0.3)) {
+                if reduceMotion {
                     controlsVisible = false
+                } else {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        controlsVisible = false
+                    }
                 }
             }
         }

@@ -25,17 +25,18 @@ struct TimerRunningView: View {
     }
 
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: DSSpacing.xl) {
             ZStack {
                 Clock(
                     remaining: screenVM.remaining,
                     total: TimeInterval(totalSec),
                     markers: markers,
                 )
-                
+
                 Text(screenVM.timeString(from: screenVM.timerVM.remaining))
-                    .font(.system(size: 44, weight: .bold, design: .rounded))
+                    .dsScaledFont(44, weight: .bold, design: .rounded, relativeTo: .largeTitle, maxSize: 60)
                     .monospacedDigit()
+                    .accessibilityHidden(true)
             }
 
             TimerButton(

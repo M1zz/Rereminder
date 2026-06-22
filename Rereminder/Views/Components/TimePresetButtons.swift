@@ -14,42 +14,45 @@ struct TimePresetButtons: View {
     private let presets = [5, 10, 15, 20, 30]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: DSSpacing.sm) {
             Text("Quick Setup")
-                .font(.subheadline.weight(.medium))
+                .font(DSFont.callout.weight(.medium))
                 .foregroundStyle(.secondary)
-                .padding(.leading, 12)
+                .padding(.leading, DSSpacing.md)
 
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 10) {
+                HStack(spacing: DSSpacing.sm) {
                     ForEach(presets, id: \.self) { minutes in
                         Button(action: {
                             screenVM.mainMinutes = minutes
                             screenVM.mainSeconds = 0
                         }) {
                             Text(String(localized: "\(minutes) min"))
-                                .font(.subheadline.weight(.medium))
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 8)
+                                .font(DSFont.callout.weight(.medium))
+                                .padding(.horizontal, DSSpacing.md)
+                                .frame(minHeight: 44)
                         }
                         .buttonStyle(.bordered)
                         .tint(isSelected(minutes) ? Color.accentColor : .gray)
+                        .accessibilityLabel(String(localized: "\(minutes) minutes"))
+                        .accessibilityAddTraits(isSelected(minutes) ? [.isSelected] : [])
                     }
 
                     // Custom 입력 버튼
                     Button(action: onShowTimeInput) {
-                        HStack(spacing: 6) {
+                        HStack(spacing: DSSpacing.xs) {
                             Image(systemName: "plus.circle.fill")
                             Text("Custom")
-                                .font(.subheadline.weight(.medium))
+                                .font(DSFont.callout.weight(.medium))
                         }
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
+                        .padding(.horizontal, DSSpacing.md)
+                        .frame(minHeight: 44)
                     }
                     .buttonStyle(.bordered)
                     .tint(Color.accentColor)
+                    .accessibilityLabel(String(localized: "Enter time manually"))
                 }
-                .padding(.horizontal, 12)
+                .padding(.horizontal, DSSpacing.md)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
