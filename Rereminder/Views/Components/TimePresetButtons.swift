@@ -9,53 +9,61 @@ import SwiftUI
 
 struct TimePresetButtons: View {
     @ObservedObject var screenVM: TimerScreenViewModel
-    var onShowTimeInput: () -> Void = {}
+    @ObservedObject private var store = PresetStore.shared
 
-    private let presets = [5, 10, 15, 20, 30]
+    /// 길게 눌러 편집 중인 슬롯
+    private struct EditTarget: Identifiable { let id: Int }
+    @State private var editTarget: EditTarget?
 
     var body: some View {
         VStack(alignment: .leading, spacing: DSSpacing.sm) {
-            Text("Quick Setup")
-                .font(DSFont.callout.weight(.medium))
-                .foregroundStyle(.secondary)
-                .padding(.leading, DSSpacing.md)
+            HStack {
+                Text("Quick Setup")
+                    .font(DSFont.callout.weight(.medium))
+                    .foregroundStyle(.secondary)
 
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: DSSpacing.sm) {
-                    ForEach(presets, id: \.self) { minutes in
-                        Button(action: {
-                            screenVM.mainMinutes = minutes
-                            screenVM.mainSeconds = 0
-                        }) {
-                            Text(String(localized: "\(minutes) min"))
-                                .font(DSFont.callout.weight(.medium))
-                                .padding(.horizontal, DSSpacing.md)
-                                .frame(minHeight: 44)
-                        }
-                        .buttonStyle(.bordered)
-                        .tint(isSelected(minutes) ? Color.accentColor : .gray)
-                        .accessibilityLabel(String(localized: "\(minutes) minutes"))
-                        .accessibilityAddTraits(isSelected(minutes) ? [.isSelected] : [])
-                    }
+                Spacer()
 
-                    // Custom 입력 버튼
-                    Button(action: onShowTimeInput) {
-                        HStack(spacing: DSSpacing.xs) {
-                            Image(systemName: "plus.circle.fill")
-                            Text("Custom")
-                                .font(DSFont.callout.weight(.medium))
-                        }
-                        .padding(.horizontal, DSSpacing.md)
-                        .frame(minHeight: 44)
+                Text("Touch and hold to edit")
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+            }
+            .padding(.horizontal, DSSpacing.md)
+
+            HStack(spacing: DSSpacing.sm) {
+                ForEach(Array(store.quickMinutes.enumerated()), id: \.offset) { index, minutes in
+                    Button {
+                        screenVM.mainMinutes = minutes
+                        screenVM.mainSeconds = 0
+                    } label: {
+                        Text(String(localized: "\(minutes) min"))
+                            .font(DSFont.callout.weight(.medium))
+                            .frame(maxWidth: .infinity)
+                            .frame(minHeight: 44)
                     }
                     .buttonStyle(.bordered)
-                    .tint(Color.accentColor)
-                    .accessibilityLabel(String(localized: "Enter time manually"))
+                    .tint(isSelected(minutes) ? Color.accentColor : .gray)
+                    .accessibilityLabel(String(localized: "\(minutes) minutes"))
+                    .accessibilityHint(String(localized: "Double tap to set. Touch and hold to edit this preset."))
+                    .accessibilityAddTraits(isSelected(minutes) ? [.isSelected] : [])
+                    .onLongPressGesture {
+                        editTarget = EditTarget(id: index)
+                    }
                 }
-                .padding(.horizontal, DSSpacing.md)
             }
+            .padding(.horizontal, DSSpacing.md)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .sheet(item: $editTarget) { target in
+            TimePresetEditorSheet(
+                title: "Edit Quick Setup",
+                showSeconds: false,
+                initialSeconds: store.quickMinutes[target.id] * 60
+            ) { totalSeconds in
+                store.setQuickMinutes(totalSeconds / 60, at: target.id)
+            }
+            .presentationDetents([.height(320)])
+        }
     }
 
     private func isSelected(_ minutes: Int) -> Bool {

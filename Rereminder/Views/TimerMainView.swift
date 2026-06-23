@@ -40,11 +40,8 @@ struct TimerMainView: View {
                 // 빠른Settings 영역
                 Group {
                     if screenVM.state != .running {
-                        TimePresetButtons(
-                            screenVM: screenVM,
-                            onShowTimeInput: { showTimeInput = true }
-                        )
-                        .padding(.top, spacing * 2)
+                        TimePresetButtons(screenVM: screenVM)
+                            .padding(.top, spacing * 2)
                     } else {
                         // 실행 중일 때 빈 공간으로 높이 유지
                         Color.clear
@@ -63,12 +60,6 @@ struct TimerMainView: View {
                     nextAlertInfo
                         .padding(.vertical, spacing * 3)
                 }
-
-                Divider()
-                    .padding(.vertical, spacing * 2)
-
-                prealertSection
-                    .padding(.bottom, spacing * 2)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
@@ -108,6 +99,7 @@ struct TimerMainView: View {
             }
         }
         .offset(y: -fontSize * 0.8)  // 중앙 시간 위쪽에 배치
+        .accessibilityHidden(true)  // 상태는 중앙 시간 라벨로 통합 안내
     }
 
     private func clockView(size: CGFloat, lineWidth: CGFloat, geometry: GeometryProxy, buttonSize: CGFloat) -> some View {
@@ -196,6 +188,7 @@ struct TimerMainView: View {
                 .rotationEffect(.degrees(Double(rotationAngle)))
                 .offset(x: xOffset, y: yOffset)
         }
+        .accessibilityHidden(true)
     }
 
     private func backgroundCircle(size: CGFloat, lineWidth: CGFloat) -> some View {
@@ -209,6 +202,7 @@ struct TimerMainView: View {
                 )
             )
             .frame(width: size, height: size)
+            .accessibilityHidden(true)
     }
 
     private func progressCircle(size: CGFloat, lineWidth: CGFloat) -> some View {
@@ -260,6 +254,7 @@ struct TimerMainView: View {
                     .rotationEffect(.init(degrees: -90))
             }
         }
+        .accessibilityHidden(true)
     }
 
     private func clockMarkers(size: CGFloat, lineWidth: CGFloat) -> some View {
@@ -288,6 +283,7 @@ struct TimerMainView: View {
             showLabels: true
         )
         .frame(width: size, height: size)
+        .accessibilityHidden(true)
     }
 
     private func dragPointer(size: CGFloat, lineWidth: CGFloat) -> some View {
@@ -298,6 +294,7 @@ struct TimerMainView: View {
             .rotationEffect(.degrees(screenVM.mainAngle))
             .gesture(dragGesture)
             .rotationEffect(.init(degrees: -90))
+            .accessibilityHidden(true)
     }
 
     private var dragGesture: some Gesture {
@@ -331,6 +328,7 @@ struct TimerMainView: View {
             .foregroundStyle(.white)
             .cornerRadius(fontSize * 0.5)
             .offset(x: xOffset, y: yOffset)
+            .accessibilityHidden(true)
     }
 
     private func markerDragHandles(size: CGFloat, lineWidth: CGFloat) -> some View {
@@ -378,6 +376,7 @@ struct TimerMainView: View {
                     .rotationEffect(.init(degrees: -90))
             }
         }
+        .accessibilityHidden(true)
     }
 
     private func markerDragTooltip(size: CGFloat, fontSize: CGFloat) -> some View {
@@ -397,6 +396,7 @@ struct TimerMainView: View {
             .foregroundStyle(.white)
             .cornerRadius(fontSize * 0.5)
             .offset(x: xOffset, y: yOffset)
+            .accessibilityHidden(true)
     }
 
     private func centerTimeDisplay(fontSize: CGFloat) -> some View {
@@ -407,10 +407,64 @@ struct TimerMainView: View {
             .lineLimit(1)
             .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
             .onTapGesture {
-                if screenVM.state != .running && screenVM.state != .overtime && screenVM.state != .paused {
+                if isTimeEditable {
                     showTimeInput = true
                 }
             }
+            // VoiceOver: 다이얼 전체를 "상태 + 시간" 한 덩어리로 안내하고,
+            // 드래그 대신 위/아래 스와이프로 시간을 조정할 수 있게 한다.
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(stateLabel)
+            .accessibilityValue(accessibilityTimeValue)
+            .accessibilityHint(isTimeEditable
+                ? String(localized: "Swipe up or down to adjust the time. Double tap to enter an exact time.")
+                : "")
+            .accessibilityAddTraits(isTimeEditable ? [.isButton, .updatesFrequently] : .updatesFrequently)
+            .accessibilityAdjustableAction { direction in
+                guard isTimeEditable else { return }
+                switch direction {
+                case .increment:
+                    adjustTime(by: 60)
+                case .decrement:
+                    adjustTime(by: -60)
+                @unknown default:
+                    break
+                }
+            }
+    }
+
+    /// 실행/일시정지/오버타임이 아닐 때만 시간 편집 가능
+    private var isTimeEditable: Bool {
+        screenVM.state != .running && screenVM.state != .overtime && screenVM.state != .paused
+    }
+
+    /// VoiceOver가 읽어줄 시간 값 (편집 중이면 설정값, 진행 중이면 남은 시간)
+    private var accessibilityTimeValue: String {
+        if screenVM.state == .running || screenVM.state == .overtime {
+            return spokenTime(totalSeconds: max(0, Int(screenVM.timerVM.remaining)))
+        }
+        return spokenTime(totalSeconds: screenVM.mainMinutes * 60 + screenVM.mainSeconds)
+    }
+
+    /// 초를 "N분 M초" 형태의 음성 친화 문자열로 변환
+    private func spokenTime(totalSeconds: Int) -> String {
+        let minutes = totalSeconds / 60
+        let seconds = totalSeconds % 60
+        if minutes > 0 && seconds > 0 {
+            return String(localized: "\(minutes) min \(seconds) sec")
+        } else if minutes > 0 {
+            return String(localized: "\(minutes) min")
+        } else {
+            return String(localized: "\(seconds) sec")
+        }
+    }
+
+    /// VoiceOver 위/아래 스와이프 시 시간을 1분 단위로 증감 (0 ~ 최대 120분)
+    private func adjustTime(by deltaSeconds: Int) {
+        let total = screenVM.mainMinutes * 60 + screenVM.mainSeconds
+        let newTotal = max(0, min(TimeMapper.maxSeconds, total + deltaSeconds))
+        screenVM.mainMinutes = newTotal / 60
+        screenVM.mainSeconds = newTotal % 60
     }
 
     @ViewBuilder
@@ -432,125 +486,6 @@ struct TimerMainView: View {
                 .fill(Color.orange.opacity(0.1))
         )
         .padding(.horizontal, 16)
-    }
-
-    @State private var showPaywall = false
-    @State private var paywallFeature: ProGate.Feature?
-    @State private var paywallStage: ProGate.PaywallStage = .second
-    @State private var pendingPrealertSec: Int?
-
-    @ViewBuilder
-    private var prealertSection: some View {
-        let mainSeconds = screenVM.mainMinutes * 60 + screenVM.mainSeconds
-        let presets = Timer.presetOffsetsSec
-        let prealertGate = ProGate.evaluate(.unlimitedPrealerts)
-
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text("Pre-alerts")
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(.secondary)
-
-                if !StoreManager.isProUser {
-                    if let remaining = prealertGate.trialRemaining,
-                       screenVM.selectedOffsets.count >= ProGate.freePrealertLimit {
-                        Text("Trial \(remaining) left")
-                            .font(.caption2.weight(.medium))
-                            .foregroundStyle(.orange)
-                    } else {
-                        Text("\(screenVM.selectedOffsets.count)/\(ProGate.freePrealertLimit)")
-                            .font(.caption2.weight(.medium))
-                            .foregroundStyle(.secondary)
-                    }
-                }
-
-                Spacer()
-            }
-            .padding(.leading, 12)
-
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 8) {
-                    ForEach(presets, id: \.self) { sec in
-                        prealertToggle(sec: sec, mainSeconds: mainSeconds)
-                    }
-                }
-                .padding(.horizontal, 12)
-            }
-        }
-        .paywallGate(
-            isPresented: $showPaywall,
-            feature: paywallFeature,
-            stage: paywallStage,
-            onAcceptExtension: applyPendingPrealert
-        )
-    }
-
-    private func applyPendingPrealert() {
-        if let sec = pendingPrealertSec {
-            screenVM.selectedOffsets.insert(sec)
-            screenVM.showPrealertToast(for: sec, isEnabled: true)
-            pendingPrealertSec = nil
-        }
-    }
-
-    private func prealertToggle(sec: Int, mainSeconds: Int) -> some View {
-        let isDisabled = sec >= mainSeconds
-        let isSelected = screenVM.selectedOffsets.contains(sec)
-        let prealertGate = ProGate.evaluate(.unlimitedPrealerts)
-
-        return Toggle(
-            isOn: Binding(
-                get: { isSelected },
-                set: { on in
-                    if on {
-                        // 1번째는 항상 free, 2번째부터 5+5 trial 평가
-                        if screenVM.selectedOffsets.count >= ProGate.freePrealertLimit {
-                            switch ProGate.evaluate(.unlimitedPrealerts) {
-                            case .allowed, .allowedWithTrial:
-                                screenVM.selectedOffsets.insert(sec)
-                            case .blocked(let stage):
-                                paywallFeature = .unlimitedPrealerts
-                                paywallStage = stage
-                                pendingPrealertSec = sec
-                                showPaywall = true
-                                AnalyticsManager.log(.premiumTrialExhausted(
-                                    feature: .unlimitedPrealerts,
-                                    stage: stage
-                                ))
-                                return
-                            }
-                        } else {
-                            screenVM.selectedOffsets.insert(sec)
-                        }
-                    } else {
-                        screenVM.selectedOffsets.remove(sec)
-                    }
-                    screenVM.showPrealertToast(for: sec, isEnabled: on)
-                }
-            )
-        ) {
-            HStack(spacing: 4) {
-                Text(sec < 60 ? String(localized: "\(sec) sec") : String(localized: "\(sec/60) min"))
-                    .dsScaledFont(14, weight: .medium, relativeTo: .callout, maxSize: 20)
-
-                // 제한 초과 프리셋에 잠금 아이콘 (trial 도 소진된 경우)
-                if !isSelected && !StoreManager.isProUser
-                    && screenVM.selectedOffsets.count >= ProGate.freePrealertLimit
-                    && !prealertGate.isAllowed
-                    && !isDisabled {
-                    Image(systemName: "lock.fill")
-                        .font(.caption2)
-                        .foregroundStyle(.orange)
-                }
-            }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
-            .lineLimit(1)
-            .minimumScaleFactor(0.8)
-        }
-        .toggleStyle(.button)
-        .buttonStyle(.bordered)
-        .disabled(isDisabled)
     }
 
     private func mmss(from sec: Int) -> String {
@@ -602,6 +537,24 @@ struct TimerMainView: View {
         case .overtime:
             return "Overtime"
         }
+    }
+
+    /// VoiceOver 라벨용 상태 문자열 ("Timer, 준비됨" 형태로 시간 값과 결합)
+    private var stateLabel: String {
+        let state: String
+        switch screenVM.state {
+        case .idle:
+            state = String(localized: "Ready")
+        case .running:
+            state = String(localized: "In Progress")
+        case .paused:
+            state = String(localized: "Paused")
+        case .finished:
+            state = String(localized: "Done")
+        case .overtime:
+            state = String(localized: "Overtime")
+        }
+        return String(localized: "Timer, \(state)")
     }
 
     // 왼쪽 버튼 (Cancel) - Start Timer 후에만 표시

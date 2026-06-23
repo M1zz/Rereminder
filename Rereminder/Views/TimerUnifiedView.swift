@@ -18,6 +18,7 @@ struct TimerUnifiedView: View {
 
     @State private var showHistory = false
     @State private var showMessageEditor = false
+    @State private var showPrealerts = false
     @State private var showProPaywall = false
     @State private var paywallStage: ProGate.PaywallStage = .second
 
@@ -31,6 +32,8 @@ struct TimerUnifiedView: View {
         Binding(
             get: { screenVM.currentMode },
             set: { newMode in
+                // 실행 중에는 모드 전환(스와이프) 무시 → 자동으로 원래 페이지로 복귀
+                guard isIdle else { return }
                 guard newMode == .presentation else {
                     screenVM.currentMode = newMode
                     return
@@ -63,6 +66,7 @@ struct TimerUnifiedView: View {
             .modifier(SheetsModifier(
                 showHistory: $showHistory,
                 showMessageEditor: $showMessageEditor,
+                showPrealerts: $showPrealerts,
                 showProPaywall: $showProPaywall,
                 paywallStage: paywallStage,
                 onAcceptExtension: enterPresentationAfterExtension,
@@ -82,72 +86,60 @@ struct TimerUnifiedView: View {
 
     private var mainContent: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                modePicker
-                modeContent
-            }
-            .toolbar {
-                toolbarLeading
-                toolbarMessageEditor
-                toolbarSettings
-            }
+            modePager
+                .toolbar { bottomToolbar }
         }
     }
 
-    @ViewBuilder
-    private var modePicker: some View {
-        if isIdle {
-            Picker("Mode", selection: modeBinding) {
-                Text("Timer").tag(AppMode.timer)
-                Text("Presentation").tag(AppMode.presentation)
-            }
-            .pickerStyle(.segmented)
-            .padding(.horizontal, 16)
-            .padding(.top, 8)
-        }
-    }
+    /// 타이머 ↔ 프레젠테이션을 좌우 스와이프로 전환하는 페이지네이션
+    private var modePager: some View {
+        TabView(selection: modeBinding) {
+            TimerMainView()
+                .padding()
+                .tag(AppMode.timer)
 
-    private var modeContent: some View {
-        Group {
-            switch screenVM.currentMode {
-            case .timer:
-                TimerMainView()
-                    .padding()
-            case .presentation:
-                PresentationContainerView()
-            }
+            PresentationContainerView()
+                .tag(AppMode.presentation)
         }
         .environmentObject(screenVM)
+        .tabViewStyle(.page(indexDisplayMode: .always))
+        .indexViewStyle(.page(backgroundDisplayMode: .always))
     }
 
-    // MARK: - Toolbar
+    // MARK: - Bottom Toolbar
 
-    private var toolbarLeading: some ToolbarContent {
-        ToolbarItem(placement: .topBarLeading) {
+    @ToolbarContentBuilder
+    private var bottomToolbar: some ToolbarContent {
+        ToolbarItemGroup(placement: .bottomBar) {
             if screenVM.currentMode == .timer {
                 Button {
                     showHistory = true
                 } label: {
                     Image(systemName: "list.bullet")
                 }
-            }
-        }
-    }
+                .accessibilityLabel(String(localized: "Saved timers"))
 
-    private var toolbarMessageEditor: some ToolbarContent {
-        ToolbarItem(placement: .topBarTrailing) {
-            if screenVM.currentMode == .timer {
+                Spacer()
+
+                Button {
+                    showPrealerts = true
+                } label: {
+                    Image(systemName: "bell.badge")
+                }
+                .accessibilityLabel(String(localized: "Pre-alerts"))
+
+                Spacer()
+
                 Button {
                     showMessageEditor = true
                 } label: {
                     Image(systemName: "text.bubble")
                 }
-            }
-        }
-    }
+                .accessibilityLabel(String(localized: "Edit notification message"))
 
-    private var toolbarSettings: some ToolbarContent {
-        ToolbarItem(placement: .topBarTrailing) {
+                Spacer()
+            }
+
             NavigationLink {
                 NoticeSettingView()
                     .environmentObject(appStateManager)
@@ -155,6 +147,7 @@ struct TimerUnifiedView: View {
             } label: {
                 Image(systemName: "gearshape")
             }
+            .accessibilityLabel(String(localized: "Settings"))
         }
     }
 
@@ -223,6 +216,7 @@ struct TimerUnifiedView: View {
 private struct SheetsModifier: ViewModifier {
     @Binding var showHistory: Bool
     @Binding var showMessageEditor: Bool
+    @Binding var showPrealerts: Bool
     @Binding var showProPaywall: Bool
     let paywallStage: ProGate.PaywallStage
     let onAcceptExtension: () -> Void
@@ -239,6 +233,12 @@ private struct SheetsModifier: ViewModifier {
             }
             .sheet(isPresented: $showMessageEditor) {
                 NotificationMessageSettingView()
+                    .environmentObject(screenVM)
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.visible)
+            }
+            .sheet(isPresented: $showPrealerts) {
+                PrealertSettingsView()
                     .environmentObject(screenVM)
                     .presentationDetents([.medium, .large])
                     .presentationDragIndicator(.visible)
