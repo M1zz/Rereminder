@@ -8,13 +8,52 @@
 
     },
     ":" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ":"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ":"
+          }
+        }
+      }
     },
     "· %lld alerts" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "・%lld件のアラート"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "· %lld개 알림"
+          }
+        }
+      }
     },
     "%@ · One-time purchase" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@・買い切り"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · 일회성 구매"
+          }
+        }
+      }
     },
     "%@ %@" : {
       "localizations" : {
@@ -28,6 +67,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ %2$@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "%@ color" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@カラー"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ 색상"
           }
         }
       }
@@ -45,11 +106,30 @@
             "state" : "translated",
             "value" : "%1$@：%2$@ %3$@、%4$@ %5$@"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$@ %3$@, %4$@ %5$@"
+          }
         }
       }
     },
     "%lld" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        }
+      }
     },
     "%lld / %lld" : {
       "localizations" : {
@@ -105,8 +185,43 @@
         }
       }
     },
+    "%lld min %lld sec" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld min %2$lld sec"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld分%lld秒"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld분 %lld초"
+          }
+        }
+      }
+    },
     "%lld min before" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld分前"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld분 전"
+          }
+        }
+      }
     },
     "%lld min before alert" : {
       "extractionState" : "stale",
@@ -142,25 +257,170 @@
       }
     },
     "%lld minute pre-alert" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld分前の事前アラート"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld분 예비 알림"
+          }
+        }
+      }
     },
     "%lld minutes" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld分"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld분"
+          }
+        }
+      }
+    },
+    "%lld minutes %lld seconds" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld minutes %2$lld seconds"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld分%lld秒"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld분 %lld초"
+          }
+        }
+      }
+    },
+    "%lld percent" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldパーセント"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld퍼센트"
+          }
+        }
+      }
     },
     "%lld percent remaining" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "残り%lldパーセント"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld퍼센트 남음"
+          }
+        }
+      }
     },
     "%lld sec" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld秒"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld초"
+          }
+        }
+      }
     },
     "%lld sec before" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld秒前"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld초 전"
+          }
+        }
+      }
     },
     "%lld sec remaining" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "残り%lld秒"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld초 남음"
+          }
+        }
+      }
+    },
+    "%lld seconds" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld秒"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld초"
+          }
+        }
+      }
     },
     "%lld sections" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldセクション"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld개 섹션"
+          }
+        }
+      }
     },
     "%lld/%lld" : {
       "localizations" : {
@@ -169,11 +429,36 @@
             "state" : "new",
             "value" : "%1$lld/%2$lld"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld/%lld"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld/%lld"
+          }
         }
       }
     },
     "%lldm" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld分"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld분"
+          }
+        }
+      }
     },
     "%lldm %llds" : {
       "localizations" : {
@@ -182,20 +467,84 @@
             "state" : "new",
             "value" : "%1$lldm %2$llds"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld分%lld秒"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld분 %lld초"
+          }
         }
       }
     },
     "%lldmin" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld分"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld분"
+          }
+        }
+      }
     },
     "•" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "•"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "•"
+          }
+        }
+      }
     },
     ">>" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ">>"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ">>"
+          }
+        }
+      }
     },
     "00:00" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "00:00"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "00:00"
+          }
+        }
+      }
     },
     "1 min timer → ends in ~%lld sec" : {
       "localizations" : {
@@ -294,10 +643,36 @@
       }
     },
     "70%" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "70%"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "70%"
+          }
+        }
+      }
     },
     "A an example control that runs a timer." : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーを実行するサンプルコントロールです。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머를 실행하는 예시 컨트롤입니다."
+          }
+        }
+      }
     },
     "A dedicated notification system for timers.\n\n• Alerts at exact times even in background\n• Automatic permission management for convenience\n• Prevents duplicate notifications\n• Optimized for time management during mentoring or presentations\n\nRecommended: Keep enhanced notifications enabled" : {
       "localizations" : {
@@ -347,6 +722,31 @@
         }
       }
     },
+    "Add" : {
+
+    },
+    "Add a custom pre-alert" : {
+
+    },
+    "Add custom minutes" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カスタム時間を追加"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "직접 분 입력"
+          }
+        }
+      }
+    },
+    "Add Pre-alert" : {
+
+    },
     "Add Section" : {
       "localizations" : {
         "ja" : {
@@ -354,17 +754,78 @@
             "state" : "translated",
             "value" : "セクションを追加"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "섹션 추가"
+          }
         }
       }
     },
     "Add to favorites" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "お気に入りに追加"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "즐겨찾기에 추가"
+          }
+        }
+      }
     },
     "alarmID" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "alarmID"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "alarmID"
+          }
+        }
+      }
+    },
+    "Alert at section end" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "セクション終了時に通知"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "섹션 종료 시 알림"
+          }
+        }
+      }
     },
     "All features unlocked" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべての機能が利用可能"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모든 기능 잠금 해제"
+          }
+        }
+      }
     },
     "Allowed" : {
       "localizations" : {
@@ -455,6 +916,12 @@
             "state" : "translated",
             "value" : "外観"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "화면 모드"
+          }
         }
       }
     },
@@ -491,7 +958,20 @@
       }
     },
     "available" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "利用可能"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용 가능"
+          }
+        }
+      }
     },
     "Average Duration" : {
       "localizations" : {
@@ -499,6 +979,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "平均時間"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "평균 시간"
           }
         }
       }
@@ -552,7 +1038,20 @@
       }
     },
     "Choose your accent color for the entire app." : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリ全体のアクセントカラーを選択します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "앱 전체에 적용할 강조 색상을 선택하세요."
+          }
+        }
+      }
     },
     "Close" : {
       "localizations" : {
@@ -577,11 +1076,30 @@
             "state" : "translated",
             "value" : "プラン比較"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "플랜 비교"
+          }
         }
       }
     },
     "completed" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완료됨"
+          }
+        }
+      }
     },
     "Completed" : {
       "localizations" : {
@@ -589,6 +1107,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "完了"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완료"
           }
         }
       }
@@ -600,10 +1124,17 @@
             "state" : "translated",
             "value" : "完了率"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완료율"
+          }
         }
       }
     },
     "Custom" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -653,7 +1184,20 @@
       }
     },
     "Dark" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ダーク"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다크"
+          }
+        }
+      }
     },
     "Data" : {
       "localizations" : {
@@ -661,6 +1205,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "データ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "데이터"
           }
         }
       }
@@ -689,6 +1239,28 @@
             "state" : "translated",
             "value" : "デフォルトメッセージ"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기본 메시지"
+          }
+        }
+      }
+    },
+    "Delete section" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "セクションを削除"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "섹션 삭제"
+          }
         }
       }
     },
@@ -709,7 +1281,20 @@
       }
     },
     "Dismiss timer alert" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーアラートを閉じる"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 알림 닫기"
+          }
+        }
+      }
     },
     "Done" : {
       "localizations" : {
@@ -726,6 +1311,9 @@
           }
         }
       }
+    },
+    "Double tap to set. Touch and hold to edit this preset." : {
+
     },
     "e.g., Presentation, Mentoring, Meeting" : {
       "localizations" : {
@@ -758,6 +1346,25 @@
           }
         }
       }
+    },
+    "Edit notification message" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知メッセージを編集"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "알림 메시지 편집"
+          }
+        }
+      }
+    },
+    "Edit Quick Setup" : {
+
     },
     "Edit Template" : {
       "localizations" : {
@@ -807,6 +1414,23 @@
         }
       }
     },
+    "Enter time manually" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "時間を手動で入力"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "직접 시간 입력"
+          }
+        }
+      }
+    },
     "Enter Time Manually" : {
       "localizations" : {
         "ja" : {
@@ -824,13 +1448,68 @@
       }
     },
     "Failed to sync with App Store. Please check your network connection." : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Storeとの同期に失敗しました。ネットワーク接続を確認してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App Store와 동기화하지 못했습니다. 네트워크 연결을 확인해주세요."
+          }
+        }
+      }
     },
     "Feature" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "機能"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기능"
+          }
+        }
+      }
+    },
+    "Finished" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "終了"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완료"
+          }
+        }
+      }
     },
     "Follow these steps to enable notifications:\n\n1. Tap 'Go to Settings' button\n2. Find '%@' app in Settings\n3. Select 'Notifications' menu\n4. Turn on 'Allow Notifications'\n\n💡 Recommended settings:\n• Show on Lock Screen\n• Show in Notification Center\n• Show as Banners\n\nThis ensures you never miss timer alerts!" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知を有効にするには次の手順に従ってください:\n\n1.「設定を開く」ボタンをタップ\n2. 設定で「%@」アプリを探す\n3.「通知」メニューを選択\n4.「通知を許可」をオン\n\n💡 おすすめ設定:\n• ロック画面に表示\n• 通知センターに表示\n• バナーとして表示\n\nこれでタイマーのアラートを見逃しません！"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "알림을 켜려면 다음 단계를 따라주세요:\n\n1. '설정으로 이동' 버튼을 탭하세요\n2. 설정에서 '%@' 앱을 찾으세요\n3. '알림' 메뉴를 선택하세요\n4. '알림 허용'을 켜세요\n\n💡 권장 설정:\n• 잠금 화면에 표시\n• 알림 센터에 표시\n• 배너로 표시\n\n이렇게 하면 타이머 알림을 놓치지 않아요!"
+          }
+        }
+      }
     },
     "Follow these steps to enable notifications:\n\n1. Tap 'Go to Settings' button\n2. Find 'Rereminder' app in Settings\n3. Select 'Notifications' menu\n4. Turn on 'Allow Notifications'\n\n💡 Recommended settings:\n• Show on Lock Screen\n• Show in Notification Center\n• Show as Banners\n\nThis ensures you never miss timer alerts!" : {
       "extractionState" : "stale",
@@ -855,6 +1534,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "無料"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "무료"
+          }
+        }
+      }
+    },
+    "Get a heads-up before the timer ends." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマー終了前に事前にお知らせします。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머가 끝나기 전에 미리 알려드려요."
           }
         }
       }
@@ -925,7 +1626,21 @@
       }
     },
     "History will appear after you use timers" : {
-      "comment" : "History empty state"
+      "comment" : "History empty state",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーを使うと履歴が表示されます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머를 사용하면 기록이 표시됩니다"
+          }
+        }
+      }
     },
     "How to Enable Notifications" : {
       "localizations" : {
@@ -1105,7 +1820,20 @@
       }
     },
     "Light" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ライト"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "라이트"
+          }
+        }
+      }
     },
     "Live Activity (Dynamic Island)" : {
       "localizations" : {
@@ -1124,7 +1852,20 @@
       }
     },
     "m" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "분"
+          }
+        }
+      }
     },
     "Main %1$lld min %2$lld sec" : {
       "localizations" : {
@@ -1164,6 +1905,18 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Main %1$lld min %2$lld sec"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "メイン %lld分%lld秒"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "메인 %lld분 %lld초"
           }
         }
       }
@@ -1218,7 +1971,20 @@
       }
     },
     "Minutes" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "분"
+          }
+        }
+      }
     },
     "Mode" : {
       "localizations" : {
@@ -1226,6 +1992,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "モード"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모드"
           }
         }
       }
@@ -1279,12 +2051,46 @@
         }
       }
     },
+    "Next section: %@, %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Next section: %1$@, %2$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次のセクション: %1$@、%2$@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다음 섹션: %1$@, %2$@"
+          }
+        }
+      }
+    },
     "Next: %@ (%@)" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Next: %1$@ (%2$@)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次: %1$@（%2$@）"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다음: %1$@ (%2$@)"
           }
         }
       }
@@ -1296,6 +2102,18 @@
             "state" : "new",
             "value" : "Next: %1$@ alert (%2$lld min %3$lld sec left)"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次: %1$@アラート（残り%2$lld分%3$lld秒）"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다음: %1$@ 알림 (%2$lld분 %3$lld초 남음)"
+          }
         }
       }
     },
@@ -1305,6 +2123,18 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Next: %1$@ alert (%2$lld sec left)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次: %1$@アラート（残り%2$lld秒）"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다음: %1$@ 알림 (%2$lld초 남음)"
           }
         }
       }
@@ -1366,6 +2196,18 @@
             "state" : "new",
             "value" : "Next: End alert (%1$lld min %2$lld sec left)"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "次: 終了アラート（残り%lld分%lld秒）"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다음: 종료 알림 (%lld분 %lld초 남음)"
+          }
         }
       }
     },
@@ -1418,7 +2260,20 @@
       }
     },
     "No purchases to restore" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "復元できる購入はありません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "복원할 구매 내역이 없습니다"
+          }
+        }
+      }
     },
     "No saved templates" : {
       "localizations" : {
@@ -1437,13 +2292,52 @@
       }
     },
     "No timer history" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマー履歴がありません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 기록 없음"
+          }
+        }
+      }
     },
     "not available" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "利用不可"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용 불가"
+          }
+        }
+      }
     },
     "notice" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "お知らせ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "알림"
+          }
+        }
+      }
     },
     "Notification Message Settings" : {
       "localizations" : {
@@ -1510,7 +2404,20 @@
       }
     },
     "Notification permission is required" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知の許可が必要です"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "알림 권한이 필요합니다"
+          }
+        }
+      }
     },
     "Notification permission is required for timer alerts.\n\nWithout permission:\n• You won't receive pre-alerts\n• You won't receive end alerts\n• Notifications won't work in background\n\nPlease enable notifications in Settings." : {
       "localizations" : {
@@ -1562,7 +2469,20 @@
       }
     },
     "Off" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "オフ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "끔"
+          }
+        }
+      }
     },
     "OK" : {
       "comment" : "Timer alert dismiss button",
@@ -1582,7 +2502,20 @@
       }
     },
     "On" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "オン"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "켬"
+          }
+        }
+      }
     },
     "onboarding_desc_1" : {
       "localizations" : {
@@ -1959,7 +2892,20 @@
       }
     },
     "One-time purchase. No subscription fees." : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "買い切り。サブスクリプション料金はありません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일회성 구매. 구독료 없음."
+          }
+        }
+      }
     },
     "Open App" : {
       "localizations" : {
@@ -2010,7 +2956,21 @@
       }
     },
     "Overview" : {
-      "comment" : "History stats section header"
+      "comment" : "History stats section header",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "概要"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "개요"
+          }
+        }
+      }
     },
     "Pause" : {
       "localizations" : {
@@ -2029,7 +2989,20 @@
       }
     },
     "Pause the current timer" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在のタイマーを一時停止"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "현재 타이머 일시정지"
+          }
+        }
+      }
     },
     "Pause the timer" : {
       "localizations" : {
@@ -2048,7 +3021,20 @@
       }
     },
     "Pause timer" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーを一時停止"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 일시정지"
+          }
+        }
+      }
     },
     "Pause Timer" : {
       "localizations" : {
@@ -2083,10 +3069,36 @@
       }
     },
     "Pay once, use forever" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一度の購入でずっと使える"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "한 번 결제로 평생 사용"
+          }
+        }
+      }
     },
     "Pre-alert" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "事前アラート"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "예비 알림"
+          }
+        }
+      }
     },
     "Pre-alert Message" : {
       "localizations" : {
@@ -2160,6 +3172,12 @@
             "state" : "translated",
             "value" : "プレゼンテーション"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "프레젠테이션"
+          }
         }
       }
     },
@@ -2186,11 +3204,30 @@
             "state" : "translated",
             "value" : "プレビュー"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "미리보기"
+          }
         }
       }
     },
     "Privacy Policy" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プライバシーポリシー"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "개인정보 처리방침"
+          }
+        }
+      }
     },
     "Pro" : {
       "localizations" : {
@@ -2199,17 +3236,62 @@
             "state" : "translated",
             "value" : "Pro"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro"
+          }
         }
       }
     },
     "PRO" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PRO"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PRO"
+          }
+        }
+      }
     },
     "Purchase successful!" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "購入が完了しました！"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구매 완료!"
+          }
+        }
+      }
     },
     "Purchase verification failed. Please try restoring purchases." : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "購入の確認に失敗しました。購入の復元をお試しください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구매 확인에 실패했습니다. 구매 복원을 시도해주세요."
+          }
+        }
+      }
     },
     "Quick Setup" : {
       "localizations" : {
@@ -2309,9 +3391,39 @@
       }
     },
     "Recent Records" : {
-      "comment" : "History records section header"
+      "comment" : "History records section header",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最近の記録"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최근 기록"
+          }
+        }
+      }
     },
     "Remaining time: %@" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "残り時間: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "남은 시간: %@"
+          }
+        }
+      }
+    },
+    "Remove" : {
 
     },
     "Remove from favorites" : {
@@ -2320,6 +3432,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "お気に入りから削除"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "즐겨찾기에서 제거"
           }
         }
       }
@@ -2390,10 +3508,36 @@
       }
     },
     "Restore Purchases" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "購入を復元"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구매 복원"
+          }
+        }
+      }
     },
     "Restored successfully!" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "復元が完了しました！"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "복원 완료!"
+          }
+        }
+      }
     },
     "Resume" : {
       "localizations" : {
@@ -2412,7 +3556,20 @@
       }
     },
     "Resume the paused timer" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一時停止中のタイマーを再開"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일시정지된 타이머 재개"
+          }
+        }
+      }
     },
     "Resume the timer" : {
       "localizations" : {
@@ -2431,7 +3588,20 @@
       }
     },
     "Resume timer" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーを再開"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 재개"
+          }
+        }
+      }
     },
     "Resume Timer" : {
       "localizations" : {
@@ -2466,7 +3636,20 @@
       }
     },
     "s" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "秒"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "초"
+          }
+        }
+      }
     },
     "Save" : {
       "localizations" : {
@@ -2480,6 +3663,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "저장"
+          }
+        }
+      }
+    },
+    "Saved timers" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存したタイマー"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "저장된 타이머"
           }
         }
       }
@@ -2501,7 +3700,58 @@
       }
     },
     "sec before alert" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "秒前にアラート"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "초 전 알림"
+          }
+        }
+      }
+    },
+    "Seconds" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "秒"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "초"
+          }
+        }
+      }
+    },
+    "Section %lld of %lld, %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Section %1$lld of %2$lld, %3$@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "セクション %1$lld/%2$lld、%3$@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "섹션 %1$lld/%2$lld, %3$@"
+          }
+        }
+      }
     },
     "Section %lld/%lld" : {
       "localizations" : {
@@ -2510,11 +3760,68 @@
             "state" : "new",
             "value" : "Section %1$lld/%2$lld"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "セクション %lld/%lld"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "섹션 %lld/%lld"
+          }
         }
       }
     },
     "Section name" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "セクション名"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "섹션 이름"
+          }
+        }
+      }
+    },
+    "Section progress" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "セクションの進捗"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "섹션 진행률"
+          }
+        }
+      }
+    },
+    "Section time remaining" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "セクションの残り時間"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "섹션 남은 시간"
+          }
+        }
+      }
     },
     "Select Time Multiplier" : {
       "localizations" : {
@@ -2597,7 +3904,20 @@
       }
     },
     "sessions" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "セッション"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "세션"
+          }
+        }
+      }
     },
     "Settings" : {
       "localizations" : {
@@ -2654,7 +3974,20 @@
       }
     },
     "Show more (%lld remaining)" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "もっと見る（残り%lld）"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "더 보기 (%lld개 남음)"
+          }
+        }
+      }
     },
     "Show Toast Messages" : {
       "localizations" : {
@@ -2721,16 +4054,68 @@
       }
     },
     "Start" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開始"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시작"
+          }
+        }
+      }
     },
     "Start a timer" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーを開始"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 시작"
+          }
+        }
+      }
     },
     "Start a timer in Rereminder" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminderでタイマーを開始"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder에서 타이머 시작"
+          }
+        }
+      }
     },
     "Start Presentation" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プレゼンテーションを開始"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "프레젠테이션 시작"
+          }
+        }
+      }
     },
     "Start Timer" : {
       "comment" : "Start Timer",
@@ -2750,10 +4135,52 @@
       }
     },
     "Starting %lld minute timer" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld分タイマーを開始中"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld분 타이머 시작 중"
+          }
+        }
+      }
     },
     "Starting timer" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーを開始中"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 시작 중"
+          }
+        }
+      }
+    },
+    "Starts this template" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このテンプレートを開始します"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 템플릿을 시작합니다"
+          }
+        }
+      }
     },
     "Stop" : {
       "localizations" : {
@@ -2771,8 +4198,37 @@
         }
       }
     },
+    "Stop presentation" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プレゼンテーションを停止"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "프레젠테이션 정지"
+          }
+        }
+      }
+    },
     "Stop the current timer" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在のタイマーを停止"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "현재 타이머 정지"
+          }
+        }
+      }
     },
     "Stop the timer" : {
       "localizations" : {
@@ -2791,19 +4247,100 @@
       }
     },
     "Stop timer" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーを停止"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 정지"
+          }
+        }
+      }
     },
     "Stop Timer" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーを停止"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 정지"
+          }
+        }
+      }
     },
     "stopped" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "停止"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "정지됨"
+          }
+        }
+      }
+    },
+    "Swipe up or down to adjust the time. Double tap to enter an exact time." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上下にスワイプして時間を調整します。ダブルタップで正確な時間を入力できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "위아래로 쓸어넘겨 시간을 조절하세요. 두 번 탭하면 정확한 시간을 입력할 수 있습니다."
+          }
+        }
+      }
     },
     "System" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "システム"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시스템"
+          }
+        }
+      }
     },
     "Tap to select theme" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タップしてテーマを選択"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탭하여 테마 선택"
+          }
+        }
+      }
     },
     "Template Name" : {
       "localizations" : {
@@ -2822,7 +4359,20 @@
       }
     },
     "Templates" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "テンプレート"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "템플릿"
+          }
+        }
+      }
     },
     "Templates are automatically saved when you start a timer" : {
       "localizations" : {
@@ -2841,7 +4391,20 @@
       }
     },
     "Terms of Use" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "利用規約"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이용약관"
+          }
+        }
+      }
     },
     "Test Mode" : {
       "localizations" : {
@@ -2876,13 +4439,84 @@
       }
     },
     "Theme" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "テーマ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "테마"
+          }
+        }
+      }
     },
     "This feature requires Pro" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この機能にはProが必要です"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 기능은 Pro가 필요합니다"
+          }
+        }
+      }
     },
     "This Week" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今週"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이번 주"
+          }
+        }
+      }
+    },
+    "Time is almost up" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "まもなく時間です"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시간이 거의 다 됐어요"
+          }
+        }
+      }
+    },
+    "Time is running low" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "残り時間が少なくなっています"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시간이 얼마 안 남았어요"
+          }
+        }
+      }
     },
     "Time is up" : {
       "comment" : "Timer alert subtitle",
@@ -2924,6 +4558,12 @@
             "state" : "translated",
             "value" : "タイマー"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머"
+          }
         }
       }
     },
@@ -2944,7 +4584,20 @@
       }
     },
     "Timer duration" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーの長さ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 시간"
+          }
+        }
+      }
     },
     "Timer Duration" : {
       "comment" : "Timer Duration",
@@ -3013,7 +4666,36 @@
       }
     },
     "Timer finished, overtime counting" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマー終了、超過時間を計測中"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 종료, 초과 시간 측정 중"
+          }
+        }
+      }
+    },
+    "Timer finished. Time is up." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマー終了。時間です。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 종료. 시간이 다 됐습니다."
+          }
+        }
+      }
     },
     "Timer for Presenters\nand Mentors" : {
       "extractionState" : "stale",
@@ -3039,29 +4721,127 @@
             "state" : "translated",
             "value" : "タイマー履歴"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 기록"
+          }
         }
       }
     },
     "Timer History & Stats" : {
-      "comment" : "History locked title"
+      "comment" : "History locked title",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマー履歴と統計"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 기록 및 통계"
+          }
+        }
+      }
     },
     "Timer is running" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマー実行中"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 실행 중"
+          }
+        }
+      }
     },
     "Timer Name" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマー名"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 이름"
+          }
+        }
+      }
     },
     "Timer Name Configuration" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマー名の設定"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 이름 설정"
+          }
+        }
+      }
     },
     "Timer paused" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーを一時停止しました"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 일시정지됨"
+          }
+        }
+      }
     },
     "Timer ready" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマー準備完了"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 준비됨"
+          }
+        }
+      }
     },
     "Timer resumed" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーを再開しました"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 재개됨"
+          }
+        }
+      }
     },
     "Timer Settings" : {
       "comment" : "Timer Settings",
@@ -3081,10 +4861,36 @@
       }
     },
     "Timer started" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーを開始しました"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 시작됨"
+          }
+        }
+      }
     },
     "Timer stopped" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーを停止しました"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 정지됨"
+          }
+        }
+      }
     },
     "Timer Templates" : {
       "localizations" : {
@@ -3102,12 +4908,40 @@
         }
       }
     },
+    "Timer, %@" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマー、%@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머, %@"
+          }
+        }
+      }
+    },
     "Timer, %lld minutes %lld seconds overtime" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "Timer, %1$lld minutes %2$lld seconds overtime"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマー、%lld分%lld秒超過"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머, %lld분 %lld초 초과"
           }
         }
       }
@@ -3119,6 +4953,18 @@
             "state" : "new",
             "value" : "Timer, %1$lld minutes %2$lld seconds remaining"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマー、残り%lld分%lld秒"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머, %lld분 %lld초 남음"
+          }
         }
       }
     },
@@ -3129,26 +4975,133 @@
             "state" : "translated",
             "value" : "合計セッション"
           }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "총 세션"
+          }
         }
       }
     },
     "Total Time" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "合計時間"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "총 시간"
+          }
+        }
+      }
+    },
+    "Total time remaining" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "残り時間の合計"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "총 남은 시간"
+          }
+        }
+      }
     },
     "Total: %@" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "合計: %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "총합: %@"
+          }
+        }
+      }
+    },
+    "Touch and hold a pre-alert to remove it." : {
+
+    },
+    "Touch and hold to edit" : {
 
     },
     "Track your timer usage patterns\nand improve your time management" : {
-      "comment" : "History locked description"
+      "comment" : "History locked description",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーの使用パターンを把握して\n時間管理を改善しましょう"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 사용 패턴을 확인하고\n시간 관리를 개선하세요"
+          }
+        }
+      }
     },
     "Trial %lld left" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "体験あと%lld回"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "체험 %lld회 남음"
+          }
+        }
+      }
     },
     "Trial: %lld views remaining" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "体験: 残り%lld回"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "체험: %lld회 남음"
+          }
+        }
+      }
     },
     "Try 5 more times" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "あと5回試す"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5회 더 사용해보기"
+          }
+        }
+      }
     },
     "Unknown" : {
       "localizations" : {
@@ -3167,19 +5120,85 @@
       }
     },
     "Unlock all features" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべての機能を解除"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모든 기능 잠금 해제"
+          }
+        }
+      }
     },
     "Unlock all features · One-time purchase" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべての機能を解除・買い切り"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모든 기능 잠금 해제 · 일회성 구매"
+          }
+        }
+      }
     },
     "Unlock unlimited templates" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "テンプレートを無制限に解除"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "무제한 템플릿 잠금 해제"
+          }
+        }
+      }
     },
     "Unlock with Pro" : {
-      "comment" : "History unlock button"
+      "comment" : "History unlock button",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proで解除"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro로 잠금 해제"
+          }
+        }
+      }
     },
     "Upgrade to %@" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@にアップグレード"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@(으)로 업그레이드"
+          }
+        }
+      }
     },
     "Upgrade to Pro" : {
       "localizations" : {
@@ -3187,6 +5206,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Proにアップグレード"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro로 업그레이드"
           }
         }
       }
@@ -3352,7 +5377,20 @@
       }
     },
     "You're already a Pro member!" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すでにProメンバーです！"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이미 Pro 회원입니다!"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"
