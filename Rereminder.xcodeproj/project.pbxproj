@@ -91,15 +91,15 @@
 		9C1569E52ED04576004A4BB4 /* Exceptions for "Shared" folder in "RereminderWatch" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				DesignSystem/DSAnimation.swift,
+				DesignSystem/DSColor.swift,
+				DesignSystem/DSFont.swift,
+				DesignSystem/DSOpacity.swift,
+				DesignSystem/DSRadius.swift,
+				DesignSystem/DSSpacing.swift,
 				Modules/AppName.swift,
 				Modules/ring.swift,
 				Modules/WatchConnectivityManager.swift,
-				DesignSystem/DSSpacing.swift,
-				DesignSystem/DSRadius.swift,
-				DesignSystem/DSOpacity.swift,
-				DesignSystem/DSColor.swift,
-				DesignSystem/DSFont.swift,
-				DesignSystem/DSAnimation.swift,
 			);
 			target = 2B302B092E4375150089A14A /* RereminderWatch */;
 		};
@@ -120,12 +120,12 @@
 		A1A1A1A12F20B473004ABF40 /* Exceptions for "Shared" folder in "RereminderAlarmExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				DesignSystem/DSSpacing.swift,
-				DesignSystem/DSRadius.swift,
-				DesignSystem/DSOpacity.swift,
+				DesignSystem/DSAnimation.swift,
 				DesignSystem/DSColor.swift,
 				DesignSystem/DSFont.swift,
-				DesignSystem/DSAnimation.swift,
+				DesignSystem/DSOpacity.swift,
+				DesignSystem/DSRadius.swift,
+				DesignSystem/DSSpacing.swift,
 			);
 			target = 58AA3EAC2ECF5509007D4BBD /* RereminderAlarmExtension */;
 		};
