@@ -232,15 +232,8 @@ struct TimerHistoryView: View {
                     }
                 }
 
-                // 날짜
-                Text(record.date, style: .date)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                +
-                Text(" ")
-                    .font(.caption)
-                +
-                Text(record.date, style: .time)
+                // 날짜 + 시간
+                Text("\(record.date, style: .date) \(record.date, style: .time)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

@@ -69,7 +69,7 @@ final class ReviewRequestManager {
         #if canImport(UIKit)
         // 현재 씬에서 리뷰 요청
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-            SKStoreReviewController.requestReview(in: windowScene)
+            AppStore.requestReview(in: windowScene)
 
             // 마지막 요청 날짜 기록
             UserDefaults.standard.set(Date(), forKey: lastReviewRequestDateKey)

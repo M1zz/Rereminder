@@ -135,7 +135,7 @@ struct PresentationDisplayView: View {
             UIApplication.shared.isIdleTimerDisabled = false
             hideTask?.cancel()
         }
-        .onChange(of: urgency) { newValue in
+        .onChange(of: urgency) { _, newValue in
             // 긴급도 전환을 VoiceOver 로 즉시 안내
             guard newValue != .normal else { return }
             let phrase = newValue == .critical
