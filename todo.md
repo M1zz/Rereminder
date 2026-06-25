@@ -10,7 +10,21 @@
 - [x] 예비알림 프리셋: 추가(+)·삭제(길게 눌러 제거) 가능 — `PresetStore`(UserDefaults) 영구 저장
 - [x] 다국어 정리: 한국어 158개 + 일본어 138개 누락 번역 채움 (en/ko/ja 100%)
 
+## 완료 (Mac 확장 라운드)
+- [x] 개발자/macOS 환경 Pro 자동 부여 (`StoreManager.isDeveloperUnlock` — macOS=on, iOS DEBUG는 `dev.forcePro` 토글)
+- [x] 발표모드 하단 버튼 ↔ 페이지 인디케이터 겹침 수정 (페이지 양쪽에 하단 여백 확보)
+- [x] **Mac Catalyst 활성화** — 기존 iOS 타겟에서 Catalyst on, iOS·Catalyst 양쪽 빌드 성공
+- [x] Mac 창 크기 제약 + 타이틀바 정리 (`ContentView.configureMacWindowIfNeeded`)
+
+## Mac 후속 (네이티브 레이어 — 추후)
+- [ ] 메뉴바 타이머(`MenuBarExtra`) — Catalyst엔 없어 별도 native 처리 필요
+- [ ] 다중 동시 타이머 / 외부 디스플레이 발표 모드 / 전역 단축키
+- [ ] CloudKit 동기화(템플릿·히스토리·프리셋·테마)
+- [ ] Mac 키보드 커맨드(`.commands`) — 시작/일시정지 ⌘ 단축키
+
 ## 확인 필요 (실기기/시뮬레이터)
+- [ ] Mac 앱 실행 시 창 크기·동작, Live Activity 미동작은 정상(무시)
+- [ ] 발표모드에서 버튼/인디케이터 겹침 해소 확인
 - [ ] 페이지 인디케이터 점이 하단 바와 겹치지 않는지
 - [ ] 빠른설정 길게 눌러 편집 동작 / 페이지 스와이프와 제스처 충돌 여부
 - [ ] 예비알림 추가·삭제 후 영구 저장 확인
