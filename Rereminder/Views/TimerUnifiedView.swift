@@ -96,15 +96,20 @@ struct TimerUnifiedView: View {
         TabView(selection: modeBinding) {
             TimerMainView()
                 .padding()
+                .padding(.bottom, pageIndicatorInset)
                 .tag(AppMode.timer)
 
             PresentationContainerView()
+                .padding(.bottom, pageIndicatorInset)
                 .tag(AppMode.presentation)
         }
         .environmentObject(screenVM)
         .tabViewStyle(.page(indexDisplayMode: .always))
         .indexViewStyle(.page(backgroundDisplayMode: .always))
     }
+
+    /// 페이지 인디케이터(점)가 하단 콘텐츠와 겹치지 않도록 확보하는 여백
+    private let pageIndicatorInset: CGFloat = 28
 
     // MARK: - Bottom Toolbar
 
