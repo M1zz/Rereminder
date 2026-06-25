@@ -6,6 +6,10 @@
 //
 
 import Foundation
+
+// WatchConnectivity는 iOS(기기)·watchOS에만 존재. Mac Catalyst/macOS에는 없음.
+// canImport는 Catalyst에서 모듈맵 때문에 true로 잘못 평가되므로 플랫폼을 명시적으로 가드한다.
+#if os(watchOS) || (os(iOS) && !targetEnvironment(macCatalyst))
 import WatchConnectivity
 
 @MainActor
@@ -212,6 +216,33 @@ extension WatchConnectivityManager: WCSessionDelegate {
         }
     }
 }
+
+#else
+
+/// WatchConnectivity 미지원 플랫폼(Mac Catalyst/macOS)용 no-op 스텁.
+/// 호출부가 그대로 컴파일되도록 동일한 공개 API를 제공한다.
+@MainActor
+final class WatchConnectivityManager: ObservableObject {
+    static let shared = WatchConnectivityManager()
+
+    @Published var isReachable = false
+
+    var onTimerStart: ((TimerSyncData) -> Void)?
+    var onTimerPause: (() -> Void)?
+    var onTimerResume: (() -> Void)?
+    var onTimerStop: (() -> Void)?
+
+    private init() {}
+
+    func sendTimerStart(duration: TimeInterval, prealertOffsets: [Int]) {}
+    func sendTimerPause() {}
+    func sendTimerResume(remainingDuration: TimeInterval) {}
+    func sendTimerStop() {}
+    func sendRingMode(_ mode: String) {}
+    func updateTimerContext(duration: TimeInterval?, remaining: TimeInterval?, state: String) {}
+}
+
+#endif
 
 // MARK: - Data Models
 

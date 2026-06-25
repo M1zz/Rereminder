@@ -11,7 +11,7 @@
 import SwiftUI
 import SwiftData
 
-#if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
+#if os(iOS) && !targetEnvironment(macCatalyst)
 import ActivityKit
 #endif
 
@@ -29,7 +29,7 @@ final class TimerViewModel: ObservableObject {
     private var currentTemplate: Timer?
     private var timerStartTime: Date?
 
-    #if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
+    #if os(iOS) && !targetEnvironment(macCatalyst)
     private var currentActivity: Activity<TimerActivityAttributes>?
     #endif
 
@@ -227,7 +227,7 @@ final class TimerViewModel: ObservableObject {
     // MARK: - Live Activity
 
     private func startLiveActivity(template: Timer) {
-        #if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
+        #if os(iOS) && !targetEnvironment(macCatalyst)
         guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
 
         let attributes = TimerActivityAttributes(
@@ -257,7 +257,7 @@ final class TimerViewModel: ObservableObject {
     }
 
     private func updateLiveActivity() {
-        #if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
+        #if os(iOS) && !targetEnvironment(macCatalyst)
         guard let activity = currentActivity else { return }
 
         let endDate = state == .paused ? nil : Date().addingTimeInterval(remaining)
@@ -273,7 +273,7 @@ final class TimerViewModel: ObservableObject {
     }
 
     private func endLiveActivity() {
-        #if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
+        #if os(iOS) && !targetEnvironment(macCatalyst)
         guard let activity = currentActivity else { return }
         Task {
             await activity.end(nil, dismissalPolicy: .immediate)

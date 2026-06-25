@@ -23,9 +23,24 @@ struct ContentView: View {
                             print("알림 Request Permission 오류: \(error)")
                         }
                     }
+                configureMacWindowIfNeeded()
             }
             .fullScreenCover(isPresented: $showOnboarding) {
                 OnboardingView(isPresented: $showOnboarding)
             }
+    }
+
+    /// Mac(Catalyst)에서 타이머 앱에 어울리는 창 크기로 제약한다.
+    private func configureMacWindowIfNeeded() {
+        #if targetEnvironment(macCatalyst)
+        for scene in UIApplication.shared.connectedScenes {
+            guard let windowScene = scene as? UIWindowScene else { continue }
+            windowScene.sizeRestrictions?.minimumSize = CGSize(width: 420, height: 700)
+            windowScene.sizeRestrictions?.maximumSize = CGSize(width: 720, height: 1100)
+            // 타이틀바를 콘텐츠와 통합해 군더더기 줄이기
+            windowScene.titlebar?.titleVisibility = .hidden
+            windowScene.titlebar?.toolbar = nil
+        }
+        #endif
     }
 }
