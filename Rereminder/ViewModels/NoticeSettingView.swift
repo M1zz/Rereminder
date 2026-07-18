@@ -29,6 +29,13 @@ struct NoticeSettingView: View {
     @State private var showPermissionGuide = false
     @State private var showPaywall = false
 
+    // 미리 알림 프리셋 편집
+    @AppStorage(AlertPresets.storageKey) private var alertPresetsRaw = AlertPresets.defaultRaw
+    private struct PresetEditTarget: Identifiable {
+        let id: Int  // 편집할 프리셋 인덱스, 새 프리셋은 -1
+    }
+    @State private var editingPreset: PresetEditTarget?
+
     var body: some View {
         Form {
             // Pro 상태 섹션
@@ -153,6 +160,71 @@ struct NoticeSettingView: View {
                         }
                     }
                     .padding(.vertical, 8)
+                }
+            }
+
+            Section {
+                // 알림 문구 편집 — 하단 탭에서 설정 하위로 이동
+                NavigationLink {
+                    NotificationMessageSettingView()
+                } label: {
+                    Label("Messages", systemImage: "text.bubble")
+                }
+            }
+
+            // 타이머 화면 알림 버튼 행에 표시되는 프리셋 시간
+            Section(header: Text("Alert Presets")) {
+                let presets = AlertPresets.decode(alertPresetsRaw)
+                ForEach(Array(presets.enumerated()), id: \.element) { index, sec in
+                    Button {
+                        editingPreset = PresetEditTarget(id: index)
+                    } label: {
+                        HStack {
+                            Image(systemName: "bell.fill")
+                                .font(.caption)
+                                .foregroundStyle(DSColor.marker)
+                            Text(presetLabel(sec))
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundStyle(.tertiary)
+                        }
+                    }
+                }
+                .onDelete { indexSet in
+                    var list = presets
+                    list.remove(atOffsets: indexSet)
+                    // 최소 1개는 유지
+                    if !list.isEmpty {
+                        alertPresetsRaw = AlertPresets.encode(list)
+                    }
+                }
+
+                Button {
+                    editingPreset = PresetEditTarget(id: -1)
+                } label: {
+                    Label("Add Preset", systemImage: "plus.circle.fill")
+                }
+                .sheet(item: $editingPreset) { target in
+                    let presets = AlertPresets.decode(alertPresetsRaw)
+                    TimePresetEditorSheet(
+                        title: target.id >= 0 ? "Edit Alert Preset" : "Add Preset",
+                        showSeconds: true,
+                        initialSeconds: target.id >= 0 && target.id < presets.count
+                            ? presets[target.id]
+                            : 120
+                    ) { totalSeconds in
+                        guard totalSeconds > 0 else { return }
+                        var list = presets
+                        if target.id >= 0 && target.id < list.count {
+                            list[target.id] = totalSeconds
+                        } else {
+                            list.append(totalSeconds)
+                        }
+                        alertPresetsRaw = AlertPresets.encode(list)
+                    }
+                    .presentationDetents([.height(320)])
                 }
             }
 
@@ -473,6 +545,11 @@ struct NoticeSettingView: View {
             OnboardingView(isPresented: $showOnboarding)
         }
         .paywallGate(isPresented: $showPaywall)
+    }
+
+    /// 프리셋 초 → "1:00" 표기 (M:SS 통일)
+    private func presetLabel(_ sec: Int) -> String {
+        String(format: "%d:%02d", sec / 60, sec % 60)
     }
 
     private func openSettings() {

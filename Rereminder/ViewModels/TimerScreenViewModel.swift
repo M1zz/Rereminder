@@ -34,6 +34,8 @@ final class TimerScreenViewModel: ObservableObject {
     // MARK: - Presentation Mode
     @Published var currentMode: AppMode = .timer
     @Published var presentationSections: [PresentationSection] = []
+    /// 파생 구간의 사용자 지정 이름 (구간 인덱스 → 이름, 비어있으면 placeholder 사용)
+    @Published var sectionNames: [Int: String] = [:]
 
     let timerVM: TimerViewModel
     let configService = TimerConfigService()
@@ -57,6 +59,9 @@ final class TimerScreenViewModel: ObservableObject {
 
         // Watch 콜백은 여기서만 등록 (TimerViewModel에서는 제거됨)
         setupWatchConnectivity()
+
+        // iCloud KVS 기반 기기 간(iPhone ↔ Mac) 동기화 콜백
+        setupCloudSync()
     }
 
     // MARK: - Watch Connectivity (단일 진입점)
@@ -91,6 +96,56 @@ final class TimerScreenViewModel: ObservableObject {
         }
     }
 
+    // MARK: - Cloud Sync (iPhone ↔ Mac, 단일 진입점)
+
+    private func setupCloudSync() {
+        CloudTimerSyncManager.shared.onRemoteSnapshot = { [weak self] snapshot in
+            guard let self = self else { return }
+            let device = snapshot.sourceDeviceName
+
+            switch snapshot.state {
+            case .running:
+                guard let endDate = snapshot.endDate else { return }
+                // 이미 같은 타이머를 실행 중이면 무시 (중복 적용 방지)
+                if self.timerVM.state == .running,
+                   let localEnd = self.timerVM.engine.endDate,
+                   abs(localEnd.timeIntervalSince(endDate)) < 1.0 { return }
+
+                self.applyCloudUIFields(mainSeconds: snapshot.mainSeconds, offsets: snapshot.prealertOffsets)
+                self.timerVM.applyCloudRunning(
+                    mainSeconds: snapshot.mainSeconds,
+                    prealertOffsets: snapshot.prealertOffsets,
+                    name: snapshot.name,
+                    endDate: endDate
+                )
+                self.showToast?(String(localized: "☁️ Timer synced from \(device)"))
+
+            case .paused:
+                guard snapshot.mainSeconds > 0 else { return }
+                self.applyCloudUIFields(mainSeconds: snapshot.mainSeconds, offsets: snapshot.prealertOffsets)
+                self.timerVM.applyCloudPause(
+                    mainSeconds: snapshot.mainSeconds,
+                    prealertOffsets: snapshot.prealertOffsets,
+                    name: snapshot.name,
+                    remaining: snapshot.remaining
+                )
+                self.showToast?(String(localized: "☁️ Paused from \(device)"))
+
+            case .idle:
+                guard self.timerVM.state != .idle else { return }
+                self.timerVM.applyCloudStop()
+                self.showToast?(String(localized: "☁️ Stopped from \(device)"))
+            }
+        }
+    }
+
+    private func applyCloudUIFields(mainSeconds sec: Int, offsets: [Int]) {
+        mainMinutes = sec / 60
+        mainSeconds = sec % 60
+        configuredMainSeconds = sec
+        selectedOffsets = Set(offsets)
+    }
+
     // MARK: - Cold Launch Restore
 
     /// 앱 시작 시 타이머 상태 복원 시도
@@ -107,6 +162,10 @@ final class TimerScreenViewModel: ObservableObject {
                 selectedOffsets = Set(cfg.prealertOffsetsSec.map { Int($0) })
             }
         }
+
+        // KVS는 앱을 깨우지 못하므로, 다른 기기의 마지막 상태를 여기서 반영
+        // (다른 기기에서 시작/정지된 타이머가 로컬 복원 결과를 덮어쓴다)
+        CloudTimerSyncManager.shared.applyStoredSnapshotIfNeeded()
     }
 
     // MARK: - Context
@@ -274,8 +333,9 @@ final class TimerScreenViewModel: ObservableObject {
 // MARK: - Presentation Mode
 
 extension TimerScreenViewModel {
-    /// 섹션 배열을 기존 pre-alert 시스템으로 변환하여 타이머 시작
-    func startPresentation() {
+    /// 섹션 배열을 다이얼 상태(총 시간·알림 오프셋·메시지)에 반영 (시작하지 않음)
+    /// 발표 모드 진입/구간 편집 후 다이얼과 구간 링이 섹션을 미리 보여주도록 한다
+    func applyPresentationSections() {
         guard !presentationSections.isEmpty else { return }
 
         let totalSeconds = presentationSections.reduce(0) { $0 + $1.durationSeconds }
@@ -288,7 +348,7 @@ extension TimerScreenViewModel {
         var messages: [Int: String] = [:]
         var accumulated = 0
 
-        for (index, section) in presentationSections.enumerated() {
+        for section in presentationSections {
             accumulated += section.durationSeconds
             let remainingAtEnd = totalSeconds - accumulated
 
@@ -297,18 +357,48 @@ extension TimerScreenViewModel {
                 offsets.append(remainingAtEnd)
                 messages[remainingAtEnd] = "\(section.name) complete"
             }
-
-            // 각 섹션 시작 전 알림은 생략 (체크포인트 방식)
-            _ = index  // suppress unused warning
         }
 
-        // 기존 타이머 시스템에 적용
         mainMinutes = totalSeconds / 60
         mainSeconds = totalSeconds % 60
         selectedOffsets = Set(offsets)
         prealertMessages = messages
         finishMessage = "Presentation complete"
         configuredMainSeconds = totalSeconds
+    }
+
+    /// 다이얼의 알림 지점을 경계로 placeholder 섹션 생성 (발표 탭 파생 모델)
+    /// 예: 15분 타이머 + 5분 전 알림 → Section 1(0~10분), Section 2(10~15분)
+    func syncSectionsFromAlerts() {
+        let mainSec = mainMinutes * 60 + mainSeconds
+        guard mainSec > 0 else {
+            presentationSections = []
+            return
+        }
+        let boundaries = selectedOffsets
+            .filter { $0 > 0 && $0 < mainSec }
+            .map { mainSec - $0 }
+            .sorted()
+        let points = [0] + boundaries + [mainSec]
+        presentationSections = (0..<(points.count - 1)).map { i in
+            let custom = (sectionNames[i] ?? "").trimmingCharacters(in: .whitespaces)
+            return PresentationSection(
+                name: custom.isEmpty ? String(localized: "Section \(i + 1)") : custom,
+                durationSeconds: points[i + 1] - points[i]
+            )
+        }
+    }
+
+    /// 섹션 배열을 기존 pre-alert 시스템으로 변환하여 타이머 시작
+    func startPresentation() {
+        guard !presentationSections.isEmpty else { return }
+
+        let totalSeconds = presentationSections.reduce(0) { $0 + $1.durationSeconds }
+        guard totalSeconds > 0 else { return }
+
+        applyPresentationSections()
+        let offsets = Array(selectedOffsets)
+        let messages = prealertMessages
 
         let template = Timer(
             name: makePresentationName(),

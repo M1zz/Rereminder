@@ -17,6 +17,8 @@ struct PresentationContainerView: View {
                 PresentationSetupView()
             case .running, .paused, .overtime:
                 PresentationDisplayView()
+                    // 발표 진행 중에는 몰입을 위해 하단 바 숨김
+                    .toolbar(.hidden, for: .bottomBar)
             }
         }
     }

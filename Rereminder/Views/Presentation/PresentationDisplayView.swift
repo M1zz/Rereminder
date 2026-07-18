@@ -79,11 +79,29 @@ struct PresentationDisplayView: View {
         }
     }
 
-    /// 섹션 내 진행률
-    private var sectionProgress: Double {
-        let info = currentSectionInfo
-        guard info.sectionDuration > 0 else { return 0 }
-        return max(0, min(1, 1.0 - info.sectionRemaining / TimeInterval(info.sectionDuration)))
+    /// 총 시간 대비 남은 비율 (링 표시용)
+    private var totalRatio: CGFloat {
+        guard totalSeconds > 0 else { return 0 }
+        return CGFloat(max(0, min(1, remaining / TimeInterval(totalSeconds))))
+    }
+
+    /// 섹션 배열 → 링 좌표(남은 시간 비율) 구간 변환
+    private var ringSegments: [SectionRing.Segment] {
+        let sections = screenVM.presentationSections
+        let total = CGFloat(max(1, totalSeconds))
+        var accumulated: CGFloat = 0
+        return sections.map { section in
+            let hi = (total - accumulated) / total
+            accumulated += CGFloat(section.durationSeconds)
+            let lo = (total - accumulated) / total
+            return SectionRing.Segment(
+                id: section.id,
+                name: section.name,
+                durationText: section.formattedDuration,
+                lo: max(0, lo),
+                hi: min(1, hi)
+            )
+        }
     }
 
     var body: some View {
@@ -93,38 +111,32 @@ struct PresentationDisplayView: View {
                 .ignoresSafeArea()
                 .dsAnimation(.easeInOut(duration: 1.0), value: urgency)
 
-            VStack(spacing: 0) {
-                Spacer()
+            GeometryReader { geo in
+                VStack(spacing: 0) {
+                    Spacer()
 
-                // 섹션 정보
-                sectionHeader
-                    .padding(.bottom, DSSpacing.md)
+                    // 섹션 링 (중앙: 현재 섹션 + 섹션 남은 시간)
+                    ringView(size: min(geo.size.width * 0.8, geo.size.height * 0.5))
+                        .padding(.bottom, DSSpacing.xl)
 
-                // 대형 카운트다운
-                countdownDisplay
-                    .padding(.bottom, DSSpacing.lg)
+                    // 총 남은 시간
+                    totalRemainingDisplay
+                        .padding(.bottom, DSSpacing.sm)
 
-                // 섹션 프로그레스 바
-                sectionProgressBar
-                    .padding(.horizontal, 40)
-                    .padding(.bottom, DSSpacing.xl)
+                    // 다음 섹션 미리보기
+                    nextSectionPreview
+                        .padding(.bottom, DSSpacing.xl)
 
-                // 총 남은 시간
-                totalRemainingDisplay
-                    .padding(.bottom, DSSpacing.sm)
+                    Spacer()
 
-                // 다음 섹션 미리보기
-                nextSectionPreview
-                    .padding(.bottom, DSSpacing.xl)
-
-                Spacer()
-
-                // 컨트롤 (3초 후 자동 숨김)
-                if controlsVisible {
-                    controlButtons
-                        .padding(.bottom, 40)
-                        .transition(.opacity)
+                    // 컨트롤 (3초 후 자동 숨김)
+                    if controlsVisible {
+                        controlButtons
+                            .padding(.bottom, 40)
+                            .transition(.opacity)
+                    }
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
         .onAppear {
@@ -159,81 +171,67 @@ struct PresentationDisplayView: View {
         )
     }
 
-    // MARK: - Section Header
+    // MARK: - Section Ring
 
-    private var sectionHeader: some View {
+    /// 섹션 분할 링 + 중앙 현재 섹션 정보
+    private func ringView(size: CGFloat) -> some View {
+        let lineWidth = size * 0.075
         let info = currentSectionInfo
         let sections = screenVM.presentationSections
-        return VStack(spacing: DSSpacing.xs) {
-            if !sections.isEmpty {
-                Text("Section \(info.index + 1)/\(sections.count)")
-                    .font(DSFont.callout.weight(.medium))
-                    .foregroundStyle(.secondary)
-                Text(info.name)
-                    .font(.title3.weight(.semibold))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-            }
-        }
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel(sections.isEmpty
-            ? ""
-            : String(localized: "Section \(info.index + 1) of \(sections.count), \(info.name)"))
-    }
-
-    // MARK: - Countdown
-
-    private var countdownDisplay: some View {
-        let info = currentSectionInfo
         let displayTime = max(0, info.sectionRemaining)
         let minutes = Int(displayTime) / 60
         let seconds = Int(displayTime) % 60
 
-        return HStack(spacing: DSSpacing.sm) {
-            if let symbol = urgencySymbol {
-                Image(systemName: symbol)
-                    .dsScaledFont(40, weight: .bold, relativeTo: .largeTitle, maxSize: 56)
-                    .foregroundStyle(urgencyColor)
-                    .accessibilityHidden(true)
+        return ZStack {
+            SectionRing(
+                segments: ringSegments,
+                ratio: totalRatio,
+                size: size,
+                lineWidth: lineWidth
+            )
+
+            VStack(spacing: DSSpacing.xs) {
+                if !sections.isEmpty {
+                    Text("Section \(info.index + 1)/\(sections.count)")
+                        .font(DSFont.caption.weight(.medium))
+                        .foregroundStyle(.secondary)
+                    Text(info.name)
+                        .font(.title3.weight(.semibold))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                }
+                HStack(spacing: DSSpacing.xs) {
+                    if let symbol = urgencySymbol {
+                        Image(systemName: symbol)
+                            .dsScaledFont(20, weight: .bold, relativeTo: .title2, maxSize: 28)
+                            .foregroundStyle(urgencyColor)
+                            .accessibilityHidden(true)
+                    }
+                    Text(String(format: "%d:%02d", minutes, seconds))
+                        .dsScaledFont(44, weight: .bold, design: .rounded, relativeTo: .largeTitle, maxSize: 56)
+                        .monospacedDigit()
+                        .minimumScaleFactor(0.5)
+                        .lineLimit(1)
+                        .foregroundStyle(urgencyColor)
+                        .contentTransition(.numericText())
+                        .dsAnimation(.linear(duration: 0.3), value: Int(displayTime))
+                }
             }
-            Text(String(format: "%d:%02d", minutes, seconds))
-                .dsScaledFont(120, weight: .bold, design: .rounded, relativeTo: .largeTitle, maxSize: 150)
-                .monospacedDigit()
-                .minimumScaleFactor(0.5)
-                .lineLimit(1)
-                .foregroundStyle(urgencyColor)
-                .contentTransition(.numericText())
-                .dsAnimation(.linear(duration: 0.3), value: Int(displayTime))
+            .frame(maxWidth: size * 0.6)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(sections.isEmpty
+                ? String(localized: "Section time remaining")
+                : String(localized: "Section \(info.index + 1) of \(sections.count), \(info.name)"))
+            .accessibilityValue(countdownAccessibilityValue(minutes: minutes, seconds: seconds))
+            .accessibilityAddTraits(.updatesFrequently)
         }
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(String(localized: "Section time remaining"))
-        .accessibilityValue(countdownAccessibilityValue(minutes: minutes, seconds: seconds))
-        .accessibilityAddTraits(.updatesFrequently)
+        .frame(width: size, height: size)
     }
 
     private func countdownAccessibilityValue(minutes: Int, seconds: Int) -> String {
         let base = String(localized: "\(minutes) minutes \(seconds) seconds")
         let phrase = urgencyAccessibilityPhrase
         return phrase.isEmpty ? base : "\(base), \(phrase)"
-    }
-
-    // MARK: - Progress Bar
-
-    private var sectionProgressBar: some View {
-        GeometryReader { geo in
-            ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: DSSpacing.xs)
-                    .fill(Color(.systemGray5))
-                RoundedRectangle(cornerRadius: DSSpacing.xs)
-                    .fill(urgencyColor)
-                    .frame(width: geo.size.width * sectionProgress)
-                    .dsAnimation(.linear(duration: 0.5), value: sectionProgress)
-            }
-        }
-        .frame(height: DSSpacing.sm)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(String(localized: "Section progress"))
-        .accessibilityValue(String(localized: "\(Int(sectionProgress * 100)) percent"))
     }
 
     // MARK: - Total Remaining

@@ -115,8 +115,13 @@ struct TimerTemplateView: View {
                 .accessibilityLabel(timer.isFavorite ? String(localized: "Remove from favorites") : String(localized: "Add to favorites"))
 
                 VStack(alignment: .leading, spacing: DSSpacing.xs) {
+                    // 1행: 템플릿 이름이 주인공, 라벨은 색 칩으로 보조
                     HStack(spacing: DSSpacing.sm) {
-                        // Label 태그
+                        Text(timer.name.isEmpty ? mmssText(timer.mainSeconds) : timer.name)
+                            .font(DSFont.body.weight(.semibold))
+                            .foregroundStyle(.primary)
+                            .lineLimit(1)
+
                         if !timer.label.isEmpty {
                             Text(timer.label)
                                 .font(DSFont.caption)
@@ -127,8 +132,34 @@ struct TimerTemplateView: View {
                                 .foregroundStyle(Color(hex:timer.colorHex))
                                 .cornerRadius(DSRadius.sm)
                         }
+                    }
 
-                        // 사용 횟수
+                    // 2행: 시간 정보를 심볼 + M:SS로 (다이얼 화면과 같은 시각 언어)
+                    HStack(spacing: DSSpacing.md) {
+                        HStack(spacing: DSSpacing.xxs) {
+                            Image(systemName: "timer")
+                                .font(.caption2)
+                            Text(mmssText(timer.mainSeconds))
+                                .font(DSFont.caption.monospacedDigit())
+                        }
+                        .foregroundStyle(.secondary)
+
+                        if !timer.prealertOffsetsSec.isEmpty {
+                            HStack(spacing: DSSpacing.xxs) {
+                                Image(systemName: "bell.fill")
+                                    .font(.caption2)
+                                    .foregroundStyle(DSColor.marker)
+                                Text(
+                                    timer.prealertOffsetsSec
+                                        .sorted()
+                                        .map { mmssText($0) }
+                                        .joined(separator: ", ")
+                                )
+                                .font(DSFont.caption.monospacedDigit())
+                                .foregroundStyle(.secondary)
+                            }
+                        }
+
                         if timer.usageCount > 0 {
                             HStack(spacing: DSSpacing.xxs) {
                                 Image(systemName: "play.circle.fill")
@@ -136,46 +167,50 @@ struct TimerTemplateView: View {
                                 Text("\(timer.usageCount)")
                                     .font(DSFont.caption)
                             }
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(.tertiary)
                         }
-                    }
-
-                    // Timer Info
-                    let mMain = timer.mainSeconds / 60
-                    let sMain = timer.mainSeconds % 60
-                    let preList = timer.prealertOffsetsSec
-                        .sorted()
-                        .map { String(localized: "\($0/60) min") }
-                        .joined(separator: ", ")
-
-                    Text(sMain > 0 ? "Main \(mMain) min \(sMain) sec" : "Main \(mMain) min")
-                        .font(DSFont.body)
-                        .fontWeight(.medium)
-                        .foregroundStyle(.primary)
-
-                    if !preList.isEmpty {
-                        Text("Pre-alert: \(preList)")
-                            .font(DSFont.caption)
-                            .foregroundStyle(.secondary)
                     }
                 }
                 .accessibilityElement(children: .combine)
 
                 Spacer()
 
-                Image(systemName: "chevron.right")
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
+                // 탭 결과를 명시: 이 템플릿을 타이머에 적용
+                Text("Apply")
+                    .font(DSFont.caption.weight(.semibold))
+                    .padding(.horizontal, DSSpacing.sm)
+                    .padding(.vertical, DSSpacing.xs)
+                    .background(Capsule().fill(Color.accentColor.opacity(0.15)))
+                    .foregroundStyle(Color.accentColor)
             }
             .padding(.vertical, DSSpacing.xs)
         }
-        .accessibilityHint(String(localized: "Starts this template"))
+        .accessibilityHint(String(localized: "Applies this template to the timer"))
+        .contextMenu {
+            Button {
+                startEdit(timer)
+            } label: {
+                Label("Edit", systemImage: "pencil")
+            }
+            Button {
+                toggleFavorite(timer)
+            } label: {
+                Label(
+                    timer.isFavorite
+                        ? String(localized: "Remove from favorites")
+                        : String(localized: "Add to favorites"),
+                    systemImage: timer.isFavorite ? "star.slash" : "star"
+                )
+            }
+            Button(role: .destructive) {
+                delete(timer)
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
+        }
         .swipeActions(edge: .leading, allowsFullSwipe: false) {
             Button {
-                editingTimer = timer
-                editName = timer.name
-                editLabel = timer.label
-                editColorHex = timer.colorHex
+                startEdit(timer)
             } label: {
                 Label("Edit", systemImage: "pencil")
             }
@@ -188,6 +223,18 @@ struct TimerTemplateView: View {
                 Image(systemName: "trash")
             }
         }
+    }
+
+    private func startEdit(_ timer: Timer) {
+        editingTimer = timer
+        editName = timer.name
+        editLabel = timer.label
+        editColorHex = timer.colorHex
+    }
+
+    /// M:SS 표기 (앱 전체 표기 통일)
+    private func mmssText(_ sec: Int) -> String {
+        String(format: "%d:%02d", sec / 60, sec % 60)
     }
 
     @ViewBuilder
@@ -257,7 +304,7 @@ struct TimerTemplateView: View {
     @ViewBuilder
     private func colorButton(label: String, colorHex: String) -> some View {
         Button {
-            editLabel = label
+            // 색만 선택 — 라벨 텍스트는 사용자가 입력한 값 유지
             editColorHex = colorHex
         } label: {
             VStack(spacing: DSSpacing.xs) {

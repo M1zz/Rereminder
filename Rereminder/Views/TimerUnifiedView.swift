@@ -17,8 +17,6 @@ struct TimerUnifiedView: View {
     @StateObject private var appStateManager = AppStateManager()
 
     @State private var showHistory = false
-    @State private var showMessageEditor = false
-    @State private var showPrealerts = false
     @State private var showProPaywall = false
     @State private var paywallStage: ProGate.PaywallStage = .second
 
@@ -27,20 +25,31 @@ struct TimerUnifiedView: View {
         screenVM.state == .idle || screenVM.state == .finished
     }
 
-    /// Free 사용자가 Presentation 선택 시 5+5 trial 평가
+    /// 모드 세그먼트 바인딩 — 발표는 5+5 trial 평가, 실행 중에는 전환 차단
     private var modeBinding: Binding<AppMode> {
         Binding(
             get: { screenVM.currentMode },
             set: { newMode in
-                // 실행 중에는 모드 전환(스와이프) 무시 → 자동으로 원래 페이지로 복귀
-                guard isIdle else { return }
-                guard newMode == .presentation else {
-                    screenVM.currentMode = newMode
+                guard newMode != screenVM.currentMode else { return }
+
+                // 실행 중 전환 차단은 의도된 동작 — 이유를 토스트로 안내
+                guard isIdle else {
+                    toast.show(Toast(String(localized: "Stop the timer to switch modes")))
                     return
                 }
+
+                guard newMode == .presentation else {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        screenVM.currentMode = .timer
+                    }
+                    return
+                }
+
                 switch ProGate.evaluate(.presentationMode) {
                 case .allowed, .allowedWithTrial:
-                    screenVM.currentMode = newMode
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        screenVM.currentMode = .presentation
+                    }
                     ProGate.recordUsage(.presentationMode)
                     AnalyticsManager.log(.presentationModeStarted)
                 case .blocked(let stage):
@@ -63,15 +72,12 @@ struct TimerUnifiedView: View {
 
     var body: some View {
         mainContent
-            .modifier(SheetsModifier(
-                showHistory: $showHistory,
-                showMessageEditor: $showMessageEditor,
-                showPrealerts: $showPrealerts,
-                showProPaywall: $showProPaywall,
-                paywallStage: paywallStage,
-                onAcceptExtension: enterPresentationAfterExtension,
-                screenVM: screenVM
-            ))
+            .paywallGate(
+                isPresented: $showProPaywall,
+                feature: .presentationMode,
+                stage: paywallStage,
+                onAcceptExtension: enterPresentationAfterExtension
+            )
             .toast(toast)
             .onAppear(perform: setupOnAppear)
             .onChange(of: scenePhase) { oldPhase, newPhase in
@@ -80,70 +86,61 @@ struct TimerUnifiedView: View {
             .onChange(of: screenVM.state) { oldState, newState in
                 handleStateChange(oldState, newState)
             }
+            .onChange(of: screenVM.remaining) { _, newValue in
+                #if targetEnvironment(macCatalyst)
+                MenuBarManager.shared.update(remaining: newValue, state: screenVM.state)
+                #endif
+            }
     }
 
     // MARK: - Sub Views
 
+    /// 하단 바: 왼쪽 = 모드 세그먼트(타이머·발표), 오른쪽 = 도구(템플릿·설정)
     private var mainContent: some View {
         NavigationStack {
-            modePager
-                .toolbar { bottomToolbar }
-        }
-    }
-
-    /// 타이머 ↔ 프레젠테이션을 좌우 스와이프로 전환하는 페이지네이션
-    private var modePager: some View {
-        TabView(selection: modeBinding) {
+            // 두 모드 모두 다이얼 화면 사용 — 발표 모드는 구간 링·구간 편집 모달이 추가됨
             TimerMainView()
                 .padding()
-                .padding(.bottom, pageIndicatorInset)
-                .tag(AppMode.timer)
-
-            PresentationContainerView()
-                .padding(.bottom, pageIndicatorInset)
-                .tag(AppMode.presentation)
+                .toolbar { bottomToolbar }
         }
         .environmentObject(screenVM)
-        .tabViewStyle(.page(indexDisplayMode: .always))
-        .indexViewStyle(.page(backgroundDisplayMode: .always))
+        // 화면 어디를 탭해도 키보드 내림 (버튼·드래그 등 기존 조작은 그대로)
+        .simultaneousGesture(TapGesture().onEnded {
+            UIApplication.shared.sendAction(
+                #selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil
+            )
+        })
+        .sheet(isPresented: $showHistory) {
+            TimerTemplateView { selected in
+                screenVM.apply(template: selected)
+            }
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.visible)
+        }
     }
-
-    /// 페이지 인디케이터(점)가 하단 콘텐츠와 겹치지 않도록 확보하는 여백
-    private let pageIndicatorInset: CGFloat = 28
-
-    // MARK: - Bottom Toolbar
 
     @ToolbarContentBuilder
     private var bottomToolbar: some ToolbarContent {
         ToolbarItemGroup(placement: .bottomBar) {
-            if screenVM.currentMode == .timer {
-                Button {
-                    showHistory = true
-                } label: {
-                    Image(systemName: "list.bullet")
-                }
-                .accessibilityLabel(String(localized: "Saved timers"))
-
-                Spacer()
-
-                Button {
-                    showPrealerts = true
-                } label: {
-                    Image(systemName: "bell.badge")
-                }
-                .accessibilityLabel(String(localized: "Pre-alerts"))
-
-                Spacer()
-
-                Button {
-                    showMessageEditor = true
-                } label: {
-                    Image(systemName: "text.bubble")
-                }
-                .accessibilityLabel(String(localized: "Edit notification message"))
-
-                Spacer()
+            Picker("", selection: modeBinding) {
+                Image(systemName: "timer")
+                    .accessibilityLabel(String(localized: "Timer"))
+                    .tag(AppMode.timer)
+                Image(systemName: "rectangle.inset.filled.and.person.filled")
+                    .accessibilityLabel(String(localized: "Presentation"))
+                    .tag(AppMode.presentation)
             }
+            .pickerStyle(.segmented)
+            .fixedSize()
+
+            Spacer()
+
+            Button {
+                showHistory = true
+            } label: {
+                Image(systemName: "list.bullet")
+            }
+            .accessibilityLabel(String(localized: "Saved timers"))
 
             NavigationLink {
                 NoticeSettingView()
@@ -167,6 +164,22 @@ struct TimerUnifiedView: View {
         screenVM.timerVM.modelContext = context
         screenVM.initialConfiguration()
         screenVM.restoreTimerIfNeeded()
+
+        #if targetEnvironment(macCatalyst)
+        // 메뉴바 타이머 (RereminderMenuBar 번들이 임베드된 빌드에서만 동작)
+        MenuBarManager.shared.setUpIfAvailable()
+        MenuBarManager.shared.onPauseToggle = {
+            if screenVM.state == .running || screenVM.state == .overtime {
+                screenVM.pause()
+            } else if screenVM.state == .paused {
+                screenVM.resume()
+            }
+        }
+        MenuBarManager.shared.onStop = {
+            screenVM.cancel()
+        }
+        MenuBarManager.shared.update(remaining: screenVM.remaining, state: screenVM.state)
+        #endif
     }
 
     private func handleScenePhase(_: ScenePhase, _ newPhase: ScenePhase) {
@@ -180,6 +193,10 @@ struct TimerUnifiedView: View {
     private func handleStateChange(_: TimerState, _ newState: TimerState) {
         UIApplication.shared.isIdleTimerDisabled =
             (newState == .running || newState == .paused || newState == .overtime)
+
+        #if targetEnvironment(macCatalyst)
+        MenuBarManager.shared.update(remaining: screenVM.remaining, state: newState)
+        #endif
     }
 
     private func handleControlWidgetAction() {
@@ -213,46 +230,5 @@ struct TimerUnifiedView: View {
         default:
             break
         }
-    }
-}
-
-// MARK: - Sheets Modifier (body 타입체커 부담 분산)
-
-private struct SheetsModifier: ViewModifier {
-    @Binding var showHistory: Bool
-    @Binding var showMessageEditor: Bool
-    @Binding var showPrealerts: Bool
-    @Binding var showProPaywall: Bool
-    let paywallStage: ProGate.PaywallStage
-    let onAcceptExtension: () -> Void
-    let screenVM: TimerScreenViewModel
-
-    func body(content: Content) -> some View {
-        content
-            .sheet(isPresented: $showHistory) {
-                TimerTemplateView { selected in
-                    screenVM.apply(template: selected)
-                }
-                .presentationDetents(Set<PresentationDetent>([.medium, .large]))
-                .presentationDragIndicator(Visibility.visible)
-            }
-            .sheet(isPresented: $showMessageEditor) {
-                NotificationMessageSettingView()
-                    .environmentObject(screenVM)
-                    .presentationDetents([.medium, .large])
-                    .presentationDragIndicator(.visible)
-            }
-            .sheet(isPresented: $showPrealerts) {
-                PrealertSettingsView()
-                    .environmentObject(screenVM)
-                    .presentationDetents([.medium, .large])
-                    .presentationDragIndicator(.visible)
-            }
-            .paywallGate(
-                isPresented: $showProPaywall,
-                feature: .presentationMode,
-                stage: paywallStage,
-                onAcceptExtension: onAcceptExtension
-            )
     }
 }
