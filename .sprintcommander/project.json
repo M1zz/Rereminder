@@ -1,0 +1,28 @@
+{
+  "appStoreURL" : "https:\/\/apps.apple.com\/app\/rereminder-smart-alarm\/id6752551268",
+  "colorHex" : "F472B6",
+  "desc" : "SwiftUI 기반 Xcode Project · 63개 파일",
+  "doneTasks" : 52,
+  "durationWeeks" : 4,
+  "icon" : "📱",
+  "id" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+  "landingURL" : "https:\/\/m1zz.github.io\/Rereminder\/",
+  "languages" : [
+    "한국어",
+    "English"
+  ],
+  "lastModified" : "2026-03-02T15:35:58Z",
+  "name" : "Rereminder",
+  "pricing" : {
+    "downloadPrice" : "무료",
+    "lifetimePrice" : "$9.99, ₩14,000",
+    "monthlyPrice" : "0",
+    "yearlyPrice" : "0"
+  },
+  "progress" : 100,
+  "sourcePath" : "\/Users\/hyunholee\/Documents\/workspace\/code\/Rereminder",
+  "sprint" : "완료됨",
+  "startWeek" : 3,
+  "totalTasks" : 52,
+  "version" : "2.0.1"
+}

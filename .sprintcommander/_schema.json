@@ -1,0 +1,37 @@
+{
+  "_description" : "SprintCommander 프로젝트 데이터",
+  "_note" : "tasks.json을 수정하면 SprintCommander 앱에 자동 반영됩니다.",
+  "_project" : "Rereminder",
+  "_projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+  "example" : {
+    "assignee" : "JK",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "550e8400-e29b-41d4-a716-446655440000",
+    "priority" : "high",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "status" : "백로그",
+    "storyPoints" : 5,
+    "tags" : [
+      "Feature",
+      "Backend"
+    ],
+    "title" : "예시 태스크"
+  },
+  "task_fields" : {
+    "assignee" : "string - 2글자 이니셜 (예: JK)",
+    "assigneeColorHex" : "string - 6자리 hex 색상 (예: 4FACFE, 34D399, A78BFA, FB923C)",
+    "id" : "UUID string (새 태스크 생성 시 새 UUID 필요, 예: UUID().uuidString)",
+    "priority" : "string - high | medium | low",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D (이 프로젝트의 ID, 반드시 이 값 사용)",
+    "status" : "string - 백로그 | 할 일 | 진행 중 | 완료",
+    "storyPoints" : "integer - 스토리 포인트 (1, 2, 3, 5, 8, 13)",
+    "tags" : "string[] - [\"Feature\", \"UI\", \"Backend\", \"Bug\", \"Core\", \"Performance\", \"Refactor\", \"Design\", \"iOS\"]",
+    "title" : "string - 태스크 제목"
+  },
+  "usage" : [
+    "1. tasks.json 파일을 읽으세요",
+    "2. 태스크를 추가\/수정\/삭제하세요",
+    "3. 저장하면 SprintCommander 앱에 자동 반영됩니다",
+    "4. 새 태스크의 id는 새 UUID를, projectId는 FD506795-B8A5-4FA1-BB51-1F086B1E0D6D를 사용하세요"
+  ]
+}
