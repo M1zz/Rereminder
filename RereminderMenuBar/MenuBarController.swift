@@ -109,6 +109,15 @@ public final class RRMenuBarController: NSObject {
         open.target = self
         menu.addItem(open)
 
+        menu.addItem(.separator())
+
+        let quit = NSMenuItem(
+            title: localized("Quit Rereminder"),
+            action: #selector(quitTapped), keyEquivalent: "q"
+        )
+        quit.target = self
+        menu.addItem(quit)
+
         item.menu = menu
         statusItem = item
     }
@@ -126,6 +135,10 @@ public final class RRMenuBarController: NSObject {
     @objc private func openTapped() {
         NSApp.activate(ignoringOtherApps: true)
         NSApp.windows.first?.makeKeyAndOrderFront(nil)
+    }
+
+    @objc private func quitTapped() {
+        NSApp.terminate(nil)
     }
 
     // MARK: - Localization (앱 메인 번들의 String Catalog 사용)
