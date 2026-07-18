@@ -35,6 +35,11 @@ struct RereminderApp: App {
             try? Tips.configure()
         }
 
+        #if targetEnvironment(macCatalyst)
+        // 메뉴바는 뷰 수명주기와 무관하게 앱 시작 시 바로 생성
+        MenuBarManager.shared.setUpIfAvailable()
+        #endif
+
         // 앱 시작 시 UIWindow tintColor를 즉시 설정하여 색상 깜빡임 방지
         ThemeManager.applyInitialTint()
     }

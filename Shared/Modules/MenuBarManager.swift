@@ -44,25 +44,25 @@ final class MenuBarManager {
 
         guard let url = Bundle.main.builtInPlugInsURL?
                 .appendingPathComponent("RereminderMenuBar.bundle") else {
-            print("🖥️ MenuBar: PlugIns URL 없음")
+            NSLog("%@", "🖥️ MenuBar: PlugIns URL 없음")
             return
         }
         guard let bundle = Bundle(url: url) else {
-            print("🖥️ MenuBar: 번들 없음 — \(url.path)")
+            NSLog("%@", "🖥️ MenuBar: 번들 없음 — \(url.path)")
             return
         }
         guard bundle.load() else {
-            print("🖥️ MenuBar: 번들 로드 실패 — \(url.path)")
+            NSLog("%@", "🖥️ MenuBar: 번들 로드 실패 — \(url.path)")
             return
         }
         guard let principal = bundle.principalClass as? NSObject.Type else {
-            print("🖥️ MenuBar: principalClass 없음 — \(String(describing: bundle.principalClass))")
+            NSLog("%@", "🖥️ MenuBar: principalClass 없음 — \(String(describing: bundle.principalClass))")
             return
         }
         let instance = principal.init()
         controller = instance
         _ = instance.perform(NSSelectorFromString("show"))
-        print("🖥️ MenuBar: 상태 아이템 생성 완료")
+        NSLog("%@", "🖥️ MenuBar: 상태 아이템 생성 완료")
     }
 
     /// 타이머 상태를 메뉴바에 반영
