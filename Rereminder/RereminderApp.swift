@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TipKit
 #if canImport(FirebaseCore)
 import FirebaseCore
 #endif
@@ -25,6 +26,14 @@ struct RereminderApp: App {
 
         // WatchConnectivity 초기화
         _ = WatchConnectivityManager.shared
+
+        // iCloud KVS 동기화 초기화 (iPhone ↔ Mac 타이머 동기화)
+        _ = CloudTimerSyncManager.shared
+
+        // TipKit (iOS 17+)
+        if #available(iOS 17.0, *) {
+            try? Tips.configure()
+        }
 
         // 앱 시작 시 UIWindow tintColor를 즉시 설정하여 색상 깜빡임 방지
         ThemeManager.applyInitialTint()

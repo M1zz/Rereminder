@@ -225,6 +225,78 @@ final class TimerEngine {
         return true
     }
 
+    // MARK: - Remote Sync 적용 (다른 기기에서 제어된 타이머 반영)
+
+    /// 다른 기기에서 시작/재개된 타이머를 endDate 절대 시각 기준으로 반영
+    /// 동기화 지연과 무관하게 남은 시간이 원본 기기와 일치한다
+    func applyRemoteRunning(mainSeconds: Int, prealertOffsetsSec: [Int], name: String, endDate remoteEndDate: Date) {
+        stopUITick()
+        cancelScheduledNotifications()
+        timeMultiplier = 1.0
+
+        let dur = TimeInterval(max(1, mainSeconds))
+        let offsets = prealertOffsetsSec
+            .filter { $0 > 0 && $0 < Int(dur) }
+            .sorted(by: >)
+            .map(TimeInterval.init)
+        config = .init(mainDuration: dur, prealertOffsetsSec: offsets, name: name)
+
+        pausedElapsed = 0
+        remainingWhenPaused = nil
+        firedOffsets.removeAll()
+        startDate = remoteEndDate.addingTimeInterval(-dur)
+        endDate = remoteEndDate
+
+        let remaining = remoteEndDate.timeIntervalSinceNow
+
+        // 이미 지나간 pre-alert 마킹
+        for off in offsets where remaining <= off {
+            firedOffsets.insert(Int(off))
+        }
+
+        if remaining <= 0 {
+            state = .overtime
+            onTick?(remaining)
+            DispatchQueue.main.async { self.onFinish?() }
+            return
+        }
+
+        // 이 기기에서도 알림이 울리도록 남은 시점 기준으로 스케줄
+        let futureOffsets = offsets.filter { $0 < remaining }
+        scheduleNotifications(duration: remaining, offsets: futureOffsets)
+
+        state = .running
+        onTick?(remaining)
+        startUITick()
+    }
+
+    /// 다른 기기에서 일시정지된 타이머를 반영 (남은 시간을 그대로 넘겨받아 오차 없음)
+    func applyRemotePause(mainSeconds: Int, prealertOffsetsSec: [Int], name: String, remaining: TimeInterval) {
+        stopUITick()
+        cancelScheduledNotifications()
+        timeMultiplier = 1.0
+
+        let dur = TimeInterval(max(1, mainSeconds))
+        let offsets = prealertOffsetsSec
+            .filter { $0 > 0 && $0 < Int(dur) }
+            .sorted(by: >)
+            .map(TimeInterval.init)
+        config = .init(mainDuration: dur, prealertOffsetsSec: offsets, name: name)
+
+        let r = max(0, remaining)
+        startDate = nil
+        pausedElapsed = dur - r
+        remainingWhenPaused = r
+        firedOffsets.removeAll()
+        for off in offsets where r <= off {
+            firedOffsets.insert(Int(off))
+        }
+        // 복원 규칙과 동일: paused 상태의 endDate는 "지금 기준 남은 시간"을 담는다
+        endDate = Date().addingTimeInterval(r)
+        state = .paused
+        onTick?(r)
+    }
+
     /// 앱이 포그라운드로 돌아왔을 때 호출 — endDate 기반 재계산
     func recalculateOnForeground() {
         guard state == .running || state == .overtime,
