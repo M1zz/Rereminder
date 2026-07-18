@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA10AB0D2F20C0000000000D /* RereminderMenuBar.bundle in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = AA10AB012F20C00000000001 /* RereminderMenuBar.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		2B302B142E4375170089A14A /* RereminderWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2B302B0A2E4375150089A14A /* RereminderWatch.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		581D85DC2F48C24200F2F032 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 581D85DB2F48C24200F2F032 /* StoreKit.framework */; };
 		584DC9092FAB90DE006CC090 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 584DC9082FAB90DE006CC090 /* GoogleService-Info.plist */; };
@@ -21,6 +22,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		AA10AB0A2F20C0000000000A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 260414C32E1B9FA200CBA29B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AA10AB032F20C00000000003;
+			remoteInfo = RereminderMenuBar;
+		};
 		2B302B122E4375170089A14A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 260414C32E1B9FA200CBA29B /* Project object */;
@@ -38,6 +46,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		AA10AB0C2F20C0000000000C /* Embed PlugIns */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				AA10AB0D2F20C0000000000D /* RereminderMenuBar.bundle in Embed PlugIns */,
+			);
+			name = "Embed PlugIns";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		2B302B182E4375170089A14A /* Embed Watch Content */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -63,6 +82,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AA10AB012F20C00000000001 /* RereminderMenuBar.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RereminderMenuBar.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		260414CB2E1B9FA200CBA29B /* Rereminder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rereminder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B302B0A2E4375150089A14A /* RereminderWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RereminderWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		581D85DB2F48C24200F2F032 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
@@ -132,6 +152,11 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		AA10AB022F20C00000000002 /* RereminderMenuBar */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = RereminderMenuBar;
+			sourceTree = "<group>";
+		};
 		260414CD2E1B9FA200CBA29B /* Rereminder */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
@@ -167,6 +192,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		AA10AB052F20C00000000005 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		260414C82E1B9FA200CBA29B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -208,6 +240,7 @@
 				260414CD2E1B9FA200CBA29B /* Rereminder */,
 				2B302B0B2E4375150089A14A /* RereminderWatch */,
 				58AA3EB32ECF5509007D4BBD /* RereminderAlarm */,
+				AA10AB022F20C00000000002 /* RereminderMenuBar */,
 				58AA3EAE2ECF5509007D4BBD /* Frameworks */,
 				260414CC2E1B9FA200CBA29B /* Products */,
 			);
@@ -219,6 +252,7 @@
 				260414CB2E1B9FA200CBA29B /* Rereminder.app */,
 				2B302B0A2E4375150089A14A /* RereminderWatch.app */,
 				58AA3EAD2ECF5509007D4BBD /* RereminderAlarmExtension.appex */,
+				AA10AB012F20C00000000001 /* RereminderMenuBar.bundle */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -236,6 +270,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		AA10AB032F20C00000000003 /* RereminderMenuBar */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA10AB092F20C00000000009 /* Build configuration list for PBXNativeTarget "RereminderMenuBar" */;
+			buildPhases = (
+				AA10AB042F20C00000000004 /* Sources */,
+				AA10AB052F20C00000000005 /* Frameworks */,
+				AA10AB062F20C00000000006 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				AA10AB022F20C00000000002 /* RereminderMenuBar */,
+			);
+			name = RereminderMenuBar;
+			packageProductDependencies = (
+			);
+			productName = RereminderMenuBar;
+			productReference = AA10AB012F20C00000000001 /* RereminderMenuBar.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
 		260414CA2E1B9FA200CBA29B /* Rereminder */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 260414D82E1B9FA400CBA29B /* Build configuration list for PBXNativeTarget "Rereminder" */;
@@ -245,12 +301,14 @@
 				260414C92E1B9FA200CBA29B /* Resources */,
 				2B302B182E4375170089A14A /* Embed Watch Content */,
 				58AA3EC82ECF550B007D4BBD /* Embed Foundation Extensions */,
+				AA10AB0C2F20C0000000000C /* Embed PlugIns */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				2B302B132E4375170089A14A /* PBXTargetDependency */,
 				58AA3EC22ECF550B007D4BBD /* PBXTargetDependency */,
+				AA10AB0B2F20C0000000000B /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				260414CD2E1B9FA200CBA29B /* Rereminder */,
@@ -355,11 +413,19 @@
 				260414CA2E1B9FA200CBA29B /* Rereminder */,
 				2B302B092E4375150089A14A /* RereminderWatch */,
 				58AA3EAC2ECF5509007D4BBD /* RereminderAlarmExtension */,
+				AA10AB032F20C00000000003 /* RereminderMenuBar */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		AA10AB062F20C00000000006 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		260414C92E1B9FA200CBA29B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -385,6 +451,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		AA10AB042F20C00000000004 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		260414C72E1B9FA200CBA29B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -409,6 +482,12 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		AA10AB0B2F20C0000000000B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = maccatalyst;
+			target = AA10AB032F20C00000000003 /* RereminderMenuBar */;
+			targetProxy = AA10AB0A2F20C0000000000A /* PBXContainerItemProxy */;
+		};
 		2B302B132E4375170089A14A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			platformFilter = ios;
@@ -424,6 +503,48 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		AA10AB072F20C00000000007 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = QGAQ3AY3R3;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSPrincipalClass = RRMenuBarController;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.MenuBar;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+		AA10AB082F20C00000000008 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = QGAQ3AY3R3;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSPrincipalClass = RRMenuBarController;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.MenuBar;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
 		260414D62E1B9FA400CBA29B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -748,6 +869,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		AA10AB092F20C00000000009 /* Build configuration list for PBXNativeTarget "RereminderMenuBar" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA10AB072F20C00000000007 /* Debug */,
+				AA10AB082F20C00000000008 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		260414C62E1B9FA200CBA29B /* Build configuration list for PBXProject "Rereminder" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
