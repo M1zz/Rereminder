@@ -407,6 +407,17 @@ struct NoticeSettingView: View {
                     }
                 }
 
+                // TODO: localize (handle is a proper noun, shown as-is)
+                Link(destination: URL(string: "https://instagram.com/lee25_ios")!) {
+                    HStack {
+                        Label("Instagram DM (@lee25_ios)", systemImage: "paperplane.fill")
+                        Spacer()
+                        Image(systemName: "arrow.up.right")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+
                 // Test Mode일 때만 표시
                 if testModeEnabled {
                     VStack(alignment: .leading, spacing: 4) {
