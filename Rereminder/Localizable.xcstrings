@@ -46,6 +46,26 @@
         }
       }
     },
+    "%@ · %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ · %2$@"
+          }
+        }
+      }
+    },
+    "%@ · %@ · %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ · %2$@ · %3$@"
+          }
+        }
+      }
+    },
     "%@ · One-time purchase" : {
       "localizations" : {
         "ja" : {
@@ -362,6 +382,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld퍼센트 남음"
+          }
+        }
+      }
+    },
+    "%lld received · %lld done" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "受信 %lld件 · 完了 %lld件"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "접수 %lld건 · 완료 %lld건"
           }
         }
       }
@@ -778,6 +814,22 @@
         }
       }
     },
+    "A user left feedback. Check the inbox." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ユーザーがフィードバックを残しました。インボックスで確認してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용자가 의견을 남겼어요. 인박스에서 확인해 보세요."
+          }
+        }
+      }
+    },
     "Accurate notifications in background" : {
       "localizations" : {
         "ja" : {
@@ -923,6 +975,22 @@
         }
       }
     },
+    "Add this ID to the admin role in CloudKit Dashboard to read all feedback in the app. Tap to copy." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloudKit DashboardのadminロールにこのIDを追加すると、アプリで全フィードバックを読めます。タップでコピー。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CloudKit Dashboard의 admin 역할에 이 ID를 추가하면 앱에서 모든 피드백을 읽을 수 있어요. 탭하면 복사됩니다."
+          }
+        }
+      }
+    },
     "Add to favorites" : {
       "localizations" : {
         "ja" : {
@@ -1048,6 +1116,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "모든 기능 잠금 해제"
+          }
+        }
+      }
+    },
+    "All Pro features — Presentation Mode, unlimited pre-alerts, overtime tracking, and timer history — are yours free forever. Nothing you had has been taken away." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プレゼンモード、無制限の事前通知、オーバータイム記録、タイマー統計などすべてのPro機能を永久無料でご利用いただけます。お使いだった機能は何も失われていません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "발표 모드, 무제한 예비 알림, 오버타임 추적, 타이머 통계 등 모든 Pro 기능을 평생 무료로 이용하실 수 있어요. 쓰시던 기능은 하나도 사라지지 않았습니다."
           }
         }
       }
@@ -1182,6 +1266,22 @@
         }
       }
     },
+    "Auto-attached Info" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自動添付情報"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "자동 첨부 정보"
+          }
+        }
+      }
+    },
     "Automatic Permission Management" : {
       "localizations" : {
         "ja" : {
@@ -1242,6 +1342,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "전 알림"
+          }
+        }
+      }
+    },
+    "Bug Report" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "バグ報告"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "버그 신고"
           }
         }
       }
@@ -1370,6 +1486,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "완료율"
+          }
+        }
+      }
+    },
+    "Couldn't send via iCloud" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloudで送信できません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud로 보낼 수 없어요"
           }
         }
       }
@@ -1537,6 +1669,22 @@
         }
       }
     },
+    "Delete this feedback?" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このフィードバックを削除しますか？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 피드백을 삭제할까요?"
+          }
+        }
+      }
+    },
     "Denied - Go to Settings" : {
       "localizations" : {
         "ja" : {
@@ -1549,6 +1697,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "여러 번 알림받고\n여유있게 마무리"
+          }
+        }
+      }
+    },
+    "Describe your issue or suggestion." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "問題点やご提案を自由にお書きください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "불편하신 점이나 제안 사항을 자유롭게 적어주세요."
           }
         }
       }
@@ -1747,6 +1911,22 @@
         }
       }
     },
+    "Enabled after you enter a message." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "内容を入力すると有効になります"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "내용을 입력하면 활성화됩니다"
+          }
+        }
+      }
+    },
     "End" : {
       "localizations" : {
         "ja" : {
@@ -1812,6 +1992,22 @@
         }
       }
     },
+    "Failed to send feedback" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "フィードバックの送信に失敗しました"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "피드백 전송에 실패했어요"
+          }
+        }
+      }
+    },
     "Failed to sync with App Store. Please check your network connection." : {
       "localizations" : {
         "ja" : {
@@ -1840,6 +2036,102 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "기능"
+          }
+        }
+      }
+    },
+    "Feature Request" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "機能リクエスト"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기능 제안"
+          }
+        }
+      }
+    },
+    "Feedback Inbox" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "受信フィードバック"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "접수된 피드백"
+          }
+        }
+      }
+    },
+    "Feedback Inbox (Developer)" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "受信フィードバック（開発者）"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "접수된 피드백 (개발자)"
+          }
+        }
+      }
+    },
+    "Feedback message" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "フィードバック内容"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "피드백 내용"
+          }
+        }
+      }
+    },
+    "Feedback sent!\nThank you for your input 🙏" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "フィードバックを送信しました！\n貴重なご意見ありがとうございます 🙏"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "피드백을 보냈습니다!\n소중한 의견 감사합니다 🙏"
+          }
+        }
+      }
+    },
+    "Feedback Type" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "お問い合わせの種類"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "문의 유형"
           }
         }
       }
@@ -1905,6 +2197,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "무료"
+          }
+        }
+      }
+    },
+    "Free forever as an early supporter 🎉" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "初期ユーザー特典で永久無料 🎉"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기존 사용자 평생 무료 혜택 🎉"
           }
         }
       }
@@ -2039,6 +2347,22 @@
         }
       }
     },
+    "If this is a permission error, register the admin role with read access and your user ID below in CloudKit Dashboard." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "権限エラーの場合は、CloudKit Dashboardでadminロールにread権限と下のユーザーIDを登録してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "권한 오류라면 CloudKit Dashboard에서 admin 역할에 read 권한과 아래 사용자 ID를 등록했는지 확인하세요."
+          }
+        }
+      }
+    },
     "In Progress" : {
       "localizations" : {
         "ja" : {
@@ -2073,6 +2397,22 @@
     },
     "Instagram DM (@lee25_ios)" : {
 
+    },
+    "It will be permanently removed from the server." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サーバーから完全に削除され、元に戻せません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "서버에서 완전히 삭제되며 되돌릴 수 없어요."
+          }
+        }
+      }
     },
     "Keep counting\neven after time's up" : {
       "extractionState" : "stale",
@@ -2219,6 +2559,22 @@
         }
       }
     },
+    "Loading…" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "読み込み中…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "불러오는 중…"
+          }
+        }
+      }
+    },
     "m" : {
       "localizations" : {
         "ja" : {
@@ -2236,6 +2592,7 @@
       }
     },
     "Main %1$lld min %2$lld sec" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -2252,6 +2609,7 @@
       }
     },
     "Main %lld min" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -2268,6 +2626,7 @@
       }
     },
     "Main %lld min %lld sec" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2285,6 +2644,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "메인 %lld분 %lld초"
+          }
+        }
+      }
+    },
+    "Mark as Done" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了にする"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완료 표시"
+          }
+        }
+      }
+    },
+    "Mark as Open" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "完了を解除"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "완료 해제"
+          }
+        }
+      }
+    },
+    "Message" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "内容"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "내용"
           }
         }
       }
@@ -2386,6 +2793,22 @@
         }
       }
     },
+    "My User ID" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "マイユーザーID"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "내 사용자 ID"
+          }
+        }
+      }
+    },
     "Name" : {
       "localizations" : {
         "ja" : {
@@ -2415,6 +2838,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "데드라인을 절대\n놓치지 마세요"
+          }
+        }
+      }
+    },
+    "New Feedback Alerts" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新着フィードバック通知"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 피드백 알림"
+          }
+        }
+      }
+    },
+    "New feedback arrived 📬" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新しいフィードバックが届きました 📬"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 피드백이 도착했어요 📬"
           }
         }
       }
@@ -2558,6 +3013,7 @@
       }
     },
     "Next: End alert (%1$lld min %2$lld sec left)" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -2623,6 +3079,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "활성 타이머 없음"
+          }
+        }
+      }
+    },
+    "No feedback yet" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "まだフィードバックはありません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 접수된 피드백이 없어요"
           }
         }
       }
@@ -2848,6 +3320,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "알림 스타일"
+          }
+        }
+      }
+    },
+    "Notifications are off. Allow them in iOS Settings." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知がオフです。iOSの設定で許可してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "알림 권한이 꺼져 있어요. iOS 설정에서 허용해 주세요."
           }
         }
       }
@@ -3292,6 +3780,7 @@
       }
     },
     "Only basic notifications are supported on macOS" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -3352,6 +3841,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "두번알림 앱을 엽니다"
+          }
+        }
+      }
+    },
+    "Other" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "その他"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기타"
           }
         }
       }
@@ -3707,6 +4212,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "구매 확인에 실패했습니다. 구매 복원을 시도해주세요."
+          }
+        }
+      }
+    },
+    "Pushes a notification to this device when new feedback arrives. Requires read access for the CloudKit admin role." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新しいフィードバックが届くとこのデバイスにプッシュ通知が来ます。CloudKit adminロールのread権限が必要です。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 피드백이 접수되면 이 기기로 푸시 알림이 와요. CloudKit admin 역할의 read 권한이 필요해요."
+          }
+        }
+      }
+    },
+    "Question" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使い方の質問"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용 방법 문의"
           }
         }
       }
@@ -4354,6 +4891,38 @@
         }
       }
     },
+    "Send" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "送信"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "보내기"
+          }
+        }
+      }
+    },
+    "Send by Email" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "メールで送信"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이메일로 보내기"
+          }
+        }
+      }
+    },
     "Send Feedback" : {
       "localizations" : {
         "ja" : {
@@ -4402,6 +4971,38 @@
         }
       }
     },
+    "Sending…" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "送信中…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "보내는 중…"
+          }
+        }
+      }
+    },
+    "Sends your feedback directly to the developer." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タップすると開発者に直接送信されます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탭하면 개발자에게 바로 전송됩니다"
+          }
+        }
+      }
+    },
     "sessions" : {
       "localizations" : {
         "ja" : {
@@ -4430,6 +5031,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "설정"
+          }
+        }
+      }
+    },
+    "Share anything on your mind." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自由にご意見をお寄せください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "자유롭게 의견을 남겨주세요."
           }
         }
       }
@@ -4516,6 +5133,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "현재 타이머 상태를 표시합니다"
+          }
+        }
+      }
+    },
+    "Sign in to iCloud to send directly from the app, or send your feedback by email instead." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloudにサインインするとアプリから直接送信できます。代わりにメールで送信することもできます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud에 로그인하면 앱에서 바로 보낼 수 있어요. 대신 이메일로 보낼 수도 있습니다."
           }
         }
       }
@@ -4810,6 +5443,22 @@
         }
       }
     },
+    "Swipe right to mark done, left to delete. Requires write access for the CloudKit admin role." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "右にスワイプで完了、左にスワイプで削除。CloudKit adminロールのwrite権限が必要です。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오른쪽으로 밀면 완료 표시, 왼쪽으로 밀면 삭제. CloudKit admin 역할에 쓰기 권한이 있어야 반영돼요."
+          }
+        }
+      }
+    },
     "Swipe up or down to adjust the time. Double tap to enter an exact time." : {
       "localizations" : {
         "ja" : {
@@ -4854,6 +5503,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "탭하여 테마 선택"
+          }
+        }
+      }
+    },
+    "Tell us what went wrong.\ne.g. The alert didn't fire in the background." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "どのような問題が発生したか教えてください。\n例）バックグラウンドで通知が鳴りませんでした。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "어떤 상황에서 문제가 발생했는지 알려주세요.\n예) 백그라운드에서 알림이 울리지 않았어요."
           }
         }
       }
@@ -4950,6 +5615,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "버튼을 누르면 1초 후 테스트 알림이 전송됩니다"
+          }
+        }
+      }
+    },
+    "Thank you for being an early user 💙" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "早くからご利用いただきありがとうございます 💙"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일찍부터 함께해 주셔서 감사해요 💙"
           }
         }
       }
@@ -5854,6 +6535,22 @@
         }
       }
     },
+    "What feature would you like?\ne.g. I'd like to repeat timers automatically." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "どんな機能が欲しいですか？\n例）タイマーを自動で繰り返したいです。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "어떤 기능이 있으면 좋겠나요?\n예) 타이머를 자동으로 반복하고 싶어요."
+          }
+        }
+      }
+    },
     "What is Quick Test Mode?" : {
       "localizations" : {
         "ja" : {
@@ -5866,6 +6563,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "빠른 테스트 모드란?"
+          }
+        }
+      }
+    },
+    "What would you like to know?\ne.g. How do I add more pre-alerts?" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "何を知りたいですか？\n例）事前通知はどうやって追加しますか？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "어떤 부분이 궁금하신가요?\n예) 예비 알림은 어떻게 추가하나요?"
           }
         }
       }
@@ -5946,6 +6659,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이미 Pro 회원입니다!"
+          }
+        }
+      }
+    },
+    "You're not signed in to iCloud" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloudにサインインしていません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud에 로그인되어 있지 않아요"
           }
         }
       }

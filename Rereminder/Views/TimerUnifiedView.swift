@@ -20,6 +20,10 @@ struct TimerUnifiedView: View {
     @State private var showProPaywall = false
     @State private var paywallStage: ProGate.PaywallStage = .second
 
+    // 기존 사용자 무료 Pro(그랜드파더링) 안내 — 최초 1회만 표시
+    private static let grandfatherThankedKey = "rereminder.grandfather.thanked"
+    @State private var showGrandfatherThanks = false
+
     /// 타이머가 실행 중이 아닐 때만 모드 전환 허용
     private var isIdle: Bool {
         screenVM.state == .idle || screenVM.state == .finished
@@ -79,6 +83,11 @@ struct TimerUnifiedView: View {
                 onAcceptExtension: enterPresentationAfterExtension
             )
             .toast(toast)
+            .alert(String(localized: "Thank you for being an early user 💙"), isPresented: $showGrandfatherThanks) {
+                Button(String(localized: "OK"), role: .cancel) {}
+            } message: {
+                Text(String(localized: "All Pro features — Presentation Mode, unlimited pre-alerts, overtime tracking, and timer history — are yours free forever. Nothing you had has been taken away."))
+            }
             .onAppear(perform: setupOnAppear)
             .onChange(of: scenePhase) { oldPhase, newPhase in
                 handleScenePhase(oldPhase, newPhase)
@@ -102,14 +111,15 @@ struct TimerUnifiedView: View {
             TimerMainView()
                 .padding()
                 .toolbar { bottomToolbar }
+                // 타이머 화면 어디를 탭해도 키보드 내림 (버튼·드래그 등 기존 조작은 그대로)
+                // NavigationStack 전체에 붙이면 push된 설정 Form의 행 탭과 경합해 터치가 씹힘
+                .simultaneousGesture(TapGesture().onEnded {
+                    UIApplication.shared.sendAction(
+                        #selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil
+                    )
+                })
         }
         .environmentObject(screenVM)
-        // 화면 어디를 탭해도 키보드 내림 (버튼·드래그 등 기존 조작은 그대로)
-        .simultaneousGesture(TapGesture().onEnded {
-            UIApplication.shared.sendAction(
-                #selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil
-            )
-        })
         .sheet(isPresented: $showHistory) {
             TimerTemplateView { selected in
                 screenVM.apply(template: selected)
@@ -156,6 +166,13 @@ struct TimerUnifiedView: View {
     // MARK: - Actions
 
     private func setupOnAppear() {
+        // 그랜드파더링된 기존 사용자에게 무료 Pro 안내 (최초 1회)
+        if StoreManager.isGrandfathered,
+           !UserDefaults.standard.bool(forKey: Self.grandfatherThankedKey) {
+            UserDefaults.standard.set(true, forKey: Self.grandfatherThankedKey)
+            showGrandfatherThanks = true
+        }
+
         screenVM.attachContext(context)
         screenVM.seedTemplatesIfNeeded()
         screenVM.timerVM.showToast = { toast.show(Toast($0)) }
@@ -164,6 +181,8 @@ struct TimerUnifiedView: View {
         screenVM.timerVM.modelContext = context
         screenVM.initialConfiguration()
         screenVM.restoreTimerIfNeeded()
+        // 실행 중 타이머가 없으면 마지막 사용 설정을 다이얼에 복원
+        screenVM.restoreLastUsedConfigIfNeeded()
 
         #if targetEnvironment(macCatalyst)
         // 메뉴바 타이머 (RereminderMenuBar 번들이 임베드된 빌드에서만 동작)

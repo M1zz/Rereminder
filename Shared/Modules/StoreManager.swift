@@ -81,7 +81,17 @@ final class StoreManager: ObservableObject {
     // MARK: - Grandfathering
 
     /// Pro 잠금 도입 전 기존 사용자에게 무료 Pro 부여
-    private static let grandfatherCheckKey = "rereminder.grandfather.checked"
+    /// v2: v1은 부여 직후 verifyCurrentEntitlements 가 구매 부재로 Pro 를 되돌리는
+    /// 버그가 있었다. 부여 사실을 별도 플래그로 기록해 검증에서 보호하고,
+    /// v1 에서 부여받았다 잃은 사용자를 위해 흔적 검사를 한 번 더 수행한다.
+    private static let grandfatherCheckKey = "rereminder.grandfather.checked.v2"
+    nonisolated private static let grandfatherGrantedKey = "rereminder.grandfather.granted"
+
+    /// 기존 사용자 무료 Pro 여부 — verifyCurrentEntitlements 가 구매 부재로
+    /// Pro 를 회수하지 않도록 보호하는 근거
+    nonisolated static var isGrandfathered: Bool {
+        UserDefaults.standard.bool(forKey: grandfatherGrantedKey)
+    }
 
     private func grandfatherExistingUserIfNeeded() {
         let defaults = UserDefaults.standard
@@ -90,7 +100,7 @@ final class StoreManager: ObservableObject {
         guard !defaults.bool(forKey: Self.grandfatherCheckKey) else { return }
         defaults.set(true, forKey: Self.grandfatherCheckKey)
 
-        // 이미 Pro인 경우 스킵
+        // 이미 Pro인 경우 스킵 (실제 구매자)
         guard !isPro else { return }
 
         // Pro 도입 전에 앱을 사용한 흔적이 있는지 확인
@@ -99,6 +109,7 @@ final class StoreManager: ObservableObject {
             || defaults.integer(forKey: "timerCompletionCount") > 0
 
         if isExistingUser {
+            defaults.set(true, forKey: Self.grandfatherGrantedKey)
             isPro = true
             savePurchaseState(true)
         }
@@ -245,14 +256,15 @@ final class StoreManager: ObservableObject {
             }
         }
 
-        // TestFlight/Sandbox 환경에서는 entitlement 가 없어도 Pro 유지 (verifyCurrentEntitlements 가
-        // 실제 구매 부재로 인해 isPro 를 false 로 되돌리지 않도록 보호)
-        let effectiveFoundPro = foundPro || Self.isAutoProEnvironment
+        // TestFlight/Sandbox 환경과 기존 사용자(그랜드파더링)는 entitlement 가 없어도
+        // Pro 유지 (verifyCurrentEntitlements 가 실제 구매 부재로 인해 isPro 를
+        // false 로 되돌리지 않도록 보호)
+        let effectiveFoundPro = foundPro || Self.isAutoProEnvironment || Self.isGrandfathered
 
         if effectiveFoundPro != isPro {
             isPro = effectiveFoundPro
             if !Self.isAutoProEnvironment {
-                savePurchaseState(foundPro)
+                savePurchaseState(effectiveFoundPro)
             }
         }
 
@@ -337,9 +349,9 @@ extension StoreManager {
 
     /// 빠른 Pro 체크 (저장된 값, 네트워크 불필요)
     /// nonisolated — Keychain/UserDefaults만 읽으므로 어디서든 호출 가능
-    /// TestFlight/Sandbox 환경에서는 항상 true 를 반환
+    /// TestFlight/Sandbox 환경과 기존 사용자(그랜드파더링)는 항상 true 를 반환
     nonisolated static var isProUser: Bool {
-        if isAutoProEnvironment { return true }
+        if isAutoProEnvironment || isGrandfathered { return true }
         return KeychainHelper.load(key: "rereminder.pro.purchased") ?? UserDefaults.standard.bool(forKey: "rereminder.pro.purchased")
     }
 }

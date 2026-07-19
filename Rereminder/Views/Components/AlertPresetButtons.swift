@@ -47,6 +47,12 @@ struct AlertPresetButtons: View {
     /// "아직 없는 id로 scrollTo"가 무시되는 타이밍 레이스를 피한다
     @State private var pendingScrollOffset: Int?
 
+    // 5+5 trial 페이월 (2번째 알림부터 unlimitedPrealerts 평가)
+    @State private var showPaywall = false
+    @State private var paywallStage: ProGate.PaywallStage = .second
+    /// 페이월에서 연장 체험 수락 시 이어서 추가할 시점
+    @State private var pendingGatedOffset: Int?
+
     /// 프리셋 + 현재 선택된 시점의 합집합 (오름차순)
     private var displayOffsets: [Int] {
         Array(Set(AlertPresets.decode(presetsRaw)).union(screenVM.selectedOffsets)).sorted()
@@ -61,6 +67,12 @@ struct AlertPresetButtons: View {
                 chipRow(proxy: proxy)
             }
         }
+        .paywallGate(
+            isPresented: $showPaywall,
+            feature: .unlimitedPrealerts,
+            stage: paywallStage,
+            onAcceptExtension: insertPendingGatedOffset
+        )
     }
 
     @ViewBuilder
@@ -84,18 +96,25 @@ struct AlertPresetButtons: View {
                         ForEach(displayOffsets, id: \.self) { offset in
                             let selected = screenVM.selectedOffsets.contains(offset)
                             Button {
-                                withAnimation(.easeInOut(duration: 0.25)) {
-                                    if selected {
-                                        screenVM.selectedOffsets.remove(offset)
-                                    } else {
-                                        screenVM.selectedOffsets.insert(offset)
+                                if selected {
+                                    withAnimation(.easeInOut(duration: 0.25)) {
+                                        _ = screenVM.selectedOffsets.remove(offset)
                                     }
+                                } else {
+                                    insertGated(offset)
                                 }
                             } label: {
-                                Text(offsetLabel(offset))
-                                    .font(DSFont.callout.weight(.medium))
-                                    .padding(.horizontal, DSSpacing.sm)
-                                    .frame(minWidth: 56, minHeight: 44)
+                                HStack(spacing: 2) {
+                                    Text(offsetLabel(offset))
+                                        .font(DSFont.callout.weight(.medium))
+                                    if isLocked(offset: offset, selected: selected) {
+                                        Image(systemName: "lock.fill")
+                                            .font(.caption2)
+                                            .foregroundStyle(.orange)
+                                    }
+                                }
+                                .padding(.horizontal, DSSpacing.sm)
+                                .frame(minWidth: 56, minHeight: 44)
                             }
                             .buttonStyle(.bordered)
                             // 링 위의 알림 마커(주황)와 같은 색으로 선택 상태 표시
@@ -158,9 +177,48 @@ struct AlertPresetButtons: View {
               !screenVM.selectedOffsets.contains(newOffset) else { return }
 
         pendingScrollOffset = newOffset
-        withAnimation(.easeInOut(duration: 0.25)) {
-            _ = screenVM.selectedOffsets.insert(newOffset)
+        insertGated(newOffset)
+    }
+
+    // MARK: - Pro Gate (unlimitedPrealerts)
+
+    /// 1번째 알림은 항상 free, 2번째부터 5+5 trial 평가 (PrealertSettingsView와 동일 정책)
+    private func insertGated(_ offset: Int) {
+        if screenVM.selectedOffsets.count >= ProGate.freePrealertLimit {
+            switch ProGate.evaluate(.unlimitedPrealerts) {
+            case .allowed, .allowedWithTrial:
+                break
+            case .blocked(let stage):
+                paywallStage = stage
+                pendingGatedOffset = offset
+                showPaywall = true
+                AnalyticsManager.log(.premiumTrialExhausted(
+                    feature: .unlimitedPrealerts,
+                    stage: stage
+                ))
+                return
+            }
         }
+        withAnimation(.easeInOut(duration: 0.25)) {
+            _ = screenVM.selectedOffsets.insert(offset)
+        }
+    }
+
+    /// 페이월에서 연장 체험 수락 시, 막혔던 시점을 이어서 추가
+    private func insertPendingGatedOffset() {
+        guard let offset = pendingGatedOffset else { return }
+        pendingGatedOffset = nil
+        withAnimation(.easeInOut(duration: 0.25)) {
+            _ = screenVM.selectedOffsets.insert(offset)
+        }
+    }
+
+    /// 잠금 아이콘 표시 여부 — 미선택 칩이고, 추가하려면 Pro/trial 이 필요한데 소진된 경우
+    private func isLocked(offset: Int, selected: Bool) -> Bool {
+        !selected
+            && !StoreManager.isProUser
+            && screenVM.selectedOffsets.count >= ProGate.freePrealertLimit
+            && !ProGate.evaluate(.unlimitedPrealerts).isAllowed
     }
 
     /// 항상 "M:SS" 표기 (예: 1:00, 2:30)

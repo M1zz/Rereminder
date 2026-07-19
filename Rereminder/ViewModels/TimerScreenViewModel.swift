@@ -241,6 +241,7 @@ final class TimerScreenViewModel: ObservableObject {
         selectedOffsets = Set(t.prealertOffsetsSec)
         prealertMessages = t.prealertMessages
         finishMessage = t.finishMessage ?? ""
+        persistLastUsedConfig(mainSec: t.mainSeconds, offsets: t.prealertOffsetsSec)
         showTemplateApplyToast(for: t)
         timerVM.start()
     }
@@ -291,6 +292,48 @@ final class TimerScreenViewModel: ObservableObject {
 
     // MARK: - Internal Configure
 
+    // MARK: - Last Used Config (재실행 시 다이얼 복원)
+
+    private static let lastUsedConfigKey = "rereminder.lastUsedConfig.v1"
+    private var didRestoreLastUsedConfig = false
+
+    private struct LastUsedConfig: Codable {
+        let mainSeconds: Int
+        let offsets: [Int]
+        let prealertMessages: [Int: String]
+        let finishMessage: String
+    }
+
+    private func persistLastUsedConfig(mainSec: Int, offsets: [Int]) {
+        let cfg = LastUsedConfig(
+            mainSeconds: mainSec,
+            offsets: offsets,
+            prealertMessages: prealertMessages,
+            finishMessage: finishMessage
+        )
+        if let data = try? JSONEncoder().encode(cfg) {
+            UserDefaults.standard.set(data, forKey: Self.lastUsedConfigKey)
+        }
+    }
+
+    /// 앱 시작 시 마지막으로 사용한 타이머 설정을 다이얼에 복원한다 (타이머 시작은 하지 않음).
+    /// 실행 중 타이머 복원(restoreTimerIfNeeded)이 성공했으면 건드리지 않는다.
+    func restoreLastUsedConfigIfNeeded() {
+        guard !didRestoreLastUsedConfig else { return }
+        didRestoreLastUsedConfig = true
+        guard timerVM.state == .idle,
+              let data = UserDefaults.standard.data(forKey: Self.lastUsedConfigKey),
+              let cfg = try? JSONDecoder().decode(LastUsedConfig.self, from: data),
+              cfg.mainSeconds > 0 else { return }
+
+        mainMinutes = cfg.mainSeconds / 60
+        mainSeconds = cfg.mainSeconds % 60
+        selectedOffsets = Set(cfg.offsets)
+        prealertMessages = cfg.prealertMessages
+        finishMessage = cfg.finishMessage
+        initialConfiguration()
+    }
+
     private func justConfigure(save: Bool, toast: Bool) {
         let secPart = max(0, min(59, mainSeconds))
         let mainSec = max(0, mainMinutes) * 60 + secPart
@@ -318,6 +361,7 @@ final class TimerScreenViewModel: ObservableObject {
                 prealertMessages: prealertMessages,
                 finishMessage: finishMessage.isEmpty ? nil : finishMessage
             )
+            persistLastUsedConfig(mainSec: mainSec, offsets: normalizedOffsets)
         }
 
         if toast {
