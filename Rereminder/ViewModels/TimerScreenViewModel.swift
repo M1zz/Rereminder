@@ -292,6 +292,39 @@ final class TimerScreenViewModel: ObservableObject {
 
     // MARK: - Internal Configure
 
+    // MARK: - Template Quick Bar (다이얼 아래 저장·템플릿 칩)
+
+    /// 현재 다이얼 설정을 저장 규칙과 동일하게 정규화한 값
+    var normalizedCurrentConfig: (mainSec: Int, offsets: [Int]) {
+        let secPart = max(0, min(59, mainSeconds))
+        let mainSec = max(0, mainMinutes) * 60 + secPart
+        let offsets = Array(selectedOffsets.filter { $0 > 0 && $0 < mainSec }).sorted()
+        return (mainSec, offsets)
+    }
+
+    /// 현재 설정을 템플릿으로 저장한다 (타이머 시작 없음)
+    func saveCurrentAsTemplate() {
+        let cfg = normalizedCurrentConfig
+        guard cfg.mainSec > 0 else { return }
+        configService.saveIfNeeded(
+            mainSec: cfg.mainSec,
+            offsets: cfg.offsets,
+            prealertMessages: prealertMessages,
+            finishMessage: finishMessage.isEmpty ? nil : finishMessage
+        )
+        showToast?(String(localized: "Template saved"))
+    }
+
+    /// 템플릿 설정만 다이얼에 반영한다 (apply(template:)와 달리 시작하지 않음)
+    func load(template t: Timer) {
+        mainMinutes = max(0, t.mainSeconds) / 60
+        mainSeconds = max(0, t.mainSeconds) % 60
+        selectedOffsets = Set(t.prealertOffsetsSec)
+        prealertMessages = t.prealertMessages
+        finishMessage = t.finishMessage ?? ""
+        initialConfiguration()
+    }
+
     // MARK: - Last Used Config (재실행 시 다이얼 복원)
 
     private static let lastUsedConfigKey = "rereminder.lastUsedConfig.v1"

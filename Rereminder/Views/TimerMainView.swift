@@ -97,6 +97,11 @@ struct TimerMainView: View {
                     // Next 알림 Info (원 밖 아래쪽)
                     nextAlertInfo
                         .padding(.vertical, spacing * 3)
+                } else if screenVM.state == .idle || screenVM.state == .finished {
+                    // 대기 상태: 최근 템플릿 칩 + 수정 시 저장 버튼 (원 밖 아래쪽)
+                    TemplateQuickBar(screenVM: screenVM)
+                        .padding(.horizontal)
+                        .padding(.bottom, spacing * 2)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
