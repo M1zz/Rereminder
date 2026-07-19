@@ -28,6 +28,11 @@ struct NoticeSettingView: View {
     @State private var showTestModeInfo = false
     @State private var showPermissionGuide = false
     @State private var showPaywall = false
+    @State private var showFeedback = false
+
+    // 마스터 모드(개발자) — Info의 버전 행 7번 탭으로 토글, 피드백 인박스 진입점 노출
+    @AppStorage("masterModeEnabled") private var masterModeEnabled = false
+    @State private var versionTapCount = 0
 
     // 미리 알림 프리셋 편집
     @AppStorage(AlertPresets.storageKey) private var alertPresetsRaw = AlertPresets.defaultRaw
@@ -48,7 +53,10 @@ struct NoticeSettingView: View {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(AppName.pro)
                                 .font(.headline)
-                            Text("All features unlocked")
+                            // 기존 사용자에게는 평생 무료임을 명시해 손해 보지 않았음을 안심시킨다
+                            Text(StoreManager.isGrandfathered
+                                 ? String(localized: "Free forever as an early supporter 🎉")
+                                 : String(localized: "All features unlocked"))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -469,13 +477,26 @@ struct NoticeSettingView: View {
                 }
                 .foregroundStyle(.primary)
 
-                Link(destination: URL(string: "mailto:leeo@kakao.com?subject=Rereminder%20%ED%94%BC%EB%93%9C%EB%B0%B1")!) {
+                // CloudKit 직접 제출 (메일 앱 불필요) — 실패 시 FeedbackView 내부에서 이메일 폴백
+                Button {
+                    showFeedback = true
+                } label: {
                     HStack {
                         Label("Send Feedback", systemImage: "envelope.fill")
                         Spacer()
-                        Image(systemName: "arrow.up.right")
+                        Image(systemName: "chevron.right")
                             .font(.caption)
                             .foregroundStyle(.secondary)
+                    }
+                }
+                .foregroundStyle(.primary)
+
+                // 개발자 전용 — 버전 행 7번 탭으로 노출
+                if masterModeEnabled {
+                    NavigationLink {
+                        FeedbackInboxView()
+                    } label: {
+                        Label(String(localized: "Feedback Inbox (Developer)"), systemImage: "tray.full.fill")
                     }
                 }
 
@@ -516,6 +537,8 @@ struct NoticeSettingView: View {
                     Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")
                         .foregroundStyle(.secondary)
                 }
+                .contentShape(Rectangle())
+                .onTapGesture(perform: handleVersionTap)
             }
         }
         .navigationTitle("Settings")
@@ -544,7 +567,19 @@ struct NoticeSettingView: View {
         .fullScreenCover(isPresented: $showOnboarding) {
             OnboardingView(isPresented: $showOnboarding)
         }
+        .sheet(isPresented: $showFeedback) {
+            FeedbackView()
+        }
         .paywallGate(isPresented: $showPaywall)
+    }
+
+    /// Info의 버전 행 7번 탭 → 마스터 모드(개발자) 토글
+    private func handleVersionTap() {
+        versionTapCount += 1
+        guard versionTapCount >= 7 else { return }
+        versionTapCount = 0
+        masterModeEnabled.toggle()
+        UINotificationFeedbackGenerator().notificationOccurred(.success)
     }
 
     /// 프리셋 초 → "1:00" 표기 (M:SS 통일)
