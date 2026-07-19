@@ -17,6 +17,14 @@ struct PaywallView: View {
     /// Paywall을 열게 된 기능 (nil이면 일반 업그레이드)
     var triggeredBy: ProGate.Feature?
 
+    /// 페이월 단계 (5+5 모델)
+    var stage: ProGate.PaywallStage = .second
+
+    /// "5번 더 체험" 수락 시 호출 (stage == .first 일 때만 노출)
+    var onAcceptExtension: (() -> Void)?
+
+    @State private var didPurchaseDuringSession = false
+
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -53,6 +61,20 @@ struct PaywallView: View {
                 }
             }
         }
+        .onAppear {
+            AnalyticsManager.log(.paywallShown(trigger: triggeredBy))
+        }
+        .onDisappear {
+            AnalyticsManager.log(.paywallDismissed(
+                trigger: triggeredBy,
+                didPurchase: didPurchaseDuringSession
+            ))
+        }
+        .onChange(of: store.purchaseState) { _, newValue in
+            if newValue == .purchased {
+                didPurchaseDuringSession = true
+            }
+        }
     }
 
     // MARK: - Header
@@ -60,7 +82,7 @@ struct PaywallView: View {
     private var headerSection: some View {
         VStack(spacing: 16) {
             Image(systemName: "crown.fill")
-                .font(.system(size: 56))
+                .dsScaledFont(56, relativeTo: .largeTitle, maxSize: 76)
                 .foregroundStyle(
                     LinearGradient(
                         colors: [.yellow, .orange],
@@ -69,9 +91,10 @@ struct PaywallView: View {
                     )
                 )
                 .padding(.top, 20)
+                .accessibilityHidden(true)
 
             Text(AppName.pro)
-                .font(.system(size: 32, weight: .bold, design: .rounded))
+                .dsScaledFont(32, weight: .bold, design: .rounded, relativeTo: .title, maxSize: 44)
 
             Text("Unlock all features")
                 .font(.title3)
@@ -152,13 +175,14 @@ struct PaywallView: View {
 
                 // Rows
                 comparisonRow("Timer", free: true, pro: true)
-                comparisonRow("Pre-alerts", free: true, pro: true)
+                comparisonRow("Pre-alerts", free: "1", pro: "∞")
                 comparisonRow("Live Activity", free: true, pro: true)
-                comparisonRow("Apple Watch", free: true, pro: true)
+                comparisonRow("Watch / Widget", free: true, pro: true)
                 Divider()
+                comparisonRow("Presentation Mode", free: false, pro: true)
+                comparisonRow("Overtime Tracking", free: false, pro: true)
                 comparisonRow("Templates", free: "3", pro: "∞")
-                comparisonRow("Custom Messages", free: false, pro: true)
-                comparisonRow("Label Colors", free: "1", pro: "8")
+                comparisonRow("Custom Messages", free: true, pro: true)
                 comparisonRow("Timer History", free: false, pro: true)
             }
             .background(Color(uiColor: .secondarySystemBackground).opacity(0.5))
@@ -257,6 +281,29 @@ struct PaywallView: View {
                 .accessibilityLabel(String(localized: "Upgrade to Pro"))
                 .accessibilityValue(store.proPrice.isEmpty ? "" : store.proPrice)
 
+                // 1차 페이월 — "5번 더 체험" 옵션
+                if stage == .first,
+                   let feature = triggeredBy,
+                   feature.supportsTrial {
+                    Button {
+                        AnalyticsManager.log(.paywallOneMoreClicked(trigger: feature))
+                        ProGate.acceptExtendedTrial(feature)
+                        onAcceptExtension?()
+                        dismiss()
+                    } label: {
+                        Text("Try 5 more times")
+                            .font(.subheadline.weight(.medium))
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 14)
+                            .foregroundStyle(Color.accentColor)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 14)
+                                    .strokeBorder(Color.accentColor.opacity(0.4), lineWidth: 1)
+                            )
+                    }
+                    .accessibilityLabel(String(localized: "Try 5 more times"))
+                }
+
                 // 에러 메시지
                 if let error = store.errorMessage {
                     Text(error)
@@ -301,7 +348,7 @@ struct PaywallView: View {
 
             HStack(spacing: 16) {
                 Link("Terms of Use", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)
-                Link("Privacy Policy", destination: URL(string: "https://www.apple.com/legal/privacy/")!)
+                Link("Privacy Policy", destination: URL(string: "https://m1zz.github.io/Rereminder/privacy.html")!)
             }
             .font(.caption2)
             .foregroundStyle(.secondary)
@@ -311,24 +358,40 @@ struct PaywallView: View {
 
 // MARK: - Paywall Trigger Modifier
 
-/// 사용법: .paywallGate(isPresented: $showPaywall, feature: .customPrealertMessage)
+/// 사용법: .paywallGate(isPresented: $showPaywall, feature: .presentationMode)
 struct PaywallGateModifier: ViewModifier {
     @Binding var isPresented: Bool
     var feature: ProGate.Feature?
+    var stage: ProGate.PaywallStage = .second
+    var onAcceptExtension: (() -> Void)?
 
     func body(content: Content) -> some View {
         content
             .sheet(isPresented: $isPresented) {
-                PaywallView(triggeredBy: feature)
-                    .presentationDetents([.large])
-                    .presentationDragIndicator(.visible)
+                PaywallView(
+                    triggeredBy: feature,
+                    stage: stage,
+                    onAcceptExtension: onAcceptExtension
+                )
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
             }
     }
 }
 
 extension View {
-    func paywallGate(isPresented: Binding<Bool>, feature: ProGate.Feature? = nil) -> some View {
-        modifier(PaywallGateModifier(isPresented: isPresented, feature: feature))
+    func paywallGate(
+        isPresented: Binding<Bool>,
+        feature: ProGate.Feature? = nil,
+        stage: ProGate.PaywallStage = .second,
+        onAcceptExtension: (() -> Void)? = nil
+    ) -> some View {
+        modifier(PaywallGateModifier(
+            isPresented: isPresented,
+            feature: feature,
+            stage: stage,
+            onAcceptExtension: onAcceptExtension
+        ))
     }
 }
 
@@ -355,7 +418,7 @@ struct ProBadge: View {
 }
 
 #Preview("Paywall") {
-    PaywallView(triggeredBy: .customPrealertMessage)
+    PaywallView(triggeredBy: .presentationMode)
 }
 
 #Preview("Pro Badge") {

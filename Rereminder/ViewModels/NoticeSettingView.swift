@@ -22,11 +22,24 @@ struct NoticeSettingView: View {
     @EnvironmentObject var appStateManager: AppStateManager
     @EnvironmentObject var screenVM: TimerScreenViewModel
     @ObservedObject private var store = StoreManager.shared
+    @ObservedObject private var themeManager = ThemeManager.shared
     @State private var showAlarmKitInfo = false
     @State private var showOnboarding = false
     @State private var showTestModeInfo = false
     @State private var showPermissionGuide = false
     @State private var showPaywall = false
+    @State private var showFeedback = false
+
+    // 마스터 모드(개발자) — Info의 버전 행 7번 탭으로 토글, 피드백 인박스 진입점 노출
+    @AppStorage("masterModeEnabled") private var masterModeEnabled = false
+    @State private var versionTapCount = 0
+
+    // 미리 알림 프리셋 편집
+    @AppStorage(AlertPresets.storageKey) private var alertPresetsRaw = AlertPresets.defaultRaw
+    private struct PresetEditTarget: Identifiable {
+        let id: Int  // 편집할 프리셋 인덱스, 새 프리셋은 -1
+    }
+    @State private var editingPreset: PresetEditTarget?
 
     var body: some View {
         Form {
@@ -40,7 +53,10 @@ struct NoticeSettingView: View {
                         VStack(alignment: .leading, spacing: 2) {
                             Text(AppName.pro)
                                 .font(.headline)
-                            Text("All features unlocked")
+                            // 기존 사용자에게는 평생 무료임을 명시해 손해 보지 않았음을 안심시킨다
+                            Text(StoreManager.isGrandfathered
+                                 ? String(localized: "Free forever as an early supporter 🎉")
+                                 : String(localized: "All features unlocked"))
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -82,6 +98,9 @@ struct NoticeSettingView: View {
                         }
                     }
                     .pickerStyle(.segmented)
+                    .onChange(of: ringMode) { _, newMode in
+                        WatchConnectivityManager.shared.sendRingMode(newMode.rawValue)
+                    }
                 }
             }
 
@@ -149,6 +168,71 @@ struct NoticeSettingView: View {
                         }
                     }
                     .padding(.vertical, 8)
+                }
+            }
+
+            Section {
+                // 알림 문구 편집 — 하단 탭에서 설정 하위로 이동
+                NavigationLink {
+                    NotificationMessageSettingView()
+                } label: {
+                    Label("Messages", systemImage: "text.bubble")
+                }
+            }
+
+            // 타이머 화면 알림 버튼 행에 표시되는 프리셋 시간
+            Section(header: Text("Alert Presets")) {
+                let presets = AlertPresets.decode(alertPresetsRaw)
+                ForEach(Array(presets.enumerated()), id: \.element) { index, sec in
+                    Button {
+                        editingPreset = PresetEditTarget(id: index)
+                    } label: {
+                        HStack {
+                            Image(systemName: "bell.fill")
+                                .font(.caption)
+                                .foregroundStyle(DSColor.marker)
+                            Text(presetLabel(sec))
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundStyle(.tertiary)
+                        }
+                    }
+                }
+                .onDelete { indexSet in
+                    var list = presets
+                    list.remove(atOffsets: indexSet)
+                    // 최소 1개는 유지
+                    if !list.isEmpty {
+                        alertPresetsRaw = AlertPresets.encode(list)
+                    }
+                }
+
+                Button {
+                    editingPreset = PresetEditTarget(id: -1)
+                } label: {
+                    Label("Add Preset", systemImage: "plus.circle.fill")
+                }
+                .sheet(item: $editingPreset) { target in
+                    let presets = AlertPresets.decode(alertPresetsRaw)
+                    TimePresetEditorSheet(
+                        title: target.id >= 0 ? "Edit Alert Preset" : "Add Preset",
+                        showSeconds: true,
+                        initialSeconds: target.id >= 0 && target.id < presets.count
+                            ? presets[target.id]
+                            : 120
+                    ) { totalSeconds in
+                        guard totalSeconds > 0 else { return }
+                        var list = presets
+                        if target.id >= 0 && target.id < list.count {
+                            list[target.id] = totalSeconds
+                        } else {
+                            list.append(totalSeconds)
+                        }
+                        alertPresetsRaw = AlertPresets.encode(list)
+                    }
+                    .presentationDetents([.height(320)])
                 }
             }
 
@@ -303,6 +387,16 @@ struct NoticeSettingView: View {
             }
 
             Section(header: Text("Appearance")) {
+                HStack(spacing: 16) {
+                    Text("Mode")
+                    Picker("Mode", selection: $themeManager.appearanceMode) {
+                        ForEach(AppearanceMode.allCases) { mode in
+                            Text(mode.displayName).tag(mode)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
+
                 NavigationLink {
                     ThemeSettingView()
                 } label: {
@@ -383,9 +477,33 @@ struct NoticeSettingView: View {
                 }
                 .foregroundStyle(.primary)
 
-                Link(destination: URL(string: "mailto:leeo@kakao.com?subject=Rereminder%20%ED%94%BC%EB%93%9C%EB%B0%B1")!) {
+                // CloudKit 직접 제출 (메일 앱 불필요) — 실패 시 FeedbackView 내부에서 이메일 폴백
+                Button {
+                    showFeedback = true
+                } label: {
                     HStack {
                         Label("Send Feedback", systemImage: "envelope.fill")
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .foregroundStyle(.primary)
+
+                // 개발자 전용 — 버전 행 7번 탭으로 노출
+                if masterModeEnabled {
+                    NavigationLink {
+                        FeedbackInboxView()
+                    } label: {
+                        Label(String(localized: "Feedback Inbox (Developer)"), systemImage: "tray.full.fill")
+                    }
+                }
+
+                // TODO: localize (handle is a proper noun, shown as-is)
+                Link(destination: URL(string: "https://instagram.com/lee25_ios")!) {
+                    HStack {
+                        Label("Instagram DM (@lee25_ios)", systemImage: "paperplane.fill")
                         Spacer()
                         Image(systemName: "arrow.up.right")
                             .font(.caption)
@@ -419,6 +537,8 @@ struct NoticeSettingView: View {
                     Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")
                         .foregroundStyle(.secondary)
                 }
+                .contentShape(Rectangle())
+                .onTapGesture(perform: handleVersionTap)
             }
         }
         .navigationTitle("Settings")
@@ -447,7 +567,24 @@ struct NoticeSettingView: View {
         .fullScreenCover(isPresented: $showOnboarding) {
             OnboardingView(isPresented: $showOnboarding)
         }
+        .sheet(isPresented: $showFeedback) {
+            FeedbackView()
+        }
         .paywallGate(isPresented: $showPaywall)
+    }
+
+    /// Info의 버전 행 7번 탭 → 마스터 모드(개발자) 토글
+    private func handleVersionTap() {
+        versionTapCount += 1
+        guard versionTapCount >= 7 else { return }
+        versionTapCount = 0
+        masterModeEnabled.toggle()
+        UINotificationFeedbackGenerator().notificationOccurred(.success)
+    }
+
+    /// 프리셋 초 → "1:00" 표기 (M:SS 통일)
+    private func presetLabel(_ sec: Int) -> String {
+        String(format: "%d:%02d", sec / 60, sec % 60)
     }
 
     private func openSettings() {

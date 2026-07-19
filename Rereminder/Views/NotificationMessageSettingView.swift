@@ -10,10 +10,6 @@ import SwiftUI
 struct NotificationMessageSettingView: View {
     @EnvironmentObject var screenVM: TimerScreenViewModel
     @Environment(\.dismiss) private var dismiss
-    @State private var showPaywall = false
-    @State private var paywallFeature: ProGate.Feature?
-
-    private var isPro: Bool { StoreManager.isProUser }
 
     var body: some View {
         NavigationStack {
@@ -25,17 +21,8 @@ struct NotificationMessageSettingView: View {
                 }
 
                 Section(header: Text("Pre-alert Message")) {
-                    if isPro {
-                        ForEach(Array(screenVM.selectedOffsets.sorted()), id: \.self) { offset in
-                            prealertMessageEditor(for: offset)
-                        }
-                    } else {
-                        // 무료: 미리보기만 + 잠금
-                        ForEach(Array(screenVM.selectedOffsets.sorted()), id: \.self) { offset in
-                            prealertMessagePreview(for: offset)
-                        }
-
-                        proUpgradeRow(feature: .customPrealertMessage)
+                    ForEach(Array(screenVM.selectedOffsets.sorted()), id: \.self) { offset in
+                        prealertMessageEditor(for: offset)
                     }
 
                     if screenVM.selectedOffsets.isEmpty {
@@ -46,46 +33,23 @@ struct NotificationMessageSettingView: View {
                 }
 
                 Section(header: Text("End Alert Message")) {
-                    if isPro {
-                        VStack(alignment: .leading, spacing: 8) {
-                            TextField("Timer finished", text: $screenVM.finishMessage)
-                                .textFieldStyle(.roundedBorder)
+                    VStack(alignment: .leading, spacing: 8) {
+                        TextField("Timer finished", text: $screenVM.finishMessage)
+                            .textFieldStyle(.roundedBorder)
 
-                            Text("Leave empty to use default message: \"Timer finished\"")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                    } else {
-                        HStack {
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text("Timer finished")
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                                Text("Default message")
-                                    .font(.caption)
-                                    .foregroundStyle(.tertiary)
-                            }
-                            Spacer()
-                            Image(systemName: "lock.fill")
-                                .foregroundStyle(.orange)
-                        }
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            paywallFeature = .customFinishMessage
-                            showPaywall = true
-                        }
+                        Text("Leave empty to use default message: \"Timer finished\"")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
                 }
 
-                if isPro {
-                    Section {
-                        Button(action: resetAllMessages) {
-                            HStack {
-                                Image(systemName: "arrow.counterclockwise")
-                                Text("Reset All Messages")
-                            }
-                            .foregroundStyle(.red)
+                Section {
+                    Button(action: resetAllMessages) {
+                        HStack {
+                            Image(systemName: "arrow.counterclockwise")
+                            Text("Reset All Messages")
                         }
+                        .foregroundStyle(.red)
                     }
                 }
             }
@@ -96,19 +60,22 @@ struct NotificationMessageSettingView: View {
                     Button("Done") { dismiss() }
                 }
             }
-            .paywallGate(isPresented: $showPaywall, feature: paywallFeature)
         }
     }
 
-    // MARK: - Pro: 편집 가능
+    // MARK: - 편집 가능
 
     @ViewBuilder
     private func prealertMessageEditor(for offset: Int) -> some View {
-        let minutes = offset / 60
-        let defaultMessage = String(localized: "\(minutes) min remaining")
+        let label = offset < 60
+            ? "\(offset) \(String(localized: "sec before alert"))"
+            : "\(offset / 60) \(String(localized: "min before alert"))"
+        let defaultMessage = offset < 60
+            ? String(localized: "\(offset) sec remaining")
+            : String(localized: "\(offset / 60) min remaining")
 
         VStack(alignment: .leading, spacing: 8) {
-            Text("\(minutes) \(String(localized: "min before alert"))")
+            Text(label)
                 .font(.subheadline)
                 .fontWeight(.medium)
 
@@ -123,53 +90,6 @@ struct NotificationMessageSettingView: View {
                 .foregroundStyle(.secondary)
         }
         .padding(.vertical, 4)
-    }
-
-    // MARK: - Free: 미리보기 + 잠금
-
-    @ViewBuilder
-    private func prealertMessagePreview(for offset: Int) -> some View {
-        let minutes = offset / 60
-
-        HStack {
-            VStack(alignment: .leading, spacing: 4) {
-                Text("\(minutes) \(String(localized: "min before alert"))")
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                Text("\(minutes) min remaining")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-            Spacer()
-            Image(systemName: "lock.fill")
-                .foregroundStyle(.orange)
-        }
-        .contentShape(Rectangle())
-        .onTapGesture {
-            paywallFeature = .customPrealertMessage
-            showPaywall = true
-        }
-    }
-
-    // MARK: - Pro Upgrade Row
-
-    @ViewBuilder
-    private func proUpgradeRow(feature: ProGate.Feature) -> some View {
-        Button {
-            paywallFeature = feature
-            showPaywall = true
-        } label: {
-            HStack(spacing: 10) {
-                ProBadge(small: true)
-                Text("Customize messages with Pro")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
-            }
-        }
     }
 
     private func resetAllMessages() {

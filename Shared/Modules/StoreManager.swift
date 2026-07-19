@@ -45,10 +45,53 @@ final class StoreManager: ObservableObject {
     private let keychainKey = "rereminder.pro.purchased"
     private let defaultsKey = "rereminder.pro.purchased"
 
+    // MARK: - TestFlight / Sandbox
+
+    /// TestFlight 또는 sandbox StoreKit 환경에서 실행 중인지 판별.
+    /// Release 빌드에서만 동작하며, Debug 빌드는 항상 false 를 반환하여
+    /// 시뮬레이터/Xcode 디버그에서 paywall 흐름 테스트가 가능하도록 함.
+    nonisolated static var isTestFlightOrSandbox: Bool {
+        #if DEBUG
+        return false
+        #else
+        return Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
+        #endif
+    }
+
+    /// 개발자 / macOS 환경에서 Pro 자동 부여.
+    /// - macOS 빌드: 별도 인앱 결제 없이 모든 Pro 기능 사용 (개발자/맥앱)
+    /// - iOS DEBUG(개발) 빌드: 기본적으로 Pro 부여 → 개발자는 항상 Pro 접근.
+    ///   paywall 흐름을 테스트하려면 UserDefaults "dev.testPaywall" = true 로 끌 수 있음.
+    /// - Release/App Store 빌드: 영향 없음(실제 구매/그랜드파더링만 적용).
+    nonisolated static var isDeveloperUnlock: Bool {
+        #if os(macOS)
+        return true
+        #elseif DEBUG
+        return !UserDefaults.standard.bool(forKey: "dev.testPaywall")
+        #else
+        return false
+        #endif
+    }
+
+    /// Pro 자동 부여 환경 여부 (TestFlight/Sandbox 또는 개발자/macOS)
+    nonisolated static var isAutoProEnvironment: Bool {
+        isTestFlightOrSandbox || isDeveloperUnlock
+    }
+
     // MARK: - Grandfathering
 
     /// Pro 잠금 도입 전 기존 사용자에게 무료 Pro 부여
-    private static let grandfatherCheckKey = "rereminder.grandfather.checked"
+    /// v2: v1은 부여 직후 verifyCurrentEntitlements 가 구매 부재로 Pro 를 되돌리는
+    /// 버그가 있었다. 부여 사실을 별도 플래그로 기록해 검증에서 보호하고,
+    /// v1 에서 부여받았다 잃은 사용자를 위해 흔적 검사를 한 번 더 수행한다.
+    private static let grandfatherCheckKey = "rereminder.grandfather.checked.v2"
+    nonisolated private static let grandfatherGrantedKey = "rereminder.grandfather.granted"
+
+    /// 기존 사용자 무료 Pro 여부 — verifyCurrentEntitlements 가 구매 부재로
+    /// Pro 를 회수하지 않도록 보호하는 근거
+    nonisolated static var isGrandfathered: Bool {
+        UserDefaults.standard.bool(forKey: grandfatherGrantedKey)
+    }
 
     private func grandfatherExistingUserIfNeeded() {
         let defaults = UserDefaults.standard
@@ -57,7 +100,7 @@ final class StoreManager: ObservableObject {
         guard !defaults.bool(forKey: Self.grandfatherCheckKey) else { return }
         defaults.set(true, forKey: Self.grandfatherCheckKey)
 
-        // 이미 Pro인 경우 스킵
+        // 이미 Pro인 경우 스킵 (실제 구매자)
         guard !isPro else { return }
 
         // Pro 도입 전에 앱을 사용한 흔적이 있는지 확인
@@ -66,6 +109,7 @@ final class StoreManager: ObservableObject {
             || defaults.integer(forKey: "timerCompletionCount") > 0
 
         if isExistingUser {
+            defaults.set(true, forKey: Self.grandfatherGrantedKey)
             isPro = true
             savePurchaseState(true)
         }
@@ -118,6 +162,8 @@ final class StoreManager: ObservableObject {
         purchaseState = .purchasing
         errorMessage = nil
 
+        AnalyticsManager.log(.purchaseStarted(productId: productID.rawValue))
+
         do {
             let result = try await product.purchase()
 
@@ -126,22 +172,39 @@ final class StoreManager: ObservableObject {
                 let transaction = try checkVerified(verification)
                 await handlePurchased(transaction)
                 purchaseState = .purchased
+                AnalyticsManager.log(.purchaseCompleted(productId: productID.rawValue))
 
             case .userCancelled:
                 purchaseState = .idle
+                AnalyticsManager.log(.purchaseFailed(
+                    productId: productID.rawValue,
+                    reason: "user_cancelled"
+                ))
 
             case .pending:
                 // 결제 보류 (가족 승인 등)
                 purchaseState = .idle
                 errorMessage = "Purchase pending approval"
+                AnalyticsManager.log(.purchaseFailed(
+                    productId: productID.rawValue,
+                    reason: "pending"
+                ))
 
             @unknown default:
                 purchaseState = .failed
+                AnalyticsManager.log(.purchaseFailed(
+                    productId: productID.rawValue,
+                    reason: "unknown"
+                ))
             }
         } catch {
             print("❌ 구매 실패: \(error)")
             errorMessage = error.localizedDescription
             purchaseState = .failed
+            AnalyticsManager.log(.purchaseFailed(
+                productId: productID.rawValue,
+                reason: "error"
+            ))
         }
     }
 
@@ -164,6 +227,7 @@ final class StoreManager: ObservableObject {
 
         if isPro {
             purchaseState = .restored
+            AnalyticsManager.log(.purchaseRestored)
         } else {
             purchaseState = .idle
             if errorMessage == nil {
@@ -192,12 +256,19 @@ final class StoreManager: ObservableObject {
             }
         }
 
-        if foundPro != isPro {
-            isPro = foundPro
-            savePurchaseState(foundPro)
+        // TestFlight/Sandbox 환경과 기존 사용자(그랜드파더링)는 entitlement 가 없어도
+        // Pro 유지 (verifyCurrentEntitlements 가 실제 구매 부재로 인해 isPro 를
+        // false 로 되돌리지 않도록 보호)
+        let effectiveFoundPro = foundPro || Self.isAutoProEnvironment || Self.isGrandfathered
+
+        if effectiveFoundPro != isPro {
+            isPro = effectiveFoundPro
+            if !Self.isAutoProEnvironment {
+                savePurchaseState(effectiveFoundPro)
+            }
         }
 
-        if verificationFailed && !foundPro {
+        if verificationFailed && !effectiveFoundPro {
             errorMessage = String(localized: "Purchase verification failed. Please try restoring purchases.")
         }
     }
@@ -246,6 +317,9 @@ final class StoreManager: ObservableObject {
     }
 
     private func loadPurchaseState() -> Bool {
+        // TestFlight/Sandbox/개발자(macOS) 환경에서는 자동으로 Pro 부여 (영속화하지 않음)
+        if Self.isAutoProEnvironment { return true }
+
         // Keychain 우선, 없으면 UserDefaults
         if let keychainValue = KeychainHelper.load(key: keychainKey) {
             // UserDefaults도 동기화
@@ -275,7 +349,9 @@ extension StoreManager {
 
     /// 빠른 Pro 체크 (저장된 값, 네트워크 불필요)
     /// nonisolated — Keychain/UserDefaults만 읽으므로 어디서든 호출 가능
+    /// TestFlight/Sandbox 환경과 기존 사용자(그랜드파더링)는 항상 true 를 반환
     nonisolated static var isProUser: Bool {
-        KeychainHelper.load(key: "rereminder.pro.purchased") ?? UserDefaults.standard.bool(forKey: "rereminder.pro.purchased")
+        if isAutoProEnvironment || isGrandfathered { return true }
+        return KeychainHelper.load(key: "rereminder.pro.purchased") ?? UserDefaults.standard.bool(forKey: "rereminder.pro.purchased")
     }
 }

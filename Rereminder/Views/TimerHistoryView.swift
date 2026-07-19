@@ -15,13 +15,15 @@ struct TimerHistoryView: View {
 
     @State private var showPaywall = false
     @State private var displayLimit = 50
+    @State private var paywallStage: ProGate.PaywallStage = .second
+    @State private var historyGate: ProGate.GateResult = .blocked(stage: .first)
 
     private var isPro: Bool { StoreManager.isProUser }
 
     var body: some View {
         NavigationStack {
             Group {
-                if !isPro {
+                if !historyGate.isAllowed {
                     lockedView
                 } else if records.isEmpty {
                     ContentUnavailableView(
@@ -31,6 +33,17 @@ struct TimerHistoryView: View {
                     )
                 } else {
                     List {
+                        if let remaining = historyGate.trialRemaining, !isPro {
+                            Section {
+                                HStack {
+                                    Image(systemName: "sparkles")
+                                        .foregroundStyle(.orange)
+                                    Text("Trial: \(remaining) views remaining")
+                                        .font(.caption.weight(.medium))
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                        }
                         statsSection
                         recordsSection
                     }
@@ -39,7 +52,24 @@ struct TimerHistoryView: View {
             }
             .navigationTitle(String(localized: "Timer History"))
             .navigationBarTitleDisplayMode(.inline)
-            .paywallGate(isPresented: $showPaywall, feature: .timerHistory)
+            .paywallGate(
+                isPresented: $showPaywall,
+                feature: .timerHistory,
+                stage: paywallStage,
+                onAcceptExtension: {
+                    ProGate.recordUsage(.timerHistory)
+                    historyGate = ProGate.evaluate(.timerHistory)
+                }
+            )
+            .onAppear {
+                let result = ProGate.evaluate(.timerHistory)
+                historyGate = result
+                if case .blocked(let stage) = result {
+                    paywallStage = stage
+                } else {
+                    ProGate.recordUsage(.timerHistory)
+                }
+            }
         }
     }
 
@@ -50,27 +80,29 @@ struct TimerHistoryView: View {
             Spacer()
 
             Image(systemName: "chart.bar.fill")
-                .font(.system(size: 60))
+                .dsScaledFont(60, relativeTo: .largeTitle, maxSize: 84)
                 .foregroundStyle(Color.accentColor.opacity(0.6))
+                .accessibilityHidden(true)
 
-            VStack(spacing: 8) {
+            VStack(spacing: DSSpacing.sm) {
                 Text("Timer History & Stats", comment: "History locked title")
                     .font(.title2.weight(.bold))
                 Text("Track your timer usage patterns\nand improve your time management", comment: "History locked description")
-                    .font(.subheadline)
+                    .font(DSFont.callout)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
             }
+            .accessibilityElement(children: .combine)
 
-            // 미리보기 (블러 처리)
-            VStack(spacing: 12) {
+            // 미리보기 (블러 처리) — 잠금 상태이므로 VoiceOver 에서는 숨김
+            VStack(spacing: DSSpacing.md) {
                 previewStatRow(String(localized: "Total Sessions"), value: "\(records.count)")
                 previewStatRow(String(localized: "Completed"), value: "\(records.filter(\.finished).count)")
                 previewStatRow(String(localized: "Total Time"), value: formatTotalTime())
             }
-            .padding(20)
+            .padding(DSSpacing.xl)
             .background(
-                RoundedRectangle(cornerRadius: 16)
+                RoundedRectangle(cornerRadius: DSRadius.lg)
                     .fill(Color(uiColor: .secondarySystemBackground))
             )
             .blur(radius: 4)
@@ -79,23 +111,24 @@ struct TimerHistoryView: View {
                     .font(.title)
                     .foregroundStyle(.orange)
             )
-            .padding(.horizontal, 32)
+            .padding(.horizontal, DSSpacing.xxxl)
+            .accessibilityHidden(true)
 
             Button {
                 showPaywall = true
             } label: {
-                HStack(spacing: 8) {
+                HStack(spacing: DSSpacing.sm) {
                     ProBadge(small: true)
                     Text("Unlock with Pro", comment: "History unlock button")
                         .font(.headline)
                 }
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
+                .padding(.vertical, DSSpacing.md)
                 .background(Color.accentColor)
-                .cornerRadius(14)
+                .cornerRadius(DSRadius.md)
             }
-            .padding(.horizontal, 32)
+            .padding(.horizontal, DSSpacing.xxxl)
 
             Spacer()
             Spacer()
@@ -135,22 +168,25 @@ struct TimerHistoryView: View {
     }
 
     private func statRow(_ label: String, value: String, icon: String, color: Color) -> some View {
-        HStack(spacing: 12) {
+        HStack(spacing: DSSpacing.md) {
             Image(systemName: icon)
                 .font(.title3)
                 .foregroundStyle(color)
                 .frame(width: 28)
 
             Text(label)
-                .font(.subheadline)
+                .font(DSFont.callout)
 
             Spacer()
 
             Text(value)
-                .font(.subheadline.weight(.semibold))
+                .font(DSFont.callout.weight(.semibold))
                 .foregroundStyle(.primary)
         }
-        .padding(.vertical, 2)
+        .padding(.vertical, DSSpacing.xxs)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(label)
+        .accessibilityValue(value)
     }
 
     // MARK: - Records List (Pro)
@@ -178,13 +214,13 @@ struct TimerHistoryView: View {
     }
 
     private func recordRow(_ record: TimerRecord) -> some View {
-        HStack(spacing: 12) {
-            // 완료/중단 아이콘
+        HStack(spacing: DSSpacing.md) {
+            // 완료/중단 아이콘 (형태로도 구분 — 체크/엑스)
             Image(systemName: record.finished ? "checkmark.circle.fill" : "xmark.circle.fill")
                 .foregroundStyle(record.finished ? .green : .red)
                 .font(.title3)
 
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: DSSpacing.xs) {
                 // 설정 시간
                 HStack(spacing: 4) {
                     Text(formatSeconds(record.snapshotMainSeconds))
@@ -196,15 +232,8 @@ struct TimerHistoryView: View {
                     }
                 }
 
-                // 날짜
-                Text(record.date, style: .date)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                +
-                Text(" ")
-                    .font(.caption)
-                +
-                Text(record.date, style: .time)
+                // 날짜 + 시간
+                Text("\(record.date, style: .date) \(record.date, style: .time)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -212,16 +241,17 @@ struct TimerHistoryView: View {
             Spacer()
 
             // 실제 사용 시간
-            VStack(alignment: .trailing, spacing: 2) {
+            VStack(alignment: .trailing, spacing: DSSpacing.xxs) {
                 Text(formatSeconds(record.elapsedSeconds))
-                    .font(.caption.weight(.medium))
+                    .font(DSFont.caption.weight(.medium))
                     .foregroundStyle(.primary)
                 Text(record.finished ? String(localized: "completed") : String(localized: "stopped"))
-                    .font(.caption2)
+                    .font(DSFont.caption2)
                     .foregroundStyle(record.finished ? .green : .secondary)
             }
         }
-        .padding(.vertical, 2)
+        .padding(.vertical, DSSpacing.xxs)
+        .accessibilityElement(children: .combine)
     }
 
     // MARK: - Helpers

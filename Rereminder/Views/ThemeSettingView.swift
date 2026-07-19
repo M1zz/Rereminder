@@ -9,7 +9,6 @@ import SwiftUI
 
 struct ThemeSettingView: View {
     @ObservedObject private var theme = ThemeManager.shared
-    @State private var showPaywall = false
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 16), count: 5)
 
@@ -71,43 +70,18 @@ struct ThemeSettingView: View {
                 }
                 .padding(.vertical, 8)
             }
-
-            if !StoreManager.isProUser {
-                Section {
-                    Button {
-                        showPaywall = true
-                    } label: {
-                        HStack(spacing: 8) {
-                            ProBadge(small: true)
-                            Text("Unlock all themes with Pro")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .font(.caption2)
-                                .foregroundStyle(.tertiary)
-                        }
-                    }
-                }
-            }
         }
         .navigationTitle("Theme")
         .navigationBarTitleDisplayMode(.inline)
-        .paywallGate(isPresented: $showPaywall, feature: .labelColors)
     }
 
     @ViewBuilder
     private func themeButton(_ preset: ThemeManager.Theme) -> some View {
         let isSelected = theme.currentTheme.id == preset.id
-        let isLocked = theme.isLocked(preset)
 
         Button {
-            if isLocked {
-                showPaywall = true
-            } else {
-                withAnimation(.easeInOut(duration: 0.2)) {
-                    theme.select(preset)
-                }
+            withAnimation(.easeInOut(duration: 0.2)) {
+                theme.select(preset)
             }
         } label: {
             VStack(spacing: 6) {
@@ -120,13 +94,8 @@ struct ThemeSettingView: View {
                                 .strokeBorder(isSelected ? Color.white : Color.clear, lineWidth: 3)
                         )
                         .shadow(color: isSelected ? preset.color.opacity(0.5) : .clear, radius: 6)
-                        .opacity(isLocked ? 0.4 : 1.0)
 
-                    if isLocked {
-                        Image(systemName: "lock.fill")
-                            .font(.caption2)
-                            .foregroundStyle(.white)
-                    } else if isSelected {
+                    if isSelected {
                         Image(systemName: "checkmark")
                             .font(.caption.weight(.bold))
                             .foregroundStyle(.white)
@@ -135,14 +104,14 @@ struct ThemeSettingView: View {
 
                 Text(preset.name)
                     .font(.caption2)
-                    .foregroundStyle(isLocked ? .secondary : .primary)
+                    .foregroundStyle(.primary)
                     .lineLimit(1)
             }
         }
         .buttonStyle(.plain)
         .accessibilityLabel(preset.name)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
-        .accessibilityHint(isLocked ? String(localized: "Pro feature, tap to unlock") : String(localized: "Tap to select theme"))
+        .accessibilityHint(String(localized: "Tap to select theme"))
     }
 }
 

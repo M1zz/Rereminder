@@ -100,7 +100,7 @@ struct TimerTemplateView: View {
             onSelect(timer)
             dismiss()
         } label: {
-            HStack(spacing: 12) {
+            HStack(spacing: DSSpacing.md) {
                 // 즐겨찾기 아이콘
                 Button {
                     toggleFavorite(timer)
@@ -108,70 +108,109 @@ struct TimerTemplateView: View {
                     Image(systemName: timer.isFavorite ? "star.fill" : "star")
                         .foregroundStyle(timer.isFavorite ? .yellow : .gray)
                         .font(.title3)
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(timer.isFavorite ? String(localized: "Remove from favorites") : String(localized: "Add to favorites"))
 
-                VStack(alignment: .leading, spacing: 6) {
-                    HStack(spacing: 8) {
-                        // Label 태그
+                VStack(alignment: .leading, spacing: DSSpacing.xs) {
+                    // 1행: 템플릿 이름이 주인공, 라벨은 색 칩으로 보조
+                    HStack(spacing: DSSpacing.sm) {
+                        Text(timer.name.isEmpty ? mmssText(timer.mainSeconds) : timer.name)
+                            .font(DSFont.body.weight(.semibold))
+                            .foregroundStyle(.primary)
+                            .lineLimit(1)
+
                         if !timer.label.isEmpty {
                             Text(timer.label)
-                                .font(.caption)
+                                .font(DSFont.caption)
                                 .fontWeight(.semibold)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 3)
+                                .padding(.horizontal, DSSpacing.sm)
+                                .padding(.vertical, DSSpacing.xxs + 1)
                                 .background(Color(hex:timer.colorHex).opacity(0.2))
                                 .foregroundStyle(Color(hex:timer.colorHex))
-                                .cornerRadius(6)
+                                .cornerRadius(DSRadius.sm)
+                        }
+                    }
+
+                    // 2행: 시간 정보를 심볼 + M:SS로 (다이얼 화면과 같은 시각 언어)
+                    HStack(spacing: DSSpacing.md) {
+                        HStack(spacing: DSSpacing.xxs) {
+                            Image(systemName: "timer")
+                                .font(.caption2)
+                            Text(mmssText(timer.mainSeconds))
+                                .font(DSFont.caption.monospacedDigit())
+                        }
+                        .foregroundStyle(.secondary)
+
+                        if !timer.prealertOffsetsSec.isEmpty {
+                            HStack(spacing: DSSpacing.xxs) {
+                                Image(systemName: "bell.fill")
+                                    .font(.caption2)
+                                    .foregroundStyle(DSColor.marker)
+                                Text(
+                                    timer.prealertOffsetsSec
+                                        .sorted()
+                                        .map { mmssText($0) }
+                                        .joined(separator: ", ")
+                                )
+                                .font(DSFont.caption.monospacedDigit())
+                                .foregroundStyle(.secondary)
+                            }
                         }
 
-                        // 사용 횟수
                         if timer.usageCount > 0 {
-                            HStack(spacing: 2) {
+                            HStack(spacing: DSSpacing.xxs) {
                                 Image(systemName: "play.circle.fill")
                                     .font(.caption2)
                                 Text("\(timer.usageCount)")
-                                    .font(.caption)
+                                    .font(DSFont.caption)
                             }
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(.tertiary)
                         }
                     }
-
-                    // Timer Info
-                    let mMain = timer.mainSeconds / 60
-                    let sMain = timer.mainSeconds % 60
-                    let preList = timer.prealertOffsetsSec
-                        .sorted()
-                        .map { String(localized: "\($0/60) min") }
-                        .joined(separator: ", ")
-
-                    Text(sMain > 0 ? "Main \(mMain) min \(sMain) sec" : "Main \(mMain) min")
-                        .font(.body)
-                        .fontWeight(.medium)
-                        .foregroundStyle(.primary)
-
-                    if !preList.isEmpty {
-                        Text("Pre-alert: \(preList)")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
                 }
+                .accessibilityElement(children: .combine)
 
                 Spacer()
 
-                Image(systemName: "chevron.right")
-                    .font(.caption)
-                    .foregroundStyle(.tertiary)
+                // 탭 결과를 명시: 이 템플릿을 타이머에 적용
+                Text("Apply")
+                    .font(DSFont.caption.weight(.semibold))
+                    .padding(.horizontal, DSSpacing.sm)
+                    .padding(.vertical, DSSpacing.xs)
+                    .background(Capsule().fill(Color.accentColor.opacity(0.15)))
+                    .foregroundStyle(Color.accentColor)
             }
-            .padding(.vertical, 4)
+            .padding(.vertical, DSSpacing.xs)
+        }
+        .accessibilityHint(String(localized: "Applies this template to the timer"))
+        .contextMenu {
+            Button {
+                startEdit(timer)
+            } label: {
+                Label("Edit", systemImage: "pencil")
+            }
+            Button {
+                toggleFavorite(timer)
+            } label: {
+                Label(
+                    timer.isFavorite
+                        ? String(localized: "Remove from favorites")
+                        : String(localized: "Add to favorites"),
+                    systemImage: timer.isFavorite ? "star.slash" : "star"
+                )
+            }
+            Button(role: .destructive) {
+                delete(timer)
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
         }
         .swipeActions(edge: .leading, allowsFullSwipe: false) {
             Button {
-                editingTimer = timer
-                editName = timer.name
-                editLabel = timer.label
-                editColorHex = timer.colorHex
+                startEdit(timer)
             } label: {
                 Label("Edit", systemImage: "pencil")
             }
@@ -184,6 +223,18 @@ struct TimerTemplateView: View {
                 Image(systemName: "trash")
             }
         }
+    }
+
+    private func startEdit(_ timer: Timer) {
+        editingTimer = timer
+        editName = timer.name
+        editLabel = timer.label
+        editColorHex = timer.colorHex
+    }
+
+    /// M:SS 표기 (앱 전체 표기 통일)
+    private func mmssText(_ sec: Int) -> String {
+        String(format: "%d:%02d", sec / 60, sec % 60)
     }
 
     @ViewBuilder
@@ -252,42 +303,27 @@ struct TimerTemplateView: View {
 
     @ViewBuilder
     private func colorButton(label: String, colorHex: String) -> some View {
-        let isDefault = colorHex == "#007AFF"
-        let isLocked = !isDefault && !ProGate.canUseColor(colorHex)
-
         Button {
-            if isLocked {
-                paywallFeature = .labelColors
-                showPaywall = true
-            } else {
-                editLabel = label
-                editColorHex = colorHex
-            }
+            // 색만 선택 — 라벨 텍스트는 사용자가 입력한 값 유지
+            editColorHex = colorHex
         } label: {
-            VStack(spacing: 4) {
-                ZStack {
-                    Circle()
-                        .fill(Color(hex:colorHex))
-                        .frame(width: 40, height: 40)
-                        .overlay(
-                            Circle()
-                                .strokeBorder(editColorHex == colorHex ? Color.primary : Color.clear, lineWidth: 2)
-                        )
-                        .opacity(isLocked ? 0.4 : 1.0)
-
-                    if isLocked {
-                        Image(systemName: "lock.fill")
-                            .font(.caption)
-                            .foregroundStyle(.white)
-                    }
-                }
+            VStack(spacing: DSSpacing.xs) {
+                Circle()
+                    .fill(Color(hex:colorHex))
+                    .frame(width: 44, height: 44)
+                    .overlay(
+                        Circle()
+                            .strokeBorder(editColorHex == colorHex ? Color.primary : Color.clear, lineWidth: 2)
+                    )
 
                 Text(label)
-                    .font(.caption2)
-                    .foregroundStyle(isLocked ? .secondary : .primary)
+                    .font(DSFont.caption2)
+                    .foregroundStyle(.primary)
             }
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(String(localized: "\(label) color"))
+        .accessibilityAddTraits(editColorHex == colorHex ? [.isSelected] : [])
     }
 
     private func toggleFavorite(_ timer: Timer) {

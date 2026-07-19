@@ -12,6 +12,8 @@ struct ClockMarkers: View {
     var remaining: CGFloat
     var markers: [CGFloat]
     var markerOffsets: [Int] = []
+    var draggingIndex: Int? = nil
+    var draggingRatio: CGFloat? = nil
     var dotSize: CGFloat = 12
     var inset: CGFloat = 3
     var upcoming: Bool = true
@@ -44,7 +46,12 @@ struct ClockMarkers: View {
     }
 
     private func markerView(marker: CGFloat, index: Int, radius: CGFloat, centerX: CGFloat, centerY: CGFloat) -> some View {
-        let t = max(0, min(1, marker))
+        let t: CGFloat
+        if index == draggingIndex, let dragRatio = draggingRatio {
+            t = max(0, min(1, dragRatio))
+        } else {
+            t = max(0, min(1, marker))
+        }
         let angle = -90.0 + Double(t * 360.0)
         let theta = angle * .pi / 180.0
         let isUpcoming = t >= remaining
@@ -52,7 +59,7 @@ struct ClockMarkers: View {
         return ZStack {
             // 얇은 사각형 마크 (높이는 Timer 선 두께와 동일)
             Rectangle()
-                .fill(Color(red: 1.0, green: 0.6, blue: 0.0))  // 선명한 오렌지색
+                .fill(DSColor.marker)  // 사전 알림 마커 색
                 .frame(width: 4, height: dotSize)  // 폭 4 (2배), 높이는 Timer 선 두께
                 .rotationEffect(.degrees(angle + 90))  // 원의 중심을 향하도록 먼저 회전
                 .position(
@@ -88,9 +95,14 @@ struct ClockMarkers: View {
             ? radius - dotSize * 1.2  // 짝수: 원 안쪽 (더 가까이)
             : radius + dotSize * 1.5  // 홀수: 원 바깥
 
-        return Text("\(minutes)min")
+        let offsetSec = index < markerOffsets.count ? markerOffsets[index] : minutes * 60
+        let mins = offsetSec / 60
+        let secs = offsetSec % 60
+        let label = secs == 0 ? "\(mins)min" : String(format: "%d:%02d", mins, secs)
+
+        return Text(label)
             .font(.system(size: 10, weight: .bold, design: .rounded))
-            .foregroundColor(Color(red: 1.0, green: 0.6, blue: 0.0))  // 선명한 오렌지색
+            .foregroundColor(DSColor.marker)  // 사전 알림 마커 색
             .position(
                 x: centerX + CGFloat(cos(theta)) * labelDistance,
                 y: centerY + CGFloat(sin(theta)) * labelDistance

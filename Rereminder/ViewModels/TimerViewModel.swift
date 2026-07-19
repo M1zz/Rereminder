@@ -11,7 +11,7 @@
 import SwiftUI
 import SwiftData
 
-#if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
+#if os(iOS) && !targetEnvironment(macCatalyst)
 import ActivityKit
 #endif
 
@@ -29,7 +29,10 @@ final class TimerViewModel: ObservableObject {
     private var currentTemplate: Timer?
     private var timerStartTime: Date?
 
-    #if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
+    /// 현재 타이머의 라벨 (예: "Mentoring") — 없으면 빈 문자열
+    var currentLabel: String { currentTemplate?.label ?? "" }
+
+    #if os(iOS) && !targetEnvironment(macCatalyst)
     private var currentActivity: Activity<TimerActivityAttributes>?
     #endif
 
@@ -51,12 +54,23 @@ final class TimerViewModel: ObservableObject {
 
         engine.onFinish = { [weak self] in
             guard let self else { return }
-            self.state = .overtime
             ring()
             let message = self.currentTemplate?.getFinishMessage() ?? "Timer finished"
             self.showToast?(message)
-            DispatchQueue.main.async { self.onTimerFinish?() }
             self.appStateManager?.sendNotificationIfNeeded(message)
+
+            switch ProGate.evaluate(.overtimeTracking) {
+            case .allowed, .allowedWithTrial:
+                // Pro 또는 trial 가능: 오버타임 카운트 계속
+                ProGate.recordUsage(.overtimeTracking)
+                self.state = .overtime
+            case .blocked:
+                // Trial 소진: 00:00에서 정지
+                self.state = .finished
+                self.engine.pause()
+                self.endLiveActivity()
+            }
+            DispatchQueue.main.async { self.onTimerFinish?() }
         }
     }
 
@@ -117,7 +131,8 @@ final class TimerViewModel: ObservableObject {
         currentTemplate = template
         engine.configure(
             mainSeconds: template.mainSeconds,
-            prealertOffsetsSec: template.prealertOffsetsSec
+            prealertOffsetsSec: template.prealertOffsetsSec,
+            name: template.name
         )
         state = .idle
         remaining = TimeInterval(template.mainSeconds)
@@ -134,6 +149,12 @@ final class TimerViewModel: ObservableObject {
             : 1.0
         engine.timeMultiplier = multiplier
 
+        // 5+5 trial 카운트: 2개 이상의 예비 알림으로 시작 시
+        if let template = currentTemplate,
+           template.prealertOffsetsSec.count > ProGate.freePrealertLimit {
+            ProGate.recordUsage(.unlimitedPrealerts)
+        }
+
         engine.start()
         state = .running
 
@@ -149,6 +170,8 @@ final class TimerViewModel: ObservableObject {
                 prealertOffsets: template.prealertOffsetsSec
             )
         }
+
+        pushCloudRunning()
     }
 
     func pause() {
@@ -156,6 +179,16 @@ final class TimerViewModel: ObservableObject {
         state = .paused
         updateLiveActivity()
         WatchConnectivityManager.shared.sendTimerPause()
+
+        // 테스트 모드(가속) 타이머는 endDate 의미가 달라 동기화 제외
+        if engine.timeMultiplier == 1.0, let cfg = engine.config {
+            CloudTimerSyncManager.shared.pushPaused(
+                mainSeconds: Int(cfg.mainDuration),
+                prealertOffsets: cfg.prealertOffsetsSec.map { Int($0) },
+                name: cfg.name,
+                remaining: max(0, remaining)
+            )
+        }
     }
 
     func resume() {
@@ -163,14 +196,84 @@ final class TimerViewModel: ObservableObject {
         state = .running
         updateLiveActivity()
         WatchConnectivityManager.shared.sendTimerResume(remainingDuration: remaining)
+        pushCloudRunning()
     }
 
     func stop() {
-        saveTimerRecord(finished: state == .overtime)
+        let wasSyncable = engine.timeMultiplier == 1.0
+        saveTimerRecord(finished: state == .overtime || state == .finished)
         engine.stop()
         state = .idle
         endLiveActivity()
         WatchConnectivityManager.shared.sendTimerStop()
+        timerStartTime = nil
+
+        if wasSyncable {
+            CloudTimerSyncManager.shared.pushIdle()
+        }
+    }
+
+    private func pushCloudRunning() {
+        guard engine.timeMultiplier == 1.0,
+              let cfg = engine.config,
+              let end = engine.endDate else { return }
+        CloudTimerSyncManager.shared.pushRunning(
+            mainSeconds: Int(cfg.mainDuration),
+            prealertOffsets: cfg.prealertOffsetsSec.map { Int($0) },
+            name: cfg.name,
+            endDate: end
+        )
+    }
+
+    // MARK: - Cloud Sync 적용 (다른 기기에서 제어된 상태 반영, 재전송 없음)
+
+    func applyCloudRunning(mainSeconds: Int, prealertOffsets: [Int], name: String, endDate: Date) {
+        let template = Timer(
+            name: name,
+            mainSeconds: mainSeconds,
+            prealertOffsetsSec: prealertOffsets
+        )
+        currentTemplate = template
+        timerStartTime = endDate.addingTimeInterval(-TimeInterval(mainSeconds))
+
+        engine.applyRemoteRunning(
+            mainSeconds: mainSeconds,
+            prealertOffsetsSec: prealertOffsets,
+            name: name,
+            endDate: endDate
+        )
+        state = engine.state
+        remaining = endDate.timeIntervalSinceNow
+
+        if state == .running || state == .overtime {
+            startLiveActivity(template: template, endDate: endDate)
+        }
+    }
+
+    func applyCloudPause(mainSeconds: Int, prealertOffsets: [Int], name: String, remaining r: TimeInterval) {
+        if currentTemplate == nil {
+            currentTemplate = Timer(
+                name: name,
+                mainSeconds: mainSeconds,
+                prealertOffsetsSec: prealertOffsets
+            )
+        }
+        engine.applyRemotePause(
+            mainSeconds: mainSeconds,
+            prealertOffsetsSec: prealertOffsets,
+            name: name,
+            remaining: r
+        )
+        state = .paused
+        remaining = max(0, r)
+        updateLiveActivity()
+    }
+
+    func applyCloudStop() {
+        guard state != .idle else { return }
+        engine.stop()
+        state = .idle
+        endLiveActivity()
         timerStartTime = nil
     }
 
@@ -208,19 +311,22 @@ final class TimerViewModel: ObservableObject {
 
     // MARK: - Live Activity
 
-    private func startLiveActivity(template: Timer) {
-        #if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
+    /// endDate를 넘기면 그 절대 시각 기준으로 표시 (다른 기기에서 시작된 타이머 반영용)
+    private func startLiveActivity(template: Timer, endDate remoteEndDate: Date? = nil) {
+        #if os(iOS) && !targetEnvironment(macCatalyst)
         guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
+
+        let duration = TimeInterval(template.mainSeconds)
+        let endDate = remoteEndDate ?? Date().addingTimeInterval(duration)
 
         let attributes = TimerActivityAttributes(
             timerName: template.name,
-            totalDuration: TimeInterval(template.mainSeconds),
-            startTime: Date()
+            totalDuration: duration,
+            startTime: endDate.addingTimeInterval(-duration)
         )
 
-        let endDate = Date().addingTimeInterval(TimeInterval(template.mainSeconds))
         let initialState = TimerActivityAttributes.ContentState(
-            remainingTime: TimeInterval(template.mainSeconds),
+            remainingTime: max(0, endDate.timeIntervalSinceNow),
             isPaused: false,
             timestamp: Date(),
             endDate: endDate
@@ -239,7 +345,7 @@ final class TimerViewModel: ObservableObject {
     }
 
     private func updateLiveActivity() {
-        #if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
+        #if os(iOS) && !targetEnvironment(macCatalyst)
         guard let activity = currentActivity else { return }
 
         let endDate = state == .paused ? nil : Date().addingTimeInterval(remaining)
@@ -255,7 +361,7 @@ final class TimerViewModel: ObservableObject {
     }
 
     private func endLiveActivity() {
-        #if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
+        #if os(iOS) && !targetEnvironment(macCatalyst)
         guard let activity = currentActivity else { return }
         Task {
             await activity.end(nil, dismissalPolicy: .immediate)

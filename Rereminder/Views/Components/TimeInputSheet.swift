@@ -23,15 +23,15 @@ struct TimeInputSheet: View {
 
     var body: some View {
         NavigationView {
-            VStack(spacing: 24) {
+            VStack(spacing: DSSpacing.xxl) {
                 Text("Enter Time Manually")
-                    .font(.headline)
+                    .font(DSFont.sectionHeader)
 
-                HStack(spacing: 16) {
+                HStack(spacing: DSSpacing.lg) {
                     // min 입력
                     VStack {
                         Text("min")
-                            .font(.subheadline)
+                            .font(DSFont.callout)
                             .foregroundStyle(.secondary)
                         Picker("min", selection: $inputMinutes) {
                             ForEach(0..<61) { minute in
@@ -40,16 +40,19 @@ struct TimeInputSheet: View {
                         }
                         .pickerStyle(.wheel)
                         .frame(width: 100)
+                        .accessibilityLabel(String(localized: "Minutes"))
+                        .accessibilityValue(String(localized: "\(inputMinutes) minutes"))
                     }
 
                     Text(":")
                         .font(.largeTitle)
                         .foregroundStyle(.secondary)
+                        .accessibilityHidden(true)
 
                     // sec 입력
                     VStack {
                         Text("sec")
-                            .font(.subheadline)
+                            .font(DSFont.callout)
                             .foregroundStyle(.secondary)
                         Picker("sec", selection: $inputSeconds) {
                             ForEach(0..<60) { second in
@@ -58,6 +61,8 @@ struct TimeInputSheet: View {
                         }
                         .pickerStyle(.wheel)
                         .frame(width: 100)
+                        .accessibilityLabel(String(localized: "Seconds"))
+                        .accessibilityValue(String(localized: "\(inputSeconds) seconds"))
                     }
                 }
 
@@ -67,12 +72,12 @@ struct TimeInputSheet: View {
                     isPresented = false
                 }) {
                     Text("Apply")
-                        .font(.headline)
+                        .font(DSFont.sectionHeader)
                         .frame(maxWidth: .infinity)
-                        .padding()
+                        .frame(minHeight: 44)
                         .background(Color.accentColor)
                         .foregroundStyle(.white)
-                        .cornerRadius(12)
+                        .cornerRadius(DSRadius.md)
                 }
                 .padding(.horizontal)
             }

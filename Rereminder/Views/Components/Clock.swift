@@ -22,7 +22,7 @@ struct Clock: View {
     var body: some View {
         ZStack {
             Circle()
-                .stroke(.plain.opacity(0.5), lineWidth: 8)
+                .stroke(DSColor.plain.opacity(DSOpacity.track), lineWidth: 8)
 
             ClockTrack(remaining: ratio)
                 .stroke(
@@ -42,8 +42,25 @@ struct Clock: View {
                 upcoming: true
             )
         }
-        .frame(width: 240, height: 240)
-        .animation(.easeInOut(duration: 0.15), value: ratio)
+        .frame(width: size, height: size)
+        .dsAnimation(.easeInOut(duration: 0.15), value: ratio)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilityTimeLabel)
+        .accessibilityValue(String(localized: "\(Int(ratio * 100)) percent remaining"))
+        .accessibilityAddTraits(.updatesFrequently)
+    }
+
+    private var accessibilityTimeLabel: String {
+        let t = Int(remaining.rounded())
+        if t < 0 {
+            let absT = abs(t)
+            let m = absT / 60
+            let s = absT % 60
+            return String(localized: "Timer, \(m) minutes \(s) seconds overtime")
+        }
+        let m = t / 60
+        let s = t % 60
+        return String(localized: "Timer, \(m) minutes \(s) seconds remaining")
     }
 
     private func mmss(from sec: TimeInterval) -> String {

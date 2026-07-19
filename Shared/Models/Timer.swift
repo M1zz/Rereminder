@@ -19,6 +19,8 @@ final class Timer {
     var label: String = ""  // Label (예: "Presentation", "Mentoring", "Meeting")
     var colorHex: String = "#007AFF"  // Label Color (기본: 파란색)
     var isFavorite: Bool = false  // 즐겨찾기 여부
+    var isPresentation: Bool = false  // 발표 모드 여부
+    var sectionsData: Data? = nil  // JSON 인코딩된 [PresentationSection]
     var createdAt: Date
     var lastUsedAt: Date?  // 마지막 사용 시간
     @Relationship(deleteRule: .cascade, inverse: \TimerRecord.template)
@@ -34,6 +36,8 @@ final class Timer {
         label: String = "",
         colorHex: String = "#007AFF",
         isFavorite: Bool = false,
+        isPresentation: Bool = false,
+        sectionsData: Data? = nil,
         createdAt: Date = .now,
         lastUsedAt: Date? = nil
     ) {
@@ -46,9 +50,27 @@ final class Timer {
         self.label = label
         self.colorHex = colorHex
         self.isFavorite = isFavorite
+        self.isPresentation = isPresentation
+        self.sectionsData = sectionsData
         self.createdAt = createdAt
         self.lastUsedAt = lastUsedAt
         _ = validateInPlace()
+    }
+
+    /// 발표 섹션 배열 (JSON encode/decode)
+    var sections: [PresentationSection] {
+        get {
+            guard let data = sectionsData else { return [] }
+            return (try? JSONDecoder().decode([PresentationSection].self, from: data)) ?? []
+        }
+        set {
+            sectionsData = try? JSONEncoder().encode(newValue)
+        }
+    }
+
+    /// 전체 섹션 합산 시간
+    var totalSectionDuration: Int {
+        sections.reduce(0) { $0 + $1.durationSeconds }
     }
 
     @discardableResult
@@ -65,7 +87,7 @@ final class Timer {
 
 extension Timer {
     // prealert time components
-    static let presetOffsetsSec: [Int] = [60, 180, 300, 600, 900, 1800]
+    static let presetOffsetsSec: [Int] = [30, 45, 60, 180, 300, 600, 900, 1800]
 
     // 프리셋 Label Color
     static let presetColors: [String: String] = [
@@ -85,6 +107,9 @@ extension Timer {
             return customMessage
         }
         // 기본 메시지
+        if offsetSec < 60 {
+            return "\(offsetSec) sec remaining"
+        }
         let minutes = offsetSec / 60
         return "\(minutes) min remaining"
     }

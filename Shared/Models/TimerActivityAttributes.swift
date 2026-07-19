@@ -7,7 +7,7 @@
 
 import Foundation
 
-#if canImport(ActivityKit) && !targetEnvironment(macCatalyst)
+#if os(iOS) && !targetEnvironment(macCatalyst)
 import ActivityKit
 
 struct TimerActivityAttributes: ActivityAttributes {

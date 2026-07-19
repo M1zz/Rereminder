@@ -10,6 +10,30 @@ import SwiftUI
 import UIKit
 #endif
 
+enum AppearanceMode: String, CaseIterable, Identifiable {
+    case system = "system"
+    case light = "light"
+    case dark = "dark"
+
+    var id: String { rawValue }
+
+    var displayName: String {
+        switch self {
+        case .system: return String(localized: "System")
+        case .light: return String(localized: "Light")
+        case .dark: return String(localized: "Dark")
+        }
+    }
+
+    var colorScheme: ColorScheme? {
+        switch self {
+        case .system: return nil
+        case .light: return .light
+        case .dark: return .dark
+        }
+    }
+}
+
 @MainActor
 final class ThemeManager: ObservableObject {
 
@@ -36,8 +60,6 @@ final class ThemeManager: ObservableObject {
             Theme(id: "white",   name: "Mono",     color: Color(hex: "E5E5EA"), hex: "E5E5EA"),
         ]
 
-        /// 무료로 사용 가능한 테마 (첫 3개)
-        static let freeIDs: Set<String> = ["blue", "indigo", "green"]
     }
 
     // MARK: - State
@@ -48,13 +70,22 @@ final class ThemeManager: ObservableObject {
         }
     }
 
+    @Published var appearanceMode: AppearanceMode {
+        didSet {
+            UserDefaults.standard.set(appearanceMode.rawValue, forKey: "appearanceMode")
+        }
+    }
+
     var accentColor: Color { currentTheme.color }
+    var colorScheme: ColorScheme? { appearanceMode.colorScheme }
 
     // MARK: - Init
 
     private init() {
         let savedID = UserDefaults.standard.string(forKey: "selectedThemeID") ?? "blue"
         currentTheme = Theme.presets.first { $0.id == savedID } ?? Theme.presets[0]
+        let savedMode = UserDefaults.standard.string(forKey: "appearanceMode") ?? "dark"
+        appearanceMode = AppearanceMode(rawValue: savedMode) ?? .dark
     }
 
     // MARK: - Theme Selection
@@ -86,9 +117,6 @@ final class ThemeManager: ObservableObject {
     }
     #endif
 
-    func isLocked(_ theme: Theme) -> Bool {
-        !StoreManager.isProUser && !Theme.freeIDs.contains(theme.id)
-    }
 }
 
 // MARK: - Color hex init

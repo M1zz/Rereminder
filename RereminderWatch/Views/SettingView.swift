@@ -17,6 +17,7 @@ struct SettingView: View {
     @StateObject private var settingViewModel = SettingViewModel()
     @State private var path: [NavigationTarget] = []
     @State private var isNavigating = false
+    @State private var restoredTimerVM: TimerViewModel?
 
     var totalTime: Int {
         settingViewModel.time.convertedSecond
@@ -26,12 +27,12 @@ struct SettingView: View {
     
     var body: some View {
         NavigationStack(path: $path) {
-            VStack(spacing: 16) {
+            VStack(spacing: DSSpacing.lg) {
                 // 타이틀
                 Text("Timer Duration", comment: "Timer Duration")
-                    .font(.system(size: 14, weight: .medium, design: .rounded))
+                    .dsScaledFont(14, weight: .medium, design: .rounded, relativeTo: .footnote, maxSize: 20)
                     .foregroundStyle(.secondary)
-                    .padding(.top, 8)
+                    .padding(.top, DSSpacing.sm)
 
                 TimePicker()
 
@@ -39,13 +40,22 @@ struct SettingView: View {
 
                 NextButton()
                     .buttonStyle(.borderedProminent)
-                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                    .padding(.horizontal, 12)
-                    .padding(.bottom, 24)
+                    .clipShape(RoundedRectangle(cornerRadius: DSRadius.sm + 4))
+                    .padding(.horizontal, DSSpacing.md)
+                    .padding(.bottom, DSSpacing.xxl)
             }
             .onAppear {
                 if !(minuteRange.contains(settingViewModel.time.minute)) || settingViewModel.time.minute == 0 {
                     settingViewModel.time.minute = 30
+                }
+                // Cold launch 타이머 복원
+                if path.isEmpty, let vm = TimerViewModel.restoreFromSavedState() {
+                    restoredTimerVM = vm
+                }
+            }
+            .fullScreenCover(item: $restoredTimerVM) { vm in
+                NavigationStack {
+                    TimerView(timerViewModel: vm, path: .constant([]))
                 }
             }
             .navigationDestination(for: NavigationTarget.self) { target in
@@ -56,14 +66,29 @@ struct SettingView: View {
     
     @ViewBuilder
     private func TimePicker() -> some View {
-        HStack(alignment: .center, spacing: 8) {
+        HStack(alignment: .center, spacing: DSSpacing.sm) {
             MinuteWheel(selectedMinute: $settingViewModel.time.minute, range: minuteRange, selectionOffset: 0)
                 .frame(width: 90, height: 90)
+                .accessibilityElement(children: .ignore)
                 .accessibilityLabel(String(localized: "Timer duration"))
                 .accessibilityValue(String(localized: "\(settingViewModel.time.minute) minutes"))
-            
+                .accessibilityAdjustableAction { direction in
+                    switch direction {
+                    case .increment:
+                        if settingViewModel.time.minute < minuteRange.upperBound {
+                            settingViewModel.time.minute += 1
+                        }
+                    case .decrement:
+                        if settingViewModel.time.minute > minuteRange.lowerBound {
+                            settingViewModel.time.minute -= 1
+                        }
+                    @unknown default:
+                        break
+                    }
+                }
+
             Text("min", comment: "min")
-                .font(.system(size: 40, weight: .semibold, design: .rounded))
+                .dsScaledFont(40, weight: .semibold, design: .rounded, relativeTo: .largeTitle, maxSize: 52)
                 .accessibilityHidden(true)
         }
     }
@@ -171,11 +196,13 @@ struct SettingView: View {
 
         var body: some View {
             Text("\(minute)")
-                .font(.system(size: isSelected ? 40 : 34, weight: isSelected ? .semibold : .regular, design: .rounded))
+                .dsScaledFont(isSelected ? 40 : 34, weight: isSelected ? .semibold : .regular, design: .rounded, relativeTo: .title, maxSize: isSelected ? 46 : 40)
                 .monospacedDigit()
-                .foregroundStyle(isSelected ? Color.white : Color.gray.opacity(0.5))
+                .minimumScaleFactor(0.6)
+                .foregroundStyle(isSelected ? Color.white : Color.gray.opacity(DSOpacity.track))
                 .frame(maxWidth: .infinity)
-                .animation(.easeInOut(duration: 0.15), value: isSelected)
+                .dsAnimation(.easeInOut(duration: 0.15), value: isSelected)
+                .accessibilityHidden(true)
         }
     }
 }

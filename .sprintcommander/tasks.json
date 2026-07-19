@@ -1,0 +1,782 @@
+[
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "CC8E4E4F-C5CE-41C7-B8C1-583404E447B6",
+    "priority" : "high",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 2,
+    "tags" : [
+      "Bug",
+      "Core"
+    ],
+    "title" : "Live Activity Intent force unwrap 크래시 수정"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "3826CFD3-6403-4380-AA07-16A978F242D8",
+    "priority" : "high",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 3,
+    "tags" : [
+      "Bug",
+      "Core"
+    ],
+    "title" : "StoreManager IAP 검증 실패 시 사용자에게 피드백 제공"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "5A2833BF-82A9-461A-B4EA-009F4843687F",
+    "priority" : "high",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 1,
+    "tags" : [
+      "Bug",
+      "iOS"
+    ],
+    "title" : "앱 공유 URL을 toki에서 rereminder로 변경"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "53E3BADA-32A6-4A52-8E81-CD95B53731E4",
+    "priority" : "high",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 1,
+    "tags" : [
+      "Bug",
+      "iOS"
+    ],
+    "title" : "ReviewRequestManager 앱스토어 리뷰 URL에 잘못된 App ID 수정"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "3BEAC306-0544-4BCC-B530-54F7E3468B21",
+    "priority" : "high",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 2,
+    "tags" : [
+      "Bug",
+      "Core"
+    ],
+    "title" : "OpenAlarmAppIntent가 앱 열 때 타이머를 중지시키는 버그 수정"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "A30CB2C7-9572-469B-9F83-DFB9AD6D9E81",
+    "priority" : "high",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 2,
+    "tags" : [
+      "Bug",
+      "Core"
+    ],
+    "title" : "Watch NotificationService 날짜 컴포넌트 누락으로 알림이 매일 반복되는 버그 수정"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "081CAB03-AFA7-497D-8E97-2082CBB57FCE",
+    "priority" : "high",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 2,
+    "tags" : [
+      "Bug",
+      "Core"
+    ],
+    "title" : "Watch SetNotiView 사전알림 시간 계산 오류 수정 (타이머 종료 기준으로 변경)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "3D70CF81-EF67-408F-A30C-373FFBD3CB01",
+    "priority" : "high",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 1,
+    "tags" : [
+      "Bug",
+      "Core"
+    ],
+    "title" : "Watch→iOS 사전알림 오프셋 60배 곱하기 버그 수정 (TimerScreenViewModel)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "C668EA46-311B-447D-ABCA-9D104713BB7F",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 3,
+    "tags" : [
+      "Refactor",
+      "Core"
+    ],
+    "title" : "SwiftData save() 에러 핸들링 개선 (try? 제거)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "A07022A8-94DF-45A2-9634-CA49E518F578",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 3,
+    "tags" : [
+      "Feature",
+      "Core"
+    ],
+    "title" : "TimerEngine 알림 메시지 다국어 지원"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "485F611C-CF40-4FD4-9A40-0C245DEC0497",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 2,
+    "tags" : [
+      "Feature",
+      "UI"
+    ],
+    "title" : "TimerAlertView 하드코딩 문자열 로컬라이징"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "11697042-379D-44D2-8C8C-03D0E80EE29B",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 2,
+    "tags" : [
+      "Feature",
+      "UI"
+    ],
+    "title" : "TimerHistoryView 하드코딩 문자열 로컬라이징"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "5F81F60A-137F-4AE9-ADEE-4FD7702CE084",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 3,
+    "tags" : [
+      "Feature",
+      "UI"
+    ],
+    "title" : "Watch 앱 접근성(Accessibility) 레이블 추가"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "BD07AE50-BC04-4C6B-A482-D94EB43EF9DE",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 5,
+    "tags" : [
+      "Feature",
+      "UI"
+    ],
+    "title" : "iOS 앱 주요 뷰 접근성 개선 (Alert, History, Theme, Template, Paywall)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "A159C6D9-4B04-4BB8-B0E0-83DBA583D99E",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 1,
+    "tags" : [
+      "Bug",
+      "Core"
+    ],
+    "title" : "Watch TimerViewModel 리테인 사이클 수정 (Timer 클로저 weak self)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "8BDE70E6-8B37-4619-8E65-207DA3C27702",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 2,
+    "tags" : [
+      "Refactor",
+      "Core"
+    ],
+    "title" : "WatchConnectivityManager sendTimer* 중복 보일러플레이트 추출"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "D5AD8DD3-324B-47A0-821D-6B75EAAB56B8",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 5,
+    "tags" : [
+      "Refactor",
+      "UI"
+    ],
+    "title" : "TimerMainView 분리 (539줄 → Clock, PrealertSection, ButtonRow, StatusIndicator)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "5CCDCABF-7557-4501-A85D-E58D0EAB74A3",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 2,
+    "tags" : [
+      "Performance",
+      "Core"
+    ],
+    "title" : "nextAlertText\/markers 연산 프로퍼티 성능 최적화 (정렬 캐싱)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "1CBF5BE1-5310-48BD-B5AA-9C0E619404C7",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 1,
+    "tags" : [
+      "Refactor",
+      "UI"
+    ],
+    "title" : "colorFromHex 중복 코드 통합 (TimerTemplateView → ThemeManager 확장 사용)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "C3C4713A-DD47-438F-B1BE-41DAFD357406",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 3,
+    "tags" : [
+      "Feature",
+      "UI"
+    ],
+    "title" : "TimerHistoryView 50개 제한에 페이지네이션 또는 안내 문구 추가"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "43B75B81-34DB-44FC-936C-9692656796AD",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 1,
+    "tags" : [
+      "Refactor",
+      "Core"
+    ],
+    "title" : "TimerEngine 알림 접두사 toki → rereminder 리브랜딩"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "AF7A048C-9541-43C4-913A-8A738425F7A4",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 5,
+    "tags" : [
+      "Feature",
+      "UI"
+    ],
+    "title" : "홈 화면 위젯 실제 타이머 상태 표시 구현 (Xcode 템플릿 교체)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "13137051-F3D5-44F8-A27A-0078632F167A",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 2,
+    "tags" : [
+      "Bug",
+      "UI"
+    ],
+    "title" : "Control Center 위젯 실제 타이머 상태 반영 (isRunning 항상 true 수정)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "5B5D6F76-2D1E-4324-9C61-86F6AA31814F",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 3,
+    "tags" : [
+      "Bug",
+      "Core"
+    ],
+    "title" : "Keychain Pro 상태 저장 실패 시 사일런트 손실 방지 (재설치 후 Pro 유실)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "4BADB99C-CBD6-4259-B322-B39A21E93D8C",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 1,
+    "tags" : [
+      "Bug",
+      "UI"
+    ],
+    "title" : "Watch 프로그레스 링 음수\/초과 값 렌더링 오류 수정 (overtime 대응)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "6BEB656B-AFBF-4C30-A1C3-48D7D0F52767",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 3,
+    "tags" : [
+      "Feature",
+      "UI"
+    ],
+    "title" : "랜딩 페이지 모바일 햄버거 메뉴 추가 (언어 전환 포함)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "2970CB1E-E132-41A1-A08D-535C50348AE4",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 5,
+    "tags" : [
+      "Feature",
+      "Core"
+    ],
+    "title" : "앱 종료 후 재시작 시 타이머 상태 복원 (cold launch)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "0E65F78A-FBA4-4602-AF3E-1ED2F14C15F1",
+    "priority" : "low",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 1,
+    "tags" : [
+      "Refactor",
+      "Core"
+    ],
+    "title" : "프로덕션 코드에서 debug print() 제거"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "E00FFB48-644A-4A02-8E3C-21739B075BB1",
+    "priority" : "low",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 2,
+    "tags" : [
+      "Refactor",
+      "Core"
+    ],
+    "title" : "비활성화된 AlarmKit 코드 정리 및 UI 토글 제거\/비활성화"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "6F20A9C0-946E-4C08-88D4-19B1323DAF1A",
+    "priority" : "low",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 2,
+    "tags" : [
+      "Feature",
+      "Core"
+    ],
+    "title" : "WCSession didReceiveApplicationContext 빈 핸들러 구현"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "C8A57A5F-AE21-4D79-B567-53695FE85E68",
+    "priority" : "low",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 3,
+    "tags" : [
+      "Refactor",
+      "Core"
+    ],
+    "title" : "AppStateManager 중복 알림 경로 감사 및 정리"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "0E31AF64-E47B-49C8-B3F3-CF0C0B853184",
+    "priority" : "low",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 1,
+    "tags" : [
+      "Feature",
+      "UI"
+    ],
+    "title" : "랜딩 페이지 og:image, og:url 메타 태그 추가 (소셜 미디어 프리뷰)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "0B75B74F-BFE1-430F-8C41-F6293FC00EA7",
+    "priority" : "low",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 1,
+    "tags" : [
+      "Refactor",
+      "iOS"
+    ],
+    "title" : "onChange(of: scenePhase) deprecated API를 새 형식으로 수정"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "F0C44EDB-09D3-4F26-93E9-ABEA44580ED8",
+    "priority" : "low",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 1",
+    "status" : "완료",
+    "storyPoints" : 1,
+    "tags" : [
+      "Refactor",
+      "Core"
+    ],
+    "title" : "사용되지 않는 TimerIntents.swift 데드 코드 제거"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "7129F8DA-936C-4301-96AC-C8FB0A602FB8",
+    "priority" : "high",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 2",
+    "status" : "완료",
+    "storyPoints" : 3,
+    "tags" : [
+      "Bug",
+      "Core"
+    ],
+    "title" : "백그라운드 알림이 ringMode(진동) 설정을 무시하고 항상 소리 재생되는 버그 수정"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "8DDB762A-CC4A-429C-8E97-7FBEE93CDB5D",
+    "priority" : "high",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 2",
+    "status" : "완료",
+    "storyPoints" : 2,
+    "tags" : [
+      "Feature",
+      "iOS"
+    ],
+    "title" : "일반 타이머 모드에서 화면 꺼짐 방지(isIdleTimerDisabled) 옵션 추가"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "281B3670-7914-45BC-8C37-AC85182A153D",
+    "priority" : "high",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 2",
+    "status" : "완료",
+    "storyPoints" : 1,
+    "tags" : [
+      "Bug",
+      "iOS"
+    ],
+    "title" : "PaywallView Privacy Policy URL을 앱 전용 개인정보처리방침으로 교체"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "90D34217-F0C9-4C9C-B45B-9D62E1596CA6",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 2",
+    "status" : "완료",
+    "storyPoints" : 3,
+    "tags" : [
+      "Feature",
+      "UI"
+    ],
+    "title" : "첫 실행 시 시나리오별 기본 프리셋 템플릿 시드 데이터 추가 (운동\/발표\/스터디)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "CFD81FFE-66FD-4AAD-94EF-019B06FC6323",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 2",
+    "status" : "완료",
+    "storyPoints" : 2,
+    "tags" : [
+      "Refactor",
+      "Core"
+    ],
+    "title" : "RingMode rawValue 한국어(소리\/진동) → 영어(sound\/vibration)로 변경 + 마이그레이션"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "82BE68A8-4DA8-4A46-AD1D-3B42361108B8",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 2",
+    "status" : "완료",
+    "storyPoints" : 5,
+    "tags" : [
+      "Feature",
+      "UI"
+    ],
+    "title" : "잠금 화면 위젯 추가 (accessoryCircular\/accessoryRectangular\/accessoryInline)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "DAB58696-6706-4B10-ABFB-B3B45B3112B0",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 2",
+    "status" : "완료",
+    "storyPoints" : 3,
+    "tags" : [
+      "Feature",
+      "Core"
+    ],
+    "title" : "Watch 앱 cold launch 시 타이머 상태 복원 (SharedDefaults 기반)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "A139D586-740B-46DD-AB50-6249ECF9377E",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 2",
+    "status" : "완료",
+    "storyPoints" : 3,
+    "tags" : [
+      "Feature",
+      "iOS"
+    ],
+    "title" : "제어 센터 위젯 StartTimerIntent 실제 타이머 시작\/중지 구현"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "8C59FB19-23DE-44B2-93CC-AA3A730E2B97",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 2",
+    "status" : "완료",
+    "storyPoints" : 5,
+    "tags" : [
+      "Feature",
+      "Core"
+    ],
+    "title" : "Siri\/App Intents로 음성 타이머 시작·중지 구현 (Spotlight 검색 노출 포함)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "D10A46AC-F2EA-4C3B-981A-1F395BBDD9A3",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 2",
+    "status" : "완료",
+    "storyPoints" : 2,
+    "tags" : [
+      "Feature",
+      "UI"
+    ],
+    "title" : "온보딩에 발표 모드 소개 페이지 추가 (6번째 페이지)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "8FA1514A-566B-4065-88B5-CA246174516A",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 2",
+    "status" : "완료",
+    "storyPoints" : 3,
+    "tags" : [
+      "Feature",
+      "UI"
+    ],
+    "title" : "메인 Clock 컴포넌트 VoiceOver 접근성 레이블 및 타이머 상태 변경 공지 추가"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "02F3F731-E2B6-42BC-A2F4-2C417C8A0666",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 2",
+    "status" : "완료",
+    "storyPoints" : 2,
+    "tags" : [
+      "Feature",
+      "UI"
+    ],
+    "title" : "다크 모드 강제 해제 → 라이트\/다크\/시스템 모드 선택 옵션 추가"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "39F98248-6A74-4587-B213-6711C845EDD5",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 2",
+    "status" : "완료",
+    "storyPoints" : 2,
+    "tags" : [
+      "Feature",
+      "Core"
+    ],
+    "title" : "Watch 알림에 iOS ringMode 설정 동기화 (진동 모드 시 Watch도 무음 알림)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "4B8B24B1-3FB8-4FF5-9DD5-3F1C42BDB449",
+    "priority" : "medium",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 2",
+    "status" : "완료",
+    "storyPoints" : 2,
+    "tags" : [
+      "Feature",
+      "Core"
+    ],
+    "title" : "짧은 타이머용 초 단위 사전알림 프리셋 추가 (30초, 45초)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "A5DAC625-7BC4-4DBE-8B4D-93FC5EF18F4F",
+    "priority" : "low",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 2",
+    "status" : "완료",
+    "storyPoints" : 5,
+    "tags" : [
+      "Feature",
+      "iOS"
+    ],
+    "title" : "일본어 로컬라이징 추가 (동아시아 시장 확대)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "19D88CBD-1052-4877-A259-C571EF646683",
+    "priority" : "low",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 2",
+    "status" : "완료",
+    "storyPoints" : 2,
+    "tags" : [
+      "Feature",
+      "UI"
+    ],
+    "title" : "홈 화면 위젯에 타이머 이름\/레이블 표시 (여러 타이머 구분)"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "8E67AF4B-F7F1-4205-843F-3DB1B21EC7B7",
+    "priority" : "low",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 2",
+    "status" : "완료",
+    "storyPoints" : 2,
+    "tags" : [
+      "Feature",
+      "UI"
+    ],
+    "title" : "accessibilityLabel에 String(localized:) 적용하여 VoiceOver 다국어 지원"
+  },
+  {
+    "assignee" : "ME",
+    "assigneeColorHex" : "4FACFE",
+    "id" : "41A5CBE8-871F-4C80-87FC-F880FE64DD87",
+    "priority" : "low",
+    "projectId" : "FD506795-B8A5-4FA1-BB51-1F086B1E0D6D",
+    "sprint" : "Sprint 2",
+    "status" : "완료",
+    "storyPoints" : 2,
+    "tags" : [
+      "Feature",
+      "UI"
+    ],
+    "title" : "위젯 Large 사이즈 지원 추가 (다음 사전알림 시점 + 진행률 상세 표시)"
+  }
+]

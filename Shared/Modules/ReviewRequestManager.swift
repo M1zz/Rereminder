@@ -69,11 +69,13 @@ final class ReviewRequestManager {
         #if canImport(UIKit)
         // 현재 씬에서 리뷰 요청
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-            SKStoreReviewController.requestReview(in: windowScene)
+            AppStore.requestReview(in: windowScene)
 
             // 마지막 요청 날짜 기록
             UserDefaults.standard.set(Date(), forKey: lastReviewRequestDateKey)
             UserDefaults.standard.set(true, forKey: hasRequestedReviewKey)
+
+            AnalyticsManager.log(.reviewRequested)
         }
         #endif
     }
@@ -84,6 +86,7 @@ final class ReviewRequestManager {
         // App Store 리뷰 페이지로 Custom 이동
         if let appStoreURL = URL(string: "https://apps.apple.com/app/id6752551268?action=write-review") {
             UIApplication.shared.open(appStoreURL)
+            AnalyticsManager.log(.reviewCompleted)
         }
         #endif
     }

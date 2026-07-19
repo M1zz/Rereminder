@@ -23,6 +23,48 @@ final class TimerConfigService {
         self.context = ctx
     }
 
+    // MARK: - Seed Data
+
+    /// 첫 실행 시 시나리오별 기본 프리셋 템플릿 삽입
+    func seedIfNeeded() {
+        guard let ctx = context else { return }
+        let key = "hasSeededTemplates"
+        guard !UserDefaults.standard.bool(forKey: key) else { return }
+
+        // 이미 템플릿이 있으면 시드 불필요 (기존 사용자)
+        if !fetchRecents().isEmpty {
+            UserDefaults.standard.set(true, forKey: key)
+            return
+        }
+
+        let seeds: [(name: String, mainSec: Int, offsets: [Int], label: String, colorHex: String)] = [
+            ("Presentation 30 min", 1800, [600, 300, 60], "Presentation", "#FF3B30"),
+            ("Mentoring 40 min",    2400, [600, 300, 60], "Mentoring",    "#34C759"),
+            ("Study 25 min",        1500, [300, 60],      "Study",        "#5AC8FA"),
+            ("Exercise 30 min",     1800, [300, 60],      "Exercise",     "#FF2D55"),
+            ("Meeting 60 min",      3600, [600, 300],     "Meeting",      "#007AFF"),
+        ]
+
+        for s in seeds {
+            let t = Timer(
+                name: s.name,
+                mainSeconds: s.mainSec,
+                prealertOffsetsSec: s.offsets,
+                label: s.label,
+                colorHex: s.colorHex,
+                isFavorite: true
+            )
+            ctx.insert(t)
+        }
+
+        do {
+            try ctx.save()
+            UserDefaults.standard.set(true, forKey: key)
+        } catch {
+            print("❌ 시드 템플릿 저장 실패: \(error)")
+        }
+    }
+
     // MARK: - Template CRUD
 
     /// 최근 템플릿 조회 (생성일 역순)

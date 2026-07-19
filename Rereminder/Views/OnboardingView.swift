@@ -10,6 +10,7 @@ import SwiftUI
 struct OnboardingView: View {
     @Binding var isPresented: Bool
     @State private var currentPage = 0
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private let pages: [OnboardingPage] = [
         OnboardingPage(
@@ -41,9 +42,16 @@ struct OnboardingView: View {
             scenarioKey: "onboarding_scenario_4"
         ),
         OnboardingPage(
-            icon: "hand.tap.fill",
+            icon: "rectangle.split.3x1.fill",
             titleKey: "onboarding_title_5",
             descriptionKey: "onboarding_desc_5",
+            color: .cyan,
+            scenarioKey: "onboarding_scenario_5"
+        ),
+        OnboardingPage(
+            icon: "hand.tap.fill",
+            titleKey: "onboarding_title_6",
+            descriptionKey: "onboarding_desc_6",
             color: .purple,
             scenarioKey: nil
         )
@@ -106,8 +114,12 @@ struct OnboardingView: View {
                         }
                     } else {
                         Button(action: {
-                            withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                            if reduceMotion {
                                 currentPage += 1
+                            } else {
+                                withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                                    currentPage += 1
+                                }
                             }
                         }) {
                             HStack {
@@ -137,8 +149,12 @@ struct OnboardingView: View {
 
     private func skipOnboarding() {
         UserDefaults.standard.set(true, forKey: "hasSeenOnboarding")
-        withAnimation {
+        if reduceMotion {
             isPresented = false
+        } else {
+            withAnimation {
+                isPresented = false
+            }
         }
     }
 }
@@ -176,7 +192,7 @@ struct OnboardingPageView: View {
                         .frame(width: 140, height: 140)
 
                     Image(systemName: page.icon)
-                        .font(.system(size: 60))
+                        .dsScaledFont(60, relativeTo: .largeTitle, maxSize: 90)
                         .foregroundStyle(
                             LinearGradient(
                                 colors: [page.color, page.color.opacity(0.7)],
@@ -185,11 +201,12 @@ struct OnboardingPageView: View {
                             )
                         )
                 }
+                .accessibilityHidden(true)
 
-                VStack(spacing: 16) {
+                VStack(spacing: DSSpacing.lg) {
                     // 타이틀
                     Text(page.titleKey)
-                        .font(.system(size: 28, weight: .bold, design: .rounded))
+                        .dsScaledFont(28, weight: .bold, design: .rounded, relativeTo: .title, maxSize: 44)
                         .multilineTextAlignment(.center)
                         .foregroundStyle(.primary)
                         .lineLimit(3)
@@ -197,39 +214,40 @@ struct OnboardingPageView: View {
 
                     // 설명
                     Text(page.descriptionKey)
-                        .font(.system(size: 16))
+                        .font(DSFont.body)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                         .lineSpacing(4)
-                        .padding(.horizontal, 32)
+                        .padding(.horizontal, DSSpacing.xxxl)
                         .fixedSize(horizontal: false, vertical: true)
 
                     // 시나리오 예시 (있는 경우)
                     if let scenarioKey = page.scenarioKey {
-                        VStack(spacing: 8) {
-                            HStack(spacing: 6) {
+                        VStack(spacing: DSSpacing.sm) {
+                            HStack(spacing: DSSpacing.xs) {
                                 Image(systemName: "lightbulb.fill")
-                                    .font(.caption)
+                                    .font(DSFont.caption)
                                 Text("Usage Example")
-                                    .font(.caption.weight(.semibold))
+                                    .font(DSFont.caption.weight(.semibold))
                             }
                             .foregroundStyle(page.color)
 
                             Text(scenarioKey)
-                                .font(.system(size: 14))
+                                .font(DSFont.callout)
                                 .foregroundStyle(.secondary)
                                 .multilineTextAlignment(.center)
-                                .padding(.horizontal, 20)
-                                .padding(.vertical, 12)
+                                .padding(.horizontal, DSSpacing.xl)
+                                .padding(.vertical, DSSpacing.md)
                                 .background(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .fill(page.color.opacity(0.08))
+                                    RoundedRectangle(cornerRadius: DSRadius.md)
+                                        .fill(page.color.opacity(DSOpacity.faint))
                                 )
                         }
-                        .padding(.horizontal, 24)
-                        .padding(.top, 8)
+                        .padding(.horizontal, DSSpacing.xxl)
+                        .padding(.top, DSSpacing.sm)
                     }
                 }
+                .accessibilityElement(children: .combine)
 
                 Spacer()
                     .frame(height: 20)
