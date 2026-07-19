@@ -113,10 +113,11 @@ struct AlertPresetButtons: View {
                                             .foregroundStyle(.orange)
                                     }
                                 }
-                                .padding(.horizontal, DSSpacing.sm)
-                                .frame(minWidth: 56, minHeight: 44)
+                                .padding(.horizontal, DSSpacing.xs)
+                                .frame(minWidth: 48, minHeight: 34)
                             }
                             .buttonStyle(.bordered)
+                            .controlSize(.small)
                             // 링 위의 알림 마커(주황)와 같은 색으로 선택 상태 표시
                             .tint(selected ? DSColor.marker : .gray)
                             .accessibilityLabel(String(localized: "Alert \(offset / 60) minutes before end"))
@@ -146,9 +147,10 @@ struct AlertPresetButtons: View {
                 } label: {
                     Image(systemName: "plus")
                         .font(DSFont.callout.weight(.semibold))
-                        .frame(minWidth: 44, minHeight: 44)
+                        .frame(minWidth: 34, minHeight: 34)
                 }
                 .buttonStyle(.bordered)
+                .controlSize(.small)
                 .tint(.gray)
                 .accessibilityLabel(String(localized: "Add alert time"))
                 .accessibilityHint(String(localized: "Adds an alert halfway between the last alert and the end."))
