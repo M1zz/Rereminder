@@ -15,6 +15,12 @@ final class ProGateTests: XCTestCase {
     private var trialDefaults: UserDefaults!
 
     private static let proKey = "rereminder.pro.purchased"
+    private static let devPaywallKey = "dev.testPaywall"
+    private static let grandfatherKey = "rereminder.grandfather.granted"
+
+    // 테스트 종료 후 원복할 호스트 앱의 원래 상태
+    private var savedDevPaywall: Bool = false
+    private var savedGrandfather: Bool = false
 
     override func setUpWithError() throws {
         try super.setUpWithError()
@@ -24,6 +30,14 @@ final class ProGateTests: XCTestCase {
         trialDefaults.removePersistentDomain(forName: Self.trialSuiteName)
         TrialCounter.defaults = trialDefaults
 
+        // DEBUG 빌드의 개발자 자동 Pro(isDeveloperUnlock)와 그랜드파더링을 꺼서
+        // "무료 사용자" 전제를 만든다. 끝나면 원래 값으로 되돌린다.
+        let defaults = UserDefaults.standard
+        savedDevPaywall = defaults.bool(forKey: Self.devPaywallKey)
+        savedGrandfather = defaults.bool(forKey: Self.grandfatherKey)
+        defaults.set(true, forKey: Self.devPaywallKey)
+        defaults.removeObject(forKey: Self.grandfatherKey)
+
         // Pro 상태 클리어
         clearProState()
     }
@@ -32,6 +46,12 @@ final class ProGateTests: XCTestCase {
         trialDefaults.removePersistentDomain(forName: Self.trialSuiteName)
         TrialCounter.defaults = .standard
         clearProState()
+
+        let defaults = UserDefaults.standard
+        defaults.set(savedDevPaywall, forKey: Self.devPaywallKey)
+        if savedGrandfather {
+            defaults.set(true, forKey: Self.grandfatherKey)
+        }
         try super.tearDownWithError()
     }
 

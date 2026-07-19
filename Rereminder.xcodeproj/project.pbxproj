@@ -43,6 +43,13 @@
 			remoteGlobalIDString = AA10AB032F20C00000000003;
 			remoteInfo = RereminderMenuBar;
 		};
+		7E57AB052F30000000000005 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 260414C32E1B9FA200CBA29B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 260414CA2E1B9FA200CBA29B;
+			remoteInfo = Rereminder;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -91,6 +98,7 @@
 		58AA3EB12ECF5509007D4BBD /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		58AA3ECA2ECF5541007D4BBD /* RereminderAlarmExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RereminderAlarmExtension.entitlements; sourceTree = "<group>"; };
 		AA10AB012F20C00000000001 /* RereminderMenuBar.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RereminderMenuBar.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		7E57AB012F30000000000001 /* RereminderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RereminderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -189,6 +197,11 @@
 			path = RereminderMenuBar;
 			sourceTree = "<group>";
 		};
+		7E57AB022F30000000000002 /* RereminderTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = RereminderTests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -228,6 +241,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7E57AB0A2F3000000000000A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -241,6 +261,7 @@
 				2B302B0B2E4375150089A14A /* RereminderWatch */,
 				58AA3EB32ECF5509007D4BBD /* RereminderAlarm */,
 				AA10AB022F20C00000000002 /* RereminderMenuBar */,
+				7E57AB022F30000000000002 /* RereminderTests */,
 				58AA3EAE2ECF5509007D4BBD /* Frameworks */,
 				260414CC2E1B9FA200CBA29B /* Products */,
 			);
@@ -253,6 +274,7 @@
 				2B302B0A2E4375150089A14A /* RereminderWatch.app */,
 				58AA3EAD2ECF5509007D4BBD /* RereminderAlarmExtension.appex */,
 				AA10AB012F20C00000000001 /* RereminderMenuBar.bundle */,
+				7E57AB012F30000000000001 /* RereminderTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -370,6 +392,29 @@
 			productReference = AA10AB012F20C00000000001 /* RereminderMenuBar.bundle */;
 			productType = "com.apple.product-type.bundle";
 		};
+		7E57AB032F30000000000003 /* RereminderTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7E57AB072F30000000000007 /* Build configuration list for PBXNativeTarget "RereminderTests" */;
+			buildPhases = (
+				7E57AB092F30000000000009 /* Sources */,
+				7E57AB0A2F3000000000000A /* Frameworks */,
+				7E57AB0B2F3000000000000B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7E57AB062F30000000000006 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				7E57AB022F30000000000002 /* RereminderTests */,
+			);
+			name = RereminderTests;
+			packageProductDependencies = (
+			);
+			productName = RereminderTests;
+			productReference = 7E57AB012F30000000000001 /* RereminderTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -388,6 +433,10 @@
 					};
 					58AA3EAC2ECF5509007D4BBD = {
 						CreatedOnToolsVersion = 26.0;
+					};
+					7E57AB032F30000000000003 = {
+						CreatedOnToolsVersion = 26.0;
+						TestTargetID = 260414CA2E1B9FA200CBA29B;
 					};
 				};
 			};
@@ -414,6 +463,7 @@
 				2B302B092E4375150089A14A /* RereminderWatch */,
 				58AA3EAC2ECF5509007D4BBD /* RereminderAlarmExtension */,
 				AA10AB032F20C00000000003 /* RereminderMenuBar */,
+				7E57AB032F30000000000003 /* RereminderTests */,
 			);
 		};
 /* End PBXProject section */
@@ -442,6 +492,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		AA10AB062F20C00000000006 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7E57AB0B2F3000000000000B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -479,6 +536,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		7E57AB092F30000000000009 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -499,6 +563,11 @@
 			platformFilter = maccatalyst;
 			target = AA10AB032F20C00000000003 /* RereminderMenuBar */;
 			targetProxy = AA10AB0A2F20C0000000000A /* PBXContainerItemProxy */;
+		};
+		7E57AB062F30000000000006 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 260414CA2E1B9FA200CBA29B /* Rereminder */;
+			targetProxy = 7E57AB052F30000000000005 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -656,12 +725,12 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -695,12 +764,12 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -870,6 +939,46 @@
 			};
 			name = Release;
 		};
+		7E57AB0C2F3000000000000C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = QGAQ3AY3R3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.RereminderTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Rereminder.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Rereminder";
+			};
+			name = Debug;
+		};
+		7E57AB0D2F3000000000000D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = QGAQ3AY3R3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.RereminderTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Rereminder.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Rereminder";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -914,6 +1023,15 @@
 			buildConfigurations = (
 				AA10AB072F20C00000000007 /* Debug */,
 				AA10AB082F20C00000000008 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7E57AB072F30000000000007 /* Build configuration list for PBXNativeTarget "RereminderTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7E57AB0C2F3000000000000C /* Debug */,
+				7E57AB0D2F3000000000000D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
