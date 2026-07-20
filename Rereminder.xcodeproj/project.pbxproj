@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1EE0C17AC0DE000000000003 /* LeeoKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1EE0C17AC0DE000000000002 /* LeeoKit */; };
 		2B302B142E4375170089A14A /* RereminderWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2B302B0A2E4375150089A14A /* RereminderWatch.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		581D85DC2F48C24200F2F032 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 581D85DB2F48C24200F2F032 /* StoreKit.framework */; };
 		584DC9092FAB90DE006CC090 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 584DC9082FAB90DE006CC090 /* GoogleService-Info.plist */; };
@@ -15,7 +16,6 @@
 		584DC9342FAB92A3006CC090 /* FirebaseAnalyticsIdentitySupport in Frameworks */ = {isa = PBXBuildFile; productRef = 584DC9332FAB92A3006CC090 /* FirebaseAnalyticsIdentitySupport */; };
 		584DC9362FAB92A3006CC090 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 584DC9352FAB92A3006CC090 /* FirebaseCore */; };
 		584DC9382FAB92A3006CC090 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 584DC9372FAB92A3006CC090 /* FirebaseCrashlytics */; };
-		1EE0C17AC0DE000000000003 /* LeeoKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1EE0C17AC0DE000000000002 /* LeeoKit */; };
 		58AA3EB02ECF5509007D4BBD /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AA3EAF2ECF5509007D4BBD /* WidgetKit.framework */; };
 		58AA3EB22ECF5509007D4BBD /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AA3EB12ECF5509007D4BBD /* SwiftUI.framework */; };
 		58AA3EC32ECF550B007D4BBD /* RereminderAlarmExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 58AA3EAD2ECF5509007D4BBD /* RereminderAlarmExtension.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -100,6 +100,7 @@
 		58AA3ECA2ECF5541007D4BBD /* RereminderAlarmExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RereminderAlarmExtension.entitlements; sourceTree = "<group>"; };
 		7E57AB012F30000000000001 /* RereminderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RereminderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA10AB012F20C00000000001 /* RereminderMenuBar.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RereminderMenuBar.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		EB6620CC6445D6B84083B6BC /* Version.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Version.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -182,6 +183,8 @@
 		};
 		2B302B0B2E4375150089A14A /* RereminderWatch */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = RereminderWatch;
 			sourceTree = "<group>";
 		};
@@ -195,11 +198,15 @@
 		};
 		7E57AB022F30000000000002 /* RereminderTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = RereminderTests;
 			sourceTree = "<group>";
 		};
 		AA10AB022F20C00000000002 /* RereminderMenuBar */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+			);
 			path = RereminderMenuBar;
 			sourceTree = "<group>";
 		};
@@ -266,6 +273,7 @@
 				7E57AB022F30000000000002 /* RereminderTests */,
 				58AA3EAE2ECF5509007D4BBD /* Frameworks */,
 				260414CC2E1B9FA200CBA29B /* Products */,
+				EB6620CC6445D6B84083B6BC /* Version.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -345,8 +353,6 @@
 				2B302B0B2E4375150089A14A /* RereminderWatch */,
 			);
 			name = RereminderWatch;
-			packageProductDependencies = (
-			);
 			productName = RereminderWatch;
 			productReference = 2B302B0A2E4375150089A14A /* RereminderWatch.app */;
 			productType = "com.apple.product-type.application";
@@ -367,8 +373,6 @@
 				58AA3EB32ECF5509007D4BBD /* RereminderAlarm */,
 			);
 			name = RereminderAlarmExtension;
-			packageProductDependencies = (
-			);
 			productName = RereminderAlarmExtension;
 			productReference = 58AA3EAD2ECF5509007D4BBD /* RereminderAlarmExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -390,8 +394,6 @@
 				7E57AB022F30000000000002 /* RereminderTests */,
 			);
 			name = RereminderTests;
-			packageProductDependencies = (
-			);
 			productName = RereminderTests;
 			productReference = 7E57AB012F30000000000001 /* RereminderTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -412,8 +414,6 @@
 				AA10AB022F20C00000000002 /* RereminderMenuBar */,
 			);
 			name = RereminderMenuBar;
-			packageProductDependencies = (
-			);
 			productName = RereminderMenuBar;
 			productReference = AA10AB012F20C00000000001 /* RereminderMenuBar.bundle */;
 			productType = "com.apple.product-type.bundle";
@@ -456,7 +456,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				584DC92E2FAB92A3006CC090 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
-				1EE0C17AC0DE000000000001 /* XCLocalSwiftPackageReference "../LeeoKit" */,
+				1EE0C17AC0DE000000000001 /* XCLocalSwiftPackageReference "LeeoKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 260414CC2E1B9FA200CBA29B /* Products */;
@@ -578,6 +578,7 @@
 /* Begin XCBuildConfiguration section */
 		260414D62E1B9FA400CBA29B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EB6620CC6445D6B84083B6BC /* Version.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -643,6 +644,7 @@
 		};
 		260414D72E1B9FA400CBA29B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = EB6620CC6445D6B84083B6BC /* Version.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -707,7 +709,6 @@
 				CODE_SIGN_ENTITLEMENTS = Rereminder/Rereminder.entitlements;
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Rereminder/Rereminder-macCatalyst.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QGAQ3AY3R3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -746,7 +747,6 @@
 				CODE_SIGN_ENTITLEMENTS = Rereminder/Rereminder.entitlements;
 				"CODE_SIGN_ENTITLEMENTS[sdk=macosx*]" = "Rereminder/Rereminder-macCatalyst.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QGAQ3AY3R3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -783,7 +783,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QGAQ3AY3R3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -813,7 +812,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QGAQ3AY3R3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -844,7 +842,6 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = RereminderAlarmExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QGAQ3AY3R3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RereminderAlarm/Info.plist;
@@ -876,7 +873,6 @@
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_ENTITLEMENTS = RereminderAlarmExtension.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QGAQ3AY3R3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = RereminderAlarm/Info.plist;
@@ -906,7 +902,6 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QGAQ3AY3R3;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
@@ -926,7 +921,6 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QGAQ3AY3R3;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
@@ -946,7 +940,6 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QGAQ3AY3R3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSPrincipalClass = RRMenuBarController;
@@ -967,7 +960,6 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QGAQ3AY3R3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSPrincipalClass = RRMenuBarController;
@@ -1043,7 +1035,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		1EE0C17AC0DE000000000001 /* XCLocalSwiftPackageReference "../LeeoKit" */ = {
+		1EE0C17AC0DE000000000001 /* XCLocalSwiftPackageReference "LeeoKit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../LeeoKit;
 		};
@@ -1063,7 +1055,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		1EE0C17AC0DE000000000002 /* LeeoKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 1EE0C17AC0DE000000000001 /* XCLocalSwiftPackageReference "../LeeoKit" */;
+			package = 1EE0C17AC0DE000000000001 /* XCLocalSwiftPackageReference "LeeoKit" */;
 			productName = LeeoKit;
 		};
 		584DC92F2FAB92A3006CC090 /* FirebaseAnalytics */ = {
