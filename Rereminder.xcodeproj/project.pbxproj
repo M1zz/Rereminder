@@ -15,6 +15,7 @@
 		584DC9342FAB92A3006CC090 /* FirebaseAnalyticsIdentitySupport in Frameworks */ = {isa = PBXBuildFile; productRef = 584DC9332FAB92A3006CC090 /* FirebaseAnalyticsIdentitySupport */; };
 		584DC9362FAB92A3006CC090 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 584DC9352FAB92A3006CC090 /* FirebaseCore */; };
 		584DC9382FAB92A3006CC090 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 584DC9372FAB92A3006CC090 /* FirebaseCrashlytics */; };
+		1EE0C17AC0DE000000000003 /* LeeoKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1EE0C17AC0DE000000000002 /* LeeoKit */; };
 		58AA3EB02ECF5509007D4BBD /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AA3EAF2ECF5509007D4BBD /* WidgetKit.framework */; };
 		58AA3EB22ECF5509007D4BBD /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AA3EB12ECF5509007D4BBD /* SwiftUI.framework */; };
 		58AA3EC32ECF550B007D4BBD /* RereminderAlarmExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 58AA3EAD2ECF5509007D4BBD /* RereminderAlarmExtension.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -215,6 +216,7 @@
 				584DC9382FAB92A3006CC090 /* FirebaseCrashlytics in Frameworks */,
 				584DC9322FAB92A3006CC090 /* FirebaseAnalyticsCore in Frameworks */,
 				581D85DC2F48C24200F2F032 /* StoreKit.framework in Frameworks */,
+				1EE0C17AC0DE000000000003 /* LeeoKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,6 +323,7 @@
 				584DC9332FAB92A3006CC090 /* FirebaseAnalyticsIdentitySupport */,
 				584DC9352FAB92A3006CC090 /* FirebaseCore */,
 				584DC9372FAB92A3006CC090 /* FirebaseCrashlytics */,
+				1EE0C17AC0DE000000000002 /* LeeoKit */,
 			);
 			productName = toki;
 			productReference = 260414CB2E1B9FA200CBA29B /* Rereminder.app */;
@@ -453,6 +456,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				584DC92E2FAB92A3006CC090 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				1EE0C17AC0DE000000000001 /* XCLocalSwiftPackageReference "../LeeoKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 260414CC2E1B9FA200CBA29B /* Products */;
@@ -1038,6 +1042,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		1EE0C17AC0DE000000000001 /* XCLocalSwiftPackageReference "../LeeoKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../LeeoKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		584DC92E2FAB92A3006CC090 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -1050,6 +1061,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1EE0C17AC0DE000000000002 /* LeeoKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1EE0C17AC0DE000000000001 /* XCLocalSwiftPackageReference "../LeeoKit" */;
+			productName = LeeoKit;
+		};
 		584DC92F2FAB92A3006CC090 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 584DC92E2FAB92A3006CC090 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
