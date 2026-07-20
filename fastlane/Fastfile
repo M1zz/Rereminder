@@ -1,0 +1,2 @@
+# 이 앱의 Fastfile — 공통 로직은 fastlane-shared 에 있다. 앱별 설정은 .env 만 수정할 것.
+import "#{ENV['HOME']}/Documents/workspace/fastlane-shared/Fastfile"
