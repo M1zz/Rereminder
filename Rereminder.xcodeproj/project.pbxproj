@@ -10,12 +10,6 @@
 		1EE0C17AC0DE000000000003 /* LeeoKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1EE0C17AC0DE000000000002 /* LeeoKit */; };
 		2B302B142E4375170089A14A /* RereminderWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2B302B0A2E4375150089A14A /* RereminderWatch.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		581D85DC2F48C24200F2F032 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 581D85DB2F48C24200F2F032 /* StoreKit.framework */; };
-		584DC9092FAB90DE006CC090 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 584DC9082FAB90DE006CC090 /* GoogleService-Info.plist */; };
-		584DC9302FAB92A3006CC090 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 584DC92F2FAB92A3006CC090 /* FirebaseAnalytics */; };
-		584DC9322FAB92A3006CC090 /* FirebaseAnalyticsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 584DC9312FAB92A3006CC090 /* FirebaseAnalyticsCore */; };
-		584DC9342FAB92A3006CC090 /* FirebaseAnalyticsIdentitySupport in Frameworks */ = {isa = PBXBuildFile; productRef = 584DC9332FAB92A3006CC090 /* FirebaseAnalyticsIdentitySupport */; };
-		584DC9362FAB92A3006CC090 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 584DC9352FAB92A3006CC090 /* FirebaseCore */; };
-		584DC9382FAB92A3006CC090 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 584DC9372FAB92A3006CC090 /* FirebaseCrashlytics */; };
 		58AA3EB02ECF5509007D4BBD /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AA3EAF2ECF5509007D4BBD /* WidgetKit.framework */; };
 		58AA3EB22ECF5509007D4BBD /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AA3EB12ECF5509007D4BBD /* SwiftUI.framework */; };
 		58AA3EC32ECF550B007D4BBD /* RereminderAlarmExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 58AA3EAD2ECF5509007D4BBD /* RereminderAlarmExtension.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -93,7 +87,6 @@
 		260414CB2E1B9FA200CBA29B /* Rereminder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Rereminder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2B302B0A2E4375150089A14A /* RereminderWatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RereminderWatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		581D85DB2F48C24200F2F032 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
-		584DC9082FAB90DE006CC090 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		58AA3EAD2ECF5509007D4BBD /* RereminderAlarmExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = RereminderAlarmExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		58AA3EAF2ECF5509007D4BBD /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		58AA3EB12ECF5509007D4BBD /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -217,11 +210,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				584DC9342FAB92A3006CC090 /* FirebaseAnalyticsIdentitySupport in Frameworks */,
-				584DC9362FAB92A3006CC090 /* FirebaseCore in Frameworks */,
-				584DC9302FAB92A3006CC090 /* FirebaseAnalytics in Frameworks */,
-				584DC9382FAB92A3006CC090 /* FirebaseCrashlytics in Frameworks */,
-				584DC9322FAB92A3006CC090 /* FirebaseAnalyticsCore in Frameworks */,
 				581D85DC2F48C24200F2F032 /* StoreKit.framework in Frameworks */,
 				1EE0C17AC0DE000000000003 /* LeeoKit in Frameworks */,
 			);
@@ -263,7 +251,6 @@
 		260414C22E1B9FA200CBA29B = {
 			isa = PBXGroup;
 			children = (
-				584DC9082FAB90DE006CC090 /* GoogleService-Info.plist */,
 				58AA3ECA2ECF5541007D4BBD /* RereminderAlarmExtension.entitlements */,
 				260414E12E1B9FDE00CBA29B /* Shared */,
 				260414CD2E1B9FA200CBA29B /* Rereminder */,
@@ -326,11 +313,6 @@
 			);
 			name = Rereminder;
 			packageProductDependencies = (
-				584DC92F2FAB92A3006CC090 /* FirebaseAnalytics */,
-				584DC9312FAB92A3006CC090 /* FirebaseAnalyticsCore */,
-				584DC9332FAB92A3006CC090 /* FirebaseAnalyticsIdentitySupport */,
-				584DC9352FAB92A3006CC090 /* FirebaseCore */,
-				584DC9372FAB92A3006CC090 /* FirebaseCrashlytics */,
 				1EE0C17AC0DE000000000002 /* LeeoKit */,
 			);
 			productName = toki;
@@ -455,7 +437,6 @@
 			mainGroup = 260414C22E1B9FA200CBA29B;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				584DC92E2FAB92A3006CC090 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				1EE0C17AC0DE000000000001 /* XCLocalSwiftPackageReference "LeeoKit" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -477,7 +458,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				584DC9092FAB90DE006CC090 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1042,14 +1022,6 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		584DC92E2FAB92A3006CC090 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 12.13.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1057,31 +1029,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1EE0C17AC0DE000000000001 /* XCLocalSwiftPackageReference "LeeoKit" */;
 			productName = LeeoKit;
-		};
-		584DC92F2FAB92A3006CC090 /* FirebaseAnalytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 584DC92E2FAB92A3006CC090 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalytics;
-		};
-		584DC9312FAB92A3006CC090 /* FirebaseAnalyticsCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 584DC92E2FAB92A3006CC090 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalyticsCore;
-		};
-		584DC9332FAB92A3006CC090 /* FirebaseAnalyticsIdentitySupport */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 584DC92E2FAB92A3006CC090 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAnalyticsIdentitySupport;
-		};
-		584DC9352FAB92A3006CC090 /* FirebaseCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 584DC92E2FAB92A3006CC090 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseCore;
-		};
-		584DC9372FAB92A3006CC090 /* FirebaseCrashlytics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 584DC92E2FAB92A3006CC090 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseCrashlytics;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

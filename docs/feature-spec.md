@@ -318,7 +318,10 @@ App Group UserDefaults (group.leeo.toki) 에 다음을 저장하여 iOS, Watch, 
 설정값 (테마, 액센트 색상, 알림 모드 등)
 
 
-18. 분석 (Firebase Analytics)
+18. 분석 (로컬 이벤트 로깅 — 외부 전송 없음)
+
+AnalyticsManager 는 이벤트 추상화 계층으로만 유지되며, 외부 분석 SDK(Firebase 등)를 사용하지 않습니다.
+아래 이벤트들은 DEBUG 빌드에서 콘솔 출력용으로만 기록되고, 어떤 데이터도 외부로 전송되지 않습니다.
 
 18.1 추적 이벤트
 
@@ -347,4 +350,4 @@ RereminderAlarm: 위젯 및 Live Activity 확장
 
 19.3 의존성
 
-외부 의존성은 Firebase iOS SDK (Analytics, Core, Crashlytics) 가 유일합니다. SPM 으로 관리됩니다.
+외부 의존성은 로컬 SPM 패키지 LeeoKit 뿐이며, 외부 원격 의존성(Firebase 등)은 사용하지 않습니다.
