@@ -70,13 +70,14 @@ struct TimerMainView: View {
             let buttonSize = clockSize * 0.18
 
             VStack(spacing: 0) {
-                // 빠른Settings 영역
+                // 빠른Settings 영역 — 알림 프리셋(종) 칩은 타이머 모드 전용.
+                // 발표 모드에서는 구간(=알림 지점)을 아래 구간 리스트에서 관리하므로 숨긴다.
                 Group {
-                    if screenVM.state != .running {
+                    if !isPresentationMode && screenVM.state != .running {
                         AlertPresetButtons(screenVM: screenVM)
                             .padding(.top, spacing * 2)
                     } else {
-                        // 실행 중일 때 빈 공간으로 높이 유지
+                        // 발표 모드 / 실행 중일 때 빈 공간으로 높이 유지
                         Color.clear
                             .frame(height: availableHeight * 0.08)
                     }
@@ -654,56 +655,9 @@ struct TimerMainView: View {
 
     private func derivedSectionList(maxHeight: CGFloat) -> some View {
         ScrollView {
-            VStack(spacing: DSSpacing.xs) {
+            VStack(spacing: DSSpacing.sm) {
                 ForEach(derivedSegments, id: \.index) { seg in
-                    let isEditingThis = focusedSectionIndex == seg.index
-                    HStack(spacing: DSSpacing.sm) {
-                        // 링의 해당 구간과 같은 색 — 어느 호가 이 구간인지 연결
-                        Circle()
-                            .fill(sectionColor(seg.index))
-                            .frame(width: 10, height: 10)
-
-                        // 이름 편집 — 비워두면 placeholder("구간 N") 사용
-                        TextField(
-                            String(localized: "Section \(seg.index + 1)"),
-                            text: sectionNameBinding(seg.index)
-                        )
-                        .font(DSFont.callout.weight(.medium))
-                        .disabled(!isTimeEditable)
-                        .focused($focusedSectionIndex, equals: seg.index)
-                        .submitLabel(.done)
-                        .accessibilityLabel(String(localized: "Section name"))
-
-                        Spacer()
-
-                        Text("\(rangeText(seg.startSec)) – \(rangeEndText(seg.endSec))")
-                            .font(DSFont.callout.monospacedDigit())
-                            .foregroundStyle(.secondary)
-
-                        Text(durationText(seg.endSec - seg.startSec))
-                            .font(DSFont.callout.weight(.semibold).monospacedDigit())
-                            .foregroundStyle(DSColor.marker)
-                    }
-                    .padding(.horizontal, DSSpacing.md)
-                    .padding(.vertical, DSSpacing.md)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10)
-                            .fill(isEditingThis
-                                ? sectionColor(seg.index).opacity(0.12)
-                                : Color(.systemGray6))
-                    )
-                    .overlay(
-                        // 편집 중인 구간은 구간색 테두리로 포커싱
-                        RoundedRectangle(cornerRadius: 10)
-                            .strokeBorder(
-                                isEditingThis ? sectionColor(seg.index) : .clear,
-                                lineWidth: 1.5
-                            )
-                    )
-                    // 다른 구간을 편집 중이면 이 행은 한 발 물러남
-                    .opacity(focusedSectionIndex == nil || isEditingThis ? 1.0 : 0.55)
-                    .accessibilityElement(children: .combine)
-                    .transition(.opacity.combined(with: .move(edge: .bottom)))
+                    derivedSectionRow(seg)
                 }
             }
             .padding(.horizontal, 16)
@@ -715,6 +669,69 @@ struct TimerMainView: View {
         .frame(maxHeight: maxHeight)
         // 리스트를 끌면 키보드가 따라 내려감
         .scrollDismissesKeyboard(.interactively)
+    }
+
+    /// 한 구간 카드 — 2단 구성(이름+길이 배지 / 시간 범위)으로 빼곡함을 덜어 한눈에 들어오게
+    @ViewBuilder
+    private func derivedSectionRow(_ seg: (index: Int, startSec: Int, endSec: Int)) -> some View {
+        let isEditingThis = focusedSectionIndex == seg.index
+        HStack(alignment: .top, spacing: DSSpacing.md) {
+            // 링의 해당 구간과 같은 색 — 어느 호가 이 구간인지 연결
+            Circle()
+                .fill(sectionColor(seg.index))
+                .frame(width: 12, height: 12)
+                .padding(.top, DSSpacing.xs)
+                .accessibilityHidden(true)
+
+            VStack(alignment: .leading, spacing: DSSpacing.xs) {
+                // 1단: 구간 이름 + 길이 배지
+                HStack(alignment: .firstTextBaseline, spacing: DSSpacing.sm) {
+                    TextField(
+                        String(localized: "Section \(seg.index + 1)"),
+                        text: sectionNameBinding(seg.index)
+                    )
+                    .font(DSFont.body.weight(.semibold))
+                    .disabled(!isTimeEditable)
+                    .focused($focusedSectionIndex, equals: seg.index)
+                    .submitLabel(.done)
+                    .accessibilityLabel(String(localized: "Section name"))
+
+                    Spacer(minLength: DSSpacing.sm)
+
+                    Text(durationText(seg.endSec - seg.startSec))
+                        .font(DSFont.callout.weight(.bold).monospacedDigit())
+                        .foregroundStyle(DSColor.marker)
+                        .padding(.horizontal, DSSpacing.sm)
+                        .padding(.vertical, DSSpacing.xxs)
+                        .background(Capsule().fill(DSColor.marker.opacity(DSOpacity.subtle)))
+                }
+
+                // 2단: 시간 범위 (보조 정보)
+                Text("\(rangeText(seg.startSec)) – \(rangeEndText(seg.endSec))")
+                    .font(DSFont.caption.monospacedDigit())
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .padding(.horizontal, DSSpacing.lg)
+        .padding(.vertical, DSSpacing.md)
+        .background(
+            RoundedRectangle(cornerRadius: DSRadius.md)
+                .fill(isEditingThis
+                    ? sectionColor(seg.index).opacity(DSOpacity.subtle)
+                    : Color(.systemGray6))
+        )
+        .overlay(
+            // 편집 중인 구간은 구간색 테두리로 포커싱
+            RoundedRectangle(cornerRadius: DSRadius.md)
+                .strokeBorder(
+                    isEditingThis ? sectionColor(seg.index) : .clear,
+                    lineWidth: 1.5
+                )
+        )
+        // 다른 구간을 편집 중이면 이 행은 한 발 물러남
+        .opacity(focusedSectionIndex == nil || isEditingThis ? 1.0 : 0.55)
+        .accessibilityElement(children: .combine)
+        .transition(.opacity.combined(with: .move(edge: .bottom)))
     }
 
     /// 초 → "10:00" 형태 (M:SS 표기 통일)
