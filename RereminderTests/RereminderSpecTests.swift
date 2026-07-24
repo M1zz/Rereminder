@@ -14,7 +14,8 @@ final class RereminderSpecTests: XCTestCase {
 
     func testContainerIdentifierMatchesEntitlements() {
         // Rereminder.entitlements의 iCloud 컨테이너와 어긋나면 제출이 조용히 실패한다
-        XCTAssertEqual(RereminderSpec.feedback.containerIdentifier, "iCloud.com.xa.toki")
+        // 공용 피드백 허브(FeedbackHub)로 전환됨
+        XCTAssertEqual(RereminderSpec.feedback.containerIdentifier, "iCloud.com.Ysoup.FeedbackHub")
     }
 
     func testRecordTypeIsStable() {
@@ -27,9 +28,9 @@ final class RereminderSpecTests: XCTestCase {
         XCTAssertEqual(RereminderSpec.feedback.subscriptionID, "feedback-new-v1")
     }
 
-    func testAppIdentifierStaysNilForLegacySchema() {
-        // appId 필드는 Production 스키마에 없다 — 공용 허브 전환 전까지 nil 유지
-        XCTAssertNil(RereminderSpec.feedback.appIdentifier)
+    func testAppIdentifierForSharedHub() {
+        // 공용 허브 전환 완료 — appIdentifier로 앱을 구분한다
+        XCTAssertEqual(RereminderSpec.feedback.appIdentifier, "com.xa.toki")
     }
 
     func testAppNameAndDeveloperEmail() {

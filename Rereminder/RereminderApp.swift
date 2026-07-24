@@ -35,6 +35,9 @@ struct RereminderApp: App {
 
         // 앱 시작 시 UIWindow tintColor를 즉시 설정하여 색상 깜빡임 방지
         ThemeManager.applyInitialTint()
+
+        // 앱 실행 기록 + 익명 사용 스냅샷을 iCloud로 전송 (백그라운드)
+        ActivityReporter.registerLaunch()
     }
 
     var body: some Scene {

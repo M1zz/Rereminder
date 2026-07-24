@@ -29,16 +29,13 @@ final class ReviewRequestManager {
 
     // MARK: - Timer Done 기록
 
-    /// Timer Done 시 호출
+    /// Timer Done 시 호출 — 완료 횟수만 집계한다(지표·디버그용).
+    /// 자동 리뷰 유도는 만족도 게이트(LeeoReviewGate / .leeoSatisfactionCheck)가 단독으로 담당한다.
+    /// 여기서 시스템 리뷰창을 바로 띄우면 게이트와 이중 노출되므로 호출하지 않는다.
     func recordTimerCompletion() {
         let currentCount = UserDefaults.standard.integer(forKey: completionCountKey)
         let newCount = currentCount + 1
         UserDefaults.standard.set(newCount, forKey: completionCountKey)
-
-        // 조건을 만족하면 리뷰 요청
-        if shouldRequestReview(completionCount: newCount) {
-            requestReview()
-        }
     }
 
     // MARK: - 리뷰 요청 조건 OK

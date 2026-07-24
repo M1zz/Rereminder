@@ -7,6 +7,41 @@
 
 import Foundation
 import SwiftUI
+import TipKit
+import LeeoKit
+
+/// 여러 기기(워치·위젯·Siri·Mac)에서도 쓸 수 있다는 걸 설정 버튼 위에 살짝 알려주는 팁.
+/// 타이머를 두 번 이상 완료한 뒤(=앱을 실제로 써 본 사용자)에만 노출한다.
+@available(iOS 17.0, *)
+struct MultiDeviceTip: Tip {
+    /// 타이머 완료 이벤트 — 도너를 여러 번 쌓아 노출 조건을 만든다
+    static let timerCompleted = Event(id: "multiDeviceTip.timerCompleted")
+
+    var title: Text {
+        Text("tip_multidevice_title")
+    }
+    var message: Text? {
+        Text("tip_multidevice_message")
+    }
+    var image: Image? {
+        Image(systemName: "square.stack.3d.up.fill")
+    }
+    var rules: [Rule] {
+        #Rule(Self.timerCompleted) { $0.donations.count >= 2 }
+    }
+}
+
+/// popoverTip은 iOS 17+ 전용이라 가용성 가드를 한 곳에 모은 모디파이어.
+/// 하위 버전에서는 아무 것도 붙이지 않는다.
+private struct MultiDeviceTipAnchor: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 17.0, *) {
+            content.popoverTip(MultiDeviceTip(), arrowEdge: .top)
+        } else {
+            content
+        }
+    }
+}
 
 struct TimerUnifiedView: View {
     @Environment(\.modelContext) private var context
@@ -89,6 +124,16 @@ struct TimerUnifiedView: View {
                 Text(String(localized: "All Pro features — Presentation Mode, unlimited pre-alerts, overtime tracking, and timer history — are yours free forever. Nothing you had has been taken away."))
             }
             .onAppear(perform: setupOnAppear)
+            // 사용 중 적절한 시점에 "즐겁게 쓰고 계신가요?" → 👍 앱스토어 리뷰 / 👎 피드백.
+            // 실행 3회·설치 2일·타이머 완료 3회 이상, 버전당 1회, 120일 쿨다운(정책 내장).
+            .leeoSatisfactionCheck(
+                RereminderSpec.self,
+                policy: LeeoReviewPolicy(
+                    minLaunches: 3,
+                    minDaysSinceInstall: 2,
+                    minSignificantEvents: 3
+                )
+            )
             .onChange(of: scenePhase) { oldPhase, newPhase in
                 handleScenePhase(oldPhase, newPhase)
             }
@@ -158,6 +203,7 @@ struct TimerUnifiedView: View {
                     .environmentObject(screenVM)
             } label: {
                 Image(systemName: "gearshape")
+                    .modifier(MultiDeviceTipAnchor())
             }
             .accessibilityLabel(String(localized: "Settings"))
         }

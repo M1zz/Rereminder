@@ -10,6 +10,7 @@
 
 import SwiftUI
 import SwiftData
+import TipKit
 
 #if os(iOS) && !targetEnvironment(macCatalyst)
 import ActivityKit
@@ -306,6 +307,13 @@ final class TimerViewModel: ObservableObject {
 
         if finished {
             ReviewRequestManager.shared.recordTimerCompletion()
+            // 익명 활동 이벤트 — 완료 카운트 + iCloud 이벤트 스트림
+            ActivityReporter.recordSignificantEvent()
+            ActivityReporter.log("timer_complete")
+            // 여러 기기 활용 팁 노출 조건(완료 2회 이상)을 위한 이벤트 도너
+            if #available(iOS 17.0, *) {
+                Task { await MultiDeviceTip.timerCompleted.donate() }
+            }
         }
     }
 
