@@ -438,6 +438,13 @@ struct NoticeSettingView: View {
                 }
                 .foregroundStyle(.primary)
 
+                NavigationLink {
+                    MultiDeviceGuideView()
+                } label: {
+                    Label("Use on All Your Devices", systemImage: "square.stack.3d.up.fill")
+                }
+                .foregroundStyle(.primary)
+
                 Button {
                     shareApp()
                 } label: {
@@ -493,11 +500,7 @@ struct NoticeSettingView: View {
 
                 // 개발자 전용 — 버전 행 7번 탭으로 노출
                 if masterModeEnabled {
-                    NavigationLink {
-                        FeedbackInboxView()
-                    } label: {
-                        Label(String(localized: "Feedback Inbox (Developer)"), systemImage: "tray.full.fill")
-                    }
+                    developerLinks
                 }
 
                 // TODO: localize (handle is a proper noun, shown as-is)
@@ -571,6 +574,22 @@ struct NoticeSettingView: View {
             FeedbackView()
         }
         .paywallGate(isPresented: $showPaywall)
+    }
+
+    /// 개발자(마스터 모드) 전용 진입점 — 본문 타입체크 부담을 줄이려 별도 프로퍼티로 분리
+    @ViewBuilder
+    private var developerLinks: some View {
+        NavigationLink {
+            FeedbackInboxView()
+        } label: {
+            Label(String(localized: "Feedback Inbox (Developer)"), systemImage: "tray.full.fill")
+        }
+
+        NavigationLink {
+            UsageStatsView()
+        } label: {
+            Label(String(localized: "Usage Stats (Developer)"), systemImage: "chart.bar.fill")
+        }
     }
 
     /// Info의 버전 행 7번 탭 → 마스터 모드(개발자) 토글

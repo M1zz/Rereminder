@@ -7,9 +7,6 @@
 
 import SwiftUI
 import TipKit
-#if canImport(FirebaseCore)
-import FirebaseCore
-#endif
 
 @main
 struct RereminderApp: App {
@@ -17,10 +14,6 @@ struct RereminderApp: App {
     @StateObject private var themeManager = ThemeManager.shared
 
     init() {
-        #if canImport(FirebaseCore)
-        FirebaseApp.configure()
-        #endif
-
         // 기존 한국어 ringMode 값 마이그레이션
         RingMode.migrateIfNeeded()
 
@@ -42,6 +35,9 @@ struct RereminderApp: App {
 
         // 앱 시작 시 UIWindow tintColor를 즉시 설정하여 색상 깜빡임 방지
         ThemeManager.applyInitialTint()
+
+        // 앱 실행 기록 + 익명 사용 스냅샷을 iCloud로 전송 (백그라운드)
+        ActivityReporter.registerLaunch()
     }
 
     var body: some Scene {

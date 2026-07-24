@@ -2,14 +2,22 @@
 //  StoreManager.swift
 //  Rereminder
 //
-//  StoreKit 2 기반 인앱 구매 관리
-//  - 일회성 구매 (Non-consumable)
-//  - 구매 상태 영구 저장 (UserDefaults + Keychain)
-//  - Transaction 자동 감시
+//  부분 유료화(프로 일회성 잠금해제) — 파사드
+//
+//  StoreKit 2 엔진(상품 로드·구매·복원·권한 추적·트랜잭션 리스너·오프라인 캐시)은
+//  이제 LeeoKit 의 LeeoStore 가 공용으로 담당한다. 이 파일은 그 위에 앱 고유의
+//  로직만 얹은 얇은 파사드로, 기존 호출부·ProGate·PaywallView 는 그대로 동작한다.
+//  - 일회성 구매 (Non-consumable, com.xa.toki.pro)
+//  - 구매 상태 영구 저장 (UserDefaults + Keychain, key "rereminder.pro.purchased")
+//    → 논isolated 정적 isProUser 가 항상 올바른 값을 읽도록 store.hasPro 를 미러링한다.
+//  - 개발/샌드박스/맥앱 자동 Pro → unlockOverride 로 LeeoStore 에 주입
+//  - 기존 사용자 그랜드파더링 → grandfather 클로저로 LeeoStore 에 주입
 //
 
 import Foundation
+import Combine
 import StoreKit
+import LeeoKit
 
 @MainActor
 final class StoreManager: ObservableObject {
@@ -39,9 +47,10 @@ final class StoreManager: ObservableObject {
 
     static let shared = StoreManager()
 
-    // MARK: - Private
+    // MARK: - Private (LeeoStore 엔진 + 상태 미러링)
 
-    private var transactionListener: Task<Void, Error>?
+    private let store: LeeoStore
+    private var cancellable: AnyCancellable?
     private let keychainKey = "rereminder.pro.purchased"
     private let defaultsKey = "rereminder.pro.purchased"
 
@@ -93,15 +102,19 @@ final class StoreManager: ObservableObject {
         UserDefaults.standard.bool(forKey: grandfatherGrantedKey)
     }
 
-    private func grandfatherExistingUserIfNeeded() {
+    /// LeeoStore 의 grandfather 클로저로 주입되는 판정.
+    /// 실제 구매/그랜드파더링이 없을 때 LeeoStore 가 1회만 호출한다(결과 캐시).
+    /// 부여하면 rereminder.grandfather.granted 를 기록해 정적 isGrandfathered 가 읽는다.
+    private static func grandfatherExistingUserIfNeeded() -> Bool {
         let defaults = UserDefaults.standard
 
         // 이미 체크 완료된 경우 스킵
-        guard !defaults.bool(forKey: Self.grandfatherCheckKey) else { return }
-        defaults.set(true, forKey: Self.grandfatherCheckKey)
+        guard !defaults.bool(forKey: grandfatherCheckKey) else { return false }
+        defaults.set(true, forKey: grandfatherCheckKey)
 
-        // 이미 Pro인 경우 스킵 (실제 구매자)
-        guard !isPro else { return }
+        // 자동 Pro 환경(개발/샌드박스/맥앱)에서는 그랜드파더링을 부여하지 않는다.
+        // (원본의 `guard !isPro` 재현 — 자동 Pro 는 keychain/grant 에 영속화하지 않는다.)
+        guard !isAutoProEnvironment else { return false }
 
         // Pro 도입 전에 앱을 사용한 흔적이 있는지 확인
         let isExistingUser = defaults.string(forKey: "selectedThemeID") != nil
@@ -109,201 +122,122 @@ final class StoreManager: ObservableObject {
             || defaults.integer(forKey: "timerCompletionCount") > 0
 
         if isExistingUser {
-            defaults.set(true, forKey: Self.grandfatherGrantedKey)
-            isPro = true
-            savePurchaseState(true)
+            defaults.set(true, forKey: grandfatherGrantedKey)
+            return true
         }
+        return false
     }
 
     // MARK: - Init
 
     private init() {
-        // 저장된 구매 상태 로드
-        isPro = loadPurchaseState()
+        store = LeeoStore(
+            config: RereminderSpec.paywall!,
+            // 개발/샌드박스/맥앱 자동 Pro (true=강제 해제). 그 외에는 정상 판정(nil).
+            unlockOverride: { Self.isAutoProEnvironment ? true : nil },
+            // 기존 사용자 그랜드파더링 (구매 없을 때 LeeoStore 가 1회 호출).
+            grandfather: { Self.grandfatherExistingUserIfNeeded() }
+        )
 
-        // 기존 사용자 무료 Pro 부여
-        grandfatherExistingUserIfNeeded()
+        // 공용 스토어의 초기 상태를 파사드에 반영 + 키체인 미러링
+        syncFromStore()
 
-        // Transaction 감시 시작
-        transactionListener = listenForTransactions()
-
-        // 제품 정보 로드
-        Task { await loadProducts() }
-
-        // 앱 시작 시 영수증 검증
-        Task { await verifyCurrentEntitlements() }
+        // 공용 스토어의 상태 변화를 파사드 @Published + 키체인/UserDefaults 로 전파.
+        // objectWillChange 는 값 변경 '직전'에 발화하므로, 변경 반영 후 읽도록
+        // 다음 메인액터 틱으로 미룬다.
+        cancellable = store.objectWillChange.sink { [weak self] in
+            Task { @MainActor in
+                self?.syncFromStore()
+                self?.objectWillChange.send()
+            }
+        }
     }
 
-    deinit {
-        transactionListener?.cancel()
+    // MARK: - 상태 미러링
+
+    /// LeeoStore 의 현재 상태를 파사드의 @Published 로 옮기고,
+    /// 논isolated 정적 isProUser 가 어디서든 올바른 값을 읽도록
+    /// Pro 상태를 Keychain + UserDefaults(rereminder.pro.purchased) 로 미러링한다.
+    private func syncFromStore() {
+        products = store.products
+
+        let pro = store.hasPro
+        let changed = (pro != isPro)
+        isPro = pro
+
+        // 자동 Pro 환경은 영속화하지 않는다(원본과 동일). 실제 구매/그랜드파더링만 저장.
+        if changed, !Self.isAutoProEnvironment {
+            savePurchaseState(pro)
+        }
     }
 
-    // MARK: - Load Products
+    // MARK: - Load Products / Entitlements (LeeoStore 로 위임)
 
     func loadProducts() async {
-        do {
-            let ids = ProductID.allCases.map(\.rawValue)
-            products = try await Product.products(for: ids)
-        } catch {
-            print("❌ 제품 로드 실패: \(error)")
-            errorMessage = "Failed to load products"
-        }
+        await store.loadProducts()
+    }
+
+    /// 현재 유효한 구매 내역 확인 (앱 시작 시, 복원 시 호출)
+    func verifyCurrentEntitlements() async {
+        await store.refreshEntitlements()
     }
 
     // MARK: - Purchase
 
     func purchase(_ productID: ProductID = .pro) async {
-        guard let product = products.first(where: { $0.id == productID.rawValue }) else {
-            errorMessage = "Product not found"
-            purchaseState = .failed
-            return
-        }
-
         purchaseState = .purchasing
         errorMessage = nil
 
         AnalyticsManager.log(.purchaseStarted(productId: productID.rawValue))
 
-        do {
-            let result = try await product.purchase()
+        let success: Bool
+        if let product = store.products.first(where: { $0.id == productID.rawValue }) {
+            success = await store.purchase(product)
+        } else {
+            success = await store.purchasePrimary()
+        }
 
-            switch result {
-            case .success(let verification):
-                let transaction = try checkVerified(verification)
-                await handlePurchased(transaction)
-                purchaseState = .purchased
-                AnalyticsManager.log(.purchaseCompleted(productId: productID.rawValue))
-
-            case .userCancelled:
-                purchaseState = .idle
-                AnalyticsManager.log(.purchaseFailed(
-                    productId: productID.rawValue,
-                    reason: "user_cancelled"
-                ))
-
-            case .pending:
-                // 결제 보류 (가족 승인 등)
-                purchaseState = .idle
-                errorMessage = "Purchase pending approval"
-                AnalyticsManager.log(.purchaseFailed(
-                    productId: productID.rawValue,
-                    reason: "pending"
-                ))
-
-            @unknown default:
-                purchaseState = .failed
-                AnalyticsManager.log(.purchaseFailed(
-                    productId: productID.rawValue,
-                    reason: "unknown"
-                ))
-            }
-        } catch {
-            print("❌ 구매 실패: \(error)")
-            errorMessage = error.localizedDescription
+        if success {
+            purchaseState = .purchased
+            errorMessage = nil
+            AnalyticsManager.log(.purchaseCompleted(productId: productID.rawValue))
+        } else if let message = store.lastError {
+            // 오류/보류 — LeeoStore 가 사용자 노출 메시지를 남긴 경우
+            errorMessage = message
             purchaseState = .failed
             AnalyticsManager.log(.purchaseFailed(
                 productId: productID.rawValue,
                 reason: "error"
             ))
+        } else {
+            // 사용자 취소 등 — 조용히 idle 로 되돌림
+            purchaseState = .idle
+            AnalyticsManager.log(.purchaseFailed(
+                productId: productID.rawValue,
+                reason: "user_cancelled"
+            ))
         }
+
+        syncFromStore()
     }
 
     // MARK: - Restore Purchases
 
     func restorePurchases() async {
         purchaseState = .purchasing
+        errorMessage = nil
 
-        // AppStore에 동기화 요청
-        do {
-            try await AppStore.sync()
-        } catch {
-            print("❌ AppStore 동기화 실패: \(error)")
-            purchaseState = .failed
-            errorMessage = String(localized: "Failed to sync with App Store. Please check your network connection.")
-            return
-        }
-
-        await verifyCurrentEntitlements()
+        await store.restore()
+        syncFromStore()
 
         if isPro {
             purchaseState = .restored
             AnalyticsManager.log(.purchaseRestored)
         } else {
             purchaseState = .idle
-            if errorMessage == nil {
-                errorMessage = String(localized: "No purchases to restore")
-            }
+            errorMessage = store.lastError
+                ?? String(localized: "No purchases to restore")
         }
-    }
-
-    // MARK: - Entitlement Verification
-
-    /// 현재 유효한 구매 내역 확인 (앱 시작 시, 복원 시 호출)
-    func verifyCurrentEntitlements() async {
-        var foundPro = false
-        var verificationFailed = false
-
-        for await result in Transaction.currentEntitlements {
-            do {
-                let transaction = try checkVerified(result)
-                if transaction.productID == ProductID.pro.rawValue {
-                    foundPro = true
-                    await transaction.finish()
-                }
-            } catch {
-                print("❌ 트랜잭션 검증 실패: \(error)")
-                verificationFailed = true
-            }
-        }
-
-        // TestFlight/Sandbox 환경과 기존 사용자(그랜드파더링)는 entitlement 가 없어도
-        // Pro 유지 (verifyCurrentEntitlements 가 실제 구매 부재로 인해 isPro 를
-        // false 로 되돌리지 않도록 보호)
-        let effectiveFoundPro = foundPro || Self.isAutoProEnvironment || Self.isGrandfathered
-
-        if effectiveFoundPro != isPro {
-            isPro = effectiveFoundPro
-            if !Self.isAutoProEnvironment {
-                savePurchaseState(effectiveFoundPro)
-            }
-        }
-
-        if verificationFailed && !effectiveFoundPro {
-            errorMessage = String(localized: "Purchase verification failed. Please try restoring purchases.")
-        }
-    }
-
-    // MARK: - Transaction Listener
-
-    /// 외부 구매 (프로모션 코드, 가족 공유 등) 실시간 감지
-    private func listenForTransactions() -> Task<Void, Error> {
-        Task.detached { [weak self] in
-            for await result in Transaction.updates {
-                guard let self else { return }
-                if let transaction = try? self.checkVerified(result) {
-                    await self.handlePurchased(transaction)
-                }
-            }
-        }
-    }
-
-    // MARK: - Helpers
-
-    nonisolated private func checkVerified<T>(_ result: VerificationResult<T>) throws -> T {
-        switch result {
-        case .unverified(_, let error):
-            throw error
-        case .verified(let value):
-            return value
-        }
-    }
-
-    private func handlePurchased(_ transaction: Transaction) async {
-        if transaction.productID == ProductID.pro.rawValue {
-            isPro = true
-            savePurchaseState(true)
-        }
-        await transaction.finish()
     }
 
     // MARK: - Persistence (UserDefaults + Keychain)
@@ -314,19 +248,6 @@ final class StoreManager: ObservableObject {
 
         // Keychain (앱 삭제 후 재설치에도 유지)
         KeychainHelper.save(key: keychainKey, value: purchased)
-    }
-
-    private func loadPurchaseState() -> Bool {
-        // TestFlight/Sandbox/개발자(macOS) 환경에서는 자동으로 Pro 부여 (영속화하지 않음)
-        if Self.isAutoProEnvironment { return true }
-
-        // Keychain 우선, 없으면 UserDefaults
-        if let keychainValue = KeychainHelper.load(key: keychainKey) {
-            // UserDefaults도 동기화
-            UserDefaults.standard.set(keychainValue, forKey: defaultsKey)
-            return keychainValue
-        }
-        return UserDefaults.standard.bool(forKey: defaultsKey)
     }
 }
 

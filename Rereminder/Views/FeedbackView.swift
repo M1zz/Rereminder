@@ -20,3 +20,10 @@ struct FeedbackInboxView: View {
         LeeoFeedbackInboxView<RereminderSpec>()
     }
 }
+
+/// 개발자용 익명 사용 통계 뷰어 — 앱 활동(설치 스냅샷·이벤트)을 iCloud에서 모아 보여준다.
+struct UsageStatsView: View {
+    var body: some View {
+        LeeoUsageStatsView<RereminderSpec>()
+    }
+}

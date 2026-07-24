@@ -2,15 +2,12 @@
 //  AnalyticsManager.swift
 //  Rereminder
 //
-//  Firebase Analytics 래퍼
-//  iOS 타겟에서만 동작 (Watch/Widget 에서는 no-op)
+//  로컬 이벤트 로깅 래퍼 (외부 분석 SDK 미사용).
+//  Firebase Analytics 연동은 제거되었으며, 이벤트는 DEBUG 빌드에서만
+//  콘솔에 출력되고 어떤 데이터도 외부로 전송되지 않는다.
 //
 
 import Foundation
-
-#if canImport(FirebaseAnalytics)
-import FirebaseAnalytics
-#endif
 
 enum AnalyticsManager {
 
@@ -104,39 +101,27 @@ enum AnalyticsManager {
 
     // MARK: - Public API
 
-    /// 앱 시작 시 1회 호출
-    static func configure() {
-        #if canImport(FirebaseAnalytics)
-        // FirebaseApp.configure() 는 RereminderApp init 에서 호출됨
-        #endif
-    }
+    /// 앱 시작 시 1회 호출 (외부 분석 SDK 미사용 — no-op)
+    static func configure() {}
 
-    /// 이벤트 추적
+    /// 이벤트 추적 (DEBUG 빌드에서만 콘솔 출력, 외부 전송 없음)
     static func log(_ event: Event) {
-        #if canImport(FirebaseAnalytics)
-        Analytics.logEvent(event.name, parameters: event.parameters)
-        #endif
-
         #if DEBUG
         print("📊 [Analytics] \(event.name) \(event.parameters)")
         #endif
     }
 
-    /// 사용자 속성 설정 (예: pro_user, trial_user)
+    /// 사용자 속성 설정 (DEBUG 빌드에서만 콘솔 출력)
     static func setUserProperty(_ value: String?, forName name: String) {
-        #if canImport(FirebaseAnalytics)
-        Analytics.setUserProperty(value, forName: name)
+        #if DEBUG
+        print("📊 [Analytics] userProperty \(name)=\(value ?? "nil")")
         #endif
     }
 
-    /// 화면 이름 추적 (자동 화면 추적 보완)
+    /// 화면 이름 추적 (DEBUG 빌드에서만 콘솔 출력)
     static func logScreen(_ name: String, screenClass: String? = nil) {
-        #if canImport(FirebaseAnalytics)
-        var params: [String: Any] = [AnalyticsParameterScreenName: name]
-        if let screenClass = screenClass {
-            params[AnalyticsParameterScreenClass] = screenClass
-        }
-        Analytics.logEvent(AnalyticsEventScreenView, parameters: params)
+        #if DEBUG
+        print("📊 [Analytics] screen_view \(name)")
         #endif
     }
 }

@@ -254,6 +254,7 @@ final class TimerScreenViewModel: ObservableObject {
         }
         showToast?("Start")
         timerVM.start()
+        ActivityReporter.log("timer_start")
     }
 
     func pause() {
@@ -499,6 +500,7 @@ extension TimerScreenViewModel {
         }
 
         timerVM.start()
+        ActivityReporter.log("presentation_start")
     }
 
     /// 발표 이름 자동 생성
