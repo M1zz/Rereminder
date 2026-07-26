@@ -4,7 +4,7 @@
 //
 //  타이머 다이얼 아래 빠른 템플릿 바
 //  - 왼쪽: 최근 사용한 템플릿 이름 칩 (탭하면 설정만 다이얼에 반영, 시작하지 않음)
-//  - 오른쪽: 저장 버튼 (다이얼을 수정해 마지막 저장본과 달라졌을 때만 표시)
+//  - 오른쪽: 템플릿 저장 버튼 (시간·예비 알림·문구가 기존 템플릿과 달라졌을 때만 표시)
 //
 
 import SwiftData
@@ -21,16 +21,23 @@ struct TemplateQuickBar: View {
         allTemplates.sorted { ($0.lastUsedAt ?? $0.createdAt) > ($1.lastUsedAt ?? $1.createdAt) }
     }
 
-    /// 현재 다이얼이 마지막 저장 템플릿과 다른가 — 저장 버튼 노출 조건
-    /// (TimerConfigService.saveIfNeeded의 중복 판정과 동일 기준)
-    private var isModified: Bool {
-        guard let top = allTemplates.first else { return true }
+    /// 저장할 것이 있는가 — 버튼 노출 조건
+    /// 시간·예비 알림·문구 중 하나라도 기존 템플릿과 다르면 true.
+    /// 같은 설정의 템플릿이 이미 있거나 저장할 시간이 없으면 false (버튼 숨김).
+    private var hasUnsavedChanges: Bool {
         let cfg = screenVM.normalizedCurrentConfig
-        let normalizedFinish = screenVM.finishMessage.isEmpty ? nil : screenVM.finishMessage
-        return !(top.mainSeconds == cfg.mainSec
-            && top.prealertOffsetsSec == cfg.offsets
-            && top.prealertMessages == screenVM.prealertMessages
-            && top.finishMessage == normalizedFinish)
+        guard cfg.mainSec > 0 else { return false }
+        let messages: [Int: String] = screenVM.prealertMessages
+        let finish: String? = screenVM.finishMessage.isEmpty ? nil : screenVM.finishMessage
+
+        for template in allTemplates {
+            guard template.mainSeconds == cfg.mainSec else { continue }
+            guard template.prealertOffsetsSec == cfg.offsets else { continue }
+            guard template.prealertMessages == messages else { continue }
+            guard template.finishMessage == finish else { continue }
+            return false
+        }
+        return true
     }
 
     var body: some View {
@@ -56,22 +63,23 @@ struct TemplateQuickBar: View {
                 .padding(.horizontal, 2)
             }
 
-            if isModified {
+            if hasUnsavedChanges {
                 Button {
                     withAnimation(.easeInOut(duration: 0.25)) {
                         screenVM.saveCurrentAsTemplate()
                     }
                 } label: {
-                    Label(String(localized: "Save"), systemImage: "square.and.arrow.down")
+                    Label(String(localized: "Save template"), systemImage: "square.and.arrow.down")
                         .font(DSFont.callout.weight(.medium))
                         .lineLimit(1)
                         .frame(minHeight: 36)
                 }
                 .buttonStyle(.borderedProminent)
+                .accessibilityLabel(String(localized: "Save the current settings as a template"))
                 .transition(.opacity.combined(with: .scale(scale: 0.9)))
             }
         }
-        .animation(.easeInOut(duration: 0.2), value: isModified)
+        .animation(.easeInOut(duration: 0.2), value: hasUnsavedChanges)
     }
 
     /// 이름이 비어있으면 M:SS 시간 표기

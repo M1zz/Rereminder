@@ -5630,6 +5630,38 @@
         }
       }
     },
+    "Save template" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "テンプレートを保存"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "템플릿 저장"
+          }
+        }
+      }
+    },
+    "Save the current settings as a template" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在の設定をテンプレートとして保存します"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "현재 설정을 템플릿으로 저장합니다"
+          }
+        }
+      }
+    },
     "Saved" : {
       "extractionState" : "stale",
       "localizations" : {
