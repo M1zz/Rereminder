@@ -2,12 +2,16 @@
 
 #
 # update_version.sh
-# Toki 버전 업데이트 스크립트
+# Rereminder 버전 업데이트 스크립트
 #
 # 사용법:
 #   ./scripts/update_version.sh 1.0.7        # 버전만 업데이트
 #   ./scripts/update_version.sh 1.0.7 2      # 버전과 빌드 번호 업데이트
 #   ./scripts/update_version.sh --build-only # 빌드 번호만 증가
+#
+# Config/Version.xcconfig 가 프로젝트의 base configuration 이라,
+# 이 파일 하나만 고치면 모든 타겟(앱·Watch·위젯·App Clip·MenuBar)에 반영된다.
+# 타겟 빌드 설정에 MARKETING_VERSION 을 다시 넣으면 이 값이 덮여쓰이니 넣지 말 것.
 #
 
 set -e
@@ -15,7 +19,6 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 VERSION_FILE="$PROJECT_ROOT/Config/Version.xcconfig"
-PROJECT_FILE="$PROJECT_ROOT/Toki.xcodeproj/project.pbxproj"
 
 # 색상 코드
 RED='\033[0;31m'
@@ -47,7 +50,7 @@ show_version() {
     CURRENT_VERSION=$(get_current_version)
     CURRENT_BUILD=$(get_current_build)
     echo ""
-    echo "📱 Toki 현재 버전 정보"
+    echo "📱 Rereminder 현재 버전 정보"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "버전:      $CURRENT_VERSION"
     echo "빌드 번호: $CURRENT_BUILD"
@@ -81,7 +84,7 @@ update_version() {
     CURRENT_BUILD=$(get_current_build)
 
     echo ""
-    echo "📱 Toki 버전 업데이트"
+    echo "📱 Rereminder 버전 업데이트"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "현재 버전:  $CURRENT_VERSION (빌드 $CURRENT_BUILD)"
     echo "새 버전:    $NEW_VERSION (빌드 $NEW_BUILD)"

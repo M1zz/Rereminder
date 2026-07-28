@@ -1,9 +1,0 @@
-// Version Configuration
-// 이 파일에서 빌드 번호(CURRENT_PROJECT_VERSION)를 중앙 관리합니다.
-// 마케팅 버전은 타겟별로 다를 수 있어 각 타겟 설정을 유지합니다.
-
-// 마케팅 버전 기본값 (메인 앱 기준 — 타겟이 개별 지정 시 그 값이 우선)
-MARKETING_VERSION = 2.0.3
-
-// 빌드 번호 (내부 버전) — 모든 타겟 공통
-CURRENT_PROJECT_VERSION = 1
