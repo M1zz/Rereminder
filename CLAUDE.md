@@ -25,6 +25,13 @@ Rereminder/
 │   ├── RereminderAlarm.swift       # 위젯 구현
 │   └── RereminderAlarmLiveActivity.swift  # Live Activity 구현
 │
+├── RereminderClip/           # App Clip (경량 체험판)
+│   ├── RereminderClipApp.swift   # 클립 진입점
+│   ├── ClipTimerView.swift       # 단일 화면 UI
+│   ├── ClipTimerViewModel.swift  # TimerEngine 래핑
+│   ├── ClipAlertPlanner.swift    # 알림 3개 자동 배분 로직
+│   └── Assets.xcassets/
+│
 └── Shared/                   # 공유 모듈 (iOS, Watch, Widget)
     ├── Models/               # 데이터 모델
     │   ├── Timer.swift       # 타이머 모델
@@ -99,14 +106,16 @@ git checkout -b feature/이슈번호
 - **CURRENT_PROJECT_VERSION**: 빌드 번호 (정수)
   - TestFlight 업로드마다 증가
 
-### Xcode 설정 (초기 1회)
-자세한 설정 방법은 `Config/README.md` 참고
+### 동작 방식 (설정 완료 — 추가 작업 없음)
+`Config/Version.xcconfig` 가 프로젝트 레벨 base configuration 이고,
+**어떤 타겟도 버전을 자기 빌드 설정에 갖고 있지 않습니다.** 파일 하나 = 전 타겟.
 
-1. 각 타겟의 Build Settings에서:
-   - MARKETING_VERSION = $(inherited)
-   - CURRENT_PROJECT_VERSION = $(inherited)
+**절대 하지 말 것** (2026-07-27 에 정리한 문제들):
+- 타겟 Build Settings 에 `MARKETING_VERSION` 을 넣기 → xcconfig 를 덮어써서 중앙 관리가 무력화됨
+- 저장소 루트에 `Version.xcconfig` 를 만들기 → 예전에 루트/`Config/` 두 파일이 공존했고,
+  프로젝트는 루트를, 스크립트·문서는 `Config/` 를 봐서 값이 계속 어긋났음
 
-2. 프로젝트 Info → Configurations에서 Version.xcconfig 연결
+검증: `./scripts/update_version.sh --show` 와 각 타겟의 `-showBuildSettings` 값이 일치해야 함
 
 ## 커밋 컨벤션
 
@@ -192,6 +201,57 @@ extension TimerView {
 - **TimePresetButtons** (`Rereminder/Views/Components/TimePresetButtons.swift`): 시간 프리셋 버튼
 - **ToastViewModifier** (`Rereminder/Views/Components/ToastViewModifier.swift`): 토스트 메시지
 
+### App Clip (RereminderClip)
+앱의 핵심 가치인 **"끝나기 전 여러 번 알림"**만 남긴 경량 체험판입니다.
+
+- **번들 ID**: `com.xa.toki.Clip` (부모 앱 `com.xa.toki`에 임베드)
+- **조작**: 메인 앱과 같은 다이얼 UX입니다. 흰 핸들을 끌어 총 시간을,
+  주황 종 노브를 끌어 알림 지점을 정합니다. 시간 프리셋(10·30·60분) 버튼도 있습니다.
+- **ClipAlertPlanner**: 총 시간만 받아 알림 지점을 자동 배분합니다(사용자가 종을 옮기기 전 기본값).
+  총 시간의 1/3·1/6·1/30 지점을 계산한 뒤 사람이 말하는 단위(10분·5분·1분 등)로 스냅합니다.
+  (예: 30분 → 10분·5분·1분 전)
+  - 목표에서 2배 넘게 벗어나면 그 알림은 만들지 않습니다.
+  - **알림 사이 최소 간격 150초**를 강제합니다. 링이 절대 각도(1° = 10초)라 150초 = 15°인데,
+    그보다 가까우면 종 노브가 겹쳐서 집을 수가 없습니다.
+    간격을 못 만들면 3개보다 적게 만듭니다 (10분 타이머 → 3분 전·20초 전 2개).
+  - 사용자가 종을 한 번이라도 옮기면(`hasCustomizedAlerts`) 시간이 바뀌어도 다시 배분하지 않고,
+    총 시간 밖으로 나간 지점만 버립니다.
+- **코드 재사용**: `TimerEngine`, `ThemeManager`, 디자인 시스템(DS*), `RingSound`, `AppName`,
+  `ring.swift`, `Localizable.xcstrings`를 메인 앱과 공유합니다.
+  Xcode 동기화 그룹(`PBXFileSystemSynchronizedBuildFileExceptionSet`)으로 멤버십만 추가하는 방식이라
+  파일이 복제되지 않습니다.
+- **`ClipClock`**: 시계는 공유하지 않고 클립 전용으로 다시 그렸습니다.
+  메인 화면(`TimerMainView.clockView`)은 공유 `Clock.swift`가 아니라 자체 렌더링을 쓰기 때문에,
+  `Clock`을 재사용하면 오히려 앱과 달라 보입니다(선 두께 고정 8pt vs 지름의 8.3%, 노브 없음 등).
+  `ClipClock`은 메인과 같은 규칙으로 맞췄습니다:
+  - 대기 중에는 **절대 각도**(`TimeMapper`, 1° = 10초, 2바퀴까지 / 2바퀴째는 연두)
+  - 실행 중에는 남은 비율 + 줄어드는 호 끝의 흰 점
+  - 지름의 8.3% 선 두께, `plain` 50% 트랙, 주황 종 노브, 드래그 툴팁
+  - 드래그 툴팁이 원 밖 48pt까지 나가므로 `ClipTimerView`에서 시계 위아래 여백을 그만큼 둡니다.
+  **메인 시계 디자인을 바꾸면 여기도 함께 손봐야 합니다.**
+- **테마**: 클립에도 `.tint(themeManager.accentColor)` + `.preferredColorScheme`를 적용합니다.
+  이게 없으면 에셋의 `AccentColor`(분홍)가 나와 앱(기본 Ocean 블루 + 다크)과 완전히 달라 보입니다.
+- **`APPCLIP` 컴파일 조건**: 클립에는 App Group·위젯·인앱결제가 없으므로,
+  `TimerEngine`의 공유 상태 저장 / `WidgetCenter` 갱신 / `AnalyticsManager`(ProGate 의존) 호출을
+  `#if !APPCLIP`으로 제외합니다. **Shared 코드를 고칠 때 이 가드를 깨지 않도록 주의하세요.**
+- **알림 권한**: `Info.plist`의 `NSAppClipRequestEphemeralUserNotification`으로
+  클립 세션(8시간) 동안 알림을 보낼 수 있습니다.
+- **호출 URL**: `?minutes=N` (1~120) 쿼리로 시작 시간을 지정할 수 있습니다.
+- **고급 App Clip 경험 / 도메인 연결** — GitHub Pages (`M1zz/m1zz.github.io` 저장소):
+  - 초대 URL: `https://m1zz.github.io/rereminder/`
+  - 클립 엔타이틀먼트: `com.apple.developer.associated-domains` = `appclips:m1zz.github.io`
+  - AASA: `m1zz.github.io/.well-known/apple-app-site-association` 의 `appclips.apps` 에
+    `QGAQ3AY3R3.com.xa.toki.Clip` 포함.
+    ⚠️ **FindMe 클립과 같은 파일을 공유합니다. 고칠 때 기존 항목을 지우지 마세요.**
+  - 저장소 루트에 `.nojekyll` 이 있어야 `.well-known` 폴더가 서빙됩니다.
+  - GitHub Pages 는 이 파일을 `application/octet-stream` 으로 주지만 **Apple 은 문제없이 파싱합니다.**
+    (문서에는 `application/json` 이 요구사항이라 적혀 있으나 실제로는 통과 — FindMe 로 검증됨)
+  - 검증: `curl https://app-site-association.cdn-apple.com/a/v1/m1zz.github.io`
+    (Apple CDN 캐시라 푸시 직후에는 옛 내용이 나올 수 있음)
+  - 랜딩 페이지 원본은 `web/index.html`. 고치면 블로그 저장소로 복사해 푸시.
+  - **도메인을 바꾸면 엔타이틀먼트·AASA·App Store Connect 세 곳을 모두 고쳐야 합니다.**
+- **주의**: 클립 버전(`MARKETING_VERSION`)은 메인 앱과 **반드시 일치**해야 제출이 통과합니다.
+
 ### Models
 - **Timer**: 타이머 데이터 구조
 - **TimerRecord**: 타이머 사용 기록
@@ -244,6 +304,12 @@ extension TimerView {
 - [ ] 홈 화면 위젯 표시 확인
 - [ ] 잠금 화면 위젯 표시 확인
 - [ ] 위젯에서 타이머 제어 확인
+
+### App Clip
+- [ ] 시간 프리셋 선택 시 알림 3개 지점이 갱신되는지
+- [ ] 실기기에서 백그라운드 3번 알림 수신 확인 (시뮬레이터로는 검증 불가)
+- [ ] 전체 앱 유도 `SKOverlay` 표시 확인
+- [ ] 호출 URL `?minutes=N` 으로 시작 시간이 반영되는지
 
 ## 빌드 환경
 - **Xcode**: 15.0+
