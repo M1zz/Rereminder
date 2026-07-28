@@ -1070,6 +1070,23 @@
         }
       }
     },
+    "Alerts are set automatically" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アラート地点が自動で設定されました"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "알림 지점이 자동으로 잡혔어요"
+          }
+        }
+      }
+    },
     "Alerts before end" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1769,6 +1786,22 @@
         }
       }
     },
+    "Drag the bells to get reminders before your talk ends" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ベルをドラッグして、発表が終わる前にリマインダーを受け取りましょう"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "종 모양을 움직여서 발표 종료 전 미리 알림을 받아보세요"
+          }
+        }
+      }
+    },
     "e.g., Presentation, Mentoring, Meeting" : {
       "localizations" : {
         "ja" : {
@@ -2345,6 +2378,7 @@
       }
     },
     "guide_iphone_f1_desc" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2367,6 +2401,7 @@
       }
     },
     "guide_iphone_f1_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2389,6 +2424,7 @@
       }
     },
     "guide_iphone_f2_desc" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2411,6 +2447,7 @@
       }
     },
     "guide_iphone_f2_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2433,6 +2470,7 @@
       }
     },
     "guide_iphone_f3_desc" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2455,6 +2493,7 @@
       }
     },
     "guide_iphone_f3_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2477,6 +2516,7 @@
       }
     },
     "guide_iphone_subtitle" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2499,6 +2539,7 @@
       }
     },
     "guide_iphone_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2521,6 +2562,7 @@
       }
     },
     "guide_mac_f1_desc" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2543,6 +2585,7 @@
       }
     },
     "guide_mac_f1_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2565,6 +2608,7 @@
       }
     },
     "guide_mac_f2_desc" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2587,6 +2631,7 @@
       }
     },
     "guide_mac_f2_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2609,6 +2654,7 @@
       }
     },
     "guide_mac_f3_desc" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2631,6 +2677,7 @@
       }
     },
     "guide_mac_f3_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2653,6 +2700,7 @@
       }
     },
     "guide_mac_subtitle" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2675,6 +2723,7 @@
       }
     },
     "guide_mac_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2719,6 +2768,7 @@
       }
     },
     "guide_siri_f1_desc" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2741,6 +2791,7 @@
       }
     },
     "guide_siri_f1_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2763,6 +2814,7 @@
       }
     },
     "guide_siri_f2_desc" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2785,6 +2837,7 @@
       }
     },
     "guide_siri_f2_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2807,6 +2860,7 @@
       }
     },
     "guide_siri_f3_desc" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2829,6 +2883,7 @@
       }
     },
     "guide_siri_f3_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2851,6 +2906,7 @@
       }
     },
     "guide_siri_subtitle" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2873,6 +2929,7 @@
       }
     },
     "guide_siri_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2895,6 +2952,7 @@
       }
     },
     "guide_watch_f1_desc" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2917,6 +2975,7 @@
       }
     },
     "guide_watch_f1_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2939,6 +2998,7 @@
       }
     },
     "guide_watch_f2_desc" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2961,6 +3021,7 @@
       }
     },
     "guide_watch_f2_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2983,6 +3044,7 @@
       }
     },
     "guide_watch_f3_desc" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3005,6 +3067,7 @@
       }
     },
     "guide_watch_f3_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3027,6 +3090,7 @@
       }
     },
     "guide_watch_subtitle" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3049,6 +3113,7 @@
       }
     },
     "guide_watch_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3071,6 +3136,7 @@
       }
     },
     "guide_widget_f1_desc" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3093,6 +3159,7 @@
       }
     },
     "guide_widget_f1_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3115,6 +3182,7 @@
       }
     },
     "guide_widget_f2_desc" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3137,6 +3205,7 @@
       }
     },
     "guide_widget_f2_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3159,6 +3228,7 @@
       }
     },
     "guide_widget_f3_desc" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3181,6 +3251,7 @@
       }
     },
     "guide_widget_f3_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3203,6 +3274,7 @@
       }
     },
     "guide_widget_subtitle" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3225,6 +3297,7 @@
       }
     },
     "guide_widget_title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -4755,6 +4828,7 @@
       }
     },
     "Only basic notifications are supported on macOS" : {
+      "extractionState" : "stale",
       "localizations" : {
         "ja" : {
           "stringUnit" : {
@@ -5075,6 +5149,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "프레젠테이션"
+          }
+        }
+      }
+    },
+    "Presentation mode, templates, and history in the full app" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プレゼンモード・テンプレート・履歴は製品版アプリで"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "발표 모드·템플릿·기록은 전체 앱에서"
           }
         }
       }
@@ -5434,6 +5524,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "두번알림 타이머"
+          }
+        }
+      }
+    },
+    "Reset" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "リセット"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "초기화"
           }
         }
       }
@@ -6814,6 +6920,22 @@
         }
       }
     },
+    "Timer dial" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーダイヤル"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 다이얼"
+          }
+        }
+      }
+    },
     "Timer duration" : {
       "localizations" : {
         "ja" : {
@@ -7400,6 +7522,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "5회 더 사용해보기"
+          }
+        }
+      }
+    },
+    "Turn on notifications to get alerts while the app is in the background." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "バックグラウンドでも通知を受け取るには、通知を許可してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "백그라운드에서도 알림을 받으려면 알림 권한을 켜주세요."
           }
         }
       }
