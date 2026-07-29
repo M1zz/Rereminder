@@ -10,6 +10,20 @@ App Clip 도메인 연결과 랜딩 페이지는 **블로그 저장소**에 있�
 
 초대 URL: `https://m1zz.github.io/rereminder/` (`?minutes=N` 으로 시작 시간 지정 가능, 1~120)
 
+## 소개 페이지에서 들어오는 길
+
+앱 소개 페이지(`docs/index.html` → `m1zz.github.io/Rereminder/`, **대문자 R**)에서
+위 초대 URL(**소문자 r**)로 가는 링크가 세 군데 있습니다:
+
+| 위치 | 문구 (en / ko) |
+|---|---|
+| 상단 내비 + 모바일 메뉴 | `nav.tryClip` — Try Now / 바로 써보기 |
+| 히어로 보조 CTA | `hero.ctaClip` — Try without installing / 설치 없이 바로 써보기 |
+| 푸터 | `footer.tryClip` — Try without installing / 설치 없이 써보기 |
+
+⚠️ **경로 대소문자가 다릅니다.** 소개 페이지는 이 저장소의 `docs/`(`/Rereminder/`),
+클립 랜딩은 블로그 저장소(`/rereminder/`)라 서로 다른 배포처입니다. 링크를 고칠 때 헷갈리지 마세요.
+
 ## 이 폴더의 파일
 
 - `index.html` — 랜딩 페이지 원본. 고치면 블로그 저장소의 `rereminder/index.html` 로 복사해 푸시.
