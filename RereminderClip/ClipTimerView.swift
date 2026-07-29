@@ -12,31 +12,29 @@ struct ClipTimerView: View {
     @EnvironmentObject private var viewModel: ClipTimerViewModel
     @Environment(\.scenePhase) private var scenePhase
 
+    // 클립은 스크롤 없는 한 화면이다. 나머지 요소가 제 높이를 먼저 가져가고,
+    // 남는 자리는 전부 원이 쓴다 — 원 크기가 이 화면의 최우선이다.
     var body: some View {
-        GeometryReader { geometry in
-            VStack(spacing: DSSpacing.lg) {
-                header
+        VStack(spacing: DSSpacing.md) {
+            header
 
-                Spacer(minLength: 0)
+            clockArea
+                // 알림 배지가 원 밖으로 나가므로 이웃보다 위에 그린다
+                .zIndex(1)
 
-                clock(size: clockSize(in: geometry.size))
+            alertChips
 
-                alertChips
-
-                Spacer(minLength: 0)
-
-                if viewModel.isEditable {
-                    durationPresets
-                }
-
-                controls
-
-                fullAppLink
+            if viewModel.isEditable {
+                durationPresets
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+
+            controls
+
+            fullAppLink
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .padding(.horizontal, DSSpacing.xl)
-        .padding(.vertical, DSSpacing.xl)
+        .padding(.vertical, DSSpacing.lg)
         .onChange(of: scenePhase) { _, phase in
             if phase == .active { viewModel.refreshOnForeground() }
         }
@@ -57,12 +55,35 @@ struct ClipTimerView: View {
 
     // MARK: - Clock
 
-    /// 드래그 툴팁이 원 밖으로 나가는 여백. 툴팁 중심이 반지름+32, 높이 절반이 약 16pt다.
-    /// `ClipClock` 이 이미 노브 히트 영역만큼(선 두께 × 1.4 ≈ 34pt) 프레임을 키워두므로 나머지만 둔다.
-    private static let tooltipMargin: CGFloat = 16
+    /// 알림 배지가 원 위·아래로 삐져나오는 몫.
+    /// 배지 중심이 반지름+52, 높이 절반이 34pt인데 `ClipClock` 프레임이 이미
+    /// 노브 히트 영역(선 두께 × 1.4)만큼 커져 있어 그만큼은 빼고 잡은 값이다.
+    private static let badgeMargin: CGFloat = 48
 
-    private func clockSize(in available: CGSize) -> CGFloat {
-        min(available.width * 0.80, available.height * 0.38)
+    /// 자리가 아무리 없어도 이보다 작아지면 다이얼을 손으로 조작할 수 없다
+    private static let minClockSide: CGFloat = 150
+
+    /// 종 노브(지름 1.6 × 선 두께)가 링 바깥으로 나가는 만큼을 뺀 비율.
+    /// 이걸 안 빼면 3시·9시 방향 종이 화면 가장자리에서 잘린다.
+    /// (링 반지름 + 노브 반지름 = 지름 × 0.5664 → 화면 폭의 88%가 한계)
+    private static let widthRatio: CGFloat = 0.88
+
+    /// 나머지 요소를 뺀 자리를 전부 원에 준다.
+    /// 세로가 남아도는 화면에서는 가로가 한계라 원이 화면 폭을 거의 꽉 채운다.
+    private func clockSide(in available: CGSize) -> CGFloat {
+        max(
+            Self.minClockSide,
+            min(available.width * Self.widthRatio, available.height - Self.badgeMargin * 2)
+        )
+    }
+
+    private var clockArea: some View {
+        GeometryReader { proxy in
+            clock(size: clockSide(in: proxy.size))
+                .frame(width: proxy.size.width, height: proxy.size.height)
+        }
+        // 원만은 화면 좌우 여백까지 되찾아 쓴다 — 이 화면에서 가장 중요한 게 원이다
+        .padding(.horizontal, -DSSpacing.xl)
     }
 
     private func clock(size: CGFloat) -> some View {
@@ -82,8 +103,6 @@ struct ClipTimerView: View {
             }
             .allowsHitTesting(false)
         }
-        // 툴팁이 알림 칩·헤더를 덮지 않도록 원 둘레에 자리를 비워둔다.
-        .padding(.vertical, Self.tooltipMargin)
     }
 
     private var timeText: String {
