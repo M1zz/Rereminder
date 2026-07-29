@@ -5576,6 +5576,38 @@
         }
       }
     },
+    "Reset the timer to the default setup" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーをデフォルト設定に戻します"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머를 기본 설정으로 되돌립니다"
+          }
+        }
+      }
+    },
+    "Reset to the default timer" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デフォルトのタイマー設定に戻しました"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기본 타이머 설정으로 되돌렸어요"
+          }
+        }
+      }
+    },
     "Restore Purchases" : {
       "localizations" : {
         "ja" : {
