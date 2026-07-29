@@ -196,6 +196,67 @@ extension TimerView {
 - **RereminderAlarmManager** (`Shared/Modules/RereminderAlarmManager.swift`): 알림 관리
 - **ReviewRequestManager** (`Shared/Modules/ReviewRequestManager.swift`): 앱스토어 리뷰 요청 관리
 
+### 알림 배지 (종을 옮길 때 뜨는 툴팁)
+종 노브를 끌면 그 지점을 **두 가지로** 읽어줍니다. 발표자는 "몇 분 남았나"와
+"몇 분째 말하고 있나"를 둘 다 알아야 하기 때문입니다.
+
+```
+⚑ 1:00   ← 종료 전 남은 시간 (주황, DSColor.marker)
+▶ 4:00   ← 시작 후 경과 (강조색)
+```
+(5분 발표에서 종료 1분 전에 종을 두면 위와 같이 나옵니다)
+
+- 같은 순간 **링도 종을 경계로 두 색으로 갈라집니다.**
+  0° ~ 종 = 주황(= 위 줄), 종 ~ 설정 시간 = 강조색(= 아래 줄).
+  배지 줄 색과 링 구간 색이 같아야 어느 숫자가 어디인지 읽히므로, **한쪽만 바꾸지 마세요.**
+- 종이 여러 개일 때 잡고 있는(또는 방금 놓은) 종만 100%, 나머지는 25%로 물러납니다.
+  **종 노브(`alertKnobs`)와 작대기 마커(`ClockMarkers.dimmedIndices`) 둘 다** 흐려져야 합니다.
+  하나만 흐려지면 따로 노는 것처럼 보입니다.
+- 배지·링 강조·흐리기가 모두 `highlightedMarker`(클립은 `highlightedAlert`) 하나를 따라갑니다.
+  드래그 중이면 손가락 위치, 놓은 뒤 **3초**(`tooltipLingerSeconds`) 동안은 확정된 위치입니다.
+- 3초가 지나면 배지·링 강조·흐려진 종이 **한꺼번에 0.35초 디졸브**로 원래대로 돌아옵니다
+  (`dissolveDuration`). 들어올 땐 0.2초로 빠르게, 나갈 땐 천천히 — `highlightAnimation` 이
+  방향에 따라 두 값을 골라 씁니다. 사라지는 뷰에는 `.transition(.opacity)` 가 붙어 있어야
+  뚝 끊기지 않습니다.
+- 구현: `TimerMainView.markerDragTooltip` / `alertSplitArc`,
+  `ClipClock.alertDragTooltip` / `alertSplitArc` — **두 곳을 함께 고쳐야 합니다.**
+- 배지가 3시·9시 방향에서 화면 밖으로 나가지 않도록 메인 앱은 x 오프셋을 화면 폭으로 자릅니다
+  (`markerBadgeHalfWidth`). 배지 글꼴·여백을 키우면 이 어림값도 같이 올리세요.
+
+### 다이얼 드래그 (튐 방지)
+흰 핸들·종 노브 모두 **손가락 각도만 이어 붙이고, 자르는 건 화면에 그릴 때 한 번만** 합니다.
+
+- `TimeMapper.ringAngle(at:center:)` — 고정 좌표계 좌표 → 링 각도(12시 = 0°, 시계 방향)
+- `TimeMapper.unwrappedAngle(_:continuing:)` — 359° → 1° 를 +2° 로 이어 붙임 (두 바퀴째까지)
+- 잡은 순간 `value.startLocation` 으로 **손가락과 노브의 각도 차(grab delta)** 를 기억합니다.
+  이게 없으면 노브를 집는 순간 손끝으로 순간이동합니다(히트 영역이 지름 2.8 × 선 두께라 최대 13° ≈ 130초).
+- 각도는 회전에 휘둘리지 않게 **이름 붙인 고정 좌표계**에서 읽습니다
+  (`rereminder.dial` / `rereminder.alerts` / 클립 `clip.dial`).
+  좌표계를 얹은 뷰에 `.frame(width: size, height: size)` 가 있어야 중심이 `size/2` 로 확정됩니다.
+  클립은 히트 여백까지 포함한 프레임이라 중심이 `size/2 + hitMargin` 입니다(`dialCenter`).
+- **`TimeMapper.angleDelta` 를 다시 쓰지 마세요.** "지금 표시 중인(=잘린) 각도"를 기준 삼기 때문에,
+  손가락이 허용 범위를 크게 벗어나면 최단 방향이 뒤집혀 반대편으로 순간이동합니다.
+  (종을 총 시간 너머로 계속 끌면 0 으로 / 흰 핸들을 0 아래로 끌면 30분으로 튀던 문제)
+- 드래그 중에는 `withAnimation` 을 걸지 않습니다. 손가락보다 늦게 따라와 미끄러지는 느낌이 납니다.
+  10초 단위 스냅은 손을 뗄 때(`onEnded` / `angleToSeconds`)만 합니다.
+
+### 기본 타이머 설정 (초기화의 기준점)
+`TimerScreenViewModel.DefaultSetup` — **10분 + 종료 1분 전 알림 하나**.
+앱을 갓 설치했을 때 보이는 설정이고, 다음 세 가지가 전부 이 상수 하나를 따라갑니다:
+
+1. `@Published` 초기값 (`mainMinutes`·`selectedOffsets`·`configuredMainSeconds`)
+2. `isAtDefaultSetup` — "사용자가 아직 아무것도 안 바꿨다" 판정
+3. `resetToDefaultSetup()` — 다이얼 아래 **초기화** 버튼
+
+**기본값을 바꿀 땐 `DefaultSetup` 만 고치세요.** 값을 다른 곳에 다시 적으면 세 곳이 어긋나
+"바꾼 적 없는데 저장 버튼이 떠 있는" 상태가 됩니다. `DefaultSetupResetTests` 가 이걸 지킵니다.
+
+`TemplateQuickBar` 의 두 버튼은 **사용자가 뭔가 바꿨을 때만** 나옵니다
+(왼쪽 초기화 = `!isAtDefaultSetup`, 오른쪽 템플릿 저장 = 그 위에 "기존 템플릿과도 다를 때").
+갓 설치한 상태면 바에는 템플릿 칩만 남습니다.
+두 버튼에는 `.layoutPriority(1)` 이 있어야 템플릿 칩 스크롤뷰에 밀려 글자가 잘리지 않습니다.
+초기화는 `persistLastUsedConfig` 로 "마지막 사용 설정"까지 기본값으로 덮으므로 재실행해도 유지됩니다.
+
 ### UI Components
 - **Clock** (`Rereminder/Views/Components/Clock.swift`): 타이머 시계 UI
 - **TimePresetButtons** (`Rereminder/Views/Components/TimePresetButtons.swift`): 시간 프리셋 버튼
@@ -227,7 +288,18 @@ extension TimerView {
   - 대기 중에는 **절대 각도**(`TimeMapper`, 1° = 10초, 2바퀴까지 / 2바퀴째는 연두)
   - 실행 중에는 남은 비율 + 줄어드는 호 끝의 흰 점
   - 지름의 8.3% 선 두께, `plain` 50% 트랙, 주황 종 노브, 드래그 툴팁
-  - 드래그 툴팁이 원 밖 48pt까지 나가므로 `ClipTimerView`에서 시계 위아래 여백을 그만큼 둡니다.
+  - 알림 배지도 메인과 같이 두 줄입니다 (아래 "알림 배지" 참고).
+- **한 화면 레이아웃 (스크롤 없음)** — 클립은 진입 후 바로 조작할 수 있어야 하므로
+  절대 스크롤되지 않아야 하고, **원 크기가 이 화면의 최우선**입니다.
+  - `ClipTimerView` 의 세로 스택에서 헤더·칩·프리셋·버튼·안내가 먼저 제 높이를 가져가고,
+    **남는 자리를 `clockArea`(GeometryReader)가 전부 받습니다.** 원 크기를 화면 높이의
+    고정 비율(예전 0.38)로 잡으면 요소가 하나만 늘어도 넘치므로, 비율로 되돌리지 마세요.
+  - `clockSide = min(폭 × 0.88, 높이 − badgeMargin × 2)`
+    - `0.88` 은 종 노브가 링 밖으로 나가는 몫(반지름 + 노브 = 지름 × 0.5664)입니다.
+      이걸 빼지 않으면 3시·9시 종이 화면 가장자리에서 잘립니다.
+    - `badgeMargin`(48pt)은 두 줄 알림 배지가 원 위·아래로 삐져나오는 몫입니다.
+  - `clockArea` 만 `.padding(.horizontal, -DSSpacing.xl)` 로 화면 좌우 여백을 되찾아 씁니다.
+    배지가 이웃 위로 겹쳐 그려져야 해서 `.zIndex(1)` 도 함께 붙어 있습니다.
   **메인 시계 디자인을 바꾸면 여기도 함께 손봐야 합니다.**
 - **테마**: 클립에도 `.tint(themeManager.accentColor)` + `.preferredColorScheme`를 적용합니다.
   이게 없으면 에셋의 `AccentColor`(분홍)가 나와 앱(기본 Ocean 블루 + 다크)과 완전히 달라 보입니다.
@@ -249,6 +321,10 @@ extension TimerView {
   - 검증: `curl https://app-site-association.cdn-apple.com/a/v1/m1zz.github.io`
     (Apple CDN 캐시라 푸시 직후에는 옛 내용이 나올 수 있음)
   - 랜딩 페이지 원본은 `web/index.html`. 고치면 블로그 저장소로 복사해 푸시.
+  - **앱 소개 페이지(`docs/index.html` → `m1zz.github.io/Rereminder/`, 대문자 R)에서
+    이 초대 URL(소문자 r)로 가는 링크가 내비·히어로 보조 CTA·푸터 세 군데 있습니다.**
+    두 페이지는 배포처가 달라(이 저장소 `docs/` vs 블로그 저장소) 경로 대소문자도 다릅니다.
+    자세한 건 `web/README.md` 참고.
   - **도메인을 바꾸면 엔타이틀먼트·AASA·App Store Connect 세 곳을 모두 고쳐야 합니다.**
 - **주의**: 클립 버전(`MARKETING_VERSION`)은 메인 앱과 **반드시 일치**해야 제출이 통과합니다.
 
@@ -313,8 +389,8 @@ extension TimerView {
 
 ## 빌드 환경
 - **Xcode**: 15.0+
-- **iOS Deployment Target**: iOS 16.0+
-- **watchOS Deployment Target**: watchOS 9.0+
+- **iOS Deployment Target**: iOS 26.0 (프로젝트 설정 기준 — 문서에 16.0 으로 적혀 있던 건 옛날 값)
+- **watchOS Deployment Target**: watchOS 11.6
 - **Swift Version**: Swift 5.9+
 
 ## 의존성
