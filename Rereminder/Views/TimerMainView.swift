@@ -99,7 +99,9 @@ struct TimerMainView: View {
 
                 Spacer()
 
+                // 드래그 배지가 원 밖으로 나가므로 아래쪽 템플릿 바·구간 리스트보다 위에 그린다
                 clockView(size: clockSize, lineWidth: lineWidth, geometry: geometry, buttonSize: buttonSize)
+                    .zIndex(1)
 
                 Spacer()
 
@@ -192,13 +194,18 @@ struct TimerMainView: View {
             // 알림 노브: 대기 중엔 드래그 핸들, 실행/일시정지 중엔 알림 시점 표시
             alertKnobs(size: size, lineWidth: lineWidth)
 
+            // 드래그 중 뜨는 배지는 언제나 최상단이다.
+            // 3시·9시 방향 종은 배지가 가운데 시간 글자와 같은 높이에 오는데,
+            // 시간+버튼 묶음이 이 ZStack 의 마지막 자식이라 zIndex 없이는 배지를 덮는다.
             if showDragTooltip && isTimeEditable {
                 dragTooltip(size: size)
+                    .zIndex(2)
             }
 
             if isTimeEditable, let marker = highlightedMarker {
                 markerDragTooltip(size: size, marker: marker, availableWidth: geometry.size.width)
                     .transition(.opacity)
+                    .zIndex(2)
             }
 
             let fontSize = isPresentationMode

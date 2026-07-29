@@ -88,8 +88,8 @@ struct ClipTimerView: View {
 
     private func clock(size: CGFloat) -> some View {
         ZStack {
-            ClipClock(size: size)
-
+            // 가운데 시간이 먼저다. 뒤에 오는 `ClipClock` 의 드래그 배지가 언제나 위에 그려져야
+            // 하는데, 3시·9시 방향 종은 배지가 이 글자와 같은 높이에 온다.
             VStack(spacing: DSSpacing.xxs) {
                 Text(timeText)
                     .font(DSFont.timer(.largeTitle))
@@ -102,6 +102,8 @@ struct ClipTimerView: View {
                 }
             }
             .allowsHitTesting(false)
+
+            ClipClock(size: size)
         }
     }
 
