@@ -18,6 +18,8 @@ struct ClockMarkers: View {
     var inset: CGFloat = 3
     var upcoming: Bool = true
     var showLabels: Bool = true
+    /// 종 하나를 옮기는 동안 물러나 있어야 할 마커들 (종 노브와 같이 흐려진다)
+    var dimmedIndices: Set<Int> = []
 
     var body: some View {
         GeometryReader { geo in
@@ -79,6 +81,7 @@ struct ClockMarkers: View {
                 )
             }
         }
+        .opacity(dimmedIndices.contains(index) ? 0.25 : 1.0)
     }
 
     private func markerLabel(
