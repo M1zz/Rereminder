@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>두번알림 — 발표 종료 전 미리 알림</title>
+<meta name="description" content="발표·운동·스터디 중 끝나기 전 원하는 시점마다 미리 알려주는 타이머. App Clip으로 설치 없이 바로 써보세요.">
+<meta name="apple-itunes-app" content="app-id=6752551268">
+<meta property="og:title" content="두번알림 — 발표 종료 전 미리 알림">
+<meta property="og:description" content="끝나기 전 원하는 시점마다 미리 알려주는 타이머.">
+<meta property="og:type" content="website">
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #000;
+    --fg: #fff;
+    --muted: #98989f;
+    --accent: #007aff;
+    --marker: #ff9500;
+    --card: #16161a;
+    --line: #2c2c2e;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 56px 24px 72px; }
+  header { text-align: center; margin-bottom: 40px; }
+  .dial { width: 132px; height: 132px; margin: 0 auto 24px; display: block; }
+  h1 { font-size: 30px; line-height: 1.3; margin: 0 0 12px; letter-spacing: -0.02em; }
+  .lede { color: var(--muted); margin: 0; font-size: 18px; }
+
+  .cta {
+    display: block;
+    margin: 32px auto 12px;
+    max-width: 320px;
+    padding: 16px 24px;
+    background: var(--accent);
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 14px;
+    font-weight: 600;
+  }
+  .cta-note { text-align: center; color: var(--muted); font-size: 14px; margin: 0; }
+
+  section { margin-top: 44px; }
+  h2 { font-size: 20px; margin: 0 0 16px; letter-spacing: -0.01em; }
+
+  ul.feats { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+  ul.feats li {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 16px 18px;
+  }
+  ul.feats b { display: block; margin-bottom: 4px; }
+  ul.feats span { color: var(--muted); font-size: 15px; }
+
+  .bell { color: var(--marker); font-weight: 700; }
+
+  footer {
+    margin-top: 56px; padding-top: 24px;
+    border-top: 1px solid var(--line);
+    color: var(--muted); font-size: 14px; text-align: center;
+  }
+  footer a { color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <svg class="dial" viewBox="0 0 120 120" role="img" aria-label="타이머 다이얼과 알림 지점 3개">
+      <circle cx="60" cy="60" r="50" fill="none" stroke="#48484a" stroke-width="10"/>
+      <path d="M60 10 A50 50 0 0 1 60 110" fill="none" stroke="#007aff"
+            stroke-width="10" stroke-linecap="round"/>
+      <circle cx="60" cy="110" r="7" fill="#fff"/>
+      <circle cx="103" cy="35" r="7.5" fill="#ff9500"/>
+      <circle cx="85" cy="17" r="7.5" fill="#ff9500"/>
+      <circle cx="65" cy="10.3" r="7.5" fill="#ff9500"/>
+    </svg>
+
+    <h1>끝나기 전에<br>미리 알려주는 타이머</h1>
+    <p class="lede">발표가 끝나갈 때 시계를 흘끔거리지 않아도 됩니다.</p>
+  </header>
+
+  <a class="cta" href="https://apps.apple.com/app/id6752551268">App Store에서 받기</a>
+  <p class="cta-note">iPhone에서 이 페이지를 열면 App Clip으로 설치 없이 바로 써볼 수 있어요.</p>
+
+  <section>
+    <h2>어떻게 쓰나요</h2>
+    <ul class="feats">
+      <li>
+        <b>1. 다이얼을 돌려 시간을 정합니다</b>
+        <span>10분·30분·60분 프리셋도 있습니다.</span>
+      </li>
+      <li>
+        <b>2. <span class="bell">종</span>을 끌어 알림 지점을 옮깁니다</b>
+        <span>30분으로 맞추면 10분·5분·1분 전이 기본으로 잡힙니다.</span>
+      </li>
+      <li>
+        <b>3. 시작하면 그 지점마다 알려줍니다</b>
+        <span>화면을 보고 있지 않아도, 잠금 상태여도 알림이 옵니다.</span>
+      </li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>전체 앱에는 더 있습니다</h2>
+    <ul class="feats">
+      <li><b>발표 모드</b><span>구간을 나눠 순서대로 진행하고, 남은 구간을 한눈에 봅니다.</span></li>
+      <li><b>템플릿</b><span>자주 쓰는 시간·알림 구성을 저장해 두고 한 번에 불러옵니다.</span></li>
+      <li><b>Apple Watch · 위젯 · 실시간 현황</b><span>손목과 잠금화면에서 바로 확인하고 제어합니다.</span></li>
+    </ul>
+  </section>
+
+  <footer>
+    <p>두번알림 · <a href="https://apps.apple.com/app/id6752551268">App Store</a></p>
+  </footer>
+
+</div>
+</body>
+</html>

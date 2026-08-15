@@ -20,13 +20,27 @@ struct TimerMainView: View {
     @State private var draggingMarkerOffset: Int? = nil
     @State private var markerDragAngle: Double = 0
 
-    // 드래그를 놓은 뒤에도 툴팁을 잠시 유지 (5초)
+    /// 자르지 않은 손가락 각도 — 종이 끝에 걸려도 손가락은 계속 따라가야 튀지 않는다
+    @State private var markerFingerAngle: Double = 0
+    /// 잡은 순간 종과 손가락이 어긋나 있던 만큼. 이걸 유지해야 집는 순간 종이 손끝으로 순간이동하지 않는다
+    @State private var markerGrabDelta: Double = 0
+    @State private var mainFingerAngle: Double = 0
+    @State private var mainGrabDelta: Double = 0
+
+    /// 다이얼 중심을 알아야 각도를 계산할 수 있어, 회전에 휘둘리지 않는 고정 좌표계를 따로 둔다
+    private static let dialSpace = "rereminder.dial"
+    private static let alertSpace = "rereminder.alerts"
+
+    // 드래그를 놓은 뒤에도 툴팁을 잠시 유지
     @State private var showDragTooltip = false
     @State private var dragTooltipLingerTask: Task<Void, Never>?
     @State private var lingeringMarkerOffset: Int? = nil
     @State private var markerLingerTask: Task<Void, Never>?
 
-    private static let tooltipLingerSeconds: Double = 5
+    /// 손을 놓고 이만큼 지나면 배지·링 강조·흐려진 종이 한꺼번에 원래대로 돌아온다
+    private static let tooltipLingerSeconds: Double = 3
+    /// 사라질 땐 뚝 끊지 않고 녹여서 — 들어올 땐 빠르게, 나갈 땐 천천히
+    private static let dissolveDuration: Double = 0.35
 
     /// 실행/일시정지/오버타임: 설정 시간을 100%로 보는 비율 모드
     private var isProgressMode: Bool {
@@ -85,7 +99,9 @@ struct TimerMainView: View {
 
                 Spacer()
 
+                // 드래그 배지가 원 밖으로 나가므로 아래쪽 템플릿 바·구간 리스트보다 위에 그린다
                 clockView(size: clockSize, lineWidth: lineWidth, geometry: geometry, buttonSize: buttonSize)
+                    .zIndex(1)
 
                 Spacer()
 
@@ -162,6 +178,12 @@ struct TimerMainView: View {
                 progressEdgeDot(size: size, lineWidth: lineWidth)
             }
 
+            // 종을 잡고 있는 동안 링을 "시작 후 / 종료 전" 두 색으로 가른다
+            if isTimeEditable, let marker = highlightedMarker {
+                alertSplitArc(size: size, lineWidth: lineWidth, angle: marker.angle)
+                    .transition(.opacity)
+            }
+
             clockMarkers(size: size, lineWidth: lineWidth)
 
             // 시간 조절 드래그는 대기/Done 상태에서만 (실행·일시정지·오버타임 중에는 불가)
@@ -172,12 +194,18 @@ struct TimerMainView: View {
             // 알림 노브: 대기 중엔 드래그 핸들, 실행/일시정지 중엔 알림 시점 표시
             alertKnobs(size: size, lineWidth: lineWidth)
 
+            // 드래그 중 뜨는 배지는 언제나 최상단이다.
+            // 3시·9시 방향 종은 배지가 가운데 시간 글자와 같은 높이에 오는데,
+            // 시간+버튼 묶음이 이 ZStack 의 마지막 자식이라 zIndex 없이는 배지를 덮는다.
             if showDragTooltip && isTimeEditable {
                 dragTooltip(size: size)
+                    .zIndex(2)
             }
 
-            if (draggingMarkerOffset != nil || lingeringMarkerOffset != nil) && isTimeEditable {
-                markerDragTooltip(size: size)
+            if isTimeEditable, let marker = highlightedMarker {
+                markerDragTooltip(size: size, marker: marker, availableWidth: geometry.size.width)
+                    .transition(.opacity)
+                    .zIndex(2)
             }
 
             let fontSize = isPresentationMode
@@ -227,6 +255,45 @@ struct TimerMainView: View {
             }
             AccessibilityNotification.Announcement(announcement).post()
         }
+    }
+
+    /// 지금 주목해야 할 알림 — 끌고 있는 종, 없으면 방금 놓은 종.
+    /// 배지·링 강조·다른 종 흐리기가 모두 이 값 하나를 따라간다.
+    private var highlightedMarker: (seconds: Int, angle: Double)? {
+        if draggingMarkerOffset != nil {
+            return (TimeMapper.angleToSeconds(from: markerDragAngle), markerDragAngle)
+        }
+        if let sec = lingeringMarkerOffset {
+            return (sec, Double(sec) / TimeMapper.secondsPerDegree)
+        }
+        return nil
+    }
+
+    /// 종 위치를 경계로 링의 "종료 전" 쪽(0° ~ 종)만 주황으로 덮어 배지의 두 줄과 색을 맞춘다.
+    /// 나머지(종 ~ 설정 시간)는 원래 강조색으로 남아 "시작 후" 구간이 된다.
+    private func alertSplitArc(size: CGFloat, lineWidth: CGFloat, angle: Double) -> some View {
+        let fraction = angle / 360.0
+        return ZStack {
+            Circle()
+                .trim(from: 0, to: CGFloat(min(1.0, max(0, fraction))))
+                .stroke(
+                    DSColor.marker,
+                    style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round)
+                )
+
+            // 60분을 넘겨 두 번째 바퀴에 걸친 알림
+            if fraction > 1 {
+                Circle()
+                    .trim(from: 0, to: CGFloat(min(1.0, fraction - 1)))
+                    .stroke(
+                        DSColor.marker,
+                        style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round)
+                    )
+            }
+        }
+        .frame(width: size, height: size)
+        .rotationEffect(.degrees(-90))
+        .accessibilityHidden(true)
     }
 
     /// 줄어드는 호의 움직이는 끝점 표시 — 대기 중 드래그 핸들과 같은 시각 언어(흰 원)
@@ -379,6 +446,15 @@ struct TimerMainView: View {
         } else {
             nil
         }
+        // 작대기 마커도 종 노브와 함께 물러난다 — 하나만 흐려지면 따로 노는 것처럼 보인다
+        let dimmed: Set<Int>
+        if highlightedMarker != nil,
+           let focused = draggingMarkerOffset ?? lingeringMarkerOffset,
+           let focusedIndex = sortedOffsets.firstIndex(of: focused) {
+            dimmed = Set(sortedOffsets.indices).subtracting([focusedIndex])
+        } else {
+            dimmed = []
+        }
 
         return ClockMarkers(
             remaining: ratio,
@@ -390,46 +466,71 @@ struct TimerMainView: View {
             inset: 0,
             upcoming: true,
             // 상시 라벨은 제거 — 드래그 중/직후 툴팁이 대신함
-            showLabels: false
+            showLabels: false,
+            dimmedIndices: dimmed
         )
         .frame(width: size, height: size)
+        .animation(highlightAnimation, value: dimmed)
         .accessibilityHidden(true)
     }
 
-    private func dragPointer(size: CGFloat, lineWidth: CGFloat) -> some View {
-        Circle()
-            .fill(.white)
-            .frame(width: lineWidth, height: lineWidth)
-            .offset(x: size / 2)
-            .rotationEffect(.degrees(screenVM.mainAngle))
-            .gesture(dragGesture)
-            .rotationEffect(.init(degrees: -90))
-            .accessibilityHidden(true)
+    /// 물러날 땐 빠르게, 돌아올 땐 배지가 녹는 속도에 맞춰 천천히
+    private var highlightAnimation: Animation {
+        highlightedMarker != nil
+            ? .easeInOut(duration: 0.2)
+            : .easeOut(duration: Self.dissolveDuration)
     }
 
-    private var dragGesture: some Gesture {
-        DragGesture()
+    private func dragPointer(size: CGFloat, lineWidth: CGFloat) -> some View {
+        ZStack {
+            Circle()
+                .fill(.white)
+                .frame(width: lineWidth, height: lineWidth)
+                .offset(x: size / 2)
+                .rotationEffect(.degrees(screenVM.mainAngle))
+                .gesture(dragGesture(size: size))
+                .rotationEffect(.init(degrees: -90))
+        }
+        .frame(width: size, height: size)
+        .coordinateSpace(name: Self.dialSpace)
+        .accessibilityHidden(true)
+    }
+
+    private func dragGesture(size: CGFloat) -> some Gesture {
+        let center = CGPoint(x: size / 2, y: size / 2)
+
+        // 좌표계만 고정 좌표계로 바꾼다 — 인식 거리는 그대로 둬야 좌우 스와이프 페이지 넘김을 안 뺏는다
+        return DragGesture(coordinateSpace: .named(Self.dialSpace))
             .onChanged { value in
-                isDragging = true
                 showDragTooltip = true
                 dragTooltipLingerTask?.cancel()
-                withAnimation(.linear(duration: 0.3)) {
-                    onDrag(value: value)
+
+                if !isDragging {
+                    isDragging = true
+                    // 손가락은 핸들 한가운데를 짚지 않는다. 그 차이를 기억해 두면 집는 순간 안 튄다
+                    let grabbed = TimeMapper.ringAngle(at: value.startLocation, center: center)
+                    mainFingerAngle = grabbed
+                    mainGrabDelta = screenVM.mainAngle - grabbed
                 }
+
+                let finger = TimeMapper.ringAngle(at: value.location, center: center)
+                mainFingerAngle = TimeMapper.unwrappedAngle(finger, continuing: mainFingerAngle)
+                let angle = mainFingerAngle + mainGrabDelta
+                // 자르는 건 여기서만 — 잘린 값은 다음 계산에 되먹이지 않는다
+                screenVM.mainAngle = max(0, min(angle, TimeMapper.maxAngle))
+
                 dragTooltipAngle = screenVM.mainAngle - 90
             }
             .onEnded { _ in
                 isDragging = false
                 let snapped = snappedAngle(from: screenVM.mainAngle)
-                withAnimation {
-                    screenVM.mainAngle = snapped
-                }
+                screenVM.mainAngle = snapped
                 dragTooltipAngle = snapped - 90
                 // 손을 놓은 뒤에도 잠시 유지
                 dragTooltipLingerTask = Task {
                     try? await Task.sleep(for: .seconds(Self.tooltipLingerSeconds))
                     guard !Task.isCancelled else { return }
-                    withAnimation(.easeOut(duration: 0.3)) {
+                    withAnimation(.easeOut(duration: Self.dissolveDuration)) {
                         showDragTooltip = false
                     }
                 }
@@ -459,6 +560,7 @@ struct TimerMainView: View {
     private func alertKnobs(size: CGFloat, lineWidth: CGFloat) -> some View {
         let sortedOffsets = Array(screenVM.selectedOffsets.sorted())
         let total = CGFloat(max(1, screenVM.configuredMainSeconds))
+        let isHighlighting = highlightedMarker != nil
         return ZStack {
             ForEach(sortedOffsets, id: \.self) { offsetSec in
                 let baseAngle: Double = isProgressMode
@@ -466,6 +568,11 @@ struct TimerMainView: View {
                     : Double(offsetSec) / TimeMapper.secondsPerDegree
                 let displayAngle = draggingMarkerOffset == offsetSec ? markerDragAngle : baseAngle
                 let isDraggingThis = draggingMarkerOffset == offsetSec
+                // 방금 놓은 종도 배지가 남아 있는 동안은 계속 주인공이다
+                let isFocused = isDraggingThis
+                    || (draggingMarkerOffset == nil && lingeringMarkerOffset == offsetSec)
+                // 하나를 옮기는 동안 나머지는 물러나 있어야 어느 종을 만지는지 헷갈리지 않는다
+                let dimmed = isHighlighting && !isFocused
                 let fired = isProgressMode && ratio <= CGFloat(offsetSec) / total
                 let knobScale: CGFloat = isTimeEditable ? (isDraggingThis ? 2.0 : 1.6) : 1.15
 
@@ -478,7 +585,7 @@ struct TimerMainView: View {
                         .foregroundStyle(.white)
                 }
                 .frame(width: lineWidth * knobScale, height: lineWidth * knobScale)
-                .opacity(fired ? 0.35 : 1.0)
+                .opacity(fired ? 0.35 : (dimmed ? 0.25 : 1.0))
                 // 링을 따라 돌아도 종 아이콘은 똑바로 서 있도록 역회전
                 .rotationEffect(.degrees(90 - displayAngle))
                 .frame(width: lineWidth * 2.8, height: lineWidth * 2.8)
@@ -486,25 +593,37 @@ struct TimerMainView: View {
                 .offset(x: size / 2)
                 .rotationEffect(.degrees(displayAngle))
                     .gesture(
-                        DragGesture()
+                        DragGesture(coordinateSpace: .named(Self.alertSpace))
                             .onChanged { value in
-                                let currentAngle: Double
-                                if draggingMarkerOffset == offsetSec {
-                                    currentAngle = markerDragAngle
-                                } else {
+                                let center = CGPoint(x: size / 2, y: size / 2)
+
+                                if draggingMarkerOffset != offsetSec {
                                     draggingMarkerOffset = offsetSec
-                                    currentAngle = Double(offsetSec) / TimeMapper.secondsPerDegree
+                                    // 손가락은 종 한가운데를 짚지 않는다. 그 차이를 기억해 두면 집는 순간 안 튄다
+                                    let grabbed = TimeMapper.ringAngle(
+                                        at: value.startLocation,
+                                        center: center
+                                    )
+                                    markerFingerAngle = grabbed
+                                    markerGrabDelta =
+                                        Double(offsetSec) / TimeMapper.secondsPerDegree - grabbed
                                 }
                                 markerLingerTask?.cancel()
                                 lingeringMarkerOffset = nil
-                                var newAngle = TimeMapper.angleDelta(
-                                    from: value.location,
-                                    currentAngle: currentAngle
+
+                                let finger = TimeMapper.ringAngle(at: value.location, center: center)
+                                markerFingerAngle = TimeMapper.unwrappedAngle(
+                                    finger,
+                                    continuing: markerFingerAngle
                                 )
+
                                 let mainSec = screenVM.mainMinutes * 60 + screenVM.mainSeconds
                                 let maxAngle = Double(mainSec - 10) / TimeMapper.secondsPerDegree
-                                newAngle = max(0, min(newAngle, max(0, maxAngle)))
-                                markerDragAngle = newAngle
+                                // 자르는 건 여기서만 — 잘린 값은 다음 계산에 되먹이지 않는다
+                                markerDragAngle = max(
+                                    0,
+                                    min(markerFingerAngle + markerGrabDelta, max(0, maxAngle))
+                                )
                             }
                             .onEnded { _ in
                                 guard let dragOffset = draggingMarkerOffset else { return }
@@ -518,7 +637,7 @@ struct TimerMainView: View {
                                     markerLingerTask = Task {
                                         try? await Task.sleep(for: .seconds(Self.tooltipLingerSeconds))
                                         guard !Task.isCancelled else { return }
-                                        withAnimation(.easeOut(duration: 0.3)) {
+                                        withAnimation(.easeOut(duration: Self.dissolveDuration)) {
                                             lingeringMarkerOffset = nil
                                         }
                                     }
@@ -532,37 +651,76 @@ struct TimerMainView: View {
                     .transition(.scale.combined(with: .opacity))
             }
         }
+        .frame(width: size, height: size)
+        .coordinateSpace(name: Self.alertSpace)
         .animation(.easeInOut(duration: 0.25), value: screenVM.sortedOffsetsDesc)
+        // 흐려지고 돌아오는 것만 부드럽게 — 각도는 손가락을 그대로 따라가야 한다
+        .animation(highlightAnimation, value: draggingMarkerOffset)
+        .animation(highlightAnimation, value: lingeringMarkerOffset)
         .allowsHitTesting(isTimeEditable)
         .accessibilityHidden(true)
     }
 
-    private func markerDragTooltip(size: CGFloat) -> some View {
-        // 드래그 중이면 현재 드래그 위치, 놓은 후에는 확정된 위치에 표시
-        let sec: Int
-        let angle: Double
-        if draggingMarkerOffset != nil {
-            sec = TimeMapper.angleToSeconds(from: markerDragAngle)
-            angle = markerDragAngle
-        } else {
-            sec = lingeringMarkerOffset ?? 0
-            angle = Double(sec) / TimeMapper.secondsPerDegree
-        }
-        let timeText = String(format: "%d:%02d", sec / 60, sec % 60)
-        let tooltipAngle = angle - 90
-        let xOffset = cos(tooltipAngle * .pi / 180) * (size / 2 + 32)
-        let yOffset = sin(tooltipAngle * .pi / 180) * (size / 2 + 32)
+    /// 배지 반너비 어림값 — 화면 밖으로 나가지 않게 x 오프셋을 자를 때 쓴다.
+    /// 글꼴이나 여백을 키우면 이 값도 같이 올려야 한다
+    private static let markerBadgeHalfWidth: CGFloat = 58
 
-        return Text(timeText)
-            .font(.body.weight(.semibold))
-            .monospacedDigit()
-            .padding(.horizontal, 12)
-            .padding(.vertical, 6)
-            .background(DSColor.marker)
-            .foregroundStyle(.white)
-            .cornerRadius(10)
-            .offset(x: xOffset, y: yOffset)
-            .accessibilityHidden(true)
+    /// 알림 배지 — 한 지점을 두 가지로 읽어준다.
+    /// 위: 종료까지 얼마나 남았는지, 아래: 시작 후 얼마나 지났는지.
+    /// (5분 발표에서 종료 1분 전에 종을 두면 1:00 / 4:00)
+    /// 각 줄의 색은 링에서 강조되는 구간 색과 같아 어느 숫자가 어디인지 바로 보인다.
+    private func markerDragTooltip(
+        size: CGFloat,
+        marker: (seconds: Int, angle: Double),
+        availableWidth: CGFloat
+    ) -> some View {
+        let total = screenVM.mainMinutes * 60 + screenVM.mainSeconds
+        let beforeEnd = max(0, marker.seconds)
+        let afterStart = max(0, total - beforeEnd)
+
+        let tooltipAngle = marker.angle - 90
+        // 두 줄 배지는 높이 절반이 34pt 쯤 되므로, 12시·6시에서 링을 덮지 않을 만큼 띄운다
+        let distance = size / 2 + 52
+        let rawX = cos(tooltipAngle * .pi / 180) * distance
+        // 3시·9시 방향에서 배지가 화면 밖으로 밀려나지 않도록 가둔다
+        let limit = max(0, availableWidth / 2 - Self.markerBadgeHalfWidth - 4)
+        let xOffset = min(max(rawX, -limit), limit)
+        let yOffset = sin(tooltipAngle * .pi / 180) * distance
+
+        return VStack(spacing: 0) {
+            markerBadgeRow(
+                icon: "flag.checkered",
+                text: mmss(from: beforeEnd),
+                background: DSColor.marker
+            )
+            markerBadgeRow(
+                icon: "play.fill",
+                text: mmss(from: afterStart),
+                background: Color.accentColor
+            )
+        }
+        .fixedSize(horizontal: true, vertical: false)
+        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .shadow(color: .black.opacity(0.25), radius: 3, x: 0, y: 1)
+        .offset(x: xOffset, y: yOffset)
+        .accessibilityHidden(true)
+    }
+
+    private func markerBadgeRow(icon: String, text: String, background: Color) -> some View {
+        HStack(spacing: 6) {
+            Image(systemName: icon)
+                .font(.footnote.weight(.bold))
+            Text(text)
+                .font(.title3.weight(.bold))
+                .monospacedDigit()
+        }
+        .foregroundStyle(.white)
+        .padding(.horizontal, 12)
+        .padding(.vertical, 6)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(background)
+        // 배지가 원 위로 겹치므로 대비를 확실히 준다
+        .shadow(color: .black.opacity(0.2), radius: 1, x: 0, y: 0)
     }
 
     private func centerTimeDisplay(fontSize: CGFloat) -> some View {
@@ -823,14 +981,6 @@ struct TimerMainView: View {
         TimeMapper.snappedAngle(from: rawAngle)
     }
     
-    func onDrag(value: DragGesture.Value) {
-        let newAngle = TimeMapper.angleDelta(
-            from: value.location,
-            currentAngle: screenVM.mainAngle
-        )
-        screenVM.mainAngle = newAngle
-    }
-
     private var stateColor: Color {
         switch screenVM.state {
         case .idle:

@@ -19,13 +19,23 @@ enum AppMode: String, CaseIterable {
 
 @MainActor
 final class TimerScreenViewModel: ObservableObject {
-    @Published var mainMinutes: Int = 10
-    @Published var mainSeconds: Int = 0
-    @Published var selectedOffsets: Set<Int> = [60] {  // 무료 기본 1개 (1분)
+    /// 앱을 갓 설치했을 때의 타이머 설정.
+    /// 초기화 버튼이 되돌리는 기준점이자 "사용자가 아직 아무것도 안 바꿨다"의 판정 기준이라,
+    /// 아래 `@Published` 초기값들도 전부 여기서 가져온다. **정의는 이 한 곳뿐이어야 한다.**
+    enum DefaultSetup {
+        /// 10분
+        static let mainSeconds = 600
+        /// 종료 1분 전 알림 하나 (무료 기본)
+        static let offsets: Set<Int> = [60]
+    }
+
+    @Published var mainMinutes: Int = DefaultSetup.mainSeconds / 60
+    @Published var mainSeconds: Int = DefaultSetup.mainSeconds % 60
+    @Published var selectedOffsets: Set<Int> = DefaultSetup.offsets {
         didSet { sortedOffsetsDesc = selectedOffsets.sorted(by: >) }
     }
-    private(set) var sortedOffsetsDesc: [Int] = [60]
-    @Published private(set) var configuredMainSeconds: Int = 600
+    private(set) var sortedOffsetsDesc: [Int] = DefaultSetup.offsets.sorted(by: >)
+    @Published private(set) var configuredMainSeconds: Int = DefaultSetup.mainSeconds
     @Published var showTimerAlert: Bool = false
     @Published var prealertMessages: [Int: String] = [:]
     @Published var finishMessage: String = ""
@@ -301,6 +311,34 @@ final class TimerScreenViewModel: ObservableObject {
         let mainSec = max(0, mainMinutes) * 60 + secPart
         let offsets = Array(selectedOffsets.filter { $0 > 0 && $0 < mainSec }).sorted()
         return (mainSec, offsets)
+    }
+
+    /// 사용자가 아직 아무것도 손대지 않은 상태 — 갓 설치했을 때 그대로다.
+    /// 이때는 저장할 것도 되돌릴 것도 없으므로 저장·초기화 버튼을 둘 다 숨긴다.
+    var isAtDefaultSetup: Bool {
+        let cfg = normalizedCurrentConfig
+        return cfg.mainSec == DefaultSetup.mainSeconds
+            && Set(cfg.offsets) == DefaultSetup.offsets
+            && prealertMessages.isEmpty
+            && finishMessage.isEmpty
+    }
+
+    /// 다이얼을 갓 설치했을 때의 설정으로 되돌린다.
+    /// 저장해 둔 템플릿·기록은 건드리지 않는다 — 되돌리는 건 지금 화면의 설정뿐이다.
+    func resetToDefaultSetup() {
+        mainMinutes = DefaultSetup.mainSeconds / 60
+        mainSeconds = DefaultSetup.mainSeconds % 60
+        selectedOffsets = DefaultSetup.offsets
+        prealertMessages = [:]
+        finishMessage = ""
+        sectionNames = [:]
+        initialConfiguration()
+        // 다시 켰을 때 되살아나지 않도록 "마지막 사용 설정"도 기본값으로 덮는다
+        persistLastUsedConfig(
+            mainSec: DefaultSetup.mainSeconds,
+            offsets: DefaultSetup.offsets.sorted()
+        )
+        showToast?(String(localized: "Reset to the default timer"))
     }
 
     /// 현재 설정을 템플릿으로 저장한다 (타이머 시작 없음)

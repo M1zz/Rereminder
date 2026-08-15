@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>NSAppClip</key>
+	<dict>
+		<!-- 클립 세션 동안 타이머 알림을 보낼 수 있도록 8시간 임시 알림 권한을 요청한다. -->
+		<key>NSAppClipRequestEphemeralUserNotification</key>
+		<true/>
+		<key>NSAppClipRequestLocationConfirmation</key>
+		<false/>
+	</dict>
+</dict>
+</plist>

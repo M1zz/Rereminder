@@ -189,15 +189,20 @@ struct TimerUnifiedView: View {
     @ToolbarContentBuilder
     private var bottomToolbar: some ToolbarContent {
         ToolbarItemGroup(placement: .bottomBar) {
-            Picker("", selection: modeBinding) {
+            // ⚠️ Picker("", …)는 빈 문자열을 문자열 카탈로그에 추출시켜 다국어 검사를 막는다.
+            //    라벨은 제대로 주고 화면에서만 숨긴다.
+            Picker(selection: modeBinding) {
                 Image(systemName: "timer")
                     .accessibilityLabel(String(localized: "Timer"))
                     .tag(AppMode.timer)
                 Image(systemName: "rectangle.inset.filled.and.person.filled")
                     .accessibilityLabel(String(localized: "Presentation"))
                     .tag(AppMode.presentation)
+            } label: {
+                Text(String(localized: "Mode"))
             }
             .pickerStyle(.segmented)
+            .labelsHidden()
             .fixedSize()
 
             Spacer()

@@ -177,6 +177,29 @@
         }
         .hero-cta svg { width: 20px; height: 20px; }
 
+        /* 두 개의 CTA — 설치(주) / App Clip 체험(부) */
+        .hero-ctas {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+        .hero-cta-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+        .hero-cta-secondary:hover {
+            border-color: rgba(255,255,255,0.5);
+            box-shadow: none;
+        }
+        /* `.hero p` 가 아래 여백 48px·큰 글자를 주므로 그보다 구체적으로 눌러쓴다 */
+        .hero .hero-clip-note {
+            margin: 16px auto 0;
+            font-size: 14px;
+            color: var(--text2);
+        }
+
         /* Pain Points */
         .pain-points {
             max-width: 1080px;
@@ -533,6 +556,7 @@
             <a href="#how-it-works" data-i18n="nav.howItWorks">How It Works</a>
             <a href="#use-cases" data-i18n="nav.useCases">Use Cases</a>
             <a href="#pro">Pro</a>
+            <a href="https://m1zz.github.io/rereminder/" data-i18n="nav.tryClip">Try Now</a>
             <a href="https://apps.apple.com/us/app/rereminder/id6752551268" target="_blank" data-i18n="nav.download">Download</a>
             <button class="lang-btn" id="lang-toggle">한국어</button>
         </div>
@@ -548,6 +572,7 @@
     <a href="#how-it-works" data-i18n="nav.howItWorks">How It Works</a>
     <a href="#use-cases" data-i18n="nav.useCases">Use Cases</a>
     <a href="#pro">Pro</a>
+    <a href="https://m1zz.github.io/rereminder/" data-i18n="nav.tryClip">Try Now</a>
     <a href="https://apps.apple.com/us/app/rereminder/id6752551268" target="_blank" data-i18n="nav.download">Download</a>
     <button class="lang-btn" id="mobile-lang-toggle">한국어</button>
 </div>
@@ -566,10 +591,18 @@
         Rereminder alerts you <em>before</em> your timer ends.
         Set pre-alerts at 10 min, 5 min, 1 min — and never get caught off guard.
     </p>
-    <a href="https://apps.apple.com/us/app/rereminder/id6752551268" class="hero-cta">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
-        <span data-i18n="hero.cta">Download Free</span>
-    </a>
+    <div class="hero-ctas">
+        <a href="https://apps.apple.com/us/app/rereminder/id6752551268" class="hero-cta">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            <span data-i18n="hero.cta">Download Free</span>
+        </a>
+        <!-- App Clip 체험 페이지 (블로그 저장소의 m1zz.github.io/rereminder/) -->
+        <a href="https://m1zz.github.io/rereminder/" class="hero-cta hero-cta-secondary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+            <span data-i18n="hero.ctaClip">Try without installing</span>
+        </a>
+    </div>
+    <p class="hero-clip-note" data-i18n="hero.clipNote">Open on iPhone to run it right away with App Clip — no install needed.</p>
 </section>
 
 <!-- Pain Points / Why Switch -->
@@ -769,6 +802,7 @@
     <div class="footer-inner">
         <div class="footer-links">
             <a href="https://apps.apple.com/us/app/rereminder/id6752551268">App Store</a>
+            <a href="https://m1zz.github.io/rereminder/" data-i18n="footer.tryClip">Try without installing</a>
             <a href="mailto:leeo@kakao.com" data-i18n="footer.contact">Contact</a>
             <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/" data-i18n="footer.terms">Terms</a>
             <a href="privacy.html" data-i18n="footer.privacy">Privacy</a>
@@ -785,10 +819,13 @@ const i18n = {
         "nav.howItWorks": "How It Works",
         "nav.useCases": "Use Cases",
         "nav.download": "Download",
+        "nav.tryClip": "Try Now",
         "hero.badge": "Available on iOS & Apple Watch",
         "hero.title": 'Know before<br><span class="gradient">time runs out</span>',
         "hero.description": 'Rereminder alerts you <em>before</em> your timer ends. Set pre-alerts at 10 min, 5 min, 1 min — and never get caught off guard.',
         "hero.cta": "Download Free",
+        "hero.ctaClip": "Try without installing",
+        "hero.clipNote": "Open on iPhone to run it right away with App Clip — no install needed.",
         "painPoints.title": 'Tired of your<br><span class="gradient">basic timer?</span>',
         "painPoints.subtitle": "These frustrations brought millions of users looking for something better.",
         "painPoints.noMidAlert.label": "No mid-timer alerts",
@@ -853,6 +890,7 @@ const i18n = {
         "footer.contact": "Contact",
         "footer.terms": "Terms",
         "footer.privacy": "Privacy",
+        "footer.tryClip": "Try without installing",
         "footer.copy": "© 2026 Rereminder (두번알림). All rights reserved."
     },
     ko: {
@@ -861,10 +899,13 @@ const i18n = {
         "nav.howItWorks": "사용법",
         "nav.useCases": "활용 사례",
         "nav.download": "다운로드",
+        "nav.tryClip": "바로 써보기",
         "hero.badge": "iOS & Apple Watch 지원",
         "hero.title": '시간이 끝나기 전에<br><span class="gradient">미리 알려드립니다</span>',
         "hero.description": '두번알림은 타이머가 끝나기 <em>전에</em> 알려줍니다. 10분 전, 5분 전, 1분 전 — 원하는 시점에 미리 알림을 받으세요.',
         "hero.cta": "무료 다운로드",
+        "hero.ctaClip": "설치 없이 바로 써보기",
+        "hero.clipNote": "아이폰에서 열면 App Clip으로 설치 없이 바로 실행돼요.",
         "painPoints.title": '기본 타이머에<br><span class="gradient">지치셨나요?</span>',
         "painPoints.subtitle": "이런 불편함 때문에 수많은 사용자들이 더 나은 타이머를 찾고 있습니다.",
         "painPoints.noMidAlert.label": "타이머 중간에 알림이 없음",
@@ -929,6 +970,7 @@ const i18n = {
         "footer.contact": "문의하기",
         "footer.terms": "이용약관",
         "footer.privacy": "개인정보처리방침",
+        "footer.tryClip": "설치 없이 써보기",
         "footer.copy": "© 2026 Rereminder (두번알림). All rights reserved."
     }
 };

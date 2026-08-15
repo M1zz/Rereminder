@@ -41,47 +41,37 @@ MARKETING_VERSION = 1.0.7
 CURRENT_PROJECT_VERSION = 2
 ```
 
-## Xcode 프로젝트 설정 (초기 설정 필요)
+## 동작 방식 (설정 완료 — 더 손댈 것 없음)
 
-### ⚠️ 중요: 처음 한 번만 설정하면 됩니다
+`Config/Version.xcconfig` 가 **프로젝트 레벨 base configuration** 으로 연결되어 있고,
+어떤 타겟도 `MARKETING_VERSION` / `CURRENT_PROJECT_VERSION` 을 자기 빌드 설정에
+따로 갖고 있지 않습니다. 그래서 이 파일 하나만 고치면 전 타겟에 반영됩니다.
 
-1. **Xcode에서 프로젝트 열기**
-   - `Rereminder.xcodeproj` 더블클릭
+적용 대상: `Rereminder`, `RereminderWatch`, `RereminderAlarmExtension`,
+`RereminderClip`, `RereminderMenuBar`, `RereminderTests`
 
-2. **모든 타겟에 xcconfig 적용**
+### ⚠️ 깨뜨리지 않으려면
 
-   각 타겟(Rereminder, RereminderWatch, RereminderAlarm)에 대해:
+1. **타겟 Build Settings 에 `MARKETING_VERSION` 을 다시 넣지 마세요.**
+   타겟 값이 xcconfig 를 덮어써서 중앙 관리가 무력화됩니다.
+   (실제로 이 문제가 있었고 2026-07-27 에 정리했습니다 — 아래 이력 참고)
+2. **`Version.xcconfig` 를 저장소 루트에 다시 만들지 마세요.**
+   예전에 루트와 `Config/` 두 곳에 같은 이름 파일이 있었고,
+   프로젝트는 루트 쪽을, 스크립트·문서는 `Config/` 쪽을 보고 있어 값이 어긋났습니다.
 
-   a. 프로젝트 네비게이터에서 프로젝트 파일 선택
+### 확인 방법
 
-   b. 타겟 선택 (Rereminder, RereminderWatch, RereminderAlarm)
+```bash
+# 한 곳만 보면 됨
+./scripts/update_version.sh --show
 
-   c. "Build Settings" 탭 선택
-
-   d. "+" 버튼 클릭 → "Add User-Defined Setting"
-
-   e. 또는 상단 검색창에서 "MARKETING_VERSION" 검색
-
-   f. 각 설정의 값을 다음과 같이 변경:
-      ```
-      MARKETING_VERSION = $(inherited)
-      CURRENT_PROJECT_VERSION = $(inherited)
-      ```
-
-3. **프로젝트 레벨에서 xcconfig 파일 연결**
-
-   a. 프로젝트 파일 선택 (타겟이 아닌 프로젝트)
-
-   b. "Info" 탭 선택
-
-   c. "Configurations" 섹션에서 각 Configuration(Debug, Release)에 대해:
-      - Configuration 옆 화살표 클릭
-      - 각 타겟의 드롭다운에서 "Version" 선택
-
-4. **빌드하여 확인**
-   ```bash
-   xcodebuild -project Rereminder.xcodeproj -showBuildSettings | grep VERSION
-   ```
+# 타겟별 실제 해석값이 모두 같은지 검증
+for s in Rereminder RereminderClip RereminderWatch RereminderAlarmExtension; do
+  echo -n "$s: "
+  xcodebuild -scheme "$s" -showBuildSettings -configuration Release 2>/dev/null \
+    | grep -E "^\s+MARKETING_VERSION " | sed 's/^ *//' | sort -u
+done
+```
 
 ## 버전 관리 워크플로우
 

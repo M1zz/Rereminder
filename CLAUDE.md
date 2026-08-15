@@ -25,6 +25,13 @@ Rereminder/
 │   ├── RereminderAlarm.swift       # 위젯 구현
 │   └── RereminderAlarmLiveActivity.swift  # Live Activity 구현
 │
+├── RereminderClip/           # App Clip (경량 체험판)
+│   ├── RereminderClipApp.swift   # 클립 진입점
+│   ├── ClipTimerView.swift       # 단일 화면 UI
+│   ├── ClipTimerViewModel.swift  # TimerEngine 래핑
+│   ├── ClipAlertPlanner.swift    # 알림 3개 자동 배분 로직
+│   └── Assets.xcassets/
+│
 └── Shared/                   # 공유 모듈 (iOS, Watch, Widget)
     ├── Models/               # 데이터 모델
     │   ├── Timer.swift       # 타이머 모델
@@ -77,7 +84,7 @@ git checkout -b feature/이슈번호
 ### 중앙 집중식 버전 관리
 모든 타겟(iOS, Watch, Widget)의 버전을 한 곳에서 관리합니다.
 
-**설정 파일**: 루트 `Version.xcconfig` (프로젝트 레벨 baseConfiguration — 타겟 하드코딩 금지)
+**설정 파일**: `Config/Version.xcconfig` (프로젝트 레벨 baseConfiguration — 타겟 하드코딩 금지)
 
 ### 버전 업데이트 방법
 
@@ -99,14 +106,16 @@ git checkout -b feature/이슈번호
 - **CURRENT_PROJECT_VERSION**: 빌드 번호 (정수)
   - TestFlight 업로드마다 증가
 
-### Xcode 설정 (초기 1회)
-자세한 설정 방법은 `Config/README.md` 참고
+### 동작 방식 (설정 완료 — 추가 작업 없음)
+`Config/Version.xcconfig` 가 프로젝트 레벨 base configuration 이고,
+**어떤 타겟도 버전을 자기 빌드 설정에 갖고 있지 않습니다.** 파일 하나 = 전 타겟.
 
-1. 각 타겟의 Build Settings에서:
-   - MARKETING_VERSION = $(inherited)
-   - CURRENT_PROJECT_VERSION = $(inherited)
+**절대 하지 말 것** (2026-07-27 에 정리한 문제들):
+- 타겟 Build Settings 에 `MARKETING_VERSION` 을 넣기 → xcconfig 를 덮어써서 중앙 관리가 무력화됨
+- 저장소 루트에 `Version.xcconfig` 를 만들기 → 예전에 루트/`Config/` 두 파일이 공존했고,
+  프로젝트는 루트를, 스크립트·문서는 `Config/` 를 봐서 값이 계속 어긋났음
 
-2. 프로젝트 Info → Configurations에서 Version.xcconfig 연결
+검증: `./scripts/update_version.sh --show` 와 각 타겟의 `-showBuildSettings` 값이 일치해야 함
 
 ## 커밋 컨벤션
 
@@ -206,10 +215,145 @@ extension TimerView {
   동적 키(`guide_*`)·플랫폼 조건부 문자열은 카탈로그에서 `extractionState: manual`로 둘 것
   (그러지 않으면 빌드마다 stale로 찍혀 predeploy가 실패한다).
 
+### 알림 배지 (종을 옮길 때 뜨는 툴팁)
+종 노브를 끌면 그 지점을 **두 가지로** 읽어줍니다. 발표자는 "몇 분 남았나"와
+"몇 분째 말하고 있나"를 둘 다 알아야 하기 때문입니다.
+
+```
+⚑ 1:00   ← 종료 전 남은 시간 (주황, DSColor.marker)
+▶ 4:00   ← 시작 후 경과 (강조색)
+```
+(5분 발표에서 종료 1분 전에 종을 두면 위와 같이 나옵니다)
+
+- 같은 순간 **링도 종을 경계로 두 색으로 갈라집니다.**
+  0° ~ 종 = 주황(= 위 줄), 종 ~ 설정 시간 = 강조색(= 아래 줄).
+  배지 줄 색과 링 구간 색이 같아야 어느 숫자가 어디인지 읽히므로, **한쪽만 바꾸지 마세요.**
+- 종이 여러 개일 때 잡고 있는(또는 방금 놓은) 종만 100%, 나머지는 25%로 물러납니다.
+  **종 노브(`alertKnobs`)와 작대기 마커(`ClockMarkers.dimmedIndices`) 둘 다** 흐려져야 합니다.
+  하나만 흐려지면 따로 노는 것처럼 보입니다.
+- 배지·링 강조·흐리기가 모두 `highlightedMarker`(클립은 `highlightedAlert`) 하나를 따라갑니다.
+  드래그 중이면 손가락 위치, 놓은 뒤 **3초**(`tooltipLingerSeconds`) 동안은 확정된 위치입니다.
+- 3초가 지나면 배지·링 강조·흐려진 종이 **한꺼번에 0.35초 디졸브**로 원래대로 돌아옵니다
+  (`dissolveDuration`). 들어올 땐 0.2초로 빠르게, 나갈 땐 천천히 — `highlightAnimation` 이
+  방향에 따라 두 값을 골라 씁니다. 사라지는 뷰에는 `.transition(.opacity)` 가 붙어 있어야
+  뚝 끊기지 않습니다.
+- 구현: `TimerMainView.markerDragTooltip` / `alertSplitArc`,
+  `ClipClock.alertDragTooltip` / `alertSplitArc` — **두 곳을 함께 고쳐야 합니다.**
+- 배지가 3시·9시 방향에서 화면 밖으로 나가지 않도록 메인 앱은 x 오프셋을 화면 폭으로 자릅니다
+  (`markerBadgeHalfWidth`). 배지 글꼴·여백을 키우면 이 어림값도 같이 올리세요.
+- **배지는 언제나 최상단이어야 합니다.** 3시·9시 방향 종은 배지가 가운데 시간 글자와 같은
+  높이에 오고, 안쪽으로 잘린 x 오프셋 때문에 실제로 겹칩니다. 두 겹으로 보장합니다:
+  - `clockView` ZStack 안: 두 툴팁에 `.zIndex(2)` — 시간+버튼 묶음이 마지막 자식이라
+    zIndex 없이는 배지를 덮습니다.
+  - 바깥 `VStack`: `clockView` 에 `.zIndex(1)` — 배지가 원 밖으로 나가 아래쪽 템플릿 바·
+    구간 리스트에 덮이지 않게.
+  - 클립은 `ClipTimerView.clock(size:)` 에서 **가운데 시간을 `ClipClock` 보다 먼저** 둡니다.
+    순서를 되돌리면 같은 문제가 재발합니다.
+
+### 다이얼 드래그 (튐 방지)
+흰 핸들·종 노브 모두 **손가락 각도만 이어 붙이고, 자르는 건 화면에 그릴 때 한 번만** 합니다.
+
+- `TimeMapper.ringAngle(at:center:)` — 고정 좌표계 좌표 → 링 각도(12시 = 0°, 시계 방향)
+- `TimeMapper.unwrappedAngle(_:continuing:)` — 359° → 1° 를 +2° 로 이어 붙임 (두 바퀴째까지)
+- 잡은 순간 `value.startLocation` 으로 **손가락과 노브의 각도 차(grab delta)** 를 기억합니다.
+  이게 없으면 노브를 집는 순간 손끝으로 순간이동합니다(히트 영역이 지름 2.8 × 선 두께라 최대 13° ≈ 130초).
+- 각도는 회전에 휘둘리지 않게 **이름 붙인 고정 좌표계**에서 읽습니다
+  (`rereminder.dial` / `rereminder.alerts` / 클립 `clip.dial`).
+  좌표계를 얹은 뷰에 `.frame(width: size, height: size)` 가 있어야 중심이 `size/2` 로 확정됩니다.
+  클립은 히트 여백까지 포함한 프레임이라 중심이 `size/2 + hitMargin` 입니다(`dialCenter`).
+- **`TimeMapper.angleDelta` 를 다시 쓰지 마세요.** "지금 표시 중인(=잘린) 각도"를 기준 삼기 때문에,
+  손가락이 허용 범위를 크게 벗어나면 최단 방향이 뒤집혀 반대편으로 순간이동합니다.
+  (종을 총 시간 너머로 계속 끌면 0 으로 / 흰 핸들을 0 아래로 끌면 30분으로 튀던 문제)
+- 드래그 중에는 `withAnimation` 을 걸지 않습니다. 손가락보다 늦게 따라와 미끄러지는 느낌이 납니다.
+  10초 단위 스냅은 손을 뗄 때(`onEnded` / `angleToSeconds`)만 합니다.
+
+### 기본 타이머 설정 (초기화의 기준점)
+`TimerScreenViewModel.DefaultSetup` — **10분 + 종료 1분 전 알림 하나**.
+앱을 갓 설치했을 때 보이는 설정이고, 다음 세 가지가 전부 이 상수 하나를 따라갑니다:
+
+1. `@Published` 초기값 (`mainMinutes`·`selectedOffsets`·`configuredMainSeconds`)
+2. `isAtDefaultSetup` — "사용자가 아직 아무것도 안 바꿨다" 판정
+3. `resetToDefaultSetup()` — 다이얼 아래 **초기화** 버튼
+
+**기본값을 바꿀 땐 `DefaultSetup` 만 고치세요.** 값을 다른 곳에 다시 적으면 세 곳이 어긋나
+"바꾼 적 없는데 저장 버튼이 떠 있는" 상태가 됩니다. `DefaultSetupResetTests` 가 이걸 지킵니다.
+
+`TemplateQuickBar` 의 두 버튼은 **사용자가 뭔가 바꿨을 때만** 나옵니다
+(왼쪽 초기화 = `!isAtDefaultSetup`, 오른쪽 템플릿 저장 = 그 위에 "기존 템플릿과도 다를 때").
+갓 설치한 상태면 바에는 템플릿 칩만 남습니다.
+두 버튼에는 `.layoutPriority(1)` 이 있어야 템플릿 칩 스크롤뷰에 밀려 글자가 잘리지 않습니다.
+초기화는 `persistLastUsedConfig` 로 "마지막 사용 설정"까지 기본값으로 덮으므로 재실행해도 유지됩니다.
+
 ### UI Components
 - **Clock** (`Rereminder/Views/Components/Clock.swift`): 타이머 시계 UI
 - **TimePresetButtons** (`Rereminder/Views/Components/TimePresetButtons.swift`): 시간 프리셋 버튼
 - **ToastViewModifier** (`Rereminder/Views/Components/ToastViewModifier.swift`): 토스트 메시지
+
+### App Clip (RereminderClip)
+앱의 핵심 가치인 **"끝나기 전 여러 번 알림"**만 남긴 경량 체험판입니다.
+
+- **번들 ID**: `com.xa.toki.Clip` (부모 앱 `com.xa.toki`에 임베드)
+- **조작**: 메인 앱과 같은 다이얼 UX입니다. 흰 핸들을 끌어 총 시간을,
+  주황 종 노브를 끌어 알림 지점을 정합니다. 시간 프리셋(10·30·60분) 버튼도 있습니다.
+- **ClipAlertPlanner**: 총 시간만 받아 알림 지점을 자동 배분합니다(사용자가 종을 옮기기 전 기본값).
+  총 시간의 1/3·1/6·1/30 지점을 계산한 뒤 사람이 말하는 단위(10분·5분·1분 등)로 스냅합니다.
+  (예: 30분 → 10분·5분·1분 전)
+  - 목표에서 2배 넘게 벗어나면 그 알림은 만들지 않습니다.
+  - **알림 사이 최소 간격 150초**를 강제합니다. 링이 절대 각도(1° = 10초)라 150초 = 15°인데,
+    그보다 가까우면 종 노브가 겹쳐서 집을 수가 없습니다.
+    간격을 못 만들면 3개보다 적게 만듭니다 (10분 타이머 → 3분 전·20초 전 2개).
+  - 사용자가 종을 한 번이라도 옮기면(`hasCustomizedAlerts`) 시간이 바뀌어도 다시 배분하지 않고,
+    총 시간 밖으로 나간 지점만 버립니다.
+- **코드 재사용**: `TimerEngine`, `ThemeManager`, 디자인 시스템(DS*), `RingSound`, `AppName`,
+  `ring.swift`, `Localizable.xcstrings`를 메인 앱과 공유합니다.
+  Xcode 동기화 그룹(`PBXFileSystemSynchronizedBuildFileExceptionSet`)으로 멤버십만 추가하는 방식이라
+  파일이 복제되지 않습니다.
+- **`ClipClock`**: 시계는 공유하지 않고 클립 전용으로 다시 그렸습니다.
+  메인 화면(`TimerMainView.clockView`)은 공유 `Clock.swift`가 아니라 자체 렌더링을 쓰기 때문에,
+  `Clock`을 재사용하면 오히려 앱과 달라 보입니다(선 두께 고정 8pt vs 지름의 8.3%, 노브 없음 등).
+  `ClipClock`은 메인과 같은 규칙으로 맞췄습니다:
+  - 대기 중에는 **절대 각도**(`TimeMapper`, 1° = 10초, 2바퀴까지 / 2바퀴째는 연두)
+  - 실행 중에는 남은 비율 + 줄어드는 호 끝의 흰 점
+  - 지름의 8.3% 선 두께, `plain` 50% 트랙, 주황 종 노브, 드래그 툴팁
+  - 알림 배지도 메인과 같이 두 줄입니다 (아래 "알림 배지" 참고).
+- **한 화면 레이아웃 (스크롤 없음)** — 클립은 진입 후 바로 조작할 수 있어야 하므로
+  절대 스크롤되지 않아야 하고, **원 크기가 이 화면의 최우선**입니다.
+  - `ClipTimerView` 의 세로 스택에서 헤더·칩·프리셋·버튼·안내가 먼저 제 높이를 가져가고,
+    **남는 자리를 `clockArea`(GeometryReader)가 전부 받습니다.** 원 크기를 화면 높이의
+    고정 비율(예전 0.38)로 잡으면 요소가 하나만 늘어도 넘치므로, 비율로 되돌리지 마세요.
+  - `clockSide = min(폭 × 0.88, 높이 − badgeMargin × 2)`
+    - `0.88` 은 종 노브가 링 밖으로 나가는 몫(반지름 + 노브 = 지름 × 0.5664)입니다.
+      이걸 빼지 않으면 3시·9시 종이 화면 가장자리에서 잘립니다.
+    - `badgeMargin`(48pt)은 두 줄 알림 배지가 원 위·아래로 삐져나오는 몫입니다.
+  - `clockArea` 만 `.padding(.horizontal, -DSSpacing.xl)` 로 화면 좌우 여백을 되찾아 씁니다.
+    배지가 이웃 위로 겹쳐 그려져야 해서 `.zIndex(1)` 도 함께 붙어 있습니다.
+  **메인 시계 디자인을 바꾸면 여기도 함께 손봐야 합니다.**
+- **테마**: 클립에도 `.tint(themeManager.accentColor)` + `.preferredColorScheme`를 적용합니다.
+  이게 없으면 에셋의 `AccentColor`(분홍)가 나와 앱(기본 Ocean 블루 + 다크)과 완전히 달라 보입니다.
+- **`APPCLIP` 컴파일 조건**: 클립에는 App Group·위젯·인앱결제가 없으므로,
+  `TimerEngine`의 공유 상태 저장 / `WidgetCenter` 갱신 / `AnalyticsManager`(ProGate 의존) 호출을
+  `#if !APPCLIP`으로 제외합니다. **Shared 코드를 고칠 때 이 가드를 깨지 않도록 주의하세요.**
+- **알림 권한**: `Info.plist`의 `NSAppClipRequestEphemeralUserNotification`으로
+  클립 세션(8시간) 동안 알림을 보낼 수 있습니다.
+- **호출 URL**: `?minutes=N` (1~120) 쿼리로 시작 시간을 지정할 수 있습니다.
+- **고급 App Clip 경험 / 도메인 연결** — GitHub Pages (`M1zz/m1zz.github.io` 저장소):
+  - 초대 URL: `https://m1zz.github.io/rereminder/`
+  - 클립 엔타이틀먼트: `com.apple.developer.associated-domains` = `appclips:m1zz.github.io`
+  - AASA: `m1zz.github.io/.well-known/apple-app-site-association` 의 `appclips.apps` 에
+    `QGAQ3AY3R3.com.xa.toki.Clip` 포함.
+    ⚠️ **FindMe 클립과 같은 파일을 공유합니다. 고칠 때 기존 항목을 지우지 마세요.**
+  - 저장소 루트에 `.nojekyll` 이 있어야 `.well-known` 폴더가 서빙됩니다.
+  - GitHub Pages 는 이 파일을 `application/octet-stream` 으로 주지만 **Apple 은 문제없이 파싱합니다.**
+    (문서에는 `application/json` 이 요구사항이라 적혀 있으나 실제로는 통과 — FindMe 로 검증됨)
+  - 검증: `curl https://app-site-association.cdn-apple.com/a/v1/m1zz.github.io`
+    (Apple CDN 캐시라 푸시 직후에는 옛 내용이 나올 수 있음)
+  - 랜딩 페이지 원본은 `web/index.html`. 고치면 블로그 저장소로 복사해 푸시.
+  - **앱 소개 페이지(`docs/index.html` → `m1zz.github.io/Rereminder/`, 대문자 R)에서
+    이 초대 URL(소문자 r)로 가는 링크가 내비·히어로 보조 CTA·푸터 세 군데 있습니다.**
+    두 페이지는 배포처가 달라(이 저장소 `docs/` vs 블로그 저장소) 경로 대소문자도 다릅니다.
+    자세한 건 `web/README.md` 참고.
+  - **도메인을 바꾸면 엔타이틀먼트·AASA·App Store Connect 세 곳을 모두 고쳐야 합니다.**
+- **주의**: 클립 버전(`MARKETING_VERSION`)은 메인 앱과 **반드시 일치**해야 제출이 통과합니다.
 
 ### Models
 - **Timer**: 타이머 데이터 구조
@@ -264,14 +408,20 @@ extension TimerView {
 - [ ] 잠금 화면 위젯 표시 확인
 - [ ] 위젯에서 타이머 제어 확인
 
+### App Clip
+- [ ] 시간 프리셋 선택 시 알림 3개 지점이 갱신되는지
+- [ ] 실기기에서 백그라운드 3번 알림 수신 확인 (시뮬레이터로는 검증 불가)
+- [ ] 전체 앱 유도 `SKOverlay` 표시 확인
+- [ ] 호출 URL `?minutes=N` 으로 시작 시간이 반영되는지
+
 ## 빌드 환경
-- **Xcode**: 26+
-- **iOS Deployment Target**: iOS 26.0
-- **watchOS Deployment Target**: watchOS 9.0+
+- **Xcode**: 15.0+
+- **iOS Deployment Target**: iOS 26.0 (프로젝트 설정 기준 — 문서에 16.0 으로 적혀 있던 건 옛날 값)
+- **watchOS Deployment Target**: watchOS 11.6
 - **Swift Version**: Swift 5.9+
 
 ## 의존성
-- **LeeoKit** (SPM, 2.7.0+): 공용 StoreKit 2 엔진(LeeoStore)·사용 리포터·원격 킬스위치(LeeoRemoteFlags)·MetricKit 크래시 진단(LeeoDiagnostics) 등 자체 공용 모듈. 킬스위치 플래그는 `Rereminder/Modules/RereminderFlags.swift`, Dashboard 수동 작업은 `docs/OPERATIONS_CHECKLIST.md` 참고
+- **LeeoKit** (SPM, 2.9.0+): 공용 StoreKit 2 엔진(LeeoStore)·사용 리포터·원격 킬스위치(LeeoRemoteFlags)·MetricKit 크래시 진단(LeeoDiagnostics) 등 자체 공용 모듈. 킬스위치 플래그는 `Rereminder/Modules/RereminderFlags.swift`, Dashboard 수동 작업은 `docs/OPERATIONS_CHECKLIST.md` 참고
 - **TelemetryDeck SwiftSDK** (SPM, 2.0.0+): 익명·비추적 분석. 메인 iOS 앱 타겟에만 링크.
   `AnalyticsManager.telemetryDeckAppID` 가 비어 있으면 외부 전송 없음(no-op).
   활성화하려면 dashboard.telemetrydeck.com 에서 App ID 발급 후 해당 상수에 입력.
@@ -333,7 +483,7 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
   - 분석 활성화: AnalyticsManager.eventSink → 익명 사용 허브(CloudKit) 전송 결선, 온보딩(shown/completed/skipped)·프리셋(saved/used) 퍼널 이벤트 추가
   - 리뷰 레거시 정리: ReviewRequestManager 죽은 정책 코드 제거(만족도 게이트가 단독 담당)
   - CI/배포 게이트: scripts/predeploy.sh(다국어 검사 + 전체 테스트) 단일 게이트를 CI·fastlane 공용으로 도입
-  - 버전 관리 단일화: 루트 Version.xcconfig 단일 소스(타겟 하드코딩 제거), update_version.sh 수리
+  - 버전 관리 단일화: xcconfig 단일 소스(타겟 하드코딩 제거) — 이후 2.0.5에서 `Config/Version.xcconfig`로 정착
   - 현지화 위생: stale 키 72건 제거, 알림 권한 상태 오역 수정, 타이머 적용 토스트 현지화(ko/ja)
 
 

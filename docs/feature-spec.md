@@ -343,7 +343,7 @@ NSPrivacyTracking false. 사용자 식별이나 광고 추적에 데이터를 �
 
 19.1 버전 관리
 
-루트 Version.xcconfig 에서 모든 타겟의 MARKETING_VERSION 과 CURRENT_PROJECT_VERSION 을 통합 관리합니다(프로젝트 레벨 baseConfiguration, 타겟 하드코딩 금지). scripts/update_version.sh 로 자동 업데이트 가능합니다.
+Config/Version.xcconfig 에서 모든 타겟의 MARKETING_VERSION 과 CURRENT_PROJECT_VERSION 을 통합 관리합니다(프로젝트 레벨 baseConfiguration, 타겟 하드코딩 금지). scripts/update_version.sh 로 자동 업데이트 가능합니다.
 
 19.2 타겟
 

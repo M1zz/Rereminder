@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>com.apple.developer.parent-application-identifiers</key>
+	<array>
+		<string>$(AppIdentifierPrefix)com.xa.toki</string>
+	</array>
+	<!--
+	  고급 App Clip 경험용 도메인 (GitHub Pages: M1zz/m1zz.github.io 저장소).
+	  같은 도메인의 AASA 를 FindMe 클립과 공유하므로, 수정할 때 기존 항목을 지우지 말 것.
+	    https://m1zz.github.io/.well-known/apple-app-site-association
+	    → appclips.apps 에 QGAQ3AY3R3.com.xa.toki.Clip 포함
+	  초대 URL: https://m1zz.github.io/rereminder/
+	-->
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>appclips:m1zz.github.io</string>
+	</array>
+</dict>
+</plist>

@@ -2,19 +2,23 @@
 
 #
 # update_version.sh
-# Rereminder(두번알림) 버전 업데이트 스크립트 — 루트 Version.xcconfig 단일 소스
+# Rereminder 버전 업데이트 스크립트
 #
 # 사용법:
 #   ./scripts/update_version.sh 1.0.7        # 버전만 업데이트
 #   ./scripts/update_version.sh 1.0.7 2      # 버전과 빌드 번호 업데이트
 #   ./scripts/update_version.sh --build-only # 빌드 번호만 증가
 #
+# Config/Version.xcconfig 가 프로젝트의 base configuration 이라,
+# 이 파일 하나만 고치면 모든 타겟(앱·Watch·위젯·App Clip·MenuBar)에 반영된다.
+# 타겟 빌드 설정에 MARKETING_VERSION 을 다시 넣으면 이 값이 덮여쓰이니 넣지 말 것.
+#
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-VERSION_FILE="$PROJECT_ROOT/Version.xcconfig"
+VERSION_FILE="$PROJECT_ROOT/Config/Version.xcconfig"
 
 # 색상 코드
 RED='\033[0;31m'
@@ -24,11 +28,11 @@ NC='\033[0m' # No Color
 
 # 현재 버전 읽기
 get_current_version() {
-    grep "^MARKETING_VERSION" "$VERSION_FILE" | sed 's/.*= //'
+    grep "MARKETING_VERSION" "$VERSION_FILE" | sed 's/.*= //'
 }
 
 get_current_build() {
-    grep "^CURRENT_PROJECT_VERSION" "$VERSION_FILE" | sed 's/.*= //'
+    grep "CURRENT_PROJECT_VERSION" "$VERSION_FILE" | sed 's/.*= //'
 }
 
 # 사용법 출력
@@ -60,7 +64,7 @@ increment_build() {
     NEW_BUILD=$((CURRENT_BUILD + 1))
 
     # Version.xcconfig 업데이트
-    sed -i '' "s/^CURRENT_PROJECT_VERSION = .*/CURRENT_PROJECT_VERSION = $NEW_BUILD/" "$VERSION_FILE"
+    sed -i '' "s/CURRENT_PROJECT_VERSION = .*/CURRENT_PROJECT_VERSION = $NEW_BUILD/" "$VERSION_FILE"
 
     echo -e "${GREEN}✅ 빌드 번호 업데이트: $CURRENT_BUILD → $NEW_BUILD${NC}"
 }
@@ -95,14 +99,14 @@ update_version() {
     fi
 
     # Version.xcconfig 업데이트
-    sed -i '' "s/^MARKETING_VERSION = .*/MARKETING_VERSION = $NEW_VERSION/" "$VERSION_FILE"
-    sed -i '' "s/^CURRENT_PROJECT_VERSION = .*/CURRENT_PROJECT_VERSION = $NEW_BUILD/" "$VERSION_FILE"
+    sed -i '' "s/MARKETING_VERSION = .*/MARKETING_VERSION = $NEW_VERSION/" "$VERSION_FILE"
+    sed -i '' "s/CURRENT_PROJECT_VERSION = .*/CURRENT_PROJECT_VERSION = $NEW_BUILD/" "$VERSION_FILE"
 
     echo ""
     echo -e "${GREEN}✅ 버전 업데이트 완료!${NC}"
     echo ""
     echo "다음 단계:"
-    echo "1. git add Version.xcconfig"
+    echo "1. git add Config/Version.xcconfig"
     echo "2. git commit -m \"chore: 버전 $NEW_VERSION으로 업데이트\""
     echo "3. git tag v$NEW_VERSION"
     echo ""

@@ -43,10 +43,6 @@ struct AlertPresetButtons: View {
 
     @AppStorage(AlertPresets.storageKey) private var presetsRaw = AlertPresets.defaultRaw
 
-    /// + 로 추가된 칩으로 스크롤할 대상 — 칩이 레이아웃된 뒤(onChange) 스크롤해야
-    /// "아직 없는 id로 scrollTo"가 무시되는 타이밍 레이스를 피한다
-    @State private var pendingScrollOffset: Int?
-
     // 5+5 trial 페이월 (2번째 알림부터 unlimitedPrealerts 평가)
     @State private var showPaywall = false
     @State private var paywallStage: ProGate.PaywallStage = .second
@@ -130,10 +126,15 @@ struct AlertPresetButtons: View {
                     }
                     .animation(.easeInOut(duration: 0.25), value: displayOffsets)
                 }
-                // 새 칩이 실제로 추가된 다음 프레임에 끝으로 스크롤
-                .onChange(of: displayOffsets) { _, _ in
-                    guard let target = pendingScrollOffset else { return }
-                    pendingScrollOffset = nil
+                // 알림이 새로 생기면 그 칩이 보이도록 오른쪽으로 밀어준다.
+                // + 버튼뿐 아니라 링에서 종을 끌어 만든 알림·템플릿 적용까지 전부 여기서 처리한다
+                // (목록이 오름차순이라 새 알림은 대개 맨 오른쪽 = 화면 밖에 생긴다).
+                // 실제로 칩이 레이아웃된 다음 프레임에 스크롤해야 "아직 없는 id로 scrollTo"가
+                // 무시되는 타이밍 레이스를 피할 수 있다.
+                .onChange(of: displayOffsets) { previous, current in
+                    let added = Set(current).subtracting(previous)
+                    // 여러 개가 한꺼번에 들어오면(템플릿 적용 등) 가장 오른쪽 것을 기준으로 삼는다
+                    guard let target = added.max() else { return }
                     DispatchQueue.main.async {
                         withAnimation(.easeInOut(duration: 0.35)) {
                             proxy.scrollTo(target, anchor: .trailing)
@@ -163,7 +164,7 @@ struct AlertPresetButtons: View {
     /// → 새 알림이 항상 가장 먼저 울리는 알림이 된다
     /// 예: 10분 타이머에 5분 전 알림만 있으면 → 7:30 전(경과 2:30 시점) 추가
     /// 알림이 없으면 타이머 전체의 중간 지점에 추가
-    /// 추가 후 새 칩이 보이도록 스크롤 이동
+    /// (추가된 칩으로의 스크롤은 `displayOffsets` 변화를 보고 알아서 따라간다)
     private func addMidpointAlert() {
         let mainSec = screenVM.mainMinutes * 60 + screenVM.mainSeconds
         guard mainSec > 0 else { return }
@@ -178,7 +179,6 @@ struct AlertPresetButtons: View {
         guard newOffset < mainSec,
               !screenVM.selectedOffsets.contains(newOffset) else { return }
 
-        pendingScrollOffset = newOffset
         insertGated(newOffset)
     }
 
