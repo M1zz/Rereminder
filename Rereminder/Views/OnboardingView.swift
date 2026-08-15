@@ -54,6 +54,15 @@ struct OnboardingView: View {
             descriptionKey: "onboarding_desc_6",
             color: .purple,
             scenarioKey: nil
+        ),
+        // 마지막 장은 "이 앱을 더 잘 쓰는 법" — 아이폰 하나로만 쓰면 절반만 쓰는 앱이다.
+        // 자세한 기기별 활용은 설정 > Help > 모든 기기에서 사용하기 에서 다시 볼 수 있다.
+        OnboardingPage(
+            icon: "square.stack.3d.up.fill",
+            titleKey: "onboarding_title_7",
+            descriptionKey: "onboarding_desc_7",
+            color: .teal,
+            scenarioKey: "onboarding_scenario_7"
         )
     ]
 

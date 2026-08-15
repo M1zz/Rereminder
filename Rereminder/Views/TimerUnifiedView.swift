@@ -33,6 +33,16 @@ struct MultiDeviceTip: Tip {
 
 /// popoverTip은 iOS 17+ 전용이라 가용성 가드를 한 곳에 모은 모디파이어.
 /// 하위 버전에서는 아무 것도 붙이지 않는다.
+private struct PresentationModeTipAnchor: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 17.0, *) {
+            content.popoverTip(PresentationModeTip(), arrowEdge: .top)
+        } else {
+            content
+        }
+    }
+}
+
 private struct MultiDeviceTipAnchor: ViewModifier {
     func body(content: Content) -> some View {
         if #available(iOS 17.0, *) {
@@ -95,6 +105,7 @@ struct TimerUnifiedView: View {
                     }
                     ProGate.recordUsage(.presentationMode)
                     AnalyticsManager.log(.presentationModeStarted)
+                    FeatureTips.markPresentationModeUsed()
                 case .blocked(let stage):
                     paywallStage = stage
                     showProPaywall = true
@@ -111,6 +122,7 @@ struct TimerUnifiedView: View {
         screenVM.currentMode = .presentation
         ProGate.recordUsage(.presentationMode)
         AnalyticsManager.log(.presentationModeStarted)
+        FeatureTips.markPresentationModeUsed()
     }
 
     var body: some View {
@@ -204,6 +216,8 @@ struct TimerUnifiedView: View {
             .pickerStyle(.segmented)
             .labelsHidden()
             .fixedSize()
+            // 타이머를 두 번 이상 완주한 뒤, 발표 모드를 아직 안 써 봤을 때만 알려준다
+            .modifier(PresentationModeTipAnchor())
 
             Spacer()
 

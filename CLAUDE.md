@@ -212,6 +212,10 @@ extension TimerView {
   유닛 테스트 대상 — `RereminderTests/UsageInsightsTests.swift`).
 - **UsageStatsView** (`Rereminder/Views/UsageStatsView.swift`): 마스터 모드 전용 대시보드
   (설정 → Info의 버전 행 7번 탭 → Help에 노출). 피드백 인박스로 이어진다.
+- **FeatureTips** (`Rereminder/Modules/FeatureTips.swift`): 기능 발견용 TipKit 팁.
+  원칙 — 써 본 뒤에 뜨고(완주·시작 도너), 이미 쓰는 기능이면 안 뜨고(`hasUsed*` 파라미터),
+  한 화면에 하나씩. 지금은 발표 모드(완주 2회+), 템플릿 저장(시작 3회+) 둘.
+  기기별 활용 안내는 팁이 아니라 온보딩 마지막 장과 설정 > Help 가 담당한다.
 - **FeedbackNudge** (`Rereminder/Modules/FeedbackNudge.swift`): 앱이 먼저 의견을 묻는 경로
   (10회째 실행 → 이후 40회 간격, "다시 보지 않기"=6개월 유예, 만족도 게이트에 양보).
   통계가 "어디서 떨어지는지"를 말해 준다면 이유는 이 경로로 들어온다.

@@ -424,12 +424,12 @@ struct NoticeSettingView: View {
                 }
             }
 
-            Section(header: Text("Help")) {
+            Section(header: Text("Help"), footer: Text("Everything from the first-run walkthrough is here — including how to use Rereminder on Apple Watch, Mac, widgets, and Siri.")) {
                 Button {
                     showOnboarding = true
                 } label: {
                     HStack {
-                        Label("View App Tutorial", systemImage: "book.fill")
+                        Label("How to Use This App", systemImage: "book.fill")
                         Spacer()
                         Image(systemName: "chevron.right")
                             .font(.caption)

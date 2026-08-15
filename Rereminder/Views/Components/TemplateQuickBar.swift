@@ -93,6 +93,8 @@ struct TemplateQuickBar: View {
                     withAnimation(.easeInOut(duration: 0.25)) {
                         screenVM.saveCurrentAsTemplate()
                     }
+                    // 한 번 저장해 본 사람에게는 더 권하지 않는다
+                    FeatureTips.markTemplateSaved()
                 } label: {
                     Label(String(localized: "Save template"), systemImage: "square.and.arrow.down")
                         .font(DSFont.callout.weight(.medium))
@@ -103,6 +105,8 @@ struct TemplateQuickBar: View {
                 .accessibilityLabel(String(localized: "Save the current settings as a template"))
                 .layoutPriority(1)
                 .transition(.opacity.combined(with: .scale(scale: 0.9)))
+                // 같은 설정을 여러 번 맞춰 본 뒤에야 뜬다 (타이머 3회 시작 + 저장 이력 없음)
+                .modifier(SaveTemplateTipAnchor())
             }
         }
         .animation(.easeInOut(duration: 0.2), value: hasUnsavedChanges)
@@ -118,5 +122,17 @@ struct TemplateQuickBar: View {
     private func displayName(_ template: Timer) -> String {
         if !template.name.isEmpty { return template.name }
         return TimeMapper.mmss(template.mainSeconds)
+    }
+}
+
+
+/// popoverTip 은 iOS 17+ 전용이라 가용성 가드를 한 곳에 모은다.
+private struct SaveTemplateTipAnchor: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 17.0, *) {
+            content.popoverTip(SaveTemplateTip(), arrowEdge: .bottom)
+        } else {
+            content
+        }
     }
 }

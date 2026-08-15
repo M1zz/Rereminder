@@ -340,6 +340,7 @@ struct TimerMainView: View {
             .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 0)
             // 두 줄일 때는 끝점도 지금 줄어드는 줄 위에 있어야 한다
             .offset(x: ringSize(forAngle: angle, size: size, lineWidth: lineWidth) / 2)
+            .animation(Self.lapChangeAnimation, value: isSecondLap(angle))
             .rotationEffect(.degrees(angle))
             .rotationEffect(.degrees(-90))
             .accessibilityHidden(true)
@@ -362,6 +363,14 @@ struct TimerMainView: View {
     private func innerRingSize(_ size: CGFloat, lineWidth: CGFloat) -> CGFloat {
         size - lineWidth * 2.6
     }
+
+    /// 60분 경계에서 줄이 바뀌는 순간, 반지름이 뚝 끊기면 손에서 튕겨 나간 것처럼 보인다.
+    /// **각도는 손끝을 그대로 따라가고(애니메이션 금지 — 미끄러지는 느낌이 난다),
+    /// 줄 사이를 옮겨 가는 이동만** 짧게 미끄러뜨린다.
+    private static let lapChangeAnimation: Animation = .easeInOut(duration: 0.22)
+
+    /// 이 각도가 두 번째 바퀴(안쪽 줄)에 속하는가 — 애니메이션 트리거 값
+    private func isSecondLap(_ angle: Double) -> Bool { angle >= 360 }
 
     /// 이 각도가 놓일 줄의 지름 — 호·종 노브·드래그 핸들이 **모두 이 하나를 따라야**
     /// 60분을 넘겼을 때 종만 바깥에 남는 식으로 어긋나지 않는다.
@@ -634,8 +643,10 @@ struct TimerMainView: View {
                 // 종 노브(lineWidth * 2.8)와 같은 크기로 맞춘다.
                 .frame(width: lineWidth * 2.8, height: lineWidth * 2.8)
                 .contentShape(Circle())
-                // 설정 시간이 60분을 넘으면 호가 안쪽 줄로 넘어가므로 핸들도 같이 간다
+                // 설정 시간이 60분을 넘으면 호가 안쪽 줄로 넘어가므로 핸들도 같이 간다.
+                // 줄이 바뀌는 그 순간만 미끄러지듯 옮겨 간다(각도는 손끝 그대로).
                 .offset(x: ringSize(forAngle: screenVM.mainAngle, size: size, lineWidth: lineWidth) / 2)
+                .animation(Self.lapChangeAnimation, value: isSecondLap(screenVM.mainAngle))
                 .rotationEffect(.degrees(screenVM.mainAngle))
                 .gesture(dragGesture(size: size))
                 .rotationEffect(.init(degrees: -90))
@@ -740,8 +751,9 @@ struct TimerMainView: View {
                 .rotationEffect(.degrees(90 - displayAngle))
                 .frame(width: lineWidth * 2.8, height: lineWidth * 2.8)
                 .contentShape(Circle())
-                // 60분을 넘어간 종은 그 시간이 그려진 안쪽 줄에 붙는다
+                // 60분을 넘어간 종은 그 시간이 그려진 안쪽 줄에 붙는다(줄 이동만 부드럽게)
                 .offset(x: ringSize(forAngle: displayAngle, size: size, lineWidth: lineWidth) / 2)
+                .animation(Self.lapChangeAnimation, value: isSecondLap(displayAngle))
                 .rotationEffect(.degrees(displayAngle))
                     .gesture(
                         DragGesture(coordinateSpace: .named(Self.alertSpace))

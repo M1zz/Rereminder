@@ -265,6 +265,8 @@ final class TimerScreenViewModel: ObservableObject {
         showToast?("Start")
         timerVM.start()
         ActivityReporter.log("timer_start")
+        // "이 설정 자주 쓰시네요, 저장해 둘까요?" 팁의 노출 조건
+        FeatureTips.donateTimerStarted()
     }
 
     func pause() {
