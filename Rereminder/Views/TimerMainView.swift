@@ -107,7 +107,9 @@ struct TimerMainView: View {
 
                 if isPresentationMode {
                     // 알림 지점 기준 파생 구간 리스트 (원 밖 아래쪽)
-                    derivedSectionList(maxHeight: availableHeight * 0.4)
+                    // 이름을 편집하는 동안에는 키보드가 화면을 절반 가까이 먹으므로 리스트 몫을 늘린다
+                    // (원은 그만큼 작아지지만, 그때 중요한 건 지금 고치는 구간이 보이는 것이다)
+                    derivedSectionList(maxHeight: availableHeight * (focusedSectionIndex == nil ? 0.4 : 0.55))
                         .padding(.bottom, spacing * 2)
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                 } else if !screenVM.nextAlertText.isEmpty {
@@ -122,6 +124,9 @@ struct TimerMainView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            // ⚠️ 이게 없으면 Spacer·여백처럼 아무것도 그리지 않은 자리는 탭이 잡히지 않아
+            //    "화면 아무 데나 눌러 키보드 내리기"가 원·카드 위에서만 동작한다.
+            .contentShape(Rectangle())
         }
         // 빈 곳을 탭하면 키보드 내림 (버튼·제스처는 그대로 동작)
         .simultaneousGesture(TapGesture().onEnded {
@@ -812,21 +817,41 @@ struct TimerMainView: View {
     }
 
     private func derivedSectionList(maxHeight: CGFloat) -> some View {
-        ScrollView {
-            VStack(spacing: DSSpacing.sm) {
-                ForEach(derivedSegments, id: \.index) { seg in
-                    derivedSectionRow(seg)
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack(spacing: DSSpacing.sm) {
+                    ForEach(derivedSegments, id: \.index) { seg in
+                        derivedSectionRow(seg)
+                            .id(seg.index)
+                    }
+                }
+                .padding(.horizontal, 16)
+                // 알림 토글로 구간이 나뉘거나 합쳐질 때 부드럽게
+                .animation(.easeInOut(duration: 0.25), value: screenVM.sortedOffsetsDesc)
+                // 편집 포커스 이동 시 하이라이트 전환
+                .animation(.easeInOut(duration: 0.2), value: focusedSectionIndex)
+            }
+            .frame(maxHeight: maxHeight)
+            // 리스트를 끌면 키보드가 따라 내려감
+            .scrollDismissesKeyboard(.interactively)
+            // 편집을 시작하면 그 카드를 보이는 자리로 끌어온다.
+            // 두 번 스크롤하는 이유: 누른 즉시 한 번(반응이 바로 보이게), 키보드가 다 올라와
+            // 리스트 높이가 줄어든 뒤에 또 한 번(줄어든 창 기준으로 다시 맞춰야 실제로 보인다).
+            .onChange(of: focusedSectionIndex) { _, index in
+                guard let index else { return }
+                scrollToSection(index, using: proxy)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    guard focusedSectionIndex == index else { return }
+                    scrollToSection(index, using: proxy)
                 }
             }
-            .padding(.horizontal, 16)
-            // 알림 토글로 구간이 나뉘거나 합쳐질 때 부드럽게
-            .animation(.easeInOut(duration: 0.25), value: screenVM.sortedOffsetsDesc)
-            // 편집 포커스 이동 시 하이라이트 전환
-            .animation(.easeInOut(duration: 0.2), value: focusedSectionIndex)
         }
-        .frame(maxHeight: maxHeight)
-        // 리스트를 끌면 키보드가 따라 내려감
-        .scrollDismissesKeyboard(.interactively)
+    }
+
+    private func scrollToSection(_ index: Int, using proxy: ScrollViewProxy) {
+        withAnimation(.easeInOut(duration: 0.25)) {
+            proxy.scrollTo(index, anchor: .center)
+        }
     }
 
     /// 한 구간 카드 — 2단 구성(이름+길이 배지 / 시간 범위)으로 빼곡함을 덜어 한눈에 들어오게

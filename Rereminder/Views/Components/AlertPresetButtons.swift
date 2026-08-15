@@ -22,6 +22,17 @@ enum AlertPresets {
     static func encode(_ list: [Int]) -> String {
         Array(Set(list.filter { $0 > 0 })).sorted().map(String.init).joined(separator: ",")
     }
+
+    /// 칩 줄에 늘어놓을 순서 — **켜져 있는 알림이 먼저, 그 뒤에 나머지**(각 묶음 안에서는 시간순).
+    ///
+    /// 예: 프리셋 1:00·3:00 에 1:30 을 켜 두면 → `[90, 60, 180]` (1:30, 1:00, 3:00)
+    ///
+    /// 지금 무엇이 걸려 있는지가 이 줄에서 가장 중요한 정보인데, 시간순으로만 늘어놓으면
+    /// 프리셋이 늘어날수록 켜 둔 칩이 오른쪽으로 밀려 스크롤해야 보인다.
+    static func displayOrder(presets: [Int], selected: Set<Int>) -> [Int] {
+        let all = Set(presets).union(selected)
+        return all.filter { selected.contains($0) }.sorted() + all.subtracting(selected).sorted()
+    }
 }
 
 /// 프리셋을 설정에서 바꿀 수 있다는 안내 팁
@@ -49,9 +60,10 @@ struct AlertPresetButtons: View {
     /// 페이월에서 연장 체험 수락 시 이어서 추가할 시점
     @State private var pendingGatedOffset: Int?
 
-    /// 프리셋 + 현재 선택된 시점의 합집합 (오름차순)
+    /// 프리셋 + 현재 선택된 시점 — 켜진 알림이 앞, 나머지가 뒤(규칙은 `AlertPresets.displayOrder`).
     private var displayOffsets: [Int] {
-        Array(Set(AlertPresets.decode(presetsRaw)).union(screenVM.selectedOffsets)).sorted()
+        AlertPresets.displayOrder(presets: AlertPresets.decode(presetsRaw),
+                                  selected: screenVM.selectedOffsets)
     }
 
     var body: some View {
@@ -126,18 +138,19 @@ struct AlertPresetButtons: View {
                     }
                     .animation(.easeInOut(duration: 0.25), value: displayOffsets)
                 }
-                // 알림이 새로 생기면 그 칩이 보이도록 오른쪽으로 밀어준다.
-                // + 버튼뿐 아니라 링에서 종을 끌어 만든 알림·템플릿 적용까지 전부 여기서 처리한다
-                // (목록이 오름차순이라 새 알림은 대개 맨 오른쪽 = 화면 밖에 생긴다).
+                // 알림이 새로 켜지면 그 칩이 보이도록 스크롤한다.
+                // + 버튼뿐 아니라 링에서 종을 끌어 만든 알림·템플릿 적용까지 전부 여기서 처리한다.
+                // ⚠️ 켜진 칩은 항상 맨 앞 묶음으로 가므로 **왼쪽 끝**을 보여준다. 목록(displayOffsets)이
+                //    아니라 선택 자체를 봐야 이미 있던 프리셋을 켠 경우(목록은 그대로, 자리만 앞으로
+                //    이동)에도 따라간다.
                 // 실제로 칩이 레이아웃된 다음 프레임에 스크롤해야 "아직 없는 id로 scrollTo"가
                 // 무시되는 타이밍 레이스를 피할 수 있다.
-                .onChange(of: displayOffsets) { previous, current in
-                    let added = Set(current).subtracting(previous)
-                    // 여러 개가 한꺼번에 들어오면(템플릿 적용 등) 가장 오른쪽 것을 기준으로 삼는다
-                    guard let target = added.max() else { return }
+                .onChange(of: screenVM.selectedOffsets) { previous, current in
+                    // 여러 개가 한꺼번에 켜지면(템플릿 적용 등) 가장 왼쪽 것을 기준으로 삼는다
+                    guard let target = current.subtracting(previous).min() else { return }
                     DispatchQueue.main.async {
                         withAnimation(.easeInOut(duration: 0.35)) {
-                            proxy.scrollTo(target, anchor: .trailing)
+                            proxy.scrollTo(target, anchor: .leading)
                         }
                     }
                 }
