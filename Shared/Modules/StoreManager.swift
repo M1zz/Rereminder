@@ -132,7 +132,7 @@ final class StoreManager: ObservableObject {
 
     private init() {
         store = LeeoStore(
-            config: RereminderSpec.paywall!,
+            config: RereminderSpec.paywallConfig,
             // 개발/샌드박스/맥앱 자동 Pro (true=강제 해제). 그 외에는 정상 판정(nil).
             unlockOverride: { Self.isAutoProEnvironment ? true : nil },
             // 기존 사용자 그랜드파더링 (구매 없을 때 LeeoStore 가 1회 호출).
@@ -173,8 +173,17 @@ final class StoreManager: ObservableObject {
 
     // MARK: - Load Products / Entitlements (LeeoStore 로 위임)
 
+    /// 상품 로드 — 네트워크 불안정 대비 지수 백오프 재시도 (1s → 2s → 4s)
     func loadProducts() async {
-        await store.loadProducts()
+        let maxRetries = 3
+        for attempt in 0..<maxRetries {
+            await store.loadProducts()
+            if !store.products.isEmpty { return }
+            // 마지막 시도가 아니면 백오프 후 재시도
+            guard attempt < maxRetries - 1 else { break }
+            let backoff = UInt64(1 << attempt) * 1_000_000_000
+            try? await Task.sleep(nanoseconds: backoff)
+        }
     }
 
     /// 현재 유효한 구매 내역 확인 (앱 시작 시, 복원 시 호출)

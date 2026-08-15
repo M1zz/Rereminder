@@ -28,6 +28,9 @@ final class AppStateManager: ObservableObject {
         UNUserNotificationCenter.current().getNotificationSettings { settings in
             DispatchQueue.main.async {
                 self.notificationAuthStatus = settings.authorizationStatus
+                // 익명 사용 스냅샷이 실어 보내는 0/1 플래그 — 알림이 이 앱의 전부라
+                // "권한을 안 준 사람이 얼마나 되는지"가 곧 못 받는 가치의 크기다.
+                UsageMetrics.setNotificationsAuthorized(settings.authorizationStatus == .authorized)
             }
         }
     }

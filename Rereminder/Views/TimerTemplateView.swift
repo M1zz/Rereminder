@@ -97,6 +97,7 @@ struct TimerTemplateView: View {
     @ViewBuilder
     private func templateRow(for timer: Timer) -> some View {
         Button {
+            AnalyticsManager.log(.presetUsed(name: timer.name))
             onSelect(timer)
             dismiss()
         } label: {

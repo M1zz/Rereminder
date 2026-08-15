@@ -2,8 +2,9 @@
 //  ReviewRequestManager.swift
 //  Rereminder
 //
-//  리뷰 요청 관리자
-//  Apple 가이드라인 준수: 적절한 시점에 자동으로 리뷰 요청
+//  수동 리뷰 진입점 + 완료 횟수 집계.
+//  자동 리뷰 유도는 만족도 게이트(LeeoReviewGate / .leeoSatisfactionCheck)가 단독 담당하고,
+//  여기는 설정 화면의 수동 요청 버튼과 지표용 완료 카운트만 남긴다.
 //
 
 import Foundation
@@ -18,12 +19,6 @@ final class ReviewRequestManager {
     static let shared = ReviewRequestManager()
 
     private let completionCountKey = "timerCompletionCount"
-    private let lastReviewRequestDateKey = "lastReviewRequestDate"
-    private let hasRequestedReviewKey = "hasRequestedReview"
-
-    // Settings값
-    private let completionThreshold = 5  // 5회 Done 후 리뷰 요청
-    private let minimumDaysBetweenRequests = 90  // 90일에 한 번만 요청
 
     private init() {}
 
@@ -38,28 +33,7 @@ final class ReviewRequestManager {
         UserDefaults.standard.set(newCount, forKey: completionCountKey)
     }
 
-    // MARK: - 리뷰 요청 조건 OK
-
-    private func shouldRequestReview(completionCount: Int) -> Bool {
-        // 1. Done 횟수가 threshold 이상인지 OK
-        guard completionCount >= completionThreshold else {
-            return false
-        }
-
-        // 2. 마지막 요청 날짜 OK
-        if let lastRequestDate = UserDefaults.standard.object(forKey: lastReviewRequestDateKey) as? Date {
-            let daysSinceLastRequest = Calendar.current.dateComponents([.day], from: lastRequestDate, to: Date()).day ?? 0
-
-            // 90일이 지나지 않았으면 요청하지 않음
-            if daysSinceLastRequest < minimumDaysBetweenRequests {
-                return false
-            }
-        }
-
-        return true
-    }
-
-    // MARK: - 리뷰 요청 실행
+    // MARK: - 리뷰 요청 실행 (설정 화면 수동 버튼 전용)
 
     /// 시스템 네이티브 리뷰 팝업 표시
     func requestReview() {
@@ -67,11 +41,6 @@ final class ReviewRequestManager {
         // 현재 씬에서 리뷰 요청
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
             AppStore.requestReview(in: windowScene)
-
-            // 마지막 요청 날짜 기록
-            UserDefaults.standard.set(Date(), forKey: lastReviewRequestDateKey)
-            UserDefaults.standard.set(true, forKey: hasRequestedReviewKey)
-
             AnalyticsManager.log(.reviewRequested)
         }
         #endif

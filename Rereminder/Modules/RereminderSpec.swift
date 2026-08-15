@@ -28,10 +28,14 @@ enum RereminderSpec: LeeoAppSpec {
     /// cacheSuiteName: 앱 그룹(group.leeo.toki)에 권한을 캐시해 위젯/확장·오프라인에서도
     /// 마지막으로 확인된 Pro 상태로 즉시 잠금 해제한다.
     /// ⚠️ 상품 ID 는 App Store Connect 계약이다 — 변경 금지.
-    static let paywall: LeeoPaywallConfig? = LeeoPaywallConfig(
+    /// 앱 내부에서는 언래핑이 필요 없는 이 비옵셔널 원본을 쓸 것 (StoreManager 등).
+    static let paywallConfig = LeeoPaywallConfig(
         productIDs: ["com.xa.toki.pro"],
         termsURL: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"),
         privacyURL: URL(string: "https://m1zz.github.io/Rereminder/privacy.html"),
         cacheSuiteName: "group.leeo.toki"
     )
+
+    /// LeeoAppSpec witness — 타입을 옵셔널로 명시해야 프로토콜 기본값(nil)에 가려지지 않는다.
+    static let paywall: LeeoPaywallConfig? = paywallConfig
 }

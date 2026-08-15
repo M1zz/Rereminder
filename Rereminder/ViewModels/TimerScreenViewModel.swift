@@ -399,10 +399,16 @@ final class TimerScreenViewModel: ObservableObject {
         }
 
         if toast {
-            let mainLabel = secPart > 0 ? "\(mainMinutes)min \(secPart)sec" : "\(mainMinutes)min"
-            let preText = normalizedOffsets.map { "\($0/60)min" }.sorted().joined(separator: ", ")
+            let mainLabel = secPart > 0
+                ? String(localized: "\(mainMinutes)min \(secPart)sec")
+                : String(localized: "\(mainMinutes)min")
+            let preText = normalizedOffsets.sorted()
+                .map { String(localized: "\($0 / 60)min") }
+                .joined(separator: ", ")
             timerVM.showToast?(
-                "Timer applied: \(mainLabel)" + (preText.isEmpty ? "" : " / Pre-alert \(preText)")
+                preText.isEmpty
+                    ? String(localized: "Timer applied: \(mainLabel)")
+                    : String(localized: "Timer applied: \(mainLabel) / Pre-alert \(preText)")
             )
         }
     }

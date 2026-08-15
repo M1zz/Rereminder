@@ -77,7 +77,7 @@ git checkout -b feature/이슈번호
 ### 중앙 집중식 버전 관리
 모든 타겟(iOS, Watch, Widget)의 버전을 한 곳에서 관리합니다.
 
-**설정 파일**: `Config/Version.xcconfig`
+**설정 파일**: 루트 `Version.xcconfig` (프로젝트 레벨 baseConfiguration — 타겟 하드코딩 금지)
 
 ### 버전 업데이트 방법
 
@@ -187,6 +187,25 @@ extension TimerView {
 - **RereminderAlarmManager** (`Shared/Modules/RereminderAlarmManager.swift`): 알림 관리
 - **ReviewRequestManager** (`Shared/Modules/ReviewRequestManager.swift`): 앱스토어 리뷰 요청 관리
 
+### 사용 통계·피드백 (서비스 판단 루프)
+"이 앱이 실제로 쓸모가 있나"를 개발자가 앱 안에서 확인하는 경로. 설계·운영 문서는
+`docs/USAGE_STATS_HUB.md`(수집·집계)와 `docs/FEEDBACK_CLOUDKIT.md`(피드백).
+- **UsageMetrics** (`Shared/Modules/UsageMetrics.swift`): 이 기기의 로컬 누적 카운터
+  (완주 횟수·관리한 시간 등). `AnalyticsManager.log`가 단독으로 갱신한다.
+- **ActivityReporter** (`Rereminder/Modules/ActivityReporter.swift`): 수집 정책(쓰로틀·킬스위치)
+  + 허브 조회/기간별 집계. 전송 엔진은 LeeoKit `LeeoUsageReporter`.
+- **UsageInsights** (`Rereminder/Modules/UsageInsights.swift`): 퍼널·리텐션·분포 계산(순수 함수,
+  유닛 테스트 대상 — `RereminderTests/UsageInsightsTests.swift`).
+- **UsageStatsView** (`Rereminder/Views/UsageStatsView.swift`): 마스터 모드 전용 대시보드
+  (설정 → Info의 버전 행 7번 탭 → Help에 노출). 피드백 인박스로 이어진다.
+- **FeedbackNudge** (`Rereminder/Modules/FeedbackNudge.swift`): 앱이 먼저 의견을 묻는 경로
+  (10회째 실행 → 이후 40회 간격, "다시 보지 않기"=6개월 유예, 만족도 게이트에 양보).
+  통계가 "어디서 떨어지는지"를 말해 준다면 이유는 이 경로로 들어온다.
+- ⚠️ 개발자 전용 화면은 `Text(verbatim:)`으로 쓴다. `Text("한글")`·`Picker("", …)`·
+  Charts의 `.value("한글", …)` 리터럴은 문자열 카탈로그에 추출돼 다국어 게이트를 막는다.
+  동적 키(`guide_*`)·플랫폼 조건부 문자열은 카탈로그에서 `extractionState: manual`로 둘 것
+  (그러지 않으면 빌드마다 stale로 찍혀 predeploy가 실패한다).
+
 ### UI Components
 - **Clock** (`Rereminder/Views/Components/Clock.swift`): 타이머 시계 UI
 - **TimePresetButtons** (`Rereminder/Views/Components/TimePresetButtons.swift`): 시간 프리셋 버튼
@@ -246,13 +265,21 @@ extension TimerView {
 - [ ] 위젯에서 타이머 제어 확인
 
 ## 빌드 환경
-- **Xcode**: 15.0+
-- **iOS Deployment Target**: iOS 16.0+
+- **Xcode**: 26+
+- **iOS Deployment Target**: iOS 26.0
 - **watchOS Deployment Target**: watchOS 9.0+
 - **Swift Version**: Swift 5.9+
 
 ## 의존성
-현재 외부 라이브러리 의존성 없음 (네이티브 프레임워크만 사용)
+- **LeeoKit** (SPM, 2.7.0+): 공용 StoreKit 2 엔진(LeeoStore)·사용 리포터·원격 킬스위치(LeeoRemoteFlags)·MetricKit 크래시 진단(LeeoDiagnostics) 등 자체 공용 모듈. 킬스위치 플래그는 `Rereminder/Modules/RereminderFlags.swift`, Dashboard 수동 작업은 `docs/OPERATIONS_CHECKLIST.md` 참고
+- **TelemetryDeck SwiftSDK** (SPM, 2.0.0+): 익명·비추적 분석. 메인 iOS 앱 타겟에만 링크.
+  `AnalyticsManager.telemetryDeckAppID` 가 비어 있으면 외부 전송 없음(no-op).
+  활성화하려면 dashboard.telemetrydeck.com 에서 App ID 발급 후 해당 상수에 입력.
+
+## CI / 린트
+- **GitHub Actions** (`.github/workflows/ci.yml`): main/dev push·PR 시 iOS 시뮬레이터에서 유닛 테스트 실행 + SwiftLint
+  - 주의: `CODE_SIGNING_ALLOWED=NO` 로 빌드하면 entitlements 가 빠져 CloudKit 초기화가 크래시하므로 사용 금지
+- **SwiftLint** (`.swiftlint.yml`): 로컬에서 `swiftlint lint` 로 실행
 
 ## 릴리즈 프로세스
 1. dev 브랜치에서 기능 개발 및 테스트
@@ -278,6 +305,37 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
 ```
 
 ## 버전 히스토리
+
+### (미출시) 서비스 판단 루프 — 통계·피드백으로 효용 확인 (2026-08-15)
+- **LeeoKit 2.9.0 상향**: `UsageEvent`에 `occurredAt`·`installID`가 실린다
+  (⚠️ 배포 전 CloudKit 스키마 배포 필수 — `docs/OPERATIONS_CHECKLIST.md` 3번)
+- **로컬 카운터 도입** (`Shared/Modules/UsageMetrics.swift`): 이벤트 쓰로틀(6시간) 때문에
+  셀 수 없던 "몇 번 했나"를 기기에서 세어 스냅샷 `metrics`로 보낸다
+  (완주 횟수·관리한 시간·템플릿/발표/워치 사용·알림 권한 플래그)
+- **ActivityReporter 확장**: 이름당 쓰로틀, `app_open`(20시간, 화면이 실제로 뜨는 경로에서만),
+  이벤트 스트림 조회(커서 3,000건)·이름별 집계·기간별 추이
+- **UsageInsights 신설**: 활성화/온보딩/결제 퍼널, 주간 코호트 리텐션, 완주 횟수 분포,
+  기능 채택률 — 전부 순수 함수 + 유닛 테스트 12개
+- **통계 대시보드 자체 구현** (`Rereminder/Views/UsageStatsView.swift`): LeeoKit 기본 화면 대신
+  이 앱의 판단 지표(완주율·0회 사용자·알림 권한 허용률)를 보여주고, 피드백 인박스로 이어진다.
+  기간별 추이 차트(일·주·월·연, 좌우 스크롤·탭 값 읽기)는 `Views/Components/UsageTrendChartView.swift`
+- **의견 요청 도입** (`Rereminder/Modules/FeedbackNudge.swift`): 설정 안에 숨은 피드백 버튼을
+  스스로 찾아오는 사용자는 드물다 — 앱이 먼저 묻고, 노출·수락을 이벤트로 남겨 통계 화면의
+  "의견 요청 수락률"로 확인한다 (테스트 4개)
+- **현지화 위생**: 동적 키 41건을 `extractionState: manual`로 전환 — 빌드마다 stale로 찍혀
+  predeploy 게이트를 막던 문제 해소
+- **문서**: `docs/USAGE_STATS_HUB.md` 신설(수집 항목·집계 설계·스키마 배포 순서),
+  `docs/FEEDBACK_CLOUDKIT.md`에 피드백 유입 경로 3가지 정리
+
+### v2.0.4 (2026-08-02)
+- **서비스 성숙도 강화 (클립키보드 수준 정렬)**
+  - LeeoKit 2.7.0 상향: 원격 킬스위치(LeeoRemoteFlags — usageReporting/diagnostics/cloudSync) + MetricKit 크래시 진단(LeeoDiagnostics) 통합
+  - 분석 활성화: AnalyticsManager.eventSink → 익명 사용 허브(CloudKit) 전송 결선, 온보딩(shown/completed/skipped)·프리셋(saved/used) 퍼널 이벤트 추가
+  - 리뷰 레거시 정리: ReviewRequestManager 죽은 정책 코드 제거(만족도 게이트가 단독 담당)
+  - CI/배포 게이트: scripts/predeploy.sh(다국어 검사 + 전체 테스트) 단일 게이트를 CI·fastlane 공용으로 도입
+  - 버전 관리 단일화: 루트 Version.xcconfig 단일 소스(타겟 하드코딩 제거), update_version.sh 수리
+  - 현지화 위생: stale 키 72건 제거, 알림 권한 상태 오역 수정, 타이머 적용 토스트 현지화(ko/ja)
+
 
 ### v1.0.6 (2026-01-28)
 - **중앙 집중식 버전 관리 시스템 도입**

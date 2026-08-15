@@ -73,7 +73,10 @@ final class TimerConfigService {
         let desc = FetchDescriptor<Timer>(
             sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
         )
-        return (try? ctx.fetch(desc)) ?? []
+        let recents = (try? ctx.fetch(desc)) ?? []
+        // 익명 사용 스냅샷이 실어 보낼 "현재 템플릿 수" 미러 — 개수만, 이름·내용은 나가지 않는다.
+        UsageMetrics.setTemplateCount(recents.count)
+        return recents
     }
 
     /// 중복이 아닌 경우에만 템플릿 저장, limit 초과 시 오래된 것 삭제
@@ -107,6 +110,7 @@ final class TimerConfigService {
         ctx.insert(entry)
         do {
             try ctx.save()
+            AnalyticsManager.log(.presetSaved(name: entry.name, durationSeconds: mainSec))
         } catch {
             print("❌ 타이머 템플릿 저장 실패: \(error)")
         }

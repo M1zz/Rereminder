@@ -7,9 +7,12 @@ Rereminder 앱의 버전을 중앙에서 관리하기 위한 설정 파일입니
 ## 파일 구조
 
 ```
-Config/
+(저장소 루트)
 └── Version.xcconfig    # 버전 정보 (MARKETING_VERSION, CURRENT_PROJECT_VERSION)
 ```
+
+> 2026-08-02: Config/Version.xcconfig 는 삭제되고 **루트 Version.xcconfig 로 단일화**되었습니다.
+> 프로젝트 레벨 baseConfiguration 으로 연결되어 모든 타겟이 상속하며, 타겟 레벨 하드코딩은 금지입니다.
 
 ## 버전 업데이트 방법
 

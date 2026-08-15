@@ -69,12 +69,16 @@ struct OnboardingView: View {
                 endPoint: .bottomTrailing
             )
             .ignoresSafeArea()
+            .onAppear { AnalyticsManager.log(.onboardingShown) }
 
             VStack(spacing: 0) {
                 // Skip 버튼
                 HStack {
                     Spacer()
-                    Button(action: skipOnboarding) {
+                    Button(action: {
+                        AnalyticsManager.log(.onboardingSkipped(page: currentPage))
+                        skipOnboarding()
+                    }) {
                         Text("Skip")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
@@ -96,7 +100,10 @@ struct OnboardingView: View {
                 // 하단 버튼
                 VStack(spacing: 12) {
                     if currentPage == pages.count - 1 {
-                        Button(action: skipOnboarding) {
+                        Button(action: {
+                            AnalyticsManager.log(.onboardingCompleted)
+                            skipOnboarding()
+                        }) {
                             Text("Get Started")
                                 .font(.headline)
                                 .foregroundStyle(.white)

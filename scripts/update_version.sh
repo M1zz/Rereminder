@@ -2,7 +2,7 @@
 
 #
 # update_version.sh
-# Toki 버전 업데이트 스크립트
+# Rereminder(두번알림) 버전 업데이트 스크립트 — 루트 Version.xcconfig 단일 소스
 #
 # 사용법:
 #   ./scripts/update_version.sh 1.0.7        # 버전만 업데이트
@@ -14,8 +14,7 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-VERSION_FILE="$PROJECT_ROOT/Config/Version.xcconfig"
-PROJECT_FILE="$PROJECT_ROOT/Toki.xcodeproj/project.pbxproj"
+VERSION_FILE="$PROJECT_ROOT/Version.xcconfig"
 
 # 색상 코드
 RED='\033[0;31m'
@@ -25,11 +24,11 @@ NC='\033[0m' # No Color
 
 # 현재 버전 읽기
 get_current_version() {
-    grep "MARKETING_VERSION" "$VERSION_FILE" | sed 's/.*= //'
+    grep "^MARKETING_VERSION" "$VERSION_FILE" | sed 's/.*= //'
 }
 
 get_current_build() {
-    grep "CURRENT_PROJECT_VERSION" "$VERSION_FILE" | sed 's/.*= //'
+    grep "^CURRENT_PROJECT_VERSION" "$VERSION_FILE" | sed 's/.*= //'
 }
 
 # 사용법 출력
@@ -47,7 +46,7 @@ show_version() {
     CURRENT_VERSION=$(get_current_version)
     CURRENT_BUILD=$(get_current_build)
     echo ""
-    echo "📱 Toki 현재 버전 정보"
+    echo "📱 Rereminder 현재 버전 정보"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "버전:      $CURRENT_VERSION"
     echo "빌드 번호: $CURRENT_BUILD"
@@ -61,7 +60,7 @@ increment_build() {
     NEW_BUILD=$((CURRENT_BUILD + 1))
 
     # Version.xcconfig 업데이트
-    sed -i '' "s/CURRENT_PROJECT_VERSION = .*/CURRENT_PROJECT_VERSION = $NEW_BUILD/" "$VERSION_FILE"
+    sed -i '' "s/^CURRENT_PROJECT_VERSION = .*/CURRENT_PROJECT_VERSION = $NEW_BUILD/" "$VERSION_FILE"
 
     echo -e "${GREEN}✅ 빌드 번호 업데이트: $CURRENT_BUILD → $NEW_BUILD${NC}"
 }
@@ -81,7 +80,7 @@ update_version() {
     CURRENT_BUILD=$(get_current_build)
 
     echo ""
-    echo "📱 Toki 버전 업데이트"
+    echo "📱 Rereminder 버전 업데이트"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "현재 버전:  $CURRENT_VERSION (빌드 $CURRENT_BUILD)"
     echo "새 버전:    $NEW_VERSION (빌드 $NEW_BUILD)"
@@ -96,14 +95,14 @@ update_version() {
     fi
 
     # Version.xcconfig 업데이트
-    sed -i '' "s/MARKETING_VERSION = .*/MARKETING_VERSION = $NEW_VERSION/" "$VERSION_FILE"
-    sed -i '' "s/CURRENT_PROJECT_VERSION = .*/CURRENT_PROJECT_VERSION = $NEW_BUILD/" "$VERSION_FILE"
+    sed -i '' "s/^MARKETING_VERSION = .*/MARKETING_VERSION = $NEW_VERSION/" "$VERSION_FILE"
+    sed -i '' "s/^CURRENT_PROJECT_VERSION = .*/CURRENT_PROJECT_VERSION = $NEW_BUILD/" "$VERSION_FILE"
 
     echo ""
     echo -e "${GREEN}✅ 버전 업데이트 완료!${NC}"
     echo ""
     echo "다음 단계:"
-    echo "1. git add Config/Version.xcconfig"
+    echo "1. git add Version.xcconfig"
     echo "2. git commit -m \"chore: 버전 $NEW_VERSION으로 업데이트\""
     echo "3. git tag v$NEW_VERSION"
     echo ""

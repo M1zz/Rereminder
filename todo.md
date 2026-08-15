@@ -13,7 +13,7 @@
 ## 완료 (Mac 확장 라운드)
 - [x] 개발자/macOS 환경 Pro 자동 부여 (`StoreManager.isDeveloperUnlock` — macOS=on, iOS DEBUG는 `dev.forcePro` 토글)
 - [x] 발표모드 하단 버튼 ↔ 페이지 인디케이터 겹침 수정 (페이지 양쪽에 하단 여백 확보)
-- [x] **Mac Catalyst 활성화** — 기존 iOS 타겟에서 Catalyst on, iOS·Catalyst 양쪽 빌드 성공
+- [x] ~~**Mac Catalyst 활성화**~~ → **2026-08-02: Mac Catalyst/iPad 지원 해제됨**(커밋 8a4dd74, SUPPORTS_MACCATALYST=NO). 아래 Mac 관련 항목은 전부 보류.
 - [x] Mac 창 크기 제약 + 타이틀바 정리 (`ContentView.configureMacWindowIfNeeded`)
 
 ## Mac 후속 (네이티브 레이어 — 추후)

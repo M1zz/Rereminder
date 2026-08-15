@@ -59,6 +59,10 @@ struct TimerUnifiedView: View {
     private static let grandfatherThankedKey = "rereminder.grandfather.thanked"
     @State private var showGrandfatherThanks = false
 
+    // 가끔 먼저 물어보는 의견 요청 — 조건 판정은 FeedbackNudge가 한다
+    @State private var showFeedbackNudge = false
+    @State private var showFeedbackSheet = false
+
     /// 타이머가 실행 중이 아닐 때만 모드 전환 허용
     private var isIdle: Bool {
         screenVM.state == .idle || screenVM.state == .finished
@@ -126,14 +130,22 @@ struct TimerUnifiedView: View {
             .onAppear(perform: setupOnAppear)
             // 사용 중 적절한 시점에 "즐겁게 쓰고 계신가요?" → 👍 앱스토어 리뷰 / 👎 피드백.
             // 실행 3회·설치 2일·타이머 완료 3회 이상, 버전당 1회, 120일 쿨다운(정책 내장).
-            .leeoSatisfactionCheck(
-                RereminderSpec.self,
-                policy: LeeoReviewPolicy(
-                    minLaunches: 3,
-                    minDaysSinceInstall: 2,
-                    minSignificantEvents: 3
-                )
-            )
+            .leeoSatisfactionCheck(RereminderSpec.self, policy: Self.satisfactionPolicy)
+            // 만족도 게이트가 뜰 차례가 아닐 때만, 가끔 먼저 "불편한 점 없으세요?"를 묻는다.
+            // 통계는 어디서 떨어지는지까지만 말해 준다 — 왜 그런지는 여기로만 들어온다.
+            .alert(String(localized: "Anything bothering you?"), isPresented: $showFeedbackNudge) {
+                Button(String(localized: "Leave Feedback")) {
+                    AnalyticsManager.log(.feedbackNudgeAccepted)
+                    showFeedbackSheet = true
+                }
+                Button(String(localized: "Later"), role: .cancel) {}
+                Button(String(localized: "Don't Show Again")) { FeedbackNudge.snooze() }
+            } message: {
+                Text(String(localized: "Tell us what you need or what felt off — the developer reads every message."))
+            }
+            .sheet(isPresented: $showFeedbackSheet) {
+                FeedbackView()
+            }
             .onChange(of: scenePhase) { oldPhase, newPhase in
                 handleScenePhase(oldPhase, newPhase)
             }
@@ -211,7 +223,25 @@ struct TimerUnifiedView: View {
 
     // MARK: - Actions
 
+    /// 만족도 게이트 조건 — 의견 요청(FeedbackNudge)이 "게이트가 뜰 차례인지"를 볼 때도 같은 값을 봐야
+    /// 한 실행에서 두 번 묻는 일이 없다. 그래서 한 곳에 둔다.
+    static let satisfactionPolicy = LeeoReviewPolicy(
+        minLaunches: 3,
+        minDaysSinceInstall: 2,
+        minSignificantEvents: 3
+    )
+
     private func setupOnAppear() {
+        // 사람이 실제로 화면을 본 순간 = 실행 1회 + 오늘의 활동(app_open).
+        // 콜드 런치는 scenePhase onChange가 안 오므로 여기서 남긴다(내부 쓰로틀로 중복 없음).
+        ActivityReporter.reportForegroundOpen()
+
+        // 실행 횟수를 올린 뒤에 판정한다 — 순서가 뒤바뀌면 10회째가 아니라 11회째에 뜬다.
+        if FeedbackNudge.isDue(policy: Self.satisfactionPolicy) {
+            FeedbackNudge.markShown()
+            showFeedbackNudge = true
+        }
+
         // 그랜드파더링된 기존 사용자에게 무료 Pro 안내 (최초 1회)
         if StoreManager.isGrandfathered,
            !UserDefaults.standard.bool(forKey: Self.grandfatherThankedKey) {
@@ -252,6 +282,8 @@ struct TimerUnifiedView: View {
         if newPhase == .active {
             screenVM.timerVM.engine.recalculateOnForeground()
             handleControlWidgetAction()
+            // 며칠씩 살아 있는 프로세스에서도 "오늘 열었다"를 놓치지 않게 복귀마다 확인한다.
+            ActivityReporter.reportForegroundOpen()
         }
     }
 

@@ -1,9 +1,11 @@
-// Version Configuration
-// 이 파일에서 빌드 번호(CURRENT_PROJECT_VERSION)를 중앙 관리합니다.
-// 마케팅 버전은 타겟별로 다를 수 있어 각 타겟 설정을 유지합니다.
+// Version Configuration — 버전의 단일 소스
+// 앱 3개 타겟(iOS/Watch/Widget)의 마케팅 버전과 빌드 번호를 여기서만 관리합니다.
+// (프로젝트 레벨 baseConfigurationReference 로 연결되어 모든 타겟이 상속.
+//  타겟 레벨에 MARKETING_VERSION/CURRENT_PROJECT_VERSION 을 다시 쓰면 이 파일이 무시되므로 금지)
+// 갱신은 ./scripts/update_version.sh 사용. 빌드 번호는 fastlane bump 가 자동 증가.
 
-// 마케팅 버전 기본값 (메인 앱 기준 — 타겟이 개별 지정 시 그 값이 우선)
-MARKETING_VERSION = 2.0.3
+// 앱 버전 (App Store 표시)
+MARKETING_VERSION = 2.0.4
 
-// 빌드 번호 (내부 버전) — 모든 타겟 공통
+// 빌드 번호 (TestFlight 업로드마다 증가)
 CURRENT_PROJECT_VERSION = 1
