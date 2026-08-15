@@ -10,14 +10,19 @@ import AppIntents
 import ActivityKit
 
 // MARK: - Live Activity Intents
+//
+// ⚠️ 이 인텐트들은 **위젯 확장 프로세스**에서 돈다. NotificationCenter 는 프로세스 경계를 넘지 못하므로
+//    그것만으로는 앱에 아무것도 전달되지 않는다(예전 버그: 버튼을 눌러도 아무 일도 일어나지 않음).
+//    그래서 세 가지를 함께 한다:
+//     ① 앱 그룹에 명령을 남긴다 — 앱이 꺼져 있어도 다음에 열릴 때 적용된다
+//     ② 같은 프로세스에 앱이 있다면 알림도 보낸다 — 즉시 반영
+//     ③ 눈에 보이는 결과를 그 자리에서 만든다 — 정지는 활동을 바로 없애고, 일시정지/재개는 표시를 바꾼다
 
 struct PauseIntent: LiveActivityIntent {
     func perform() throws -> some IntentResult {
-        // Broadcast notification to pause timer
-        NotificationCenter.default.post(
-            name: NSNotification.Name("PauseTimerIntent"),
-            object: nil
-        )
+        LiveActivityCommand.pause.dispatch()
+        // 앱이 실제로 멈출 때까지 기다리지 않고 표시부터 멈춘다 — 버튼이 죽은 것처럼 보이지 않게
+        LiveActivityController.markPaused()
         return .result()
     }
 
@@ -38,11 +43,7 @@ struct PauseIntent: LiveActivityIntent {
 
 struct ResumeIntent: LiveActivityIntent {
     func perform() throws -> some IntentResult {
-        // Broadcast notification to resume timer
-        NotificationCenter.default.post(
-            name: NSNotification.Name("ResumeTimerIntent"),
-            object: nil
-        )
+        LiveActivityCommand.resume.dispatch()
         return .result()
     }
 
@@ -63,11 +64,9 @@ struct ResumeIntent: LiveActivityIntent {
 
 struct StopIntent: LiveActivityIntent {
     func perform() throws -> some IntentResult {
-        // Broadcast notification to stop timer
-        NotificationCenter.default.post(
-            name: NSNotification.Name("StopTimerIntent"),
-            object: nil
-        )
+        LiveActivityCommand.stop.dispatch()
+        // 정지는 눌렀으면 사라져야 한다 — 앱이 꺼져 있어도 여기서 끝낸다
+        LiveActivityController.endAll()
         return .result()
     }
 

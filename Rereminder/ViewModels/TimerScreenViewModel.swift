@@ -556,6 +556,58 @@ extension TimerScreenViewModel {
     }
 }
 
+extension TimerScreenViewModel {
+    /// 지금 켜 둔 알림 때문에 더 줄일 수 없는 하한(초).
+    ///
+    /// ⚠️ **현재 시간 안에 있는 알림만** 센다. 템플릿에서 넘어온, 지금 시간보다 긴 알림까지 세면
+    ///    시간을 줄이려는 순간 오히려 늘어나 버린다(그 알림은 어차피 울리지도 않는다).
+    var alertFloorSeconds: Int {
+        let current = max(0, mainMinutes) * 60 + max(0, min(59, mainSeconds))
+        let valid = selectedOffsets.filter { $0 < current }
+        return TimeMapper.minimumSeconds(forAlertOffsets: Set(valid))
+    }
+}
+
+extension TimerScreenViewModel {
+    /// 다이나믹 아일랜드 버튼이 앱이 꺼져 있는 동안 남겨 둔 명령을 적용한다.
+    ///
+    /// 버튼 인텐트는 위젯 확장 프로세스에서 돌기 때문에, 앱이 떠 있지 않으면 그때는 아무것도
+    /// 적용할 수 없다. 앱이 앞으로 나오는 이 순간이 그 명령을 처리할 유일한 자리다.
+    func applyPendingLiveActivityCommand() {
+        #if os(iOS) && !targetEnvironment(macCatalyst)
+        guard let command = LiveActivityCommandStore.take() else { return }
+        switch command {
+        case .pause:  if timerVM.state == .running { pause() }
+        case .resume: if timerVM.state == .paused { resume() }
+        case .stop:   cancel()
+        }
+        #endif
+    }
+
+    /// 타이머는 이미 끝났는데 다이나믹 아일랜드만 남아 있는 경우를 치운다.
+    /// (앱을 강제 종료하면 활동은 시스템에 남아 몇 시간을 버틴다 — 사용자는 없앨 방법이 없다)
+    func cleanUpOrphanLiveActivities() {
+        #if os(iOS) && !targetEnvironment(macCatalyst)
+        let isActive = timerVM.state == .running || timerVM.state == .paused || timerVM.state == .overtime
+        LiveActivityController.endOrphans(isTimerActive: isActive)
+        #endif
+    }
+}
+
+extension TimerScreenViewModel {
+    /// 전체 시간을 정한다 — 켜 둔 알림보다 짧아지면 그 자리에서 멈추고 이유를 알려준다.
+    /// (다이얼은 손끝이 걸리는 느낌으로 충분해서 토스트 없이 조용히 멈춘다 — `mainAngle` 세터)
+    func setMainSeconds(_ requested: Int, announceClamp: Bool = true) {
+        let applied = max(alertFloorSeconds, max(0, min(TimeMapper.maxSeconds, requested)))
+        mainMinutes = applied / 60
+        mainSeconds = applied % 60
+
+        if announceClamp && applied > requested {
+            showToast?(String(localized: "Can't go shorter than your alerts"))
+        }
+    }
+}
+
 // MARK: - Angle Binding (delegates to TimeMapper)
 
 extension TimerScreenViewModel {
@@ -565,7 +617,9 @@ extension TimerScreenViewModel {
             return TimeMapper.secondsToAngle(from: totalSeconds)
         }
         set {
-            let totalSeconds = TimeMapper.angleToSeconds(from: newValue)
+            // 켜 둔 알림보다 짧게는 줄일 수 없다 — 줄이는 순간 그 알림이 조용히 사라지기 때문.
+            let requested = TimeMapper.angleToSeconds(from: newValue)
+            let totalSeconds = max(alertFloorSeconds, requested)
             mainMinutes = totalSeconds / 60
             mainSeconds = totalSeconds % 60
         }

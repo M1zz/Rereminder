@@ -30,6 +30,18 @@ enum TimeMapper {
         return (total / 60, total % 60)
     }
 
+    /// 알림이 걸려 있을 때 설정할 수 있는 **가장 짧은 시간**(초).
+    ///
+    /// 알림은 "종료 N분 전"이라 전체 시간보다 짧아야만 존재할 수 있다. 그래서 전체 시간을
+    /// 알림 지점보다 짧게 줄이면 그 알림이 조용히 사라진다 — 사용자는 알림을 지운 적이 없는데.
+    /// 줄이는 쪽을 여기서 막고, 지우려면 알림을 먼저 끄게 한다.
+    ///
+    /// 가장 이른 알림(= 가장 큰 offset)보다 한 칸(10초) 더 길어야 그 알림이 살아남는다.
+    static func minimumSeconds(forAlertOffsets offsets: Set<Int>) -> Int {
+        guard let earliest = offsets.filter({ $0 > 0 }).max() else { return 0 }
+        return min(maxSeconds, earliest + Int(secondsPerDegree))
+    }
+
     /// 초 → "M:SS" (분에 0을 채우지 않는 짧은 표기 — 칩·배지처럼 자리가 좁은 곳)
     /// 0을 채우는 "MM:SS" 는 `formatTime(minutes:seconds:)`.
     static func mmss(_ seconds: Int) -> String {

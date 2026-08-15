@@ -262,6 +262,9 @@ struct TimerUnifiedView: View {
         screenVM.timerVM.modelContext = context
         screenVM.initialConfiguration()
         screenVM.restoreTimerIfNeeded()
+        // 다이나믹 아일랜드에서 눌러 둔 명령을 먼저 적용하고, 남은 활동이 있으면 치운다
+        screenVM.applyPendingLiveActivityCommand()
+        screenVM.cleanUpOrphanLiveActivities()
         // 실행 중 타이머가 없으면 마지막 사용 설정을 다이얼에 복원
         screenVM.restoreLastUsedConfigIfNeeded()
 
@@ -287,6 +290,7 @@ struct TimerUnifiedView: View {
         if newPhase == .active {
             screenVM.timerVM.engine.recalculateOnForeground()
             handleControlWidgetAction()
+            screenVM.applyPendingLiveActivityCommand()
             // 며칠씩 살아 있는 프로세스에서도 "오늘 열었다"를 놓치지 않게 복귀마다 확인한다.
             ActivityReporter.reportForegroundOpen()
         }

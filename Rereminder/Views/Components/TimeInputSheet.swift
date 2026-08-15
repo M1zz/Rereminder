@@ -70,10 +70,10 @@ struct TimeInputSheet: View {
                 }
 
                 Button(action: {
-                    // 상한(120:00)을 넘는 조합은 다이얼이 조용히 잘라 버리므로 여기서 맞춰 준다
+                    // 상한(120:00)을 넘는 조합은 다이얼이 조용히 잘라 버리므로 여기서 맞춰 준다.
+                    // 아래쪽(켜 둔 알림보다 짧게)은 setMainSeconds 가 막고 이유를 알려준다.
                     let applied = TimeMapper.clampedInput(minutes: inputMinutes, seconds: inputSeconds)
-                    screenVM.mainMinutes = applied.minutes
-                    screenVM.mainSeconds = applied.seconds
+                    screenVM.setMainSeconds(applied.minutes * 60 + applied.seconds)
                     isPresented = false
                 }) {
                     Text("Apply")

@@ -6852,6 +6852,23 @@
           }
         }
       }
+    },
+    "Can't go shorter than your alerts" : {
+      "comment" : "Toast when the timer can't be shortened below an existing alert",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知より短くはできません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "켜 둔 알림보다 짧게는 못 줄여요"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

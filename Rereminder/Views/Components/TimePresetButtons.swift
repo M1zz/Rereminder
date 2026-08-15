@@ -33,8 +33,7 @@ struct TimePresetButtons: View {
             HStack(spacing: DSSpacing.sm) {
                 ForEach(Array(store.quickMinutes.enumerated()), id: \.offset) { index, minutes in
                     Button {
-                        screenVM.mainMinutes = minutes
-                        screenVM.mainSeconds = 0
+                        screenVM.setMainSeconds(minutes * 60)
                     } label: {
                         Text(String(localized: "\(minutes) min"))
                             .font(DSFont.callout.weight(.medium))

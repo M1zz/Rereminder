@@ -165,7 +165,9 @@ struct AlertPresetButtons: View {
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
-                .tint(.gray)
+                // 회색은 이 줄에서 "꺼진 프리셋"의 색이다 — 누를 수 있는 버튼까지 회색이면
+                // 비활성처럼 보인다. 실제로 하는 일(알림 추가)과 같은 색을 쓴다.
+                .tint(DSColor.marker)
                 .accessibilityLabel(String(localized: "Add alert time"))
                 .accessibilityHint(String(localized: "Adds an alert halfway between the last alert and the end."))
             }

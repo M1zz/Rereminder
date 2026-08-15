@@ -18,11 +18,25 @@ final class LastUsedConfigRestoreTests: XCTestCase {
     override func setUp() {
         super.setUp()
         UserDefaults.standard.removeObject(forKey: storageKey)
+        clearSharedTimerState()
     }
 
     override func tearDown() {
         UserDefaults.standard.removeObject(forKey: storageKey)
+        clearSharedTimerState()
         super.tearDown()
+    }
+
+    /// 앱 그룹에 남아 있는 "실행 중 타이머" 흔적을 지운다.
+    ///
+    /// ⚠️ 이게 없으면 기기에 실제로 돌던(혹은 디버깅하며 심어 둔) 타이머가 복원돼
+    ///    "저장된 게 없을 때 기본값" 같은 전제가 조용히 깨진다 — 실제로 겪은 실패다.
+    private func clearSharedTimerState() {
+        let shared = UserDefaults(suiteName: "group.leeo.toki")
+        for key in ["timerIsRunning", "timerIsPaused", "timerMainDuration",
+                    "timerEndDate", "timerStartDate", "timerPrealertOffsets", "timerName"] {
+            shared?.removeObject(forKey: key)
+        }
     }
 
     func test_applyCurrentSettings_persistsLastUsedConfig() {
