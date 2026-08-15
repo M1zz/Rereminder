@@ -60,16 +60,33 @@ struct TimerMainView: View {
         }
         return CGFloat(max(0, min(1, remaining / TimeInterval(TimeMapper.maxSeconds))))
     }
+    /// 링을 **절대 각도**(1° = 10초)로 그리는가. 아니면 비율(설정 시간 = 한 바퀴)이다.
+    ///
+    /// 진행 중에는 보통 비율로 그린다(10분 타이머도 링이 가득 차서 줄어드는 게 읽기 쉽다).
+    /// 다만 60분을 넘는 타이머까지 비율로 누르면 90분이 한 바퀴로 압축돼, 방금 대기 화면에서 보던
+    /// **두 줄이 사라진다.** 그래서 긴 타이머는 진행 중에도 절대 각도를 유지한다.
+    private var usesAbsoluteRing: Bool {
+        DialRing.usesAbsoluteCoordinates(isRunning: isProgressMode,
+                                         configuredSeconds: screenVM.configuredMainSeconds)
+    }
+
+    /// 남은 시간을 링 좌표로 (1.0 = 한 바퀴). 절대 각도로 그릴 때 쓴다.
+    private var remainingLaps: CGFloat { DialRing.laps(ofSeconds: remaining) }
+
+    /// 안쪽 줄의 반지름 비율 — 마커도 호·종과 같은 줄에 놓이게 하려면 이 값을 함께 넘겨야 한다
+    private func innerRadiusScale(size: CGFloat, lineWidth: CGFloat) -> CGFloat {
+        guard size > 0 else { return 1 }
+        return innerRingSize(size, lineWidth: lineWidth) / size
+    }
+
     private var markers: [CGFloat] {
         let offsets = screenVM.sortedOffsetsDesc.reversed()
-        if isProgressMode {
+        guard usesAbsoluteRing else {
             // 비율 좌표: 10분 타이머의 1분 전 알림 = 링의 10% 지점
             let total = CGFloat(max(1, screenVM.configuredMainSeconds))
             return offsets.map { CGFloat($0) / total }
         }
-        return offsets.map { offset in
-            CGFloat(offset) / TimeMapper.secondsPerDegree / 360.0
-        }
+        return offsets.map { CGFloat($0) / CGFloat(TimeMapper.secondsPerLap) }
     }
 
     var body: some View {
@@ -134,10 +151,13 @@ struct TimerMainView: View {
             //    "화면 아무 데나 눌러 키보드 내리기"가 원·카드 위에서만 동작한다.
             .contentShape(Rectangle())
         }
-        // 빈 곳을 탭하면 키보드 내림 (버튼·제스처는 그대로 동작)
-        .simultaneousGesture(TapGesture().onEnded {
-            focusedSectionIndex = nil
-        })
+        // 빈 곳을 탭하면 키보드 내림.
+        // ⚠️ 편집 중이 아닐 때는 아예 인식하지 않는다(mask: .none) — 다이얼을 만지는 평상시에
+        //    화면 전체를 덮는 제스처를 하나 더 얹어 둘 이유가 없다.
+        .simultaneousGesture(
+            TapGesture().onEnded { focusedSectionIndex = nil },
+            including: focusedSectionIndex == nil ? .none : .all
+        )
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
@@ -221,9 +241,10 @@ struct TimerMainView: View {
                     .zIndex(2)
             }
 
-            let fontSize = isPresentationMode
-                ? size * 0.17
-                : min(geometry.size.width, geometry.size.height) * 0.16
+            // 가운데 시간·버튼은 원 안에 사는 것들이라 **원 크기**를 따라간다.
+            // 화면 크기를 기준으로 삼으면 원이 작아져도(발표 모드·키보드가 올라온 상태) 글자만 그대로 남아
+            // 원 밖으로 삐져나온다.
+            let fontSize = size * 0.19
 
             // 시간 + 버튼 묶음을 원의 세로 중앙에 배치 (모든 모드 공통)
             VStack(spacing: fontSize * 0.45) {
@@ -313,12 +334,14 @@ struct TimerMainView: View {
 
     /// 줄어드는 호의 움직이는 끝점 표시 — 대기 중 드래그 핸들과 같은 시각 언어(흰 원)
     private func progressEdgeDot(size: CGFloat, lineWidth: CGFloat) -> some View {
-        Circle()
+        let angle = Double(usesAbsoluteRing ? remainingLaps : ratio) * 360.0
+        return Circle()
             .fill(.white)
             .frame(width: lineWidth * 0.9, height: lineWidth * 0.9)
             .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 0)
-            .offset(x: size / 2)
-            .rotationEffect(.degrees(Double(ratio) * 360.0))
+            // 두 줄일 때는 끝점도 지금 줄어드는 줄 위에 있어야 한다
+            .offset(x: ringSize(forAngle: angle, size: size, lineWidth: lineWidth) / 2)
+            .rotationEffect(.degrees(angle))
             .rotationEffect(.degrees(-90))
             .accessibilityHidden(true)
     }
@@ -466,9 +489,11 @@ struct TimerMainView: View {
         let circleColor: Color
 
         if screenVM.state == .running || screenVM.state == .paused {
-            // 실행/Pause 중: 설정 시간 = 100% 링이 비율로 감소
-            primaryFraction = ratio
-            secondaryFraction = 0
+            // 실행/Pause 중: 남은 시간이 줄어드는 링.
+            // 짧은 타이머는 비율(설정 시간 = 한 바퀴), 60분을 넘으면 절대 각도라 두 줄이 유지된다.
+            let rows = DialRing.rows(laps: usesAbsoluteRing ? remainingLaps : ratio)
+            primaryFraction = rows.outer
+            secondaryFraction = rows.inner
             circleColor = Color.accentColor
         } else if screenVM.state == .overtime {
             // 오버타임: 빨간색 원형 (음수 시간은 각도로 변환하지 않고 0으로 표시)
@@ -477,15 +502,15 @@ struct TimerMainView: View {
             circleColor = Color.red
         } else {
             // 대기/Done 상태: Settings된 시간을 절대 각도(1° = 10초)로 표시
-            let angle = screenVM.mainAngle
-            primaryFraction = CGFloat(min(1.0, max(0, angle) / 360.0))
-            secondaryFraction = CGFloat(max(0, min(1.0, (angle - 360) / 360.0)))
+            let rows = DialRing.rows(laps: CGFloat(max(0, screenVM.mainAngle) / 360.0))
+            primaryFraction = rows.outer
+            secondaryFraction = rows.inner
             circleColor = Color.accentColor
         }
 
         // 설정 시간 전체 길이(바퀴 수 포함) — 구간 색 분할이 바퀴를 걸쳐도 이어지도록
         let totalFraction = isProgressMode
-            ? primaryFraction
+            ? primaryFraction + secondaryFraction
             : CGFloat(max(0, screenVM.mainAngle) / 360.0)
         let innerSize = innerRingSize(size, lineWidth: lineWidth)
 
@@ -561,7 +586,7 @@ struct TimerMainView: View {
         }
 
         return ClockMarkers(
-            remaining: ratio,
+            remaining: usesAbsoluteRing ? remainingLaps : ratio,
             markers: markers,
             markerOffsets: sortedOffsets,
             draggingIndex: draggingIdx,
@@ -571,7 +596,8 @@ struct TimerMainView: View {
             upcoming: true,
             // 상시 라벨은 제거 — 드래그 중/직후 툴팁이 대신함
             showLabels: false,
-            dimmedIndices: dimmed
+            dimmedIndices: dimmed,
+            innerRadiusScale: innerRadiusScale(size: size, lineWidth: lineWidth)
         )
         .frame(width: size, height: size)
         .animation(highlightAnimation, value: dimmed)
@@ -590,6 +616,10 @@ struct TimerMainView: View {
             Circle()
                 .fill(.white)
                 .frame(width: lineWidth, height: lineWidth)
+                // 잡는 자리는 보이는 크기보다 넓게 — 선 두께(약 25pt)만으로는 손끝이 자꾸 빗나간다.
+                // 종 노브(lineWidth * 2.8)와 같은 크기로 맞춘다.
+                .frame(width: lineWidth * 2.8, height: lineWidth * 2.8)
+                .contentShape(Circle())
                 // 설정 시간이 60분을 넘으면 호가 안쪽 줄로 넘어가므로 핸들도 같이 간다
                 .offset(x: ringSize(forAngle: screenVM.mainAngle, size: size, lineWidth: lineWidth) / 2)
                 .rotationEffect(.degrees(screenVM.mainAngle))
@@ -668,9 +698,9 @@ struct TimerMainView: View {
         let isHighlighting = highlightedMarker != nil
         return ZStack {
             ForEach(sortedOffsets, id: \.self) { offsetSec in
-                let baseAngle: Double = isProgressMode
-                    ? Double(CGFloat(offsetSec) / total) * 360.0
-                    : Double(offsetSec) / TimeMapper.secondsPerDegree
+                let baseAngle: Double = usesAbsoluteRing
+                    ? Double(offsetSec) / TimeMapper.secondsPerDegree
+                    : Double(CGFloat(offsetSec) / total) * 360.0
                 let displayAngle = draggingMarkerOffset == offsetSec ? markerDragAngle : baseAngle
                 let isDraggingThis = draggingMarkerOffset == offsetSec
                 // 방금 놓은 종도 배지가 남아 있는 동안은 계속 주인공이다
@@ -678,7 +708,8 @@ struct TimerMainView: View {
                     || (draggingMarkerOffset == nil && lingeringMarkerOffset == offsetSec)
                 // 하나를 옮기는 동안 나머지는 물러나 있어야 어느 종을 만지는지 헷갈리지 않는다
                 let dimmed = isHighlighting && !isFocused
-                let fired = isProgressMode && ratio <= CGFloat(offsetSec) / total
+                // 좌표계와 무관하게 "남은 시간이 이 알림 지점을 지났나"로 판단한다
+                let fired = isProgressMode && remaining <= TimeInterval(offsetSec)
                 let knobScale: CGFloat = isTimeEditable ? (isDraggingThis ? 2.0 : 1.6) : 1.15
 
                 ZStack {

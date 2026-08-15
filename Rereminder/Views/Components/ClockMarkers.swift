@@ -20,6 +20,9 @@ struct ClockMarkers: View {
     var showLabels: Bool = true
     /// 종 하나를 옮기는 동안 물러나 있어야 할 마커들 (종 노브와 같이 흐려진다)
     var dimmedIndices: Set<Int> = []
+    /// 60분을 넘어 두 번째 바퀴에 놓인 마커가 붙을 안쪽 줄의 반지름 비율 (1이면 줄이 하나뿐)
+    /// ⚠️ 이게 없으면 두 번째 바퀴 마커가 1.0 으로 잘려 전부 12시에 뭉친다.
+    var innerRadiusScale: CGFloat = 1
 
     var body: some View {
         GeometryReader { geo in
@@ -48,15 +51,15 @@ struct ClockMarkers: View {
     }
 
     private func markerView(marker: CGFloat, index: Int, radius: CGFloat, centerX: CGFloat, centerY: CGFloat) -> some View {
-        let t: CGFloat
-        if index == draggingIndex, let dragRatio = draggingRatio {
-            t = max(0, min(1, dragRatio))
-        } else {
-            t = max(0, min(1, marker))
-        }
+        let raw = index == draggingIndex ? (draggingRatio ?? marker) : marker
+        let lapped = max(0, raw)
+        // 한 바퀴를 넘은 마커는 안쪽 줄로 내려보낸다(각도는 넘긴 만큼만)
+        let isSecondLap = lapped > 1
+        let t = isSecondLap ? min(1, lapped - 1) : lapped
+        let markerRadius = isSecondLap ? radius * innerRadiusScale : radius
         let angle = -90.0 + Double(t * 360.0)
         let theta = angle * .pi / 180.0
-        let isUpcoming = t >= remaining
+        let isUpcoming = lapped >= remaining
 
         return ZStack {
             // 얇은 사각형 마크 (높이는 Timer 선 두께와 동일)
@@ -65,8 +68,8 @@ struct ClockMarkers: View {
                 .frame(width: 4, height: dotSize)  // 폭 4 (2배), 높이는 Timer 선 두께
                 .rotationEffect(.degrees(angle + 90))  // 원의 중심을 향하도록 먼저 회전
                 .position(
-                    x: centerX + CGFloat(cos(theta)) * radius,
-                    y: centerY + CGFloat(sin(theta)) * radius
+                    x: centerX + CGFloat(cos(theta)) * markerRadius,
+                    y: centerY + CGFloat(sin(theta)) * markerRadius
                 )
 
             if showLabels && index < markerOffsets.count {
@@ -74,7 +77,7 @@ struct ClockMarkers: View {
                     minutes: markerOffsets[index] / 60,
                     theta: theta,
                     isUpcoming: isUpcoming,
-                    radius: radius,
+                    radius: markerRadius,
                     centerX: centerX,
                     centerY: centerY,
                     index: index

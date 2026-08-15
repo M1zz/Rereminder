@@ -13,6 +13,8 @@ enum TimeMapper {
     static let maxSeconds = 7200        // 120분
     static let maxAngle = Double(maxSeconds) / secondsPerDegree  // 720도 (2바퀴)
     static let tickCount = 60
+    /// 한 바퀴에 담기는 시간(초) — 1° = 10초 × 360°. "60분을 넘었나"를 묻는 곳이 전부 이 값을 본다.
+    static let secondsPerLap = Int(secondsPerDegree) * 360
 
     /// 분 단위 상한 — 수동 입력 피커처럼 "몇 분까지 고를 수 있나"를 묻는 곳은 전부 이 값을 본다.
     ///
