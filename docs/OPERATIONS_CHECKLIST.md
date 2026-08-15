@@ -41,8 +41,7 @@
   `onboarding_shown/completed/skipped`, `preset_saved`, `preset_used`, `purchase_*`, `review_*`
   (스키마 변경 불필요 — `event` 필드에 문자열로 들어감)
 
-## 4. (선택) TelemetryDeck
+## 4. 외부 분석 SDK — 없음
 
-- [ ] dashboard.telemetrydeck.com 에서 App ID 발급
-- [ ] `Shared/Modules/AnalyticsManager.swift`의 `telemetryDeckAppID`에 입력
-- 미설정 시 TelemetryDeck 전송만 no-op — 사용 허브(CloudKit) 전송은 무관하게 동작한다.
+TelemetryDeck 은 2026-08 에 제거했다(App ID 미설정으로 실제 전송이 없었고, 사용 통계는
+CloudKit 허브가 담당). 분석 관련 대시보드 작업은 3번(사용 통계)만 보면 된다.

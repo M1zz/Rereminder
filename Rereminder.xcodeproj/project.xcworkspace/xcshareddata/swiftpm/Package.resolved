@@ -9,15 +9,6 @@
         "revision" : "154018f8ec524dace0e227d786d66a39995ca18c",
         "version" : "2.9.0"
       }
-    },
-    {
-      "identity" : "swiftsdk",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/TelemetryDeck/SwiftSDK.git",
-      "state" : {
-        "revision" : "58f436299d3f6710bcedc18aff26480aaf1879fc",
-        "version" : "2.14.2"
-      }
     }
   ],
   "version" : 3

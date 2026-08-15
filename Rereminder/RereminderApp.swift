@@ -28,9 +28,6 @@ struct RereminderApp: App {
             isEnabled: { LeeoRemoteFlags.isEnabled(RereminderFlag.diagnosticsEnabled) }
         )
 
-        // 분석 초기화 — 이벤트를 익명 사용 허브(CloudKit)로 전송하는 sink 결선
-        AnalyticsManager.configure()
-
         // 기존 한국어 ringMode 값 마이그레이션
         RingMode.migrateIfNeeded()
 

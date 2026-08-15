@@ -422,9 +422,9 @@ extension TimerView {
 
 ## 의존성
 - **LeeoKit** (SPM, 2.9.0+): 공용 StoreKit 2 엔진(LeeoStore)·사용 리포터·원격 킬스위치(LeeoRemoteFlags)·MetricKit 크래시 진단(LeeoDiagnostics) 등 자체 공용 모듈. 킬스위치 플래그는 `Rereminder/Modules/RereminderFlags.swift`, Dashboard 수동 작업은 `docs/OPERATIONS_CHECKLIST.md` 참고
-- **TelemetryDeck SwiftSDK** (SPM, 2.0.0+): 익명·비추적 분석. 메인 iOS 앱 타겟에만 링크.
-  `AnalyticsManager.telemetryDeckAppID` 가 비어 있으면 외부 전송 없음(no-op).
-  활성화하려면 dashboard.telemetrydeck.com 에서 App ID 발급 후 해당 상수에 입력.
+- **외부 분석 SDK 없음**: Firebase(2026-07)에 이어 TelemetryDeck(2026-08)도 제거했다.
+  App ID 가 비어 있어 실제로 아무것도 보내지 않았고, 사용 통계는 CloudKit 허브가 이미 담당한다.
+  이벤트는 `AnalyticsManager` → `ActivityReporter` 한 경로로만 나간다.
 
 ## CI / 린트
 - **GitHub Actions** (`.github/workflows/ci.yml`): main/dev push·PR 시 iOS 시뮬레이터에서 유닛 테스트 실행 + SwiftLint

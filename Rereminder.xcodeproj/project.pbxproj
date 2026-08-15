@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		07C42068B7266377CF890D07 /* RereminderClip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = A78942BCAED1D1FFB2FDB397 /* RereminderClip.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1EE0C17AC0DE000000000003 /* LeeoKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1EE0C17AC0DE000000000002 /* LeeoKit */; };
-		1EE0C17AC0DE000000000013 /* TelemetryDeck in Frameworks */ = {isa = PBXBuildFile; productRef = 1EE0C17AC0DE000000000012 /* TelemetryDeck */; };
 		2B302B142E4375170089A14A /* RereminderWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2B302B0A2E4375150089A14A /* RereminderWatch.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		581D85DC2F48C24200F2F032 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 581D85DB2F48C24200F2F032 /* StoreKit.framework */; };
 		58AA3EB02ECF5509007D4BBD /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AA3EAF2ECF5509007D4BBD /* WidgetKit.framework */; };
@@ -275,7 +274,6 @@
 			files = (
 				581D85DC2F48C24200F2F032 /* StoreKit.framework in Frameworks */,
 				1EE0C17AC0DE000000000003 /* LeeoKit in Frameworks */,
-				1EE0C17AC0DE000000000013 /* TelemetryDeck in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,7 +395,6 @@
 			name = Rereminder;
 			packageProductDependencies = (
 				1EE0C17AC0DE000000000002 /* LeeoKit */,
-				1EE0C17AC0DE000000000012 /* TelemetryDeck */,
 			);
 			productName = toki;
 			productReference = 260414CB2E1B9FA200CBA29B /* Rereminder.app */;
@@ -542,7 +539,6 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				1EE0C17AC0DE000000000001 /* XCRemoteSwiftPackageReference "LeeoKit" */,
-				1EE0C17AC0DE000000000011 /* XCRemoteSwiftPackageReference "SwiftSDK" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 260414CC2E1B9FA200CBA29B /* Products */;
@@ -1211,14 +1207,6 @@
 				minimumVersion = 2.9.0;
 			};
 		};
-		1EE0C17AC0DE000000000011 /* XCRemoteSwiftPackageReference "SwiftSDK" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/TelemetryDeck/SwiftSDK.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1226,11 +1214,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 1EE0C17AC0DE000000000001 /* XCRemoteSwiftPackageReference "LeeoKit" */;
 			productName = LeeoKit;
-		};
-		1EE0C17AC0DE000000000012 /* TelemetryDeck */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1EE0C17AC0DE000000000011 /* XCRemoteSwiftPackageReference "SwiftSDK" */;
-			productName = TelemetryDeck;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

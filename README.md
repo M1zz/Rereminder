@@ -28,7 +28,7 @@ Rereminder(두번알림)는 원하는 시점마다 알림을 받을 수 있는 �
 - **WatchConnectivity** (iOS ↔ Watch 동기화)
 - **StoreKit 2** (인앱 결제)
 - **App Intents** (Siri / Shortcuts)
-- 핵심 의존성: LeeoKit 2.7.0 (자체 공용 모듈 — 결제·피드백·사용 통계·킬스위치·크래시 진단), TelemetryDeck (선택적 분석)
+- 핵심 의존성: LeeoKit 2.9.0 (자체 공용 모듈 — 결제·피드백·사용 통계·킬스위치·크래시 진단). 외부 분석 SDK 없음
 
 ## 프로젝트 구조
 
@@ -60,7 +60,7 @@ cd Rereminder
 open Rereminder.xcodeproj
 ```
 
-SPM 의존성(LeeoKit, TelemetryDeck)은 Xcode 가 자동 해석하므로 바로 빌드 가능합니다.
+SPM 의존성(LeeoKit)은 Xcode 가 자동 해석하므로 바로 빌드 가능합니다.
 
 ---
 

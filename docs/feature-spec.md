@@ -318,10 +318,10 @@ App Group UserDefaults (group.leeo.toki) 에 다음을 저장하여 iOS, Watch, 
 설정값 (테마, 액센트 색상, 알림 모드 등)
 
 
-18. 분석 (TelemetryDeck — 익명·비추적)
+18. 분석 (익명·비추적, 외부 SDK 없음)
 
 AnalyticsManager 는 이벤트 추상화 계층이며, 전송 백엔드로 프라이버시 중심의
-TelemetryDeck(SwiftSDK, 메인 iOS 앱 타겟에만 링크)을 사용합니다. Firebase 는 2026-07 에 제거되었습니다.
+외부 분석 SDK를 쓰지 않습니다. Firebase 는 2026-07, TelemetryDeck 은 2026-08 에 제거했고, 익명 사용 통계는 CloudKit 허브(FeedbackHub)로만 모읍니다.
 AnalyticsManager.telemetryDeckAppID 가 비어 있으면 어떤 데이터도 외부로 전송되지 않고
 DEBUG 콘솔 로깅만 수행합니다. App ID 는 dashboard.telemetrydeck.com 에서 발급 후
 해당 상수에 넣으면 활성화됩니다. 개인 식별 정보는 수집하지 않습니다.
@@ -355,4 +355,4 @@ RereminderTests: 유닛 테스트
 
 19.3 의존성
 
-외부 의존성은 LeeoKit 2.7.0(원격 SPM, github.com/M1zz/LeeoKit — StoreKit2 엔진·CloudKit 피드백 허브·사용 통계·리뷰 게이트·원격 킬스위치·MetricKit 크래시 진단)과 TelemetryDeck SwiftSDK 2.x(메인 앱만, App ID 미설정 시 no-op)입니다. Firebase 는 사용하지 않습니다.
+외부 의존성은 LeeoKit 2.9.0(원격 SPM, github.com/M1zz/LeeoKit — StoreKit2 엔진·CloudKit 피드백 허브·사용 통계·리뷰 게이트·원격 킬스위치·MetricKit 크래시 진단) 하나뿐입니다. Firebase·TelemetryDeck 등 외부 분석 SDK 는 사용하지 않습니다.
