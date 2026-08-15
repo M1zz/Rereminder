@@ -904,19 +904,11 @@ struct TimerMainView: View {
 
     /// 알림 지점을 경계로 타이머를 구간으로 나눈 리스트
     /// 예: 15분 타이머 + 5분 전 알림 → Section 1 (0:00–10:00), Section 2 (10:00–15:00)
-    private var derivedSegments: [(index: Int, startSec: Int, endSec: Int)] {
+    private var derivedSegments: [TimerSections.Segment] {
         let mainSec = isProgressMode
             ? screenVM.configuredMainSeconds
             : screenVM.mainMinutes * 60 + screenVM.mainSeconds
-        guard mainSec > 0 else { return [] }
-        let boundaries = screenVM.selectedOffsets
-            .filter { $0 > 0 && $0 < mainSec }
-            .map { mainSec - $0 }
-            .sorted()
-        let points = [0] + boundaries + [mainSec]
-        return (0..<(points.count - 1)).map { i in
-            (index: i, startSec: points[i], endSec: points[i + 1])
-        }
+        return TimerSections.derive(mainSeconds: mainSec, alertOffsets: screenVM.selectedOffsets)
     }
 
     private func derivedSectionList(maxHeight: CGFloat) -> some View {
@@ -959,7 +951,7 @@ struct TimerMainView: View {
 
     /// 한 구간 카드 — 2단 구성(이름+길이 배지 / 시간 범위)으로 빼곡함을 덜어 한눈에 들어오게
     @ViewBuilder
-    private func derivedSectionRow(_ seg: (index: Int, startSec: Int, endSec: Int)) -> some View {
+    private func derivedSectionRow(_ seg: TimerSections.Segment) -> some View {
         let isEditingThis = focusedSectionIndex == seg.index
         HStack(alignment: .top, spacing: DSSpacing.md) {
             // 링의 해당 구간과 같은 색 — 어느 호가 이 구간인지 연결
@@ -984,7 +976,7 @@ struct TimerMainView: View {
 
                     Spacer(minLength: DSSpacing.sm)
 
-                    Text(durationText(seg.endSec - seg.startSec))
+                    Text(durationText(seg.durationSec))
                         .font(DSFont.callout.weight(.bold).monospacedDigit())
                         .foregroundStyle(DSColor.marker)
                         .padding(.horizontal, DSSpacing.sm)
@@ -1021,9 +1013,7 @@ struct TimerMainView: View {
     }
 
     /// 초 → "10:00" 형태 (M:SS 표기 통일)
-    private func durationText(_ sec: Int) -> String {
-        String(format: "%d:%02d", sec / 60, sec % 60)
-    }
+    private func durationText(_ sec: Int) -> String { TimeMapper.mmss(sec) }
 
     /// 구간 범위 시작 표기 — 타이머의 처음이면 "시작", 경계는 알림 칩과 같은 "종료 기준 N 전"
     private func rangeText(_ sec: Int) -> String {
@@ -1109,35 +1099,6 @@ struct TimerMainView: View {
         TimeMapper.snappedAngle(from: rawAngle)
     }
     
-    private var stateColor: Color {
-        switch screenVM.state {
-        case .idle:
-            return .gray
-        case .running:
-            return .green
-        case .paused:
-            return .orange
-        case .finished:
-            return .blue
-        case .overtime:
-            return .red
-        }
-    }
-
-    private var stateText: LocalizedStringKey {
-        switch screenVM.state {
-        case .idle:
-            return "Ready"
-        case .running:
-            return "In Progress"
-        case .paused:
-            return "Paused"
-        case .finished:
-            return "Done"
-        case .overtime:
-            return "Overtime"
-        }
-    }
 
     /// VoiceOver 라벨용 상태 문자열 ("Timer, 준비됨" 형태로 시간 값과 결합)
     private var stateLabel: String {

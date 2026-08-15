@@ -1590,6 +1590,22 @@
         }
       }
     },
+    "Drag the bells to get reminders before your talk ends" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ベルをドラッグして、発表が終わる前にリマインダーを受け取りましょう"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "종 모양을 움직여서 발표 종료 전 미리 알림을 받아보세요"
+          }
+        }
+      }
+    },
     "e.g., Presentation, Mentoring, Meeting" : {
       "localizations" : {
         "ja" : {
@@ -4341,6 +4357,22 @@
         }
       }
     },
+    "Presentation mode, templates, and history in the full app" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プレゼンモード・テンプレート・履歴は製品版アプリで"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "발표 모드·템플릿·기록은 전체 앱에서"
+          }
+        }
+      }
+    },
     "Prevent Duplicate Alerts" : {
       "localizations" : {
         "ja" : {
@@ -4598,6 +4630,22 @@
         }
       }
     },
+    "Reset" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "リセット"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "초기화"
+          }
+        }
+      }
+    },
     "Reset All Messages" : {
       "localizations" : {
         "ja" : {
@@ -4626,6 +4674,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "완료 횟수 초기화"
+          }
+        }
+      }
+    },
+    "Reset the timer to the default setup" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーをデフォルト設定に戻します"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머를 기본 설정으로 되돌립니다"
+          }
+        }
+      }
+    },
+    "Reset to the default timer" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "デフォルトのタイマー設定に戻しました"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기본 타이머 설정으로 되돌렸어요"
           }
         }
       }
@@ -5819,6 +5899,22 @@
         }
       }
     },
+    "Timer dial" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーダイヤル"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 다이얼"
+          }
+        }
+      }
+    },
     "Timer duration" : {
       "localizations" : {
         "ja" : {
@@ -6392,6 +6488,22 @@
         }
       }
     },
+    "Turn on notifications to get alerts while the app is in the background." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "バックグラウンドでも通知を受け取るには、通知を許可してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "백그라운드에서도 알림을 받으려면 알림 권한을 켜주세요."
+          }
+        }
+      }
+    },
     "Unknown" : {
       "localizations" : {
         "ja" : {
@@ -6737,118 +6849,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이미 Pro 회원입니다!"
-          }
-        }
-      }
-    },
-    "Presentation mode, templates, and history in the full app" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "プレゼンモード・テンプレート・履歴は製品版アプリで"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "발표 모드·템플릿·기록은 전체 앱에서"
-          }
-        }
-      }
-    },
-    "Turn on notifications to get alerts while the app is in the background." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "バックグラウンドでも通知を受け取るには、通知を許可してください。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "백그라운드에서도 알림을 받으려면 알림 권한을 켜주세요."
-          }
-        }
-      }
-    },
-    "Timer dial" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "タイマーダイヤル"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "타이머 다이얼"
-          }
-        }
-      }
-    },
-    "Reset to the default timer" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "デフォルトのタイマー設定に戻しました"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "기본 타이머 설정으로 되돌렸어요"
-          }
-        }
-      }
-    },
-    "Reset" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "リセット"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "초기화"
-          }
-        }
-      }
-    },
-    "Reset the timer to the default setup" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "タイマーをデフォルト設定に戻します"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "타이머를 기본 설정으로 되돌립니다"
-          }
-        }
-      }
-    },
-    "Drag the bells to get reminders before your talk ends" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ベルをドラッグして、発表が終わる前にリマインダーを受け取りましょう"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "종 모양을 움직여서 발표 종료 전 미리 알림을 받아보세요"
           }
         }
       }

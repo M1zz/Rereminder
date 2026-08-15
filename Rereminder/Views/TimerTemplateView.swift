@@ -234,9 +234,7 @@ struct TimerTemplateView: View {
     }
 
     /// M:SS 표기 (앱 전체 표기 통일)
-    private func mmssText(_ sec: Int) -> String {
-        String(format: "%d:%02d", sec / 60, sec % 60)
-    }
+    private func mmssText(_ sec: Int) -> String { TimeMapper.mmss(sec) }
 
     @ViewBuilder
     private func editSheet(for timer: Timer) -> some View {

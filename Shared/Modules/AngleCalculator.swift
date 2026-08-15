@@ -14,6 +14,27 @@ enum TimeMapper {
     static let maxAngle = Double(maxSeconds) / secondsPerDegree  // 720도 (2바퀴)
     static let tickCount = 60
 
+    /// 분 단위 상한 — 수동 입력 피커처럼 "몇 분까지 고를 수 있나"를 묻는 곳은 전부 이 값을 본다.
+    ///
+    /// ⚠️ 여기 말고 다른 데서 60 을 따로 적어 두면, 다이얼로 110분을 맞춘 뒤 수동 입력을 열었을 때
+    ///    현재 값(110)이 목록에 없어 휠이 아무 반응도 하지 않는다. 실제로 났던 버그다.
+    static var maxMinutes: Int { maxSeconds / 60 }
+
+    /// 분·초 입력을 다이얼이 받을 수 있는 범위로 자른다.
+    /// 초는 0~59, 합계는 `maxSeconds` 를 넘지 않는다(넘으면 상한 시각으로 맞춘다).
+    static func clampedInput(minutes: Int, seconds: Int) -> (minutes: Int, seconds: Int) {
+        let safeSeconds = max(0, min(59, seconds))
+        let total = min(maxSeconds, max(0, minutes) * 60 + safeSeconds)
+        return (total / 60, total % 60)
+    }
+
+    /// 초 → "M:SS" (분에 0을 채우지 않는 짧은 표기 — 칩·배지처럼 자리가 좁은 곳)
+    /// 0을 채우는 "MM:SS" 는 `formatTime(minutes:seconds:)`.
+    static func mmss(_ seconds: Int) -> String {
+        let total = max(0, seconds)
+        return String(format: "%d:%02d", total / 60, total % 60)
+    }
+
     static func secondsToAngle(from s: Int) -> Double {
         let clamped = max(0, min(s, maxSeconds))
         return Double(clamped) / secondsPerDegree

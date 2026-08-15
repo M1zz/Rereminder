@@ -25,6 +25,15 @@ final class TimerConfigService {
 
     // MARK: - Seed Data
 
+    /// 첫 실행 시 심는 기본 템플릿 한 줄 — 이름 없는 큰 튜플로 두면 어느 자리가 무엇인지 읽히지 않는다
+    private struct SeedTemplate {
+        let name: String
+        let mainSec: Int
+        let offsets: [Int]
+        let label: String
+        let colorHex: String
+    }
+
     /// 첫 실행 시 시나리오별 기본 프리셋 템플릿 삽입
     func seedIfNeeded() {
         guard let ctx = context else { return }
@@ -37,12 +46,17 @@ final class TimerConfigService {
             return
         }
 
-        let seeds: [(name: String, mainSec: Int, offsets: [Int], label: String, colorHex: String)] = [
-            ("Presentation 30 min", 1800, [600, 300, 60], "Presentation", "#FF3B30"),
-            ("Mentoring 40 min",    2400, [600, 300, 60], "Mentoring",    "#34C759"),
-            ("Study 25 min",        1500, [300, 60],      "Study",        "#5AC8FA"),
-            ("Exercise 30 min",     1800, [300, 60],      "Exercise",     "#FF2D55"),
-            ("Meeting 60 min",      3600, [600, 300],     "Meeting",      "#007AFF"),
+        let seeds: [SeedTemplate] = [
+            SeedTemplate(name: "Presentation 30 min", mainSec: 1800, offsets: [600, 300, 60],
+                         label: "Presentation", colorHex: "#FF3B30"),
+            SeedTemplate(name: "Mentoring 40 min", mainSec: 2400, offsets: [600, 300, 60],
+                         label: "Mentoring", colorHex: "#34C759"),
+            SeedTemplate(name: "Study 25 min", mainSec: 1500, offsets: [300, 60],
+                         label: "Study", colorHex: "#5AC8FA"),
+            SeedTemplate(name: "Exercise 30 min", mainSec: 1800, offsets: [300, 60],
+                         label: "Exercise", colorHex: "#FF2D55"),
+            SeedTemplate(name: "Meeting 60 min", mainSec: 3600, offsets: [600, 300],
+                         label: "Meeting", colorHex: "#007AFF"),
         ]
 
         for s in seeds {

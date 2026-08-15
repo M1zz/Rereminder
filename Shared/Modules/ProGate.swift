@@ -112,6 +112,38 @@ enum ProGate {
         return .blocked(stage: .second)
     }
 
+    // MARK: - 알림 추가 게이트
+    //
+    // "1번째 알림은 free, 2번째부터 체험 평가" 정책이 알림을 켤 수 있는 화면마다 복사돼 있었다.
+    // 한쪽만 고치면 같은 앱 안에서 규칙이 갈라지므로 여기 한 곳에 둔다.
+
+    enum PrealertAdmission: Equatable {
+        case allowed
+        case blocked(stage: PaywallStage)
+    }
+
+    /// 지금 알림을 하나 더 켤 수 있는지 — **부작용 없는 판정**.
+    /// 자물쇠 아이콘처럼 그릴 때마다 물어보는 곳에서도 안전하게 쓸 수 있다.
+    static func prealertAdmission(currentCount: Int) -> PrealertAdmission {
+        guard currentCount >= freePrealertLimit else { return .allowed }
+        switch evaluate(.unlimitedPrealerts) {
+        case .allowed, .allowedWithTrial:
+            return .allowed
+        case .blocked(let stage):
+            return .blocked(stage: stage)
+        }
+    }
+
+    /// 사용자가 실제로 알림을 켜려 할 때 — 판정은 같고 막혔을 때 이벤트를 남긴다.
+    /// ⚠️ 화면을 그리는 경로에서 부르지 말 것(그릴 때마다 이벤트가 쌓인다). 그 용도는 위 함수다.
+    static func requestPrealert(currentCount: Int) -> PrealertAdmission {
+        let admission = prealertAdmission(currentCount: currentCount)
+        if case .blocked(let stage) = admission {
+            AnalyticsManager.log(.premiumTrialExhausted(feature: .unlimitedPrealerts, stage: stage))
+        }
+        return admission
+    }
+
     /// 사용자가 기능을 실제로 사용했을 때 호출 (Pro면 no-op)
     static func recordUsage(_ feature: Feature) {
         guard !StoreManager.isProUser else { return }

@@ -13,10 +13,6 @@ struct TimerRunningView: View {
 
     private var totalSec: Int { screenVM.configuredMainSeconds }
     private var remaining: TimeInterval { screenVM.remaining }
-    private var ratio: CGFloat {
-        guard totalSec > 0 else { return 0 }
-        return CGFloat(max(0, min(1, remaining / TimeInterval(totalSec))))
-    }
     private var markers: [CGFloat] {
         guard totalSec > 0 else { return [] }
         return screenVM.sortedOffsetsDesc.reversed()

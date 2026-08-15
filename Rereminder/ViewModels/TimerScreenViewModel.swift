@@ -493,22 +493,15 @@ extension TimerScreenViewModel {
     /// 예: 15분 타이머 + 5분 전 알림 → Section 1(0~10분), Section 2(10~15분)
     func syncSectionsFromAlerts() {
         let mainSec = mainMinutes * 60 + mainSeconds
-        guard mainSec > 0 else {
-            presentationSections = []
-            return
-        }
-        let boundaries = selectedOffsets
-            .filter { $0 > 0 && $0 < mainSec }
-            .map { mainSec - $0 }
-            .sorted()
-        let points = [0] + boundaries + [mainSec]
-        presentationSections = (0..<(points.count - 1)).map { i in
-            let custom = (sectionNames[i] ?? "").trimmingCharacters(in: .whitespaces)
-            return PresentationSection(
-                name: custom.isEmpty ? String(localized: "Section \(i + 1)") : custom,
-                durationSeconds: points[i + 1] - points[i]
-            )
-        }
+        presentationSections = TimerSections
+            .derive(mainSeconds: mainSec, alertOffsets: selectedOffsets)
+            .map { segment in
+                let custom = (sectionNames[segment.index] ?? "").trimmingCharacters(in: .whitespaces)
+                return PresentationSection(
+                    name: custom.isEmpty ? String(localized: "Section \(segment.index + 1)") : custom,
+                    durationSeconds: segment.durationSec
+                )
+            }
     }
 
     /// 섹션 배열을 기존 pre-alert 시스템으로 변환하여 타이머 시작

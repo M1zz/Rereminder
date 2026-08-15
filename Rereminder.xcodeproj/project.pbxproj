@@ -149,9 +149,9 @@
 				DesignSystem/DSSpacing.swift,
 				Modules/AngleCalculator.swift,
 				Modules/AppName.swift,
+				Modules/ring.swift,
 				Modules/ThemeManager.swift,
 				Modules/TimerEngine.swift,
-				Modules/ring.swift,
 			);
 			target = 6ED914668010A8B195B84C58 /* RereminderClip */;
 		};
@@ -230,8 +230,6 @@
 		};
 		2B302B0B2E4375150089A14A /* RereminderWatch */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = RereminderWatch;
 			sourceTree = "<group>";
 		};
@@ -253,15 +251,11 @@
 		};
 		7E57AB022F30000000000002 /* RereminderTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = RereminderTests;
 			sourceTree = "<group>";
 		};
 		AA10AB022F20C00000000002 /* RereminderMenuBar */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = RereminderMenuBar;
 			sourceTree = "<group>";
 		};

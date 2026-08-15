@@ -602,9 +602,7 @@ struct NoticeSettingView: View {
     }
 
     /// 프리셋 초 → "1:00" 표기 (M:SS 통일)
-    private func presetLabel(_ sec: Int) -> String {
-        String(format: "%d:%02d", sec / 60, sec % 60)
-    }
+    private func presetLabel(_ sec: Int) -> String { TimeMapper.mmss(sec) }
 
     private func openSettings() {
         #if targetEnvironment(macCatalyst)

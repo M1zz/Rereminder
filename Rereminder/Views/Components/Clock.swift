@@ -62,11 +62,4 @@ struct Clock: View {
         let s = t % 60
         return String(localized: "Timer, \(m) minutes \(s) seconds remaining")
     }
-
-    private func mmss(from sec: TimeInterval) -> String {
-        let t = max(0, Int(sec.rounded()))
-        let m = t / 60
-        let s = t % 60
-        return String(format: "%02d:%02d", m, s)
-    }
 }

@@ -197,25 +197,17 @@ struct AlertPresetButtons: View {
 
     // MARK: - Pro Gate (unlimitedPrealerts)
 
-    /// 1번째 알림은 항상 free, 2번째부터 5+5 trial 평가 (PrealertSettingsView와 동일 정책)
+    /// 정책(1번째 free, 그 다음부터 체험 평가)은 ProGate 가 단독으로 안다
     private func insertGated(_ offset: Int) {
-        if screenVM.selectedOffsets.count >= ProGate.freePrealertLimit {
-            switch ProGate.evaluate(.unlimitedPrealerts) {
-            case .allowed, .allowedWithTrial:
-                break
-            case .blocked(let stage):
-                paywallStage = stage
-                pendingGatedOffset = offset
-                showPaywall = true
-                AnalyticsManager.log(.premiumTrialExhausted(
-                    feature: .unlimitedPrealerts,
-                    stage: stage
-                ))
-                return
+        switch ProGate.requestPrealert(currentCount: screenVM.selectedOffsets.count) {
+        case .allowed:
+            withAnimation(.easeInOut(duration: 0.25)) {
+                _ = screenVM.selectedOffsets.insert(offset)
             }
-        }
-        withAnimation(.easeInOut(duration: 0.25)) {
-            _ = screenVM.selectedOffsets.insert(offset)
+        case .blocked(let stage):
+            paywallStage = stage
+            pendingGatedOffset = offset
+            showPaywall = true
         }
     }
 
@@ -230,14 +222,10 @@ struct AlertPresetButtons: View {
 
     /// 잠금 아이콘 표시 여부 — 미선택 칩이고, 추가하려면 Pro/trial 이 필요한데 소진된 경우
     private func isLocked(offset: Int, selected: Bool) -> Bool {
-        !selected
-            && !StoreManager.isProUser
-            && screenVM.selectedOffsets.count >= ProGate.freePrealertLimit
-            && !ProGate.evaluate(.unlimitedPrealerts).isAllowed
+        guard !selected, !StoreManager.isProUser else { return false }
+        return ProGate.prealertAdmission(currentCount: screenVM.selectedOffsets.count) != .allowed
     }
 
     /// 항상 "M:SS" 표기 (예: 1:00, 2:30)
-    private func offsetLabel(_ sec: Int) -> String {
-        String(format: "%d:%02d", sec / 60, sec % 60)
-    }
+    private func offsetLabel(_ sec: Int) -> String { TimeMapper.mmss(sec) }
 }

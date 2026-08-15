@@ -426,9 +426,7 @@ struct ClipClock: View {
             .accessibilityHidden(true)
     }
 
-    private func mmss(_ seconds: Int) -> String {
-        String(format: "%d:%02d", max(0, seconds) / 60, max(0, seconds) % 60)
-    }
+    private func mmss(_ seconds: Int) -> String { TimeMapper.mmss(seconds) }
 
     // MARK: - Accessibility
 

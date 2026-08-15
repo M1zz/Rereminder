@@ -17,8 +17,10 @@ struct TimeInputSheet: View {
     init(screenVM: TimerScreenViewModel, isPresented: Binding<Bool>) {
         self.screenVM = screenVM
         self._isPresented = isPresented
-        self._inputMinutes = State(initialValue: screenVM.mainMinutes)
-        self._inputSeconds = State(initialValue: screenVM.mainSeconds)
+        // ⚠️ 목록에 없는 값으로 시작하면 휠이 아무 반응도 하지 않는다 — 범위 안으로 맞춰서 연다
+        let current = TimeMapper.clampedInput(minutes: screenVM.mainMinutes, seconds: screenVM.mainSeconds)
+        self._inputMinutes = State(initialValue: current.minutes)
+        self._inputSeconds = State(initialValue: current.seconds)
     }
 
     var body: some View {
@@ -34,7 +36,8 @@ struct TimeInputSheet: View {
                             .font(DSFont.callout)
                             .foregroundStyle(.secondary)
                         Picker("min", selection: $inputMinutes) {
-                            ForEach(0..<61) { minute in
+                            // 다이얼과 같은 상한을 본다 (60분으로 굳혀 두면 110분 설정을 못 줄인다)
+                            ForEach(0...TimeMapper.maxMinutes, id: \.self) { minute in
                                 Text("\(minute)").tag(minute)
                             }
                         }
@@ -67,8 +70,10 @@ struct TimeInputSheet: View {
                 }
 
                 Button(action: {
-                    screenVM.mainMinutes = inputMinutes
-                    screenVM.mainSeconds = inputSeconds
+                    // 상한(120:00)을 넘는 조합은 다이얼이 조용히 잘라 버리므로 여기서 맞춰 준다
+                    let applied = TimeMapper.clampedInput(minutes: inputMinutes, seconds: inputSeconds)
+                    screenVM.mainMinutes = applied.minutes
+                    screenVM.mainSeconds = applied.seconds
                     isPresented = false
                 }) {
                     Text("Apply")

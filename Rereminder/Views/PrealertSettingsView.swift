@@ -130,31 +130,22 @@ struct PrealertSettingsView: View {
     private func prealertToggle(sec: Int, mainSeconds: Int) -> some View {
         let isDisabled = sec >= mainSeconds
         let isSelected = screenVM.selectedOffsets.contains(sec)
-        let prealertGate = ProGate.evaluate(.unlimitedPrealerts)
 
         return Toggle(
             isOn: Binding(
                 get: { isSelected },
                 set: { on in
                     if on {
-                        // 1번째는 항상 free, 2번째부터 5+5 trial 평가
-                        if screenVM.selectedOffsets.count >= ProGate.freePrealertLimit {
-                            switch ProGate.evaluate(.unlimitedPrealerts) {
-                            case .allowed, .allowedWithTrial:
-                                screenVM.selectedOffsets.insert(sec)
-                            case .blocked(let stage):
-                                paywallFeature = .unlimitedPrealerts
-                                paywallStage = stage
-                                pendingPrealertSec = sec
-                                showPaywall = true
-                                AnalyticsManager.log(.premiumTrialExhausted(
-                                    feature: .unlimitedPrealerts,
-                                    stage: stage
-                                ))
-                                return
-                            }
-                        } else {
+                        // 정책(1번째 free, 그 다음부터 체험 평가)은 ProGate 가 단독으로 안다
+                        switch ProGate.requestPrealert(currentCount: screenVM.selectedOffsets.count) {
+                        case .allowed:
                             screenVM.selectedOffsets.insert(sec)
+                        case .blocked(let stage):
+                            paywallFeature = .unlimitedPrealerts
+                            paywallStage = stage
+                            pendingPrealertSec = sec
+                            showPaywall = true
+                            return
                         }
                     } else {
                         screenVM.selectedOffsets.remove(sec)
@@ -168,10 +159,8 @@ struct PrealertSettingsView: View {
                     .dsScaledFont(14, weight: .medium, relativeTo: .callout, maxSize: 20)
 
                 // 제한 초과 프리셋에 잠금 아이콘 (trial 도 소진된 경우)
-                if !isSelected && !StoreManager.isProUser
-                    && screenVM.selectedOffsets.count >= ProGate.freePrealertLimit
-                    && !prealertGate.isAllowed
-                    && !isDisabled {
+                if !isSelected && !StoreManager.isProUser && !isDisabled
+                    && ProGate.prealertAdmission(currentCount: screenVM.selectedOffsets.count) != .allowed {
                     Image(systemName: "lock.fill")
                         .font(.caption2)
                         .foregroundStyle(.orange)
