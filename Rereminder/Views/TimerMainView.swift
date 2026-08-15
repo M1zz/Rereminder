@@ -313,6 +313,47 @@ struct TimerMainView: View {
             .accessibilityHidden(true)
     }
 
+    /// 링을 알림 경계로 나눠 구간 색으로 칠할 때인가.
+    ///
+    /// 종을 잡고 있는 동안에는 **끄고** 단색 + `alertSplitArc`(시작 후/종료 전 2색)로 돌아간다.
+    /// 그때 화면의 주인공은 드래그 배지 두 줄이고, 배지 줄 색과 링 구간 색이 어긋나면
+    /// 어느 숫자가 어디인지 읽히지 않기 때문이다(CLAUDE.md의 배지·링 색 규칙).
+    ///
+    /// 한 바퀴(60분)를 넘어가면 두 번째 바퀴가 같은 원 위에 겹쳐 그려져 구간 경계가
+    /// 뒤엉키므로 아직 켜지 않는다 — 두 줄 링으로 분리한 뒤에 확장할 자리다.
+    private var showsAlertSectionColors: Bool {
+        isTimeEditable
+            && !isProgressMode
+            && highlightedMarker == nil
+            && screenVM.mainAngle <= 360
+            && !screenVM.selectedOffsets.isEmpty
+    }
+
+    /// 알림 지점을 경계로 링 자체를 구간 색으로 나눈다.
+    /// (발표 모드의 바깥 얇은 링 `sectionOuterRing` 과 같은 색 규칙 — 같은 구간은 어디서나 같은 색)
+    private func alertSectionRing(size: CGFloat, lineWidth: CGFloat, arcEnd: CGFloat) -> some View {
+        let bounds = [0] + markers.filter { $0 > 0 && $0 < arcEnd }.sorted() + [arcEnd]
+
+        return ZStack {
+            ForEach(0..<max(0, bounds.count - 1), id: \.self) { i in
+                // 링은 "종료까지 남은 시간" 좌표라 경과 순서와 반대 → 구간 인덱스로 역매핑
+                let sectionIndex = bounds.count - 2 - i
+                Circle()
+                    .trim(from: bounds[i], to: bounds[i + 1])
+                    .stroke(
+                        sectionColor(sectionIndex),
+                        // 이어 붙는 경계라 round 캡을 쓰면 서로 겹쳐 부풀어 보인다.
+                        // 양 끝(시작·설정 시간)만 둥근 건 아래 캡 오버레이가 맡는다.
+                        style: StrokeStyle(lineWidth: lineWidth, lineCap: .butt)
+                    )
+                    .frame(width: size, height: size)
+                    .rotationEffect(.degrees(-90))
+            }
+        }
+        .animation(.easeInOut(duration: 0.2), value: screenVM.sortedOffsetsDesc)
+        .accessibilityHidden(true)
+    }
+
     /// 구간별 고유 색 팔레트 (주황은 알림 마커 전용이라 제외)
     private static let sectionPalette: [Color] = [.blue, .green, .purple, .teal, .pink, .indigo]
 
@@ -405,19 +446,23 @@ struct TimerMainView: View {
         }
 
         return ZStack {
-            // 첫 번째 바퀴: 기본 색상
-            Circle()
-                .trim(from: 0, to: primaryFraction)
-                .stroke(
-                    circleColor,
-                    style: StrokeStyle(
-                        lineWidth: lineWidth,
-                        lineCap: .round,
-                        lineJoin: .round
+            // 첫 번째 바퀴: 알림을 경계로 구간 색, 조건이 안 맞으면 단색
+            if showsAlertSectionColors {
+                alertSectionRing(size: size, lineWidth: lineWidth, arcEnd: primaryFraction)
+            } else {
+                Circle()
+                    .trim(from: 0, to: primaryFraction)
+                    .stroke(
+                        circleColor,
+                        style: StrokeStyle(
+                            lineWidth: lineWidth,
+                            lineCap: .round,
+                            lineJoin: .round
+                        )
                     )
-                )
-                .frame(width: size, height: size)
-                .rotationEffect(.init(degrees: -90))
+                    .frame(width: size, height: size)
+                    .rotationEffect(.init(degrees: -90))
+            }
 
             // 두 번째 바퀴 (360-720도): 연두색
             if secondaryFraction > 0 {
