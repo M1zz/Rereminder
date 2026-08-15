@@ -465,7 +465,7 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
 
 ## 버전 히스토리
 
-### (미출시) 서비스 판단 루프 — 통계·피드백으로 효용 확인 (2026-08-15)
+### v2.1.0 (2026-08-16)
 - **LeeoKit 2.9.0 상향**: `UsageEvent`에 `occurredAt`·`installID`가 실린다
   (⚠️ 배포 전 CloudKit 스키마 배포 필수 — `docs/OPERATIONS_CHECKLIST.md` 3번)
 - **로컬 카운터 도입** (`Shared/Modules/UsageMetrics.swift`): 이벤트 쓰로틀(6시간) 때문에
@@ -485,6 +485,13 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
   predeploy 게이트를 막던 문제 해소
 - **문서**: `docs/USAGE_STATS_HUB.md` 신설(수집 항목·집계 설계·스키마 배포 순서),
   `docs/FEEDBACK_CLOUDKIT.md`에 피드백 유입 경로 3가지 정리
+- **다이얼**: 알림을 경계로 구간 색 상시 분할, 60분 초과 시 두 줄 링(바깥=첫 바퀴)
+- **알림 칩**: 켜 둔 알림을 맨 앞으로 정렬
+- **발표 구간 이름 편집**: 빈 곳 탭으로 키보드 내림(contentShape 누락 수정), 편집 카드 자동 스크롤
+- **버그**: 60분 초과 시간을 수동 입력으로 줄일 수 없던 문제(분 휠 0~60 고정) 수정
+- **정리**: TelemetryDeck 제거(외부 SDK 0개), 시간 표기·구간 계산·알림 게이트 중복 제거,
+  죽은 코드 삭제(TimerSetupView 등), 발표 구간 목록을 별도 뷰로 분리, 테스트 118개
+- 릴리즈 노트: `docs/release-notes-2.1.0.md` (ko/en/ja)
 
 ### v2.0.4 (2026-08-02)
 - **서비스 성숙도 강화 (클립키보드 수준 정렬)**
