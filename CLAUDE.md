@@ -190,6 +190,11 @@ extension TimerView {
 ## 주요 컴포넌트 설명
 
 ### Core Components
+- **TimerSections** (`Shared/Modules/TimerSections.swift`): 알림 경계로 구간을 나누는 단일 소스.
+  링·구간 리스트·발표 시작이 전부 이 계산을 쓴다 (따로 계산하면 보이는 구간과 울리는 구간이 갈라진다)
+- **TimeMapper** (`Shared/Modules/AngleCalculator.swift`): 시간↔각도 + 시간 표기(`mmss`)·입력 범위
+  (`maxMinutes`/`clampedInput`). 다이얼 범위를 아는 유일한 곳 — 피커가 따로 60분을 적어 뒀다가
+  110분을 못 줄이던 버그가 났다
 - **TimerEngine** (`Shared/Modules/TimerEngine.swift`): 타이머 로직의 핵심 엔진
 - **AppStateManager** (`Shared/Modules/AppStateManager.swift`): 앱 상태 관리
 - **WatchConnectivityManager** (`Shared/Modules/WatchConnectivityManager.swift`): iOS-Watch 통신
@@ -286,6 +291,10 @@ extension TimerView {
 
 ### UI Components
 - **Clock** (`Rereminder/Views/Components/Clock.swift`): 타이머 시계 UI
+- **PresentationSectionList** (`Rereminder/Views/Presentation/PresentationSectionList.swift`):
+  발표 모드 구간 카드 목록(이름 편집). 구간 계산은 하지 않고 받은 것만 그린다
+- **SectionPalette** (`Rereminder/Views/Components/SectionPalette.swift`): 구간 색 규칙 —
+  링의 호·리스트 점·진행 중 표시가 **같은 구간이면 같은 색**이어야 해서 한 곳에 둔다
 - **TimePresetButtons** (`Rereminder/Views/Components/TimePresetButtons.swift`): 시간 프리셋 버튼
 - **ToastViewModifier** (`Rereminder/Views/Components/ToastViewModifier.swift`): 토스트 메시지
 

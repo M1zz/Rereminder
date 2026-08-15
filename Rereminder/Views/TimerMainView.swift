@@ -109,7 +109,13 @@ struct TimerMainView: View {
                     // 알림 지점 기준 파생 구간 리스트 (원 밖 아래쪽)
                     // 이름을 편집하는 동안에는 키보드가 화면을 절반 가까이 먹으므로 리스트 몫을 늘린다
                     // (원은 그만큼 작아지지만, 그때 중요한 건 지금 고치는 구간이 보이는 것이다)
-                    derivedSectionList(maxHeight: availableHeight * (focusedSectionIndex == nil ? 0.4 : 0.55))
+                    PresentationSectionList(
+                        screenVM: screenVM,
+                        focusedSectionIndex: $focusedSectionIndex,
+                        segments: derivedSegments,
+                        maxHeight: availableHeight * (focusedSectionIndex == nil ? 0.4 : 0.55),
+                        isEditable: isTimeEditable
+                    )
                         .padding(.bottom, spacing * 2)
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                 } else if !screenVM.nextAlertText.isEmpty {
@@ -225,7 +231,7 @@ struct TimerMainView: View {
                     // 발표 모드 실행 중: 현재 구간 이름 + 구간 색 점
                     HStack(spacing: DSSpacing.xs) {
                         Circle()
-                            .fill(sectionColor(segment.index))
+                            .fill(SectionPalette.color(segment.index))
                             .frame(width: fontSize * 0.22, height: fontSize * 0.22)
                         Text(segment.name)
                             .font(.system(size: fontSize * 0.45, weight: .semibold, design: .rounded))
@@ -378,7 +384,7 @@ struct TimerMainView: View {
                     Circle()
                         .trim(from: from, to: to)
                         .stroke(
-                            sectionColor(sectionIndex),
+                            SectionPalette.color(sectionIndex),
                             // 이어 붙는 경계라 round 캡을 쓰면 서로 겹쳐 부풀어 보인다
                             style: StrokeStyle(lineWidth: lineWidth, lineCap: .butt)
                         )
@@ -392,14 +398,6 @@ struct TimerMainView: View {
         .animation(.easeInOut(duration: 0.2), value: screenVM.sortedOffsetsDesc)
         .animation(.easeInOut(duration: 0.2), value: focusedSectionIndex)
         .accessibilityHidden(true)
-    }
-
-    /// 구간별 고유 색 팔레트 (주황은 알림 마커 전용이라 제외)
-    private static let sectionPalette: [Color] = [.blue, .green, .purple, .teal, .pink, .indigo]
-
-    /// 구간 인덱스(경과 순서 기준) → 색
-    private func sectionColor(_ index: Int) -> Color {
-        Self.sectionPalette[index % Self.sectionPalette.count]
     }
 
     /// 알림 지점을 경계로 분할된 바깥 구간 링 (발표용 토글)
@@ -436,7 +434,7 @@ struct TimerMainView: View {
                 Circle()
                     .trim(from: trimFrom, to: trimTo)
                     .stroke(
-                        sectionColor(sectionIndex).opacity(isEditingThis ? 1.0 : 0.85),
+                        SectionPalette.color(sectionIndex).opacity(isEditingThis ? 1.0 : 0.85),
                         // 편집 중인 구간의 호는 굵어져서 위치가 바로 보임
                         style: StrokeStyle(lineWidth: ringWidth * (isEditingThis ? 1.8 : 1.0), lineCap: .butt)
                     )
@@ -911,128 +909,8 @@ struct TimerMainView: View {
         return TimerSections.derive(mainSeconds: mainSec, alertOffsets: screenVM.selectedOffsets)
     }
 
-    private func derivedSectionList(maxHeight: CGFloat) -> some View {
-        ScrollViewReader { proxy in
-            ScrollView {
-                VStack(spacing: DSSpacing.sm) {
-                    ForEach(derivedSegments, id: \.index) { seg in
-                        derivedSectionRow(seg)
-                            .id(seg.index)
-                    }
-                }
-                .padding(.horizontal, 16)
-                // 알림 토글로 구간이 나뉘거나 합쳐질 때 부드럽게
-                .animation(.easeInOut(duration: 0.25), value: screenVM.sortedOffsetsDesc)
-                // 편집 포커스 이동 시 하이라이트 전환
-                .animation(.easeInOut(duration: 0.2), value: focusedSectionIndex)
-            }
-            .frame(maxHeight: maxHeight)
-            // 리스트를 끌면 키보드가 따라 내려감
-            .scrollDismissesKeyboard(.interactively)
-            // 편집을 시작하면 그 카드를 보이는 자리로 끌어온다.
-            // 두 번 스크롤하는 이유: 누른 즉시 한 번(반응이 바로 보이게), 키보드가 다 올라와
-            // 리스트 높이가 줄어든 뒤에 또 한 번(줄어든 창 기준으로 다시 맞춰야 실제로 보인다).
-            .onChange(of: focusedSectionIndex) { _, index in
-                guard let index else { return }
-                scrollToSection(index, using: proxy)
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    guard focusedSectionIndex == index else { return }
-                    scrollToSection(index, using: proxy)
-                }
-            }
-        }
-    }
-
-    private func scrollToSection(_ index: Int, using proxy: ScrollViewProxy) {
-        withAnimation(.easeInOut(duration: 0.25)) {
-            proxy.scrollTo(index, anchor: .center)
-        }
-    }
-
-    /// 한 구간 카드 — 2단 구성(이름+길이 배지 / 시간 범위)으로 빼곡함을 덜어 한눈에 들어오게
-    @ViewBuilder
-    private func derivedSectionRow(_ seg: TimerSections.Segment) -> some View {
-        let isEditingThis = focusedSectionIndex == seg.index
-        HStack(alignment: .top, spacing: DSSpacing.md) {
-            // 링의 해당 구간과 같은 색 — 어느 호가 이 구간인지 연결
-            Circle()
-                .fill(sectionColor(seg.index))
-                .frame(width: 12, height: 12)
-                .padding(.top, DSSpacing.xs)
-                .accessibilityHidden(true)
-
-            VStack(alignment: .leading, spacing: DSSpacing.xs) {
-                // 1단: 구간 이름 + 길이 배지
-                HStack(alignment: .firstTextBaseline, spacing: DSSpacing.sm) {
-                    TextField(
-                        String(localized: "Section \(seg.index + 1)"),
-                        text: sectionNameBinding(seg.index)
-                    )
-                    .font(DSFont.body.weight(.semibold))
-                    .disabled(!isTimeEditable)
-                    .focused($focusedSectionIndex, equals: seg.index)
-                    .submitLabel(.done)
-                    .accessibilityLabel(String(localized: "Section name"))
-
-                    Spacer(minLength: DSSpacing.sm)
-
-                    Text(durationText(seg.durationSec))
-                        .font(DSFont.callout.weight(.bold).monospacedDigit())
-                        .foregroundStyle(DSColor.marker)
-                        .padding(.horizontal, DSSpacing.sm)
-                        .padding(.vertical, DSSpacing.xxs)
-                        .background(Capsule().fill(DSColor.marker.opacity(DSOpacity.subtle)))
-                }
-
-                // 2단: 시간 범위 (보조 정보)
-                Text("\(rangeText(seg.startSec)) – \(rangeEndText(seg.endSec))")
-                    .font(DSFont.caption.monospacedDigit())
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .padding(.horizontal, DSSpacing.lg)
-        .padding(.vertical, DSSpacing.md)
-        .background(
-            RoundedRectangle(cornerRadius: DSRadius.md)
-                .fill(isEditingThis
-                    ? sectionColor(seg.index).opacity(DSOpacity.subtle)
-                    : Color(.systemGray6))
-        )
-        .overlay(
-            // 편집 중인 구간은 구간색 테두리로 포커싱
-            RoundedRectangle(cornerRadius: DSRadius.md)
-                .strokeBorder(
-                    isEditingThis ? sectionColor(seg.index) : .clear,
-                    lineWidth: 1.5
-                )
-        )
-        // 다른 구간을 편집 중이면 이 행은 한 발 물러남
-        .opacity(focusedSectionIndex == nil || isEditingThis ? 1.0 : 0.55)
-        .accessibilityElement(children: .combine)
-        .transition(.opacity.combined(with: .move(edge: .bottom)))
-    }
-
     /// 초 → "10:00" 형태 (M:SS 표기 통일)
     private func durationText(_ sec: Int) -> String { TimeMapper.mmss(sec) }
-
-    /// 구간 범위 시작 표기 — 타이머의 처음이면 "시작", 경계는 알림 칩과 같은 "종료 기준 N 전"
-    private func rangeText(_ sec: Int) -> String {
-        guard sec != 0 else { return String(localized: "Start") }
-        return boundaryText(sec)
-    }
-
-    /// 구간 범위 끝 표기 — 타이머의 끝이면 "종료", 경계는 알림 칩과 같은 "종료 기준 N 전"
-    private func rangeEndText(_ sec: Int) -> String {
-        guard sec != derivedSegments.last?.endSec else { return String(localized: "End") }
-        return boundaryText(sec)
-    }
-
-    /// 경계 시각을 알림 칩과 같은 좌표(종료까지 남은 시간)로 표기 — "5:00 전"
-    private func boundaryText(_ elapsedSec: Int) -> String {
-        let total = derivedSegments.last?.endSec ?? 0
-        let remaining = max(0, total - elapsedSec)
-        return String(localized: "\(mmss(from: remaining)) left")
-    }
 
     /// 실행 중 현재 진행 중인 구간 (경과 시간 기준)
     /// 발표 모드: 항상 표시 (placeholder 포함)
@@ -1055,14 +933,6 @@ struct TimerMainView: View {
     private func sectionDisplayName(_ index: Int) -> String {
         let custom = (screenVM.sectionNames[index] ?? "").trimmingCharacters(in: .whitespaces)
         return custom.isEmpty ? String(localized: "Section \(index + 1)") : custom
-    }
-
-    /// 구간 이름 바인딩 — 빈 값이면 저장하지 않고 placeholder로 복귀
-    private func sectionNameBinding(_ index: Int) -> Binding<String> {
-        Binding(
-            get: { screenVM.sectionNames[index] ?? "" },
-            set: { screenVM.sectionNames[index] = $0.isEmpty ? nil : $0 }
-        )
     }
 
     @ViewBuilder
