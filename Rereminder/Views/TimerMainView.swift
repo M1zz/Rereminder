@@ -172,8 +172,10 @@ struct TimerMainView: View {
             backgroundCircle(size: size, lineWidth: lineWidth)
             progressCircle(size: size, lineWidth: lineWidth)
 
-            // 구간 링은 발표 모드 전용
-            if isPresentationMode {
+            // 얇은 바깥 구간 링은 **진행 중에만**.
+            // 대기 중에는 본 링이 이미 알림 경계로 구간 색이라(alertSectionRing) 같은 정보가
+            // 두 겹으로 겹쳐 보인다. 진행 중에는 본 링이 남은 시간만 그리므로 이 링이 필요하다.
+            if isPresentationMode && isProgressMode {
                 sectionOuterRing(size: size, lineWidth: lineWidth)
                     .transition(.opacity)
             }
@@ -278,6 +280,7 @@ struct TimerMainView: View {
     /// 나머지(종 ~ 설정 시간)는 원래 강조색으로 남아 "시작 후" 구간이 된다.
     private func alertSplitArc(size: CGFloat, lineWidth: CGFloat, angle: Double) -> some View {
         let fraction = angle / 360.0
+        let innerSize = innerRingSize(size, lineWidth: lineWidth)
         return ZStack {
             Circle()
                 .trim(from: 0, to: CGFloat(min(1.0, max(0, fraction))))
@@ -285,8 +288,9 @@ struct TimerMainView: View {
                     DSColor.marker,
                     style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round)
                 )
+                .frame(width: size, height: size)
 
-            // 60분을 넘겨 두 번째 바퀴에 걸친 알림
+            // 60분을 넘겨 두 번째 바퀴에 걸친 알림 — 그 시간이 그려진 안쪽 줄에 얹는다
             if fraction > 1 {
                 Circle()
                     .trim(from: 0, to: CGFloat(min(1.0, fraction - 1)))
@@ -294,9 +298,9 @@ struct TimerMainView: View {
                         DSColor.marker,
                         style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round)
                     )
+                    .frame(width: innerSize, height: innerSize)
             }
         }
-        .frame(width: size, height: size)
         .rotationEffect(.degrees(-90))
         .accessibilityHidden(true)
     }
@@ -318,39 +322,75 @@ struct TimerMainView: View {
     /// 종을 잡고 있는 동안에는 **끄고** 단색 + `alertSplitArc`(시작 후/종료 전 2색)로 돌아간다.
     /// 그때 화면의 주인공은 드래그 배지 두 줄이고, 배지 줄 색과 링 구간 색이 어긋나면
     /// 어느 숫자가 어디인지 읽히지 않기 때문이다(CLAUDE.md의 배지·링 색 규칙).
-    ///
-    /// 한 바퀴(60분)를 넘어가면 두 번째 바퀴가 같은 원 위에 겹쳐 그려져 구간 경계가
-    /// 뒤엉키므로 아직 켜지 않는다 — 두 줄 링으로 분리한 뒤에 확장할 자리다.
     private var showsAlertSectionColors: Bool {
         isTimeEditable
             && !isProgressMode
             && highlightedMarker == nil
-            && screenVM.mainAngle <= 360
             && !screenVM.selectedOffsets.isEmpty
+    }
+
+    /// 한 바퀴(60분)를 넘어간 시간은 **안쪽 줄**에 그린다.
+    /// 다이얼 최대가 2바퀴(120분, `TimeMapper.maxAngle`)라 줄은 둘이면 충분하다.
+    private func innerRingSize(_ size: CGFloat, lineWidth: CGFloat) -> CGFloat {
+        size - lineWidth * 2.6
+    }
+
+    /// 이 각도가 놓일 줄의 지름 — 호·종 노브·드래그 핸들이 **모두 이 하나를 따라야**
+    /// 60분을 넘겼을 때 종만 바깥에 남는 식으로 어긋나지 않는다.
+    private func ringSize(forAngle angle: Double, size: CGFloat, lineWidth: CGFloat) -> CGFloat {
+        angle >= 360 ? innerRingSize(size, lineWidth: lineWidth) : size
+    }
+
+    /// 전체 호를 알림 경계로 자른 지점들 (1.0 = 한 바퀴, 바퀴 구분 없는 절대 좌표)
+    private func sectionBounds(arcEnd: CGFloat) -> [CGFloat] {
+        [0] + markers.filter { $0 > 0 && $0 < arcEnd }.sorted() + [arcEnd]
     }
 
     /// 알림 지점을 경계로 링 자체를 구간 색으로 나눈다.
     /// (발표 모드의 바깥 얇은 링 `sectionOuterRing` 과 같은 색 규칙 — 같은 구간은 어디서나 같은 색)
-    private func alertSectionRing(size: CGFloat, lineWidth: CGFloat, arcEnd: CGFloat) -> some View {
-        let bounds = [0] + markers.filter { $0 > 0 && $0 < arcEnd }.sorted() + [arcEnd]
+    ///
+    /// - Parameters:
+    ///   - arcEnd: 설정 시간까지의 전체 길이(바퀴 수 포함, 예: 90분 = 1.5)
+    ///   - lap: 이 줄이 맡는 바퀴 (0 = 바깥, 1 = 안쪽)
+    /// 구간이 바퀴 경계를 걸치면 잘라서 양쪽 줄에 나눠 그린다.
+    private func alertSectionRing(size: CGFloat, lineWidth: CGFloat, arcEnd: CGFloat, lap: Int = 0) -> some View {
+        let bounds = sectionBounds(arcEnd: arcEnd)
+        let lapStart = CGFloat(lap)
 
         return ZStack {
             ForEach(0..<max(0, bounds.count - 1), id: \.self) { i in
                 // 링은 "종료까지 남은 시간" 좌표라 경과 순서와 반대 → 구간 인덱스로 역매핑
                 let sectionIndex = bounds.count - 2 - i
-                Circle()
-                    .trim(from: bounds[i], to: bounds[i + 1])
-                    .stroke(
-                        sectionColor(sectionIndex),
-                        // 이어 붙는 경계라 round 캡을 쓰면 서로 겹쳐 부풀어 보인다.
-                        // 양 끝(시작·설정 시간)만 둥근 건 아래 캡 오버레이가 맡는다.
-                        style: StrokeStyle(lineWidth: lineWidth, lineCap: .butt)
-                    )
-                    .frame(width: size, height: size)
-                    .rotationEffect(.degrees(-90))
+                let isEditingThis = focusedSectionIndex == sectionIndex
+                let from = max(bounds[i], lapStart) - lapStart
+                let to = min(bounds[i + 1], lapStart + 1) - lapStart
+                if to > from {
+                    // 이름을 편집 중인 구간은 링에서도 도드라진다 (리스트 카드의 테두리와 같은 문법)
+                    if isEditingThis {
+                        Circle()
+                            .trim(from: from, to: to)
+                            .stroke(Color.primary.opacity(0.85),
+                                    style: StrokeStyle(lineWidth: lineWidth + 6, lineCap: .butt))
+                            .frame(width: size, height: size)
+                            .rotationEffect(.degrees(-90))
+                    }
+
+                    Circle()
+                        .trim(from: from, to: to)
+                        .stroke(
+                            sectionColor(sectionIndex),
+                            // 이어 붙는 경계라 round 캡을 쓰면 서로 겹쳐 부풀어 보인다
+                            style: StrokeStyle(lineWidth: lineWidth, lineCap: .butt)
+                        )
+                        // 다른 구간을 편집 중이면 이 호는 한 발 물러난다 (리스트 행과 같은 값)
+                        .opacity(focusedSectionIndex == nil || isEditingThis ? 1.0 : 0.55)
+                        .frame(width: size, height: size)
+                        .rotationEffect(.degrees(-90))
+                }
             }
         }
         .animation(.easeInOut(duration: 0.2), value: screenVM.sortedOffsetsDesc)
+        .animation(.easeInOut(duration: 0.2), value: focusedSectionIndex)
         .accessibilityHidden(true)
     }
 
@@ -445,10 +485,16 @@ struct TimerMainView: View {
             circleColor = Color.accentColor
         }
 
+        // 설정 시간 전체 길이(바퀴 수 포함) — 구간 색 분할이 바퀴를 걸쳐도 이어지도록
+        let totalFraction = isProgressMode
+            ? primaryFraction
+            : CGFloat(max(0, screenVM.mainAngle) / 360.0)
+        let innerSize = innerRingSize(size, lineWidth: lineWidth)
+
         return ZStack {
-            // 첫 번째 바퀴: 알림을 경계로 구간 색, 조건이 안 맞으면 단색
+            // 바깥 줄 = 첫 바퀴
             if showsAlertSectionColors {
-                alertSectionRing(size: size, lineWidth: lineWidth, arcEnd: primaryFraction)
+                alertSectionRing(size: size, lineWidth: lineWidth, arcEnd: totalFraction, lap: 0)
             } else {
                 Circle()
                     .trim(from: 0, to: primaryFraction)
@@ -464,20 +510,30 @@ struct TimerMainView: View {
                     .rotationEffect(.init(degrees: -90))
             }
 
-            // 두 번째 바퀴 (360-720도): 연두색
+            // 안쪽 줄 = 60분을 넘어간 시간.
+            // 예전에는 같은 원 위에 연두색으로 겹쳐 그려서 두 바퀴가 서로를 덮었다.
             if secondaryFraction > 0 {
+                // 얼마나 더 갈 수 있는지 보이도록 안쪽에도 옅은 바탕 링
                 Circle()
-                    .trim(from: 0, to: secondaryFraction)
-                    .stroke(
-                        Color.green.opacity(0.7),
-                        style: StrokeStyle(
-                            lineWidth: lineWidth,
-                            lineCap: .round,
-                            lineJoin: .round
+                    .stroke(.plain.opacity(0.5), style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
+                    .frame(width: innerSize, height: innerSize)
+
+                if showsAlertSectionColors {
+                    alertSectionRing(size: innerSize, lineWidth: lineWidth, arcEnd: totalFraction, lap: 1)
+                } else {
+                    Circle()
+                        .trim(from: 0, to: secondaryFraction)
+                        .stroke(
+                            circleColor,
+                            style: StrokeStyle(
+                                lineWidth: lineWidth,
+                                lineCap: .round,
+                                lineJoin: .round
+                            )
                         )
-                    )
-                    .frame(width: size, height: size)
-                    .rotationEffect(.init(degrees: -90))
+                        .frame(width: innerSize, height: innerSize)
+                        .rotationEffect(.init(degrees: -90))
+                }
             }
         }
         .accessibilityHidden(true)
@@ -536,7 +592,8 @@ struct TimerMainView: View {
             Circle()
                 .fill(.white)
                 .frame(width: lineWidth, height: lineWidth)
-                .offset(x: size / 2)
+                // 설정 시간이 60분을 넘으면 호가 안쪽 줄로 넘어가므로 핸들도 같이 간다
+                .offset(x: ringSize(forAngle: screenVM.mainAngle, size: size, lineWidth: lineWidth) / 2)
                 .rotationEffect(.degrees(screenVM.mainAngle))
                 .gesture(dragGesture(size: size))
                 .rotationEffect(.init(degrees: -90))
@@ -640,7 +697,8 @@ struct TimerMainView: View {
                 .rotationEffect(.degrees(90 - displayAngle))
                 .frame(width: lineWidth * 2.8, height: lineWidth * 2.8)
                 .contentShape(Circle())
-                .offset(x: size / 2)
+                // 60분을 넘어간 종은 그 시간이 그려진 안쪽 줄에 붙는다
+                .offset(x: ringSize(forAngle: displayAngle, size: size, lineWidth: lineWidth) / 2)
                 .rotationEffect(.degrees(displayAngle))
                     .gesture(
                         DragGesture(coordinateSpace: .named(Self.alertSpace))
