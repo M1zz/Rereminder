@@ -369,6 +369,11 @@ final class TimerScreenViewModel: ObservableObject {
     private static let lastUsedConfigKey = "rereminder.lastUsedConfig.v1"
     private var didRestoreLastUsedConfig = false
 
+    /// 마지막 사용 설정을 담는 저장소.
+    /// ⚠️ 테스트가 기기에 남아 있는 실제 설정에 휘둘리지 않도록 갈아끼울 수 있게 둔다
+    ///    (TrialCounter.defaults 와 같은 방식). 앱에서는 항상 standard 다.
+    static var lastUsedDefaults: UserDefaults = .standard
+
     private struct LastUsedConfig: Codable {
         let mainSeconds: Int
         let offsets: [Int]
@@ -384,7 +389,7 @@ final class TimerScreenViewModel: ObservableObject {
             finishMessage: finishMessage
         )
         if let data = try? JSONEncoder().encode(cfg) {
-            UserDefaults.standard.set(data, forKey: Self.lastUsedConfigKey)
+            Self.lastUsedDefaults.set(data, forKey: Self.lastUsedConfigKey)
         }
     }
 
@@ -394,7 +399,7 @@ final class TimerScreenViewModel: ObservableObject {
         guard !didRestoreLastUsedConfig else { return }
         didRestoreLastUsedConfig = true
         guard timerVM.state == .idle,
-              let data = UserDefaults.standard.data(forKey: Self.lastUsedConfigKey),
+              let data = Self.lastUsedDefaults.data(forKey: Self.lastUsedConfigKey),
               let cfg = try? JSONDecoder().decode(LastUsedConfig.self, from: data),
               cfg.mainSeconds > 0 else { return }
 

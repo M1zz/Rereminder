@@ -15,14 +15,21 @@ final class LastUsedConfigRestoreTests: XCTestCase {
 
     private let storageKey = "rereminder.lastUsedConfig.v1"
 
+    private static let suiteName = "LastUsedConfigRestoreTests.suite"
+    private var suite: UserDefaults!
+
     override func setUp() {
         super.setUp()
-        UserDefaults.standard.removeObject(forKey: storageKey)
+        // 기기에 남아 있는 실제 설정과 섞이지 않도록 전용 저장소에서 검증한다
+        suite = UserDefaults(suiteName: Self.suiteName)
+        suite.removePersistentDomain(forName: Self.suiteName)
+        TimerScreenViewModel.lastUsedDefaults = suite
         clearSharedTimerState()
     }
 
     override func tearDown() {
-        UserDefaults.standard.removeObject(forKey: storageKey)
+        suite.removePersistentDomain(forName: Self.suiteName)
+        TimerScreenViewModel.lastUsedDefaults = .standard
         clearSharedTimerState()
         super.tearDown()
     }
@@ -48,7 +55,7 @@ final class LastUsedConfigRestoreTests: XCTestCase {
         vm.applyCurrentSettings()
 
         XCTAssertNotNil(
-            UserDefaults.standard.data(forKey: storageKey),
+            suite.data(forKey: storageKey),
             "타이머 시작 시 마지막 사용 설정이 저장되어야 한다"
         )
     }

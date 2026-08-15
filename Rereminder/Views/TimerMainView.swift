@@ -73,14 +73,40 @@ struct TimerMainView: View {
     /// 남은 시간을 링 좌표로 (1.0 = 한 바퀴). 절대 각도로 그릴 때 쓴다.
     private var remainingLaps: CGFloat { DialRing.laps(ofSeconds: remaining) }
 
+    /// 지금 두 줄로 그려지는가 (60분을 넘겼는가)
+    private var hasSecondRow: Bool {
+        DialRing.rows(laps: usesAbsoluteRing
+                      ? (isProgressMode ? remainingLaps : CGFloat(max(0, screenVM.mainAngle) / 360.0))
+                      : ratio).inner > 0
+    }
+
+    /// 가운데(시간·버튼)가 쓸 수 있는 지름 — 링 두께와 여유를 뺀 값.
+    /// 두 줄이면 안쪽 줄 안쪽이 한계다.
+    private func centerContentDiameter(size: CGFloat, lineWidth: CGFloat) -> CGFloat {
+        let innermost = hasSecondRow ? innerRingSize(size, lineWidth: lineWidth) : size
+        // 링 두께(양쪽) + 링에 닿지 않을 여백
+        return max(0, innermost - lineWidth * 2 - 24)
+    }
+
     /// 안쪽 줄의 반지름 비율 — 마커도 호·종과 같은 줄에 놓이게 하려면 이 값을 함께 넘겨야 한다
     private func innerRadiusScale(size: CGFloat, lineWidth: CGFloat) -> CGFloat {
         guard size > 0 else { return 1 }
         return innerRingSize(size, lineWidth: lineWidth) / size
     }
 
+    /// 지금 화면에 보이는 알림 지점들 — 종을 끌고 있으면 그 종만 손끝 위치로 바꿔서 본다.
+    /// 저장은 손을 뗄 때 이뤄지므로, 이걸 쓰지 않으면 드래그 중에 구간 색 경계가 따라오지 않는다.
+    private var liveOffsets: Set<Int> {
+        guard let dragging = draggingMarkerOffset else { return screenVM.selectedOffsets }
+        var offsets = screenVM.selectedOffsets
+        offsets.remove(dragging)
+        let dragged = TimeMapper.angleToSeconds(from: markerDragAngle)
+        if dragged > 0 { offsets.insert(dragged) }
+        return offsets
+    }
+
     private var markers: [CGFloat] {
-        let offsets = screenVM.sortedOffsetsDesc.reversed()
+        let offsets = liveOffsets.sorted()
         guard usesAbsoluteRing else {
             // 비율 좌표: 10분 타이머의 1분 전 알림 = 링의 10% 지점
             let total = CGFloat(max(1, screenVM.configuredMainSeconds))
@@ -211,12 +237,6 @@ struct TimerMainView: View {
                 progressEdgeDot(size: size, lineWidth: lineWidth)
             }
 
-            // 종을 잡고 있는 동안 링을 "시작 후 / 종료 전" 두 색으로 가른다
-            if isTimeEditable, let marker = highlightedMarker {
-                alertSplitArc(size: size, lineWidth: lineWidth, angle: marker.angle)
-                    .transition(.opacity)
-            }
-
             clockMarkers(size: size, lineWidth: lineWidth)
 
             // 시간 조절 드래그는 대기/Done 상태에서만 (실행·일시정지·오버타임 중에는 불가)
@@ -241,10 +261,16 @@ struct TimerMainView: View {
                     .zIndex(2)
             }
 
-            // 가운데 시간·버튼은 원 안에 사는 것들이라 **원 크기**를 따라간다.
-            // 화면 크기를 기준으로 삼으면 원이 작아져도(발표 모드·키보드가 올라온 상태) 글자만 그대로 남아
-            // 원 밖으로 삐져나온다.
-            let fontSize = size * 0.19
+            // 가운데 시간·버튼이 들어갈 수 있는 실제 지름.
+            // 두 줄일 때는 **안쪽 줄 안쪽**이 한계다 — 바깥 원 기준으로 잡으면 "110:00" 같은 긴 시간이
+            // 안쪽 링을 덮어 버리고, 시간 묶음이 ZStack 의 마지막 자식이라 그 위에 그려지므로
+            // 링 위의 종·핸들 터치까지 글자가 가로챈다(실제로 조작이 안 되던 원인).
+            let centerDiameter = centerContentDiameter(size: size, lineWidth: lineWidth)
+
+            // 원 크기를 따라가되, 안쪽에 실제로 들어갈 수 있는 크기를 넘지 않는다.
+            // 0.22 는 "110:00"(6글자, 가장 긴 표기)이 그 지름 안에 **여유를 두고** 들어가는 비율이다
+            // (글자폭 ≈ 0.6 × 크기 × 6글자 = 3.6배 → 0.22 면 폭이 지름의 80% 정도).
+            let fontSize = min(size * 0.19, centerDiameter * 0.22)
 
             // 시간 + 버튼 묶음을 원의 세로 중앙에 배치 (모든 모드 공통)
             VStack(spacing: fontSize * 0.45) {
@@ -272,6 +298,8 @@ struct TimerMainView: View {
                 centerTimeDisplay(fontSize: fontSize)
                 buttonRow(buttonSize: buttonSize)
             }
+            // 링 안쪽으로 가둔다 — 넘치면 그 부분이 링 위 조작을 먹는다
+            .frame(maxWidth: centerDiameter)
         }
         .onChange(of: screenVM.state) { _, newState in
             let announcement: String
@@ -303,35 +331,6 @@ struct TimerMainView: View {
         return nil
     }
 
-    /// 종 위치를 경계로 링의 "종료 전" 쪽(0° ~ 종)만 주황으로 덮어 배지의 두 줄과 색을 맞춘다.
-    /// 나머지(종 ~ 설정 시간)는 원래 강조색으로 남아 "시작 후" 구간이 된다.
-    private func alertSplitArc(size: CGFloat, lineWidth: CGFloat, angle: Double) -> some View {
-        let fraction = angle / 360.0
-        let innerSize = innerRingSize(size, lineWidth: lineWidth)
-        return ZStack {
-            Circle()
-                .trim(from: 0, to: CGFloat(min(1.0, max(0, fraction))))
-                .stroke(
-                    DSColor.marker,
-                    style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round)
-                )
-                .frame(width: size, height: size)
-
-            // 60분을 넘겨 두 번째 바퀴에 걸친 알림 — 그 시간이 그려진 안쪽 줄에 얹는다
-            if fraction > 1 {
-                Circle()
-                    .trim(from: 0, to: CGFloat(min(1.0, fraction - 1)))
-                    .stroke(
-                        DSColor.marker,
-                        style: StrokeStyle(lineWidth: lineWidth, lineCap: .round, lineJoin: .round)
-                    )
-                    .frame(width: innerSize, height: innerSize)
-            }
-        }
-        .rotationEffect(.degrees(-90))
-        .accessibilityHidden(true)
-    }
-
     /// 줄어드는 호의 움직이는 끝점 표시 — 대기 중 드래그 핸들과 같은 시각 언어(흰 원)
     private func progressEdgeDot(size: CGFloat, lineWidth: CGFloat) -> some View {
         let angle = Double(usesAbsoluteRing ? remainingLaps : ratio) * 360.0
@@ -351,11 +350,11 @@ struct TimerMainView: View {
     /// 종을 잡고 있는 동안에는 **끄고** 단색 + `alertSplitArc`(시작 후/종료 전 2색)로 돌아간다.
     /// 그때 화면의 주인공은 드래그 배지 두 줄이고, 배지 줄 색과 링 구간 색이 어긋나면
     /// 어느 숫자가 어디인지 읽히지 않기 때문이다(CLAUDE.md의 배지·링 색 규칙).
+    /// 종을 잡고 있는 동안에도 **그대로 둔다**. 예전에는 잡는 순간 주황/강조색 2색 분할로 갈아탔는데,
+    /// 이미 구간마다 색이 있는 링에서 굳이 다른 색 체계로 바꾸면 "지금 만지는 구간이 어디였더라"를
+    /// 다시 찾아야 한다. 대신 드래그 배지 두 줄이 **그 구간들의 색**을 따라간다.
     private var showsAlertSectionColors: Bool {
-        isTimeEditable
-            && !isProgressMode
-            && highlightedMarker == nil
-            && !screenVM.selectedOffsets.isEmpty
+        isTimeEditable && !isProgressMode && !liveOffsets.isEmpty
     }
 
     /// 한 바퀴(60분)를 넘어간 시간은 **안쪽 줄**에 그린다.
@@ -373,6 +372,21 @@ struct TimerMainView: View {
     /// 전체 호를 알림 경계로 자른 지점들 (1.0 = 한 바퀴, 바퀴 구분 없는 절대 좌표)
     private func sectionBounds(arcEnd: CGFloat) -> [CGFloat] {
         [0] + markers.filter { $0 > 0 && $0 < arcEnd }.sorted() + [arcEnd]
+    }
+
+    /// 드래그 중인 종의 양옆 구간 색 — 배지 두 줄이 링과 같은 색을 쓰게 한다.
+    /// (⚑ 종료까지 = 종 뒤쪽 구간, ▶ 시작 후 = 종 앞쪽 구간)
+    private func sectionColors(around markerSeconds: Int) -> (beforeEnd: Color, afterStart: Color) {
+        let total = screenVM.mainMinutes * 60 + screenVM.mainSeconds
+        let segments = TimerSections.derive(mainSeconds: total, alertOffsets: liveOffsets)
+        let boundary = total - markerSeconds
+
+        let afterStart = segments.first { $0.endSec == boundary }
+        let beforeEnd = segments.first { $0.startSec == boundary }
+        return (
+            beforeEnd.map { SectionPalette.color($0.index) } ?? DSColor.marker,
+            afterStart.map { SectionPalette.color($0.index) } ?? Color.accentColor
+        )
     }
 
     /// 알림 지점을 경계로 링 자체를 구간 색으로 나눈다.
@@ -824,16 +838,20 @@ struct TimerMainView: View {
         let xOffset = min(max(rawX, -limit), limit)
         let yOffset = sin(tooltipAngle * .pi / 180) * distance
 
+        // 링이 이미 구간 색으로 나뉘어 있으므로 배지도 그 색을 그대로 쓴다 —
+        // 배지 줄 색과 링 구간 색이 어긋나면 어느 숫자가 어디인지 읽히지 않는다.
+        let colors = sectionColors(around: marker.seconds)
+
         return VStack(spacing: 0) {
             markerBadgeRow(
                 icon: "flag.checkered",
                 text: mmss(from: beforeEnd),
-                background: DSColor.marker
+                background: colors.beforeEnd
             )
             markerBadgeRow(
                 icon: "play.fill",
                 text: mmss(from: afterStart),
-                background: Color.accentColor
+                background: colors.afterStart
             )
         }
         .fixedSize(horizontal: true, vertical: false)
