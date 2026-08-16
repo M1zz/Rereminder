@@ -1414,22 +1414,6 @@
         }
       }
     },
-    "Customize your timer notification messages." : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "タイマー通知メッセージをカスタマイズできます。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "타이머 알림 메시지를 커스터마이징할 수 있습니다."
-          }
-        }
-      }
-    },
     "Dark" : {
       "localizations" : {
         "ja" : {
@@ -1635,6 +1619,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "예: 발표, 멘토링, 회의"
+          }
+        }
+      }
+    },
+    "Each alert can carry its own message. When that moment arrives, this is the text you see in the notification and on screen." : {
+      "comment" : "Notification message settings: what this screen does",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知ごとに違う文言を設定できます。その時刻になると、ここに書いた文言が通知と画面にそのまま表示されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "알림마다 다른 문구를 넣을 수 있어요. 그 시각이 되면 여기 적은 문구가 알림과 화면에 그대로 표시됩니다."
           }
         }
       }
@@ -3178,6 +3179,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "라이트"
+          }
+        }
+      }
+    },
+    "Listed in the order they will ring. Alerts longer than the timer itself never ring, so they aren't shown here." : {
+      "comment" : "Notification message settings: why some alerts are missing",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "鳴る順に並んでいます。タイマーより長い通知は鳴らないため、ここには表示されません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "울리는 순서대로 나열돼 있어요. 타이머 길이보다 긴 알림은 울리지 않아서 여기 나오지 않습니다."
           }
         }
       }
@@ -7052,40 +7070,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이미 Pro 회원입니다!"
-          }
-        }
-      }
-    },
-    "Each alert can carry its own message. When that moment arrives, this is the text you see in the notification and on screen." : {
-      "comment" : "Notification message settings: what this screen does",
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "알림마다 다른 문구를 넣을 수 있어요. 그 시각이 되면 여기 적은 문구가 알림과 화면에 그대로 표시됩니다."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "通知ごとに違う文言を設定できます。その時刻になると、ここに書いた文言が通知と画面にそのまま表示されます。"
-          }
-        }
-      }
-    },
-    "Listed in the order they will ring. Alerts longer than the timer itself never ring, so they aren't shown here." : {
-      "comment" : "Notification message settings: why some alerts are missing",
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "울리는 순서대로 나열돼 있어요. 타이머 길이보다 긴 알림은 울리지 않아서 여기 나오지 않습니다."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "鳴る順に並んでいます。タイマーより長い通知は鳴らないため、ここには表示されません。"
           }
         }
       }

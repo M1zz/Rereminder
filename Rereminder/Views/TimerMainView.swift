@@ -17,6 +17,10 @@ struct TimerMainView: View {
     /// 구간 이름 입력 포커스 (키보드 내리기 제어용)
     @FocusState private var focusedSectionIndex: Int?
 
+    /// 구간 번호를 지금 보여도 되는지 — 움직임이 멎고 나서 켠다.
+    @State private var sectionNumbersVisible = false
+    @State private var sectionNumbersTask: Task<Void, Never>?
+
     /// 안쪽 줄(60분 초과)이 나타나고 사라질 때 12시부터 빙 둘러 차오르는 정도 (0 → 1).
     /// 없다가 통째로 그려지면 "뿅" 하고 튀어나온 것처럼 보인다.
     @State private var innerRingReveal: CGFloat = 0
@@ -78,10 +82,28 @@ struct TimerMainView: View {
     private var remainingLaps: CGFloat { DialRing.laps(ofSeconds: remaining) }
 
     /// 지금 두 줄로 그려지는가 (60분을 넘겼는가)
-    /// 링에 구간 번호를 붙일지 — 구간이 주인공인 발표 모드에서만.
-    /// 타이머 모드에서는 알림 지점이 주인공이라 숫자까지 얹으면 시끄럽다.
+    /// 링에 구간 번호를 붙일지.
+    ///
+    /// ⚠️ 움직이는 동안에는 붙이지 않는다. 호는 애니메이션으로 움직이는데 숫자는 계산이 끝난
+    ///    자리에 곧바로 찍히기 때문에, 이동 중에 숫자만 먼저 가 있는 엉뚱한 그림이 된다.
+    ///    드래그·줄 이동이 **다 멎은 뒤**(`sectionNumbersVisible`) 살짝 떠오른다.
     private var showsSectionNumbers: Bool {
-        isPresentationMode && showsAlertSectionColors
+        showsAlertSectionColors && sectionNumbersVisible
+    }
+
+    /// 무언가 움직였다 — 숫자를 감추고, 조용해지면 다시 띄운다.
+    /// 드래그처럼 값이 계속 바뀌는 동안에는 예약이 계속 밀려 숫자가 뜨지 않는다.
+    private func deferSectionNumbers() {
+        sectionNumbersTask?.cancel()
+        if sectionNumbersVisible {
+            withAnimation(.easeOut(duration: 0.12)) { sectionNumbersVisible = false }
+        }
+        sectionNumbersTask = Task {
+            // 줄 이동(0.22초)·바탕 링 차오르기(0.45초)가 끝나고 나서
+            try? await Task.sleep(for: .seconds(0.5))
+            guard !Task.isCancelled else { return }
+            withAnimation(.easeIn(duration: 0.25)) { sectionNumbersVisible = true }
+        }
     }
 
     /// 링 위 한 지점(0~1)에 구간 번호를 세워서 얹는다.
@@ -330,7 +352,15 @@ struct TimerMainView: View {
         // 안쪽 줄이 생기고 사라질 때 빙 둘러 차오르게 한다.
         // 처음 화면에 나올 때(이미 60분이 넘은 설정을 복원한 경우)는 애니메이션 없이 그려 둔다 —
         // 아무 조작도 하지 않았는데 링이 혼자 도는 건 이상하다.
-        .onAppear { innerRingReveal = hasSecondRow ? 1 : 0 }
+        .onAppear {
+            innerRingReveal = hasSecondRow ? 1 : 0
+            deferSectionNumbers()
+        }
+        // 값이 바뀔 때마다 숫자를 감추고 다시 예약한다 (드래그 중엔 계속 밀린다)
+        .onChange(of: screenVM.mainAngle) { _, _ in deferSectionNumbers() }
+        .onChange(of: screenVM.sortedOffsetsDesc) { _, _ in deferSectionNumbers() }
+        .onChange(of: markerDragAngle) { _, _ in deferSectionNumbers() }
+        .onChange(of: draggingMarkerOffset) { _, _ in deferSectionNumbers() }
         .onChange(of: hasSecondRow) { _, appeared in
             withAnimation(.easeInOut(duration: 0.45)) {
                 innerRingReveal = appeared ? 1 : 0
