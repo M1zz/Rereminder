@@ -17,6 +17,15 @@ struct TimerMainView: View {
     /// 구간 이름 입력 포커스 (키보드 내리기 제어용)
     @FocusState private var focusedSectionIndex: Int?
 
+    /// 이름을 편집하는 중인가.
+    ///
+    /// ⚠️ `focusedSectionIndex != nil` 을 그대로 쓰면 안 된다. 구간 1 → 구간 2 로 포커스를 옮길 때
+    ///    그 사이에 잠깐 nil 이 되는데, 그 한 프레임 때문에 리스트 높이(0.55 → 0.4 → 0.55)와
+    ///    원 크기가 왕복하면서 화면이 통째로 흩어졌다 다시 조립되는 것처럼 보인다.
+    ///    그래서 포커스가 풀려도 잠깐 붙잡아 두고, 정말 끝났을 때만 되돌린다.
+    @State private var isEditingSectionName = false
+    @State private var editingHoldTask: Task<Void, Never>?
+
     /// 구간 번호를 지금 보여도 되는지 — 움직임이 멎고 나서 켠다.
     @State private var sectionNumbersVisible = false
     @State private var sectionNumbersTask: Task<Void, Never>?
@@ -204,7 +213,7 @@ struct TimerMainView: View {
                         screenVM: screenVM,
                         focusedSectionIndex: $focusedSectionIndex,
                         segments: derivedSegments,
-                        maxHeight: availableHeight * (focusedSectionIndex == nil ? 0.4 : 0.55),
+                        maxHeight: availableHeight * (isEditingSectionName ? 0.55 : 0.4),
                         isEditable: isTimeEditable
                     )
                         .padding(.bottom, spacing * 2)
@@ -221,6 +230,8 @@ struct TimerMainView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            // 리스트가 커지면 원이 작아진다 — 두 변화가 한 몸으로 움직여야 매끄럽다
+            .animation(.easeInOut(duration: 0.28), value: isEditingSectionName)
             // ⚠️ 이게 없으면 Spacer·여백처럼 아무것도 그리지 않은 자리는 탭이 잡히지 않아
             //    "화면 아무 데나 눌러 키보드 내리기"가 원·카드 위에서만 동작한다.
             .contentShape(Rectangle())
@@ -360,6 +371,19 @@ struct TimerMainView: View {
         .onChange(of: screenVM.mainAngle) { _, _ in deferSectionNumbers() }
         .onChange(of: screenVM.sortedOffsetsDesc) { _, _ in deferSectionNumbers() }
         .onChange(of: markerDragAngle) { _, _ in deferSectionNumbers() }
+        .onChange(of: focusedSectionIndex) { _, index in
+            editingHoldTask?.cancel()
+            guard index == nil else {
+                isEditingSectionName = true
+                return
+            }
+            // 옮겨 가는 중인지(곧 다른 구간이 잡힌다) 정말 끝난 것인지 잠깐 기다렸다 판단한다
+            editingHoldTask = Task {
+                try? await Task.sleep(for: .seconds(0.25))
+                guard !Task.isCancelled, focusedSectionIndex == nil else { return }
+                isEditingSectionName = false
+            }
+        }
         .onChange(of: draggingMarkerOffset) { _, _ in deferSectionNumbers() }
         .onChange(of: hasSecondRow) { _, appeared in
             withAnimation(.easeInOut(duration: 0.45)) {
