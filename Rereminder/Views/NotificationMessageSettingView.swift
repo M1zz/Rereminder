@@ -15,21 +15,25 @@ struct NotificationMessageSettingView: View {
         NavigationStack {
             Form {
                 Section {
-                    Text("Customize your timer notification messages.")
+                    Text("Each alert can carry its own message. When that moment arrives, this is the text you see in the notification and on screen.")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
 
-                Section(header: Text("Pre-alert Message")) {
-                    ForEach(Array(screenVM.selectedOffsets.sorted()), id: \.self) { offset in
+                Section {
+                    ForEach(firingOffsets, id: \.self) { offset in
                         prealertMessageEditor(for: offset)
                     }
 
-                    if screenVM.selectedOffsets.isEmpty {
+                    if firingOffsets.isEmpty {
                         Text("No pre-alerts set")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
+                } header: {
+                    Text("Pre-alert Message")
+                } footer: {
+                    Text("Listed in the order they will ring. Alerts longer than the timer itself never ring, so they aren't shown here.")
                 }
 
                 Section(header: Text("End Alert Message")) {
@@ -61,6 +65,17 @@ struct NotificationMessageSettingView: View {
                 }
             }
         }
+    }
+
+    /// 지금 타이머 길이 안에 있어서 **실제로 울리는** 알림만, 울리는 순서(먼 것 → 가까운 것)로.
+    ///
+    /// ⚠️ 켜 둔 알림을 전부 보여주면 안 된다. 타이머보다 긴 알림(예전 설정이나 템플릿에서 남은 것)은
+    ///    울리지 않는데 목록에만 있어서 "내가 설정한 건 15분·3분인데 20분 전 알림은 뭐지?" 가 된다.
+    private var firingOffsets: [Int] {
+        let mainSeconds = screenVM.mainMinutes * 60 + screenVM.mainSeconds
+        return screenVM.selectedOffsets
+            .filter { $0 > 0 && $0 < mainSeconds }
+            .sorted(by: >)
     }
 
     // MARK: - 편집 가능

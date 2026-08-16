@@ -1236,6 +1236,23 @@
         }
       }
     },
+    "Can't go shorter than your alerts" : {
+      "comment" : "Toast when the timer can't be shortened below an existing alert",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知より短くはできません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "켜 둔 알림보다 짧게는 못 줄여요"
+          }
+        }
+      }
+    },
     "Cancel" : {
       "localizations" : {
         "ja" : {
@@ -1746,6 +1763,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "두번알림 앱을 엽니다"
+          }
+        }
+      }
+    },
+    "Everything from the first-run walkthrough is here — including how to use Rereminder on Apple Watch, Mac, widgets, and Siri." : {
+      "comment" : "Settings Help section footer",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "初回起動時の案内はここで見直せます — Apple Watch・Mac・ウィジェット・Siriの活用法も含まれています。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "처음 실행할 때 봤던 안내를 여기서 다시 볼 수 있어요 — Apple Watch·Mac·위젯·Siri 활용법까지 함께 있습니다."
           }
         }
       }
@@ -2967,6 +3001,23 @@
         }
       }
     },
+    "How to Use This App" : {
+      "comment" : "Settings row: replay the onboarding walkthrough",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このアプリの使い方"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 앱 활용법 보기"
+          }
+        }
+      }
+    },
     "In Progress" : {
       "localizations" : {
         "ja" : {
@@ -3824,6 +3875,30 @@
         }
       }
     },
+    "onboarding_desc_7" : {
+      "comment" : "Onboarding page 7 description",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start on iPhone and keep going on Apple Watch or Mac — pause on one, and the others follow. Widgets and the Dynamic Island let you check and control without opening the app."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhoneで始めてApple WatchやMacでそのまま続けられます。片方で止めればもう片方も止まります。ウィジェットやダイナミックアイランドからは、アプリを開かずに確認・操作できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone에서 시작해 Apple Watch나 Mac에서 그대로 이어가세요. 한쪽에서 멈추면 다른 쪽도 따라 멈춥니다. 위젯과 다이나믹 아일랜드로는 앱을 열지 않고도 보고 조작할 수 있어요."
+          }
+        }
+      }
+    },
     "onboarding_scenario_1" : {
       "localizations" : {
         "en" : {
@@ -3930,6 +4005,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "인트로 5분 → 본론 20분 → Q&A 5분, 구간 전환마다 알림"
+          }
+        }
+      }
+    },
+    "onboarding_scenario_7" : {
+      "comment" : "Onboarding page 7 example",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Presenting from your Mac while your wrist taps the 5-minute warning"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Macで発表しながら、5分前の通知は手首で受け取る"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "맥으로 발표하면서 5분 전 알림은 손목으로 받기"
           }
         }
       }
@@ -4062,6 +4161,30 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "3가지 방법으로\n빠르게 설정"
+          }
+        }
+      }
+    },
+    "onboarding_title_7" : {
+      "comment" : "Onboarding page 7 title (multi-device)",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One timer,\nall your devices"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ひとつのタイマーを\nすべてのデバイスで"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 하나로\n모든 기기에서"
           }
         }
       }
@@ -6327,6 +6450,102 @@
         }
       }
     },
+    "tip_presentation_message" : {
+      "comment" : "TipKit: presentation mode detail",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Presentation mode divides your time into sections — intro, main, Q&A — and alerts you at each boundary."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "発表モードでイントロ・本編・Q&Aのように時間を分けると、区間が変わるたびに知らせます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "발표 모드로 인트로·본론·Q&A처럼 시간을 나누면, 구간이 바뀔 때마다 알려줍니다."
+          }
+        }
+      }
+    },
+    "tip_presentation_title" : {
+      "comment" : "TipKit: presentation mode discovery",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Split a long talk into sections"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "長い発表は区間に分けましょう"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "긴 발표는 구간으로 나눠 보세요"
+          }
+        }
+      }
+    },
+    "tip_template_message" : {
+      "comment" : "TipKit: save template detail",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save the time and alerts you just set, and start the same timer with one tap next time."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "いま設定した時間と通知を保存しておくと、次回はワンタップで同じタイマーを開始できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지금 맞춘 시간과 알림을 저장해 두면, 다음엔 한 번에 같은 타이머를 시작할 수 있어요."
+          }
+        }
+      }
+    },
+    "tip_template_title" : {
+      "comment" : "TipKit: save template discovery",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save this setup"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この設定を保存しませんか？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 설정, 저장해 둘까요?"
+          }
+        }
+      }
+    },
     "Total Sessions" : {
       "localizations" : {
         "ja" : {
@@ -6725,22 +6944,6 @@
         }
       }
     },
-    "View App Tutorial" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "アプリチュートリアルを見る"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "앱 사용법 보기"
-          }
-        }
-      }
-    },
     "What are Enhanced Notifications?" : {
       "localizations" : {
         "ja" : {
@@ -6853,221 +7056,36 @@
         }
       }
     },
-    "Can't go shorter than your alerts" : {
-      "comment" : "Toast when the timer can't be shortened below an existing alert",
+    "Each alert can carry its own message. When that moment arrives, this is the text you see in the notification and on screen." : {
+      "comment" : "Notification message settings: what this screen does",
       "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "通知より短くはできません"
-          }
-        },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "켜 둔 알림보다 짧게는 못 줄여요"
+            "value" : "알림마다 다른 문구를 넣을 수 있어요. 그 시각이 되면 여기 적은 문구가 알림과 화면에 그대로 표시됩니다."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知ごとに違う文言を設定できます。その時刻になると、ここに書いた文言が通知と画面にそのまま表示されます。"
           }
         }
       }
     },
-    "onboarding_title_7" : {
-      "comment" : "Onboarding page 7 title (multi-device)",
-      "extractionState" : "manual",
+    "Listed in the order they will ring. Alerts longer than the timer itself never ring, so they aren't shown here." : {
+      "comment" : "Notification message settings: why some alerts are missing",
       "localizations" : {
-        "en" : {
+        "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "One timer,\nall your devices"
+            "value" : "울리는 순서대로 나열돼 있어요. 타이머 길이보다 긴 알림은 울리지 않아서 여기 나오지 않습니다."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ひとつのタイマーを\nすべてのデバイスで"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "타이머 하나로\n모든 기기에서"
-          }
-        }
-      }
-    },
-    "onboarding_desc_7" : {
-      "comment" : "Onboarding page 7 description",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Start on iPhone and keep going on Apple Watch or Mac — pause on one, and the others follow. Widgets and the Dynamic Island let you check and control without opening the app."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iPhoneで始めてApple WatchやMacでそのまま続けられます。片方で止めればもう片方も止まります。ウィジェットやダイナミックアイランドからは、アプリを開かずに確認・操作できます。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "iPhone에서 시작해 Apple Watch나 Mac에서 그대로 이어가세요. 한쪽에서 멈추면 다른 쪽도 따라 멈춥니다. 위젯과 다이나믹 아일랜드로는 앱을 열지 않고도 보고 조작할 수 있어요."
-          }
-        }
-      }
-    },
-    "onboarding_scenario_7" : {
-      "comment" : "Onboarding page 7 example",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Presenting from your Mac while your wrist taps the 5-minute warning"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Macで発表しながら、5分前の通知は手首で受け取る"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "맥으로 발표하면서 5분 전 알림은 손목으로 받기"
-          }
-        }
-      }
-    },
-    "tip_presentation_title" : {
-      "comment" : "TipKit: presentation mode discovery",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Split a long talk into sections"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "長い発表は区間に分けましょう"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "긴 발표는 구간으로 나눠 보세요"
-          }
-        }
-      }
-    },
-    "tip_presentation_message" : {
-      "comment" : "TipKit: presentation mode detail",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Presentation mode divides your time into sections — intro, main, Q&A — and alerts you at each boundary."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "発表モードでイントロ・本編・Q&Aのように時間を分けると、区間が変わるたびに知らせます。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "발표 모드로 인트로·본론·Q&A처럼 시간을 나누면, 구간이 바뀔 때마다 알려줍니다."
-          }
-        }
-      }
-    },
-    "tip_template_title" : {
-      "comment" : "TipKit: save template discovery",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Save this setup"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "この設定を保存しませんか？"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이 설정, 저장해 둘까요?"
-          }
-        }
-      }
-    },
-    "tip_template_message" : {
-      "comment" : "TipKit: save template detail",
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Save the time and alerts you just set, and start the same timer with one tap next time."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "いま設定した時間と通知を保存しておくと、次回はワンタップで同じタイマーを開始できます。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "지금 맞춘 시간과 알림을 저장해 두면, 다음엔 한 번에 같은 타이머를 시작할 수 있어요."
-          }
-        }
-      }
-    },
-    "How to Use This App" : {
-      "comment" : "Settings row: replay the onboarding walkthrough",
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이 앱 활용법 보기"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "このアプリの使い方"
-          }
-        }
-      }
-    },
-    "Everything from the first-run walkthrough is here — including how to use Rereminder on Apple Watch, Mac, widgets, and Siri." : {
-      "comment" : "Settings Help section footer",
-      "localizations" : {
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "처음 실행할 때 봤던 안내를 여기서 다시 볼 수 있어요 — Apple Watch·Mac·위젯·Siri 활용법까지 함께 있습니다."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "初回起動時の案内はここで見直せます — Apple Watch・Mac・ウィジェット・Siriの活用法も含まれています。"
+            "value" : "鳴る順に並んでいます。タイマーより長い通知は鳴らないため、ここには表示されません。"
           }
         }
       }

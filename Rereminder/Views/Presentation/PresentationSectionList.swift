@@ -71,12 +71,17 @@ struct PresentationSectionList: View {
         let color = SectionPalette.color(segment.index)
 
         HStack(alignment: .top, spacing: DSSpacing.md) {
-            // 링의 해당 구간과 같은 색 — 어느 호가 이 구간인지 연결
-            Circle()
-                .fill(color)
-                .frame(width: 12, height: 12)
-                .padding(.top, DSSpacing.xs)
-                .accessibilityHidden(true)
+            // 링의 해당 구간과 같은 색 + 같은 번호 — 어느 호가 이 카드인지 두 가지로 잇는다
+            // (이름을 바꾸고 나면 "Section 3" 이라는 순서 단서가 사라지기 때문에 번호를 따로 둔다)
+            ZStack {
+                Circle().fill(color)
+                Text(verbatim: "\(segment.index + 1)")
+                    .font(.caption2.weight(.bold))
+                    .foregroundStyle(.white)
+            }
+            .frame(width: 20, height: 20)
+            .padding(.top, 2)
+            .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: DSSpacing.xs) {
                 HStack(alignment: .firstTextBaseline, spacing: DSSpacing.sm) {

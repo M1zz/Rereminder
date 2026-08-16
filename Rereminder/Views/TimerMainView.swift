@@ -16,6 +16,10 @@ struct TimerMainView: View {
 
     /// 구간 이름 입력 포커스 (키보드 내리기 제어용)
     @FocusState private var focusedSectionIndex: Int?
+
+    /// 안쪽 줄(60분 초과)이 나타나고 사라질 때 12시부터 빙 둘러 차오르는 정도 (0 → 1).
+    /// 없다가 통째로 그려지면 "뿅" 하고 튀어나온 것처럼 보인다.
+    @State private var innerRingReveal: CGFloat = 0
     @State private var dragTooltipAngle: Double = 0
     @State private var draggingMarkerOffset: Int? = nil
     @State private var markerDragAngle: Double = 0
@@ -74,6 +78,28 @@ struct TimerMainView: View {
     private var remainingLaps: CGFloat { DialRing.laps(ofSeconds: remaining) }
 
     /// 지금 두 줄로 그려지는가 (60분을 넘겼는가)
+    /// 링에 구간 번호를 붙일지 — 구간이 주인공인 발표 모드에서만.
+    /// 타이머 모드에서는 알림 지점이 주인공이라 숫자까지 얹으면 시끄럽다.
+    private var showsSectionNumbers: Bool {
+        isPresentationMode && showsAlertSectionColors
+    }
+
+    /// 링 위 한 지점(0~1)에 구간 번호를 세워서 얹는다.
+    private func sectionNumber(_ number: Int, atFraction fraction: CGFloat,
+                               size: CGFloat, lineWidth: CGFloat) -> some View {
+        let angle = Double(fraction) * 360.0
+        return Text(verbatim: "\(number)")
+            .font(.system(size: lineWidth * 0.6, weight: .bold, design: .rounded))
+            .foregroundStyle(.white)
+            .shadow(color: .black.opacity(0.25), radius: 1, y: 0.5)
+            // 링을 따라 돌아도 숫자는 똑바로 서 있어야 읽힌다
+            .rotationEffect(.degrees(90 - angle))
+            .offset(x: size / 2)
+            .rotationEffect(.degrees(angle))
+            .rotationEffect(.degrees(-90))
+            .accessibilityHidden(true)
+    }
+
     private var hasSecondRow: Bool {
         DialRing.rows(laps: usesAbsoluteRing
                       ? (isProgressMode ? remainingLaps : CGFloat(max(0, screenVM.mainAngle) / 360.0))
@@ -301,6 +327,15 @@ struct TimerMainView: View {
             // 링 안쪽으로 가둔다 — 넘치면 그 부분이 링 위 조작을 먹는다
             .frame(maxWidth: centerDiameter)
         }
+        // 안쪽 줄이 생기고 사라질 때 빙 둘러 차오르게 한다.
+        // 처음 화면에 나올 때(이미 60분이 넘은 설정을 복원한 경우)는 애니메이션 없이 그려 둔다 —
+        // 아무 조작도 하지 않았는데 링이 혼자 도는 건 이상하다.
+        .onAppear { innerRingReveal = hasSecondRow ? 1 : 0 }
+        .onChange(of: hasSecondRow) { _, appeared in
+            withAnimation(.easeInOut(duration: 0.45)) {
+                innerRingReveal = appeared ? 1 : 0
+            }
+        }
         .onChange(of: screenVM.state) { _, newState in
             let announcement: String
             switch newState {
@@ -438,6 +473,15 @@ struct TimerMainView: View {
                         .opacity(focusedSectionIndex == nil || isEditingThis ? 1.0 : 0.55)
                         .frame(width: size, height: size)
                         .rotationEffect(.degrees(-90))
+
+                    // 구간 번호 — 리스트의 "1, 2, 3"과 링의 호를 잇는 이름표.
+                    // 호가 짧으면(숫자보다 좁으면) 넣지 않는다 — 옆 구간 위로 삐져나온다.
+                    if showsSectionNumbers, to - from >= 0.055 {
+                        sectionNumber(sectionIndex + 1,
+                                      atFraction: (from + to) / 2,
+                                      size: size,
+                                      lineWidth: lineWidth)
+                    }
                 }
             }
         }
@@ -558,11 +602,14 @@ struct TimerMainView: View {
 
             // 안쪽 줄 = 60분을 넘어간 시간.
             // 예전에는 같은 원 위에 연두색으로 겹쳐 그려서 두 바퀴가 서로를 덮었다.
-            if secondaryFraction > 0 {
-                // 얼마나 더 갈 수 있는지 보이도록 안쪽에도 옅은 바탕 링
+            if secondaryFraction > 0 || innerRingReveal > 0 {
+                // 얼마나 더 갈 수 있는지 보이도록 안쪽에도 옅은 바탕 링.
+                // 나타날 때는 12시부터 시계 방향으로 차오르고, 사라질 때는 같은 길로 되감긴다.
                 Circle()
+                    .trim(from: 0, to: innerRingReveal)
                     .stroke(.plain.opacity(0.5), style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
                     .frame(width: innerSize, height: innerSize)
+                    .rotationEffect(.degrees(-90))
 
                 if showsAlertSectionColors {
                     alertSectionRing(size: innerSize, lineWidth: lineWidth, arcEnd: totalFraction, lap: 1)
