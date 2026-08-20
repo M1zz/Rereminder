@@ -1,6 +1,14 @@
 # Rereminder 작업 메모
 
 ## 완료 (이번 라운드)
+- [x] **업로드 거부 2건 해결 — iPad 를 지원하지 않으면서 Mac Catalyst 유지**
+  - Catalyst 를 켜며 딸려온 iPad(`2`)가 iOS 빌드까지 번져 두 번 거부됨:
+    ① App Clip 기기 종류가 부모(`[1,2]`)와 달랐고(`[1]`), ② iPad 를 넣으면 `..._iPad` 방향
+    네 개를 전부 적어야 함(멀티태스킹)
+  - iPad 화면·스크린샷이 없으므로 **iPad 를 지원하지 않는 쪽**으로 정리:
+    `TARGETED_DEVICE_FAMILY = 1` + `"TARGETED_DEVICE_FAMILY[sdk=macosx*]" = "2,6"`
+    (메인 앱·위젯 확장, 클립은 `1`)
+  - 확인: iOS 빌드 `UIDeviceFamily = [1]`(앱·클립·위젯 모두) / Catalyst 빌드 `[6]`, 양쪽 빌드 성공
 - [x] **버전 2.1.1 (빌드 1)**
 - [x] **종을 놓을 때 튀던 애니메이션 제거** (메인 앱 + App Clip)
   - 원인 ①: `ForEach` id 가 알림 초라서 옮긴 값을 지웠다 넣으면 SwiftUI 가 "다른 종"으로 보고

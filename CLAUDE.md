@@ -506,12 +506,27 @@ extension TimerView {
 ## Mac (Mac Catalyst)
 
 메인 앱은 **Mac Catalyst 로 함께 빌드된다**(`SUPPORTS_MACCATALYST = YES`,
-`TARGETED_DEVICE_FAMILY = "1,2"`). 2026-07-26 에 한 번 껐다가(`8a4dd74`) 2.1.1 에서 되살렸다 —
+`TARGETED_DEVICE_FAMILY[sdk=macosx*] = "2,6"`). 2026-07-26 에 한 번 껐다가(`8a4dd74`) 2.1.1 에서 되살렸다 —
 앱은 온보딩·기기 안내·연결 칩에서 맥을 계속 이야기하는데 정작 설치가 불가능한 상태였다.
 
 - **App Clip 은 iOS 전용이다.** 임베드 항목에 `platformFilter = ios;` 가 붙어 있어야 한다.
   없으면 Catalyst 빌드가 *"target is built for macOS but contains embedded content built for
   the iOS platform (RereminderClip.app)"* 로 실패한다.
+- ⚠️ **iPad 는 지원하지 않는다. `TARGETED_DEVICE_FAMILY` 는 SDK 조건으로 갈라 둔다.**
+  ```
+  TARGETED_DEVICE_FAMILY = 1;                      // iOS 빌드 = iPhone 전용
+  "TARGETED_DEVICE_FAMILY[sdk=macosx*]" = "2,6";   // Catalyst 빌드에서만 iPad+Mac
+  ```
+  메인 앱과 위젯 확장에 걸려 있고, App Clip 은 `1` 하나만 둔다(Catalyst 에서 아예 빠지므로).
+  Catalyst 는 iPad 앱을 바탕으로 만들어져 iPad(`2`)를 요구하는데, 그 값이 iOS 빌드까지
+  번지면 **iOS 앱이 iPad 앱이 되어 App Store 에 iPad 스크린샷을 내야 한다.** 이 앱은 iPad 화면을
+  만든 적이 없으므로 조건부로 잘라 둔 것. 결과: iOS `UIDeviceFamily = [1]`, Catalyst = `[6]`.
+- ⚠️ 위 조건을 지우고 `"1,2"` 로 되돌리면 업로드가 두 번 거부된다(2026-08-20 에 겪음):
+  1. *"The UIDeviceFamily of an App Clip ('[1]') must be equal to ... parent app ('[1, 2]')"*
+     — 클립도 `"1,2"` 로 맞춰야 한다
+  2. 그다음엔 *"you need to include all of the ... orientations to support iPad multitasking"*
+     — iPad 를 지원하면 `..._iPad` 방향 네 개를 전부 적어야 한다
+  둘 다 "iPad 를 지원하겠다"는 전제에서만 필요한 작업이다. 지원할 생각이 없으면 조건부 설정을 유지할 것.
 - 메뉴 막대 번들(`RereminderMenuBar`)은 반대로 `platformFilter = maccatalyst` 로 Catalyst 에서만
   들어간다. Catalyst 전용 엔타이틀먼트는 `CODE_SIGN_ENTITLEMENTS[sdk=macosx*]` 로 연결돼 있다.
 - ⚠️ **iOS 배포 타깃이 26.0 이라 Catalyst 앱은 macOS 26 이상에서만 돈다**
@@ -579,6 +594,10 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
   "있어요"라고 답한 기기만, 안 될 때만 글자를 붙인다. **대기 중에도 보인다**(걸기 전에 고쳐야 하니까)
 - **연결 안내 화면** (`DeviceConnectionHelpView`): 칩이나 설정의 상태 줄을 누르면 지금 상태 +
   할 일(워치 4단계·맥 3단계) + "다시 확인" + 기기별 활용 안내로 이어진다
+- **기기 종류를 SDK 조건으로 분리**: Catalyst 를 켜며 딸려온 iPad(`2`)가 iOS 빌드까지 번져
+  업로드가 거부됐다(App Clip 기기 종류 불일치 → iPad 멀티태스킹 방향).
+  iPad 를 지원할 계획이 없으므로 `TARGETED_DEVICE_FAMILY = 1` +
+  `[sdk=macosx*] = "2,6"` 으로 갈라, **iOS 는 iPhone 전용·Mac 만 Catalyst** 로 유지
 - **레거시 삭제**: `Clock.swift` / `ClockMarkers.swift` / `TimerRunningView.swift` (아무도 안 씀).
   종 노브 아래 깔려 있던 주황 작대기가 사라져, 알림이 울린 뒤 종이 흐려질 때 혼자 남던 직사각형도 없어짐
 - **진행 중에도 링 구간 색 유지**: 타이머를 시작하면 단색(강조색)으로 바뀌던 링이 이제 알림으로
