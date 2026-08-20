@@ -52,6 +52,10 @@ struct TimerMainView: View {
     @State private var showDragTooltip = false
     @State private var dragTooltipLingerTask: Task<Void, Never>?
     @State private var lingeringMarkerOffset: Int? = nil
+
+    // 실행 중 원 아래에 서는 기기 연결 상태 — 워치는 실시간, 맥은 iCloud에 남긴 표시로 안다.
+    @ObservedObject private var watchLink = WatchConnectivityManager.shared
+    @State private var macLinkStatus: DevicePresence.Status = .away(lastSeen: nil)
     @State private var markerLingerTask: Task<Void, Never>?
 
     /// 손을 놓고 이만큼 지나면 배지·링 강조·흐려진 종이 한꺼번에 원래대로 돌아온다
@@ -97,7 +101,8 @@ struct TimerMainView: View {
     ///    자리에 곧바로 찍히기 때문에, 이동 중에 숫자만 먼저 가 있는 엉뚱한 그림이 된다.
     ///    드래그·줄 이동이 **다 멎은 뒤**(`sectionNumbersVisible`) 살짝 떠오른다.
     private var showsSectionNumbers: Bool {
-        showsAlertSectionColors && sectionNumbersVisible
+        // 진행 중에는 숫자를 붙이지 않는다 — 구간이 하나씩 사라지면서 번호만 바뀌면 어지럽다.
+        showsAlertSectionColors && sectionNumbersVisible && isTimeEditable
     }
 
     /// 무언가 움직였다 — 숫자를 감추고, 조용해지면 다시 띄운다.
@@ -143,12 +148,6 @@ struct TimerMainView: View {
         let innermost = hasSecondRow ? innerRingSize(size, lineWidth: lineWidth) : size
         // 링 두께(양쪽) + 링에 닿지 않을 여백
         return max(0, innermost - lineWidth * 2 - 24)
-    }
-
-    /// 안쪽 줄의 반지름 비율 — 마커도 호·종과 같은 줄에 놓이게 하려면 이 값을 함께 넘겨야 한다
-    private func innerRadiusScale(size: CGFloat, lineWidth: CGFloat) -> CGFloat {
-        guard size > 0 else { return 1 }
-        return innerRingSize(size, lineWidth: lineWidth) / size
     }
 
     /// 지금 화면에 보이는 알림 지점들 — 종을 끌고 있으면 그 종만 손끝 위치로 바꿔서 본다.
@@ -205,6 +204,15 @@ struct TimerMainView: View {
 
                 Spacer()
 
+                // "손목에서도 볼 수 있나?"는 **걸기 전에** 알아야 고칠 수 있다.
+                // 그래서 대기 중에도 그대로 둔다(설정 화면에만 두면 아무도 안 본다).
+                // 발표 모드에서만 뺀다 — 구간 리스트가 화면 절반을 쓰는 자리라 한 줄이 아쉽다.
+                if !isPresentationMode {
+                    DeviceLinkChips(watchStatus: watchLink.linkStatus, macStatus: macLinkStatus)
+                        .padding(.bottom, spacing)
+                        .transition(.opacity)
+                }
+
                 if isPresentationMode {
                     // 알림 지점 기준 파생 구간 리스트 (원 밖 아래쪽)
                     // 이름을 편집하는 동안에는 키보드가 화면을 절반 가까이 먹으므로 리스트 몫을 늘린다
@@ -218,8 +226,19 @@ struct TimerMainView: View {
                     )
                         .padding(.bottom, spacing * 2)
                         .transition(.move(edge: .bottom).combined(with: .opacity))
+                } else if isProgressMode && derivedSegments.count > 1 {
+                    // 구간별 카운트다운 (원 밖 아래쪽) — 링이 "전체가 얼마나 남았나"라면
+                    // 이건 "지금 이 구간이 얼마 남았나"다. 다음 알림까지의 시간이 곧 지금 구간의
+                    // 남은 시간이라 `nextAlertInfo` 자리를 대신한다(둘 다 두면 같은 말이 두 번).
+                    SectionCountdownList(
+                        segments: derivedSegments,
+                        elapsedSec: elapsedSec,
+                        maxHeight: availableHeight * 0.22
+                    )
+                        .padding(.bottom, spacing * 2)
+                        .transition(.opacity)
                 } else if !screenVM.nextAlertText.isEmpty {
-                    // Next 알림 Info (원 밖 아래쪽)
+                    // Next 알림 Info (원 밖 아래쪽) — 알림이 하나뿐이라 구간 리스트가 무의미할 때
                     nextAlertInfo
                         .padding(.vertical, spacing * 3)
                 } else if screenVM.state == .idle || screenVM.state == .finished {
@@ -235,6 +254,16 @@ struct TimerMainView: View {
             // ⚠️ 이게 없으면 Spacer·여백처럼 아무것도 그리지 않은 자리는 탭이 잡히지 않아
             //    "화면 아무 데나 눌러 키보드 내리기"가 원·카드 위에서만 동작한다.
             .contentShape(Rectangle())
+            .onAppear(perform: refreshDeviceLinks)
+            // 타이머를 거는 순간 다시 확인한다 — 그 사이 워치가 꺼졌을 수도 있다.
+            .onChange(of: screenVM.state) { _, newState in
+                if newState == .running { refreshDeviceLinks() }
+            }
+            // 다른 기기가 iCloud에 표시를 남기면 그때 따라간다.
+            .onReceive(NotificationCenter.default.publisher(
+                for: NSUbiquitousKeyValueStore.didChangeExternallyNotification)) { _ in
+                macLinkStatus = DevicePresence.status(of: .mac)
+            }
         }
         // 빈 곳을 탭하면 키보드 내림.
         // ⚠️ 편집 중이 아닐 때는 아예 인식하지 않는다(mask: .none) — 다이얼을 만지는 평상시에
@@ -295,8 +324,6 @@ struct TimerMainView: View {
             if screenVM.state == .running || screenVM.state == .paused {
                 progressEdgeDot(size: size, lineWidth: lineWidth)
             }
-
-            clockMarkers(size: size, lineWidth: lineWidth)
 
             // 시간 조절 드래그는 대기/Done 상태에서만 (실행·일시정지·오버타임 중에는 불가)
             if isTimeEditable {
@@ -443,8 +470,12 @@ struct TimerMainView: View {
     /// 종을 잡고 있는 동안에도 **그대로 둔다**. 예전에는 잡는 순간 주황/강조색 2색 분할로 갈아탔는데,
     /// 이미 구간마다 색이 있는 링에서 굳이 다른 색 체계로 바꾸면 "지금 만지는 구간이 어디였더라"를
     /// 다시 찾아야 한다. 대신 드래그 배지 두 줄이 **그 구간들의 색**을 따라간다.
+    /// **진행 중에도 그대로 유지한다.** 알림으로 나뉜 링이 시작하자마자 단색으로 바뀌면
+    /// "지금 몇 번째 구간을 지나고 있나"가 사라진다 — 발표 중에 가장 알고 싶은 게 그건데.
+    /// 남은 호만 줄어들고 색 경계는 그 자리에 그대로 있어서, 경계를 지날 때마다 색이 하나씩 없어진다.
+    /// 오버타임에서는 그릴 호 자체가 없어(0) 빨간 단색 경로로 넘긴다.
     private var showsAlertSectionColors: Bool {
-        isTimeEditable && !isProgressMode && !liveOffsets.isEmpty
+        !liveOffsets.isEmpty && screenVM.state != .overtime
     }
 
     /// 한 바퀴(60분)를 넘어간 시간은 **안쪽 줄**에 그린다.
@@ -500,8 +531,12 @@ struct TimerMainView: View {
 
         return ZStack {
             ForEach(0..<max(0, bounds.count - 1), id: \.self) { i in
-                // 링은 "종료까지 남은 시간" 좌표라 경과 순서와 반대 → 구간 인덱스로 역매핑
-                let sectionIndex = bounds.count - 2 - i
+                // 링은 "종료까지 남은 시간" 좌표라 경과 순서와 반대 → 구간 인덱스로 역매핑.
+                // (규칙과 이유는 TimerSections.ringSectionIndex 에 있다 — 테스트도 그쪽에 있다)
+                let sectionIndex = TimerSections.ringSectionIndex(
+                    segmentEnd: Double(bounds[i + 1]),
+                    markers: markers.map(Double.init)
+                )
                 let isEditingThis = focusedSectionIndex == sectionIndex
                 let from = max(bounds[i], lapStart) - lapStart
                 let to = min(bounds[i + 1], lapStart + 1) - lapStart
@@ -686,48 +721,6 @@ struct TimerMainView: View {
         .accessibilityHidden(true)
     }
 
-    private func clockMarkers(size: CGFloat, lineWidth: CGFloat) -> some View {
-        let sortedOffsets = Array(screenVM.selectedOffsets.sorted())
-        let draggingIdx: Int? = if let offset = draggingMarkerOffset {
-            sortedOffsets.firstIndex(of: offset)
-        } else {
-            nil
-        }
-        let dragRatio: CGFloat? = if draggingMarkerOffset != nil {
-            CGFloat(markerDragAngle * TimeMapper.secondsPerDegree)
-                / (TimeMapper.secondsPerDegree * 360.0)
-        } else {
-            nil
-        }
-        // 작대기 마커도 종 노브와 함께 물러난다 — 하나만 흐려지면 따로 노는 것처럼 보인다
-        let dimmed: Set<Int>
-        if highlightedMarker != nil,
-           let focused = draggingMarkerOffset ?? lingeringMarkerOffset,
-           let focusedIndex = sortedOffsets.firstIndex(of: focused) {
-            dimmed = Set(sortedOffsets.indices).subtracting([focusedIndex])
-        } else {
-            dimmed = []
-        }
-
-        return ClockMarkers(
-            remaining: usesAbsoluteRing ? remainingLaps : ratio,
-            markers: markers,
-            markerOffsets: sortedOffsets,
-            draggingIndex: draggingIdx,
-            draggingRatio: dragRatio,
-            dotSize: lineWidth,
-            inset: 0,
-            upcoming: true,
-            // 상시 라벨은 제거 — 드래그 중/직후 툴팁이 대신함
-            showLabels: false,
-            dimmedIndices: dimmed,
-            innerRadiusScale: innerRadiusScale(size: size, lineWidth: lineWidth)
-        )
-        .frame(width: size, height: size)
-        .animation(highlightAnimation, value: dimmed)
-        .accessibilityHidden(true)
-    }
-
     /// 물러날 땐 빠르게, 돌아올 땐 배지가 녹는 속도에 맞춰 천천히
     private var highlightAnimation: Animation {
         highlightedMarker != nil
@@ -836,7 +829,10 @@ struct TimerMainView: View {
                 let dimmed = isHighlighting && !isFocused
                 // 좌표계와 무관하게 "남은 시간이 이 알림 지점을 지났나"로 판단한다
                 let fired = isProgressMode && remaining <= TimeInterval(offsetSec)
-                let knobScale: CGFloat = isTimeEditable ? (isDraggingThis ? 2.0 : 1.6) : 1.15
+                // 손을 떼는 순간 크기가 2.0 → 1.6 으로 바뀌면 종이 한 번 튄다.
+                // 배지가 남아 있는 동안(=주인공인 동안)은 크기도 그대로 두고,
+                // 배지가 녹아 사라질 때 같이 작아진다.
+                let knobScale: CGFloat = isTimeEditable ? (isFocused ? 2.0 : 1.6) : 1.15
 
                 ZStack {
                     Circle()
@@ -893,20 +889,35 @@ struct TimerMainView: View {
                                 guard let dragOffset = draggingMarkerOffset else { return }
                                 let newSec = TimeMapper.angleToSeconds(from: markerDragAngle)
                                 let mainSec = screenVM.mainMinutes * 60 + screenVM.mainSeconds
-                                screenVM.selectedOffsets.remove(dragOffset)
-                                if newSec > 0 && newSec < mainSec {
-                                    screenVM.selectedOffsets.insert(newSec)
-                                    // 놓은 자리의 라벨을 잠시 유지
-                                    lingeringMarkerOffset = newSec
-                                    markerLingerTask = Task {
-                                        try? await Task.sleep(for: .seconds(Self.tooltipLingerSeconds))
-                                        guard !Task.isCancelled else { return }
-                                        withAnimation(.easeOut(duration: Self.dissolveDuration)) {
-                                            lingeringMarkerOffset = nil
-                                        }
+                                let keeps = newSec > 0 && newSec < mainSec
+
+                                // ⚠️ 손을 뗄 때 **애니메이션을 걸지 않는다.**
+                                //    ForEach 의 id 가 알림 초라서, 지웠다가 다시 넣는 순간
+                                //    SwiftUI 는 "다른 종이 사라지고 새 종이 나타났다"고 보고
+                                //    `.transition(.scale + .opacity)` 를 재생한다 — 종이 펑 튀어
+                                //    보이던 정체가 이거다. 각도도 10초 스냅 때문에 조금 움직이는데,
+                                //    그것까지 0.2초 동안 미끄러지면 손을 뗀 자리에서 벗어나 보인다.
+                                //    (링 밖으로 끌어 **지우는** 경우는 그대로 페이드아웃시킨다.)
+                                var transaction = Transaction()
+                                transaction.disablesAnimations = keeps
+                                withTransaction(transaction) {
+                                    screenVM.selectedOffsets.remove(dragOffset)
+                                    if keeps {
+                                        screenVM.selectedOffsets.insert(newSec)
+                                        // 놓은 자리의 배지를 잠시 유지 — 그동안 종도 큰 채로 남는다
+                                        lingeringMarkerOffset = newSec
+                                    }
+                                    draggingMarkerOffset = nil
+                                }
+
+                                guard keeps else { return }
+                                markerLingerTask = Task {
+                                    try? await Task.sleep(for: .seconds(Self.tooltipLingerSeconds))
+                                    guard !Task.isCancelled else { return }
+                                    withAnimation(.easeOut(duration: Self.dissolveDuration)) {
+                                        lingeringMarkerOffset = nil
                                     }
                                 }
-                                draggingMarkerOffset = nil
                             },
                         including: isTimeEditable ? .all : .none
                     )
@@ -1064,6 +1075,18 @@ struct TimerMainView: View {
 
     /// 알림 지점을 경계로 타이머를 구간으로 나눈 리스트
     /// 예: 15분 타이머 + 5분 전 알림 → Section 1 (0:00–10:00), Section 2 (10:00–15:00)
+    /// 워치·맥이 지금 닿는지 다시 읽는다.
+    private func refreshDeviceLinks() {
+        watchLink.refreshLinkStatus()
+        macLinkStatus = DevicePresence.status(of: .mac)
+    }
+
+    /// 시작 후 경과 시간(초) — 구간 리스트가 "지금 어느 구간인지"를 이걸로 정한다.
+    /// 오버타임이면 설정 시간을 넘긴 값이 되고, 그러면 모든 구간이 끝난 것으로 보인다.
+    private var elapsedSec: Int {
+        max(0, screenVM.configuredMainSeconds - Int(remaining.rounded()))
+    }
+
     private var derivedSegments: [TimerSections.Segment] {
         let mainSec = isProgressMode
             ? screenVM.configuredMainSeconds

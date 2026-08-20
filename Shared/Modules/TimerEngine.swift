@@ -105,6 +105,7 @@ final class TimerEngine {
         #if !APPCLIP
         AnalyticsManager.log(.timerStarted(
             durationSeconds: Int(cfg.mainDuration),
+            alertCount: cfg.prealertOffsetsSec.count,
             presetName: cfg.name.isEmpty ? nil : cfg.name
         ))
         #endif

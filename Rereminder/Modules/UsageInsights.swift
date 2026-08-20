@@ -309,4 +309,359 @@ enum UsageInsights {
         }
         .sorted { $0.cohortStart > $1.cohortStart }
     }
+
+    // MARK: - 결제 관점의 사용자 구분 (설치별 **현재** 상태)
+    //
+    // 이 앱의 결제는 **알림을 몇 개까지 켤 수 있나**로 갈린다 — 무료는 1개, 그 위는 5+5 체험을
+    // 다 쓴 뒤 결제다(ProGate). 그래서 "결제에 가까운 사람" = **알림 한도에 다가간 사람**이고,
+    // 여기 있는 계산은 전부 그 거리를 재는 것이다.
+    //
+    // ⚠️ 이벤트가 아니라 **스냅샷**으로 계산한다. 이벤트는 이름당 6시간 쓰로틀이 걸린 과거형이라
+    //    "지금 몇 명"을 셀 수 없다. 스냅샷은 설치당 1건 upsert라 그 설치의 현재 상태 그 자체다.
+    // ⚠️ 알림 관련 지표(alertsMax·alertLimitHits·trial.prealerts)는 2.1.1에서 추가됐다.
+    //    그 전에 깔려서 아직 새 스냅샷을 안 올린 설치는 값이 0이라 "기록 없음"으로 보인다.
+
+    /// 집계에 실제로 필요한 것만 담은 설치 1건.
+    /// ⚠️ `Snapshot`(CKRecord 전용 생성자만 있음)에 직접 의존하면 유닛 테스트로 검증할 수 없다.
+    struct UserRecord {
+        let id: String
+        let metrics: [String: Double]
+        let installDate: Date?
+        let lastActiveAt: Date?
+        let appVersion: String
+        let platform: String
+
+        init(id: String,
+             metrics: [String: Double],
+             installDate: Date? = nil,
+             lastActiveAt: Date? = nil,
+             appVersion: String = "-",
+             platform: String = "-") {
+            self.id = id
+            self.metrics = metrics
+            self.installDate = installDate
+            self.lastActiveAt = lastActiveAt
+            self.appVersion = appVersion
+            self.platform = platform
+        }
+    }
+
+    /// 결제까지의 거리로 나눈 사용자 구분. 위가 결제에 가깝다.
+    enum PaymentStage: String, CaseIterable, Identifiable {
+        /// 이미 결제했다.
+        case pro
+        /// 체험을 다 썼다 — **지금 알림을 더 켜려면 결제밖에 없는 사람.** 가장 가까운 후보다.
+        case blocked
+        /// 체험이 1~2회 남았다. 곧 위 칸으로 간다.
+        case nearLimit
+        /// 알림을 여러 개 쓰며 체험을 소비하는 중.
+        case trialing
+        /// 아직 무료 범위(알림 1개)지만 반복해서 완주하는 사람 — **곧 필요해질 사람.**
+        case demand
+        /// 쓰긴 쓰는데 알림 1개로 충분하다. 지금 구조로는 결제하지 않는다.
+        case freeFit
+        /// 아직 한 번도 완주하지 않았다. 결제 이전에 가치 경험이 먼저다.
+        case dormant
+
+        var id: String { rawValue }
+
+        var label: String {
+            switch self {
+            case .pro:       return "결제함"
+            case .blocked:   return "막힘 (결제해야 더 씀)"
+            case .nearLimit: return "한도 임박 (체험 1~2회)"
+            case .trialing:  return "체험 사용 중"
+            case .demand:    return "곧 필요할 사람"
+            case .freeFit:   return "무료로 충분"
+            case .dormant:   return "가치 경험 전"
+            }
+        }
+
+        /// 이 칸을 보고 무엇을 해야 하는지.
+        var detail: String {
+            switch self {
+            case .pro:       return "결제를 마친 설치예요."
+            case .blocked:   return "알림을 더 켜려다 막혀 있어요. 결제 안내가 가장 잘 먹히는 사람들이에요."
+            case .nearLimit: return "체험이 곧 끝나요. 여기서 값을 못 느끼면 그냥 떠나요."
+            case .trialing:  return "알림을 여러 개 쓰는 중이에요. 아직 여유가 있어요."
+            case .demand:    return "무료 범위지만 반복해서 쓰는 사람이에요. 알림이 하나로 부족해지는 건 시간 문제예요."
+            case .freeFit:   return "알림 1개로 충분한 사람이에요. 결제를 기대하기 어렵고, 다른 값을 줘야 움직여요."
+            case .dormant:   return "아직 완주가 없어요. 결제 이전에 첫 성공이 먼저예요."
+            }
+        }
+
+        /// 지금 결제 안내가 의미 있는 상태인지 (= 결제에 가까워진 사람).
+        var isNearPurchase: Bool { self == .blocked || self == .nearLimit }
+    }
+
+    /// 설치 하나를 결제 관점에서 읽은 결과.
+    struct UserProfile: Identifiable {
+        let id: String
+        let stage: PaymentStage
+        /// 결제 근접도 0~100 — 명단을 정렬하는 용도다. 절대적인 확률이 아니다.
+        let readiness: Int
+        let isPro: Bool
+        let starts: Int
+        let completions: Int
+        let focusMinutes: Int
+        /// 한 타이머에 걸어 본 알림 개수의 최대값(0이면 아직 기록 없음).
+        let alertsMax: Int
+        /// 무료 한도를 넘겨 타이머를 시작한 횟수.
+        let multiAlertRuns: Int
+        /// 알림을 더 켜려다 막힌 횟수.
+        let limitHits: Int
+        let paywallViews: Int
+        let trialUsed: Int
+        /// 남은 체험 횟수(0이면 결제해야 더 쓴다).
+        let trialRemaining: Int
+        let lastActiveAt: Date?
+        /// 마지막 활동으로부터 며칠 지났나(모르면 nil).
+        let daysSinceActive: Int?
+        let appVersion: String
+        let platform: String
+
+        /// 화면에 쓰는 짧은 식별자 — 익명 설치 UUID의 앞부분(레코드명은 `usage-<uuid>` 꼴).
+        var shortID: String {
+            let raw = id.hasPrefix("usage-") ? String(id.dropFirst("usage-".count)) : id
+            return String(raw.prefix(8)).uppercased()
+        }
+
+        /// 알림 한도(무료 1개)를 실제로 넘겨 본 사람인지 = 유료 기능 수요가 확인된 사람.
+        var hasAlertDemand: Bool {
+            alertsMax > ProGate.freePrealertLimit || multiAlertRuns > 0 || trialUsed > 0 || limitHits > 0
+        }
+    }
+
+    /// 반복 사용으로 "곧 알림이 더 필요해질 사람"으로 보는 완주 횟수 기준.
+    /// 3회면 우연이 아니라 습관으로 쓰는 쪽에 가깝다.
+    static let repeatUseThreshold = 3
+
+    /// 스냅샷 한 묶음을 결제 관점 프로필로 바꾼다.
+    static func profiles(from users: [UserRecord],
+                         calendar: Calendar = .current,
+                         now: Date = Date()) -> [UserProfile] {
+        users.map { user in
+            func metric(_ key: String) -> Int { Int((user.metrics[key] ?? 0).rounded()) }
+            func flag(_ key: String) -> Bool { (user.metrics[key] ?? 0) > 0 }
+
+            let isPro = flag("flag.isPro")
+            let trialUsed = metric("trial.prealerts")
+            let trialLimit = flag("flag.prealertTrialExtended")
+                ? TrialCounter.secondStageLimit
+                : TrialCounter.firstStageLimit
+            let trialRemaining = max(0, trialLimit - trialUsed)
+            let completions = metric("timerCompletions")
+            let alertsMax = metric("alertsMax")
+            let multiAlertRuns = metric("multiAlertRuns")
+            let limitHits = metric("alertLimitHits")
+            let paywallViews = metric("paywallViews")
+
+            let daysSinceActive = user.lastActiveAt.map {
+                calendar.dateComponents([.day], from: calendar.startOfDay(for: $0),
+                                        to: calendar.startOfDay(for: now)).day ?? 0
+            }
+
+            let stage = self.stage(isPro: isPro,
+                                   trialUsed: trialUsed,
+                                   trialRemaining: trialRemaining,
+                                   limitHits: limitHits,
+                                   alertsMax: alertsMax,
+                                   multiAlertRuns: multiAlertRuns,
+                                   completions: completions)
+
+            return UserProfile(
+                id: user.id,
+                stage: stage,
+                readiness: readiness(stage: stage,
+                                     limitHits: limitHits,
+                                     paywallViews: paywallViews,
+                                     completions: completions,
+                                     alertsMax: alertsMax,
+                                     daysSinceActive: daysSinceActive),
+                isPro: isPro,
+                starts: metric("timerStarts"),
+                completions: completions,
+                focusMinutes: metric("focusMinutes"),
+                alertsMax: alertsMax,
+                multiAlertRuns: multiAlertRuns,
+                limitHits: limitHits,
+                paywallViews: paywallViews,
+                trialUsed: trialUsed,
+                trialRemaining: trialRemaining,
+                lastActiveAt: user.lastActiveAt,
+                daysSinceActive: daysSinceActive,
+                appVersion: user.appVersion,
+                platform: user.platform
+            )
+        }
+        .sorted { $0.readiness > $1.readiness }
+    }
+
+    /// 구분 규칙 한 곳 — 화면·명단·퍼널이 전부 이걸 쓴다(따로 판정하면 숫자가 갈라진다).
+    private static func stage(isPro: Bool,
+                              trialUsed: Int,
+                              trialRemaining: Int,
+                              limitHits: Int,
+                              alertsMax: Int,
+                              multiAlertRuns: Int,
+                              completions: Int) -> PaymentStage {
+        if isPro { return .pro }
+
+        let touchedPaidArea = trialUsed > 0 || limitHits > 0
+            || alertsMax > ProGate.freePrealertLimit || multiAlertRuns > 0
+
+        if touchedPaidArea {
+            if trialRemaining == 0 || limitHits > 0 { return .blocked }
+            if trialRemaining <= 2 { return .nearLimit }
+            return .trialing
+        }
+        if completions >= repeatUseThreshold { return .demand }
+        if completions > 0 { return .freeFit }
+        return .dormant
+    }
+
+    /// 결제 근접도 점수 — **명단 정렬용 순서값**이지 확률이 아니다.
+    /// 규칙: 지금 막혀 있을수록, 막힌 경험이 많을수록, 앱을 실제로 쓸수록 위로 온다.
+    /// 오래 안 들어온 사람은 내린다(막혀 있어도 이미 떠났으면 결제하지 않는다).
+    private static func readiness(stage: PaymentStage,
+                                  limitHits: Int,
+                                  paywallViews: Int,
+                                  completions: Int,
+                                  alertsMax: Int,
+                                  daysSinceActive: Int?) -> Int {
+        if stage == .pro { return 100 }
+
+        var score: Int
+        switch stage {
+        case .blocked:   score = 45
+        case .nearLimit: score = 30
+        case .trialing:  score = 15
+        case .demand:    score = 8
+        case .freeFit:   score = 3
+        case .dormant:   score = 0
+        case .pro:       score = 100
+        }
+        score += min(15, limitHits * 5)          // 막힌 경험 = 필요를 몸으로 겪은 횟수
+        score += min(10, paywallViews * 3)       // 가격을 이미 본 사람
+        score += min(15, completions)            // 값을 실제로 받은 정도
+        if alertsMax > ProGate.freePrealertLimit { score += 10 }
+
+        switch daysSinceActive {
+        case .some(let days) where days <= 7:  score += 5
+        case .some(let days) where days <= 30: break
+        case .some:                            score -= 15   // 한 달 넘게 안 들어온 사람
+        case .none:                            break
+        }
+        return max(0, min(100, score))
+    }
+
+    // MARK: - 결제 퍼널 (지금 상태 기준)
+
+    /// **알림 개수로 이어지는 결제 퍼널.** 각 칸은 "지금 이 상태인 설치 수"다.
+    /// 결제한 사람은 앞 단계를 모두 지난 것으로 센다(그래야 칸이 뒤집히지 않는다).
+    static func paymentFunnel(profiles: [UserProfile]) -> [FunnelStage] {
+        let steps: [(String, (UserProfile) -> Bool)] = [
+            ("설치", { _ in true }),
+            ("가치 경험 (완주 1회+)", { $0.isPro || $0.completions > 0 }),
+            ("알림 2개 이상 사용", { $0.isPro || $0.hasAlertDemand }),
+            ("한도 도달·임박", { $0.isPro || $0.stage.isNearPurchase }),
+            ("페이월 노출", { $0.isPro || $0.paywallViews > 0 }),
+            ("결제", { $0.isPro })
+        ]
+
+        var stages: [FunnelStage] = []
+        var topCount = 0
+        var previousCount = 0
+        for (index, step) in steps.enumerated() {
+            let count = profiles.filter(step.1).count
+            if index == 0 { topCount = count }
+            stages.append(FunnelStage(
+                name: step.0,
+                installs: count,
+                rateFromTop: topCount > 0 ? Double(count) / Double(topCount) : 0,
+                rateFromPrevious: index == 0 ? 1.0 : (previousCount > 0 ? Double(count) / Double(previousCount) : 0)
+            ))
+            previousCount = count
+        }
+        return stages
+    }
+
+    /// 사용자 구분별 인원 — 구분 순서(결제에 가까운 쪽부터) 그대로 돌려준다.
+    static func segmentCounts(profiles: [UserProfile]) -> [(stage: PaymentStage, count: Int)] {
+        PaymentStage.allCases.map { stage in
+            (stage, profiles.filter { $0.stage == stage }.count)
+        }
+    }
+
+    /// 지금 결제에 가까운 사람이 몇인지 — 화면 맨 위에 놓는 숫자들.
+    struct PurchaseReadiness {
+        /// 지금 알림을 더 켜려면 결제해야 하는 사람.
+        let blocked: Int
+        /// 체험이 1~2회 남은 사람.
+        let nearLimit: Int
+        /// 위 둘 중 최근에도 앱을 쓰는 사람 — **실제로 두드릴 수 있는 대상.**
+        let reachable: Int
+        /// 아직 무료 범위지만 반복해서 쓰는 사람 (곧 필요해질 사람).
+        let latentDemand: Int
+        /// 이미 결제한 사람.
+        let paying: Int
+        /// 전체 설치 수.
+        let total: Int
+        /// "최근"의 기준(일).
+        let recentDays: Int
+
+        /// 결제에 가까워진 사람(막힘 + 임박).
+        var nearPurchase: Int { blocked + nearLimit }
+        /// 전체 대비 비율.
+        var nearPurchaseRate: Double { total > 0 ? Double(nearPurchase) / Double(total) : 0 }
+        var payingRate: Double { total > 0 ? Double(paying) / Double(total) : 0 }
+    }
+
+    static func purchaseReadiness(profiles: [UserProfile], recentDays: Int = 14) -> PurchaseReadiness {
+        func isRecent(_ profile: UserProfile) -> Bool {
+            guard let days = profile.daysSinceActive else { return false }
+            return days <= recentDays
+        }
+        return PurchaseReadiness(
+            blocked: profiles.filter { $0.stage == .blocked }.count,
+            nearLimit: profiles.filter { $0.stage == .nearLimit }.count,
+            reachable: profiles.filter { $0.stage.isNearPurchase && isRecent($0) }.count,
+            latentDemand: profiles.filter { $0.stage == .demand }.count,
+            paying: profiles.filter(\.isPro).count,
+            total: profiles.count,
+            recentDays: recentDays
+        )
+    }
+
+    /// 결제 안내를 지금 보낼 만한 사람 명단(근접도 순). 이미 결제한 사람은 빼고,
+    /// 오래 안 들어온 사람도 뺀다 — 떠난 사람에게 파는 건 계산이 아니라 희망이다.
+    static func hotLeads(profiles: [UserProfile], recentDays: Int = 14, limit: Int = 20) -> [UserProfile] {
+        profiles
+            .filter { !$0.isPro && $0.stage.isNearPurchase }
+            .filter { ($0.daysSinceActive ?? Int.max) <= recentDays }
+            .sorted { $0.readiness > $1.readiness }
+            .prefix(limit)
+            .map { $0 }
+    }
+
+    // MARK: - 알림 개수 수요 분포
+
+    /// **몇 명이 알림을 몇 개까지 쓰는가** — 이 앱의 가격 경계가 어디에 놓여야 하는지를 말해 준다.
+    /// 무료 한도(1개) 바로 위 칸이 크면 지금 경계가 매출을 만든다는 뜻이고,
+    /// 1개 칸만 크면 아무리 조여도 결제가 늘지 않는다.
+    static func alertDemandDistribution(profiles: [UserProfile]) -> [DistributionBucket] {
+        let bounds: [(String, Int, Int)] = [
+            ("기록 없음", 0, 0),
+            ("1개", 1, 1),
+            ("2개", 2, 2),
+            ("3개", 3, 3),
+            ("4개", 4, 4),
+            ("5개 이상", 5, Int.max)
+        ]
+        return bounds.map { label, lower, upper in
+            DistributionBucket(label: label,
+                               installs: profiles.filter { $0.alertsMax >= lower && $0.alertsMax <= upper }.count,
+                               lowerBound: lower)
+        }
+    }
 }

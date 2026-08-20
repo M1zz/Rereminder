@@ -195,4 +195,149 @@ final class UsageInsightsTests: XCTestCase {
         XCTAssertEqual(complete?.count, 1)
         XCTAssertEqual(complete?.installs, 0, "installID가 없는 옛 레코드는 설치 수에 못 넣는다")
     }
+
+    // MARK: - 결제 관점 사용자 구분
+    //
+    // 이 앱의 결제는 알림 개수(무료 1개 + 5+5 체험)로 갈린다. 여기 판정이 틀리면
+    // "지금 몇 명이 결제 직전인가"가 통째로 틀린 숫자가 된다.
+
+    private func user(_ id: String,
+                      _ metrics: [String: Double],
+                      lastActiveDaysAgo: Int? = 0,
+                      now: Date = Date()) -> UsageInsights.UserRecord {
+        UsageInsights.UserRecord(
+            id: id,
+            metrics: metrics,
+            installDate: now.addingTimeInterval(-30 * 86_400),
+            lastActiveAt: lastActiveDaysAgo.map { now.addingTimeInterval(-Double($0) * 86_400) },
+            appVersion: "2.1.1",
+            platform: "iOS"
+        )
+    }
+
+    func test_profiles_stageFollowsAlertLimitDistance() {
+        let users = [
+            user("pro", ["flag.isPro": 1, "timerCompletions": 1]),
+            user("blocked", ["trial.prealerts": 5, "alertsMax": 3, "timerCompletions": 4]),
+            user("nearLimit", ["trial.prealerts": 4, "alertsMax": 2, "timerCompletions": 3]),
+            user("trialing", ["trial.prealerts": 1, "alertsMax": 2, "timerCompletions": 2]),
+            user("demand", ["timerCompletions": 5, "alertsMax": 1]),
+            user("freeFit", ["timerCompletions": 1, "alertsMax": 1]),
+            user("dormant", ["timerStarts": 2])
+        ]
+        let byID = Dictionary(uniqueKeysWithValues: UsageInsights.profiles(from: users).map { ($0.id, $0.stage) })
+
+        XCTAssertEqual(byID["pro"], .pro)
+        XCTAssertEqual(byID["blocked"], .blocked, "1차 체험 5회를 다 쓰면 결제해야 더 켠다")
+        XCTAssertEqual(byID["nearLimit"], .nearLimit)
+        XCTAssertEqual(byID["trialing"], .trialing)
+        XCTAssertEqual(byID["demand"], .demand, "무료 범위지만 반복 사용 — 곧 필요해질 사람")
+        XCTAssertEqual(byID["freeFit"], .freeFit)
+        XCTAssertEqual(byID["dormant"], .dormant, "완주가 없으면 결제 이전에 가치 경험이 먼저다")
+    }
+
+    func test_profiles_extendedTrialPushesLimitToTen() {
+        let users = [
+            user("extended", ["trial.prealerts": 6, "flag.prealertTrialExtended": 1, "timerCompletions": 3]),
+            user("notExtended", ["trial.prealerts": 6, "timerCompletions": 3])
+        ]
+        let byID = Dictionary(uniqueKeysWithValues: UsageInsights.profiles(from: users).map { ($0.id, $0) })
+
+        XCTAssertEqual(byID["extended"]?.stage, .trialing)
+        XCTAssertEqual(byID["extended"]?.trialRemaining, 4)
+        XCTAssertEqual(byID["notExtended"]?.stage, .blocked)
+        XCTAssertEqual(byID["notExtended"]?.trialRemaining, 0)
+    }
+
+    func test_profiles_limitHitMeansBlockedEvenWithoutTrialCounter() {
+        // 옛 버전에서 넘어와 체험 카운터는 비어 있지만 막힌 기록은 있는 설치.
+        let profile = UsageInsights.profiles(from: [user("x", ["alertLimitHits": 2, "timerCompletions": 3])]).first
+        XCTAssertEqual(profile?.stage, .blocked)
+    }
+
+    func test_profiles_sortedByReadinessAndStaleUserRanksLower() {
+        let base: [String: Double] = ["trial.prealerts": 5, "alertsMax": 3, "timerCompletions": 4]
+        let profiles = UsageInsights.profiles(from: [
+            user("stale", base, lastActiveDaysAgo: 90),
+            user("fresh", base, lastActiveDaysAgo: 1)
+        ])
+        XCTAssertEqual(profiles.first?.id, "fresh", "같은 조건이면 최근에 쓴 사람이 먼저다")
+        XCTAssertGreaterThan(profiles[0].readiness, profiles[1].readiness)
+    }
+
+    func test_paymentFunnel_isMonotonicAndCountsProInEveryStage() {
+        let users = [
+            // 결제자는 완주·알림 기록이 없어도 앞 단계를 지난 것으로 센다.
+            user("pro", ["flag.isPro": 1]),
+            user("blocked", ["trial.prealerts": 5, "alertsMax": 3, "timerCompletions": 4, "paywallViews": 2]),
+            user("freeFit", ["timerCompletions": 1, "alertsMax": 1]),
+            user("dormant", [:])
+        ]
+        let stages = UsageInsights.paymentFunnel(profiles: UsageInsights.profiles(from: users))
+
+        XCTAssertEqual(stages.map(\.installs), [4, 3, 2, 2, 2, 1])
+        for (index, stage) in stages.enumerated() where index > 0 {
+            XCTAssertLessThanOrEqual(stage.installs, stages[index - 1].installs, "퍼널이 뒤집히면 안 된다")
+        }
+        XCTAssertEqual(stages.last?.name, "결제")
+    }
+
+    func test_purchaseReadiness_reachableExcludesUsersWhoLeft() {
+        let hot: [String: Double] = ["trial.prealerts": 5, "alertsMax": 3, "timerCompletions": 4]
+        let profiles = UsageInsights.profiles(from: [
+            user("blockedFresh", hot, lastActiveDaysAgo: 2),
+            user("blockedGone", hot, lastActiveDaysAgo: 60),
+            user("near", ["trial.prealerts": 4, "alertsMax": 2, "timerCompletions": 2], lastActiveDaysAgo: 3),
+            user("demand", ["timerCompletions": 4], lastActiveDaysAgo: 1),
+            user("pro", ["flag.isPro": 1], lastActiveDaysAgo: 1)
+        ])
+        let readiness = UsageInsights.purchaseReadiness(profiles: profiles)
+
+        XCTAssertEqual(readiness.blocked, 2)
+        XCTAssertEqual(readiness.nearLimit, 1)
+        XCTAssertEqual(readiness.nearPurchase, 3)
+        XCTAssertEqual(readiness.reachable, 2, "60일 전에 마지막으로 쓴 사람은 두드릴 대상이 아니다")
+        XCTAssertEqual(readiness.latentDemand, 1)
+        XCTAssertEqual(readiness.paying, 1)
+        XCTAssertEqual(readiness.total, 5)
+    }
+
+    func test_hotLeads_dropsPayingAndStaleUsers() {
+        let hot: [String: Double] = ["trial.prealerts": 5, "alertsMax": 3, "timerCompletions": 4]
+        let profiles = UsageInsights.profiles(from: [
+            user("a", hot, lastActiveDaysAgo: 1),
+            user("b", hot, lastActiveDaysAgo: 40),
+            user("c", ["flag.isPro": 1, "trial.prealerts": 5], lastActiveDaysAgo: 1),
+            user("d", ["timerCompletions": 1], lastActiveDaysAgo: 1)
+        ])
+        XCTAssertEqual(UsageInsights.hotLeads(profiles: profiles).map(\.id), ["a"])
+    }
+
+    func test_alertDemandDistribution_countsEveryInstallExactlyOnce() {
+        let profiles = UsageInsights.profiles(from: [
+            user("none", ["timerCompletions": 1]),          // 2.1.1 이전 설치 — 기록 없음
+            user("one", ["alertsMax": 1]),
+            user("two", ["alertsMax": 2]),
+            user("three", ["alertsMax": 3]),
+            user("four", ["alertsMax": 4]),
+            user("five", ["alertsMax": 5]),
+            user("many", ["alertsMax": 12])
+        ])
+        let buckets = UsageInsights.alertDemandDistribution(profiles: profiles)
+
+        XCTAssertEqual(buckets.map(\.installs), [1, 1, 1, 1, 1, 2])
+        XCTAssertEqual(buckets.reduce(0) { $0 + $1.installs }, profiles.count)
+    }
+
+    func test_segmentCounts_coversEveryProfile() {
+        let profiles = UsageInsights.profiles(from: [
+            user("pro", ["flag.isPro": 1]),
+            user("blocked", ["trial.prealerts": 5]),
+            user("dormant", [:]),
+            user("dormant2", ["timerStarts": 3])
+        ])
+        let counts = UsageInsights.segmentCounts(profiles: profiles)
+        XCTAssertEqual(counts.reduce(0) { $0 + $1.count }, profiles.count)
+        XCTAssertEqual(counts.first { $0.stage == .dormant }?.count, 2)
+    }
 }

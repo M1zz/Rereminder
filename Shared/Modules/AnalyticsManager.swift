@@ -27,7 +27,7 @@ enum AnalyticsManager {
 
     enum Event {
         // 타이머 행동
-        case timerStarted(durationSeconds: Int, presetName: String?)
+        case timerStarted(durationSeconds: Int, alertCount: Int, presetName: String?)
         case timerCompleted(durationSeconds: Int)
         case timerCancelled(remainingSeconds: Int)
         case presetSaved(name: String, durationSeconds: Int)
@@ -55,6 +55,9 @@ enum AnalyticsManager {
         case feedbackNudgeShown
         case feedbackNudgeAccepted
         case feedbackNudgeSnoozed
+
+        // 기기 보유 여부 (앱이 직접 물어본 답) — 워치·맥 안내를 누구에게 할지 가르는 값
+        case deviceOwnershipAnswered(device: String, owns: Bool)
 
         // 기타
         case reviewRequested
@@ -88,6 +91,7 @@ enum AnalyticsManager {
             case .reviewCompleted:         return "review_completed"
             case .presentationModeStarted: return "presentation_mode_started"
             case .watchSyncUsed:           return "watch_sync_used"
+            case .deviceOwnershipAnswered: return "device_ownership_answered"
             }
         }
 
@@ -101,6 +105,8 @@ enum AnalyticsManager {
                 return nil
             case .premiumFeatureUsed(let feature, _):      return "premium_feature_used:\(feature.rawValue)"
             case .premiumTrialExhausted(let feature, _):   return "premium_trial_exhausted:\(feature.rawValue)"
+            case .deviceOwnershipAnswered(let device, let owns):
+                return "device_ownership:\(device)_\(owns ? "yes" : "no")"
             case .paywallShown(let trigger):               return "paywall_shown:\(trigger?.rawValue ?? "general")"
             case .paywallDismissed(let trigger, let didPurchase):
                 return didPurchase ? "paywall_converted:\(trigger?.rawValue ?? "general")"
@@ -111,8 +117,8 @@ enum AnalyticsManager {
 
         var parameters: [String: Any] {
             switch self {
-            case .timerStarted(let duration, let preset):
-                var p: [String: Any] = ["duration_seconds": duration]
+            case .timerStarted(let duration, let alertCount, let preset):
+                var p: [String: Any] = ["duration_seconds": duration, "alert_count": alertCount]
                 if let preset = preset { p["preset_name"] = preset }
                 return p
             case .timerCompleted(let duration):
@@ -139,6 +145,8 @@ enum AnalyticsManager {
                 return ["product_id": id, "reason": reason]
             case .onboardingSkipped(let page):
                 return ["page": page]
+            case .deviceOwnershipAnswered(let device, let owns):
+                return ["device": device, "owns": owns]
             case .purchaseRestored,
                  .onboardingShown, .onboardingCompleted,
                  .feedbackNudgeShown, .feedbackNudgeAccepted, .feedbackNudgeSnoozed,

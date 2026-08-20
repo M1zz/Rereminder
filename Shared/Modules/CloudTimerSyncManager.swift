@@ -45,19 +45,25 @@ final class CloudTimerSyncManager: ObservableObject {
     private static let snapshotKey = "cloudTimerSnapshot"
     private static let deviceIDKey = "cloudSyncDeviceID"
 
+    /// 이 기기의 동기화 식별자 — **기기 존재 표시(DevicePresence)도 같은 값을 쓴다.**
+    /// (따로 만들면 같은 기기가 두 개로 보인다.)
+    nonisolated static var deviceIdentifier: String {
+        if let saved = UserDefaults.standard.string(forKey: deviceIDKey) { return saved }
+        let id = UUID().uuidString
+        UserDefaults.standard.set(id, forKey: deviceIDKey)
+        return id
+    }
+
+    /// 사람이 읽는 기기 이름 — 존재 표시에도 같은 값을 쓴다.
+    nonisolated static var deviceDisplayName: String { currentDeviceName }
+
     private let deviceID: String
 
     /// 마지막으로 적용한 스냅샷 시각 — 같은 스냅샷의 중복 적용 방지
     private var lastAppliedAt: Date = .distantPast
 
     private init() {
-        if let saved = UserDefaults.standard.string(forKey: Self.deviceIDKey) {
-            deviceID = saved
-        } else {
-            let id = UUID().uuidString
-            UserDefaults.standard.set(id, forKey: Self.deviceIDKey)
-            deviceID = id
-        }
+        deviceID = Self.deviceIdentifier
 
         NotificationCenter.default.addObserver(
             forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
@@ -99,6 +105,9 @@ final class CloudTimerSyncManager: ObservableObject {
             "updatedAt": Date().timeIntervalSince1970,
             "sourceDeviceID": deviceID,
             "sourceDeviceName": Self.currentDeviceName,
+            // 어느 종류의 기기가 보냈는지 — "맥이 연결돼 있나"를 이 값으로 판단한다
+            // (DevicePresence). 없으면 그 기기는 종류를 모르는 채로 무시된다.
+            "sourcePlatform": Self.currentPlatform,
         ]
         if let endDate {
             dict["endDate"] = endDate.timeIntervalSince1970
@@ -141,7 +150,18 @@ final class CloudTimerSyncManager: ObservableObject {
         onRemoteSnapshot?(snapshot)
     }
 
-    private static var currentDeviceName: String {
+    /// 기기 종류 — `DevicePresence.Platform` 과 같은 문자열을 쓴다(따로 정의하면 갈라진다).
+    nonisolated static var currentPlatform: String {
+        #if targetEnvironment(macCatalyst)
+        return "mac"
+        #elseif os(iOS)
+        return "phone"
+        #else
+        return "other"
+        #endif
+    }
+
+    nonisolated private static var currentDeviceName: String {
         #if canImport(UIKit)
         return UIDevice.current.name
         #else

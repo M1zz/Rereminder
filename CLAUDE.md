@@ -212,10 +212,43 @@ extension TimerView {
   유닛 테스트 대상 — `RereminderTests/UsageInsightsTests.swift`).
 - **UsageStatsView** (`Rereminder/Views/UsageStatsView.swift`): 마스터 모드 전용 대시보드
   (설정 → Info의 버전 행 7번 탭 → Help에 노출). 피드백 인박스로 이어진다.
+- **UserSegmentListView** (`Rereminder/Views/UserSegmentListView.swift`): 설치를 결제까지의
+  거리로 나눠 한 명씩 보는 명단(익명 ID 앞 8자리). 판정은 하지 않고 `UsageInsights` 결과만 그린다.
+- **결제 퍼널은 이벤트가 아니라 스냅샷으로 센다.** 이 앱의 결제는 "알림을 몇 개까지 켜나"로
+  갈리므로(무료 1개 → 5+5 체험 → 결제), 통계도 **알림 한도까지 남은 거리**를 잰다:
+  `PaymentStage`(pro/blocked/nearLimit/trialing/demand/freeFit/dormant) → 퍼널 6칸 →
+  결제 후보 명단. 이벤트는 이름당 6시간 쓰로틀 + 과거형이라 "지금 몇 명"을 못 센다.
+  **한도 상수(5+5·무료 1개)는 앱에서 계산해 보내지 말 것** — 원자료(`trial.prealerts`,
+  `alertsMax` 등)만 보내고 해석은 `UsageInsights`가 한다. 설계는 `docs/USAGE_STATS_HUB.md`.
 - **FeatureTips** (`Rereminder/Modules/FeatureTips.swift`): 기능 발견용 TipKit 팁.
   원칙 — 써 본 뒤에 뜨고(완주·시작 도너), 이미 쓰는 기능이면 안 뜨고(`hasUsed*` 파라미터),
   한 화면에 하나씩. 지금은 발표 모드(완주 2회+), 템플릿 저장(시작 3회+) 둘.
   기기별 활용 안내는 팁이 아니라 온보딩 마지막 장과 설정 > Help 가 담당한다.
+- **DeviceOwnership** (`Rereminder/Modules/DeviceOwnership.swift`): "워치·맥 있으세요?"를 타이머가
+  막 돌기 시작한 순간에 한 번 묻고(워치 → 하루 뒤 맥), 답을 설정 > **내 기기**에 저장한다.
+  원칙 — **없다고 한 기기는 질문도 안내도 다시 꺼내지 않는다.** 있다고 했는데 아직 그 기기에서
+  안 써 봤으면 타이머를 걸 때 가끔(5회 간격, 최대 3회) 토스트로 권한다.
+  페어링된 워치(`WCSession.isPaired`)·Mac Catalyst 실행은 묻지 않고 `confirmOwned`로 확정한다.
+  워치에서 조작이 오면 `markUsed` + `watchSyncUsed` 이벤트(그 전까지 워치 사용 지표가 늘 0이었다).
+  ⚠️ 안내 주기를 "시작 횟수 % 5 == 0"으로 만들지 말 것 — 카운터 증가와 판정이 같은 순간에 일어나
+  한 칸 어긋나면 그 차례를 통째로 건너뛴다. "지난번 이후 몇 번 더 걸었나"로 잰다
+  (테스트: `RereminderTests/DeviceOwnershipTests.swift`).
+- **DevicePresence** (`Rereminder/Modules/DevicePresence.swift`): "내 맥에서 지금 이 앱이 켜져
+  있나"를 iCloud 키-값 저장소로 확인한다. 앱이 앞에 있는 동안 5분마다 표시(기기 ID·종류·이름·시각)를
+  남기고, 다른 기기가 그걸 읽어 10분 안쪽이면 **연결됨**으로 본다.
+  **타이머 동기화 스냅샷(`cloudTimerSnapshot`)도 증거로 함께 읽는다** — 동기화는 멀쩡히 되는데
+  "연결 안 됨"이라고 말하면 거짓말이다. 그래서 스냅샷에 `sourcePlatform`을 함께 싣는다
+  (2.1.0 이하가 남긴 스냅샷은 종류를 알 수 없어 세지 않는다 — 양쪽 다 올라오면 해결된다).
+  **맥에서는 앱이 뒤로 가도 표시를 멈추지 않는다**(메뉴 막대로 쓰는 앱이라 창이 뒤에 있어도 사용 중).
+  ⚠️ 여기서 "연결됨"은 실시간 연결이 아니라 **최근에 켜져 있었다**는 뜻이다(KVS는 앱을 못 깨운다).
+  창은 심장박동 간격의 두 배 — 한 번 놓쳤다고 깜빡이면 안 된다. 기기 ID는 `CloudTimerSyncManager`와
+  **같은 값**을 쓴다(따로 만들면 한 기기가 둘로 보인다).
+  워치는 이 경로가 아니라 `WatchConnectivityManager.linkStatus`가 답한다 — **페어링 + 워치에 앱 설치**
+  까지만 본다(`WatchLinkStatus.resolve`).
+  ⚠️ **`isReachable`을 판정에 넣지 말 것.** iOS에서 그 값은 "워치 앱이 지금 화면에 떠 있다"에 가깝고,
+  타이머는 `updateApplicationContext`로 워치 앱이 꺼져 있어도 넘어간다 — 도달성으로 판정했더니
+  **동기화가 되는 중에도 "연결 안 됨"** 이 떴다(2.1.1에서 고침, `DevicePresenceTests`).
+  설정 > **내 기기**에서 "있어요"라고 한 기기에만 상태 심볼이 붙는다.
 - **FeedbackNudge** (`Rereminder/Modules/FeedbackNudge.swift`): 앱이 먼저 의견을 묻는 경로
   (10회째 실행 → 이후 40회 간격, "다시 보지 않기"=6개월 유예, 만족도 게이트에 양보).
   통계가 "어디서 떨어지는지"를 말해 준다면 이유는 이 경로로 들어온다.
@@ -265,6 +298,19 @@ extension TimerView {
   - 클립은 `ClipTimerView.clock(size:)` 에서 **가운데 시간을 `ClipClock` 보다 먼저** 둡니다.
     순서를 되돌리면 같은 문제가 재발합니다.
 
+### 링 구간 색 (진행 중에도 유지)
+알림으로 나뉜 링은 **타이머가 도는 동안에도 구간 색을 그대로 쓴다**(`showsAlertSectionColors`는
+오버타임에서만 꺼진다). 시작하자마자 단색으로 바뀌면 "지금 몇 번째 구간인가"가 사라지는데,
+발표 중에 가장 알고 싶은 게 그거다. 남은 호만 줄어들고 색 경계는 제자리에 있어서, 경계를 지날
+때마다 색이 하나씩 없어진다.
+
+- 구간 번호 역매핑은 **`TimerSections.ringSectionIndex`** 하나를 쓴다. 링은 "남은 시간" 좌표라
+  경과 순서와 반대이고, **진행 중에는 지나간 경계가 호에서 빠져 조각 수가 줄어든다** —
+  자리 번호(조각 수 − 1 − i)로 세면 그 순간 남은 구간의 색이 통째로 밀린다.
+  "이 조각 끝보다 뒤에 있는 알림이 몇 개인가"로 세면 언제나 맞는다(테스트: `TimerSectionsTests`).
+- 구간 **번호(1·2·3)** 는 대기 중에만 붙인다 — 진행 중에는 구간이 하나씩 사라지며 번호만 바뀌어
+  어지럽다.
+
 ### 다이얼 드래그 (튐 방지)
 흰 핸들·종 노브 모두 **손가락 각도만 이어 붙이고, 자르는 건 화면에 그릴 때 한 번만** 합니다.
 
@@ -281,6 +327,13 @@ extension TimerView {
   (종을 총 시간 너머로 계속 끌면 0 으로 / 흰 핸들을 0 아래로 끌면 30분으로 튀던 문제)
 - 드래그 중에는 `withAnimation` 을 걸지 않습니다. 손가락보다 늦게 따라와 미끄러지는 느낌이 납니다.
   10초 단위 스냅은 손을 뗄 때(`onEnded` / `angleToSeconds`)만 합니다.
+- **손을 뗄 때도 애니메이션을 걸지 않습니다** (`Transaction.disablesAnimations`).
+  종 목록의 `ForEach` id 가 **알림 초**라서, 옮긴 값을 지웠다 다시 넣는 순간 SwiftUI 는
+  "다른 종이 사라지고 새 종이 나타났다"고 보고 `.transition(.scale + .opacity)` 를 재생합니다 —
+  종이 펑 튀어 보이던 정체입니다. 링 밖으로 끌어 **지우는** 경우만 그대로 페이드아웃시킵니다.
+- 종 크기도 `isDraggingThis` 가 아니라 **`isFocused`**(배지가 남아 있는 동안) 를 따릅니다.
+  손 떼는 순간 2.0 → 1.6 으로 줄면 그것도 튀어 보입니다. 배지가 녹을 때 같이 작아집니다.
+- 메인 앱(`TimerMainView.alertKnobs`)과 App Clip(`ClipClock.alertKnobs`) **둘 다 같은 규칙**입니다.
 
 ### 기본 타이머 설정 (초기화의 기준점)
 `TimerScreenViewModel.DefaultSetup` — **10분 + 종료 1분 전 알림 하나**.
@@ -300,7 +353,24 @@ extension TimerView {
 초기화는 `persistLastUsedConfig` 로 "마지막 사용 설정"까지 기본값으로 덮으므로 재실행해도 유지됩니다.
 
 ### UI Components
-- **Clock** (`Rereminder/Views/Components/Clock.swift`): 타이머 시계 UI
+- **SectionCountdownList** (`Rereminder/Views/Components/SectionCountdownList.swift`): 실행 중
+  원 아래 구간별 카운트다운. 45분을 20+25로 나눴다면 앞의 20:00만 줄고 25:00은 서 있다가,
+  경계를 지나면 그때부터 줄어든다. **글자 색 = 링의 구간 색**(`SectionPalette`)이고 지금 구간만
+  100%, 예정 55%, 지난 구간 30%. 남은 시간 계산은 `TimerSections.remainingSeconds` 하나만 쓴다.
+  알림이 하나뿐이면(구간 1개) 대신 `nextAlertInfo`가 선다.
+- **DeviceLinkChips** (`Rereminder/Views/Components/DeviceLinkChips.swift`): 원 아래 기기 연결
+  상태 칩. **"있어요"라고 답한 기기만**, 그리고 **안 될 때만 글자**를 붙인다(연결됨은 초록 심볼만).
+  **대기 중에도 보인다** — 연결은 타이머를 걸기 *전에* 고쳐야 의미가 있다. 발표 모드에서만 뺀다
+  (구간 리스트가 화면 절반을 쓰는 자리라 한 줄이 아쉽다).
+  누르면 `DeviceConnectionHelpView` 로 들어간다.
+- **DeviceConnectionHelpView** (`Rereminder/Views/DeviceConnectionHelpView.swift`): "그래서
+  어쩌라고"에 답하는 화면 — 지금 상태 + 순서대로 할 일 + 그 자리에서 다시 확인.
+  칩과 설정 > 내 기기의 상태 줄이 **같은 화면**으로 들어온다. 맥 안내에는 "연결됨 = 최근 10분 안에
+  켜져 있었다"는 뜻을 반드시 적어 둔다(안 그러면 "켜 뒀는데 왜 안 뜨지"가 된다).
+- ~~Clock / ClockMarkers / TimerRunningView~~ — **2.1.1에서 삭제**. 메인 화면은 자체 렌더링을
+  쓰고 있었고(`TimerMainView`), 종 노브가 이미 알림 지점을 표시한다. 그 아래 깔려 있던 주황
+  작대기(`ClockMarkers`의 `Rectangle`)는 종이 흐려질 때(울린 뒤 0.35) 혼자 진하게 남아
+  "종 밑에 직사각형이 깔린" 것처럼 보였다. 되살리지 말 것 — App Clip(`ClipClock`)도 작대기가 없다.
 - **PresentationSectionList** (`Rereminder/Views/Presentation/PresentationSectionList.swift`):
   발표 모드 구간 카드 목록(이름 편집). 구간 계산은 하지 않고 받은 것만 그린다
 - **SectionPalette** (`Rereminder/Views/Components/SectionPalette.swift`): 구간 색 규칙 —
@@ -433,6 +503,25 @@ extension TimerView {
 - [ ] 전체 앱 유도 `SKOverlay` 표시 확인
 - [ ] 호출 URL `?minutes=N` 으로 시작 시간이 반영되는지
 
+## Mac (Mac Catalyst)
+
+메인 앱은 **Mac Catalyst 로 함께 빌드된다**(`SUPPORTS_MACCATALYST = YES`,
+`TARGETED_DEVICE_FAMILY = "1,2"`). 2026-07-26 에 한 번 껐다가(`8a4dd74`) 2.1.1 에서 되살렸다 —
+앱은 온보딩·기기 안내·연결 칩에서 맥을 계속 이야기하는데 정작 설치가 불가능한 상태였다.
+
+- **App Clip 은 iOS 전용이다.** 임베드 항목에 `platformFilter = ios;` 가 붙어 있어야 한다.
+  없으면 Catalyst 빌드가 *"target is built for macOS but contains embedded content built for
+  the iOS platform (RereminderClip.app)"* 로 실패한다.
+- 메뉴 막대 번들(`RereminderMenuBar`)은 반대로 `platformFilter = maccatalyst` 로 Catalyst 에서만
+  들어간다. Catalyst 전용 엔타이틀먼트는 `CODE_SIGN_ENTITLEMENTS[sdk=macosx*]` 로 연결돼 있다.
+- ⚠️ **iOS 배포 타깃이 26.0 이라 Catalyst 앱은 macOS 26 이상에서만 돈다**
+  (`LSMinimumSystemVersion = 26.0`). 더 낮은 맥을 지원하려면 iOS 타깃부터 낮춰야 한다.
+- ⚠️ **App Store Connect 에 macOS 플랫폼을 따로 추가하고 별도 심사를 받아야** 맥에 설치된다.
+  빌드 설정만 켠다고 스토어에 나타나지 않는다.
+- 빌드 확인: `xcodebuild -scheme Rereminder -destination 'platform=macOS,variant=Mac Catalyst' build`
+- 맥에서는 자기 자신의 연결 상태를 보여주지 않는다(`DevicePresence` 가 자기 기기를 세지 않으므로
+  그대로 두면 "Mac 연결 안 됨"이 늘 떠 있다).
+
 ## 빌드 환경
 - **Xcode**: 15.0+
 - **iOS Deployment Target**: iOS 26.0 (프로젝트 설정 기준 — 문서에 16.0 으로 적혀 있던 건 옛날 값)
@@ -474,6 +563,52 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
 ```
 
 ## 버전 히스토리
+
+### v2.1.1 (2026-08-19)
+- **Mac Catalyst 재활성화**: `SUPPORTS_MACCATALYST=YES`·`TARGETED_DEVICE_FAMILY="1,2"` 복구
+  (2026-07-26 에 꺼져 있어 맥에 설치 자체가 불가능했다). App Clip 임베드에 `platformFilter = ios`
+  를 달아 Catalyst 빌드 실패를 해결. 맥에서 실행·창 표시까지 확인
+  → **App Store Connect 에 macOS 플랫폼 추가 + 별도 심사 필요, macOS 26 이상만 지원**
+- **구간별 카운트다운 리스트** (`SectionCountdownList`): 실행 중 원 아래에 구간마다 한 줄.
+  앞 구간이 줄어드는 동안 뒤 구간은 제자리에 서 있다가 경계를 지나면 줄기 시작한다.
+  글자 색은 링의 구간 색과 같고, 지금 구간만 진하다 (테스트 3개)
+- **연결 판정 수정**: 워치는 도달성(`isReachable`)이 아니라 **페어링 + 앱 설치**로 판단하고,
+  맥은 심장박동 표시가 없어도 **타이머 동기화 스냅샷**을 증거로 본다 —
+  "동기화는 되는데 연결 안 됨"이 뜨던 문제 (테스트 8개)
+- **기기 연결 상태 칩** (`DeviceLinkChips`): 원 아래에 워치·맥 연결 상태.
+  "있어요"라고 답한 기기만, 안 될 때만 글자를 붙인다. **대기 중에도 보인다**(걸기 전에 고쳐야 하니까)
+- **연결 안내 화면** (`DeviceConnectionHelpView`): 칩이나 설정의 상태 줄을 누르면 지금 상태 +
+  할 일(워치 4단계·맥 3단계) + "다시 확인" + 기기별 활용 안내로 이어진다
+- **레거시 삭제**: `Clock.swift` / `ClockMarkers.swift` / `TimerRunningView.swift` (아무도 안 씀).
+  종 노브 아래 깔려 있던 주황 작대기가 사라져, 알림이 울린 뒤 종이 흐려질 때 혼자 남던 직사각형도 없어짐
+- **진행 중에도 링 구간 색 유지**: 타이머를 시작하면 단색(강조색)으로 바뀌던 링이 이제 알림으로
+  나뉜 구간 색을 그대로 유지한다. 구간 번호 역매핑을 `TimerSections.ringSectionIndex`로 옮기고
+  자리 번호 대신 "뒤에 남은 알림 수"로 계산 — 진행 중 색이 한 칸씩 밀리던 문제 방지(테스트 4개)
+- **기기 연결 상태 심볼**: 설정 > 내 기기에서 "있어요"라고 한 기기에 연결 상태를 보여준다
+  - 워치: `WatchConnectivityManager.linkStatus`(페어링 없음 / 워치에 앱 없음 / 닿지 않음 / 연결됨)
+  - 맥: `DevicePresence` — 각 기기가 iCloud KVS에 5분마다 남기는 표시를 읽어 10분 안쪽이면 연결됨
+- **기기 보유 질문** (`Rereminder/Modules/DeviceOwnership.swift`): 타이머가 실제로 돌기 시작한
+  순간에 "Apple Watch를 쓰시나요?"를 한 번 묻고, 하루 뒤 "Mac을 쓰시나요?"를 묻는다
+  - 답은 설정 > **내 기기** 섹션에 저장되고 거기서 바꿀 수 있다
+  - **없다고 하면 그 기기 이야기는 질문도 안내도 다시 나오지 않는다**
+  - 있다고 하면 그 자리에서 "이제 워치에서도 남은 시간을 확인하세요" 토스트,
+    이후 그 기기에서 아직 안 써 봤으면 타이머를 걸 때 가끔(5회 간격, 최대 3회) 권한다
+  - 페어링된 워치·Mac Catalyst 실행은 묻지 않고 확정, 워치에서 조작이 오면 사용까지 확정
+  - 통계에도 `flag.ownsWatch`·`flag.ownsMac`(답한 설치만) + `device_ownership_answered` 이벤트
+  - 시뮬레이터에서 질문 알림·안내 토스트 실제 노출 확인, 테스트 10개
+- **통계를 결제 퍼널로 재편** — "지금 결제에 가까운 사람이 몇 명인가"에 답하도록.
+  이 앱의 결제는 알림 개수로 갈리므로(무료 1개 → 5+5 체험 → 결제) 그 거리를 지표로 삼는다
+  - 수집 추가(`UsageMetrics`): `alertsMax`(한 타이머 최대 알림 수)·`multiAlertRuns`·
+    `alertLimitHits`(막힌 횟수)·`paywallViews`, `ActivityReporter`가 `trial.prealerts`·
+    `flag.prealertTrialExtended`(체험 상태)를 스냅샷에 실어 보낸다
+    (`metrics`는 JSON 한 필드라 CloudKit 스키마 배포 불필요)
+  - `AnalyticsManager.timerStarted`에 `alertCount` 추가 (TimerEngine이 실제 알림 수를 넘긴다)
+  - `UsageInsights` 신설 함수: `profiles`(설치별 결제 근접도)·`paymentFunnel`(6칸, 스냅샷 기준)·
+    `purchaseReadiness`·`hotLeads`·`alertDemandDistribution`·`segmentCounts` — 테스트 9개 추가
+  - `UsageStatsView`에 "결제 준비도(지금)"·"결제 퍼널(지금 상태)"·"알림 개수 수요"·"사용자 구분"
+    섹션 추가, 기존 이벤트 퍼널은 "결제 이벤트(기간 누적)"으로 이름을 갈라 뜻이 섞이지 않게 함
+  - **`UserSegmentListView` 신설**: 설치를 구분별로 한 명씩 보는 명단(익명 ID 앞 8자리,
+    알림 최대 개수·막힌 횟수·남은 체험·마지막 활동)
 
 ### v2.1.0 (2026-08-16)
 - **LeeoKit 2.9.0 상향**: `UsageEvent`에 `occurredAt`·`installID`가 실린다

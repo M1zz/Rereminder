@@ -325,22 +325,6 @@
         }
       }
     },
-    "%lld percent remaining" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "残り%lldパーセント"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld퍼센트 남음"
-          }
-        }
-      }
-    },
     "%lld sec" : {
       "localizations" : {
         "ja" : {
@@ -1140,6 +1124,22 @@
         }
       }
     },
+    "Apple Watch" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch"
+          }
+        }
+      }
+    },
     "Applies this template to the timer" : {
       "localizations" : {
         "ja" : {
@@ -1381,6 +1381,22 @@
         }
       }
     },
+    "Connected" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "接続済み"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "연결됨"
+          }
+        }
+      }
+    },
     "Custom Minutes" : {
       "comment" : "Custom Minutes",
       "localizations" : {
@@ -1522,6 +1538,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "타이머 알림 닫기"
+          }
+        }
+      }
+    },
+    "Do you have a Mac?" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Macをお持ちですか？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac을 쓰시나요?"
+          }
+        }
+      }
+    },
+    "Do you have an Apple Watch?" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watchをお持ちですか？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch를 쓰시나요?"
           }
         }
       }
@@ -3019,6 +3067,70 @@
         }
       }
     },
+    "I don't have one" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ありません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "없어요"
+          }
+        }
+      }
+    },
+    "I have one" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "あります"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "있어요"
+          }
+        }
+      }
+    },
+    "If you do, Rereminder can show the remaining time in your Mac menu bar." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "お持ちなら、Macのメニューバーにも残り時間を表示できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "있다면 Mac 메뉴 막대에서도 남은 시간을 볼 수 있어요."
+          }
+        }
+      }
+    },
+    "If you do, you can check the remaining time right on your wrist while the timer runs." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "お持ちなら、タイマー中に手首で残り時間をすぐ確認できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "있다면 타이머가 도는 동안 손목에서 바로 남은 시간을 볼 수 있어요."
+          }
+        }
+      }
+    },
     "In Progress" : {
       "localizations" : {
         "ja" : {
@@ -3098,6 +3210,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "레이블을 설정하면 타이머를 쉽게 구분할 수 있습니다"
+          }
+        }
+      }
+    },
+    "Last active %@" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最後の使用 %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "마지막 사용 %@"
           }
         }
       }
@@ -3232,6 +3360,22 @@
         }
       }
     },
+    "Mac" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac"
+          }
+        }
+      }
+    },
     "Messages" : {
       "localizations" : {
         "ja" : {
@@ -3326,6 +3470,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "모드"
+          }
+        }
+      }
+    },
+    "My Devices" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自分のデバイス"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "내 기기"
           }
         }
       }
@@ -3504,6 +3664,22 @@
         }
       }
     },
+    "No Apple Watch is paired with this iPhone" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このiPhoneにペアリングされたApple Watchがありません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 iPhone에 페어링된 Apple Watch가 없어요"
+          }
+        }
+      }
+    },
     "No pre-alerts set" : {
       "localizations" : {
         "ja" : {
@@ -3568,6 +3744,38 @@
         }
       }
     },
+    "No, I don't" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "いいえ、ありません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아니요, 없어요"
+          }
+        }
+      }
+    },
+    "Not answered yet" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未回答"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 답하지 않음"
+          }
+        }
+      }
+    },
     "not available" : {
       "localizations" : {
         "ja" : {
@@ -3580,6 +3788,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "사용 불가"
+          }
+        }
+      }
+    },
+    "Not connected" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未接続"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "연결 안 됨"
           }
         }
       }
@@ -3708,6 +3932,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "알림 스타일"
+          }
+        }
+      }
+    },
+    "Now check the remaining time in your Mac menu bar too" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "これからはMacのメニューバーでも残り時間を確認できます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이제 Mac 메뉴 막대에서도 남은 시간을 확인하세요"
+          }
+        }
+      }
+    },
+    "Now check the remaining time on your Apple Watch too" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "これからはApple Watchでも残り時間を確認できます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이제 Apple Watch에서도 남은 시간을 확인하세요"
           }
         }
       }
@@ -4272,6 +4528,38 @@
         }
       }
     },
+    "Open Rereminder on your Apple Watch to follow along" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple WatchでRereminderを開いて一緒に確認しましょう"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch에서 두번알림을 열어 함께 보세요"
+          }
+        }
+      }
+    },
+    "Open Rereminder on your Mac to follow along" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MacでRereminderを開いて一緒に確認しましょう"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac에서 두번알림을 열어 함께 보세요"
+          }
+        }
+      }
+    },
     "Overtime" : {
       "localizations" : {
         "ja" : {
@@ -4767,6 +5055,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "권한 요청"
+          }
+        }
+      }
+    },
+    "Rereminder points you to the devices you have, and stays quiet about the ones you don't. Set a device to No and it won't be mentioned again." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "お持ちのデバイスだけをご案内し、ないと答えたデバイスには触れません。「ありません」にすると二度と表示されません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "가지고 있다고 한 기기만 안내하고, 없다고 한 기기는 다시 꺼내지 않아요. '없어요'로 두면 그 기기 이야기는 나오지 않아요."
           }
         }
       }
@@ -5863,6 +6167,22 @@
         }
       }
     },
+    "The app isn't installed on your Apple Watch" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watchにアプリがインストールされていません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch에 앱이 설치돼 있지 않아요"
+          }
+        }
+      }
+    },
     "Theme" : {
       "localizations" : {
         "ja" : {
@@ -6376,50 +6696,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "타이머, %@"
-          }
-        }
-      }
-    },
-    "Timer, %lld minutes %lld seconds overtime" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Timer, %1$lld minutes %2$lld seconds overtime"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "タイマー、%lld分%lld秒超過"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "타이머, %lld분 %lld초 초과"
-          }
-        }
-      }
-    },
-    "Timer, %lld minutes %lld seconds remaining" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Timer, %1$lld minutes %2$lld seconds remaining"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "タイマー、残り%lld分%lld秒"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "타이머, %lld분 %lld초 남음"
           }
         }
       }
@@ -7042,6 +7318,22 @@
         }
       }
     },
+    "Yes, I have one" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "はい、あります"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "네, 있어요"
+          }
+        }
+      }
+    },
     "You can set your own alert times in Settings." : {
       "localizations" : {
         "ja" : {
@@ -7070,6 +7362,230 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이미 Pro 회원입니다!"
+          }
+        }
+      }
+    },
+    "Status" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在の状態"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지금 상태"
+          }
+        }
+      }
+    },
+    "Check again" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再確認"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다시 확인"
+          }
+        }
+      }
+    },
+    "Try this" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "こうしてみてください"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이렇게 해보세요"
+          }
+        }
+      }
+    },
+    "Connect your Apple Watch" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watchを接続する"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch 연결하기"
+          }
+        }
+      }
+    },
+    "Connect your Mac" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Macを接続する"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac 연결하기"
+          }
+        }
+      }
+    },
+    "Wear your Apple Watch and keep it near this iPhone." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watchを装着し、このiPhoneの近くに置いてください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch를 착용하고 이 iPhone 가까이 두세요."
+          }
+        }
+      }
+    },
+    "On iPhone, open the Watch app → My Watch, and install Rereminder if it isn't there." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhoneのWatchアプリ →「マイウォッチ」でRereminderがなければインストールしてください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone의 Watch 앱 → 내 시계에서 두번알림이 없으면 설치하세요."
+          }
+        }
+      }
+    },
+    "Open Rereminder on your Apple Watch — the remaining time appears while a timer runs." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple WatchでRereminderを開いてください。タイマー中は残り時間が表示されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch에서 두번알림을 여세요. 타이머가 도는 동안 남은 시간이 보여요."
+          }
+        }
+      }
+    },
+    "If it still doesn't connect, check that Bluetooth and Wi-Fi are on for both devices." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "それでも接続できない場合は、両方のデバイスのBluetoothとWi‑Fiがオンか確認してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "그래도 연결되지 않으면 두 기기의 Bluetooth와 Wi-Fi가 켜져 있는지 확인하세요."
+          }
+        }
+      }
+    },
+    "Install Rereminder on your Mac from the App Store." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MacのApp StoreでRereminderをインストールしてください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac의 App Store에서 두번알림을 설치하세요."
+          }
+        }
+      }
+    },
+    "Sign in to the same Apple Account on both devices and turn on iCloud Drive." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "両方のデバイスで同じApple アカウントにサインインし、iCloud Driveをオンにしてください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "두 기기가 같은 Apple 계정으로 로그인돼 있고 iCloud Drive가 켜져 있어야 해요."
+          }
+        }
+      }
+    },
+    "Open Rereminder on your Mac — the remaining time appears in the menu bar." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MacでRereminderを開いてください。メニューバーに残り時間が表示されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac에서 두번알림을 여세요. 메뉴 막대에 남은 시간이 보여요."
+          }
+        }
+      }
+    },
+    "\"Connected\" here means Rereminder was open on that Mac within the last 10 minutes — it isn't a live link." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ここでの「接続済み」は、直近10分以内にそのMacでRereminderが起動していたという意味です。リアルタイム接続ではありません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "여기서 \"연결됨\"은 최근 10분 안에 그 Mac에서 두번알림이 켜져 있었다는 뜻이에요. 실시간 연결이 아니에요."
+          }
+        }
+      }
+    },
+    "Shows how to connect this device" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このデバイスの接続方法を表示します"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 기기를 연결하는 방법을 보여줘요"
           }
         }
       }

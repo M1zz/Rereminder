@@ -231,10 +231,11 @@ struct ClipClock: View {
                     : Double(offsetSec) / TimeMapper.secondsPerDegree
                 let isDraggingThis = draggingAlertOffset == offsetSec
                 let angle = isDraggingThis ? alertDragAngle : baseAngle
-                let scale = isDraggingThis ? knobScale * 1.25 : knobScale
                 // 방금 놓은 종도 배지가 남아 있는 동안은 계속 주인공이다
                 let isFocused = isDraggingThis
                     || (draggingAlertOffset == nil && lingeringAlertOffset == offsetSec)
+                // 손을 떼는 순간 크기가 줄면 종이 한 번 튄다 — 배지가 녹아 사라질 때 같이 작아진다
+                let scale = isFocused ? knobScale * 1.25 : knobScale
                 // 하나를 옮기는 동안 나머지는 물러나 있어야 어느 종을 만지는지 헷갈리지 않는다
                 let dimmed = isHighlighting && !isFocused
                 let fired = isProgressMode && viewModel.remainingRatio <= CGFloat(offsetSec) / total
@@ -338,18 +339,27 @@ struct ClipClock: View {
             .onEnded { _ in
                 guard let dragged = draggingAlertOffset else { return }
                 let newSec = TimeMapper.angleToSeconds(from: alertDragAngle)
-                viewModel.moveAlert(from: dragged, to: newSec)
+                let keeps = newSec > 0 && newSec < viewModel.totalSeconds
 
-                // 놓은 자리의 시간을 잠시 유지
-                if newSec > 0 && newSec < viewModel.totalSeconds {
-                    lingeringAlertOffset = newSec
-                    alertLingerTask = Task {
-                        try? await Task.sleep(for: .seconds(Self.tooltipLingerSeconds))
-                        guard !Task.isCancelled else { return }
-                        withAnimation(.easeOut(duration: Self.dissolveDuration)) { lingeringAlertOffset = nil }
-                    }
+                // ⚠️ 손을 뗄 때는 애니메이션을 걸지 않는다 — 메인 앱과 같은 이유다.
+                //    ForEach 의 id 가 알림 초라서 지웠다 넣는 순간 SwiftUI 가 "다른 종"으로 보고
+                //    `.transition(.scale + .opacity)` 를 재생해 종이 펑 튀어 보인다.
+                //    (링 밖으로 끌어 지우는 경우는 그대로 페이드아웃)
+                var transaction = Transaction()
+                transaction.disablesAnimations = keeps
+                withTransaction(transaction) {
+                    viewModel.moveAlert(from: dragged, to: newSec)
+                    // 놓은 자리의 시간을 잠시 유지 — 그동안 종도 큰 채로 남는다
+                    if keeps { lingeringAlertOffset = newSec }
+                    draggingAlertOffset = nil
                 }
-                draggingAlertOffset = nil
+
+                guard keeps else { return }
+                alertLingerTask = Task {
+                    try? await Task.sleep(for: .seconds(Self.tooltipLingerSeconds))
+                    guard !Task.isCancelled else { return }
+                    withAnimation(.easeOut(duration: Self.dissolveDuration)) { lingeringAlertOffset = nil }
+                }
             }
     }
 

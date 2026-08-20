@@ -108,6 +108,23 @@ enum ActivityReporter {
         metrics["flag.presentationUser"] = UsageMetrics.value(.presentationRuns) > 0 ? 1 : 0
         metrics["flag.templateUser"] = UsageMetrics.value(.presetUses) > 0 ? 1 : 0
         metrics["flag.watchUser"] = UsageMetrics.value(.watchSyncUses) > 0 ? 1 : 0
+
+        // 결제 경계(알림 개수)와의 거리 — 이벤트로는 "지금 몇 명이 결제 직전인가"를 셀 수 없다.
+        // 이벤트에는 6시간 쓰로틀이 걸려 있고 과거형이지만, 스냅샷은 설치당 1건 upsert라 **현재 상태**다.
+        // 남은 체험 횟수는 여기서 계산하지 않는다(한도 상수는 바뀔 수 있다) — 원자료만 보내고
+        // 해석은 UsageInsights가 한다.
+        metrics["trial.prealerts"] = Double(TrialCounter.count(for: .unlimitedPrealerts))
+        metrics["flag.prealertTrialExtended"] = TrialCounter.extensionAccepted(for: .unlimitedPrealerts) ? 1 : 0
+
+        // 워치·맥 보유 여부 — 앱이 직접 물어본 답이라 "아직 안 물어봄"과 "없음"이 다르다.
+        // 그래서 답을 들은 설치만 보낸다(모르는 사람을 '없음'으로 세면 워치 앱의 값이 과소평가된다).
+        for device in DeviceOwnership.Device.allCases {
+            switch DeviceOwnership.answer(for: device) {
+            case .yes:     metrics["flag.owns\(device.rawValue.capitalized)"] = 1
+            case .no:      metrics["flag.owns\(device.rawValue.capitalized)"] = 0
+            case .unknown: break
+            }
+        }
         return metrics
     }
 

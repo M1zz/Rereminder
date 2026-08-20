@@ -28,6 +28,12 @@ struct UsageStatsView: View {
     /// 스냅샷의 metrics만 뽑은 것 — 집계 함수는 전부 이 형태를 받는다(테스트 가능하게).
     private var metrics: [[String: Double]] { snapshots.map(\.metrics) }
 
+    /// 설치마다 "결제까지 얼마나 가까운가"를 매긴 것 — 결제 퍼널·구분·명단이 전부 이 하나를 쓴다.
+    /// 스냅샷은 설치당 1건 upsert라 **지금 상태**다(이벤트는 쓰로틀 걸린 과거형이라 못 센다).
+    /// ⚠️ 계산 프로퍼티로 두면 섹션마다(그리고 다시 그릴 때마다) 설치 수천 건을 다시 정렬한다 —
+    ///    불러올 때 한 번만 만든다.
+    @State private var profiles: [UsageInsights.UserProfile] = []
+
     var body: some View {
         List {
             if isLoading && snapshots.isEmpty && eventSamples.isEmpty {
@@ -36,6 +42,10 @@ struct UsageStatsView: View {
                 // 일부만 실패해도(예: 아직 스키마 미배포) 읽어온 것은 그대로 보여준다.
                 if let errorMessage { errorSection(errorMessage) }
                 usersSection
+                purchaseReadinessSection
+                paymentFunnelSection
+                alertDemandSection
+                segmentSection
                 trendSection
                 valueSection
                 distributionSection
@@ -141,6 +151,115 @@ struct UsageStatsView: View {
         }
     }
 
+    // MARK: - 결제 준비도 (이 화면에서 가장 먼저 볼 숫자)
+
+    /// "지금 결제에 가까운 사람이 몇 명인가" — 이 앱의 결제는 알림 개수로 갈리므로,
+    /// 알림 한도에 부딪힌 사람 수가 곧 결제 후보 수다.
+    @ViewBuilder
+    private var purchaseReadinessSection: some View {
+        if !snapshots.isEmpty {
+            let readiness = UsageInsights.purchaseReadiness(profiles: profiles)
+            Section {
+                highlightRow(title: "지금 막혀 있는 사람",
+                             value: "\(readiness.blocked)명",
+                             detail: "알림을 더 켜려면 결제해야 하는 상태예요.")
+                highlightRow(title: "한도 임박 (체험 1~2회)",
+                             value: "\(readiness.nearLimit)명",
+                             detail: "곧 위 칸으로 넘어와요.")
+                highlightRow(title: "최근 \(readiness.recentDays)일 안에 쓴 사람 중 결제 후보",
+                             value: "\(readiness.reachable)명",
+                             detail: "떠나지 않은 사람만 센 값이에요. 실제로 두드릴 수 있는 대상이에요.")
+                highlightRow(title: "곧 필요해질 사람",
+                             value: "\(readiness.latentDemand)명",
+                             detail: "아직 알림 1개로 쓰지만 반복해서 완주하는 사람이에요(완주 \(UsageInsights.repeatUseThreshold)회 이상).")
+                statRow("이미 결제한 사람", "\(readiness.paying)명 (\(percent(readiness.payingRate)))")
+                statRow("결제에 가까워진 비율", percent(readiness.nearPurchaseRate))
+                if !UsageInsights.hotLeads(profiles: profiles).isEmpty {
+                    NavigationLink {
+                        UserSegmentListView(profiles: profiles, initialStage: .blocked)
+                    } label: {
+                        Label {
+                            Text(verbatim: "결제 후보 명단 보기")
+                        } icon: {
+                            Image(systemName: "person.crop.circle.badge.exclamationmark")
+                        }
+                    }
+                }
+            } header: {
+                Text(verbatim: "결제 준비도 (지금)")
+            } footer: {
+                Text(verbatim: "이 앱의 결제는 '알림을 몇 개까지 켤 수 있나'로 갈려요(무료 1개, 그 위는 5+5 체험 뒤 결제). 그래서 결제에 가까운 사람 = 알림 한도에 다가간 사람이에요. 스냅샷은 설치당 1건 덮어쓰기라 여기 숫자는 과거 합계가 아니라 지금 상태예요.")
+            }
+        }
+    }
+
+    // MARK: - 결제 퍼널 (지금 상태)
+
+    @ViewBuilder
+    private var paymentFunnelSection: some View {
+        if !snapshots.isEmpty {
+            Section {
+                ForEach(UsageInsights.paymentFunnel(profiles: profiles)) { stage in funnelRow(stage) }
+            } header: {
+                Text(verbatim: "결제 퍼널 (지금 상태)")
+            } footer: {
+                Text(verbatim: "설치 → 가치 경험 → 알림 2개 이상 → 한도 도달 → 페이월 → 결제. 어느 칸에서 확 줄어드는지가 곧 손볼 곳이에요. 결제한 사람은 앞 단계를 모두 지난 것으로 세요. 아래 '결제 이벤트'는 같은 이야기를 기간 누적 이벤트로 본 것이라 숫자가 다를 수 있어요.")
+            }
+        }
+    }
+
+    // MARK: - 알림 개수 수요
+
+    @ViewBuilder
+    private var alertDemandSection: some View {
+        if !snapshots.isEmpty {
+            let buckets = UsageInsights.alertDemandDistribution(profiles: profiles)
+            let maxInstalls = max(1, buckets.map(\.installs).max() ?? 1)
+            Section {
+                ForEach(buckets) { bucket in
+                    barRow(label: bucket.label, value: bucket.installs, maxValue: maxInstalls)
+                }
+            } header: {
+                Text(verbatim: "알림 개수 수요 (한 타이머 최대)")
+            } footer: {
+                Text(verbatim: "무료는 1개까지예요. 2개 이상 칸이 크면 지금의 가격 경계가 실제로 매출을 만든다는 뜻이고, 1개 칸만 크면 한도를 조여도 결제는 늘지 않아요. '기록 없음'은 2.1.1 이전 버전이라 아직 이 값을 보내지 않은 설치예요.")
+            }
+        }
+    }
+
+    // MARK: - 사용자 구분
+
+    @ViewBuilder
+    private var segmentSection: some View {
+        if !snapshots.isEmpty {
+            let segments = UsageInsights.segmentCounts(profiles: profiles).filter { $0.count > 0 }
+            Section {
+                ForEach(segments, id: \.stage) { segment in
+                    NavigationLink {
+                        UserSegmentListView(profiles: profiles, initialStage: segment.stage)
+                    } label: {
+                        VStack(alignment: .leading, spacing: 2) {
+                            HStack {
+                                Text(verbatim: segment.stage.label)
+                                Spacer()
+                                Text(verbatim: "\(segment.count)명")
+                                    .font(.body.monospacedDigit().weight(.semibold))
+                                    .foregroundStyle(.secondary)
+                            }
+                            Text(verbatim: segment.stage.detail)
+                                .font(.caption).foregroundStyle(.secondary)
+                        }
+                        .padding(.vertical, 1)
+                    }
+                }
+            } header: {
+                Text(verbatim: "사용자 구분")
+            } footer: {
+                Text(verbatim: "설치 하나하나를 결제까지의 거리로 나눈 거예요. 줄을 누르면 그 구분에 속한 설치 명단이 나와요(익명 설치 ID 앞 8자리).")
+            }
+        }
+    }
+
     // MARK: - 퍼널
 
     @ViewBuilder
@@ -184,9 +303,9 @@ struct UsageStatsView: View {
                     }
                 }
             } header: {
-                Text(verbatim: "결제 전환 퍼널")
+                Text(verbatim: "결제 이벤트 (기간 누적)")
             } footer: {
-                Text(verbatim: "이탈 줄은 건수예요. 단계 수치와 달리 같은 설치가 여러 번 잡힐 수 있어요.")
+                Text(verbatim: "위 '결제 퍼널(지금 상태)'이 현재 인원이라면, 이건 최근 이벤트 3,000건에 남은 흔적이에요. 이탈 줄은 건수라 같은 설치가 여러 번 잡힐 수 있어요.")
             }
         }
     }
@@ -350,6 +469,21 @@ struct UsageStatsView: View {
         .accessibilityElement(children: .combine)
     }
 
+    /// 큰 숫자 + 그 숫자를 어떻게 읽어야 하는지. 판단에 바로 쓰는 줄에만 쓴다.
+    private func highlightRow(title: String, value: String, detail: String) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            HStack {
+                Text(verbatim: title)
+                Spacer()
+                Text(verbatim: value)
+                    .font(.title3.monospacedDigit().weight(.semibold))
+            }
+            Text(verbatim: detail).font(.caption).foregroundStyle(.secondary)
+        }
+        .padding(.vertical, 2)
+        .accessibilityElement(children: .combine)
+    }
+
     /// 값과 비율을 함께 읽는 가로 막대 — 숫자만 있으면 분포의 모양이 안 보인다.
     private func barRow(label: String, value: Int, maxValue: Int) -> some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -466,6 +600,11 @@ struct UsageStatsView: View {
         case "presetUses":        return "템플릿 사용"
         case "watchSyncUses":     return "워치 동기화"
         case "templates":         return "보유 템플릿 수"
+        case "alertsMax":         return "알림 최대 개수"
+        case "multiAlertRuns":    return "알림 2개 이상 실행"
+        case "alertLimitHits":    return "알림 한도에 막힌 횟수"
+        case "paywallViews":      return "페이월 노출 횟수"
+        case "trial.prealerts":   return "알림 체험 사용 횟수"
         default:                  return key
         }
     }
@@ -494,6 +633,15 @@ struct UsageStatsView: View {
         } catch {
             failures.append(error.localizedDescription)
         }
+
+        profiles = UsageInsights.profiles(from: snapshots.map {
+            .init(id: $0.id,
+                  metrics: $0.metrics,
+                  installDate: $0.installDate,
+                  lastActiveAt: $0.lastActiveAt,
+                  appVersion: $0.appVersion,
+                  platform: $0.platform)
+        })
 
         if !failures.isEmpty {
             errorMessage = "불러오지 못했어요: " + Set(failures).joined(separator: "\n")

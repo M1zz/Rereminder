@@ -30,6 +30,17 @@ struct NoticeSettingView: View {
     @State private var showPaywall = false
     @State private var showFeedback = false
 
+    // 내 기기 — 타이머 중에 물어본 답이 여기에 저장된다.
+    // ⚠️ 키 문자열은 DeviceOwnership.answerKey 와 같아야 한다(@AppStorage 는 리터럴만 받는다).
+    @AppStorage("device.owns.watch") private var watchOwnershipRaw = DeviceOwnership.Answer.unknown.rawValue
+    @AppStorage("device.owns.mac") private var macOwnershipRaw = DeviceOwnership.Answer.unknown.rawValue
+
+    // 연결 상태 — 워치는 WatchConnectivity가 실시간으로, 맥은 iCloud에 남긴 표시로 알아낸다.
+    @ObservedObject private var watchLink = WatchConnectivityManager.shared
+    @State private var macPresence: DevicePresence.Status = .away(lastSeen: nil)
+    /// 눌러서 연 "어떻게 연결하나" 안내의 대상 기기.
+    @State private var connectionHelpDevice: DeviceOwnership.Device?
+
     // 마스터 모드(개발자) — Info의 버전 행 7번 탭으로 토글, 피드백 인박스 진입점 노출
     @AppStorage("masterModeEnabled") private var masterModeEnabled = false
     @State private var versionTapCount = 0
@@ -424,6 +435,25 @@ struct NoticeSettingView: View {
                 }
             }
 
+            // 타이머를 쓰는 중에 물어본 답이 여기로 온다. 여기서 바꾸면 안내도 따라 바뀐다 —
+            // "없음"으로 두면 그 기기 이야기는 다시 나오지 않는다.
+            Section(header: Text("My Devices"),
+                    footer: Text("Rereminder points you to the devices you have, and stays quiet about the ones you don't. Set a device to No and it won't be mentioned again.")) {
+                deviceOwnershipRow(title: "Apple Watch", systemImage: "applewatch", raw: $watchOwnershipRaw)
+                // 가지고 있다고 한 기기만 연결 상태를 보여준다 — 없는 기기의 연결 상태는 의미가 없다.
+                if watchOwnershipRaw == DeviceOwnership.Answer.yes.rawValue,
+                   let watch = watchConnectionDisplay {
+                    connectionRow(watch, device: .watch)
+                }
+                deviceOwnershipRow(title: "Mac", systemImage: "laptopcomputer", raw: $macOwnershipRaw)
+                // 맥에서 돌 때는 맥의 연결 상태 줄을 감춘다 — 자기 자신은 세지 않으므로
+                // 늘 "연결 안 됨"으로 보인다(맥 앞에 앉은 사람에게는 헛소리다).
+                if macOwnershipRaw == DeviceOwnership.Answer.yes.rawValue,
+                   DevicePresence.currentPlatform != .mac {
+                    connectionRow(macConnectionDisplay, device: .mac)
+                }
+            }
+
             Section(header: Text("Help"), footer: Text("Everything from the first-run walkthrough is here — including how to use Rereminder on Apple Watch, Mac, widgets, and Siri.")) {
                 Button {
                     showOnboarding = true
@@ -567,6 +597,20 @@ struct NoticeSettingView: View {
         } message: {
             Text("Follow these steps to enable notifications:\n\n1. Tap 'Go to Settings' button\n2. Find '\(AppName.display)' app in Settings\n3. Select 'Notifications' menu\n4. Turn on 'Allow Notifications'\n\n💡 Recommended settings:\n• Show on Lock Screen\n• Show in Notification Center\n• Show as Banners\n\nThis ensures you never miss timer alerts!")
         }
+        .onAppear {
+            // 화면을 열 때 지금 상태를 다시 읽는다(워치는 그 사이 꺼졌을 수 있다).
+            watchLink.refreshLinkStatus()
+            NSUbiquitousKeyValueStore.default.synchronize()
+            macPresence = DevicePresence.status(of: .mac)
+        }
+        // 다른 기기가 표시를 남기면 iCloud가 알려준다 — 화면을 열어 둔 채로도 따라간다.
+        .onReceive(NotificationCenter.default.publisher(
+            for: NSUbiquitousKeyValueStore.didChangeExternallyNotification)) { _ in
+            macPresence = DevicePresence.status(of: .mac)
+        }
+        .sheet(item: $connectionHelpDevice) { device in
+            DeviceConnectionHelpView(device: device)
+        }
         .fullScreenCover(isPresented: $showOnboarding) {
             OnboardingView(isPresented: $showOnboarding)
         }
@@ -616,6 +660,116 @@ struct NoticeSettingView: View {
             UIApplication.shared.open(url)
         }
         #endif
+    }
+
+    /// 기기 하나의 보유 여부 행 — 값은 문자열(`DeviceOwnership.Answer`)로 저장된다.
+    /// "아직 안 물어봄"을 남겨 두는 이유: 그 상태여야 타이머 중에 한 번 물어볼 수 있다.
+    private func deviceOwnershipRow(title: LocalizedStringKey,
+                                    systemImage: String,
+                                    raw: Binding<String>) -> some View {
+        let selection = Binding<DeviceOwnership.Answer>(
+            get: { DeviceOwnership.Answer(rawValue: raw.wrappedValue) ?? .unknown },
+            set: { raw.wrappedValue = $0.rawValue }
+        )
+        return Picker(selection: selection) {
+            Text("Not answered yet").tag(DeviceOwnership.Answer.unknown)
+            Text("I have one").tag(DeviceOwnership.Answer.yes)
+            Text("I don't have one").tag(DeviceOwnership.Answer.no)
+        } label: {
+            Label(title, systemImage: systemImage)
+        }
+    }
+
+    /// 연결 상태 한 줄에 필요한 것 — 심볼·색·문구.
+    private struct ConnectionDisplay {
+        let symbol: String
+        let tint: Color
+        let text: LocalizedStringKey
+        /// 아래에 작게 붙는 보충 설명(기기 이름이나 마지막 활동 시각). 없으면 nil.
+        let detail: String?
+    }
+
+    /// 워치: WatchConnectivity가 지금 통신되는지를 그대로 말해 준다.
+    /// 알 수 없는 기기(맥)에서는 nil — 모르는 걸 "연결 안 됨"이라고 하면 거짓말이 된다.
+    private var watchConnectionDisplay: ConnectionDisplay? {
+        switch watchLink.linkStatus {
+        case .unavailable:
+            return nil
+        case .connected:
+            return ConnectionDisplay(symbol: "applewatch.radiowaves.left.and.right",
+                                     tint: .green, text: "Connected", detail: nil)
+        case .notReachable:
+            return ConnectionDisplay(symbol: "applewatch.slash",
+                                     tint: .secondary, text: "Not connected", detail: nil)
+        case .appNotInstalled:
+            return ConnectionDisplay(symbol: "applewatch.slash",
+                                     tint: .orange,
+                                     text: "The app isn't installed on your Apple Watch", detail: nil)
+        case .notPaired:
+            return ConnectionDisplay(symbol: "applewatch.slash",
+                                     tint: .secondary,
+                                     text: "No Apple Watch is paired with this iPhone", detail: nil)
+        }
+    }
+
+    /// 맥: 아이폰에서 볼 방법이 없어 iCloud에 남긴 표시로 판단한다.
+    /// 그래서 "연결됨"은 실시간 연결이 아니라 **최근에 그 맥에서 앱이 켜져 있었다**는 뜻이다.
+    private var macConnectionDisplay: ConnectionDisplay {
+        switch macPresence {
+        case .connected(let name):
+            return ConnectionDisplay(symbol: "antenna.radiowaves.left.and.right",
+                                     tint: .green, text: "Connected",
+                                     detail: name.isEmpty ? nil : name)
+        case .away(let lastSeen):
+            return ConnectionDisplay(symbol: "antenna.radiowaves.left.and.right.slash",
+                                     tint: .secondary, text: "Not connected",
+                                     detail: lastSeen.map(Self.lastActiveText))
+        }
+    }
+
+    /// 상태만 보여주고 끝내지 않는다 — 누르면 무엇을 하면 되는지 알려 준다.
+    private func connectionRow(_ display: ConnectionDisplay,
+                               device: DeviceOwnership.Device) -> some View {
+        Button {
+            connectionHelpDevice = device
+        } label: {
+            connectionRowLabel(display)
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func connectionRowLabel(_ display: ConnectionDisplay) -> some View {
+        HStack(spacing: 10) {
+            Image(systemName: display.symbol)
+                .foregroundStyle(display.tint)
+                .frame(width: 24)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(display.text)
+                    .font(.subheadline)
+                    .foregroundStyle(display.tint == .secondary ? .secondary : .primary)
+                if let detail = display.detail {
+                    Text(detail)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            Spacer()
+            Image(systemName: "chevron.right")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
+        .accessibilityHint(Text("Shows how to connect this device"))
+    }
+
+    /// "3일 전에 마지막으로 켜짐" — 상대 시각 표기는 시스템이 번역해 준다.
+    private static func lastActiveText(_ date: Date) -> String {
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .full
+        let relative = formatter.localizedString(for: date, relativeTo: Date())
+        return String(format: String(localized: "Last active %@"), relative)
     }
 
     private func shareApp() {

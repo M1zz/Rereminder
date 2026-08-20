@@ -42,6 +42,15 @@ enum UsageMetrics {
         case watchSyncUses
         /// 지금 가지고 있는 템플릿 수(누적이 아니라 현재값).
         case templates
+        /// 한 타이머에 걸어 본 알림 개수의 **최대값**(누적이 아니라 최고 기록).
+        /// 이 앱의 결제는 "알림을 몇 개까지 켤 수 있나"로 갈리므로, 이 값이 곧 그 사람의 수요 크기다.
+        case alertsMax
+        /// 무료 한도(1개)를 넘겨 타이머를 시작한 횟수 — 유료 영역을 실제로 쓰고 있는 강도.
+        case multiAlertRuns
+        /// 알림을 더 켜려다 한도에 막힌 횟수 — 결제 필요를 몸으로 겪은 횟수다.
+        case alertLimitHits
+        /// 페이월을 본 횟수.
+        case paywallViews
 
         var storageKey: String { "usage.metric.\(rawValue)" }
     }
@@ -51,8 +60,11 @@ enum UsageMetrics {
     /// 분석 이벤트 1건을 로컬 카운터에 반영한다. `AnalyticsManager.log`가 단독으로 부른다.
     static func apply(_ event: AnalyticsManager.Event) {
         switch event {
-        case .timerStarted:
+        case .timerStarted(_, let alertCount, _):
             increment(.timerStarts)
+            // 알림 개수는 이 앱의 결제 경계다(무료 1개). 최대값과 "한도를 넘긴 실행 횟수"를 함께 남긴다.
+            noteMax(.alertsMax, Double(alertCount))
+            if alertCount > ProGate.freePrealertLimit { increment(.multiAlertRuns) }
         case .timerCompleted(let durationSeconds):
             increment(.timerCompletions)
             // 초가 아니라 분으로 누적한다 — 초로 쌓으면 Double 정밀도만 낭비되고 읽기도 어렵다.
@@ -67,6 +79,11 @@ enum UsageMetrics {
             increment(.presentationRuns)
         case .watchSyncUsed:
             increment(.watchSyncUses)
+        case .premiumTrialExhausted(let feature, _):
+            // 알림 한도에 막힌 것만 센다 — 발표 모드 등 다른 기능의 소진과 섞이면 뜻이 흐려진다.
+            if feature == .unlimitedPrealerts { increment(.alertLimitHits) }
+        case .paywallShown:
+            increment(.paywallViews)
         default:
             break
         }
@@ -91,6 +108,12 @@ enum UsageMetrics {
 
     static func value(_ key: Key) -> Double {
         store.double(forKey: key.storageKey)
+    }
+
+    /// 최고 기록 갱신 — 누적이 아니라 "가장 컸을 때"를 남긴다.
+    private static func noteMax(_ key: Key, _ candidate: Double) {
+        guard candidate > store.double(forKey: key.storageKey) else { return }
+        store.set(candidate, forKey: key.storageKey)
     }
 
     private static func increment(_ key: Key, by amount: Double = 1) {

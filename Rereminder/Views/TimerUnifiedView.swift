@@ -73,6 +73,10 @@ struct TimerUnifiedView: View {
     @State private var showFeedbackNudge = false
     @State private var showFeedbackSheet = false
 
+    // 타이머를 실제로 걸었을 때 한 번 물어보는 기기 보유 질문(워치 → 맥).
+    // 물어볼지 말지는 DeviceOwnership이 정한다 — "없다"고 한 기기는 다시 꺼내지 않는다.
+    @State private var deviceQuestion: DeviceOwnership.Device?
+
     /// 타이머가 실행 중이 아닐 때만 모드 전환 허용
     private var isIdle: Bool {
         screenVM.state == .idle || screenVM.state == .finished
@@ -157,6 +161,14 @@ struct TimerUnifiedView: View {
             }
             .sheet(isPresented: $showFeedbackSheet) {
                 FeedbackView()
+            }
+            // 타이머가 돌기 시작한 순간에 묻는다 — "지금 손목에서도 볼 수 있어요"가 바로 확인되는 때다.
+            // 답은 설정(내 기기)에 저장되고, 없다고 하면 그 기기 이야기는 두 번 다시 꺼내지 않는다.
+            .alert(deviceQuestionTitle, isPresented: deviceQuestionBinding, presenting: deviceQuestion) { device in
+                Button(String(localized: "Yes, I have one")) { answerDeviceQuestion(device, owns: true) }
+                Button(String(localized: "No, I don't"), role: .cancel) { answerDeviceQuestion(device, owns: false) }
+            } message: { device in
+                Text(deviceQuestionMessage(device))
             }
             .onChange(of: scenePhase) { oldPhase, newPhase in
                 handleScenePhase(oldPhase, newPhase)
@@ -251,6 +263,9 @@ struct TimerUnifiedView: View {
     )
 
     private func setupOnAppear() {
+        // 콜드 런치에서는 scenePhase onChange 가 오지 않는다 — 여기서도 표시를 남긴다.
+        DevicePresence.beginHeartbeat()
+
         // 사람이 실제로 화면을 본 순간 = 실행 1회 + 오늘의 활동(app_open).
         // 콜드 런치는 scenePhase onChange가 안 오므로 여기서 남긴다(내부 쓰로틀로 중복 없음).
         ActivityReporter.reportForegroundOpen()
@@ -283,6 +298,9 @@ struct TimerUnifiedView: View {
         screenVM.restoreLastUsedConfigIfNeeded()
 
         #if targetEnvironment(macCatalyst)
+        // 지금 맥에서 돌고 있으니 "맥 있으세요?"를 물어볼 이유가 없다 — 아는 건 묻지 않는다.
+        DeviceOwnership.markUsed(.mac)
+
         // 메뉴바 타이머 (RereminderMenuBar 번들이 임베드된 빌드에서만 동작)
         MenuBarManager.shared.setUpIfAvailable()
         MenuBarManager.shared.onPauseToggle = {
@@ -301,6 +319,13 @@ struct TimerUnifiedView: View {
 
     private func handleScenePhase(_: ScenePhase, _ newPhase: ScenePhase) {
         appStateManager.updateState(newPhase)
+        // 다른 기기(맥)에서 "이 기기 켜져 있어요"를 볼 수 있게 표시를 남긴다.
+        // 앞에 있는 동안만 — 뒤로 가면 멈춰야 "연결됨"이 거짓말이 되지 않는다.
+        if newPhase == .active {
+            DevicePresence.beginHeartbeat()
+        } else {
+            DevicePresence.endHeartbeat()
+        }
         if newPhase == .active {
             screenVM.timerVM.engine.recalculateOnForeground()
             handleControlWidgetAction()
@@ -310,13 +335,75 @@ struct TimerUnifiedView: View {
         }
     }
 
-    private func handleStateChange(_: TimerState, _ newState: TimerState) {
+    private func handleStateChange(_ oldState: TimerState, _ newState: TimerState) {
         UIApplication.shared.isIdleTimerDisabled =
             (newState == .running || newState == .paused || newState == .overtime)
+
+        // 막 시작한 순간에만 — 일시정지에서 돌아올 때마다 물으면 잔소리가 된다.
+        if newState == .running, oldState != .paused { askOrRemindAboutDevices() }
 
         #if targetEnvironment(macCatalyst)
         MenuBarManager.shared.update(remaining: screenVM.remaining, state: newState)
         #endif
+    }
+
+    // MARK: - 기기 보유 질문 / 안내
+
+    /// 타이머를 걸 때마다 한 번씩 확인한다 — 물어볼 게 있으면 묻고, 없으면 가끔 권한다.
+    /// 둘 중 하나만 한다(같은 실행에서 질문과 안내가 겹치면 시끄럽다).
+    private func askOrRemindAboutDevices() {
+        let starts = Int(UsageMetrics.value(.timerStarts))
+
+        if let device = DeviceOwnership.pendingQuestion(timerStarts: starts) {
+            deviceQuestion = device
+            return
+        }
+        // 가지고 있다고 했는데 아직 그 기기에서 안 써 본 사람에게만, 다섯 번 걸 때마다 한 번.
+        if let device = DeviceOwnership.pendingReminder(timerStarts: starts) {
+            DeviceOwnership.markReminderShown(device, atStart: starts)
+            toast.show(Toast(deviceReminderText(device), duration: 3.0))
+        }
+    }
+
+    private var deviceQuestionBinding: Binding<Bool> {
+        Binding(get: { deviceQuestion != nil },
+                set: { if !$0 { deviceQuestion = nil } })
+    }
+
+    private var deviceQuestionTitle: String {
+        switch deviceQuestion {
+        case .mac:            return String(localized: "Do you have a Mac?")
+        case .watch, .none:   return String(localized: "Do you have an Apple Watch?")
+        }
+    }
+
+    private func deviceQuestionMessage(_ device: DeviceOwnership.Device) -> String {
+        switch device {
+        case .watch: return String(localized: "If you do, you can check the remaining time right on your wrist while the timer runs.")
+        case .mac:   return String(localized: "If you do, Rereminder can show the remaining time in your Mac menu bar.")
+        }
+    }
+
+    /// 답을 저장하고, 있다고 했으면 그 자리에서 어디를 보면 되는지 알려준다.
+    private func answerDeviceQuestion(_ device: DeviceOwnership.Device, owns: Bool) {
+        DeviceOwnership.record(owns ? .yes : .no, for: device)
+        deviceQuestion = nil
+        guard owns else { return }   // 없다고 한 기기는 안내도 하지 않는다
+        toast.show(Toast(deviceGuidanceText(device), duration: 3.0))
+    }
+
+    private func deviceGuidanceText(_ device: DeviceOwnership.Device) -> String {
+        switch device {
+        case .watch: return String(localized: "Now check the remaining time on your Apple Watch too")
+        case .mac:   return String(localized: "Now check the remaining time in your Mac menu bar too")
+        }
+    }
+
+    private func deviceReminderText(_ device: DeviceOwnership.Device) -> String {
+        switch device {
+        case .watch: return String(localized: "Open Rereminder on your Apple Watch to follow along")
+        case .mac:   return String(localized: "Open Rereminder on your Mac to follow along")
+        }
     }
 
     private func handleControlWidgetAction() {
