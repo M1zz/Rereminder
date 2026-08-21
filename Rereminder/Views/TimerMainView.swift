@@ -227,13 +227,14 @@ struct TimerMainView: View {
                         .padding(.bottom, spacing * 2)
                         .transition(.move(edge: .bottom).combined(with: .opacity))
                 } else if isProgressMode && derivedSegments.count > 1 {
-                    // 구간별 카운트다운 (원 밖 아래쪽) — 링이 "전체가 얼마나 남았나"라면
-                    // 이건 "지금 이 구간이 얼마 남았나"다. 다음 알림까지의 시간이 곧 지금 구간의
-                    // 남은 시간이라 `nextAlertInfo` 자리를 대신한다(둘 다 두면 같은 말이 두 번).
-                    SectionCountdownList(
+                    // 구간 막대 (원 밖 아래쪽) — 링이 "전체가 얼마나 남았나"라면
+                    // 이건 "지금 이 구간이 얼마 남았나" + "이 구간이 전체에서 얼마나 큰 덩어리인가"다.
+                    // 뒤엣것은 각도로는 잘 안 읽혀서 길이로 바꿔 세운다(`SectionProgressBar` 주석 참고).
+                    // 다음 알림까지의 시간이 곧 지금 구간의 남은 시간이라 `nextAlertInfo` 자리를
+                    // 대신한다(둘 다 두면 같은 말이 두 번).
+                    SectionProgressBar(
                         segments: derivedSegments,
-                        elapsedSec: elapsedSec,
-                        maxHeight: availableHeight * 0.22
+                        elapsedSec: elapsedSec
                     )
                         .padding(.bottom, spacing * 2)
                         .transition(.opacity)

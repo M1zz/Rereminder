@@ -130,4 +130,18 @@ enum TimeMapper {
             return String(format: "%02d:%02d", total / 60, total % 60)
         }
     }
+
+    /// 초 → "20:00", 한 시간이 넘으면 "1:05:00".
+    ///
+    /// `mmss` 는 분에 0을 채우지 않는 짧은 표기라 3600초를 넘으면 "65:00" 이 된다.
+    /// 구간 막대·구간 리스트처럼 **한 시간이 넘는 구간이 실제로 나올 수 있는 곳**은 이걸 쓴다.
+    static func clockText(_ seconds: Int) -> String {
+        let total = max(0, seconds)
+        let hours = total / 3600
+        let minutes = (total % 3600) / 60
+        let secs = total % 60
+        return hours > 0
+            ? String(format: "%d:%02d:%02d", hours, minutes, secs)
+            : String(format: "%d:%02d", minutes, secs)
+    }
 }

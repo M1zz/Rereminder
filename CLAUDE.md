@@ -192,7 +192,8 @@ extension TimerView {
 ### Core Components
 - **TimerSections** (`Shared/Modules/TimerSections.swift`): 알림 경계로 구간을 나누는 단일 소스.
   링·구간 리스트·발표 시작이 전부 이 계산을 쓴다 (따로 계산하면 보이는 구간과 울리는 구간이 갈라진다)
-- **TimeMapper** (`Shared/Modules/AngleCalculator.swift`): 시간↔각도 + 시간 표기(`mmss`)·입력 범위
+- **TimeMapper** (`Shared/Modules/AngleCalculator.swift`): 시간↔각도 + 시간 표기(`mmss`,
+  한 시간 넘으면 `clockText`)·입력 범위
   (`maxMinutes`/`clampedInput`). 다이얼 범위를 아는 유일한 곳 — 피커가 따로 60분을 적어 뒀다가
   110분을 못 줄이던 버그가 났다
 - **TimerEngine** (`Shared/Modules/TimerEngine.swift`): 타이머 로직의 핵심 엔진
@@ -353,11 +354,29 @@ extension TimerView {
 초기화는 `persistLastUsedConfig` 로 "마지막 사용 설정"까지 기본값으로 덮으므로 재실행해도 유지됩니다.
 
 ### UI Components
-- **SectionCountdownList** (`Rereminder/Views/Components/SectionCountdownList.swift`): 실행 중
-  원 아래 구간별 카운트다운. 45분을 20+25로 나눴다면 앞의 20:00만 줄고 25:00은 서 있다가,
-  경계를 지나면 그때부터 줄어든다. **글자 색 = 링의 구간 색**(`SectionPalette`)이고 지금 구간만
-  100%, 예정 55%, 지난 구간 30%. 남은 시간 계산은 `TimerSections.remainingSeconds` 하나만 쓴다.
+- **SectionProgressBar** (`Rereminder/Views/Components/SectionProgressBar.swift`): 실행 중
+  원 아래 **완전 선형 구간 막대**. 링이 각도로 "전체가 얼마나 남았나"를 말한다면, 이건 길이로
+  "이 구간이 전체에서 얼마나 큰 덩어리인가"를 말한다 — 크기를 읽는 채널은 *공통 축 위의 위치 >
+  길이 > 각도* 순서라, 서로 다른 각도 위치에 놓인 호 두 개의 비교(5분 구간 vs 25분 구간)는
+  원이 잘 못 하는 일이다. 왼쪽 끝·오른쪽 끝이라는 기준점이 생기는 것도 원에 없던 것(원은 12시뿐).
+  **읽는 법은 링과 같다**: 오른쪽의 진한 부분이 남은 시간, 왼쪽 옅은 부분이 지나간 시간,
+  경계의 흰 표시가 지금(링에서 줄어드는 호 끝의 흰 점과 같은 역할).
+  색은 `SectionPalette`, 남은 시간은 `TimerSections.remainingSeconds` 하나만 본다.
   알림이 하나뿐이면(구간 1개) 대신 `nextAlertInfo`가 선다.
+  - 숫자 규칙 세 가지 — **지나간 구간은 숫자를 지우고**(`0:00` 이 여럿 늘어서면 지금 숫자를 다시
+    찾아야 한다), **지금 구간의 숫자는 칸을 넘겨서라도 그린다**(마지막 1분처럼 칸이 좁아지는 때가
+    하필 그 숫자가 가장 급한 때다), 아직 오지 않은 구간은 제 칸에 들어가고 지금 숫자와 겹치지
+    않을 때만 붙인다.
+- **SectionBarLayout** (`Rereminder/Views/Components/SectionBarLayout.swift`): 그 막대의 자리 계산
+  (순수 함수, `SectionBarLayoutTests`). 시간에 비례한 폭이 기본이지만 **`minWidth`(6pt)보다
+  좁아지는 칸은 최소 폭으로 올린다** — 60분 중 30초 구간은 비례대로면 2.5pt 라 사라지고,
+  사라진 구간은 "없는 구간"으로 읽힌다. 그만큼 다른 칸이 줄어들므로 **좁은 칸이 섞이면 길이가
+  시간에 정확히 비례하지 않는다**(알고 쓰는 거짓말).
+  ⚠️ **재생헤드는 비례 좌표가 아니라 실제로 그려진 칸 폭을 따라간다.** 최소 폭으로 넓힌 칸이
+  있는데 비례로 계산하면 알림이 울리는 순간 재생헤드가 경계에 있지 않고, 그러면 이 막대는
+  못 믿을 물건이 된다.
+- ~~SectionCountdownList~~ — 위 막대로 대체됐다(파일은 남아 있으나 쓰이지 않음). 같은 정보를
+  세로 목록의 **숫자**로만 줘서 5분과 25분의 차이를 눈이 아니라 머리로 계산해야 했다.
 - **DeviceLinkChips** (`Rereminder/Views/Components/DeviceLinkChips.swift`): 원 아래 기기 연결
   상태 칩. **"있어요"라고 답한 기기만**, 그리고 **안 될 때만 글자**를 붙인다(연결됨은 초록 심볼만).
   **대기 중에도 보인다** — 연결은 타이머를 걸기 *전에* 고쳐야 의미가 있다. 발표 모드에서만 뺀다
