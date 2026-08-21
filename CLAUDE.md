@@ -213,6 +213,14 @@ extension TimerView {
   유닛 테스트 대상 — `RereminderTests/UsageInsightsTests.swift`).
 - **UsageStatsView** (`Rereminder/Views/UsageStatsView.swift`): 마스터 모드 전용 대시보드
   (설정 → Info의 버전 행 7번 탭 → Help에 노출). 피드백 인박스로 이어진다.
+- **UsageChartViews** (`Rereminder/Views/Components/UsageChartViews.swift`): 통계 화면의 차트 조각
+  (분포·퍼널·비율·나열·리텐션). 규칙 — **한 차트에 축은 하나**(단위가 다른 값은 겹치지 말고 피커로
+  갈아 끼운다), 계열이 하나면 색도 하나(테마 강조색), 값은 막대에 직접 적는다. 색으로 계열을
+  나누는 건 리텐션(D1·D7·D30)뿐이고 그 3색은 색각 이상 검증을 통과한 고정 조합 + 점 모양까지
+  다르게 쓴다 — **임의로 바꾸지 말 것.**
+- **주로 쓰는 알림 개수**: `alertsMax`(최대값)만으로는 "한 번 해 봤다"와 "늘 그렇게 쓴다"가
+  구분되지 않아, 실행마다 개수를 세는 히스토그램(`UsageMetrics.AlertRun` → `alertRuns.*`)을 함께
+  보낸다. 화면은 **실행 기준 / 사람 기준**을 피커로 갈아 끼워 본다(`UsageInsights.alertRunDistribution`).
 - **UserSegmentListView** (`Rereminder/Views/UserSegmentListView.swift`): 설치를 결제까지의
   거리로 나눠 한 명씩 보는 명단(익명 ID 앞 8자리). 판정은 하지 않고 `UsageInsights` 결과만 그린다.
 - **결제 퍼널은 이벤트가 아니라 스냅샷으로 센다.** 이 앱의 결제는 "알림을 몇 개까지 켜나"로
@@ -312,6 +320,114 @@ extension TimerView {
 - 구간 **번호(1·2·3)** 는 대기 중에만 붙인다 — 진행 중에는 구간이 하나씩 사라지며 번호만 바뀌어
   어지럽다.
 
+### 타이머 모양 (설정에서 고른다 · 한 번에 하나)
+실행 중 화면의 모양은 **설정 > 타이머 모양**에서 고른다 — 원형 링 / 이중 링 / 구간 막대 /
+접은 줄(ㄹ자). 정의는 `Shared/Modules/TimerShape.swift` 한 곳, 저장은 `@AppStorage("timer.shape")`.
+
+- **한 번에 하나만 그린다.** 예전엔 원과 구간 막대를 같이 세웠는데, 같은 시간을 두 번 그리는
+  셈이라 눈이 매번 어느 쪽을 볼지 골라야 했다. 그래서 원 아래 `SectionProgressBar` 자리는
+  없어지고, 막대는 **모양 중 하나**가 됐다.
+- **대기 중에는 언제나 다이얼(원)이다.** 흰 핸들·종 노브를 끌어 시간과 알림을 정하는 조작이
+  원에 묶여 있어서, 모양 선택은 **실행 중 표시**에만 적용한다(`usesLinearShape`).
+- 고르는 화면은 이름이 아니라 **실루엣**을 보여준다(`TimerShapeSilhouette`) — "이중 링"이라는
+  말로는 무엇을 고르는 건지 알 수 없다. 실루엣은 **실제 화면과 같은 컴포넌트**로 그린다
+  (`SectionInnerRing`·`SectionProgressBar`·`SnakeTimerView`). 미리보기만 따로 그리면
+  고르고 나서 "이게 아닌데"가 된다. 네 그림은 **같은 예시 타이머의 같은 순간**을 그린다.
+- 가운데 큰 숫자는 원형 링에서만 전체 남은 시간이고, 나머지 셋은 **이 구간**의 남은 시간 +
+  아래 작은 `Total:` 줄이다(`centerSection`).
+- **접은 줄**(`SnakeTimerView`)은 경로 길이가 곧 시간이라 구간을 길이 비율로 자른다.
+  U턴에 얹힌 짧은 구간은 곡선으로 말려 실제보다 짧아 보이므로 줄 수를 늘리지 말 것(4줄).
+- **알림 지점에는 어디서나 종이 선다.** 링은 종 노브, 막대·접은 줄은 구간 사이에 주황 종.
+  구간 경계를 틈으로만 표시하면 "줄이 왜 끊겼지"로 읽힌다 — 왜 끊겼는지는 종이 말해 준다.
+  막대의 칸 사이 여백(`gap`)은 종이 앉을 자리라 막대 두께를 따라 같이 벌어진다.
+- **버튼(시작·정지)은 원 밖에 있다** (`TimerActionBar`). 원 안에 두면 가운데를 반 넘게 먹어서
+  시간 두 줄이 들어갈 자리가 없고, 링 위의 종·핸들 터치까지 버튼이 가져간다.
+  - 주 동작은 **채운 캡슐 하나**(아이콘 + 글자) — ▶ 하나만 있으면 "시작"인지 "재개"인지 유추해야
+    한다. 정지는 곁들이라 회색 원, 대기 중에는 아예 없다.
+  - 색은 **테마 강조색**. 예전 시작 버튼은 분홍 고정(`DSColor.positive`)이라 파란 링 아래에서
+    혼자 튀었다. **주황은 쓰지 않는다** — 이 화면에서 주황은 알림 종의 색이다.
+  - **움직임은 하나의 스프링으로 묶는다.** 정지 버튼이 들어오는 것·캡슐이 밀리는 것·글자가
+    바뀌는 것이 각자 다른 속도로 움직이면 그게 허접해 보이는 이유다.
+    심볼은 `.contentTransition(.symbolEffect(.replace))`, 글자는 `.contentTransition(.opacity)`,
+    정지 버튼은 옆에서 밀려들지 않고 제자리에서 커지며 나타난다.
+  - **일시정지 ↔ 재개에서 캡슐 폭이 변하면 안 된다.** 도는 동안 나올 수 있는 글자를 전부
+    ZStack 에 겹쳐 두고(보이지 않게) 그중 가장 넓은 것으로 폭을 잡는다.
+    ⚠️ `.background` 에 유령 글자를 깔면 폭이 안 잡힌다(배경은 부모 크기를 따를 뿐).
+    ⚠️ 글자 수로 긴 쪽을 고르지 말 것 — 언어마다 폭이 다르다.
+- **이중 링을 고르면 60분이 넘어도 링은 '전체 한 바퀴'다**(`usesAbsoluteRing` 예외).
+  절대 각도로 그리면 안쪽 줄이 "2바퀴째" 몫이 되어, 100분 타이머를 걸었을 때 시작하자마자
+  안쪽이 40/60 만 찬 채로 도는 것처럼 보였다. 안쪽이 '지금 구간'이려면 바깥이 전체여야 한다.
+- 가운데는 **전체가 크게, 그 아래 지금 구간이 따로 돈다**(구간 색 점 + 남은 시간).
+  예전의 "Next 알림" 안내 박스는 없앴다 — 같은 이야기를 원 밖에서 한 번 더 하던 자리였다.
+
+### 이중 링 (바깥=전체, 안쪽=이 구간)
+진행 중에는 원 안쪽에 **얇은 링 한 겹**이 더 선다 — 지금 지나는 구간이 얼마 남았나.
+바깥은 "전체가 얼마 남았나", 안쪽은 "이 구간이 얼마 남았나"다. 원은 각도라 서로 다른 자리에
+놓인 두 호를 비교하는 걸 잘 못 하기 때문에, 두 질문에 각각 자기 층을 준다
+(구간끼리의 크기 비교는 여전히 원 아래 `SectionProgressBar` 몫이다).
+
+- 계산은 **`TimerSections.progress`** 하나뿐이다. iPhone(`TimerMainView.sectionProgress`)과
+  워치(`TimerView.sectionProgress`)가 같은 함수를 본다 — 따로 세면 두 기기가 다른 구간을 가리킨다.
+- 그리는 것도 공용이다: **`SectionInnerRing`**(`Shared/DesignSystem/`). 두께(본 링의 0.5배)와
+  간격(본 링 안쪽에서 0.45배)도 그 파일이 갖는다. 워치는 링이 4pt라 끝점 흰 점만 끈다.
+- **안 그리는 경우가 셋**: 두 줄 링(60분 초과 — 그 자리가 이미 2바퀴째다), 구간이 하나
+  (안쪽이 바깥과 같은 말을 한다), 오버타임(지날 구간이 없다).
+- 안쪽 링 색은 `SectionPalette` 그대로 — 바깥 링의 그 구간과 **같은 색**이어야 "이 링이 저 구간"이
+  읽힌다. 대신 두께·간격·끝점 흰 점으로 층을 가른다. **색으로 구분하려 들지 말 것.**
+- 구간이 바뀌면 `.id(index)` 로 새로 그린다. 비율이 0 → 1 로 튀는 걸 애니메이션으로 이으면
+  링이 거꾸로 감기는 것처럼 보인다.
+- **가운데 큰 숫자는 이때 "이 구간"의 남은 시간이고, 전체는 그 아래 작은 줄(`Total: …`)로
+  내려간다.** 달리는 사람이 1초에 한 번 확인하는 값이 "전체 17분"이 아니라 "이 구간 12분"이라서다
+  (발표 모드 큰 화면 `PresentationDisplayView` 와 같은 문법). 가운데가 두 줄이 되므로
+  `centerContentDiameter` 도 안쪽 링 안쪽을 한계로 잡는다 — 넘치면 글자가 링 조작을 가로챈다.
+
+### 온보딩 — 읽는 안내가 아니라 해 보는 안내
+`OnboardingFlowView` (2.1.2에서 갈아엎음). 흐름은 **환영 → 어디에 쓸 건가요 → 60배속 체험 →
+템플릿 저장 → 기기 안내** 다섯 장.
+
+- **상황을 먼저 고르게 한다**(`OnboardingUseCase`: 발표·운동·집중·요리·회의·아직 모르겠어요).
+  "끝나기 전에 여러 번 알려 준다"가 왜 좋은지는 자기 상황에 대입해야 안다. 고른 상황의
+  추천 설정은 **알림이 두 개 이상**이 되게 잡는다 — 하나짜리는 체험에서 보여 줄 것이 없다.
+- **체험은 진짜 타이머가 아니다**(`OnboardingDemoTimer`). `TimerEngine`·알림·Live Activity를
+  건드리지 않아서 껐다 켜도 흔적이 없다. 종이 울릴 때 배너가 뜨고 햅틱이 온다.
+  - **길이와 상관없이 체험은 늘 10초다**(`demoSeconds`). 배속을 60으로 고정했더니 30분짜리
+    회의 상황이 30초를 잡아먹었다 — 온보딩에서 30초는 아무도 안 기다린다.
+    배속은 길이를 따라 계산한다(10분 → 60배, 30분 → 180배). 테스트: `OnboardingDemoTests`.
+  - ⚠️ 장난감 타이머는 **서브뷰의 `@StateObject`** 로 들고 있어야 한다. 부모의 `@State` 에 담으면
+    참조만 갖고 `@Published` 를 구독하지 않아 **화면이 10:00 에서 멈춘 채로** 보인다(실제로 그랬다).
+- **온보딩이 끝나면 고른 설정이 이미 다이얼에 올라가 있다.** 그래서 온보딩은 `screenVM` 이 있는
+  `TimerUnifiedView` 에서 띄운다(예전엔 `ContentView` 라 손이 닿지 않았다). 템플릿 저장도
+  같은 이유로 여기서 된다(`saveCurrentAsTemplate`).
+- 옛 일곱 장짜리 안내는 지웠다. 마지막 "기기 안내" 한 장만 `OnboardingPageView` 로 남아 있고,
+  쓰이지 않게 된 문구(`onboarding_*_1`~`6`)는 카탈로그에서 제거했다.
+
+### 알림 문구는 알림을 켜는 자리에서 쓴다
+"울릴 때 뭐라고 할까요"는 **알림 시트(`PrealertSettingsView`)** 안에, 켜 둔 알림 목록 바로 아래
+있다. 설정 > Messages(`NotificationMessageSettingView`)에도 같은 값이 있지만, 거기까지 찾아가는
+사람은 없다 — **문구가 필요하다고 느끼는 순간은 알림을 켤 때다.**
+
+- 두 화면은 같은 값(`prealertMessages` / `finishMessage`)을 본다. 한쪽만 고치지 말 것.
+- 빈칸의 placeholder 는 **실제로 나갈 기본 문구**여야 한다(`Timer.getPrealertMessage` 와 같은 말).
+- ⚠️ 발표 모드로 시작하면 구간 이름으로 문구가 자동 생성돼(`"도입 complete"`) **사용자가 쓴
+  문구를 덮어쓴다**(`applyPresentationSections`). 설정 화면에 그 사실을 적어 두었다.
+
+### 발표 구간 대본 (구간마다 말할 것)
+구간에 **대본·메모**를 적어 두면 발표 중 그 구간 차례에 원 아래에 펴진다.
+
+- 저장은 이름과 같은 방식 — `TimerScreenViewModel.sectionScripts[구간 번호]`.
+  구간은 알림 경계에서 파생되므로 **글도 번호를 따라간다**(알림을 옮겨 구간이 줄면 그 번호의
+  글은 화면에서 사라진다. 지워지지는 않는다).
+- 시작할 때 `syncSectionsFromAlerts()` 가 `PresentationSection.script` 로 실어 보내고,
+  템플릿으로 저장하면 `sectionsData` 에 함께 들어간다. **`script` 에 기본값이 있어야**
+  대본이 없던 시절 템플릿도 그대로 열린다.
+- 적는 곳: 구간 카드의 대본 줄 → `SectionScriptSheet`(시트). 카드 안에 여러 줄 입력을 넣으면
+  목록이 키보드마다 출렁인다.
+- 보는 곳: `PresentationScriptPanel` — **발표가 도는 동안** 구간 목록 대신 선다(목록은 고칠 때
+  필요한 것이고, 도는 동안에는 읽을 것만 남는다). 대본이 비어 있으면 목록이 그대로 선다.
+- ⚠️ `PresentationDisplayView`·`PresentationSetupView`·`PresentationContainerView` 는 지금
+  **어디에서도 열리지 않는 죽은 화면**이다(앱은 `TimerUnifiedView` → `TimerMainView` 하나로 돈다).
+  발표 관련 화면을 고칠 때 그쪽만 고치면 앱에서는 아무 일도 일어나지 않는다.
+
 ### 다이얼 드래그 (튐 방지)
 흰 핸들·종 노브 모두 **손가락 각도만 이어 붙이고, 자르는 건 화면에 그릴 때 한 번만** 합니다.
 
@@ -392,8 +508,15 @@ extension TimerView {
   "종 밑에 직사각형이 깔린" 것처럼 보였다. 되살리지 말 것 — App Clip(`ClipClock`)도 작대기가 없다.
 - **PresentationSectionList** (`Rereminder/Views/Presentation/PresentationSectionList.swift`):
   발표 모드 구간 카드 목록(이름 편집). 구간 계산은 하지 않고 받은 것만 그린다
-- **SectionPalette** (`Rereminder/Views/Components/SectionPalette.swift`): 구간 색 규칙 —
-  링의 호·리스트 점·진행 중 표시가 **같은 구간이면 같은 색**이어야 해서 한 곳에 둔다
+- **SectionPalette** (`Shared/DesignSystem/SectionPalette.swift`): 구간 색 규칙 —
+  링의 호·리스트 점·진행 중 표시가 **같은 구간이면 같은 색**이어야 해서 한 곳에 둔다.
+  iPhone·워치가 같은 색을 써야 해서 Shared 에 있다(예전엔 `Rereminder/Views/Components/`)
+- **SnakeTimerView** (`Rereminder/Views/Components/SnakeTimerView.swift`): ㄹ자로 접은 줄.
+  선의 길이 비교를 지키면서 가로 폭을 접는다 — 긴 타이머용 (위 "타이머 모양" 참고)
+- **TimerShapeSilhouette** (`Rereminder/Views/Components/TimerShapeSilhouette.swift`): 설정에서
+  모양을 고를 때 보여주는 실루엣. 예시 타이머 값은 이 파일 한 곳에만 둔다
+- **SectionInnerRing** (`Shared/DesignSystem/SectionInnerRing.swift`): 이중 링의 안쪽 링.
+  iPhone·워치가 같은 규칙으로 그리도록 두께·간격까지 이 파일이 갖는다 (위 "이중 링" 참고)
 - **TimePresetButtons** (`Rereminder/Views/Components/TimePresetButtons.swift`): 시간 프리셋 버튼
 - **ToastViewModifier** (`Rereminder/Views/Components/ToastViewModifier.swift`): 토스트 메시지
 
@@ -597,6 +720,25 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
 ```
 
 ## 버전 히스토리
+
+### v2.2.0 (2026-08-22)
+- **타이머 모양 선택** (`TimerShape` + 설정 > 화면 > 타이머 모양): 원형 링 / 이중 링 / 구간 막대 /
+  접은 줄(ㄹ자). 실루엣을 보고 고르고(`TimerShapeSilhouette`), 실행 중에는 **한 번에 하나만** 그린다
+  (원 아래 보조 막대 자리는 없어지고 막대가 모양 중 하나가 됐다)
+- **이중 링** (`SectionInnerRing`, iPhone·워치 공용): 바깥=전체, 안쪽=지금 구간.
+  계산은 `TimerSections.progress` 하나. 60분 초과여도 이중 링에서는 '전체 한 바퀴' 좌표를 쓴다
+- **가운데 두 줄**: 전체 남은 시간 + 지금 구간 남은 시간(구간 색 점). "Next 알림" 안내 박스는 제거
+- **동작 줄** (`TimerActionBar`): 버튼을 원 밖으로. 채운 캡슐 + 글자, 테마 강조색
+- **접은 줄** (`SnakeTimerView`) 신설, 막대·접은 줄에도 **알림 종** 표시
+- **발표 구간 대본** (`sectionScripts` → `SectionScriptSheet` / `PresentationScriptPanel`):
+  구간마다 할 말을 적고, 발표 중 그 구간 차례에 펼쳐진다
+- **알림 문구를 알림 시트에서** 편집(설정 깊숙한 곳에만 있어 아무도 못 찾던 기능)
+- **새 온보딩** (`OnboardingFlowView`): 용도 고르기 → **10초 체험**(길이와 무관, `OnboardingDemoTimer`)
+  → 템플릿 저장 → 기기 안내. 끝나면 고른 설정이 다이얼에 올라가 있다. 옛 7장 안내·문구는 제거
+- **통계(개발자)**: 주로 쓰는 알림 개수 히스토그램(`alertRuns.*`), 화면 전체를 차트로
+  (`UsageChartViews` — 분포·퍼널·비율·나열·리텐션)
+- 테스트 202개, 릴리즈 노트: `docs/release-notes-2.2.0.md` (ko/en/ja)
+
 
 ### v2.1.1 (2026-08-19)
 - **Mac Catalyst 재활성화**: `SUPPORTS_MACCATALYST=YES`·`TARGETED_DEVICE_FAMILY="1,2"` 복구
