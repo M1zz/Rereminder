@@ -11,7 +11,6 @@ import UserNotifications
 
 struct ContentView: View {
     @Environment(\.modelContext) private var context
-    @State private var showOnboarding = !UserDefaults.standard.bool(forKey: "hasSeenOnboarding")
 
     var body: some View {
         TimerUnifiedView()
@@ -24,9 +23,6 @@ struct ContentView: View {
                         }
                     }
                 configureMacWindowIfNeeded()
-            }
-            .fullScreenCover(isPresented: $showOnboarding) {
-                OnboardingView(isPresented: $showOnboarding)
             }
             #if targetEnvironment(macCatalyst)
             // macOS: 큰 화면에 맞춰 글자를 한 단계 키운다

@@ -2,178 +2,15 @@
 //  OnboardingView.swift
 //  Rereminder
 //
-//  Created for usability improvements
+//  온보딩 **한 장의 틀**(아이콘 + 제목 + 설명 + 예시). 지금은 새 흐름
+//  (`OnboardingFlowView`)의 마지막 장 — 기기 안내 — 하나가 이걸 쓴다.
+//
+//  예전에는 이 틀로 만든 일곱 장을 넘기는 게 온보딩 전부였다. 아무도 읽지 않아서
+//  "고르고 해 보는" 흐름으로 갈아엎었고(2.1.2), 그때 쓰이지 않게 된 문구
+//  (`onboarding_title_1`~`6` 등)는 카탈로그에서 지웠다.
 //
 
 import SwiftUI
-
-struct OnboardingView: View {
-    @Binding var isPresented: Bool
-    @State private var currentPage = 0
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-
-    private let pages: [OnboardingPage] = [
-        OnboardingPage(
-            icon: "person.3.fill",
-            titleKey: "onboarding_title_1",
-            descriptionKey: "onboarding_desc_1",
-            color: .blue,
-            scenarioKey: "onboarding_scenario_1"
-        ),
-        OnboardingPage(
-            icon: "clock.badge.checkmark.fill",
-            titleKey: "onboarding_title_2",
-            descriptionKey: "onboarding_desc_2",
-            color: .orange,
-            scenarioKey: "onboarding_scenario_2"
-        ),
-        OnboardingPage(
-            icon: "bell.badge.fill",
-            titleKey: "onboarding_title_3",
-            descriptionKey: "onboarding_desc_3",
-            color: .green,
-            scenarioKey: "onboarding_scenario_3"
-        ),
-        OnboardingPage(
-            icon: "timer",
-            titleKey: "onboarding_title_4",
-            descriptionKey: "onboarding_desc_4",
-            color: .red,
-            scenarioKey: "onboarding_scenario_4"
-        ),
-        OnboardingPage(
-            icon: "rectangle.split.3x1.fill",
-            titleKey: "onboarding_title_5",
-            descriptionKey: "onboarding_desc_5",
-            color: .cyan,
-            scenarioKey: "onboarding_scenario_5"
-        ),
-        OnboardingPage(
-            icon: "hand.tap.fill",
-            titleKey: "onboarding_title_6",
-            descriptionKey: "onboarding_desc_6",
-            color: .purple,
-            scenarioKey: nil
-        ),
-        // 마지막 장은 "이 앱을 더 잘 쓰는 법" — 아이폰 하나로만 쓰면 절반만 쓰는 앱이다.
-        // 자세한 기기별 활용은 설정 > Help > 모든 기기에서 사용하기 에서 다시 볼 수 있다.
-        OnboardingPage(
-            icon: "square.stack.3d.up.fill",
-            titleKey: "onboarding_title_7",
-            descriptionKey: "onboarding_desc_7",
-            color: .teal,
-            scenarioKey: "onboarding_scenario_7"
-        )
-    ]
-
-    var body: some View {
-        ZStack {
-            // 배경 그라데이션
-            LinearGradient(
-                colors: [
-                    pages[currentPage].color.opacity(0.1),
-                    Color(uiColor: .systemBackground)
-                ],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
-            .onAppear { AnalyticsManager.log(.onboardingShown) }
-
-            VStack(spacing: 0) {
-                // Skip 버튼
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        AnalyticsManager.log(.onboardingSkipped(page: currentPage))
-                        skipOnboarding()
-                    }) {
-                        Text("Skip")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 12)
-                }
-
-                // 페이지 콘텐츠
-                TabView(selection: $currentPage) {
-                    ForEach(0..<pages.count, id: \.self) { index in
-                        OnboardingPageView(page: pages[index])
-                            .tag(index)
-                    }
-                }
-                .tabViewStyle(.page(indexDisplayMode: .always))
-                .indexViewStyle(.page(backgroundDisplayMode: .always))
-
-                // 하단 버튼
-                VStack(spacing: 12) {
-                    if currentPage == pages.count - 1 {
-                        Button(action: {
-                            AnalyticsManager.log(.onboardingCompleted)
-                            skipOnboarding()
-                        }) {
-                            Text("Get Started")
-                                .font(.headline)
-                                .foregroundStyle(.white)
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 16)
-                                .background(
-                                    LinearGradient(
-                                        colors: [Color.accentColor, Color.accentColor.opacity(0.8)],
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    )
-                                )
-                                .cornerRadius(14)
-                                .shadow(color: Color.accentColor.opacity(0.3), radius: 8, y: 4)
-                        }
-                    } else {
-                        Button(action: {
-                            if reduceMotion {
-                                currentPage += 1
-                            } else {
-                                withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
-                                    currentPage += 1
-                                }
-                            }
-                        }) {
-                            HStack {
-                                Text("Next")
-                                    .font(.headline)
-                                Image(systemName: "arrow.right")
-                                    .font(.headline.weight(.semibold))
-                            }
-                            .foregroundStyle(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 16)
-                            .background(Color.accentColor)
-                            .cornerRadius(14)
-                        }
-                    }
-
-                    // 페이지 인디케이터 (숫자)
-                    Text("\(currentPage + 1) / \(pages.count)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-                .padding(.horizontal, 24)
-                .padding(.bottom, 32)
-            }
-        }
-    }
-
-    private func skipOnboarding() {
-        UserDefaults.standard.set(true, forKey: "hasSeenOnboarding")
-        if reduceMotion {
-            isPresented = false
-        } else {
-            withAnimation {
-                isPresented = false
-            }
-        }
-    }
-}
 
 struct OnboardingPage {
     let icon: String
@@ -275,5 +112,11 @@ struct OnboardingPageView: View {
 }
 
 #Preview {
-    OnboardingView(isPresented: .constant(true))
+    OnboardingPageView(page: OnboardingPage(
+        icon: "square.stack.3d.up.fill",
+        titleKey: "onboarding_title_7",
+        descriptionKey: "onboarding_desc_7",
+        color: .teal,
+        scenarioKey: "onboarding_scenario_7"
+    ))
 }

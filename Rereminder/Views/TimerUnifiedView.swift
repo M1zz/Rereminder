@@ -58,6 +58,7 @@ struct TimerUnifiedView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     @StateObject private var screenVM = TimerScreenViewModel()
+    @State private var showOnboarding = !UserDefaults.standard.bool(forKey: "hasSeenOnboarding")
     @StateObject private var toast = ToastManager()
     @StateObject private var appStateManager = AppStateManager()
 
@@ -201,6 +202,12 @@ struct TimerUnifiedView: View {
                 })
         }
         .environmentObject(screenVM)
+        // 온보딩은 **여기서** 띄운다 — 고른 상황을 다이얼에 올리고 템플릿까지 저장하므로
+        // `screenVM` 이 있는 자리여야 한다(예전엔 ContentView 에 있어서 손이 닿지 않았다).
+        .fullScreenCover(isPresented: $showOnboarding) {
+            OnboardingFlowView(isPresented: $showOnboarding)
+                .environmentObject(screenVM)
+        }
         .sheet(isPresented: $showHistory) {
             TimerTemplateView { selected in
                 screenVM.apply(template: selected)
