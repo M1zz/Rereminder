@@ -340,4 +340,66 @@ final class UsageInsightsTests: XCTestCase {
         XCTAssertEqual(counts.reduce(0) { $0 + $1.count }, profiles.count)
         XCTAssertEqual(counts.first { $0.stage == .dormant }?.count, 2)
     }
+
+    // MARK: - 주로 쓰는 알림 개수 (실행 히스토그램)
+
+    func test_typicalAlertCount_isTheMostFrequentNotTheMaximum() {
+        // 알림 1개로 열 번, 5개로 한 번 — 최대값은 5지만 "주로 쓰는 개수"는 1이다.
+        let metrics: [String: Double] = ["alertRuns.1": 10, "alertRuns.5": 1, "alertsMax": 5]
+        XCTAssertEqual(UsageInsights.typicalAlertCount(metrics: metrics), 1)
+    }
+
+    func test_typicalAlertCount_tieBreaksToTheSmallerCount() {
+        // 동률이면 작은 쪽 — 수요를 부풀리지 않는다.
+        XCTAssertEqual(UsageInsights.typicalAlertCount(metrics: ["alertRuns.2": 4, "alertRuns.3": 4]), 2)
+    }
+
+    func test_typicalAlertCount_isNilWithoutHistogram() {
+        // 2.1.2 이전 버전이 보낸 스냅샷 — 최대값만 있고 히스토그램이 없다.
+        XCTAssertNil(UsageInsights.typicalAlertCount(metrics: ["alertsMax": 3, "timerStarts": 9]))
+    }
+
+    func test_alertRunDistribution_countsRunsAndTypicalUsersSeparately() {
+        let snapshots: [[String: Double]] = [
+            ["alertRuns.1": 10, "alertRuns.5": 1],   // 주로 1개
+            ["alertRuns.3": 4],                      // 주로 3개
+            ["alertRuns.3": 2, "alertRuns.1": 1],    // 주로 3개
+            ["alertsMax": 2]                         // 히스토그램 없음 — 어느 칸도 올리지 않는다
+        ]
+        let buckets = UsageInsights.alertRunDistribution(metrics: snapshots)
+
+        XCTAssertEqual(buckets.count, UsageMetrics.AlertRun.allBuckets.count)
+        XCTAssertEqual(buckets.first { $0.alerts == 1 }?.runs, 11)
+        XCTAssertEqual(buckets.first { $0.alerts == 3 }?.runs, 6)
+        XCTAssertEqual(buckets.first { $0.alerts == 5 }?.runs, 1)
+        // 사람 기준은 설치당 한 칸씩만 — 히스토그램이 없는 설치는 세지 않는다.
+        XCTAssertEqual(buckets.reduce(0) { $0 + $1.installs }, 3)
+        XCTAssertEqual(buckets.first { $0.alerts == 1 }?.installs, 1)
+        XCTAssertEqual(buckets.first { $0.alerts == 3 }?.installs, 2)
+    }
+
+    func test_alertUsageSummary_modeAverageAndPaidShare() {
+        let snapshots: [[String: Double]] = [
+            ["alertRuns.1": 6],
+            ["alertRuns.2": 3, "alertRuns.1": 1],
+            ["alertsMax": 1]   // 히스토그램을 아직 안 보낸 설치
+        ]
+        let summary = UsageInsights.alertUsageSummary(metrics: snapshots)
+
+        XCTAssertEqual(summary.totalRuns, 10)
+        XCTAssertEqual(summary.modeAlerts, 1)
+        XCTAssertEqual(summary.averageAlerts, 1.3, accuracy: 0.0001)   // (7×1 + 3×2) / 10
+        XCTAssertEqual(summary.multiAlertRunRate, 0.3, accuracy: 0.0001)
+        XCTAssertEqual(summary.reportingInstalls, 2)
+        XCTAssertEqual(summary.totalInstalls, 3)
+        XCTAssertEqual(summary.coverageRate, 2.0 / 3.0, accuracy: 0.0001)
+    }
+
+    func test_alertRunHistogram_foldsTheOpenEndedBucket() {
+        // 6개 이상은 한 칸에 모인다 — 키 이름이 바뀌면 예전 스냅샷과 합산되지 않는다.
+        let key = UsageMetrics.AlertRun.metricKey(UsageMetrics.AlertRun.bucket(for: 9))
+        XCTAssertEqual(key, "alertRuns.6plus")
+        let histogram = UsageInsights.alertRunHistogram(metrics: [key: 4])
+        XCTAssertEqual(histogram[UsageMetrics.AlertRun.topBucket], 4)
+    }
 }

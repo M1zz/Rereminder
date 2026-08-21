@@ -205,7 +205,16 @@ enum UsageInsights {
         let value: String
         /// 이 숫자를 어떻게 읽어야 하는지 — 숫자만 있으면 판단을 못 한다.
         let hint: String
+        /// 0~1 비율. 차트로 나란히 세울 수 있는 값만 채운다(분·시간처럼 단위가 다른 값은 nil).
+        let ratio: Double?
         var id: String { name }
+
+        init(name: String, value: String, hint: String, ratio: Double? = nil) {
+            self.name = name
+            self.value = value
+            self.hint = hint
+            self.ratio = ratio
+        }
     }
 
     /// 제품·마케팅 판단에 바로 쓰이는 비율들.
@@ -213,34 +222,48 @@ enum UsageInsights {
         guard !snapshots.isEmpty else { return [] }
         let n = Double(snapshots.count)
 
-        func ratio(_ predicate: ([String: Double]) -> Bool) -> String {
-            String(format: "%.0f%%", Double(snapshots.filter(predicate).count) / n * 100)
+        func share(_ predicate: ([String: Double]) -> Bool) -> Double {
+            Double(snapshots.filter(predicate).count) / n
         }
+        func percentText(_ value: Double) -> String { String(format: "%.0f%%", value * 100) }
 
         let starts = snapshots.reduce(0.0) { $0 + ($1["timerStarts"] ?? 0) }
         let cancels = snapshots.reduce(0.0) { $0 + ($1["timerCancels"] ?? 0) }
         let cancelRate = starts > 0 ? cancels / starts * 100 : 0
         let avgFocus = snapshots.reduce(0.0) { $0 + ($1["focusMinutes"] ?? 0) } / n
 
+        let pro = share { ($0["flag.isPro"] ?? 0) > 0 }
+        let notifications = share { ($0["flag.notificationsOn"] ?? 0) > 0 }
+        let templates = share { ($0["flag.templateUser"] ?? 0) > 0 }
+        let presentation = share { ($0["flag.presentationUser"] ?? 0) > 0 }
+        let watch = share { ($0["flag.watchUser"] ?? 0) > 0 }
+
         return [
             AdoptionSignal(name: "Pro 전환율",
-                           value: ratio { ($0["flag.isPro"] ?? 0) > 0 },
-                           hint: "결제까지 간 비율이에요."),
+                           value: percentText(pro),
+                           hint: "결제까지 간 비율이에요.",
+                           ratio: pro),
             AdoptionSignal(name: "알림 권한 허용",
-                           value: ratio { ($0["flag.notificationsOn"] ?? 0) > 0 },
-                           hint: "알림이 이 앱의 전부예요. 낮으면 타이머가 울리지 않는 사람이 그만큼 있다는 뜻이에요."),
+                           value: percentText(notifications),
+                           hint: "알림이 이 앱의 전부예요. 낮으면 타이머가 울리지 않는 사람이 그만큼 있다는 뜻이에요.",
+                           ratio: notifications),
             AdoptionSignal(name: "템플릿 사용",
-                           value: ratio { ($0["flag.templateUser"] ?? 0) > 0 },
-                           hint: "매번 다시 맞추지 않고 저장해 둔 걸 쓰는 비율 — 반복 사용의 신호예요."),
+                           value: percentText(templates),
+                           hint: "매번 다시 맞추지 않고 저장해 둔 걸 쓰는 비율 — 반복 사용의 신호예요.",
+                           ratio: templates),
             AdoptionSignal(name: "발표 모드 사용",
-                           value: ratio { ($0["flag.presentationUser"] ?? 0) > 0 },
-                           hint: "Pro 기능을 실제로 쓰는 비율이에요."),
+                           value: percentText(presentation),
+                           hint: "Pro 기능을 실제로 쓰는 비율이에요.",
+                           ratio: presentation),
             AdoptionSignal(name: "워치 사용",
-                           value: ratio { ($0["flag.watchUser"] ?? 0) > 0 },
-                           hint: "워치 앱에 들이는 노력이 값을 하는지의 근거예요."),
+                           value: percentText(watch),
+                           hint: "워치 앱에 들이는 노력이 값을 하는지의 근거예요.",
+                           ratio: watch),
             AdoptionSignal(name: "도중 취소 비율",
                            value: String(format: "%.0f%%", cancelRate),
-                           hint: "시작한 타이머를 도중에 끄는 비율. 높으면 시간을 잘못 맞추거나 도중에 흥미를 잃는 거예요."),
+                           hint: "시작한 타이머를 도중에 끄는 비율. 높으면 시간을 잘못 맞추거나 도중에 흥미를 잃는 거예요.",
+                           ratio: cancelRate / 100),
+            // 분 단위라 위 비율들과 같은 축에 세울 수 없다 — 차트에서는 빠지고 숫자로만 남는다.
             AdoptionSignal(name: "설치당 관리 시간",
                            value: String(format: "%.0f분", avgFocus),
                            hint: "한 설치가 이 앱으로 관리한 시간 평균이에요.")
@@ -663,5 +686,105 @@ enum UsageInsights {
                                installs: profiles.filter { $0.alertsMax >= lower && $0.alertsMax <= upper }.count,
                                lowerBound: lower)
         }
+    }
+
+    // MARK: - 주로 쓰는 알림 개수 (실행마다 센 히스토그램)
+
+    /// 알림 개수 한 칸 — 같은 칸을 **실행 기준**과 **사람 기준** 두 가지로 읽는다.
+    ///
+    /// 두 숫자가 갈리는 게 이 칸의 요점이다: 실행 수가 큰 칸은 "이 앱이 실제로 굴러가는 모양"이고,
+    /// 사람 수가 큰 칸은 "이 개수를 자기 기본값으로 삼은 사람"이다. 알림을 한 번 5개 걸어 본
+    /// 사람은 앞의 칸만 올리고 뒤의 칸은 1개 칸에 남는다.
+    struct AlertRunBucket: Identifiable {
+        /// 알림 개수(`UsageMetrics.AlertRun.topBucket` 이면 "그 이상"을 모은 칸).
+        let alerts: Int
+        /// 이 개수로 시작한 타이머 실행 수(모든 설치 합).
+        let runs: Int
+        /// 이 개수를 **주로** 쓰는(=최빈값이 이 칸인) 설치 수.
+        let installs: Int
+
+        var isOpenEnded: Bool { alerts >= UsageMetrics.AlertRun.topBucket }
+        /// x축에 일곱 칸이 서므로 짧게.
+        var label: String {
+            if alerts == 0 { return "없음" }
+            return isOpenEnded ? "\(alerts)+" : "\(alerts)개"
+        }
+        var id: Int { alerts }
+    }
+
+    /// 스냅샷 1건의 알림 개수 히스토그램 (칸 번호 → 실행 수). 기록이 없으면 빈 딕셔너리.
+    static func alertRunHistogram(metrics: [String: Double]) -> [Int: Int] {
+        var histogram: [Int: Int] = [:]
+        for bucket in UsageMetrics.AlertRun.allBuckets {
+            let runs = Int((metrics[UsageMetrics.AlertRun.metricKey(bucket)] ?? 0).rounded())
+            if runs > 0 { histogram[bucket] = runs }
+        }
+        return histogram
+    }
+
+    /// 이 설치가 **주로 쓰는** 알림 개수 = 히스토그램의 최빈값. 기록이 없으면 nil.
+    /// ⚠️ 동률이면 **작은 쪽**을 고른다 — 수요를 부풀리지 않기 위해서다(결제 판단에 쓰는 값이라
+    ///    과대평가가 과소평가보다 비싸다).
+    static func typicalAlertCount(metrics: [String: Double]) -> Int? {
+        let histogram = alertRunHistogram(metrics: metrics)
+        guard let maxRuns = histogram.values.max() else { return nil }
+        return histogram.filter { $0.value == maxRuns }.keys.min()
+    }
+
+    /// 알림 개수 분포 — 실행 기준 합계와 "주로 그 개수를 쓰는 사람" 수를 한 칸에 담아 돌려준다.
+    static func alertRunDistribution(metrics snapshots: [[String: Double]]) -> [AlertRunBucket] {
+        var runsByBucket: [Int: Int] = [:]
+        var typicalByBucket: [Int: Int] = [:]
+
+        for metrics in snapshots {
+            for (bucket, runs) in alertRunHistogram(metrics: metrics) {
+                runsByBucket[bucket, default: 0] += runs
+            }
+            if let typical = typicalAlertCount(metrics: metrics) {
+                typicalByBucket[typical, default: 0] += 1
+            }
+        }
+
+        return UsageMetrics.AlertRun.allBuckets.map { bucket in
+            AlertRunBucket(alerts: bucket,
+                           runs: runsByBucket[bucket] ?? 0,
+                           installs: typicalByBucket[bucket] ?? 0)
+        }
+    }
+
+    /// 분포를 한 줄로 요약한 것 — 차트 위에 세우는 숫자들.
+    struct AlertUsageSummary {
+        /// 히스토그램을 보내온 설치 수(2.1.2 이전 버전은 아직 안 보낸다).
+        let reportingInstalls: Int
+        /// 전체 설치 수.
+        let totalInstalls: Int
+        /// 센 타이머 실행 수 합계.
+        let totalRuns: Int
+        /// 가장 많이 쓰인 알림 개수(실행 기준). 기록이 없으면 nil.
+        let modeAlerts: Int?
+        /// 실행 1회당 평균 알림 개수 — "6개 이상" 칸은 6으로 세므로 실제보다 낮게 나올 수 있다.
+        let averageAlerts: Double
+        /// 알림을 2개 이상 건 실행의 비율 = 유료 영역이 실제로 돌아가는 몫.
+        let multiAlertRunRate: Double
+
+        var coverageRate: Double {
+            totalInstalls > 0 ? Double(reportingInstalls) / Double(totalInstalls) : 0
+        }
+    }
+
+    static func alertUsageSummary(metrics snapshots: [[String: Double]]) -> AlertUsageSummary {
+        let buckets = alertRunDistribution(metrics: snapshots)
+        let totalRuns = buckets.reduce(0) { $0 + $1.runs }
+        let weighted = buckets.reduce(0) { $0 + $1.alerts * $1.runs }
+        let paidRuns = buckets.filter { $0.alerts > ProGate.freePrealertLimit }.reduce(0) { $0 + $1.runs }
+
+        return AlertUsageSummary(
+            reportingInstalls: snapshots.filter { !alertRunHistogram(metrics: $0).isEmpty }.count,
+            totalInstalls: snapshots.count,
+            totalRuns: totalRuns,
+            modeAlerts: buckets.filter { $0.runs > 0 }.max { $0.runs < $1.runs }?.alerts,
+            averageAlerts: totalRuns > 0 ? Double(weighted) / Double(totalRuns) : 0,
+            multiAlertRunRate: totalRuns > 0 ? Double(paidRuns) / Double(totalRuns) : 0
+        )
     }
 }

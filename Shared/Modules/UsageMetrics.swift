@@ -55,6 +55,31 @@ enum UsageMetrics {
         var storageKey: String { "usage.metric.\(rawValue)" }
     }
 
+    /// 한 타이머에 **알림을 몇 개 걸었는지**의 히스토그램 — 실행할 때마다 그 개수 칸을 하나 올린다.
+    ///
+    /// 왜 `alertsMax` 로는 부족한가: 한 번 5개를 걸어 본 사람과 늘 5개를 거는 사람이 같은 값으로
+    /// 보인다. "주로 몇 개를 쓰나"(=이 앱이 실제로 팔고 있는 크기)는 실행마다 세야만 나온다.
+    ///
+    /// 스냅샷 키는 `alertRuns.0` … `alertRuns.6plus` — **서버·과거 스냅샷과의 계약이다. 변경 금지.**
+    enum AlertRun {
+        /// 이 개수부터는 한 칸에 모은다 — 그 위는 표본이 얇아 칸만 늘어난다.
+        static let topBucket = 6
+
+        /// 알림 개수 → 칸 번호(0…topBucket).
+        static func bucket(for alertCount: Int) -> Int {
+            min(max(0, alertCount), topBucket)
+        }
+
+        /// 칸 번호 → 스냅샷 키.
+        static func metricKey(_ bucket: Int) -> String {
+            bucket >= topBucket ? "alertRuns.\(topBucket)plus" : "alertRuns.\(bucket)"
+        }
+
+        static var allBuckets: [Int] { Array(0...topBucket) }
+
+        fileprivate static func storageKey(_ bucket: Int) -> String { "usage.metric.\(metricKey(bucket))" }
+    }
+
     // MARK: - 기록
 
     /// 분석 이벤트 1건을 로컬 카운터에 반영한다. `AnalyticsManager.log`가 단독으로 부른다.
@@ -62,8 +87,11 @@ enum UsageMetrics {
         switch event {
         case .timerStarted(_, let alertCount, _):
             increment(.timerStarts)
-            // 알림 개수는 이 앱의 결제 경계다(무료 1개). 최대값과 "한도를 넘긴 실행 횟수"를 함께 남긴다.
+            // 알림 개수는 이 앱의 결제 경계다(무료 1개).
+            // 최대값·"한도를 넘긴 실행 횟수"에 더해 **개수별 실행 횟수**까지 남긴다 —
+            // 최대값만으로는 "한 번 해 봤다"와 "늘 그렇게 쓴다"가 구분되지 않는다.
             noteMax(.alertsMax, Double(alertCount))
+            incrementAlertRun(alertCount)
             if alertCount > ProGate.freePrealertLimit { increment(.multiAlertRuns) }
         case .timerCompleted(let durationSeconds):
             increment(.timerCompletions)
@@ -120,6 +148,16 @@ enum UsageMetrics {
         store.set(store.double(forKey: key.storageKey) + amount, forKey: key.storageKey)
     }
 
+    private static func incrementAlertRun(_ alertCount: Int) {
+        let key = AlertRun.storageKey(AlertRun.bucket(for: alertCount))
+        store.set(store.double(forKey: key) + 1, forKey: key)
+    }
+
+    /// 이 기기가 알림 개수별로 타이머를 몇 번 시작했나 (칸 번호 → 횟수).
+    static func alertRunCount(bucket: Int) -> Double {
+        store.double(forKey: AlertRun.storageKey(bucket))
+    }
+
     // MARK: - 스냅샷용 묶음
 
     /// 스냅샷에 실어 보낼 지표 — 값이 0인 키는 빼서 전송량과 평균 계산을 깔끔하게 유지한다
@@ -131,6 +169,12 @@ enum UsageMetrics {
             guard value > 0 else { continue }
             metrics[key.rawValue] = (value * 10).rounded() / 10
         }
+        // 알림 개수 히스토그램 — 0인 칸은 빼서 전송량을 줄인다(없는 칸 = 0회).
+        for bucket in AlertRun.allBuckets {
+            let runs = alertRunCount(bucket: bucket)
+            guard runs > 0 else { continue }
+            metrics[AlertRun.metricKey(bucket)] = runs.rounded()
+        }
         return metrics
     }
 
@@ -138,6 +182,7 @@ enum UsageMetrics {
     /// 테스트·디버그 전용 초기화.
     static func resetAll() {
         for key in Key.allCases { store.removeObject(forKey: key.storageKey) }
+        for bucket in AlertRun.allBuckets { store.removeObject(forKey: AlertRun.storageKey(bucket)) }
     }
     #endif
 }

@@ -34,6 +34,21 @@ struct UsageStatsView: View {
     ///    불러올 때 한 번만 만든다.
     @State private var profiles: [UsageInsights.UserProfile] = []
 
+    /// 알림 개수 분포를 어느 쪽으로 볼지 — **실행 기준**과 **사람 기준**은 단위가 달라
+    /// 한 차트에 겹쳐 그리지 않고 갈아 끼운다(축이 둘이면 없는 관계가 보인다).
+    @State private var alertMeasure: AlertMeasure = .runs
+
+    enum AlertMeasure: String, CaseIterable, Identifiable {
+        /// 타이머 실행 하나하나를 센다 — "이 앱이 실제로 돌아가는 모양".
+        case runs
+        /// 설치마다 최빈값 하나씩 — "이 개수를 자기 기본값으로 삼은 사람 수".
+        case installs
+        var id: String { rawValue }
+
+        var label: String { self == .runs ? "실행 기준" : "사람 기준" }
+        var unit: String { self == .runs ? "회" : "명" }
+    }
+
     var body: some View {
         List {
             if isLoading && snapshots.isEmpty && eventSamples.isEmpty {
@@ -44,6 +59,7 @@ struct UsageStatsView: View {
                 usersSection
                 purchaseReadinessSection
                 paymentFunnelSection
+                alertUsageSection
                 alertDemandSection
                 segmentSection
                 trendSection
@@ -119,6 +135,18 @@ struct UsageStatsView: View {
     private var valueSection: some View {
         let summary = UsageInsights.valueSummary(metrics: metrics)
         return Section {
+            // 같은 단위(횟수)라 한 축에 세울 수 있다 — 완주율이 숫자라면 이건 그 숫자의 모양이다.
+            if summary.totalStarts > 0 {
+                UsageDistributionChart(
+                    items: [
+                        .init(label: "시작", value: summary.totalStarts),
+                        .init(label: "완주", value: summary.totalCompletions, isKey: true),
+                        .init(label: "취소", value: max(0, summary.totalStarts - summary.totalCompletions))
+                    ],
+                    unit: "회",
+                    height: 140
+                )
+            }
             statRow("완주율", percent(summary.completionRate))
             statRow("한 번이라도 완주한 설치",
                     "\(summary.completedInstalls)곳 (\(percent(summary.activationRate)))")
@@ -138,11 +166,11 @@ struct UsageStatsView: View {
     private var distributionSection: some View {
         if !snapshots.isEmpty {
             let buckets = UsageInsights.completionDistribution(metrics: metrics)
-            let maxInstalls = max(1, buckets.map(\.installs).max() ?? 1)
             Section {
-                ForEach(buckets) { bucket in
-                    barRow(label: bucket.label, value: bucket.installs, maxValue: maxInstalls)
-                }
+                UsageDistributionChart(items: buckets.map {
+                    // 0회 칸만 강조 — 이 차트를 보는 이유가 그 칸이다.
+                    .init(label: $0.label, value: $0.installs, isKey: $0.lowerBound == 0)
+                })
             } header: {
                 Text(verbatim: "완주 횟수 분포")
             } footer: {
@@ -174,6 +202,17 @@ struct UsageStatsView: View {
                              detail: "아직 알림 1개로 쓰지만 반복해서 완주하는 사람이에요(완주 \(UsageInsights.repeatUseThreshold)회 이상).")
                 statRow("이미 결제한 사람", "\(readiness.paying)명 (\(percent(readiness.payingRate)))")
                 statRow("결제에 가까워진 비율", percent(readiness.nearPurchaseRate))
+                // 네 숫자가 다 '명'이라 한 축에 세울 수 있다 — 어느 칸이 큰지는 눈이 먼저 답한다.
+                UsageBreakdownChart(
+                    items: [
+                        .init(label: "막힘", value: readiness.blocked, detail: "\(readiness.blocked)명"),
+                        .init(label: "임박", value: readiness.nearLimit, detail: "\(readiness.nearLimit)명"),
+                        .init(label: "곧 필요", value: readiness.latentDemand, detail: "\(readiness.latentDemand)명"),
+                        .init(label: "결제함", value: readiness.paying, detail: "\(readiness.paying)명")
+                    ],
+                    unit: "명",
+                    limit: 4
+                )
                 if !UsageInsights.hotLeads(profiles: profiles).isEmpty {
                     NavigationLink {
                         UserSegmentListView(profiles: profiles, initialStage: .blocked)
@@ -198,12 +237,63 @@ struct UsageStatsView: View {
     @ViewBuilder
     private var paymentFunnelSection: some View {
         if !snapshots.isEmpty {
+            let stages = UsageInsights.paymentFunnel(profiles: profiles)
             Section {
-                ForEach(UsageInsights.paymentFunnel(profiles: profiles)) { stage in funnelRow(stage) }
+                UsageFunnelChart(stages: stages)
+                if let worst = weakestStep(stages) {
+                    dropNote(worst)
+                }
             } header: {
                 Text(verbatim: "결제 퍼널 (지금 상태)")
             } footer: {
                 Text(verbatim: "설치 → 가치 경험 → 알림 2개 이상 → 한도 도달 → 페이월 → 결제. 어느 칸에서 확 줄어드는지가 곧 손볼 곳이에요. 결제한 사람은 앞 단계를 모두 지난 것으로 세요. 아래 '결제 이벤트'는 같은 이야기를 기간 누적 이벤트로 본 것이라 숫자가 다를 수 있어요.")
+            }
+        }
+    }
+
+    // MARK: - 주로 쓰는 알림 개수 (실행마다 센 값)
+
+    /// **이 앱이 실제로 팔고 있는 크기.** `alertsMax`(아래 섹션)가 "가장 많이 걸어 본 개수"라면
+    /// 여기는 "평소 몇 개를 거는가"다 — 한 번 5개를 해 본 사람과 늘 5개를 거는 사람은 다르다.
+    @ViewBuilder
+    private var alertUsageSection: some View {
+        let summary = UsageInsights.alertUsageSummary(metrics: metrics)
+        if summary.totalRuns > 0 {
+            let buckets = UsageInsights.alertRunDistribution(metrics: metrics)
+            let values = buckets.map { alertMeasure == .runs ? $0.runs : $0.installs }
+            let peak = values.max() ?? 0
+            Section {
+                Picker(selection: $alertMeasure) {
+                    ForEach(AlertMeasure.allCases) { measure in
+                        Text(verbatim: measure.label).tag(measure)
+                    }
+                } label: {
+                    Text(verbatim: "보는 기준")
+                }
+                .pickerStyle(.segmented)
+                .labelsHidden()
+
+                UsageDistributionChart(
+                    items: zip(buckets, values).map { bucket, value in
+                        // 가장 높은 칸이 곧 "주로 쓰는 개수"다 — 눈이 거기 먼저 가야 한다.
+                        .init(label: bucket.label, value: value, isKey: value == peak && peak > 0)
+                    },
+                    unit: alertMeasure.unit
+                )
+
+                if let mode = summary.modeAlerts {
+                    highlightRow(title: "주로 쓰는 알림 개수",
+                                 value: mode == 0 ? "없음" : "\(mode)개",
+                                 detail: "타이머 실행 \(summary.totalRuns)회 중 가장 많았던 개수예요.")
+                }
+                statRow("실행당 평균 알림", String(format: "%.1f개", summary.averageAlerts))
+                statRow("알림 2개 이상 건 실행", percent(summary.multiAlertRunRate))
+                statRow("이 값을 보내온 설치",
+                        "\(summary.reportingInstalls)곳 (\(percent(summary.coverageRate)))")
+            } header: {
+                Text(verbatim: "주로 쓰는 알림 개수")
+            } footer: {
+                Text(verbatim: "타이머를 시작할 때마다 그때 건 알림 개수를 기기에서 세어 보낸 값이에요. '실행 기준'은 타이머 하나하나를, '사람 기준'은 설치마다 가장 자주 쓰는 개수 하나씩을 세요. 아래 '알림 개수 수요'는 최대값이라 한 번만 해 본 것도 잡히는데, 여기는 평소 습관이 보여요. 2.1.2 이전 버전은 아직 이 값을 보내지 않아 '보내온 설치' 비율이 낮게 시작해요.")
             }
         }
     }
@@ -214,11 +304,13 @@ struct UsageStatsView: View {
     private var alertDemandSection: some View {
         if !snapshots.isEmpty {
             let buckets = UsageInsights.alertDemandDistribution(profiles: profiles)
-            let maxInstalls = max(1, buckets.map(\.installs).max() ?? 1)
             Section {
-                ForEach(buckets) { bucket in
-                    barRow(label: bucket.label, value: bucket.installs, maxValue: maxInstalls)
-                }
+                UsageDistributionChart(items: buckets.map {
+                    // 무료 한도(1개) 바로 위 칸이 이 차트의 관전 포인트다.
+                    .init(label: $0.label,
+                          value: $0.installs,
+                          isKey: $0.lowerBound > ProGate.freePrealertLimit)
+                })
             } header: {
                 Text(verbatim: "알림 개수 수요 (한 타이머 최대)")
             } footer: {
@@ -232,8 +324,11 @@ struct UsageStatsView: View {
     @ViewBuilder
     private var segmentSection: some View {
         if !snapshots.isEmpty {
-            let segments = UsageInsights.segmentCounts(profiles: profiles).filter { $0.count > 0 }
+            let segments = UsageInsights.segmentCounts(profiles: profiles).filter { $0.count >= 1 }
             Section {
+                UsageBreakdownChart(items: segments.map {
+                    .init(label: $0.stage.label, value: $0.count, detail: "\($0.count)명")
+                }, unit: "명", limit: UsageInsights.PaymentStage.allCases.count)
                 ForEach(segments, id: \.stage) { segment in
                     NavigationLink {
                         UserSegmentListView(profiles: profiles, initialStage: segment.stage)
@@ -267,7 +362,8 @@ struct UsageStatsView: View {
         let stages = UsageInsights.activationFunnel(from: eventSamples)
         if (stages.first?.installs ?? 0) > 0 {
             Section {
-                ForEach(stages) { stage in funnelRow(stage) }
+                UsageFunnelChart(stages: stages)
+                if let worst = weakestStep(stages) { dropNote(worst) }
             } header: {
                 Text(verbatim: "활성화 퍼널")
             } footer: {
@@ -281,7 +377,8 @@ struct UsageStatsView: View {
         let stages = UsageInsights.onboardingFunnel(from: eventSamples)
         if (stages.first?.installs ?? 0) > 0 {
             Section {
-                ForEach(stages) { stage in funnelRow(stage) }
+                UsageFunnelChart(stages: stages)
+                if let worst = weakestStep(stages) { dropNote(worst) }
             } header: {
                 Text(verbatim: "온보딩 퍼널")
             }
@@ -294,13 +391,15 @@ struct UsageStatsView: View {
         let dropoffs = UsageInsights.dropoffReasons(from: eventSamples).filter { $0.events > 0 }
         if (stages.first?.installs ?? 0) > 0 || !dropoffs.isEmpty {
             Section {
-                ForEach(stages) { stage in funnelRow(stage) }
-                ForEach(dropoffs) { reason in
-                    HStack {
-                        Text(verbatim: reason.name).foregroundStyle(.secondary)
-                        Spacer()
-                        Text(verbatim: "\(reason.events)").foregroundStyle(.secondary)
-                    }
+                if (stages.first?.installs ?? 0) > 0 {
+                    UsageFunnelChart(stages: stages)
+                }
+                if !dropoffs.isEmpty {
+                    Text(verbatim: "이탈 사유 (건수)")
+                        .font(.caption).foregroundStyle(.secondary)
+                    UsageBreakdownChart(items: dropoffs.map {
+                        .init(label: $0.name, value: $0.events, detail: "\($0.events)건")
+                    }, unit: "건", limit: dropoffs.count)
                 }
             } header: {
                 Text(verbatim: "결제 이벤트 (기간 누적)")
@@ -320,6 +419,8 @@ struct UsageStatsView: View {
         )
         if !rows.isEmpty {
             Section {
+                // 오래된 코호트가 왼쪽에 오도록 뒤집는다(시간은 왼쪽에서 오른쪽으로 흐른다).
+                UsageRetentionChart(rows: Array(rows.prefix(8).reversed()))
                 ForEach(rows.prefix(8)) { row in
                     VStack(alignment: .leading, spacing: 4) {
                         HStack {
@@ -350,7 +451,11 @@ struct UsageStatsView: View {
     private var adoptionSection: some View {
         let signals = UsageInsights.adoptionSignals(metrics: metrics)
         if !signals.isEmpty {
+            let ratios = signals.compactMap { signal in
+                signal.ratio.map { UsageRatioChart.Item(label: signal.name, ratio: $0) }
+            }
             Section {
+                if !ratios.isEmpty { UsageRatioChart(items: ratios) }
                 ForEach(signals) { signal in
                     VStack(alignment: .leading, spacing: 2) {
                         HStack {
@@ -377,14 +482,14 @@ struct UsageStatsView: View {
             if events.isEmpty {
                 Text(verbatim: "아직 기록된 사용 내용이 없어요.").foregroundStyle(.secondary)
             } else {
-                ForEach(events) { event in
-                    VStack(alignment: .leading, spacing: 3) {
-                        Text(verbatim: event.name).font(.body.weight(.medium))
-                        Text(verbatim: "\(event.count)건 · 설치 \(event.installs)곳")
-                            .font(.caption).foregroundStyle(.secondary)
-                    }
-                    .accessibilityElement(children: .combine)
-                }
+                // 건수보다 '설치 몇 곳이 하는지'가 뜻이 있어서 그 값으로 세우고, 건수는 옆에 적는다.
+                UsageBreakdownChart(items: events
+                    .sorted { $0.installs > $1.installs }
+                    .map { .init(label: $0.name,
+                                 value: $0.installs,
+                                 detail: "\($0.installs)곳 · \($0.count)건") },
+                                    unit: "곳",
+                                    limit: 10)
             }
         } header: {
             Text(verbatim: "앱 사용 내용")
@@ -413,16 +518,16 @@ struct UsageStatsView: View {
     private var versionSection: some View {
         if !snapshots.isEmpty {
             Section {
-                ForEach(distribution(\.appVersion), id: \.key) { item in
-                    statRow(item.key, "\(item.count)")
-                }
+                UsageBreakdownChart(items: distribution(\.appVersion).map {
+                    .init(label: $0.key, value: $0.count, detail: "\($0.count)곳")
+                })
             } header: {
                 Text(verbatim: "버전 분포")
             }
             Section {
-                ForEach(distribution(\.platform), id: \.key) { item in
-                    statRow(item.key, "\(item.count)")
-                }
+                UsageBreakdownChart(items: distribution(\.platform).map {
+                    .init(label: $0.key, value: $0.count, detail: "\($0.count)곳")
+                }, limit: 6)
             } header: {
                 Text(verbatim: "플랫폼")
             }
@@ -484,48 +589,19 @@ struct UsageStatsView: View {
         .accessibilityElement(children: .combine)
     }
 
-    /// 값과 비율을 함께 읽는 가로 막대 — 숫자만 있으면 분포의 모양이 안 보인다.
-    private func barRow(label: String, value: Int, maxValue: Int) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack {
-                Text(verbatim: label)
-                Spacer()
-                Text(verbatim: "\(value)곳").font(.body.monospacedDigit()).foregroundStyle(.secondary)
-            }
-            GeometryReader { geo in
-                ZStack(alignment: .leading) {
-                    Capsule().fill(.quaternary)
-                    Capsule().fill(Color.accentColor)
-                        .frame(width: max(2, geo.size.width * Double(value) / Double(maxValue)))
-                }
-            }
-            .frame(height: 6)
-        }
-        .padding(.vertical, 2)
-        .accessibilityElement(children: .combine)
+    /// 퍼널에서 **가장 크게 줄어드는 칸** — 차트를 보면 눈에 띄지만, 말로도 한 번 못박아 둔다.
+    private func weakestStep(_ stages: [UsageInsights.FunnelStage]) -> UsageInsights.FunnelStage? {
+        stages.dropFirst().filter { $0.rateFromPrevious < 1 }.min { $0.rateFromPrevious < $1.rateFromPrevious }
     }
 
-    private func funnelRow(_ stage: UsageInsights.FunnelStage) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack {
-                Text(verbatim: stage.name).font(.body.weight(.medium))
-                Spacer()
-                Text(verbatim: "설치 \(stage.installs)곳").foregroundStyle(.secondary)
-            }
-            GeometryReader { geo in
-                ZStack(alignment: .leading) {
-                    Capsule().fill(.quaternary)
-                    Capsule().fill(Color.accentColor)
-                        .frame(width: max(2, geo.size.width * stage.rateFromTop))
-                }
-            }
-            .frame(height: 6)
-            Text(verbatim: "전체 대비 \(percent(stage.rateFromTop)) · 직전 단계 대비 \(percent(stage.rateFromPrevious))")
+    private func dropNote(_ stage: UsageInsights.FunnelStage) -> some View {
+        Label {
+            Text(verbatim: "가장 크게 줄어드는 칸: \(stage.name) — 직전 단계의 \(percent(stage.rateFromPrevious))만 넘어와요.")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+        } icon: {
+            Image(systemName: "arrow.down.right")
         }
-        .padding(.vertical, 2)
-        .accessibilityElement(children: .combine)
+        .foregroundStyle(.secondary)
     }
 
     private func retentionCell(_ label: String, _ rate: Double) -> some View {
@@ -559,7 +635,9 @@ struct UsageStatsView: View {
     private var metricAverages: [MetricAvg] {
         var sums: [String: (total: Double, n: Int)] = [:]
         for snapshot in snapshots {
-            for (key, value) in snapshot.metrics where !key.hasPrefix("flag.") {
+            // 알림 개수 히스토그램(alertRuns.*)은 위에서 차트로 다 보여 준다 — 여기서는 뺀다.
+            for (key, value) in snapshot.metrics
+            where !key.hasPrefix("flag.") && !key.hasPrefix("alertRuns.") {
                 let current = sums[key] ?? (0, 0)
                 sums[key] = (current.total + value, current.n + 1)
             }
