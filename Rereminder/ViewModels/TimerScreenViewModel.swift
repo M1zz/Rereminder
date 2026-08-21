@@ -46,6 +46,10 @@ final class TimerScreenViewModel: ObservableObject {
     @Published var presentationSections: [PresentationSection] = []
     /// 파생 구간의 사용자 지정 이름 (구간 인덱스 → 이름, 비어있으면 placeholder 사용)
     @Published var sectionNames: [Int: String] = [:]
+    /// 구간별 대본·메모 (구간 인덱스 → 글). 발표 중 화면에 그 구간의 글이 뜬다.
+    /// 이름과 같은 방식으로 **구간 번호에 매단다** — 알림을 옮기면 구간이 다시 나뉘므로,
+    /// 글도 그 번호를 따라간다(구간을 지우면 그 번호의 글은 화면에서 사라진다).
+    @Published var sectionScripts: [Int: String] = [:]
 
     let timerVM: TimerViewModel
     let configService = TimerConfigService()
@@ -334,6 +338,7 @@ final class TimerScreenViewModel: ObservableObject {
         prealertMessages = [:]
         finishMessage = ""
         sectionNames = [:]
+        sectionScripts = [:]
         initialConfiguration()
         // 다시 켰을 때 되살아나지 않도록 "마지막 사용 설정"도 기본값으로 덮는다
         persistLastUsedConfig(
@@ -506,7 +511,8 @@ extension TimerScreenViewModel {
                 let custom = (sectionNames[segment.index] ?? "").trimmingCharacters(in: .whitespaces)
                 return PresentationSection(
                     name: custom.isEmpty ? String(localized: "Section \(segment.index + 1)") : custom,
-                    durationSeconds: segment.durationSec
+                    durationSeconds: segment.durationSec,
+                    script: sectionScripts[segment.index] ?? ""
                 )
             }
     }

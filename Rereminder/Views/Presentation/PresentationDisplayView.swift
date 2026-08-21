@@ -123,6 +123,9 @@ struct PresentationDisplayView: View {
                     totalRemainingDisplay
                         .padding(.bottom, DSSpacing.sm)
 
+                    // 이 구간에 말할 것 — 적어 둔 대본이 있으면 그 차례에 뜬다
+                    scriptView(maxHeight: geo.size.height * 0.26)
+
                     // 다음 섹션 미리보기
                     nextSectionPreview
                         .padding(.bottom, DSSpacing.xl)
@@ -251,6 +254,42 @@ struct PresentationDisplayView: View {
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(String(localized: "Total time remaining"))
         .accessibilityValue(String(localized: "\(minutes) minutes \(seconds) seconds"))
+    }
+
+    // MARK: - Script
+
+    /// 지금 구간의 대본. **비어 있으면 아무것도 그리지 않는다** — 안 쓰는 사람에게 빈 상자를
+    /// 보여줄 이유가 없다. 글이 길면 그 안에서만 스크롤한다(화면이 밀리면 시간이 가려진다).
+    @ViewBuilder
+    private func scriptView(maxHeight: CGFloat) -> some View {
+        let info = currentSectionInfo
+        let sections = screenVM.presentationSections
+        let script = info.index < sections.count
+            ? sections[info.index].script.trimmingCharacters(in: .whitespacesAndNewlines)
+            : ""
+
+        if !script.isEmpty {
+            ScrollView {
+                Text(script)
+                    .font(DSFont.body)
+                    .foregroundStyle(.primary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(DSSpacing.md)
+            }
+            .frame(maxHeight: maxHeight)
+            .background(
+                RoundedRectangle(cornerRadius: DSRadius.md)
+                    .fill(.ultraThinMaterial)
+            )
+            .padding(.horizontal, DSSpacing.xl)
+            .padding(.bottom, DSSpacing.md)
+            // 구간이 바뀌면 새 글로 갈아 끼운다 — 이어 붙이면 어디까지 읽었는지 잃는다
+            .id(info.index)
+            .transition(.opacity)
+            .dsAnimation(.easeInOut(duration: 0.25), value: info.index)
+            .accessibilityLabel(Text("Script"))
+            .accessibilityValue(Text(verbatim: script))
+        }
     }
 
     // MARK: - Next Section Preview

@@ -24,6 +24,11 @@ struct PresentationSectionList: View {
     /// 실행 중에는 이름을 고칠 수 없다.
     let isEditable: Bool
 
+    /// 대본을 열어 둔 구간 (시트). `Int` 는 Identifiable 이 아니라 감싸서 쓴다.
+    @State private var scriptTarget: ScriptTarget?
+
+    private struct ScriptTarget: Identifiable { let id: Int }
+
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView {
@@ -54,6 +59,70 @@ struct PresentationSectionList: View {
                 }
             }
         }
+        .sheet(item: $scriptTarget) { target in
+            let index = target.id
+            let segment = segments.first { $0.index == index }
+            SectionScriptSheet(
+                sectionName: sectionTitle(index),
+                durationText: TimeMapper.mmss(segment?.durationSec ?? 0),
+                color: SectionPalette.color(index),
+                text: scriptBinding(index)
+            )
+            .presentationDetents([.medium, .large])
+        }
+    }
+
+    /// 시트 제목에 쓸 구간 이름 — 이름을 안 지었으면 "Section N".
+    private func sectionTitle(_ index: Int) -> String {
+        let custom = (screenVM.sectionNames[index] ?? "").trimmingCharacters(in: .whitespaces)
+        return custom.isEmpty ? String(localized: "Section \(index + 1)") : custom
+    }
+
+    // MARK: - 대본 한 줄
+
+    /// 카드 맨 아래 **대본 미리보기**. 눌러서 시트로 고친다.
+    /// 발표가 도는 중에는 고칠 수 없지만 **읽히기는 해야 한다** — 그때가 정작 볼 때다.
+    @ViewBuilder
+    private func scriptRow(_ segment: TimerSections.Segment, color: Color) -> some View {
+        let script = (screenVM.sectionScripts[segment.index] ?? "")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if isEditable {
+            Button {
+                scriptTarget = ScriptTarget(id: segment.index)
+            } label: {
+                HStack(spacing: DSSpacing.xs) {
+                    Image(systemName: script.isEmpty ? "square.and.pencil" : "text.quote")
+                        .font(.caption)
+                    Text(script.isEmpty ? String(localized: "Add script") : script)
+                        .font(DSFont.caption)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
+                    Spacer(minLength: 0)
+                }
+                .foregroundStyle(script.isEmpty ? Color.secondary : color)
+            }
+            .buttonStyle(.plain)
+            .padding(.top, DSSpacing.xxs)
+        } else if !script.isEmpty {
+            HStack(alignment: .top, spacing: DSSpacing.xs) {
+                Image(systemName: "text.quote")
+                    .font(.caption)
+                Text(script)
+                    .font(DSFont.caption)
+                    .lineLimit(3)
+                Spacer(minLength: 0)
+            }
+            .foregroundStyle(.secondary)
+            .padding(.top, DSSpacing.xxs)
+        }
+    }
+
+    private func scriptBinding(_ index: Int) -> Binding<String> {
+        Binding(
+            get: { screenVM.sectionScripts[index] ?? "" },
+            set: { screenVM.sectionScripts[index] = $0 }
+        )
     }
 
     private func scrollTo(_ index: Int, using proxy: ScrollViewProxy) {
@@ -108,6 +177,8 @@ struct PresentationSectionList: View {
                 Text("\(rangeStartText(segment.startSec)) – \(rangeEndText(segment.endSec))")
                     .font(DSFont.caption.monospacedDigit())
                     .foregroundStyle(.secondary)
+
+                scriptRow(segment, color: color)
             }
         }
         .padding(.horizontal, DSSpacing.lg)
