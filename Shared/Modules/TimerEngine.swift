@@ -112,7 +112,7 @@ final class TimerEngine {
     }
 
     func pause() {
-        guard (state == .running || state == .overtime),
+        guard state == .running || state == .overtime,
               let start = startDate,
               let cfg = config else { return }
 

@@ -235,7 +235,7 @@ extension WatchConnectivityManager: WCSessionDelegate {
 
     // MARK: - Receive Messages
 
-    nonisolated func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+    nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
         Task { @MainActor in
             guard let action = message["action"] as? String else { return }
 
@@ -274,7 +274,7 @@ extension WatchConnectivityManager: WCSessionDelegate {
         }
     }
 
-    nonisolated func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
+    nonisolated func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
         Task { @MainActor in
             // ringMode 동기화 (Watch에서 수신)
             if let ringMode = applicationContext["ringMode"] as? String {

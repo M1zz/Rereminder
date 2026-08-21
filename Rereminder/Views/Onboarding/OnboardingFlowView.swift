@@ -230,7 +230,6 @@ struct OnboardingFlowView: View {
             .id(chosen.id)
     }
 
-
     // MARK: - 4. 템플릿
 
     private var templateStep: some View {
@@ -356,7 +355,6 @@ struct OnboardingFlowView: View {
         }
     }
 }
-
 
 // MARK: - 체험 한 장
 

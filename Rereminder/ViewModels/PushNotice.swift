@@ -12,7 +12,7 @@ func pushNotice() {
     guard pushEnabled else { return }
 
     let center = UNUserNotificationCenter.current()
-    
+
     let content = UNMutableNotificationContent()
     content.body = "Timer has finished!"
     content.sound = .default

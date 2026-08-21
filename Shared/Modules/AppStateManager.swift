@@ -37,7 +37,7 @@ final class AppStateManager: ObservableObject {
 
     func requestNotificationPermission() {
         UNUserNotificationCenter.current().requestAuthorization(
-            options: [.alert, .sound, .badge]) { granted, error in
+            options: [.alert, .sound, .badge]) { _, _ in
                 DispatchQueue.main.async {
                     self.checkNotificationPermission()
                 }

@@ -811,22 +811,6 @@
         }
       }
     },
-    "Add Section": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "セクションを追加"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "섹션 추가"
-          }
-        }
-      }
-    },
     "Add a custom pre-alert": {
       "localizations": {
         "ja": {
@@ -951,22 +935,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "미리 알림 프리셋"
-          }
-        }
-      }
-    },
-    "Alert at section end": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "セクション終了時に通知"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "섹션 종료 시 알림"
           }
         }
       }
@@ -1470,22 +1438,6 @@
         }
       }
     },
-    "Delete section": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "セクションを削除"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "섹션 삭제"
-          }
-        }
-      }
-    },
     "Denied - Go to Settings": {
       "localizations": {
         "ja": {
@@ -1599,22 +1551,6 @@
         }
       }
     },
-    "Double tap to set. Touch and hold to edit this preset.": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ダブルタップで設定、長押しでこのプリセットを編集します。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "두 번 탭하면 설정, 길게 누르면 이 프리셋을 편집합니다."
-          }
-        }
-      }
-    },
     "Double tap to toggle this alert.": {
       "localizations": {
         "ja": {
@@ -1708,22 +1644,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "프리셋 편집"
-          }
-        }
-      }
-    },
-    "Edit Quick Setup": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "クイック設定を編集"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "빠른 설정 편집"
           }
         }
       }
@@ -2675,28 +2595,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "다음"
-          }
-        }
-      }
-    },
-    "Next section: %@, %@": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Next section: %1$@, %2$@"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "次のセクション: %1$@、%2$@"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "다음 섹션: %1$@, %2$@"
           }
         }
       }
@@ -3717,22 +3615,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "구매 완료!"
-          }
-        }
-      }
-    },
-    "Quick Setup": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "クイック設定"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "빠른 설정"
           }
         }
       }
@@ -4823,22 +4705,6 @@
         }
       }
     },
-    "Stop presentation": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "プレゼンテーションを停止"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "프레젠테이션 정지"
-          }
-        }
-      }
-    },
     "Stop the current timer": {
       "localizations": {
         "ja": {
@@ -5204,38 +5070,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "시간 배수"
-          }
-        }
-      }
-    },
-    "Time is almost up": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "まもなく時間です"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "시간이 거의 다 됐어요"
-          }
-        }
-      }
-    },
-    "Time is running low": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "残り時間が少なくなっています"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "시간이 얼마 안 남았어요"
           }
         }
       }
@@ -5769,22 +5603,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "예비 알림을 길게 누르면 제거됩니다."
-          }
-        }
-      }
-    },
-    "Touch and hold to edit": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "長押しで編集"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "길게 눌러 편집"
           }
         }
       }

@@ -424,9 +424,9 @@ extension TimerView {
   목록이 키보드마다 출렁인다.
 - 보는 곳: `PresentationScriptPanel` — **발표가 도는 동안** 구간 목록 대신 선다(목록은 고칠 때
   필요한 것이고, 도는 동안에는 읽을 것만 남는다). 대본이 비어 있으면 목록이 그대로 선다.
-- ⚠️ `PresentationDisplayView`·`PresentationSetupView`·`PresentationContainerView` 는 지금
-  **어디에서도 열리지 않는 죽은 화면**이다(앱은 `TimerUnifiedView` → `TimerMainView` 하나로 돈다).
-  발표 관련 화면을 고칠 때 그쪽만 고치면 앱에서는 아무 일도 일어나지 않는다.
+- ⚠️ 발표 화면은 **`TimerMainView` 하나뿐**이다(앱은 `TimerUnifiedView` → `TimerMainView` 로 돈다).
+  예전에 있던 `PresentationDisplayView`·`PresentationSetupView`·`PresentationContainerView` 는
+  어디에서도 열리지 않는 죽은 화면이라 2.2.0 에서 지웠다 — 발표 화면을 새로 만들지 말고 여기를 고칠 것.
 
 ### 다이얼 드래그 (튐 방지)
 흰 핸들·종 노브 모두 **손가락 각도만 이어 붙이고, 자르는 건 화면에 그릴 때 한 번만** 합니다.
@@ -511,6 +511,12 @@ extension TimerView {
 - **SectionPalette** (`Shared/DesignSystem/SectionPalette.swift`): 구간 색 규칙 —
   링의 호·리스트 점·진행 중 표시가 **같은 구간이면 같은 색**이어야 해서 한 곳에 둔다.
   iPhone·워치가 같은 색을 써야 해서 Shared 에 있다(예전엔 `Rereminder/Views/Components/`)
+- **TimerDialRings** (`Rereminder/Views/Components/TimerDialRings.swift`): 다이얼의 링들
+  (바탕·남은 시간·구간 색·구간 번호). 화면이 `Plan` 을 만들어 넘기면 그것만 그린다 —
+  링이 이상할 때 **값이 틀렸는지(TimerMainView.ringPlan) 그림이 틀렸는지(여기)** 를 갈라 본다.
+  `SectionOuterRing` (발표 모드 바깥 얇은 링)도 같은 파일
+- **MarkerDragBadge** (`Rereminder/Views/Components/MarkerDragBadge.swift`): 종을 끌 때 뜨는
+  두 줄 배지. 색은 부르는 쪽이 링 구간 색으로 정해 넘긴다 (위 "알림 배지" 규칙)
 - **SnakeTimerView** (`Rereminder/Views/Components/SnakeTimerView.swift`): ㄹ자로 접은 줄.
   선의 길이 비교를 지키면서 가로 폭을 접는다 — 긴 타이머용 (위 "타이머 모양" 참고)
 - **TimerShapeSilhouette** (`Rereminder/Views/Components/TimerShapeSilhouette.swift`): 설정에서

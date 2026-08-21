@@ -16,47 +16,47 @@ struct NotificationService {
             print("알림 예약 실패: \(identifier) - 유효하지 않은 시간 간격 (\(timeInterval))")
             return
         }
-        
+
         // 기존 알림 제거
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
-        
+
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if let error = error {
                 print("알림 Request Permission 실패: \(error.localizedDescription)")
                 return
             }
-            
+
             if granted {
                 let content = self.makeContent(title: title, body: body, identifier: identifier)
-                
+
                 let trigger = UNTimeIntervalNotificationTrigger(timeInterval: timeInterval, repeats: false)
                 let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-                
+
                 self.addRequest(request, identifier: identifier, timeDescription: "\(Int(timeInterval))sec later")
             } else {
                 print("Notification permission denied.")
             }
         }
     }
-    
+
     /// 새로 추가된 Date 기반 예약 함수
     func scheduleNotification(at date: Date, title: String, body: String, identifier: String) {
         // 기존 알림 제거
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
-        
+
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if let error = error {
                 print("알림 Request Permission 실패: \(error.localizedDescription)")
                 return
             }
-            
+
             if granted {
                 let content = self.makeContent(title: title, body: body, identifier: identifier)
-                
+
                 let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute, .second], from: date)
                 let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
                 let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
-                
+
                 let formatter = DateFormatter()
                 formatter.timeStyle = .short
                 let dateString = formatter.string(from: date)
@@ -66,7 +66,7 @@ struct NotificationService {
             }
         }
     }
-    
+
     // 공통 Content 생성
     private func makeContent(title: String, body: String, identifier: String) -> UNMutableNotificationContent {
         let content = UNMutableNotificationContent()
@@ -83,7 +83,7 @@ struct NotificationService {
         }
         return content
     }
-    
+
     // 공통 Request 추가 처리
     private func addRequest(_ request: UNNotificationRequest, identifier: String, timeDescription: String) {
         UNUserNotificationCenter.current().add(request) { error in
@@ -98,7 +98,7 @@ struct NotificationService {
             }
         }
     }
-    
+
     func removeAllNotifications() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         UNUserNotificationCenter.current().removeAllDeliveredNotifications()

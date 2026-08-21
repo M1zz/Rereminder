@@ -125,7 +125,6 @@ struct TemplateQuickBar: View {
     }
 }
 
-
 /// popoverTip 은 iOS 17+ 전용이라 가용성 가드를 한 곳에 모은다.
 private struct SaveTemplateTipAnchor: ViewModifier {
     func body(content: Content) -> some View {

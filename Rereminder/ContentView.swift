@@ -17,7 +17,7 @@ struct ContentView: View {
             .onAppear {
                 // Sound/Vibration 알림 Request Permission
                 UNUserNotificationCenter.current().requestAuthorization(
-                    options: [.alert, .sound, .badge]) { granted, error in
+                    options: [.alert, .sound, .badge]) { _, error in
                         if let error = error {
                             print("알림 Request Permission 오류: \(error)")
                         }

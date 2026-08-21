@@ -28,10 +28,10 @@ struct RereminderWatchApp: App {
                 }
         }
     }
-    
+
     private func setupNotifications() {
         UNUserNotificationCenter.current().delegate = notificationDelegate
-        
+
         // Notification Permission 미리 요청
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
     }
