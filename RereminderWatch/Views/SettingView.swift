@@ -24,7 +24,7 @@ struct SettingView: View {
     }
 
     private var minuteRange: ClosedRange<Int> { 1...60 }
-    
+
     var body: some View {
         NavigationStack(path: $path) {
             VStack(spacing: DSSpacing.lg) {
@@ -63,7 +63,7 @@ struct SettingView: View {
             }
         }
     }
-    
+
     @ViewBuilder
     private func TimePicker() -> some View {
         HStack(alignment: .center, spacing: DSSpacing.sm) {
@@ -92,7 +92,7 @@ struct SettingView: View {
                 .accessibilityHidden(true)
         }
     }
-    
+
     @ViewBuilder
     private func NextButton() -> some View {
         Button {
@@ -113,7 +113,7 @@ struct SettingView: View {
         }
         .disabled(isNavigating)
     }
-    
+
     @ViewBuilder
     private func destination(for target: NavigationTarget) -> some View {
         switch target {
@@ -140,7 +140,7 @@ struct SettingView: View {
             )
         }
     }
-    
+
     private struct MinuteWheel: View {
         @Binding var selectedMinute: Int
         let range: ClosedRange<Int>

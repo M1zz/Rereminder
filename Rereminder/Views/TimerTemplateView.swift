@@ -97,6 +97,7 @@ struct TimerTemplateView: View {
     @ViewBuilder
     private func templateRow(for timer: Timer) -> some View {
         Button {
+            AnalyticsManager.log(.presetUsed(name: timer.name))
             onSelect(timer)
             dismiss()
         } label: {
@@ -128,8 +129,8 @@ struct TimerTemplateView: View {
                                 .fontWeight(.semibold)
                                 .padding(.horizontal, DSSpacing.sm)
                                 .padding(.vertical, DSSpacing.xxs + 1)
-                                .background(Color(hex:timer.colorHex).opacity(0.2))
-                                .foregroundStyle(Color(hex:timer.colorHex))
+                                .background(Color(hex: timer.colorHex).opacity(0.2))
+                                .foregroundStyle(Color(hex: timer.colorHex))
                                 .cornerRadius(DSRadius.sm)
                         }
                     }
@@ -233,9 +234,7 @@ struct TimerTemplateView: View {
     }
 
     /// M:SS 표기 (앱 전체 표기 통일)
-    private func mmssText(_ sec: Int) -> String {
-        String(format: "%d:%02d", sec / 60, sec % 60)
-    }
+    private func mmssText(_ sec: Int) -> String { TimeMapper.mmss(sec) }
 
     @ViewBuilder
     private func editSheet(for timer: Timer) -> some View {
@@ -268,7 +267,7 @@ struct TimerTemplateView: View {
                     HStack {
                         Text("Selected Color:")
                         Circle()
-                            .fill(Color(hex:editColorHex))
+                            .fill(Color(hex: editColorHex))
                             .frame(width: 24, height: 24)
                         Text(editColorHex)
                             .font(.caption)
@@ -309,7 +308,7 @@ struct TimerTemplateView: View {
         } label: {
             VStack(spacing: DSSpacing.xs) {
                 Circle()
-                    .fill(Color(hex:colorHex))
+                    .fill(Color(hex: colorHex))
                     .frame(width: 44, height: 44)
                     .overlay(
                         Circle()

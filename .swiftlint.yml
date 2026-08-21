@@ -1,0 +1,52 @@
+# SwiftLint 설정 — Rereminder(두번알림)
+# 실행: swiftlint lint (루트에서)
+
+included:
+  - Rereminder
+  - RereminderWatch
+  - RereminderAlarm
+  - RereminderMenuBar
+  - RereminderTests
+  - Shared
+
+excluded:
+  - build
+  - .build
+  - DerivedData
+  - Rereminder.xcodeproj
+
+disabled_rules:
+  - todo                       # TODO 주석은 백로그로 관리
+  - line_length                # SwiftUI 뷰 빌더는 긴 줄이 자연스러움
+  - identifier_name            # 짧은 변수명(p, x 등) 허용
+  - trailing_comma
+  - opening_brace
+
+opt_in_rules:
+  - empty_count
+  - closure_spacing
+  - contains_over_first_not_nil
+  - redundant_nil_coalescing
+
+type_body_length:
+  warning: 500
+  error: 800
+
+file_length:
+  warning: 800
+  error: 1200
+
+function_body_length:
+  warning: 80
+  error: 150
+
+cyclomatic_complexity:
+  warning: 15
+  error: 25
+
+nesting:
+  type_level: 3
+
+large_tuple:
+  warning: 3
+  error: 4

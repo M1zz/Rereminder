@@ -14,14 +14,14 @@ final class AnalyticsManagerTests: XCTestCase {
     // MARK: - Timer events
 
     func test_timerStarted_withoutPreset_hasDurationOnly() {
-        let event = AnalyticsManager.Event.timerStarted(durationSeconds: 600, presetName: nil)
+        let event = AnalyticsManager.Event.timerStarted(durationSeconds: 600, alertCount: 1, presetName: nil)
         XCTAssertEqual(event.name, "timer_started")
         XCTAssertEqual(event.parameters["duration_seconds"] as? Int, 600)
         XCTAssertNil(event.parameters["preset_name"])
     }
 
     func test_timerStarted_withPreset_includesPresetName() {
-        let event = AnalyticsManager.Event.timerStarted(durationSeconds: 600, presetName: "Workout")
+        let event = AnalyticsManager.Event.timerStarted(durationSeconds: 600, alertCount: 3, presetName: "Workout")
         XCTAssertEqual(event.parameters["duration_seconds"] as? Int, 600)
         XCTAssertEqual(event.parameters["preset_name"] as? String, "Workout")
     }

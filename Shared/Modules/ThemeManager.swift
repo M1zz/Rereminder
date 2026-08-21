@@ -48,16 +48,16 @@ final class ThemeManager: ObservableObject {
         let hex: String
 
         static let presets: [Theme] = [
-            Theme(id: "blue",    name: "Ocean",    color: Color(hex: "007AFF"), hex: "007AFF"),
-            Theme(id: "indigo",  name: "Indigo",   color: Color(hex: "5856D6"), hex: "5856D6"),
-            Theme(id: "purple",  name: "Violet",   color: Color(hex: "AF52DE"), hex: "AF52DE"),
-            Theme(id: "pink",    name: "Rose",     color: Color(hex: "FF2D55"), hex: "FF2D55"),
-            Theme(id: "red",     name: "Coral",    color: Color(hex: "FF3B30"), hex: "FF3B30"),
-            Theme(id: "orange",  name: "Sunset",   color: Color(hex: "FF9500"), hex: "FF9500"),
-            Theme(id: "yellow",  name: "Gold",     color: Color(hex: "FFCC00"), hex: "FFCC00"),
-            Theme(id: "green",   name: "Mint",     color: Color(hex: "34C759"), hex: "34C759"),
-            Theme(id: "teal",    name: "Teal",     color: Color(hex: "5AC8FA"), hex: "5AC8FA"),
-            Theme(id: "white",   name: "Mono",     color: Color(hex: "E5E5EA"), hex: "E5E5EA"),
+            Theme(id: "blue", name: "Ocean", color: Color(hex: "007AFF"), hex: "007AFF"),
+            Theme(id: "indigo", name: "Indigo", color: Color(hex: "5856D6"), hex: "5856D6"),
+            Theme(id: "purple", name: "Violet", color: Color(hex: "AF52DE"), hex: "AF52DE"),
+            Theme(id: "pink", name: "Rose", color: Color(hex: "FF2D55"), hex: "FF2D55"),
+            Theme(id: "red", name: "Coral", color: Color(hex: "FF3B30"), hex: "FF3B30"),
+            Theme(id: "orange", name: "Sunset", color: Color(hex: "FF9500"), hex: "FF9500"),
+            Theme(id: "yellow", name: "Gold", color: Color(hex: "FFCC00"), hex: "FFCC00"),
+            Theme(id: "green", name: "Mint", color: Color(hex: "34C759"), hex: "34C759"),
+            Theme(id: "teal", name: "Teal", color: Color(hex: "5AC8FA"), hex: "5AC8FA"),
+            Theme(id: "white", name: "Mono", color: Color(hex: "E5E5EA"), hex: "E5E5EA"),
         ]
 
     }

@@ -13,7 +13,9 @@
 
 import Foundation
 import UserNotifications
+#if !APPCLIP
 import WidgetKit
+#endif
 
 enum TimerState: Equatable { case idle, running, paused, finished, overtime }
 
@@ -40,6 +42,10 @@ final class TimerEngine {
 
     private(set) var state: TimerState = .idle {
         didSet {
+            // App Clip은 App Group·위젯·워치가 없으므로 상태 공유를 건너뛴다.
+            #if APPCLIP
+            return
+            #else
             let shared = UserDefaults(suiteName: Self.sharedSuiteName)
             let isRunning = (state == .running || state == .overtime)
             shared?.set(isRunning, forKey: "timerIsRunning")
@@ -51,6 +57,7 @@ final class TimerEngine {
             shared?.set(offsets, forKey: "timerPrealertOffsets")
             shared?.set(config?.name ?? "", forKey: "timerName")
             WidgetCenter.shared.reloadAllTimelines()
+            #endif
         }
     }
 
@@ -94,14 +101,18 @@ final class TimerEngine {
         // UI tick 시작
         startUITick()
 
+        // 분석은 ProGate(인앱결제)에 의존하므로 App Clip 빌드에서는 제외한다.
+        #if !APPCLIP
         AnalyticsManager.log(.timerStarted(
             durationSeconds: Int(cfg.mainDuration),
+            alertCount: cfg.prealertOffsetsSec.count,
             presetName: cfg.name.isEmpty ? nil : cfg.name
         ))
+        #endif
     }
 
     func pause() {
-        guard (state == .running || state == .overtime),
+        guard state == .running || state == .overtime,
               let start = startDate,
               let cfg = config else { return }
 
@@ -150,7 +161,9 @@ final class TimerEngine {
         state = .idle
 
         if wasActive {
+            #if !APPCLIP
             AnalyticsManager.log(.timerCancelled(remainingSeconds: remainingForCancel))
+            #endif
         }
     }
 
@@ -355,9 +368,11 @@ final class TimerEngine {
             if remain <= 0 && self.state == .running {
                 self.state = .overtime
                 DispatchQueue.main.async { self.onFinish?() }
+                #if !APPCLIP
                 AnalyticsManager.log(.timerCompleted(
                     durationSeconds: Int(cfg.mainDuration)
                 ))
+                #endif
             }
 
             DispatchQueue.main.async { self.onTick?(remain) }

@@ -33,6 +33,16 @@ struct MultiDeviceTip: Tip {
 
 /// popoverTip은 iOS 17+ 전용이라 가용성 가드를 한 곳에 모은 모디파이어.
 /// 하위 버전에서는 아무 것도 붙이지 않는다.
+private struct PresentationModeTipAnchor: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 17.0, *) {
+            content.popoverTip(PresentationModeTip(), arrowEdge: .top)
+        } else {
+            content
+        }
+    }
+}
+
 private struct MultiDeviceTipAnchor: ViewModifier {
     func body(content: Content) -> some View {
         if #available(iOS 17.0, *) {
@@ -48,6 +58,7 @@ struct TimerUnifiedView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     @StateObject private var screenVM = TimerScreenViewModel()
+    @State private var showOnboarding = !UserDefaults.standard.bool(forKey: "hasSeenOnboarding")
     @StateObject private var toast = ToastManager()
     @StateObject private var appStateManager = AppStateManager()
 
@@ -58,6 +69,14 @@ struct TimerUnifiedView: View {
     // 기존 사용자 무료 Pro(그랜드파더링) 안내 — 최초 1회만 표시
     private static let grandfatherThankedKey = "rereminder.grandfather.thanked"
     @State private var showGrandfatherThanks = false
+
+    // 가끔 먼저 물어보는 의견 요청 — 조건 판정은 FeedbackNudge가 한다
+    @State private var showFeedbackNudge = false
+    @State private var showFeedbackSheet = false
+
+    // 타이머를 실제로 걸었을 때 한 번 물어보는 기기 보유 질문(워치 → 맥).
+    // 물어볼지 말지는 DeviceOwnership이 정한다 — "없다"고 한 기기는 다시 꺼내지 않는다.
+    @State private var deviceQuestion: DeviceOwnership.Device?
 
     /// 타이머가 실행 중이 아닐 때만 모드 전환 허용
     private var isIdle: Bool {
@@ -91,6 +110,7 @@ struct TimerUnifiedView: View {
                     }
                     ProGate.recordUsage(.presentationMode)
                     AnalyticsManager.log(.presentationModeStarted)
+                    FeatureTips.markPresentationModeUsed()
                 case .blocked(let stage):
                     paywallStage = stage
                     showProPaywall = true
@@ -107,6 +127,7 @@ struct TimerUnifiedView: View {
         screenVM.currentMode = .presentation
         ProGate.recordUsage(.presentationMode)
         AnalyticsManager.log(.presentationModeStarted)
+        FeatureTips.markPresentationModeUsed()
     }
 
     var body: some View {
@@ -126,14 +147,30 @@ struct TimerUnifiedView: View {
             .onAppear(perform: setupOnAppear)
             // 사용 중 적절한 시점에 "즐겁게 쓰고 계신가요?" → 👍 앱스토어 리뷰 / 👎 피드백.
             // 실행 3회·설치 2일·타이머 완료 3회 이상, 버전당 1회, 120일 쿨다운(정책 내장).
-            .leeoSatisfactionCheck(
-                RereminderSpec.self,
-                policy: LeeoReviewPolicy(
-                    minLaunches: 3,
-                    minDaysSinceInstall: 2,
-                    minSignificantEvents: 3
-                )
-            )
+            .leeoSatisfactionCheck(RereminderSpec.self, policy: Self.satisfactionPolicy)
+            // 만족도 게이트가 뜰 차례가 아닐 때만, 가끔 먼저 "불편한 점 없으세요?"를 묻는다.
+            // 통계는 어디서 떨어지는지까지만 말해 준다 — 왜 그런지는 여기로만 들어온다.
+            .alert(String(localized: "Anything bothering you?"), isPresented: $showFeedbackNudge) {
+                Button(String(localized: "Leave Feedback")) {
+                    AnalyticsManager.log(.feedbackNudgeAccepted)
+                    showFeedbackSheet = true
+                }
+                Button(String(localized: "Later"), role: .cancel) {}
+                Button(String(localized: "Don't Show Again")) { FeedbackNudge.snooze() }
+            } message: {
+                Text(String(localized: "Tell us what you need or what felt off — the developer reads every message."))
+            }
+            .sheet(isPresented: $showFeedbackSheet) {
+                FeedbackView()
+            }
+            // 타이머가 돌기 시작한 순간에 묻는다 — "지금 손목에서도 볼 수 있어요"가 바로 확인되는 때다.
+            // 답은 설정(내 기기)에 저장되고, 없다고 하면 그 기기 이야기는 두 번 다시 꺼내지 않는다.
+            .alert(deviceQuestionTitle, isPresented: deviceQuestionBinding, presenting: deviceQuestion) { device in
+                Button(String(localized: "Yes, I have one")) { answerDeviceQuestion(device, owns: true) }
+                Button(String(localized: "No, I don't"), role: .cancel) { answerDeviceQuestion(device, owns: false) }
+            } message: { device in
+                Text(deviceQuestionMessage(device))
+            }
             .onChange(of: scenePhase) { oldPhase, newPhase in
                 handleScenePhase(oldPhase, newPhase)
             }
@@ -165,6 +202,12 @@ struct TimerUnifiedView: View {
                 })
         }
         .environmentObject(screenVM)
+        // 온보딩은 **여기서** 띄운다 — 고른 상황을 다이얼에 올리고 템플릿까지 저장하므로
+        // `screenVM` 이 있는 자리여야 한다(예전엔 ContentView 에 있어서 손이 닿지 않았다).
+        .fullScreenCover(isPresented: $showOnboarding) {
+            OnboardingFlowView(isPresented: $showOnboarding)
+                .environmentObject(screenVM)
+        }
         .sheet(isPresented: $showHistory) {
             TimerTemplateView { selected in
                 screenVM.apply(template: selected)
@@ -177,16 +220,23 @@ struct TimerUnifiedView: View {
     @ToolbarContentBuilder
     private var bottomToolbar: some ToolbarContent {
         ToolbarItemGroup(placement: .bottomBar) {
-            Picker("", selection: modeBinding) {
+            // ⚠️ Picker("", …)는 빈 문자열을 문자열 카탈로그에 추출시켜 다국어 검사를 막는다.
+            //    라벨은 제대로 주고 화면에서만 숨긴다.
+            Picker(selection: modeBinding) {
                 Image(systemName: "timer")
                     .accessibilityLabel(String(localized: "Timer"))
                     .tag(AppMode.timer)
                 Image(systemName: "rectangle.inset.filled.and.person.filled")
                     .accessibilityLabel(String(localized: "Presentation"))
                     .tag(AppMode.presentation)
+            } label: {
+                Text(String(localized: "Mode"))
             }
             .pickerStyle(.segmented)
+            .labelsHidden()
             .fixedSize()
+            // 타이머를 두 번 이상 완주한 뒤, 발표 모드를 아직 안 써 봤을 때만 알려준다
+            .modifier(PresentationModeTipAnchor())
 
             Spacer()
 
@@ -211,7 +261,28 @@ struct TimerUnifiedView: View {
 
     // MARK: - Actions
 
+    /// 만족도 게이트 조건 — 의견 요청(FeedbackNudge)이 "게이트가 뜰 차례인지"를 볼 때도 같은 값을 봐야
+    /// 한 실행에서 두 번 묻는 일이 없다. 그래서 한 곳에 둔다.
+    static let satisfactionPolicy = LeeoReviewPolicy(
+        minLaunches: 3,
+        minDaysSinceInstall: 2,
+        minSignificantEvents: 3
+    )
+
     private func setupOnAppear() {
+        // 콜드 런치에서는 scenePhase onChange 가 오지 않는다 — 여기서도 표시를 남긴다.
+        DevicePresence.beginHeartbeat()
+
+        // 사람이 실제로 화면을 본 순간 = 실행 1회 + 오늘의 활동(app_open).
+        // 콜드 런치는 scenePhase onChange가 안 오므로 여기서 남긴다(내부 쓰로틀로 중복 없음).
+        ActivityReporter.reportForegroundOpen()
+
+        // 실행 횟수를 올린 뒤에 판정한다 — 순서가 뒤바뀌면 10회째가 아니라 11회째에 뜬다.
+        if FeedbackNudge.isDue(policy: Self.satisfactionPolicy) {
+            FeedbackNudge.markShown()
+            showFeedbackNudge = true
+        }
+
         // 그랜드파더링된 기존 사용자에게 무료 Pro 안내 (최초 1회)
         if StoreManager.isGrandfathered,
            !UserDefaults.standard.bool(forKey: Self.grandfatherThankedKey) {
@@ -227,10 +298,16 @@ struct TimerUnifiedView: View {
         screenVM.timerVM.modelContext = context
         screenVM.initialConfiguration()
         screenVM.restoreTimerIfNeeded()
+        // 다이나믹 아일랜드에서 눌러 둔 명령을 먼저 적용하고, 남은 활동이 있으면 치운다
+        screenVM.applyPendingLiveActivityCommand()
+        screenVM.cleanUpOrphanLiveActivities()
         // 실행 중 타이머가 없으면 마지막 사용 설정을 다이얼에 복원
         screenVM.restoreLastUsedConfigIfNeeded()
 
         #if targetEnvironment(macCatalyst)
+        // 지금 맥에서 돌고 있으니 "맥 있으세요?"를 물어볼 이유가 없다 — 아는 건 묻지 않는다.
+        DeviceOwnership.markUsed(.mac)
+
         // 메뉴바 타이머 (RereminderMenuBar 번들이 임베드된 빌드에서만 동작)
         MenuBarManager.shared.setUpIfAvailable()
         MenuBarManager.shared.onPauseToggle = {
@@ -249,19 +326,91 @@ struct TimerUnifiedView: View {
 
     private func handleScenePhase(_: ScenePhase, _ newPhase: ScenePhase) {
         appStateManager.updateState(newPhase)
+        // 다른 기기(맥)에서 "이 기기 켜져 있어요"를 볼 수 있게 표시를 남긴다.
+        // 앞에 있는 동안만 — 뒤로 가면 멈춰야 "연결됨"이 거짓말이 되지 않는다.
+        if newPhase == .active {
+            DevicePresence.beginHeartbeat()
+        } else {
+            DevicePresence.endHeartbeat()
+        }
         if newPhase == .active {
             screenVM.timerVM.engine.recalculateOnForeground()
             handleControlWidgetAction()
+            screenVM.applyPendingLiveActivityCommand()
+            // 며칠씩 살아 있는 프로세스에서도 "오늘 열었다"를 놓치지 않게 복귀마다 확인한다.
+            ActivityReporter.reportForegroundOpen()
         }
     }
 
-    private func handleStateChange(_: TimerState, _ newState: TimerState) {
+    private func handleStateChange(_ oldState: TimerState, _ newState: TimerState) {
         UIApplication.shared.isIdleTimerDisabled =
             (newState == .running || newState == .paused || newState == .overtime)
+
+        // 막 시작한 순간에만 — 일시정지에서 돌아올 때마다 물으면 잔소리가 된다.
+        if newState == .running, oldState != .paused { askOrRemindAboutDevices() }
 
         #if targetEnvironment(macCatalyst)
         MenuBarManager.shared.update(remaining: screenVM.remaining, state: newState)
         #endif
+    }
+
+    // MARK: - 기기 보유 질문 / 안내
+
+    /// 타이머를 걸 때마다 한 번씩 확인한다 — 물어볼 게 있으면 묻고, 없으면 가끔 권한다.
+    /// 둘 중 하나만 한다(같은 실행에서 질문과 안내가 겹치면 시끄럽다).
+    private func askOrRemindAboutDevices() {
+        let starts = Int(UsageMetrics.value(.timerStarts))
+
+        if let device = DeviceOwnership.pendingQuestion(timerStarts: starts) {
+            deviceQuestion = device
+            return
+        }
+        // 가지고 있다고 했는데 아직 그 기기에서 안 써 본 사람에게만, 다섯 번 걸 때마다 한 번.
+        if let device = DeviceOwnership.pendingReminder(timerStarts: starts) {
+            DeviceOwnership.markReminderShown(device, atStart: starts)
+            toast.show(Toast(deviceReminderText(device), duration: 3.0))
+        }
+    }
+
+    private var deviceQuestionBinding: Binding<Bool> {
+        Binding(get: { deviceQuestion != nil },
+                set: { if !$0 { deviceQuestion = nil } })
+    }
+
+    private var deviceQuestionTitle: String {
+        switch deviceQuestion {
+        case .mac:            return String(localized: "Do you have a Mac?")
+        case .watch, .none:   return String(localized: "Do you have an Apple Watch?")
+        }
+    }
+
+    private func deviceQuestionMessage(_ device: DeviceOwnership.Device) -> String {
+        switch device {
+        case .watch: return String(localized: "If you do, you can check the remaining time right on your wrist while the timer runs.")
+        case .mac:   return String(localized: "If you do, Rereminder can show the remaining time in your Mac menu bar.")
+        }
+    }
+
+    /// 답을 저장하고, 있다고 했으면 그 자리에서 어디를 보면 되는지 알려준다.
+    private func answerDeviceQuestion(_ device: DeviceOwnership.Device, owns: Bool) {
+        DeviceOwnership.record(owns ? .yes : .no, for: device)
+        deviceQuestion = nil
+        guard owns else { return }   // 없다고 한 기기는 안내도 하지 않는다
+        toast.show(Toast(deviceGuidanceText(device), duration: 3.0))
+    }
+
+    private func deviceGuidanceText(_ device: DeviceOwnership.Device) -> String {
+        switch device {
+        case .watch: return String(localized: "Now check the remaining time on your Apple Watch too")
+        case .mac:   return String(localized: "Now check the remaining time in your Mac menu bar too")
+        }
+    }
+
+    private func deviceReminderText(_ device: DeviceOwnership.Device) -> String {
+        switch device {
+        case .watch: return String(localized: "Open Rereminder on your Apple Watch to follow along")
+        case .mac:   return String(localized: "Open Rereminder on your Mac to follow along")
+        }
     }
 
     private func handleControlWidgetAction() {

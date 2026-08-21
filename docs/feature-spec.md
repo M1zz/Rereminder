@@ -279,7 +279,7 @@ UNNotificationContent.sound 에 매핑되어 백그라운드 알림에도 동일
 
 15.1 지원 언어
 
-한국어, 영어를 기본으로 지원하며 Localizable.xcstrings 에 추가 언어를 쉽게 확장할 수 있습니다.
+한국어, 영어, 일본어를 지원하며 Localizable.xcstrings 에 추가 언어를 쉽게 확장할 수 있습니다. 배포 전 scripts/check_localization.py 가 미번역·사문화 키를 게이트한다.
 
 15.2 시간 표시
 
@@ -290,11 +290,11 @@ UNNotificationContent.sound 에 매핑되어 백그라운드 알림에도 동일
 
 16.1 자동 요청
 
-타이머 5 회 완료 시 자동으로 SKStoreReviewController 의 네이티브 리뷰 팝업이 표시됩니다.
+LeeoKit 만족도 게이트(.leeoSatisfactionCheck)가 단독 담당합니다. 조건(실행 3회·설치 2일·유의미 이벤트 3회, 버전당 1회)이 맞으면 "즐겁게 쓰고 계신가요?"를 먼저 묻고, 만족 시에만 시스템 리뷰 요청, 불만족 시 피드백 화면으로 연결됩니다.
 
 16.2 빈도 제한
 
-90 일 동안 최대 1 회만 자동 요청하여 사용자 경험을 보호합니다.
+만족도 게이트의 쿨다운은 120일이며 버전당 최대 1회만 노출됩니다.
 
 16.3 수동 요청
 
@@ -318,10 +318,13 @@ App Group UserDefaults (group.leeo.toki) 에 다음을 저장하여 iOS, Watch, 
 설정값 (테마, 액센트 색상, 알림 모드 등)
 
 
-18. 분석 (로컬 이벤트 로깅 — 외부 전송 없음)
+18. 분석 (익명·비추적, 외부 SDK 없음)
 
-AnalyticsManager 는 이벤트 추상화 계층으로만 유지되며, 외부 분석 SDK(Firebase 등)를 사용하지 않습니다.
-아래 이벤트들은 DEBUG 빌드에서 콘솔 출력용으로만 기록되고, 어떤 데이터도 외부로 전송되지 않습니다.
+AnalyticsManager 는 이벤트 추상화 계층이며, 전송 백엔드로 프라이버시 중심의
+외부 분석 SDK를 쓰지 않습니다. Firebase 는 2026-07, TelemetryDeck 은 2026-08 에 제거했고, 익명 사용 통계는 CloudKit 허브(FeedbackHub)로만 모읍니다.
+AnalyticsManager.telemetryDeckAppID 가 비어 있으면 어떤 데이터도 외부로 전송되지 않고
+DEBUG 콘솔 로깅만 수행합니다. App ID 는 dashboard.telemetrydeck.com 에서 발급 후
+해당 상수에 넣으면 활성화됩니다. 개인 식별 정보는 수집하지 않습니다.
 
 18.1 추적 이벤트
 
@@ -340,14 +343,16 @@ NSPrivacyTracking false. 사용자 식별이나 광고 추적에 데이터를 �
 
 19.1 버전 관리
 
-Config/Version.xcconfig 에서 모든 타겟의 MARKETING_VERSION 과 CURRENT_PROJECT_VERSION 을 통합 관리합니다. scripts/update_version.sh 로 자동 업데이트 가능합니다.
+Config/Version.xcconfig 에서 모든 타겟의 MARKETING_VERSION 과 CURRENT_PROJECT_VERSION 을 통합 관리합니다(프로젝트 레벨 baseConfiguration, 타겟 하드코딩 금지). scripts/update_version.sh 로 자동 업데이트 가능합니다.
 
 19.2 타겟
 
 Rereminder: iOS 메인 앱
 RereminderWatch: Apple Watch 앱
 RereminderAlarm: 위젯 및 Live Activity 확장
+RereminderMenuBar: Mac Catalyst 메뉴바 (현재 Catalyst 지원 해제로 비활성)
+RereminderTests: 유닛 테스트
 
 19.3 의존성
 
-외부 의존성은 로컬 SPM 패키지 LeeoKit 뿐이며, 외부 원격 의존성(Firebase 등)은 사용하지 않습니다.
+외부 의존성은 LeeoKit 2.9.0(원격 SPM, github.com/M1zz/LeeoKit — StoreKit2 엔진·CloudKit 피드백 허브·사용 통계·리뷰 게이트·원격 킬스위치·MetricKit 크래시 진단) 하나뿐입니다. Firebase·TelemetryDeck 등 외부 분석 SDK 는 사용하지 않습니다.

@@ -19,13 +19,23 @@ enum AppMode: String, CaseIterable {
 
 @MainActor
 final class TimerScreenViewModel: ObservableObject {
-    @Published var mainMinutes: Int = 10
-    @Published var mainSeconds: Int = 0
-    @Published var selectedOffsets: Set<Int> = [60] {  // 무료 기본 1개 (1분)
+    /// 앱을 갓 설치했을 때의 타이머 설정.
+    /// 초기화 버튼이 되돌리는 기준점이자 "사용자가 아직 아무것도 안 바꿨다"의 판정 기준이라,
+    /// 아래 `@Published` 초기값들도 전부 여기서 가져온다. **정의는 이 한 곳뿐이어야 한다.**
+    enum DefaultSetup {
+        /// 10분
+        static let mainSeconds = 600
+        /// 종료 1분 전 알림 하나 (무료 기본)
+        static let offsets: Set<Int> = [60]
+    }
+
+    @Published var mainMinutes: Int = DefaultSetup.mainSeconds / 60
+    @Published var mainSeconds: Int = DefaultSetup.mainSeconds % 60
+    @Published var selectedOffsets: Set<Int> = DefaultSetup.offsets {
         didSet { sortedOffsetsDesc = selectedOffsets.sorted(by: >) }
     }
-    private(set) var sortedOffsetsDesc: [Int] = [60]
-    @Published private(set) var configuredMainSeconds: Int = 600
+    private(set) var sortedOffsetsDesc: [Int] = DefaultSetup.offsets.sorted(by: >)
+    @Published private(set) var configuredMainSeconds: Int = DefaultSetup.mainSeconds
     @Published var showTimerAlert: Bool = false
     @Published var prealertMessages: [Int: String] = [:]
     @Published var finishMessage: String = ""
@@ -36,6 +46,10 @@ final class TimerScreenViewModel: ObservableObject {
     @Published var presentationSections: [PresentationSection] = []
     /// 파생 구간의 사용자 지정 이름 (구간 인덱스 → 이름, 비어있으면 placeholder 사용)
     @Published var sectionNames: [Int: String] = [:]
+    /// 구간별 대본·메모 (구간 인덱스 → 글). 발표 중 화면에 그 구간의 글이 뜬다.
+    /// 이름과 같은 방식으로 **구간 번호에 매단다** — 알림을 옮기면 구간이 다시 나뉘므로,
+    /// 글도 그 번호를 따라간다(구간을 지우면 그 번호의 글은 화면에서 사라진다).
+    @Published var sectionScripts: [Int: String] = [:]
 
     let timerVM: TimerViewModel
     let configService = TimerConfigService()
@@ -255,6 +269,8 @@ final class TimerScreenViewModel: ObservableObject {
         showToast?("Start")
         timerVM.start()
         ActivityReporter.log("timer_start")
+        // "이 설정 자주 쓰시네요, 저장해 둘까요?" 팁의 노출 조건
+        FeatureTips.donateTimerStarted()
     }
 
     func pause() {
@@ -303,6 +319,35 @@ final class TimerScreenViewModel: ObservableObject {
         return (mainSec, offsets)
     }
 
+    /// 사용자가 아직 아무것도 손대지 않은 상태 — 갓 설치했을 때 그대로다.
+    /// 이때는 저장할 것도 되돌릴 것도 없으므로 저장·초기화 버튼을 둘 다 숨긴다.
+    var isAtDefaultSetup: Bool {
+        let cfg = normalizedCurrentConfig
+        return cfg.mainSec == DefaultSetup.mainSeconds
+            && Set(cfg.offsets) == DefaultSetup.offsets
+            && prealertMessages.isEmpty
+            && finishMessage.isEmpty
+    }
+
+    /// 다이얼을 갓 설치했을 때의 설정으로 되돌린다.
+    /// 저장해 둔 템플릿·기록은 건드리지 않는다 — 되돌리는 건 지금 화면의 설정뿐이다.
+    func resetToDefaultSetup() {
+        mainMinutes = DefaultSetup.mainSeconds / 60
+        mainSeconds = DefaultSetup.mainSeconds % 60
+        selectedOffsets = DefaultSetup.offsets
+        prealertMessages = [:]
+        finishMessage = ""
+        sectionNames = [:]
+        sectionScripts = [:]
+        initialConfiguration()
+        // 다시 켰을 때 되살아나지 않도록 "마지막 사용 설정"도 기본값으로 덮는다
+        persistLastUsedConfig(
+            mainSec: DefaultSetup.mainSeconds,
+            offsets: DefaultSetup.offsets.sorted()
+        )
+        showToast?(String(localized: "Reset to the default timer"))
+    }
+
     /// 현재 설정을 템플릿으로 저장한다 (타이머 시작 없음)
     func saveCurrentAsTemplate() {
         let cfg = normalizedCurrentConfig
@@ -331,6 +376,11 @@ final class TimerScreenViewModel: ObservableObject {
     private static let lastUsedConfigKey = "rereminder.lastUsedConfig.v1"
     private var didRestoreLastUsedConfig = false
 
+    /// 마지막 사용 설정을 담는 저장소.
+    /// ⚠️ 테스트가 기기에 남아 있는 실제 설정에 휘둘리지 않도록 갈아끼울 수 있게 둔다
+    ///    (TrialCounter.defaults 와 같은 방식). 앱에서는 항상 standard 다.
+    static var lastUsedDefaults: UserDefaults = .standard
+
     private struct LastUsedConfig: Codable {
         let mainSeconds: Int
         let offsets: [Int]
@@ -346,7 +396,7 @@ final class TimerScreenViewModel: ObservableObject {
             finishMessage: finishMessage
         )
         if let data = try? JSONEncoder().encode(cfg) {
-            UserDefaults.standard.set(data, forKey: Self.lastUsedConfigKey)
+            Self.lastUsedDefaults.set(data, forKey: Self.lastUsedConfigKey)
         }
     }
 
@@ -356,7 +406,7 @@ final class TimerScreenViewModel: ObservableObject {
         guard !didRestoreLastUsedConfig else { return }
         didRestoreLastUsedConfig = true
         guard timerVM.state == .idle,
-              let data = UserDefaults.standard.data(forKey: Self.lastUsedConfigKey),
+              let data = Self.lastUsedDefaults.data(forKey: Self.lastUsedConfigKey),
               let cfg = try? JSONDecoder().decode(LastUsedConfig.self, from: data),
               cfg.mainSeconds > 0 else { return }
 
@@ -399,10 +449,16 @@ final class TimerScreenViewModel: ObservableObject {
         }
 
         if toast {
-            let mainLabel = secPart > 0 ? "\(mainMinutes)min \(secPart)sec" : "\(mainMinutes)min"
-            let preText = normalizedOffsets.map { "\($0/60)min" }.sorted().joined(separator: ", ")
+            let mainLabel = secPart > 0
+                ? String(localized: "\(mainMinutes)min \(secPart)sec")
+                : String(localized: "\(mainMinutes)min")
+            let preText = normalizedOffsets.sorted()
+                .map { String(localized: "\($0 / 60)min") }
+                .joined(separator: ", ")
             timerVM.showToast?(
-                "Timer applied: \(mainLabel)" + (preText.isEmpty ? "" : " / Pre-alert \(preText)")
+                preText.isEmpty
+                    ? String(localized: "Timer applied: \(mainLabel)")
+                    : String(localized: "Timer applied: \(mainLabel) / Pre-alert \(preText)")
             )
         }
     }
@@ -449,22 +505,16 @@ extension TimerScreenViewModel {
     /// 예: 15분 타이머 + 5분 전 알림 → Section 1(0~10분), Section 2(10~15분)
     func syncSectionsFromAlerts() {
         let mainSec = mainMinutes * 60 + mainSeconds
-        guard mainSec > 0 else {
-            presentationSections = []
-            return
-        }
-        let boundaries = selectedOffsets
-            .filter { $0 > 0 && $0 < mainSec }
-            .map { mainSec - $0 }
-            .sorted()
-        let points = [0] + boundaries + [mainSec]
-        presentationSections = (0..<(points.count - 1)).map { i in
-            let custom = (sectionNames[i] ?? "").trimmingCharacters(in: .whitespaces)
-            return PresentationSection(
-                name: custom.isEmpty ? String(localized: "Section \(i + 1)") : custom,
-                durationSeconds: points[i + 1] - points[i]
-            )
-        }
+        presentationSections = TimerSections
+            .derive(mainSeconds: mainSec, alertOffsets: selectedOffsets)
+            .map { segment in
+                let custom = (sectionNames[segment.index] ?? "").trimmingCharacters(in: .whitespaces)
+                return PresentationSection(
+                    name: custom.isEmpty ? String(localized: "Section \(segment.index + 1)") : custom,
+                    durationSeconds: segment.durationSec,
+                    script: sectionScripts[segment.index] ?? ""
+                )
+            }
     }
 
     /// 섹션 배열을 기존 pre-alert 시스템으로 변환하여 타이머 시작
@@ -519,6 +569,58 @@ extension TimerScreenViewModel {
     }
 }
 
+extension TimerScreenViewModel {
+    /// 지금 켜 둔 알림 때문에 더 줄일 수 없는 하한(초).
+    ///
+    /// ⚠️ **현재 시간 안에 있는 알림만** 센다. 템플릿에서 넘어온, 지금 시간보다 긴 알림까지 세면
+    ///    시간을 줄이려는 순간 오히려 늘어나 버린다(그 알림은 어차피 울리지도 않는다).
+    var alertFloorSeconds: Int {
+        let current = max(0, mainMinutes) * 60 + max(0, min(59, mainSeconds))
+        let valid = selectedOffsets.filter { $0 < current }
+        return TimeMapper.minimumSeconds(forAlertOffsets: Set(valid))
+    }
+}
+
+extension TimerScreenViewModel {
+    /// 다이나믹 아일랜드 버튼이 앱이 꺼져 있는 동안 남겨 둔 명령을 적용한다.
+    ///
+    /// 버튼 인텐트는 위젯 확장 프로세스에서 돌기 때문에, 앱이 떠 있지 않으면 그때는 아무것도
+    /// 적용할 수 없다. 앱이 앞으로 나오는 이 순간이 그 명령을 처리할 유일한 자리다.
+    func applyPendingLiveActivityCommand() {
+        #if os(iOS) && !targetEnvironment(macCatalyst)
+        guard let command = LiveActivityCommandStore.take() else { return }
+        switch command {
+        case .pause:  if timerVM.state == .running { pause() }
+        case .resume: if timerVM.state == .paused { resume() }
+        case .stop:   cancel()
+        }
+        #endif
+    }
+
+    /// 타이머는 이미 끝났는데 다이나믹 아일랜드만 남아 있는 경우를 치운다.
+    /// (앱을 강제 종료하면 활동은 시스템에 남아 몇 시간을 버틴다 — 사용자는 없앨 방법이 없다)
+    func cleanUpOrphanLiveActivities() {
+        #if os(iOS) && !targetEnvironment(macCatalyst)
+        let isActive = timerVM.state == .running || timerVM.state == .paused || timerVM.state == .overtime
+        LiveActivityController.endOrphans(isTimerActive: isActive)
+        #endif
+    }
+}
+
+extension TimerScreenViewModel {
+    /// 전체 시간을 정한다 — 켜 둔 알림보다 짧아지면 그 자리에서 멈추고 이유를 알려준다.
+    /// (다이얼은 손끝이 걸리는 느낌으로 충분해서 토스트 없이 조용히 멈춘다 — `mainAngle` 세터)
+    func setMainSeconds(_ requested: Int, announceClamp: Bool = true) {
+        let applied = max(alertFloorSeconds, max(0, min(TimeMapper.maxSeconds, requested)))
+        mainMinutes = applied / 60
+        mainSeconds = applied % 60
+
+        if announceClamp && applied > requested {
+            showToast?(String(localized: "Can't go shorter than your alerts"))
+        }
+    }
+}
+
 // MARK: - Angle Binding (delegates to TimeMapper)
 
 extension TimerScreenViewModel {
@@ -528,7 +630,9 @@ extension TimerScreenViewModel {
             return TimeMapper.secondsToAngle(from: totalSeconds)
         }
         set {
-            let totalSeconds = TimeMapper.angleToSeconds(from: newValue)
+            // 켜 둔 알림보다 짧게는 줄일 수 없다 — 줄이는 순간 그 알림이 조용히 사라지기 때문.
+            let requested = TimeMapper.angleToSeconds(from: newValue)
+            let totalSeconds = max(alertFloorSeconds, requested)
             mainMinutes = totalSeconds / 60
             mainSeconds = totalSeconds % 60
         }

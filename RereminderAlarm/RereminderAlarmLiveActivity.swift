@@ -11,19 +11,10 @@ import SwiftUI
 import AppIntents
 
 // MARK: - Activity Attributes
-
-struct TimerActivityAttributes: ActivityAttributes {
-    public struct ContentState: Codable, Hashable {
-        var remainingTime: TimeInterval
-        var isPaused: Bool
-        var timestamp: Date
-        var endDate: Date?  // Timer Finished 시각 (자동 카운트다운용)
-    }
-
-    var timerName: String
-    var totalDuration: TimeInterval
-    var startTime: Date
-}
+//
+// 타입 선언은 `Shared/Models/TimerActivityAttributes.swift` 하나뿐이다(확장 타겟에도 포함).
+// 예전에는 앱과 확장에 같은 선언이 각각 있었는데, ActivityKit 은 이름과 필드가 정확히 맞아야
+// 디코딩되므로 한쪽만 고치면 다이나믹 아일랜드가 조용히 갱신을 멈춘다.
 
 struct RereminderAlarmLiveActivity: Widget {
     var body: some WidgetConfiguration {

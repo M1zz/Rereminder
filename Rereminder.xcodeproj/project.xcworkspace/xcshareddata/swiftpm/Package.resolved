@@ -1,13 +1,13 @@
 {
-  "originHash" : "253b56452b90e991b161d96eeecf35f9ceca5ba40f2918dee672212aaa26897e",
+  "originHash" : "4c237c0cbc6ef00d50ae1e9731354f9ce252c343736dca51b417e993038dc980",
   "pins" : [
     {
       "identity" : "leeokit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/M1zz/LeeoKit.git",
       "state" : {
-        "revision" : "83e35f02f84ccf9968a2f6b38d8758971c049552",
-        "version" : "2.5.0"
+        "revision" : "154018f8ec524dace0e227d786d66a39995ca18c",
+        "version" : "2.9.0"
       }
     }
   ],

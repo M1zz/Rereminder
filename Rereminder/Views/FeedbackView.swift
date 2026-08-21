@@ -21,9 +21,5 @@ struct FeedbackInboxView: View {
     }
 }
 
-/// 개발자용 익명 사용 통계 뷰어 — 앱 활동(설치 스냅샷·이벤트)을 iCloud에서 모아 보여준다.
-struct UsageStatsView: View {
-    var body: some View {
-        LeeoUsageStatsView<RereminderSpec>()
-    }
-}
+// 개발자용 익명 사용 통계 뷰어는 이 앱 전용 지표(완주율·활성화 퍼널 등)를 보여주려고
+// LeeoKit의 기본 화면 대신 직접 만든다 — `Rereminder/Views/UsageStatsView.swift`.

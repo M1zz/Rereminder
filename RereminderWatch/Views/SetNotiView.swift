@@ -137,11 +137,16 @@ struct SetNotiView: View {
             Text("Custom Minutes", comment: "Custom Minutes")
                 .font(.headline)
 
-            Picker("", selection: $customMinutes) {
+            // ⚠️ Picker("", …) 는 빈 문자열을 공용 문자열 카탈로그에 추출시켜 다국어 검사를 막는다
+            //    (워치 타겟도 Rereminder/Localizable.xcstrings 를 쓴다). 라벨은 주고 화면에서만 숨긴다.
+            Picker(selection: $customMinutes) {
                 ForEach(1...max(1, maxMinute), id: \.self) { minute in
                     Text("\(minute) \(String(localized: "min"))").tag(minute)
                 }
+            } label: {
+                Text("Custom Minutes", comment: "Custom Minutes")
             }
+            .labelsHidden()
             .pickerStyle(.wheel)
             .frame(height: 110)
 

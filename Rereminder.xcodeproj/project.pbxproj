@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		07C42068B7266377CF890D07 /* RereminderClip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = A78942BCAED1D1FFB2FDB397 /* RereminderClip.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1EE0C17AC0DE000000000003 /* LeeoKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1EE0C17AC0DE000000000002 /* LeeoKit */; };
 		2B302B142E4375170089A14A /* RereminderWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2B302B0A2E4375150089A14A /* RereminderWatch.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		581D85DC2F48C24200F2F032 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 581D85DB2F48C24200F2F032 /* StoreKit.framework */; };
@@ -37,6 +38,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 260414CA2E1B9FA200CBA29B;
 			remoteInfo = Rereminder;
+		};
+		99710589F5E66A7D0F32C3B8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 260414C32E1B9FA200CBA29B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6ED914668010A8B195B84C58;
+			remoteInfo = RereminderClip;
 		};
 		AA10AB0A2F20C0000000000A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -81,6 +89,17 @@
 			name = "Embed PlugIns";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E094B04C1B60276B3E7EE857 /* Embed App Clips */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/AppClips";
+			dstSubfolderSpec = 16;
+			files = (
+				07C42068B7266377CF890D07 /* RereminderClip.app in Embed App Clips */,
+			);
+			name = "Embed App Clips";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -92,8 +111,9 @@
 		58AA3EB12ECF5509007D4BBD /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		58AA3ECA2ECF5541007D4BBD /* RereminderAlarmExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RereminderAlarmExtension.entitlements; sourceTree = "<group>"; };
 		7E57AB012F30000000000001 /* RereminderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RereminderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A78942BCAED1D1FFB2FDB397 /* RereminderClip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RereminderClip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA10AB012F20C00000000001 /* RereminderMenuBar.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RereminderMenuBar.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
-		EB6620CC6445D6B84083B6BC /* Version.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Version.xcconfig; sourceTree = "<group>"; };
+		EB6620CC6445D6B84083B6BC /* Version.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Version.xcconfig; path = Config/Version.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -111,6 +131,38 @@
 			);
 			target = 58AA3EAC2ECF5509007D4BBD /* RereminderAlarmExtension */;
 		};
+		618017290F09A7469C24FD09 /* Exceptions for "RereminderClip" folder in "RereminderClip" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 6ED914668010A8B195B84C58 /* RereminderClip */;
+		};
+		674325E3A9FF16648D7C6C22 /* Exceptions for "Shared" folder in "RereminderClip" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				DesignSystem/DSAnimation.swift,
+				DesignSystem/DSColor.swift,
+				DesignSystem/DSFont.swift,
+				DesignSystem/DSOpacity.swift,
+				DesignSystem/DSRadius.swift,
+				DesignSystem/DSSpacing.swift,
+				Modules/AngleCalculator.swift,
+				Modules/AppName.swift,
+				Modules/ring.swift,
+				Modules/ThemeManager.swift,
+				Modules/TimerEngine.swift,
+			);
+			target = 6ED914668010A8B195B84C58 /* RereminderClip */;
+		};
+		883ED4870A7A84F47F564D59 /* Exceptions for "Rereminder" folder in "RereminderClip" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Localizable.xcstrings,
+				ViewModels/RingSound.swift,
+			);
+			target = 6ED914668010A8B195B84C58 /* RereminderClip */;
+		};
 		9C1569E52ED04576004A4BB4 /* Exceptions for "Shared" folder in "RereminderWatch" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -120,8 +172,11 @@
 				DesignSystem/DSOpacity.swift,
 				DesignSystem/DSRadius.swift,
 				DesignSystem/DSSpacing.swift,
+				DesignSystem/SectionInnerRing.swift,
+				DesignSystem/SectionPalette.swift,
 				Modules/AppName.swift,
 				Modules/ring.swift,
+				Modules/TimerSections.swift,
 				Modules/WatchConnectivityManager.swift,
 			);
 			target = 2B302B092E4375150089A14A /* RereminderWatch */;
@@ -149,6 +204,9 @@
 				DesignSystem/DSOpacity.swift,
 				DesignSystem/DSRadius.swift,
 				DesignSystem/DSSpacing.swift,
+				Models/TimerActivityAttributes.swift,
+				Modules/LiveActivityCommand.swift,
+				Modules/LiveActivityController.swift,
 			);
 			target = 58AA3EAC2ECF5509007D4BBD /* RereminderAlarmExtension */;
 		};
@@ -161,6 +219,7 @@
 				58AA3EA82ECF5356007D4BBD /* Exceptions for "Rereminder" folder in "Rereminder" target */,
 				9CA0A72F2F20B473004ABF40 /* Exceptions for "Rereminder" folder in "RereminderWatch" target */,
 				9CA0A7302F20B473004ABF40 /* Exceptions for "Rereminder" folder in "RereminderAlarmExtension" target */,
+				883ED4870A7A84F47F564D59 /* Exceptions for "Rereminder" folder in "RereminderClip" target */,
 			);
 			path = Rereminder;
 			sourceTree = "<group>";
@@ -170,6 +229,7 @@
 			exceptions = (
 				9C1569E52ED04576004A4BB4 /* Exceptions for "Shared" folder in "RereminderWatch" target */,
 				A1A1A1A12F20B473004ABF40 /* Exceptions for "Shared" folder in "RereminderAlarmExtension" target */,
+				674325E3A9FF16648D7C6C22 /* Exceptions for "Shared" folder in "RereminderClip" target */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -185,6 +245,14 @@
 				58AA3EC72ECF550B007D4BBD /* Exceptions for "RereminderAlarm" folder in "RereminderAlarmExtension" target */,
 			);
 			path = RereminderAlarm;
+			sourceTree = "<group>";
+		};
+		717C82F4F68208C4105E4595 /* RereminderClip */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				618017290F09A7469C24FD09 /* Exceptions for "RereminderClip" folder in "RereminderClip" target */,
+			);
+			path = RereminderClip;
 			sourceTree = "<group>";
 		};
 		7E57AB022F30000000000002 /* RereminderTests */ = {
@@ -239,9 +307,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E3886CE3A414613BFF7BC124 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		12AEEF9E969663E2C9F593A5 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
 		260414C22E1B9FA200CBA29B = {
 			isa = PBXGroup;
 			children = (
@@ -255,6 +337,7 @@
 				58AA3EAE2ECF5509007D4BBD /* Frameworks */,
 				260414CC2E1B9FA200CBA29B /* Products */,
 				EB6620CC6445D6B84083B6BC /* Version.xcconfig */,
+				717C82F4F68208C4105E4595 /* RereminderClip */,
 			);
 			sourceTree = "<group>";
 		};
@@ -266,6 +349,7 @@
 				58AA3EAD2ECF5509007D4BBD /* RereminderAlarmExtension.appex */,
 				AA10AB012F20C00000000001 /* RereminderMenuBar.bundle */,
 				7E57AB012F30000000000001 /* RereminderTests.xctest */,
+				A78942BCAED1D1FFB2FDB397 /* RereminderClip.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -276,6 +360,7 @@
 				581D85DB2F48C24200F2F032 /* StoreKit.framework */,
 				58AA3EAF2ECF5509007D4BBD /* WidgetKit.framework */,
 				58AA3EB12ECF5509007D4BBD /* SwiftUI.framework */,
+				12AEEF9E969663E2C9F593A5 /* iOS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -293,6 +378,7 @@
 				2B302B182E4375170089A14A /* Embed Watch Content */,
 				58AA3EC82ECF550B007D4BBD /* Embed Foundation Extensions */,
 				AA10AB0C2F20C0000000000C /* Embed PlugIns */,
+				E094B04C1B60276B3E7EE857 /* Embed App Clips */,
 			);
 			buildRules = (
 			);
@@ -300,6 +386,7 @@
 				2B302B132E4375170089A14A /* PBXTargetDependency */,
 				58AA3EC22ECF550B007D4BBD /* PBXTargetDependency */,
 				AA10AB0B2F20C0000000000B /* PBXTargetDependency */,
+				454D3869CE4B00C1FF7146B1 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				260414CD2E1B9FA200CBA29B /* Rereminder */,
@@ -353,6 +440,26 @@
 			productReference = 58AA3EAD2ECF5509007D4BBD /* RereminderAlarmExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
+		6ED914668010A8B195B84C58 /* RereminderClip */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 07E0B34FDFD80EB40DB61FB8 /* Build configuration list for PBXNativeTarget "RereminderClip" */;
+			buildPhases = (
+				63AB8D7FE51CAE2A62BE26CE /* Sources */,
+				E3886CE3A414613BFF7BC124 /* Frameworks */,
+				D56224A7C80CFFACE779D5FA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				717C82F4F68208C4105E4595 /* RereminderClip */,
+			);
+			name = RereminderClip;
+			productName = RereminderClip;
+			productReference = A78942BCAED1D1FFB2FDB397 /* RereminderClip.app */;
+			productType = "com.apple.product-type.application.on-demand-install-capable";
+		};
 		7E57AB032F30000000000003 /* RereminderTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7E57AB072F30000000000007 /* Build configuration list for PBXNativeTarget "RereminderTests" */;
@@ -402,7 +509,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 2600;
-				LastUpgradeCheck = 1640;
+				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					260414CA2E1B9FA200CBA29B = {
 						CreatedOnToolsVersion = 16.4;
@@ -443,6 +550,7 @@
 				58AA3EAC2ECF5509007D4BBD /* RereminderAlarmExtension */,
 				AA10AB032F20C00000000003 /* RereminderMenuBar */,
 				7E57AB032F30000000000003 /* RereminderTests */,
+				6ED914668010A8B195B84C58 /* RereminderClip */,
 			);
 		};
 /* End PBXProject section */
@@ -483,6 +591,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D56224A7C80CFFACE779D5FA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -501,6 +616,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		58AA3EA92ECF5509007D4BBD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63AB8D7FE51CAE2A62BE26CE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -530,6 +652,12 @@
 			target = 2B302B092E4375150089A14A /* RereminderWatch */;
 			targetProxy = 2B302B122E4375170089A14A /* PBXContainerItemProxy */;
 		};
+		454D3869CE4B00C1FF7146B1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RereminderClip;
+			target = 6ED914668010A8B195B84C58 /* RereminderClip */;
+			targetProxy = 99710589F5E66A7D0F32C3B8 /* PBXContainerItemProxy */;
+		};
 		58AA3EC22ECF550B007D4BBD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			platformFilter = ios;
@@ -556,6 +684,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -610,6 +739,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -622,6 +752,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -669,6 +800,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
@@ -700,7 +832,6 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -709,7 +840,8 @@
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
+				"TARGETED_DEVICE_FAMILY[sdk=macosx*]" = "2,6";
 			};
 			name = Debug;
 		};
@@ -738,7 +870,6 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -747,7 +878,8 @@
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
+				"TARGETED_DEVICE_FAMILY[sdk=macosx*]" = "2,6";
 			};
 			name = Release;
 		};
@@ -768,7 +900,6 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -797,7 +928,6 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
@@ -808,6 +938,35 @@
 				WATCHOS_DEPLOYMENT_TARGET = 11.6;
 			};
 			name = Release;
+		};
+		57C3A05459CF5DEA67936C9E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = RereminderClip/RereminderClip.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = QGAQ3AY3R3;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RereminderClip/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "두번알림";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.Clip;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "APPCLIP DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
 		};
 		58AA3EC52ECF550B007D4BBD /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -827,7 +986,6 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.RereminderAlarm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -836,7 +994,8 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
+				"TARGETED_DEVICE_FAMILY[sdk=macosx*]" = "2,6";
 			};
 			name = Debug;
 		};
@@ -858,7 +1017,6 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 2.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.RereminderAlarm;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -867,7 +1025,8 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
+				"TARGETED_DEVICE_FAMILY[sdk=macosx*]" = "2,6";
 			};
 			name = Release;
 		};
@@ -879,7 +1038,6 @@
 				DEVELOPMENT_TEAM = QGAQ3AY3R3;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.RereminderTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -898,7 +1056,6 @@
 				DEVELOPMENT_TEAM = QGAQ3AY3R3;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.RereminderTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -918,7 +1075,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSPrincipalClass = RRMenuBarController;
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.MenuBar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -938,7 +1094,6 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSPrincipalClass = RRMenuBarController;
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.MenuBar;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -949,9 +1104,48 @@
 			};
 			name = Release;
 		};
+		CCB38009AA818C35CF82F425 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_ENTITLEMENTS = RereminderClip/RereminderClip.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = QGAQ3AY3R3;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RereminderClip/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "두번알림";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.Clip;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "APPCLIP $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		07E0B34FDFD80EB40DB61FB8 /* Build configuration list for PBXNativeTarget "RereminderClip" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				CCB38009AA818C35CF82F425 /* Release */,
+				57C3A05459CF5DEA67936C9E /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		260414C62E1B9FA200CBA29B /* Build configuration list for PBXProject "Rereminder" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1013,8 +1207,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/M1zz/LeeoKit.git";
 			requirement = {
-				kind = exactVersion;
-				version = 2.5.0;
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.9.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

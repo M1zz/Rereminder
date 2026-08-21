@@ -33,10 +33,6 @@ final class TimerViewModel: ObservableObject {
     /// 현재 타이머의 라벨 (예: "Mentoring") — 없으면 빈 문자열
     var currentLabel: String { currentTemplate?.label ?? "" }
 
-    #if os(iOS) && !targetEnvironment(macCatalyst)
-    private var currentActivity: Activity<TimerActivityAttributes>?
-    #endif
-
     init() {
         // Live Activity 인텐트 옵저버
         setupLiveActivityObservers()
@@ -119,7 +115,7 @@ final class TimerViewModel: ObservableObject {
                     prealertOffsetsSec: cfg.prealertOffsetsSec.map { Int($0) }
                 )
                 currentTemplate = temp
-                startLiveActivity(template: temp)
+                startLiveActivity(template: temp, adoptExisting: true)
             }
         }
 
@@ -320,61 +316,40 @@ final class TimerViewModel: ObservableObject {
     // MARK: - Live Activity
 
     /// endDate를 넘기면 그 절대 시각 기준으로 표시 (다른 기기에서 시작된 타이머 반영용)
-    private func startLiveActivity(template: Timer, endDate remoteEndDate: Date? = nil) {
+    /// - Parameter adoptExisting: 복원 경로에서 true — 이미 살아 있는 활동을 채택한다.
+    ///   무조건 새로 요청하면 앱을 껐다 켤 때마다 다이나믹 아일랜드에 활동이 하나씩 늘어난다.
+    private func startLiveActivity(template: Timer,
+                                   endDate remoteEndDate: Date? = nil,
+                                   adoptExisting: Bool = false) {
         #if os(iOS) && !targetEnvironment(macCatalyst)
-        guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
-
         let duration = TimeInterval(template.mainSeconds)
         let endDate = remoteEndDate ?? Date().addingTimeInterval(duration)
+        let name = template.name
 
-        let attributes = TimerActivityAttributes(
-            timerName: template.name,
-            totalDuration: duration,
-            startTime: endDate.addingTimeInterval(-duration)
-        )
-
-        let initialState = TimerActivityAttributes.ContentState(
-            remainingTime: max(0, endDate.timeIntervalSinceNow),
-            isPaused: false,
-            timestamp: Date(),
-            endDate: endDate
-        )
-
-        do {
-            let activity = try Activity.request(
-                attributes: attributes,
-                content: .init(state: initialState, staleDate: nil)
-            )
-            currentActivity = activity
-        } catch {
-            print("❌ Live Activity 시작 실패: \(error)")
+        if adoptExisting {
+            LiveActivityController.adoptOrStart(name: name, duration: duration, endDate: endDate)
+        } else {
+            LiveActivityController.start(name: name, duration: duration, endDate: endDate)
         }
         #endif
     }
 
     private func updateLiveActivity() {
         #if os(iOS) && !targetEnvironment(macCatalyst)
-        guard let activity = currentActivity else { return }
-
-        let endDate = state == .paused ? nil : Date().addingTimeInterval(remaining)
-        let newState = TimerActivityAttributes.ContentState(
-            remainingTime: remaining,
-            isPaused: state == .paused,
-            timestamp: Date(),
-            endDate: endDate
+        let isPaused = state == .paused
+        LiveActivityController.update(
+            remaining: remaining,
+            isPaused: isPaused,
+            endDate: isPaused ? nil : Date().addingTimeInterval(remaining)
         )
-
-        Task { await activity.update(.init(state: newState, staleDate: nil)) }
         #endif
     }
 
+    /// 남아 있는 활동을 전부 끝낸다 — 앱이 죽었다 살아난 뒤에도 없앨 수 있어야 한다
+    /// (예전에는 메모리 참조가 사라져 있으면 조용히 아무것도 하지 않았다).
     private func endLiveActivity() {
         #if os(iOS) && !targetEnvironment(macCatalyst)
-        guard let activity = currentActivity else { return }
-        Task {
-            await activity.end(nil, dismissalPolicy: .immediate)
-            currentActivity = nil
-        }
+        LiveActivityController.endAll()
         #endif
     }
 }

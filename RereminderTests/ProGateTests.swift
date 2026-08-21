@@ -278,4 +278,56 @@ final class ProGateTests: XCTestCase {
             XCTFail("attempt 11: expected blocked second")
         }
     }
+
+    // MARK: - 알림 추가 게이트 (prealertAdmission / requestPrealert)
+    //
+    // 이 정책은 알림을 켤 수 있는 화면마다 복사돼 있었고, 지금은 ProGate 한 곳이 답한다.
+    // 화면들이 같은 답을 쓰는 한 여기서 규칙을 지키면 된다.
+
+    func test_prealertAdmission_firstAlertIsFree_evenWhenTrialExhausted() {
+        setProUser(false)
+        for _ in 0..<10 { TrialCounter.increment(.unlimitedPrealerts) }   // 1·2차 체험 모두 소진
+
+        XCTAssertEqual(ProGate.prealertAdmission(currentCount: 0), .allowed,
+                       "1번째 알림은 무료 기능이다 — 체험이 다 떨어져도 막으면 안 된다")
+    }
+
+    func test_prealertAdmission_secondAlert_allowedWhileTrialRemains() {
+        setProUser(false)
+        XCTAssertEqual(ProGate.prealertAdmission(currentCount: ProGate.freePrealertLimit), .allowed)
+    }
+
+    func test_prealertAdmission_blocksSecondAlert_whenFirstTrialExhausted() {
+        setProUser(false)
+        for _ in 0..<TrialCounter.firstStageLimit { TrialCounter.increment(.unlimitedPrealerts) }
+
+        XCTAssertEqual(ProGate.prealertAdmission(currentCount: 1), .blocked(stage: .first))
+    }
+
+    func test_prealertAdmission_proUser_isNeverBlocked() {
+        setProUser(true)
+        for _ in 0..<10 { TrialCounter.increment(.unlimitedPrealerts) }
+
+        XCTAssertEqual(ProGate.prealertAdmission(currentCount: 99), .allowed)
+    }
+
+    func test_prealertAdmission_hasNoSideEffect() {
+        setProUser(false)
+        let before = TrialCounter.count(for: .unlimitedPrealerts)
+
+        // 자물쇠 아이콘처럼 그릴 때마다 물어보는 경로다 — 물어본 것만으로 상태가 변하면 안 된다
+        for _ in 0..<5 { _ = ProGate.prealertAdmission(currentCount: 3) }
+
+        XCTAssertEqual(TrialCounter.count(for: .unlimitedPrealerts), before)
+    }
+
+    func test_requestPrealert_matchesPureAdmission() {
+        setProUser(false)
+        for _ in 0..<TrialCounter.firstStageLimit { TrialCounter.increment(.unlimitedPrealerts) }
+
+        // 이벤트를 남기는 것 말고는 판정이 같아야 한다
+        XCTAssertEqual(ProGate.requestPrealert(currentCount: 2),
+                       ProGate.prealertAdmission(currentCount: 2))
+    }
+
 }

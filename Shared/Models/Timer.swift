@@ -20,7 +20,7 @@ final class Timer {
     var colorHex: String = "#007AFF"  // Label Color (기본: 파란색)
     var isFavorite: Bool = false  // 즐겨찾기 여부
     var isPresentation: Bool = false  // 발표 모드 여부
-    var sectionsData: Data? = nil  // JSON 인코딩된 [PresentationSection]
+    var sectionsData: Data?  // JSON 인코딩된 [PresentationSection]
     var createdAt: Date
     var lastUsedAt: Date?  // 마지막 사용 시간
     @Relationship(deleteRule: .cascade, inverse: \TimerRecord.template)

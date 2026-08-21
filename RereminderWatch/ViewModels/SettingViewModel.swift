@@ -10,7 +10,7 @@ import Foundation
 class SettingViewModel: ObservableObject {
     @Published var time: TimeModel
     @Published var timer: Timer?
-    
+
     init(
         time: TimeModel = .init(hour: 0, minute: 0, second: 0),
         timer: Timer? = nil) {

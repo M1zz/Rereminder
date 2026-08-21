@@ -2,20 +2,32 @@
 //  AnalyticsManager.swift
 //  Rereminder
 //
-//  로컬 이벤트 로깅 래퍼 (외부 분석 SDK 미사용).
-//  Firebase Analytics 연동은 제거되었으며, 이벤트는 DEBUG 빌드에서만
-//  콘솔에 출력되고 어떤 데이터도 외부로 전송되지 않는다.
+//  이벤트 추상화 계층 — 앱에서 벌어진 일을 한 가지 어휘로 모으는 곳.
+//
+//  외부 분석 SDK는 쓰지 않는다. Firebase 는 2026-07, TelemetryDeck 은 2026-08 에 걷어냈다
+//  (App ID 가 비어 있어 실제로는 아무것도 보내지 않는 상태였고, 사용 통계는 CloudKit 허브가
+//   이미 담당한다 — 외부 SDK 0개 원칙).
+//
+//  이 함수가 하는 일은 셋이다:
+//   ① 로컬 카운터 갱신(UsageMetrics)  ② 익명 사용 허브로 이벤트 전달(eventSink)  ③ DEBUG 로깅
+//  - 개인 식별 정보는 수집하지 않는다 (이벤트 이름 + 숫자/열거형 파라미터만).
 //
 
 import Foundation
 
 enum AnalyticsManager {
 
+    /// 익명 사용 허브(CloudKit) 전송 훅 — 메인 앱이 런치 시 꽂는다.
+    /// Watch/위젯 타겟에서는 nil이라 콘솔 로깅만 수행된다.
+    /// ⚠️ 이 파일은 Watch/위젯 타겟에도 포함된다 — 여기서 LeeoKit/CloudKit을 직접 참조하지 말 것.
+    ///    전송 구현은 메인 앱의 ActivityReporter가 담당한다.
+    static var eventSink: ((String) -> Void)?
+
     // MARK: - Events
 
     enum Event {
         // 타이머 행동
-        case timerStarted(durationSeconds: Int, presetName: String?)
+        case timerStarted(durationSeconds: Int, alertCount: Int, presetName: String?)
         case timerCompleted(durationSeconds: Int)
         case timerCancelled(remainingSeconds: Int)
         case presetSaved(name: String, durationSeconds: Int)
@@ -33,6 +45,19 @@ enum AnalyticsManager {
         case purchaseCompleted(productId: String)
         case purchaseFailed(productId: String, reason: String)
         case purchaseRestored
+
+        // 온보딩 퍼널
+        case onboardingShown
+        case onboardingCompleted
+        case onboardingSkipped(page: Int)
+
+        // 의견 요청(피드백 넛지) — 개발자가 "무엇이 문제인지"를 듣는 유일한 능동 경로
+        case feedbackNudgeShown
+        case feedbackNudgeAccepted
+        case feedbackNudgeSnoozed
+
+        // 기기 보유 여부 (앱이 직접 물어본 답) — 워치·맥 안내를 누구에게 할지 가르는 값
+        case deviceOwnershipAnswered(device: String, owns: Bool)
 
         // 기타
         case reviewRequested
@@ -56,17 +81,44 @@ enum AnalyticsManager {
             case .purchaseCompleted:       return "purchase_completed"
             case .purchaseFailed:          return "purchase_failed"
             case .purchaseRestored:        return "purchase_restored"
+            case .onboardingShown:         return "onboarding_shown"
+            case .onboardingCompleted:     return "onboarding_completed"
+            case .onboardingSkipped:       return "onboarding_skipped"
+            case .feedbackNudgeShown:      return "feedback_nudge_shown"
+            case .feedbackNudgeAccepted:   return "feedback_nudge_accepted"
+            case .feedbackNudgeSnoozed:    return "feedback_nudge_snoozed"
             case .reviewRequested:         return "review_requested"
             case .reviewCompleted:         return "review_completed"
             case .presentationModeStarted: return "presentation_mode_started"
             case .watchSyncUsed:           return "watch_sync_used"
+            case .deviceOwnershipAnswered: return "device_ownership_answered"
+            }
+        }
+
+        /// 익명 사용 허브(UsageEvent)로 보낼 이벤트 문자열. nil이면 허브로 보내지 않는다.
+        /// 기존 시리즈(timer_start/timer_complete/presentation_start)는 ViewModel이 ActivityReporter로
+        /// 직접 보내던 역사가 있어 여기서 다시 보내면 중복·의미 변형이 생긴다 — 그쪽 경로를 유지하고 제외.
+        /// 구분값이 유의미한 이벤트는 "이름:슬라이스" 한 조각만 붙인다(값·PII는 보내지 않는다).
+        var usageEventName: String? {
+            switch self {
+            case .timerStarted, .timerCompleted, .presentationModeStarted:
+                return nil
+            case .premiumFeatureUsed(let feature, _):      return "premium_feature_used:\(feature.rawValue)"
+            case .premiumTrialExhausted(let feature, _):   return "premium_trial_exhausted:\(feature.rawValue)"
+            case .deviceOwnershipAnswered(let device, let owns):
+                return "device_ownership:\(device)_\(owns ? "yes" : "no")"
+            case .paywallShown(let trigger):               return "paywall_shown:\(trigger?.rawValue ?? "general")"
+            case .paywallDismissed(let trigger, let didPurchase):
+                return didPurchase ? "paywall_converted:\(trigger?.rawValue ?? "general")"
+                                   : "paywall_dismissed:\(trigger?.rawValue ?? "general")"
+            default:                       return name
             }
         }
 
         var parameters: [String: Any] {
             switch self {
-            case .timerStarted(let duration, let preset):
-                var p: [String: Any] = ["duration_seconds": duration]
+            case .timerStarted(let duration, let alertCount, let preset):
+                var p: [String: Any] = ["duration_seconds": duration, "alert_count": alertCount]
                 if let preset = preset { p["preset_name"] = preset }
                 return p
             case .timerCompleted(let duration):
@@ -91,7 +143,13 @@ enum AnalyticsManager {
                 return ["product_id": id]
             case .purchaseFailed(let id, let reason):
                 return ["product_id": id, "reason": reason]
+            case .onboardingSkipped(let page):
+                return ["page": page]
+            case .deviceOwnershipAnswered(let device, let owns):
+                return ["device": device, "owns": owns]
             case .purchaseRestored,
+                 .onboardingShown, .onboardingCompleted,
+                 .feedbackNudgeShown, .feedbackNudgeAccepted, .feedbackNudgeSnoozed,
                  .reviewRequested, .reviewCompleted,
                  .presentationModeStarted, .watchSyncUsed:
                 return [:]
@@ -101,27 +159,16 @@ enum AnalyticsManager {
 
     // MARK: - Public API
 
-    /// 앱 시작 시 1회 호출 (외부 분석 SDK 미사용 — no-op)
-    static func configure() {}
-
-    /// 이벤트 추적 (DEBUG 빌드에서만 콘솔 출력, 외부 전송 없음)
+    /// 이벤트 추적 — 로컬 카운터 갱신 + 익명 사용 허브로 전달, DEBUG 에선 콘솔에도 출력
     static func log(_ event: Event) {
+        // 허브 이벤트는 이름당 쓰로틀이 걸려 "몇 번 했는지"를 셀 수 없다 — 횟수는 기기에서 센다.
+        UsageMetrics.apply(event)
+
+        if let hubEvent = event.usageEventName {
+            eventSink?(hubEvent)
+        }
         #if DEBUG
         print("📊 [Analytics] \(event.name) \(event.parameters)")
-        #endif
-    }
-
-    /// 사용자 속성 설정 (DEBUG 빌드에서만 콘솔 출력)
-    static func setUserProperty(_ value: String?, forName name: String) {
-        #if DEBUG
-        print("📊 [Analytics] userProperty \(name)=\(value ?? "nil")")
-        #endif
-    }
-
-    /// 화면 이름 추적 (DEBUG 빌드에서만 콘솔 출력)
-    static func logScreen(_ name: String, screenClass: String? = nil) {
-        #if DEBUG
-        print("📊 [Analytics] screen_view \(name)")
         #endif
     }
 }

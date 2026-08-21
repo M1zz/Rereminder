@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Gate (다국어 검사 + 전체 테스트)
+    runs-on: macos-15
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show Xcode version
+        run: xcodebuild -version
+
+      - name: Cache SPM
+        uses: actions/cache@v4
+        with:
+          path: ~/Library/Developer/Xcode/DerivedData/**/SourcePackages
+          key: spm-${{ runner.os }}-${{ hashFiles('**/Package.resolved') }}
+          restore-keys: spm-${{ runner.os }}-
+
+      # 로컬 배포와 같은 게이트를 하나로 유지한다 (scripts/predeploy.sh).
+      # CODE_SIGNING_ALLOWED=NO 금지 — entitlements 가 빠지면 CloudKit 초기화가 크래시한다.
+      - name: Run predeploy gate
+        run: sh scripts/predeploy.sh
+
+  lint:
+    name: SwiftLint
+    runs-on: macos-15
+    timeout-minutes: 10
+    continue-on-error: true # 기존 위반 해소 전까지 non-blocking — 해소 후 이 줄을 제거할 것
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install SwiftLint
+        run: brew install swiftlint
+      - name: Lint
+        run: swiftlint lint --reporter github-actions-logging

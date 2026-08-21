@@ -1,0 +1,208 @@
+{
+  "$comment": [
+    "FeedbackHubViewer가 이 앱의 통계를 '앱 화면과 같은 말'로 그리기 위한 스펙이다.",
+    "원본은 이 파일이고, 뷰어는 scripts/sync-stats-specs.sh 로 복사해 간다.",
+    "지표(metrics 키)나 이벤트를 추가하면 여기 라벨도 같이 적을 것 —",
+    "적지 않으면 뷰어는 키 원문을 보여주고 '스펙에 없는 지표'로 표시한다(사라지지는 않는다).",
+    "무료 알림 1개 / 체험 5회(연장 시 10회) 같은 경계는 이 앱의 정책이라 여기 숫자로 적는다."
+  ],
+  "specVersion": 1,
+  "appId": "com.xa.toki",
+  "appName": "두번알림",
+
+  "metricLabels": {
+    "timerStarts": { "label": "타이머 시작 횟수" },
+    "timerCompletions": { "label": "완주 횟수" },
+    "timerCancels": { "label": "도중 취소 횟수" },
+    "focusMinutes": { "label": "관리한 시간", "unit": "분" },
+    "presentationRuns": { "label": "발표 모드 실행" },
+    "presetSaves": { "label": "템플릿 저장" },
+    "presetUses": { "label": "템플릿 사용" },
+    "watchSyncUses": { "label": "워치 동기화" },
+    "templates": { "label": "보유 템플릿 수" },
+    "alertsMax": { "label": "한 타이머 최대 알림 개수", "excludeFromAverages": true },
+    "multiAlertRuns": { "label": "알림 2개 이상 실행" },
+    "alertLimitHits": { "label": "알림 한도에 막힌 횟수" },
+    "paywallViews": { "label": "페이월 노출 횟수" },
+    "trial.prealerts": { "label": "알림 체험 사용 횟수" },
+    "flag.isPro": { "label": "결제한 사용자", "excludeFromAverages": true },
+    "flag.notificationsOn": { "label": "알림 권한을 켠 설치", "excludeFromAverages": true },
+    "flag.presentationUser": { "label": "발표 모드 사용자", "excludeFromAverages": true },
+    "flag.templateUser": { "label": "템플릿 사용자", "excludeFromAverages": true },
+    "flag.watchUser": { "label": "워치 사용자", "excludeFromAverages": true },
+    "flag.prealertTrialExtended": { "label": "체험 연장을 받은 설치", "excludeFromAverages": true }
+  },
+  "metricPrefixLabels": {
+    "flag.owns": "기기 보유 응답"
+  },
+
+  "eventLabels": {
+    "app_open": "앱을 연 횟수",
+    "timer_start": "타이머를 시작함",
+    "timer_complete": "타이머를 완주함",
+    "presentation_start": "발표 모드를 시작함",
+    "onboarding_completed": "처음 안내를 끝냄",
+    "onboarding_skipped": "처음 안내를 건너뜀",
+    "feedback_nudge_shown": "피드백 권유를 봄",
+    "feedback_nudge_accepted": "피드백 권유를 수락함",
+    "feedback_nudge_snoozed": "피드백 권유를 미룸",
+    "review_requested": "리뷰를 요청함",
+    "review_completed": "리뷰를 남김",
+    "presentation_mode_started": "발표 모드로 들어감",
+    "watch_sync_used": "워치와 동기화함",
+    "device_ownership_answered": "기기 보유를 답함",
+    "device_ownership": "기기 보유 응답",
+    "premium_feature_used": "유료 기능을 씀",
+    "premium_trial_exhausted": "체험을 다 씀",
+    "paywall_shown": "페이월을 봄",
+    "paywall_dismissed": "페이월을 닫음",
+    "paywall_converted": "페이월에서 결제함"
+  },
+
+  "derived": [
+    {
+      "$comment": "체험 한도는 연장 수락 여부로 갈린다(TrialCounter.firstStageLimit/secondStageLimit).",
+      "name": "trialLimit",
+      "kind": "choose",
+      "flag": "flag.prealertTrialExtended",
+      "whenSet": 10,
+      "whenUnset": 5
+    },
+    {
+      "name": "trialRemaining",
+      "kind": "difference",
+      "from": "trialLimit",
+      "subtract": "trial.prealerts"
+    },
+    {
+      "$comment": "유료 영역(알림 2개 이상)을 한 번이라도 건드린 설치. 무료 한도는 1개다.",
+      "name": "paidAreaTouched",
+      "kind": "anyAbove",
+      "terms": [
+        { "metric": "trial.prealerts", "gt": 0 },
+        { "metric": "alertLimitHits", "gt": 0 },
+        { "metric": "multiAlertRuns", "gt": 0 },
+        { "metric": "alertsMax", "gt": 1 }
+      ]
+    }
+  ],
+
+  "tileGroups": [
+    {
+      "title": "결제 준비도 (지금)",
+      "note": "이 앱의 결제는 '알림을 몇 개까지 켤 수 있나'로 갈려요(무료 1개, 그 위는 체험 뒤 결제). 그래서 결제에 가까운 사람 = 알림 한도에 다가간 사람이에요. 스냅샷은 설치당 1건 덮어쓰기라 여기 숫자는 과거 합계가 아니라 지금 상태예요.",
+      "tiles": [
+        { "label": "지금 막혀 있는 사람", "kind": "segment", "segment": "막힘 (결제해야 더 씀)", "hint": "알림을 더 켜려면 결제해야 하는 상태예요." },
+        { "label": "한도 임박 (체험 1~2회)", "kind": "segment", "segment": "한도 임박 (체험 1~2회)", "hint": "곧 위 칸으로 넘어와요." },
+        { "label": "곧 필요해질 사람", "kind": "segment", "segment": "곧 필요할 사람", "hint": "아직 알림 1개로 쓰지만 반복해서 완주하는 사람이에요(완주 3회 이상)." },
+        { "label": "이미 결제한 사람", "kind": "installsWithMetric", "metric": "flag.isPro" }
+      ]
+    },
+    {
+      "title": "핵심 가치",
+      "note": "완주는 이 앱이 실제로 쓰였다는 가장 직접적인 증거예요. 시작 대비 완주가 낮으면 도중에 그만두게 만드는 무언가가 있어요.",
+      "tiles": [
+        { "label": "한 번이라도 완주한 사람", "kind": "installsWithMetric", "metric": "timerCompletions" },
+        { "label": "완주 / 시작", "kind": "ratio", "metric": "timerCompletions", "condition": "timerStarts" },
+        { "label": "관리한 시간 합계", "kind": "sum", "metric": "focusMinutes", "unit": "분" },
+        { "label": "설치당 관리 시간", "kind": "average", "metric": "focusMinutes", "unit": "분" },
+        { "label": "도중 취소 비율", "kind": "ratio", "metric": "timerCancels", "condition": "timerStarts", "hint": "높으면 시간을 잘못 맞추거나 도중에 흥미를 잃는 거예요." }
+      ]
+    },
+    {
+      "title": "기능 채택률",
+      "note": "알림이 이 앱의 전부예요. 알림 권한이 낮으면 타이머가 울리지 않는 사람이 그만큼 있다는 뜻이에요.",
+      "tiles": [
+        { "label": "알림 권한 허용", "kind": "installsWithMetric", "metric": "flag.notificationsOn", "format": "percent" },
+        { "label": "템플릿 사용", "kind": "installsWithMetric", "metric": "flag.templateUser", "format": "percent" },
+        { "label": "발표 모드 사용", "kind": "installsWithMetric", "metric": "flag.presentationUser", "format": "percent" },
+        { "label": "워치 사용", "kind": "installsWithMetric", "metric": "flag.watchUser", "format": "percent" }
+      ]
+    }
+  ],
+
+  "distributions": [
+    {
+      "title": "완주 횟수 분포",
+      "metric": "timerCompletions",
+      "note": "0회 칸이 이 화면에서 가장 중요한 숫자예요. 깔았지만 한 번도 끝까지 안 간 사람의 수이고, 그 크기가 곧 첫인상에서 새는 양이에요.",
+      "buckets": [
+        { "label": "0회", "from": 0, "to": 0 },
+        { "label": "1~2", "from": 1, "to": 2 },
+        { "label": "3~5", "from": 3, "to": 5 },
+        { "label": "6~10", "from": 6, "to": 10 },
+        { "label": "11~30", "from": 11, "to": 30 },
+        { "label": "31회 이상", "from": 31 }
+      ]
+    },
+    {
+      "title": "알림 개수 수요 (한 타이머 최대)",
+      "metric": "alertsMax",
+      "note": "무료는 1개까지예요. 2개 이상 칸이 크면 지금의 가격 경계가 실제로 매출을 만든다는 뜻이고, 1개 칸만 크면 한도를 조여도 결제는 늘지 않아요. '기록 없음'은 2.1.1 이전 버전이라 아직 이 값을 보내지 않은 설치예요.",
+      "buckets": [
+        { "label": "기록 없음", "from": 0, "to": 0 },
+        { "label": "1개", "from": 1, "to": 1 },
+        { "label": "2개", "from": 2, "to": 2 },
+        { "label": "3개", "from": 3, "to": 3 },
+        { "label": "4개", "from": 4, "to": 4 },
+        { "label": "5개 이상", "from": 5 }
+      ]
+    }
+  ],
+
+  "segments": {
+    "title": "사용자 구분",
+    "note": "설치 하나하나를 결제까지의 거리로 나눈 거예요. 위가 결제에 가깝고, 한 설치는 한 칸에만 들어가요.",
+    "rules": [
+      {
+        "name": "결제함",
+        "hint": "결제를 마친 설치예요.",
+        "when": [{ "metric": "flag.isPro", "gt": 0 }]
+      },
+      {
+        "name": "막힘 (결제해야 더 씀)",
+        "hint": "알림을 더 켜려다 막혀 있어요. 결제 안내가 가장 잘 먹히는 사람들이에요.",
+        "when": [
+          { "derived": "paidAreaTouched", "gte": 1 },
+          { "derived": "trialRemaining", "lte": 0 }
+        ]
+      },
+      {
+        "name": "막힘 (결제해야 더 씀)",
+        "hint": "알림을 더 켜려다 막혀 있어요. 결제 안내가 가장 잘 먹히는 사람들이에요.",
+        "when": [
+          { "derived": "paidAreaTouched", "gte": 1 },
+          { "metric": "alertLimitHits", "gte": 1 }
+        ]
+      },
+      {
+        "name": "한도 임박 (체험 1~2회)",
+        "hint": "체험이 곧 끝나요. 여기서 값을 못 느끼면 그냥 떠나요.",
+        "when": [
+          { "derived": "paidAreaTouched", "gte": 1 },
+          { "derived": "trialRemaining", "lte": 2 }
+        ]
+      },
+      {
+        "name": "체험 사용 중",
+        "hint": "알림을 여러 개 쓰는 중이에요. 아직 여유가 있어요.",
+        "when": [{ "derived": "paidAreaTouched", "gte": 1 }]
+      },
+      {
+        "name": "곧 필요할 사람",
+        "hint": "무료 범위지만 반복해서 쓰는 사람이에요. 알림이 하나로 부족해지는 건 시간 문제예요.",
+        "when": [{ "metric": "timerCompletions", "gte": 3 }]
+      },
+      {
+        "name": "무료로 충분",
+        "hint": "알림 1개로 충분한 사람이에요. 결제를 기대하기 어렵고, 다른 값을 줘야 움직여요.",
+        "when": [{ "metric": "timerCompletions", "gte": 1 }]
+      },
+      {
+        "name": "가치 경험 전",
+        "hint": "아직 완주가 없어요. 결제 이전에 첫 성공이 먼저예요.",
+        "when": []
+      }
+    ]
+  }
+}

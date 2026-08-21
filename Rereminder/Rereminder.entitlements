@@ -17,5 +17,15 @@
 	<array>
 		<string>group.leeo.toki</string>
 	</array>
+	<!--
+	  App Clip 을 품은 앱이 반드시 가져야 하는 짝 — 클립의 앱 ID 를 부모가 선언한다.
+	  (클립 쪽은 RereminderClip.entitlements 의 parent-application-identifiers 로 부모를 가리킨다.
+	   한쪽만 있으면 업로드 시 "Missing entitlement" 경고가 뜬다.)
+	  ⚠️ 클립 번들 ID(com.xa.toki.Clip)와 반드시 같아야 한다 — 바꾸면 여기도 같이 바꿀 것.
+	-->
+	<key>com.apple.developer.associated-appclip-app-identifiers</key>
+	<array>
+		<string>$(AppIdentifierPrefix)com.xa.toki.Clip</string>
+	</array>
 </dict>
 </plist>

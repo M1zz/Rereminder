@@ -17,7 +17,7 @@ final class ToastManager: ObservableObject {
         guard isToastEnabled() else { return }
 
         queue.append(toast)
-        
+
         if Thread.isMainThread {
             displayNext()
         } else {
@@ -30,7 +30,7 @@ final class ToastManager: ObservableObject {
         if d.object(forKey: "toastEnabled") == nil { return true }
         return d.bool(forKey: "toastEnabled")
     }
-    
+
     // queue handling
     private func displayNext() {
         guard !isShowing, let next = queue.first else { return }
