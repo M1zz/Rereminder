@@ -85,4 +85,42 @@ enum TimerSections {
                                  tolerance: Double = 0.000_1) -> Int {
         markers.filter { $0 >= segmentEnd - tolerance }.count
     }
+
+    // MARK: - 지금 지나는 중인 구간 (이중 링의 안쪽 링이 보는 값)
+
+    /// 지금 어느 구간을 지나고 있고, 그 구간이 얼마나 남았나.
+    ///
+    /// **이중 링의 안쪽 링·가운데 큰 숫자가 전부 이 하나를 본다.** 바깥 링은 "전체가 얼마 남았나",
+    /// 안쪽 링은 "이 구간이 얼마 남았나" — 두 값을 각각 다른 곳에서 계산하면 링과 숫자가 갈라진다.
+    struct Progress: Equatable {
+        let segment: Segment
+        /// 전체 구간 수. 하나뿐이면 안쪽 링은 바깥 링과 같은 말을 한다.
+        let totalCount: Int
+        /// 이 구간의 남은 시간(초).
+        let remainingSec: Int
+        /// 이 구간의 남은 비율 (1 → 0). 안쪽 링의 trim 값.
+        let remainingRatio: Double
+
+        var index: Int { segment.index }
+
+        /// 안쪽 링을 그릴 만한가 — **구간이 둘 이상일 때만** 뜻이 있다.
+        var isDivided: Bool { totalCount > 1 }
+    }
+
+    /// 경과 시간으로 지금 구간을 찾는다. 구간이 없거나 이미 다 지났으면(오버타임) nil.
+    static func progress(mainSeconds: Int, alertOffsets: Set<Int>, elapsedSec: Int) -> Progress? {
+        let segments = derive(mainSeconds: mainSeconds, alertOffsets: alertOffsets)
+        guard !segments.isEmpty, elapsedSec < mainSeconds else { return nil }
+
+        let elapsed = max(0, elapsedSec)
+        // 경계에 딱 걸린 순간은 이미 그 구간이 끝난 것으로 본다(phase 와 같은 규칙).
+        guard let segment = segments.first(where: { elapsed < $0.endSec }) else { return nil }
+
+        let remaining = remainingSeconds(of: segment, elapsedSec: elapsed)
+        let duration = max(1, segment.durationSec)
+        return Progress(segment: segment,
+                        totalCount: segments.count,
+                        remainingSec: remaining,
+                        remainingRatio: min(1, max(0, Double(remaining) / Double(duration))))
+    }
 }

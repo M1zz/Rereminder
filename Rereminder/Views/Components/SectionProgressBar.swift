@@ -28,7 +28,8 @@ struct SectionProgressBar: View {
 
     var barHeight: CGFloat = 14
 
-    private let gap: CGFloat = 3
+    /// 칸 사이 여백 — 여기 종이 앉는다(막대가 두꺼울수록 종도 커지므로 같이 벌어진다).
+    private var gap: CGFloat { max(3, barHeight * 0.32) }
     private let minSlotWidth: CGFloat = 6
     private let labelSpacing: CGFloat = 6
 
@@ -58,9 +59,27 @@ struct SectionProgressBar: View {
                 slotView(slot: slot, segment: segment)
                     .offset(x: slot.x)
             }
+            alertBells(slots: slots)
             playhead(slots: slots)
         }
         .frame(height: barHeight)
+    }
+
+    /// 칸과 칸 사이 = **알림이 울리는 지점.** 링의 종 노브와 같은 표시를 막대에도 세운다.
+    /// 이게 없으면 칸 사이 틈이 "왜 끊겼지"로 읽힌다.
+    private func alertBells(slots: [SectionBarLayout.Slot]) -> some View {
+        let diameter = barHeight * 1.05
+
+        return ForEach(slots.dropLast()) { slot in
+            ZStack {
+                Circle().fill(DSColor.marker)
+                Image(systemName: "bell.fill")
+                    .font(.system(size: diameter * 0.52, weight: .bold))
+                    .foregroundStyle(.white)
+            }
+            .frame(width: diameter, height: diameter)
+            .offset(x: slot.maxX + gap / 2 - diameter / 2)
+        }
     }
 
     /// 칸 하나 — 옅은 바탕에 **오른쪽부터** 진한 색이 남는다(오른쪽 = 아직 오지 않은 시간).

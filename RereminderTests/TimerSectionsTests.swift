@@ -145,4 +145,49 @@ final class TimerSectionsTests: XCTestCase {
             XCTAssertEqual(TimerSections.remainingSeconds(of: segment, elapsedSec: 900), 0)
         }
     }
+
+    // MARK: - 이중 링이 보는 값 (progress)
+
+    func test_progress_pointsAtTheSectionBeingPassed() {
+        // 20분 · 5분 전 + 1분 전 알림 → 구간 셋(0~15분, 15~19분, 19~20분)
+        let progress = TimerSections.progress(mainSeconds: 1200,
+                                              alertOffsets: [300, 60],
+                                              elapsedSec: 16 * 60)
+        XCTAssertEqual(progress?.index, 1)
+        XCTAssertEqual(progress?.totalCount, 3)
+        XCTAssertEqual(progress?.remainingSec, 3 * 60)          // 19분 − 16분
+        XCTAssertEqual(progress?.remainingRatio ?? 0, 0.75, accuracy: 0.0001)  // 4분짜리 구간의 3분
+        XCTAssertEqual(progress?.isDivided, true)
+    }
+
+    func test_progress_atBoundary_movesToTheNextSection() {
+        // 경계에 딱 걸린 순간은 그 구간이 끝난 것으로 본다(phase 와 같은 규칙 — 그 순간 알림이 울린다)
+        let progress = TimerSections.progress(mainSeconds: 1200,
+                                              alertOffsets: [300, 60],
+                                              elapsedSec: 15 * 60)
+        XCTAssertEqual(progress?.index, 1)
+        XCTAssertEqual(progress?.remainingSec, 4 * 60)
+        XCTAssertEqual(progress?.remainingRatio ?? 0, 1.0, accuracy: 0.0001)
+    }
+
+    func test_progress_withoutAlerts_isNotDivided() {
+        // 구간이 하나면 안쪽 링은 바깥 링과 같은 말을 한다 — 화면이 그걸 보고 안 그린다
+        let progress = TimerSections.progress(mainSeconds: 600, alertOffsets: [], elapsedSec: 100)
+        XCTAssertEqual(progress?.totalCount, 1)
+        XCTAssertEqual(progress?.isDivided, false)
+    }
+
+    func test_progress_afterTheEnd_isNil() {
+        // 오버타임에는 지날 구간이 남아 있지 않다
+        XCTAssertNil(TimerSections.progress(mainSeconds: 600, alertOffsets: [60], elapsedSec: 600))
+        XCTAssertNil(TimerSections.progress(mainSeconds: 600, alertOffsets: [60], elapsedSec: 900))
+        XCTAssertNil(TimerSections.progress(mainSeconds: 0, alertOffsets: [60], elapsedSec: 0))
+    }
+
+    func test_progress_atStart_isTheFirstSectionAndFull() {
+        let progress = TimerSections.progress(mainSeconds: 600, alertOffsets: [60], elapsedSec: 0)
+        XCTAssertEqual(progress?.index, 0)
+        XCTAssertEqual(progress?.remainingSec, 540)
+        XCTAssertEqual(progress?.remainingRatio ?? 0, 1.0, accuracy: 0.0001)
+    }
 }

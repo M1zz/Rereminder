@@ -172,8 +172,11 @@
 				DesignSystem/DSOpacity.swift,
 				DesignSystem/DSRadius.swift,
 				DesignSystem/DSSpacing.swift,
+				DesignSystem/SectionInnerRing.swift,
+				DesignSystem/SectionPalette.swift,
 				Modules/AppName.swift,
 				Modules/ring.swift,
+				Modules/TimerSections.swift,
 				Modules/WatchConnectivityManager.swift,
 			);
 			target = 2B302B092E4375150089A14A /* RereminderWatch */;
