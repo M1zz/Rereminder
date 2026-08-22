@@ -371,6 +371,19 @@ final class TimerScreenViewModel: ObservableObject {
         initialConfiguration()
     }
 
+    /// 반복 감지가 권한 설정을 다이얼에 올린다(시작하지는 않는다).
+    ///
+    /// `load(template:)` 과 달리 문구는 건드리지 않는다 — `RepeatDetector` 의 지문은 시간과 알림
+    /// 지점만 담으므로, 문구까지 덮으면 사용자가 써 둔 말을 근거 없이 지우게 된다.
+    func applyRepeatConfig(mainSec: Int, offsets: [Int]) {
+        guard mainSec > 0 else { return }
+        mainMinutes = mainSec / 60
+        mainSeconds = mainSec % 60
+        selectedOffsets = Set(offsets.filter { $0 > 0 && $0 < mainSec })
+        initialConfiguration()
+        showToast?(String(localized: "Set up your usual timer"))
+    }
+
     // MARK: - Last Used Config (재실행 시 다이얼 복원)
 
     private static let lastUsedConfigKey = "rereminder.lastUsedConfig.v1"

@@ -3961,6 +3961,22 @@
         }
       }
     },
+    "Same time as usual": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いつもこの時間ですね"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "늘 이맘때 하시던 거네요"
+          }
+        }
+      }
+    },
     "Save": {
       "localizations": {
         "ja": {
@@ -4307,6 +4323,38 @@
           "stringUnit": {
             "state": "translated",
             "value": "테스트 알림 보내기"
+          }
+        }
+      }
+    },
+    "Set it up": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "その設定にする"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "그 설정으로"
+          }
+        }
+      }
+    },
+    "Set up your usual timer": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いつもの設定にしました"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "늘 쓰시던 설정으로 맞췄어요"
           }
         }
       }
@@ -6122,6 +6170,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "이 설정을 자주 쓰시네요"
+          }
+        }
+      }
+    },
+    "You usually run %1$@ with %2$lld alerts around now.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この時間帯はいつも %1$@・通知 %2$lld 個で使っています。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이맘때면 %1$@ 에 알림 %2$lld 개로 쓰시더라고요."
           }
         }
       }

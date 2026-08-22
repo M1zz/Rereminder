@@ -83,6 +83,9 @@ struct TimerUnifiedView: View {
     // 판정은 RepeatDetector 가 한다 — 한 설정에 한 번, 전체 상한까지만.
     @State private var repeatProposal: RepeatDetector.Config?
 
+    // "지금이 그 시간"일 때 그 설정을 올려 드릴지 묻는다(같은 요일·비슷한 시각의 반복).
+    @State private var timeSuggestion: RepeatDetector.Config?
+
     /// 지금 다이얼에 올라온 설정과 같은 템플릿을 이미 갖고 있는가.
     /// (저장돼 있으면 제안할 이유가 없다 — 이미 앱이 기억하고 있다.)
     @Query private var savedTemplates: [Timer]
@@ -194,6 +197,20 @@ struct TimerUnifiedView: View {
                 }
             } message: { _ in
                 Text(String(localized: "Saving it means one tap to start next time."))
+            }
+            // 저장 제안이 "이 설정을 기억해 둘까"라면, 이건 "지금 이걸 하려던 참 아닌가"다.
+            .alert(String(localized: "Same time as usual"),
+                   isPresented: timeSuggestionBinding,
+                   presenting: timeSuggestion) { config in
+                Button(String(localized: "Set it up")) {
+                    RepeatDetector.markTimeSuggested(config)
+                    screenVM.applyRepeatConfig(mainSec: config.mainSec, offsets: config.offsets)
+                }
+                Button(String(localized: "Not now"), role: .cancel) {
+                    RepeatDetector.markTimeSuggested(config)
+                }
+            } message: { config in
+                Text(String(localized: "You usually run \(TimeMapper.clockText(config.mainSec)) with \(config.offsets.count) alerts around now."))
             }
             .onChange(of: scenePhase) { oldPhase, newPhase in
                 handleScenePhase(oldPhase, newPhase)
@@ -327,8 +344,11 @@ struct TimerUnifiedView: View {
         screenVM.cleanUpOrphanLiveActivities()
         // 실행 중 타이머가 없으면 마지막 사용 설정을 다이얼에 복원
         screenVM.restoreLastUsedConfigIfNeeded()
-        // 복원된 그 설정이 여러 날 반복된 것이면 저장을 먼저 제안한다(복원 **뒤에** 판단해야 한다)
-        offerToSaveRecurringSetupIfDue()
+        // 복원된 그 설정이 여러 날 반복된 것이면 저장을 먼저 제안한다(복원 **뒤에** 판단해야 한다).
+        // ⚠️ 둘 중 **하나만** 띄운다 — 앱을 열자마자 두 번 물으면 둘 다 안 읽힌다.
+        if !offerTimeOfDaySetupIfDue() {
+            offerToSaveRecurringSetupIfDue()
+        }
 
         #if targetEnvironment(macCatalyst)
         // 지금 맥에서 돌고 있으니 "맥 있으세요?"를 물어볼 이유가 없다 — 아는 건 묻지 않는다.
@@ -385,6 +405,29 @@ struct TimerUnifiedView: View {
     private var repeatProposalBinding: Binding<Bool> {
         Binding(get: { repeatProposal != nil },
                 set: { if !$0 { repeatProposal = nil } })
+    }
+
+    private var timeSuggestionBinding: Binding<Bool> {
+        Binding(get: { timeSuggestion != nil },
+                set: { if !$0 { timeSuggestion = nil } })
+    }
+
+    /// 같은 요일·비슷한 시각에 되풀이하던 설정이 있으면 그걸로 올려 드릴지 묻는다.
+    /// - Returns: 물었으면 `true` — 그러면 저장 제안은 이번에 건너뛴다.
+    @discardableResult
+    private func offerTimeOfDaySetupIfDue() -> Bool {
+        guard isIdle, !showOnboarding else { return false }
+        guard !showFeedbackNudge, !showGrandfatherThanks, deviceQuestion == nil else { return false }
+        guard let config = RepeatDetector.timeOfDaySuggestion() else { return false }
+
+        // 이미 그 설정이 다이얼에 올라와 있으면 권할 것이 없다(마지막 사용 설정이 그것이었던 경우).
+        let current = screenVM.normalizedCurrentConfig
+        guard RepeatDetector.Config(mainSec: current.mainSec, offsets: current.offsets) != config else {
+            return false
+        }
+
+        timeSuggestion = config
+        return true
     }
 
     /// 지금 다이얼에 올라온 설정이 **여러 날 반복된 것인데 아직 저장돼 있지 않으면** 한 번 묻는다.

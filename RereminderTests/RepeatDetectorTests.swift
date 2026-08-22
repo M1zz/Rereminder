@@ -26,11 +26,16 @@ final class RepeatDetectorTests: XCTestCase {
         suite = UserDefaults(suiteName: Self.suiteName)
         suite.removePersistentDomain(forName: Self.suiteName)
         RepeatDetector.defaults = suite
+        // 요일·시각 판정이 실행 환경의 시간대에 휘둘리면 테스트가 기계마다 달라진다.
+        var fixed = Calendar(identifier: .gregorian)
+        fixed.timeZone = TimeZone(identifier: "Asia/Seoul") ?? .gmt
+        RepeatDetector.calendar = fixed
     }
 
     override func tearDownWithError() throws {
         suite.removePersistentDomain(forName: Self.suiteName)
         RepeatDetector.defaults = .standard
+        RepeatDetector.calendar = .current
         try super.tearDownWithError()
     }
 
@@ -124,5 +129,102 @@ final class RepeatDetectorTests: XCTestCase {
         RepeatDetector.markProposed(config)
         XCTAssertEqual(RepeatDetector.proposalCount, 1,
                        "같은 설정을 두 번 세면 상한이 실제보다 빨리 찬다")
+    }
+
+    // MARK: - 지문 왕복
+
+    func test_configRoundTripsThroughFingerprint() {
+        let restored = RepeatDetector.Config(fingerprint: config.fingerprint)
+        XCTAssertEqual(restored, config, "시간대 제안은 저장된 지문에서 설정을 되살려야 한다")
+
+        // 알림이 없는 설정도 되살아나야 한다(지문 뒤가 빈 문자열)
+        let bare = RepeatDetector.Config(mainSec: 600, offsets: [])
+        XCTAssertEqual(RepeatDetector.Config(fingerprint: bare.fingerprint), bare)
+
+        XCTAssertNil(RepeatDetector.Config(fingerprint: "쓰레기"))
+    }
+
+    // MARK: - 시간대 제안 ("지금이 그 시간인가")
+
+    /// 서울 기준 특정 요일·시각의 Date
+    private func at(day n: Int, hour: Int) -> Date {
+        var components = DateComponents()
+        components.year = 2026
+        components.month = 3
+        components.day = 2 + n          // 2026-03-02 = 월요일
+        components.hour = hour
+        return RepeatDetector.calendar.date(from: components)!
+    }
+
+    func test_suggestsWhenSameWeekdayAndHourRepeatedOnDifferentDays() {
+        // 월요일 오후 3시에 두 번(다른 주)
+        RepeatDetector.record(config, now: at(day: 0, hour: 15))
+        RepeatDetector.record(config, now: at(day: 7, hour: 15))
+
+        XCTAssertEqual(RepeatDetector.timeOfDaySuggestion(now: at(day: 14, hour: 15)), config)
+    }
+
+    func test_doesNotSuggestOnADifferentWeekday() {
+        RepeatDetector.record(config, now: at(day: 0, hour: 15))
+        RepeatDetector.record(config, now: at(day: 7, hour: 15))
+
+        // 화요일 같은 시각 — 요일이 다르면 같은 상황이 아니다
+        XCTAssertNil(RepeatDetector.timeOfDaySuggestion(now: at(day: 15, hour: 15)))
+    }
+
+    func test_doesNotSuggestAtAFarOffHour() {
+        RepeatDetector.record(config, now: at(day: 0, hour: 15))
+        RepeatDetector.record(config, now: at(day: 7, hour: 15))
+
+        XCTAssertNil(RepeatDetector.timeOfDaySuggestion(now: at(day: 14, hour: 9)))
+    }
+
+    func test_toleratesAnHourEitherSide() {
+        RepeatDetector.record(config, now: at(day: 0, hour: 15))
+        RepeatDetector.record(config, now: at(day: 7, hour: 15))
+
+        // 3시에 하던 일을 2시에 열어도 같은 상황으로 본다
+        XCTAssertEqual(RepeatDetector.timeOfDaySuggestion(now: at(day: 14, hour: 14)), config)
+        XCTAssertEqual(RepeatDetector.timeOfDaySuggestion(now: at(day: 14, hour: 16)), config)
+    }
+
+    func test_sameDayRepeatsDoNotMakeATimeSuggestion() {
+        // 같은 날 같은 시각대에 두 번 — 한 번의 상황이지 "매주 그 시간"이 아니다
+        RepeatDetector.record(config, now: at(day: 0, hour: 15))
+        RepeatDetector.record(config, now: at(day: 0, hour: 16))
+
+        XCTAssertNil(RepeatDetector.timeOfDaySuggestion(now: at(day: 7, hour: 15)))
+    }
+
+    func test_suggestsEachConfigOnlyOnce() {
+        RepeatDetector.record(config, now: at(day: 0, hour: 15))
+        RepeatDetector.record(config, now: at(day: 7, hour: 15))
+        XCTAssertNotNil(RepeatDetector.timeOfDaySuggestion(now: at(day: 14, hour: 15)))
+
+        RepeatDetector.markTimeSuggested(config)
+        XCTAssertNil(RepeatDetector.timeOfDaySuggestion(now: at(day: 21, hour: 15)),
+                     "수락하든 거절하든 같은 설정을 다시 권하지 않는다")
+    }
+
+    func test_stopsAfterTheTimeSuggestionLimit() {
+        for index in 0..<RepeatDetector.maxTimeSuggestions {
+            RepeatDetector.markTimeSuggested(.init(mainSec: 600 + index * 60, offsets: [60]))
+        }
+        RepeatDetector.record(other, now: at(day: 0, hour: 15))
+        RepeatDetector.record(other, now: at(day: 7, hour: 15))
+
+        XCTAssertNil(RepeatDetector.timeOfDaySuggestion(now: at(day: 14, hour: 15)),
+                     "상한을 넘으면 아무리 되풀이해도 더는 말을 걸지 않는다")
+    }
+
+    func test_picksTheMoreRepeatedConfigWhenTwoMatch() {
+        // config: 두 주, other: 세 주 — 더 자주 되풀이된 쪽을 권한다
+        RepeatDetector.record(config, now: at(day: 0, hour: 15))
+        RepeatDetector.record(config, now: at(day: 7, hour: 15))
+        RepeatDetector.record(other, now: at(day: 0, hour: 15))
+        RepeatDetector.record(other, now: at(day: 7, hour: 15))
+        RepeatDetector.record(other, now: at(day: 14, hour: 15))
+
+        XCTAssertEqual(RepeatDetector.timeOfDaySuggestion(now: at(day: 21, hour: 15)), other)
     }
 }
