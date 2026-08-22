@@ -355,76 +355,30 @@ extension TimerView {
 - 구간 **번호(1·2·3)** 는 대기 중에만 붙인다 — 진행 중에는 구간이 하나씩 사라지며 번호만 바뀌어
   어지럽다.
 
-### 타이머 모양 (설정에서 고른다 · 한 번에 하나)
-실행 중 화면의 모양은 **설정 > 타이머 모양**에서 고른다 — 원형 링 / 줄 + 링 / 구간 막대 /
-접은 줄(ㄹ자). 정의는 `Shared/Modules/TimerShape.swift` 한 곳, 저장은 `@AppStorage("timer.shape")`.
+### 실행 중 화면 — 링 한 겹 + 원 아래 구간 카운트다운
+실행 중에도 화면은 **원 하나**다. 링은 알림 경계로 나뉜 구간 색을 그대로 유지하고
+(`showsAlertSectionColors`), 가운데는 **전체 남은 시간 한 줄**, 그 아래에 동작 버튼 두 개,
+원 밖 아래에 **구간별 카운트다운 리스트**(`SectionCountdownList`)가 선다.
 
-- **한 번에 하나만 그린다.** 예전엔 원과 구간 막대를 같이 세웠는데, 같은 시간을 두 번 그리는
-  셈이라 눈이 매번 어느 쪽을 볼지 골라야 했다. 그래서 원 아래 `SectionProgressBar` 자리는
-  없어지고, 막대는 **모양 중 하나**가 됐다.
-- **대기 중에는 언제나 다이얼(원)이다.** 흰 핸들·종 노브를 끌어 시간과 알림을 정하는 조작이
-  원에 묶여 있어서, 모양 선택은 **실행 중 표시**에만 적용한다(`usesLinearShape`).
-- 고르는 화면은 이름이 아니라 **실루엣**을 보여준다(`TimerShapeSilhouette`) — "줄 + 링"이라는
-  말로는 무엇을 고르는 건지 알 수 없다. 실루엣은 **실제 화면과 같은 컴포넌트**로 그린다
-  (`SectionInnerRing`·`SectionProgressBar`·`SnakeTimerView`). 미리보기만 따로 그리면
-  고르고 나서 "이게 아닌데"가 된다. 네 그림은 **같은 예시 타이머의 같은 순간**을 그린다.
-- 가운데 큰 숫자는 원형 링에서만 전체 남은 시간이고, 나머지 셋은 **이 구간**의 남은 시간 +
-  아래 작은 `Total:` 줄이다(`centerSection`).
-- **접은 줄**(`SnakeTimerView`)은 경로 길이가 곧 시간이라 구간을 길이 비율로 자른다.
-  U턴에 얹힌 짧은 구간은 곡선으로 말려 실제보다 짧아 보이므로 줄 수를 늘리지 말 것(4줄).
-- **알림 지점에는 어디서나 종이 선다.** 링은 종 노브, 막대·접은 줄은 구간 사이에 주황 종.
-  구간 경계를 틈으로만 표시하면 "줄이 왜 끊겼지"로 읽힌다 — 왜 끊겼는지는 종이 말해 준다.
-  막대의 칸 사이 여백(`gap`)은 종이 앉을 자리라 막대 두께를 따라 같이 벌어진다.
-- **버튼(시작·정지)은 원 밖에 있다** (`TimerActionBar`). 원 안에 두면 가운데를 반 넘게 먹어서
-  시간 두 줄이 들어갈 자리가 없고, 링 위의 종·핸들 터치까지 버튼이 가져간다.
-  - 주 동작은 **채운 캡슐 하나**(아이콘 + 글자) — ▶ 하나만 있으면 "시작"인지 "재개"인지 유추해야
-    한다. 정지는 곁들이라 회색 원, 대기 중에는 아예 없다.
-  - 색은 **테마 강조색**. 예전 시작 버튼은 분홍 고정(`DSColor.positive`)이라 파란 링 아래에서
-    혼자 튀었다. **주황은 쓰지 않는다** — 이 화면에서 주황은 알림 종의 색이다.
-  - **움직임은 하나의 스프링으로 묶는다.** 정지 버튼이 들어오는 것·캡슐이 밀리는 것·글자가
-    바뀌는 것이 각자 다른 속도로 움직이면 그게 허접해 보이는 이유다.
-    심볼은 `.contentTransition(.symbolEffect(.replace))`, 글자는 `.contentTransition(.opacity)`,
-    정지 버튼은 옆에서 밀려들지 않고 제자리에서 커지며 나타난다.
-  - **일시정지 ↔ 재개에서 캡슐 폭이 변하면 안 된다.** 도는 동안 나올 수 있는 글자를 전부
-    ZStack 에 겹쳐 두고(보이지 않게) 그중 가장 넓은 것으로 폭을 잡는다.
-    ⚠️ `.background` 에 유령 글자를 깔면 폭이 안 잡힌다(배경은 부모 크기를 따를 뿐).
-    ⚠️ 글자 수로 긴 쪽을 고르지 말 것 — 언어마다 폭이 다르다.
-- **"줄 + 링"에서는 60분을 넘겨도 링이 두 줄이 되지 않는다** — 링 한 바퀴가 "이 구간"이라
-  바퀴를 셀 이유가 없다(`usesAbsoluteRing` 예외). 전체 길이는 위의 줄이 갖는다.
-- 가운데는 모양에 따라 다르다: 원형 링은 전체만, **줄 + 링은 이 구간만**(전체는 위의 줄),
-  막대·접은 줄은 전체가 크고 그 아래 이 구간. 예전의 "Next 알림" 안내 박스는 없앴다 —
-  같은 이야기를 원 밖에서 한 번 더 하던 자리였다.
+⚠️ **2.2.0 에서 넣었던 "타이머 모양 선택"(원형 링 / 이중 링 / 구간 막대 / 접은 줄)과
+이중 링·원 밖 버튼 바·선형 막대는 그 직후 전부 걷어냈다 — 모양 선택 자체를 없앴다.**
+같은 시간을 두 군데에 그리면(원 두 겹, 또는 원 + 막대) 볼 때마다 어느 쪽이 무엇인지
+골라야 해서 오히려 느리다.
+`TimerShape`·`TimerActionBar`·`SectionProgressBar`·`SectionBarLayout`·`SnakeTimerView`·
+`TimerShapeSilhouette`·`TotalTimelineStrip` 은 삭제됐다 — **되살리지 말 것.**
 
-### 줄 + 링 (위=전체, 링=이 구간) — 옛 "이중 링"을 대체
-진행 중에 원 **위**로 얇은 일자 줄이 서고, 원(링)은 **지금 지나는 구간 하나만** 센다.
-
-왜 바꿨나 — 2.2.0 까지는 원 안에 링을 한 겹 더 두른 **이중 링**이었다(바깥=전체, 안쪽=구간).
-같은 모양이 둘이면 볼 때마다 "어느 쪽이 무엇이더라"를 먼저 골라야 한다. 1초 안에 답을 얻어야
-하는 화면에서 그 한 번의 선택이 비싸다. 그래서 **질문 둘을 형태 둘로 갈랐다** —
-길이(줄)는 *전체가 어디쯤인가*, 각도(링)는 *이 구간이 얼마 남았나*. 형태가 다르면 고르지
-않아도 눈이 알아서 나눈다.
-
-- 정의는 `TimerShape.lineAndRing`. ⚠️ **원시값은 `dualRing` 그대로** — 바꾸면 이미 이걸 고른
-  사람의 설정이 기본값으로 되돌아간다. 판정은 `TimerShape.ringShowsSection` 하나.
-- 위의 줄은 **`TotalTimelineStrip`**(`Views/Components/`). 그림은 구간 막대
-  (`SectionProgressBar`)를 **그대로** 쓰고 `showsLabels: false` 로 칸 숫자만 끈다 —
-  칸 색·종·재생헤드가 두 모양에서 같아야 설정에서 모양을 바꿔도 다시 배우지 않는다.
-  숫자는 줄 오른쪽 끝의 전체 남은 시간 하나뿐이다(칸마다 또 붙이면 한 화면에 시간이 다섯 개다).
-- 링이 구간을 세는 동안 **링 위에서 사라지는 것 넷**: 알림 종 노브(좌표가 전체 시간 기준이라
-  구간 한 바퀴에 얹으면 엉뚱한 각도에 선다 — 그 종들은 위의 줄이 갖고 있다), 구간 색 분할
-  (`showsAlertSectionColors`), 두 줄 링(구간은 언제나 전체보다 짧다), 절대 각도
-  (`usesAbsoluteRing` — 한 바퀴가 "이 구간"이지 60분이 아니다). 판정은 전부
-  `TimerMainView.ringSectionProgress != nil` 하나를 본다.
-- 링 색은 `SectionPalette` 의 그 구간 색 — 위 줄에서 지금 지나는 칸과 **같은 색**이어야 이어진다.
-- 가운데 큰 숫자는 **이 구간**의 남은 시간(구간 색 점 + 시간, `sectionTimeRow`).
-  전체는 위의 줄에 이미 있으므로 가운데에 또 적지 않는다.
-  막대·접은 줄은 그대로 전체가 크고 구간이 그 아래 작은 줄이다.
-- 구간이 하나뿐이면(`sectionProgress` 가 nil) 이 모양은 **원형 링과 같아진다** — 나눌 것이
-  없는데 줄과 링을 둘 다 세우면 같은 말을 두 번 하게 된다.
-- 원은 줄의 높이만큼 작아진다(`stripReserve`) — 그러지 않으면 작은 화면에서 줄이 동작 버튼을 민다.
-- ⚠️ **워치는 아직 이중 링이다**(`RereminderWatch/Views/TimerView.swift` + `SectionInnerRing`).
-  워치에는 모양 설정이 없고 화면이 좁아 줄을 세울 자리가 없다. `SectionInnerRing` 은 그래서
-  남아 있다 — iPhone 에서 안 쓴다고 지우지 말 것.
+- **버튼은 원 안에 있다**(`TimerButtonStyle`, `buttonRow`) — 가운데 시간 바로 아래.
+  원 밖으로 뺐던 이유는 가운데를 두 줄(전체 + 구간)로 쓰려던 것인데, 그 두 줄이 없어졌으므로
+  버튼이 다시 안으로 들어왔다. 정지는 회색 원(`DSColor.plain`, 대기 중에는 없다),
+  시작·재개는 `DSColor.positive`, 일시정지는 `DSColor.negativeSoft`(주황).
+- **가운데는 전체 남은 시간 한 줄뿐이다.** "지금 구간이 얼마 남았나"는 원 아래 리스트가 답한다.
+- **SectionCountdownList** (`Rereminder/Views/Components/SectionCountdownList.swift`):
+  45분을 20+25로 나눴다면 앞의 20:00 만 줄고 25:00 은 제자리에 서 있다가 경계를 지나면
+  줄기 시작한다. 색은 링의 구간 색(`SectionPalette`)과 같고 **지금 구간만 100%**.
+  남은 시간 계산은 `TimerSections.remainingSeconds` 하나만 쓴다.
+  알림이 하나뿐이라 구간이 하나면 대신 `nextAlertInfo` 한 줄이 선다(둘 다 두면 같은 말이 두 번).
+- **SectionInnerRing 은 워치 전용으로 남아 있다** — 워치는 화면이 좁아 리스트를 세울 자리가
+  없어서 안쪽 링이 그 역할을 한다. iPhone 에서 안 쓴다고 지우지 말 것.
 
 ### 온보딩 — 읽는 안내가 아니라 해 보는 안내
 `OnboardingFlowView` (2.1.2에서 갈아엎음). 흐름은 **환영 → 어디에 쓸 건가요 → 60배속 체험 →
@@ -562,14 +516,10 @@ extension TimerView {
   `SectionOuterRing` (발표 모드 바깥 얇은 링)도 같은 파일
 - **MarkerDragBadge** (`Rereminder/Views/Components/MarkerDragBadge.swift`): 종을 끌 때 뜨는
   두 줄 배지. 색은 부르는 쪽이 링 구간 색으로 정해 넘긴다 (위 "알림 배지" 규칙)
-- **SnakeTimerView** (`Rereminder/Views/Components/SnakeTimerView.swift`): ㄹ자로 접은 줄.
-  선의 길이 비교를 지키면서 가로 폭을 접는다 — 긴 타이머용 (위 "타이머 모양" 참고)
-- **TimerShapeSilhouette** (`Rereminder/Views/Components/TimerShapeSilhouette.swift`): 설정에서
-  모양을 고를 때 보여주는 실루엣. 예시 타이머 값은 이 파일 한 곳에만 둔다
-- **SectionInnerRing** (`Shared/DesignSystem/SectionInnerRing.swift`): **워치 전용이 됐다** —
-  iPhone 은 "줄 + 링"으로 갈아탔지만 워치에는 모양 설정이 없고 줄을 세울 자리도 없다. 지우지 말 것
-- **TotalTimelineStrip** (`Rereminder/Views/Components/TotalTimelineStrip.swift`): "줄 + 링"에서
-  원 위에 서는 전체 타이머 줄 (위 "줄 + 링" 참고)
+- **SectionInnerRing** (`Shared/DesignSystem/SectionInnerRing.swift`): **워치 전용**.
+  iPhone 은 링 한 겹 + 원 아래 리스트로 돌아갔다 — 지우지 말 것(워치가 쓴다)
+- **TimerButtonStyle** (`Rereminder/Views/Components/TimerButtonStyle.swift`): 원 안의 동그란
+  동작 버튼 모양
 - **TimePresetButtons** (`Rereminder/Views/Components/TimePresetButtons.swift`): 시간 프리셋 버튼
 - **ToastViewModifier** (`Rereminder/Views/Components/ToastViewModifier.swift`): 토스트 메시지
 

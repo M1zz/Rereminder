@@ -10,7 +10,6 @@ import UserNotifications
 
 struct NoticeSettingView: View {
     /// 설정 행에 지금 고른 모양 이름·실루엣을 같이 보여주려고 읽는다.
-    @AppStorage(TimerShape.storageKey) private var timerShapeRaw = TimerShape.fallback.rawValue
     @AppStorage("ringMode") private var ringMode: RingMode = .sound
     @AppStorage("pushEnabled") private var pushEnabled: Bool = true
     @AppStorage("toastEnabled") private var toastEnabled: Bool = true
@@ -419,19 +418,6 @@ struct NoticeSettingView: View {
                         Circle()
                             .fill(ThemeManager.shared.accentColor)
                             .frame(width: 20, height: 20)
-                    }
-                }
-
-                // 타이머가 도는 동안의 모양 — 실루엣을 보고 고른다(설명은 그 화면에).
-                NavigationLink {
-                    TimerShapeSettingView()
-                } label: {
-                    HStack {
-                        Label("Timer Shape", systemImage: "circle.dashed")
-                        Spacer()
-                        Text(TimerShape.resolve(timerShapeRaw).displayName)
-                            .foregroundStyle(.secondary)
-                        TimerShapeSilhouette(shape: TimerShape.resolve(timerShapeRaw), size: 26)
                     }
                 }
             }

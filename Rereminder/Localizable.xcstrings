@@ -400,6 +400,7 @@
       }
     },
     "%lld sections": {
+      "extractionState": "stale",
       "localizations": {
         "ja": {
           "stringUnit": {
@@ -711,22 +712,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "타이머 전용 알림 시스템입니다.\n\n• 백그라운드에서도 정확한 시간에 알림이 울립니다\n• 자동으로 권한을 관리하여 편리합니다\n• 중복 알림을 방지하여 깔끔합니다\n• 멘토링이나 발표 시 시간 관리에 최적화되어 있습니다\n\n권장: 향상된 알림을 켜두는 것을 추천합니다"
-          }
-        }
-      }
-    },
-    "A line on top holds the whole timer, and the ring counts down just the section you are in.": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "上のラインが全体を受け持ち、リングは今のセクションだけを数えます。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "위의 줄이 전체를 갖고, 링은 지금 지나는 구간만 셉니다."
           }
         }
       }
@@ -1241,22 +1226,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "플랜 비교"
-          }
-        }
-      }
-    },
-    "Compares section sizes as lengths on one line.": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "セクションの大きさを一直線上の長さで比べます。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "구간의 크기를 한 줄 위의 길이로 비교해요."
           }
         }
       }
@@ -1778,6 +1747,7 @@
       }
     },
     "Finished": {
+      "extractionState": "stale",
       "localizations": {
         "ja": {
           "stringUnit": {
@@ -1805,38 +1775,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "집중"
-          }
-        }
-      }
-    },
-    "Folded Line": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "折り返しライン"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "접은 줄"
-          }
-        }
-      }
-    },
-    "Folds that line into rows, so a long timer fits a narrow screen.": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "その線を折り返して、長いタイマーも狭い画面に収めます。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "그 줄을 여러 줄로 접어서, 긴 타이머도 좁은 화면에 들어가요."
           }
         }
       }
@@ -2389,22 +2327,6 @@
         }
       }
     },
-    "Line and Ring": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ライン + リング"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "줄 + 링"
-          }
-        }
-      }
-    },
     "Listed in the order they will ring. Alerts longer than the timer itself never ring, so they aren't shown here.": {
       "comment": "Notification message settings: why some alerts are missing",
       "localizations": {
@@ -2632,6 +2554,7 @@
       }
     },
     "Next: %@ (%@)": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -4181,6 +4104,7 @@
       }
     },
     "Section %lld of %lld, %@": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -4203,6 +4127,7 @@
       }
     },
     "Section %lld/%lld": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -4220,22 +4145,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "섹션 %lld/%lld"
-          }
-        }
-      }
-    },
-    "Section Bar": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "セクションバー"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "구간 막대"
           }
         }
       }
@@ -4428,22 +4337,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "현재 타이머 상태를 표시합니다"
-          }
-        }
-      }
-    },
-    "Shows how much of the whole timer is left.": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "タイマー全体の残りを見せます。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "전체가 얼마나 남았는지 보여줘요."
           }
         }
       }
@@ -5251,22 +5144,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "타이머 설정"
-          }
-        }
-      }
-    },
-    "Timer Shape": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "タイマーの形"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "타이머 모양"
           }
         }
       }
@@ -7489,6 +7366,7 @@
       }
     },
     "s": {
+      "extractionState": "stale",
       "localizations": {
         "ja": {
           "stringUnit": {
