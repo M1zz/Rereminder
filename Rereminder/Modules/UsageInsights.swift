@@ -843,7 +843,9 @@ enum UsageInsights {
         let modeAlerts: Int?
         /// 실행 1회당 평균 알림 개수 — "6개 이상" 칸은 6으로 세므로 실제보다 낮게 나올 수 있다.
         let averageAlerts: Double
-        /// 알림을 2개 이상 건 실행의 비율 = 유료 영역이 실제로 돌아가는 몫.
+        /// **무료 한도를 넘긴** 실행의 비율 = 유료 영역이 실제로 돌아가는 몫.
+        /// ⚠️ 한도(`ProGate.freePrealertLimit`)를 따라가는 값이라 한도를 바꾸면 뜻도 바뀐다 —
+        ///    한도 변경 전후를 같은 자로 비교하려면 기기 카운터 `multiAlertRuns`(2개 이상 고정)를 볼 것.
         let multiAlertRunRate: Double
 
         var coverageRate: Double {

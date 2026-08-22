@@ -44,6 +44,9 @@ enum AnalyticsManager {
         case paywallShown(trigger: ProGate.Feature?)
         case paywallDismissed(trigger: ProGate.Feature?, didPurchase: Bool)
         case paywallOneMoreClicked(trigger: ProGate.Feature)
+        /// 한도에 막힌 순간 페이월 대신 **이번 한 번**을 내줬다 (하루 1회).
+        /// 이 사람이 나중에 결제하는지가 그 설계의 유일한 판정 기준이다.
+        case prealertGraceGranted(stage: ProGate.PaywallStage)
         case purchaseStarted(productId: String)
         case purchaseCompleted(productId: String)
         case purchaseFailed(productId: String, reason: String)
@@ -80,6 +83,7 @@ enum AnalyticsManager {
             case .paywallShown:            return "paywall_shown"
             case .paywallDismissed:        return "paywall_dismissed"
             case .paywallOneMoreClicked:   return "paywall_one_more_clicked"
+            case .prealertGraceGranted:    return "prealert_grace_granted"
             case .purchaseStarted:         return "purchase_started"
             case .purchaseCompleted:       return "purchase_completed"
             case .purchaseFailed:          return "purchase_failed"
@@ -142,6 +146,8 @@ enum AnalyticsManager {
                 return ["trigger": trigger?.rawValue ?? "general", "did_purchase": didPurchase]
             case .paywallOneMoreClicked(let trigger):
                 return ["trigger": trigger.rawValue]
+            case .prealertGraceGranted(let stage):
+                return ["stage": stage.rawValue]
             case .purchaseStarted(let id), .purchaseCompleted(let id):
                 return ["product_id": id]
             case .purchaseFailed(let id, let reason):

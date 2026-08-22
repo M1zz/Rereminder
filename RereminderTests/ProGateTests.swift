@@ -213,14 +213,14 @@ final class ProGateTests: XCTestCase {
     }
 
     func test_canAddPrealert_freeUserAtLimitWithTrial_returnsTrue() {
-        // count == freePrealertLimit (1), trial 가능 (count: 0)
-        XCTAssertTrue(ProGate.canAddPrealert(currentCount: 1))
+        // count == freePrealertLimit, trial 가능 (count: 0)
+        XCTAssertTrue(ProGate.canAddPrealert(currentCount: ProGate.freePrealertLimit))
     }
 
     func test_canAddPrealert_freeUserExhaustedTrial_returnsFalse() {
         for _ in 0..<5 { TrialCounter.increment(.unlimitedPrealerts) }
-        // 1차 페이월 이후, 확장 미수락
-        XCTAssertFalse(ProGate.canAddPrealert(currentCount: 1))
+        // 1차 페이월 이후, 확장 미수락 — 한도 **위**에서만 막힌다
+        XCTAssertFalse(ProGate.canAddPrealert(currentCount: ProGate.freePrealertLimit))
     }
 
     func test_canSaveTemplate_underFreeLimit_returnsTrue() {
@@ -297,11 +297,45 @@ final class ProGateTests: XCTestCase {
         XCTAssertEqual(ProGate.prealertAdmission(currentCount: ProGate.freePrealertLimit), .allowed)
     }
 
-    func test_prealertAdmission_blocksSecondAlert_whenFirstTrialExhausted() {
+    func test_prealertAdmission_freeLimitIsTwo_soSecondAlertIsAlwaysFree() {
         setProUser(false)
+        for _ in 0..<10 { TrialCounter.increment(.unlimitedPrealerts) }   // 체험 전부 소진
+
+        // 이 앱이 파는 문장은 "여러 번 알려 준다"다 — 2개까지는 체험과 무관하게 무료여야
+        // 그 문장이 성립한다(1개면 그냥 평범한 타이머다).
+        XCTAssertEqual(ProGate.freePrealertLimit, 2)
+        XCTAssertEqual(ProGate.prealertAdmission(currentCount: 1), .allowed)
+    }
+
+    func test_prealertAdmission_offersGraceAtLimit_whenTrialExhausted() {
+        setProUser(false)
+        PrealertGrace.reset()
         for _ in 0..<TrialCounter.firstStageLimit { TrialCounter.increment(.unlimitedPrealerts) }
 
-        XCTAssertEqual(ProGate.prealertAdmission(currentCount: 1), .blocked(stage: .first))
+        // 막힌 자리에서 문을 닫지 않는다 — 오늘치 유예가 남아 있으면 그 자리에서 내준다
+        XCTAssertEqual(ProGate.prealertAdmission(currentCount: ProGate.freePrealertLimit),
+                       .grace(stage: .first))
+    }
+
+    func test_prealertAdmission_blocksAfterGraceIsUsedToday() {
+        setProUser(false)
+        PrealertGrace.reset()
+        for _ in 0..<TrialCounter.firstStageLimit { TrialCounter.increment(.unlimitedPrealerts) }
+
+        PrealertGrace.consume()
+
+        // 하루 한 번이라 두 번째부터는 원래대로 막힌다 — 아니면 게이트가 없는 것과 같다
+        XCTAssertEqual(ProGate.prealertAdmission(currentCount: ProGate.freePrealertLimit),
+                       .blocked(stage: .first))
+    }
+
+    func test_prealertGrace_isAvailableAgainTheNextDay() {
+        PrealertGrace.reset()
+        let today = Date()
+        PrealertGrace.consume(now: today)
+
+        XCTAssertFalse(PrealertGrace.isAvailable(now: today))
+        XCTAssertTrue(PrealertGrace.isAvailable(now: today.addingTimeInterval(86_400 + 60)))
     }
 
     func test_prealertAdmission_proUser_isNeverBlocked() {
@@ -321,13 +355,23 @@ final class ProGateTests: XCTestCase {
         XCTAssertEqual(TrialCounter.count(for: .unlimitedPrealerts), before)
     }
 
-    func test_requestPrealert_matchesPureAdmission() {
+    func test_requestPrealert_matchesPureAdmission_whenNothingIsConsumed() {
         setProUser(false)
+
+        // 허용되는 경우에는 부작용이 없으므로 두 함수의 답이 같아야 한다
+        XCTAssertEqual(ProGate.requestPrealert(currentCount: 0),
+                       ProGate.prealertAdmission(currentCount: 0))
+    }
+
+    func test_requestPrealert_consumesTheGrace_soTheNextTryIsBlocked() {
+        setProUser(false)
+        PrealertGrace.reset()
         for _ in 0..<TrialCounter.firstStageLimit { TrialCounter.increment(.unlimitedPrealerts) }
 
-        // 이벤트를 남기는 것 말고는 판정이 같아야 한다
-        XCTAssertEqual(ProGate.requestPrealert(currentCount: 2),
-                       ProGate.prealertAdmission(currentCount: 2))
+        let count = ProGate.freePrealertLimit
+        XCTAssertEqual(ProGate.requestPrealert(currentCount: count), .grace(stage: .first))
+        // 유예는 하루 한 번 — 실제로 소진돼야 한다(안 그러면 무제한이 된다)
+        XCTAssertEqual(ProGate.prealertAdmission(currentCount: count), .blocked(stage: .first))
     }
 
 }

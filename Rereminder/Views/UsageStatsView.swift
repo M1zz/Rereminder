@@ -313,7 +313,8 @@ struct UsageStatsView: View {
                                  detail: "타이머 실행 \(summary.totalRuns)회 중 가장 많았던 개수예요.")
                 }
                 statRow("실행당 평균 알림", String(format: "%.1f개", summary.averageAlerts))
-                statRow("알림 2개 이상 건 실행", percent(summary.multiAlertRunRate))
+                statRow("무료 한도(\(ProGate.freePrealertLimit)개) 초과 실행",
+                        percent(summary.multiAlertRunRate))
                 statRow("이 값을 보내온 설치",
                         "\(summary.reportingInstalls)곳 (\(percent(summary.coverageRate)))")
             } header: {

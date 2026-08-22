@@ -382,17 +382,20 @@ final class UsageInsightsTests: XCTestCase {
         let snapshots: [[String: Double]] = [
             ["alertRuns.1": 6],
             ["alertRuns.2": 3, "alertRuns.1": 1],
+            ["alertRuns.4": 2],
             ["alertsMax": 1]   // 히스토그램을 아직 안 보낸 설치
         ]
         let summary = UsageInsights.alertUsageSummary(metrics: snapshots)
 
-        XCTAssertEqual(summary.totalRuns, 10)
+        XCTAssertEqual(summary.totalRuns, 12)
         XCTAssertEqual(summary.modeAlerts, 1)
-        XCTAssertEqual(summary.averageAlerts, 1.3, accuracy: 0.0001)   // (7×1 + 3×2) / 10
-        XCTAssertEqual(summary.multiAlertRunRate, 0.3, accuracy: 0.0001)
-        XCTAssertEqual(summary.reportingInstalls, 2)
-        XCTAssertEqual(summary.totalInstalls, 3)
-        XCTAssertEqual(summary.coverageRate, 2.0 / 3.0, accuracy: 0.0001)
+        XCTAssertEqual(summary.averageAlerts, 21.0 / 12.0, accuracy: 0.0001)  // (7×1 + 3×2 + 2×4) / 12
+        // **무료 한도를 넘긴 실행**의 몫이다 — 한도가 2개이므로 2개짜리는 여기 들어가지 않는다.
+        // (고정 정의 "2개 이상"은 기기 카운터 `multiAlertRuns` 가 따로 센다.)
+        XCTAssertEqual(summary.multiAlertRunRate, 2.0 / 12.0, accuracy: 0.0001)
+        XCTAssertEqual(summary.reportingInstalls, 3)
+        XCTAssertEqual(summary.totalInstalls, 4)
+        XCTAssertEqual(summary.coverageRate, 3.0 / 4.0, accuracy: 0.0001)
     }
 
     func test_alertRunHistogram_foldsTheOpenEndedBucket() {
