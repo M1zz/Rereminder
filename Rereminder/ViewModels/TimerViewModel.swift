@@ -176,6 +176,13 @@ final class TimerViewModel: ObservableObject {
         engine.start()
         state = .running
 
+        // 같은 설정을 여러 날 반복해서 거는지 남긴다 — 그 반복을 앱이 먼저 알아채고
+        // "저장해 둘까요?"라고 묻는 근거다(`RepeatDetector`).
+        if let template = currentTemplate {
+            RepeatDetector.record(.init(mainSec: template.mainSeconds,
+                                        offsets: template.prealertOffsetsSec))
+        }
+
         // Live Activity
         if let template = currentTemplate {
             startLiveActivity(template: template)

@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import SwiftData
 import TipKit
 import LeeoKit
 
@@ -77,6 +78,14 @@ struct TimerUnifiedView: View {
     // 타이머를 실제로 걸었을 때 한 번 물어보는 기기 보유 질문(워치 → 맥).
     // 물어볼지 말지는 DeviceOwnership이 정한다 — "없다"고 한 기기는 다시 꺼내지 않는다.
     @State private var deviceQuestion: DeviceOwnership.Device?
+
+    // 여러 날 반복해서 건 설정을 앱이 먼저 알아채고 "저장해 둘까요?"라고 묻는다.
+    // 판정은 RepeatDetector 가 한다 — 한 설정에 한 번, 전체 상한까지만.
+    @State private var repeatProposal: RepeatDetector.Config?
+
+    /// 지금 다이얼에 올라온 설정과 같은 템플릿을 이미 갖고 있는가.
+    /// (저장돼 있으면 제안할 이유가 없다 — 이미 앱이 기억하고 있다.)
+    @Query private var savedTemplates: [Timer]
 
     /// 타이머가 실행 중이 아닐 때만 모드 전환 허용
     private var isIdle: Bool {
@@ -170,6 +179,21 @@ struct TimerUnifiedView: View {
                 Button(String(localized: "No, I don't"), role: .cancel) { answerDeviceQuestion(device, owns: false) }
             } message: { device in
                 Text(deviceQuestionMessage(device))
+            }
+            // 반복을 앱이 먼저 알아챈다 — 저장은 사용자가 결심해야 하는 일이었고, 결심은 잘 안 난다.
+            .alert(String(localized: "You use this setup a lot"),
+                   isPresented: repeatProposalBinding,
+                   presenting: repeatProposal) { config in
+                Button(String(localized: "Save as template")) {
+                    RepeatDetector.markProposed(config)
+                    screenVM.saveCurrentAsTemplate()
+                }
+                // 거절해도 markProposed 한다 — 다시 묻지 않기 위해서다.
+                Button(String(localized: "Not now"), role: .cancel) {
+                    RepeatDetector.markProposed(config)
+                }
+            } message: { _ in
+                Text(String(localized: "Saving it means one tap to start next time."))
             }
             .onChange(of: scenePhase) { oldPhase, newPhase in
                 handleScenePhase(oldPhase, newPhase)
@@ -303,6 +327,8 @@ struct TimerUnifiedView: View {
         screenVM.cleanUpOrphanLiveActivities()
         // 실행 중 타이머가 없으면 마지막 사용 설정을 다이얼에 복원
         screenVM.restoreLastUsedConfigIfNeeded()
+        // 복원된 그 설정이 여러 날 반복된 것이면 저장을 먼저 제안한다(복원 **뒤에** 판단해야 한다)
+        offerToSaveRecurringSetupIfDue()
 
         #if targetEnvironment(macCatalyst)
         // 지금 맥에서 돌고 있으니 "맥 있으세요?"를 물어볼 이유가 없다 — 아는 건 묻지 않는다.
@@ -352,6 +378,37 @@ struct TimerUnifiedView: View {
         #if targetEnvironment(macCatalyst)
         MenuBarManager.shared.update(remaining: screenVM.remaining, state: newState)
         #endif
+    }
+
+    // MARK: - 반복 설정 저장 제안
+
+    private var repeatProposalBinding: Binding<Bool> {
+        Binding(get: { repeatProposal != nil },
+                set: { if !$0 { repeatProposal = nil } })
+    }
+
+    /// 지금 다이얼에 올라온 설정이 **여러 날 반복된 것인데 아직 저장돼 있지 않으면** 한 번 묻는다.
+    ///
+    /// ⚠️ 다른 안내가 뜨는 차례면 양보한다 — 한 화면에 두 개가 겹치면 둘 다 읽히지 않는다.
+    /// ⚠️ 대기 중일 때만. 타이머가 도는 중에 저장 이야기를 꺼내면 화면의 주인공을 가린다.
+    private func offerToSaveRecurringSetupIfDue() {
+        guard isIdle, !showOnboarding else { return }
+        guard !showFeedbackNudge, !showGrandfatherThanks, deviceQuestion == nil else { return }
+
+        let cfg = screenVM.normalizedCurrentConfig
+        let config = RepeatDetector.Config(mainSec: cfg.mainSec, offsets: cfg.offsets)
+        guard RepeatDetector.shouldPropose(config, isAlreadySaved: hasTemplate(matching: config)) else { return }
+
+        repeatProposal = config
+    }
+
+    /// 같은 시간·같은 알림 지점의 템플릿이 이미 있는가.
+    /// (문구까지 같아야 하는 `TemplateQuickBar` 의 판정보다 느슨하다 — 여기서 묻는 것은
+    ///  "이 상황을 앱이 기억하고 있나"이고, 문구가 달라도 기억은 하고 있는 것이다.)
+    private func hasTemplate(matching config: RepeatDetector.Config) -> Bool {
+        savedTemplates.contains {
+            $0.mainSeconds == config.mainSec && $0.prealertOffsetsSec.sorted() == config.offsets
+        }
     }
 
     // MARK: - 기기 보유 질문 / 안내

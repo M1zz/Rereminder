@@ -2803,6 +2803,22 @@
         }
       }
     },
+    "Not now": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あとで"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "나중에"
+          }
+        }
+      }
+    },
     "Not sure yet": {
       "localizations": {
         "ja": {
@@ -4053,6 +4069,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "저장한 타이머는 메인 화면에서 한 번에 불러와요. 같은 걸 두 번 만들 필요가 없어요."
+          }
+        }
+      }
+    },
+    "Saving it means one tap to start next time.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存しておけば、次回はワンタップで始められます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장해 두면 다음엔 한 번만 눌러서 시작할 수 있어요."
           }
         }
       }
@@ -6074,6 +6106,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "설정에서 원하는 알림 시간으로 바꿀 수 있어요."
+          }
+        }
+      }
+    },
+    "You use this setup a lot": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この設定をよく使っていますね"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 설정을 자주 쓰시네요"
           }
         }
       }

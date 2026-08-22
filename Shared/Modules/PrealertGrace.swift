@@ -24,10 +24,9 @@ enum PrealertGrace {
 
     private static let lastGrantedDayKey = "prealert.grace.lastGrantedDay"
 
-    /// 날짜만 남긴다(시각·타임존 없이) — "오늘 이미 받았나"만 알면 된다.
-    private static func dayStamp(_ date: Date) -> Int {
-        Int(date.timeIntervalSince1970 / 86_400)
-    }
+    /// "오늘 이미 받았나"만 알면 된다 — **사용자의 달력 기준**으로 센다.
+    /// (UTC 로 세면 한국에서는 오전 9시에 하루가 바뀌어, 아침에 받은 유예가 그날 오전에 또 열린다.)
+    private static func dayStamp(_ date: Date) -> Int { LocalDay.stamp(date) }
 
     /// 오늘 아직 유예를 안 썼는가.
     static func isAvailable(now: Date = Date()) -> Bool {
