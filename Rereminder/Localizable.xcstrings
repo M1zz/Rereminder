@@ -4151,6 +4151,22 @@
         }
       }
     },
+    "Section lengths": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "セクションの長さ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "구간 길이"
+          }
+        }
+      }
+    },
     "Section name": {
       "localizations": {
         "ja": {

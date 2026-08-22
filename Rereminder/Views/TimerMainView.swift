@@ -192,6 +192,15 @@ struct TimerMainView: View {
                           buttonSize: buttonSize)
                     .zIndex(1)
 
+                // **걸기 전에도 구간이 몇 분짜리인지 보인다.** 종을 옮기는 조작은 각도라
+                // "그래서 첫 구간이 몇 분이지?"를 머리로 계산하게 되는데, 그 답을 바로 옆에 둔다.
+                // 실행 중에는 세우지 않는다 — 그 자리는 원 아래 줄어드는 숫자(SectionCountdownList) 몫이다.
+                if !isProgressMode, !isPresentationMode, derivedSegments.count > 1 {
+                    SectionLengthBar(segments: derivedSegments)
+                        .padding(.top, spacing * 2)
+                        .transition(.opacity)
+                }
+
                 Spacer()
 
                 // "손목에서도 볼 수 있나?"는 **걸기 전에** 알아야 고칠 수 있다.
