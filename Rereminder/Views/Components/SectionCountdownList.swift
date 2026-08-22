@@ -8,6 +8,11 @@
 //  앞 구간이 0이 되면 그때부터 줄어든다. 링은 "전체가 얼마나 남았나"를 보여주는데,
 //  발표자가 실제로 세는 건 **지금 이 구간이 얼마 남았나**다.
 //
+//  숫자 옆에는 **길이에 비례한 막대**가 선다. 숫자만으로는 4분 구간과 8분 구간의 차이를 눈이
+//  아니라 머리로 계산해야 한다 — 막대는 그걸 길이로 바꾼다(가장 긴 구간이 최대 폭).
+//  막대는 **오른쪽 정렬**이고, 남은 시간만큼만 칠해져 왼쪽 끝이 오른쪽으로 밀리며 줄어든다.
+//  (링·구간 막대와 같은 문법 — **오른쪽의 진한 부분이 남은 시간**이다.)
+//
 //  색은 링의 구간 색을 그대로 쓴다(`SectionPalette`). 같은 구간이면 어디서나 같은 색이어야
 //  "저 초록 호가 이 초록 숫자"라는 연결이 생긴다 — 색을 한쪽만 바꾸지 말 것.
 //  다만 **지금 구간만 100%**, 아직 오지 않은 구간은 물러나 있고 지나간 구간은 더 물러난다.
@@ -24,6 +29,14 @@ struct SectionCountdownList: View {
     /// 시작 후 경과 시간(초).
     let elapsedSec: Int
     var maxHeight: CGFloat = 160
+
+    /// 가장 긴 구간의 막대 폭. 나머지는 길이에 비례해 짧아진다.
+    /// ⚠️ `GeometryReader` 로 화면 폭에서 재지 않는다 — 스크롤뷰 안에서 높이가 함께 늘어나
+    ///    목록이 늘 최대 높이를 차지하게 된다. 고정값이면 그 위험이 없고 줄 사이 비교도 안정적이다.
+    private let barMaxWidth: CGFloat = 116
+    /// 아주 짧은 구간도 보이긴 해야 한다 — 비례대로면 30초짜리는 사라진다.
+    private let barMinWidth: CGFloat = 10
+    private let barHeight: CGFloat = 7
 
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
@@ -55,12 +68,10 @@ struct SectionCountdownList: View {
                 .monospacedDigit()
                 .foregroundStyle(color)
 
-            Spacer(minLength: 0)
+            Spacer(minLength: 8)
 
-            // 전체에서 이 구간이 차지하는 길이 — 줄어드는 숫자와 헷갈리지 않게 작게 둔다.
-            Text(verbatim: Self.mmss(segment.durationSec))
-                .font(.caption.monospacedDigit())
-                .foregroundStyle(.secondary)
+            // 길이에 비례한 막대 — 숫자가 못 하는 "이 구간이 저 구간의 두 배"를 눈으로 보여준다.
+            bar(segment: segment, remaining: remaining, color: color)
         }
         .opacity(dimming(for: phase))
         .padding(.horizontal, 12)
@@ -72,6 +83,29 @@ struct SectionCountdownList: View {
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Text("Section \(segment.index + 1)"))
         .accessibilityValue(Text(verbatim: Self.mmss(remaining)))
+    }
+
+    /// 구간 길이에 비례한 막대. **오른쪽 정렬**이고 남은 만큼만 칠해진다 —
+    /// 왼쪽 끝이 오른쪽으로 밀리며 줄어들어, 숫자와 같은 것을 길이로 말한다.
+    private func bar(segment: TimerSections.Segment,
+                     remaining: Int,
+                     color: Color) -> some View {
+        let width = Self.trackWidth(durationSec: segment.durationSec,
+                                    longestSec: segments.map(\.durationSec).max() ?? 0,
+                                    maxWidth: barMaxWidth,
+                                    minWidth: barMinWidth)
+        let ratio = Self.fillRatio(remaining: remaining, durationSec: segment.durationSec)
+
+        return ZStack(alignment: .trailing) {
+            Capsule().fill(color.opacity(0.22))
+            Capsule()
+                .fill(color)
+                .frame(width: width * ratio)
+        }
+        .frame(width: width, height: barHeight)
+        // 1초마다 툭툭 끊기지 않게 미끄러진다(원 아래 막대와 같은 값).
+        .animation(.linear(duration: 0.2), value: remaining)
+        .accessibilityHidden(true)
     }
 
     /// 지금 구간은 꽉 찬 점, 아직 오지 않은 구간은 빈 점, 지나간 구간은 체크.
@@ -102,6 +136,28 @@ struct SectionCountdownList: View {
         case .upcoming: return 0.55
         case .done:     return 0.3
         }
+    }
+
+    // MARK: - 폭 계산 (순수 함수 — 눈으로 못 보는 비율을 테스트가 지킨다)
+
+    /// 이 구간 막대의 **전체 길이**. 가장 긴 구간이 `maxWidth`, 나머지는 그에 비례한다.
+    ///
+    /// ⚠️ 비례 폭이 `minWidth` 보다 좁아지면 최소 폭으로 올린다 — 20분 중 30초짜리 구간은
+    ///    비례대로면 3pt 라 사라지고, **사라진 구간은 "없는 구간"으로 읽힌다**.
+    ///    그만큼 그 줄만 실제보다 길어진다(알고 쓰는 거짓말 — `SectionBarLayout` 과 같은 규칙).
+    static func trackWidth(durationSec: Int,
+                           longestSec: Int,
+                           maxWidth: CGFloat,
+                           minWidth: CGFloat) -> CGFloat {
+        let longest = max(1, longestSec)
+        let proportional = maxWidth * CGFloat(max(0, durationSec)) / CGFloat(longest)
+        return min(maxWidth, max(minWidth, proportional))
+    }
+
+    /// 막대에서 **칠해지는 몫** (1 → 0). 오른쪽 정렬이라 이 값이 줄면 왼쪽 끝이 오른쪽으로 밀린다.
+    static func fillRatio(remaining: Int, durationSec: Int) -> CGFloat {
+        guard durationSec > 0 else { return 0 }
+        return min(1, max(0, CGFloat(remaining) / CGFloat(durationSec)))
     }
 
     /// "20:00" — 한 시간이 넘으면 "1:05:00".
