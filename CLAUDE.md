@@ -266,6 +266,41 @@ extension TimerView {
   동적 키(`guide_*`)·플랫폼 조건부 문자열은 카탈로그에서 `extractionState: manual`로 둘 것
   (그러지 않으면 빌드마다 stale로 찍혀 predeploy가 실패한다).
 
+### Live Activity 버튼 (일시정지·재개·정지)
+
+다이나믹 아일랜드·잠금화면의 세 버튼. **인텐트 파일의 타겟 멤버십이 이 기능의 전부다.**
+
+- ⚠️ **`LiveActivityIntent` 는 위젯 확장이 아니라 앱 프로세스에서 실행된다.**
+  Apple: *"the system runs the app intent in the app's process. Make sure to add your custom
+  app intent to your app target."* 그래서 인텐트 타입이 확장 타겟에만 있으면 시스템이 앱에서
+  그 인텐트를 못 찾아 **버튼을 눌러도 아무 일도 일어나지 않는다** — 2.2.0 까지 재생·정지가
+  죽어 있던 이유이고, 코드 주석은 반대로("확장에서 돈다") 적혀 있었다.
+- 그래서 세 인텐트는 `Shared/Intents/LiveActivityIntents.swift` 에 있고 **앱·확장 양쪽에서
+  컴파일된다**(확장에도 있어야 위젯의 `Button(intent:)` 가 타입을 참조할 수 있다.
+  양쪽에 있으면 Apple 은 앱 쪽 것을 실행한다). 확장 멤버십은 pbxproj 의
+  `Exceptions for "Shared" folder in "RereminderAlarmExtension" target` 에 적혀 있다 —
+  **파일을 옮기거나 이름을 바꾸면 이 목록도 함께 고칠 것.**
+- **검증법** (30초): 빌드한 뒤
+  `Rereminder.app/Metadata.appintents/extract.actionsdata` 에
+  `PauseIntent`·`ResumeIntent`·`StopIntent` 가 있는지 본다. appex 에만 있으면 깨진 것이다.
+  ```bash
+  grep -o 'PauseIntent' <빌드경로>/Rereminder.app/Metadata.appintents/extract.actionsdata
+  ```
+- 버튼이 앱에 닿는 길은 두 겹이다(`LiveActivityCommand`):
+  ① 앱 그룹에 명령을 남기고 ② `NotificationCenter` 로 알린다.
+  앱이 인텐트 때문에 백그라운드로 막 깨어난 참이면 화면(`TimerViewModel`)이 아직 없어서
+  ②는 아무도 못 받는다 — 그 경우는 다음에 앱이 앞으로 나올 때
+  `applyPendingLiveActivityCommand` 가 ①을 읽어 적용한다.
+- **"앱이 받았나"는 기록이 지워졌는지로 판정한다.** 받은 쪽(`TimerViewModel` 의 옵저버)이
+  처리했으면 `LiveActivityCommandStore.clear()` 를 부르고, `dispatch()` 는 그걸 보고 `true` 를
+  돌려준다. `false` 일 때만 인텐트가 표시를 앞질러 바꾼다
+  (`markPaused`/`markResumed`/`endAll`). 이 핸드셰이크가 깨지면 둘 중 하나가 난다 —
+  진짜 상태를 어림값이 덮거나, 눌러도 화면이 그대로거나.
+  (`NotificationCenter.post` 는 동기라서 `dispatch()` 가 돌아온 시점이면 옵저버는 이미 다 돌았다.)
+- 상태에 맞지 않는 명령은 **처리하지 않고 기록도 남겨 둔다** — cold launch 로 타이머를 아직
+  복원하기 전일 수 있고, 그때는 복원 뒤에 적용되어야 한다.
+- 테스트: `RereminderTests/LiveActivityCommandTests.swift`
+
 ### 알림 배지 (종을 옮길 때 뜨는 툴팁)
 종 노브를 끌면 그 지점을 **두 가지로** 읽어줍니다. 발표자는 "몇 분 남았나"와
 "몇 분째 말하고 있나"를 둘 다 알아야 하기 때문입니다.

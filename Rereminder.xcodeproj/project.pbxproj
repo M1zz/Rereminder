@@ -204,6 +204,7 @@
 				DesignSystem/DSOpacity.swift,
 				DesignSystem/DSRadius.swift,
 				DesignSystem/DSSpacing.swift,
+				Intents/LiveActivityIntents.swift,
 				Models/TimerActivityAttributes.swift,
 				Modules/LiveActivityCommand.swift,
 				Modules/LiveActivityController.swift,

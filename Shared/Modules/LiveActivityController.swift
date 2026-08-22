@@ -12,7 +12,8 @@
 //  해법은 하나다: 참조를 들고 다니지 말고 **시스템 목록(`Activity.activities`)을 진실로 삼는다.**
 //  그 목록은 프로세스가 새로 떠도 그대로 있으므로, 앱이 죽었다 살아나도 같은 활동을 찾아 끝낼 수 있다.
 //
-//  ⚠️ 위젯 확장에서도 쓴다(다이나믹 아일랜드 버튼이 앱 프로세스에서 도는 인텐트라 같은 코드를 탄다).
+//  ⚠️ 앱과 위젯 확장 양쪽에서 컴파일된다 — 다이나믹 아일랜드 버튼의 인텐트
+//    (`Shared/Intents/LiveActivityIntents.swift`)가 **앱 프로세스**에서 이 코드를 탄다.
 //
 
 import Foundation
@@ -103,6 +104,21 @@ enum LiveActivityController {
             endDate: nil
         )
         Task { await activity.update(.init(state: state, staleDate: nil)) }
+    }
+
+    /// 앱이 실제로 다시 흐르기 전에 표시부터 "진행 중"으로 바꾼다 — `markPaused` 의 짝.
+    /// 남은 시간만큼 끝나는 시각을 새로 잡아 준다(앱이 깨어나면 진짜 값으로 덮인다).
+    static func markResumed() {
+        guard let activity = current else { return }
+        let remaining = max(0, activity.content.state.remainingTime)
+        let endDate = Date().addingTimeInterval(remaining)
+        let state = TimerActivityAttributes.ContentState(
+            remainingTime: remaining,
+            isPaused: false,
+            timestamp: Date(),
+            endDate: endDate
+        )
+        Task { await activity.update(.init(state: state, staleDate: endDate)) }
     }
 
     /// 남아 있는 활동을 **전부** 즉시 없앤다. 앱이 죽었다 살아난 뒤에도 동작한다.

@@ -4,12 +4,13 @@
 //
 //  다이나믹 아일랜드 버튼(일시정지·재개·정지)이 앱에 닿는 길.
 //
-//  왜 필요한가 — 버튼의 인텐트는 **위젯 확장 프로세스**에서 돈다(인텐트 타입이 확장 타겟에만 있다).
-//  예전에는 거기서 `NotificationCenter.post` 를 했는데, 알림은 프로세스 경계를 넘지 못한다.
-//  즉 앱이 떠 있든 아니든 그 버튼들은 **아무 일도 하지 않았다.**
+//  왜 필요한가 — 버튼의 인텐트(`LiveActivityIntent`)는 **앱 프로세스**에서 돈다. 다만 앱은
+//  그 인텐트 때문에 백그라운드로 막 깨어난 참일 수 있고, 그러면 화면(=`TimerViewModel`)이
+//  아직 없어서 `NotificationCenter` 로는 아무도 받지 못한다.
 //
-//  그래서 명령을 앱 그룹에 적어 둔다. 앱이 이미 떠 있으면 NotificationCenter 로 즉시 반영되고,
-//  꺼져 있었다면 다음에 앱이 앞으로 나올 때 이 기록을 읽어 그대로 적용한다.
+//  그래서 명령을 앱 그룹에 적어 둔다. 받을 사람이 있으면 NotificationCenter 로 즉시 반영되고
+//  (받은 쪽이 이 기록을 지운다 — 그게 "처리했다"는 신호다), 없으면 다음에 앱이 앞으로 나올 때
+//  이 기록을 읽어 그대로 적용한다.
 //
 //  ⚠️ 앱과 위젯 확장 양쪽에서 컴파일된다 — UIKit/SwiftUI 를 끌어들이지 말 것.
 //
@@ -30,11 +31,18 @@ enum LiveActivityCommand: String, Codable {
         }
     }
 
-    /// 남기고(앱이 꺼져 있어도) 알리고(떠 있으면 즉시) — 버튼이 해야 할 일의 절반이다.
-    /// 나머지 절반(화면에 보이는 변화)은 호출부가 LiveActivityController 로 처리한다.
-    func dispatch() {
+    /// 남기고(앱이 화면을 아직 안 만들었어도) 알리고(살아 있으면 즉시) — 버튼이 해야 할 일의 절반이다.
+    ///
+    /// - Returns: **앱이 그 자리에서 진짜로 처리했으면 `true`.**
+    ///   판정은 "받은 쪽이 기록을 지웠는가"로 한다(`TimerViewModel`의 옵저버가 지운다).
+    ///   `NotificationCenter.post` 는 같은 스레드에서 동기로 돌기 때문에, 이 함수가 돌아온 시점이면
+    ///   옵저버는 이미 다 돈 뒤다. `false` 면 나머지 절반(눈에 보이는 변화)은 호출부가
+    ///   `LiveActivityController` 로 직접 만들어야 한다.
+    @discardableResult
+    func dispatch() -> Bool {
         LiveActivityCommandStore.post(self)
         NotificationCenter.default.post(name: notificationName, object: nil)
+        return !LiveActivityCommandStore.isPending
     }
 }
 
@@ -64,6 +72,11 @@ enum LiveActivityCommandStore {
 
         guard issuedAt > 0, now.timeIntervalSince1970 - issuedAt <= expiry else { return nil }
         return command
+    }
+
+    /// 아직 아무도 가져가지 않은 명령이 남아 있는가.
+    static var isPending: Bool {
+        defaults?.string(forKey: commandKey) != nil
     }
 
     static func clear() {
