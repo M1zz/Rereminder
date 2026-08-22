@@ -371,6 +371,19 @@ final class TimerScreenViewModel: ObservableObject {
         initialConfiguration()
     }
 
+    /// 반복 감지가 권한 설정을 다이얼에 올린다(시작하지는 않는다).
+    ///
+    /// `load(template:)` 과 달리 문구는 건드리지 않는다 — `RepeatDetector` 의 지문은 시간과 알림
+    /// 지점만 담으므로, 문구까지 덮으면 사용자가 써 둔 말을 근거 없이 지우게 된다.
+    func applyRepeatConfig(mainSec: Int, offsets: [Int]) {
+        guard mainSec > 0 else { return }
+        mainMinutes = mainSec / 60
+        mainSeconds = mainSec % 60
+        selectedOffsets = Set(offsets.filter { $0 > 0 && $0 < mainSec })
+        initialConfiguration()
+        showToast?(String(localized: "Set up your usual timer"))
+    }
+
     // MARK: - Last Used Config (재실행 시 다이얼 복원)
 
     private static let lastUsedConfigKey = "rereminder.lastUsedConfig.v1"
@@ -584,8 +597,9 @@ extension TimerScreenViewModel {
 extension TimerScreenViewModel {
     /// 다이나믹 아일랜드 버튼이 앱이 꺼져 있는 동안 남겨 둔 명령을 적용한다.
     ///
-    /// 버튼 인텐트는 위젯 확장 프로세스에서 돌기 때문에, 앱이 떠 있지 않으면 그때는 아무것도
-    /// 적용할 수 없다. 앱이 앞으로 나오는 이 순간이 그 명령을 처리할 유일한 자리다.
+    /// 버튼 인텐트는 앱 프로세스에서 돌지만, 백그라운드로 막 깨어난 참이라 화면이 아직 없으면
+    /// 그 자리에서는 아무것도 적용할 수 없다. 앱이 앞으로 나오는 이 순간이 그 명령을 처리할 자리다.
+    /// (그 자리에서 처리된 명령은 이미 지워져 있으므로 여기서 두 번 적용되지 않는다.)
     func applyPendingLiveActivityCommand() {
         #if os(iOS) && !targetEnvironment(macCatalyst)
         guard let command = LiveActivityCommandStore.take() else { return }

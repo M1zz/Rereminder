@@ -57,7 +57,15 @@ enum ProGate {
 
     // MARK: - Free Limits
 
-    static let freePrealertLimit = 1
+    /// 무료로 켤 수 있는 예비 알림 수.
+    ///
+    /// ⚠️ **1 → 2 로 올렸다.** 이 앱이 파는 문장은 "끝나기 전에 **여러 번** 알려 준다"인데,
+    ///    무료 1개는 그 문장이 성립하지 않는 상태다(그냥 'N분 전 알림 하나' = 기본 타이머로도 되는 것).
+    ///    가치를 경험하기 전에 벽을 만나면 결제가 아니라 이탈이 된다. 2개면 "한 번 더"가 성립하고,
+    ///    3개째부터 받으면 그건 실제로 **구간을 설계하는 사람**(발표자·트레이너)이다.
+    ///    ⚠️ 올리기 전에 통계 > "주로 쓰는 알림 개수"에서 **결제** 표본만 켜고 확인할 것 —
+    ///       결제한 사람이 주로 쓰는 개수가 이 값보다 넉넉히 커야 팔 것이 남는다.
+    static let freePrealertLimit = 2
     static let freeTemplateLimit = 3
 
     // MARK: - Gate Result
@@ -119,6 +127,13 @@ enum ProGate {
 
     enum PrealertAdmission: Equatable {
         case allowed
+        /// 체험은 소진됐지만 **오늘치 유예가 남아 있다** — 페이월 대신 이번 한 번을 내준다.
+        ///
+        /// 왜: 한도에 막힌 순간은 사용자가 이 앱의 가치를 **가장 강하게 원하는 순간**이다.
+        /// 그 자리에서 문을 닫으면 결제가 아니라 이탈이 된다("이 앱은 안 되는 앱"). 한 번 내주면
+        /// 원하던 것을 손에 넣은 채로 "다음부터는 Pro"라는 문장을 듣게 되고, 그게 훨씬 잘 팔린다.
+        /// 하루 한 번으로 묶어 두어 게이트 자체가 무의미해지지는 않는다.
+        case grace(stage: PaywallStage)
         case blocked(stage: PaywallStage)
     }
 
@@ -130,7 +145,7 @@ enum ProGate {
         case .allowed, .allowedWithTrial:
             return .allowed
         case .blocked(let stage):
-            return .blocked(stage: stage)
+            return PrealertGrace.isAvailable ? .grace(stage: stage) : .blocked(stage: stage)
         }
     }
 
@@ -138,7 +153,15 @@ enum ProGate {
     /// ⚠️ 화면을 그리는 경로에서 부르지 말 것(그릴 때마다 이벤트가 쌓인다). 그 용도는 위 함수다.
     static func requestPrealert(currentCount: Int) -> PrealertAdmission {
         let admission = prealertAdmission(currentCount: currentCount)
-        if case .blocked(let stage) = admission {
+        switch admission {
+        case .allowed:
+            break
+        case .grace(let stage):
+            // 유예도 "한도를 몸으로 겪은" 순간이다 — 소진 이벤트는 그대로 남긴다.
+            AnalyticsManager.log(.premiumTrialExhausted(feature: .unlimitedPrealerts, stage: stage))
+            PrealertGrace.consume()
+            AnalyticsManager.log(.prealertGraceGranted(stage: stage))
+        case .blocked(let stage):
             AnalyticsManager.log(.premiumTrialExhausted(feature: .unlimitedPrealerts, stage: stage))
         }
         return admission
@@ -167,7 +190,7 @@ enum ProGate {
         evaluate(feature).isAllowed
     }
 
-    /// 예비 알림 추가 가능 여부 (1번째는 항상 free, 2번째 이상은 trial)
+    /// 예비 알림 추가 가능 여부 (무료 한도까지는 항상 free, 그 위는 trial)
     static func canAddPrealert(currentCount: Int) -> Bool {
         if currentCount < freePrealertLimit { return true }
         return evaluate(.unlimitedPrealerts).isAllowed

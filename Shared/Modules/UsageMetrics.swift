@@ -26,8 +26,15 @@ enum UsageMetrics {
     enum Key: String, CaseIterable {
         /// 타이머를 시작한 횟수.
         case timerStarts
-        /// 타이머를 끝까지 마친 횟수 — 이 앱이 실제로 쓰였다는 가장 직접적인 증거.
+        /// 타이머를 끝까지 마친 횟수.
         case timerCompletions
+        /// **예비 알림이 실제로 울린 채로** 끝까지 마친 횟수 — 이 앱의 aha moment 카운터.
+        ///
+        /// 왜 `timerCompletions` 로는 부족한가: 알림이 한 번도 울리지 않은 완주는 평범한
+        /// 타이머를 쓴 것과 같다. 이 앱이 파는 것은 "끝나기 전에 여러 번 알려 준다"이므로,
+        /// **그 알림을 실제로 들은 완주**만이 가치를 경험했다는 증거다.
+        /// 결제 판단(무료 한도를 몇 개로 둘까)의 기준선이 되는 값이라 따로 센다.
+        case alertedCompletions
         /// 도중에 그만둔 횟수.
         case timerCancels
         /// 완주한 타이머의 시간 합계(분) — "이 앱으로 관리한 시간"의 총량.
@@ -45,15 +52,24 @@ enum UsageMetrics {
         /// 한 타이머에 걸어 본 알림 개수의 **최대값**(누적이 아니라 최고 기록).
         /// 이 앱의 결제는 "알림을 몇 개까지 켤 수 있나"로 갈리므로, 이 값이 곧 그 사람의 수요 크기다.
         case alertsMax
-        /// 무료 한도(1개)를 넘겨 타이머를 시작한 횟수 — 유료 영역을 실제로 쓰고 있는 강도.
+        /// **알림을 2개 이상** 걸고 시작한 횟수 — 이 앱의 문장("여러 번 알려 준다")이 실제로
+        /// 쓰인 횟수다. ⚠️ 기준(2개)은 무료 한도와 무관하게 **고정**이다(`multiAlertThreshold`) —
+        /// 한도를 올렸다고 이 정의를 따라 바꾸면 과거 스냅샷과 합산되지 않아 지표가 조용히 끊긴다.
         case multiAlertRuns
         /// 알림을 더 켜려다 한도에 막힌 횟수 — 결제 필요를 몸으로 겪은 횟수다.
         case alertLimitHits
+        /// 막힌 자리에서 **이번 한 번**을 내준 횟수(하루 1회 유예).
+        /// `alertLimitHits` 대비 이 값이 곧 "문을 닫는 대신 열어 준 비율"이다.
+        case graceGrants
         /// 페이월을 본 횟수.
         case paywallViews
 
         var storageKey: String { "usage.metric.\(rawValue)" }
     }
+
+    /// `multiAlertRuns` 가 세는 기준 — **고정값이다.** 무료 한도가 바뀌어도 이 정의는 그대로 둬야
+    /// 한도를 올리기 전후를 같은 자로 비교할 수 있다.
+    static let multiAlertThreshold = 2
 
     /// 한 타이머에 **알림을 몇 개 걸었는지**의 히스토그램 — 실행할 때마다 그 개수 칸을 하나 올린다.
     ///
@@ -92,9 +108,13 @@ enum UsageMetrics {
             // 최대값만으로는 "한 번 해 봤다"와 "늘 그렇게 쓴다"가 구분되지 않는다.
             noteMax(.alertsMax, Double(alertCount))
             incrementAlertRun(alertCount)
-            if alertCount > ProGate.freePrealertLimit { increment(.multiAlertRuns) }
-        case .timerCompleted(let durationSeconds):
+            // ⚠️ 임계값을 `freePrealertLimit` 에 묶지 말 것 — 한도를 올리면 이 지표의 뜻이 바뀌어
+            //    과거 스냅샷과 합산되지 않는다. **"알림 2개 이상"으로 고정된 정의다.**
+            if alertCount >= multiAlertThreshold { increment(.multiAlertRuns) }
+        case .timerCompleted(let durationSeconds, let firedAlertCount):
             increment(.timerCompletions)
+            // 알림을 실제로 들은 완주만 따로 센다 — 이게 "이 앱이 도움이 됐다"의 유일한 증거다.
+            if firedAlertCount > 0 { increment(.alertedCompletions) }
             // 초가 아니라 분으로 누적한다 — 초로 쌓으면 Double 정밀도만 낭비되고 읽기도 어렵다.
             increment(.focusMinutes, by: Double(max(0, durationSeconds)) / 60)
         case .timerCancelled:
@@ -110,6 +130,8 @@ enum UsageMetrics {
         case .premiumTrialExhausted(let feature, _):
             // 알림 한도에 막힌 것만 센다 — 발표 모드 등 다른 기능의 소진과 섞이면 뜻이 흐려진다.
             if feature == .unlimitedPrealerts { increment(.alertLimitHits) }
+        case .prealertGraceGranted:
+            increment(.graceGrants)
         case .paywallShown:
             increment(.paywallViews)
         default:

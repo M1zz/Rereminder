@@ -202,6 +202,51 @@ extension TimerView {
 - **RereminderAlarmManager** (`Shared/Modules/RereminderAlarmManager.swift`): 알림 관리
 - **ReviewRequestManager** (`Shared/Modules/ReviewRequestManager.swift`): 앱스토어 리뷰 요청 관리
 
+### 반복을 앱이 먼저 알아챈다 (RepeatDetector)
+이 앱은 **상황이 반복되는 사람**에게만 팔린다(매주 수업, 매일 운동, 매번 같은 발표 형식).
+그런데 그 반복을 앱에 남기려면 사용자가 스스로 "저장"을 결심해야 했고, 결심은 잘 나지 않는다.
+반복은 이미 증거로 남아 있으므로 그 결심을 앱이 대신한다 — `RepeatDetector`.
+
+판정은 두 갈래다 — **①저장 제안**("이 설정을 기억해 둘까")과 **②시간대 제안**("지금 이걸
+하려던 참 아닌가"). 답이 다르므로 상한·기록도 따로 센다.
+
+- 타이머를 시작할 때마다 **설정 지문(시간 + 알림 지점) + 그날 날짜 + 요일·시각**을 남긴다
+  (`TimerViewModel.start`). 문구·이름은 지문에 넣지 않는다 — 같은 상황이면 같은 설정이다.
+- **서로 다른 날 2일 이상**이면 반복으로 본다. ⚠️ **같은 날 다섯 번은 한 번의 상황이다** —
+  실행 횟수로 세면 포모도로처럼 하루에 여러 번 도는 사용이 첫날부터 걸린다.
+- 제안은 앱을 열었을 때 **마지막 설정을 복원한 뒤에** 판단한다(`offerToSaveRecurringSetupIfDue`).
+  그 순간 다이얼에 올라온 설정이 곧 "또 하려는 그것"이다.
+- ⚠️ **잔소리가 되지 않는 것이 이 기능의 성패다.** 세 겹으로 막는다:
+  한 설정에 **한 번만**(거절해도 저장해도 `markProposed`), 전체 **3회** 상한,
+  그리고 다른 안내(기기 질문·피드백 넛지·그랜드파더링)가 뜨는 차례면 **양보**한다.
+- 이미 같은 시간·알림의 템플릿이 있으면 ①의 후보가 아니다(앱이 이미 기억하고 있다).
+- **②시간대 제안**(`timeOfDaySuggestion`): 같은 **요일**·비슷한 **시각**(±1시간)에 서로 다른 날
+  2일 이상 되풀이했으면, 그 시간에 앱을 열었을 때 "늘 이맘때 하시던 거네요"라고 묻고
+  수락하면 다이얼에 올려 준다(`applyRepeatConfig` — 시작하지는 않는다).
+  상한은 **2회**로 ①보다 적다 — 틀렸을 때 더 성가시다.
+  ⚠️ **①과 ②를 한 번에 띄우지 말 것** — 앱을 열자마자 두 번 물으면 둘 다 안 읽힌다.
+  ②를 먼저 보고, 띄웠으면 ①은 그 차례를 건너뛴다.
+- ⚠️ 문구는 덮지 않는다 — 지문에 문구가 없으므로, 덮으면 사용자가 써 둔 말을 근거 없이 지운다.
+
+⚠️ **날짜는 `LocalDay.stamp` 로 센다** — `timeIntervalSince1970 / 86400` 으로 세면 UTC 자정이
+경계라 **한국에서는 오전 9시에 하루가 바뀐다.** 아침 8시와 10시에 한 번씩 쓴 것이 "이틀 반복"이
+되어 첫날부터 제안이 뜬다(`RepeatDetectorTests` 가 이걸 잡았다). `PrealertGrace` 의 "하루 한 번"도
+같은 함수를 쓴다.
+
+### 결제 게이트 — 무료 2개 + 막힌 자리의 유예
+- `ProGate.freePrealertLimit = 2`. ⚠️ **1개로 되돌리지 말 것** — 이 앱이 파는 문장은
+  "끝나기 전에 **여러 번** 알려 준다"인데 무료 1개는 그 문장이 성립하지 않는 상태다
+  (그냥 'N분 전 알림 하나'는 기본 타이머로도 된다). 가치를 경험하기 전에 벽을 만나면
+  결제가 아니라 이탈이 된다.
+- **막힌 자리에서 문을 닫지 않는다**(`PrealertGrace`, 하루 한 번). 한도에 막히는 순간은
+  사용자가 이 앱을 가장 강하게 원하는 순간이라, 거기서 페이월을 세우면 얻는 건 결제가 아니라
+  "이 앱은 안 되는 앱"이라는 인상이다. `PrealertAdmission.grace` → 그 자리에서 켜 주고 토스트.
+- 판정 기준: **유예를 받은 사람이 나중에 결제하는가** (`prealertGraceGranted` + `graceGrants`).
+- ⚠️ `UsageMetrics.multiAlertRuns` 의 기준(2개)은 **한도와 무관하게 고정**이다
+  (`multiAlertThreshold`). 한도에 묶어 두면 한도를 올리는 순간 지표의 뜻이 바뀌어
+  **변경 전후를 같은 자로 비교할 수 없게 된다.** 반대로 `UsageInsights.multiAlertRunRate` 는
+  "무료 한도 초과"라는 살아 있는 뜻이라 한도를 따라간다.
+
 ### 사용 통계·피드백 (서비스 판단 루프)
 "이 앱이 실제로 쓸모가 있나"를 개발자가 앱 안에서 확인하는 경로. 설계·운영 문서는
 `docs/USAGE_STATS_HUB.md`(수집·집계)와 `docs/FEEDBACK_CLOUDKIT.md`(피드백).
@@ -266,6 +311,60 @@ extension TimerView {
   동적 키(`guide_*`)·플랫폼 조건부 문자열은 카탈로그에서 `extractionState: manual`로 둘 것
   (그러지 않으면 빌드마다 stale로 찍혀 predeploy가 실패한다).
 
+### Live Activity 버튼 (일시정지·재개·정지)
+
+다이나믹 아일랜드·잠금화면의 세 버튼. **인텐트 파일의 타겟 멤버십이 이 기능의 전부다.**
+
+- ⚠️ **`LiveActivityIntent` 는 위젯 확장이 아니라 앱 프로세스에서 실행된다.**
+  Apple: *"the system runs the app intent in the app's process. Make sure to add your custom
+  app intent to your app target."* 그래서 인텐트 타입이 확장 타겟에만 있으면 시스템이 앱에서
+  그 인텐트를 못 찾아 **버튼을 눌러도 아무 일도 일어나지 않는다** — 2.2.0 까지 재생·정지가
+  죽어 있던 이유이고, 코드 주석은 반대로("확장에서 돈다") 적혀 있었다.
+- 그래서 세 인텐트는 `Shared/Intents/LiveActivityIntents.swift` 에 있고 **앱·확장 양쪽에서
+  컴파일된다**(확장에도 있어야 위젯의 `Button(intent:)` 가 타입을 참조할 수 있다.
+  양쪽에 있으면 Apple 은 앱 쪽 것을 실행한다). 확장 멤버십은 pbxproj 의
+  `Exceptions for "Shared" folder in "RereminderAlarmExtension" target` 에 적혀 있다 —
+  **파일을 옮기거나 이름을 바꾸면 이 목록도 함께 고칠 것.**
+- **검증법** (30초): 빌드한 뒤
+  `Rereminder.app/Metadata.appintents/extract.actionsdata` 에
+  `PauseIntent`·`ResumeIntent`·`StopIntent` 가 있는지 본다. appex 에만 있으면 깨진 것이다.
+  ```bash
+  grep -o 'PauseIntent' <빌드경로>/Rereminder.app/Metadata.appintents/extract.actionsdata
+  ```
+- 버튼이 앱에 닿는 길은 두 겹이다(`LiveActivityCommand`):
+  ① 앱 그룹에 명령을 남기고 ② `NotificationCenter` 로 알린다.
+  앱이 인텐트 때문에 백그라운드로 막 깨어난 참이면 화면(`TimerViewModel`)이 아직 없어서
+  ②는 아무도 못 받는다 — 그 경우는 다음에 앱이 앞으로 나올 때
+  `applyPendingLiveActivityCommand` 가 ①을 읽어 적용한다.
+- **"앱이 받았나"는 기록이 지워졌는지로 판정한다.** 받은 쪽(`TimerViewModel` 의 옵저버)이
+  처리했으면 `LiveActivityCommandStore.clear()` 를 부르고, `dispatch()` 는 그걸 보고 `true` 를
+  돌려준다. `false` 일 때만 인텐트가 표시를 앞질러 바꾼다
+  (`markPaused`/`markResumed`/`endAll`). 이 핸드셰이크가 깨지면 둘 중 하나가 난다 —
+  진짜 상태를 어림값이 덮거나, 눌러도 화면이 그대로거나.
+  (`NotificationCenter.post` 는 동기라서 `dispatch()` 가 돌아온 시점이면 옵저버는 이미 다 돌았다.)
+- 상태에 맞지 않는 명령은 **처리하지 않고 기록도 남겨 둔다** — cold launch 로 타이머를 아직
+  복원하기 전일 수 있고, 그때는 복원 뒤에 적용되어야 한다.
+- 테스트: `RereminderTests/LiveActivityCommandTests.swift`
+
+### Live Activity 생김새 — 앱과 같은 색 체계
+잠금화면·다이나믹 아일랜드는 **앱과 같은 색 규칙**을 쓴다. 예전에는 여기만 초록(재개)·주황
+(일시정지)·빨강(정지) 세 원색을 `.borderedProminent` 사각 버튼으로 칠하고 keyline 도 주황
+고정이라, 앱을 보다가 잠금화면을 보면 **다른 앱처럼** 보였다.
+
+- 진행·강조 = **사용자가 고른 테마 강조색**. ⚠️ 확장은 `UserDefaults.standard` 를 읽지 못하므로
+  (자기 컨테이너를 본다) 앱이 테마를 바꿀 때마다 **앱 그룹에 hex 를 한 벌 적어 둔다**
+  (`SharedAccent`). `ThemeManager` 의 `didSet` **과 `init` 양쪽**에서 쓴다 — init 에서는 didSet 이
+  돌지 않아, 그것만 빼먹으면 업데이트 직후 잠금화면만 기본색으로 남는다.
+- 버튼은 **동그라미**, 색도 앱과 같다: 정지 `DSColor.plain`(회색, 왼쪽) / 일시정지
+  `DSColor.negativeSoft`(주황) / 재개 `DSColor.positive`. 배치도 앱의 원 안과 같은 순서다.
+- ⚠️ **주황을 진행 표시에 쓰지 말 것** — 이 앱에서 주황은 알림 종의 색이다.
+- ⚠️ 카운트다운은 **`Text(timerInterval:countsDown:)`** 으로 그린다.
+  `Text(endDate, style: .timer)` 는 잠금화면의 큰 글씨에서 iOS 가 **"8 minutes" 같은 자연어**로
+  대체해 버려 초가 사라진다(다이나믹 아일랜드 컴팩트에서는 "9:10" 으로 나와 더 헷갈렸다).
+- `Color(hex:)` 는 `SharedAccent.swift` 에 있다(예전엔 `ThemeManager` 안). ⚠️ 그 파일은 앱·위젯
+  확장·**App Clip** 세 타겟에 모두 들어가야 한다 — 클립도 `ThemeManager` 를 쓰므로 빠지면
+  클립 빌드가 깨진다.
+
 ### 알림 배지 (종을 옮길 때 뜨는 툴팁)
 종 노브를 끌면 그 지점을 **두 가지로** 읽어줍니다. 발표자는 "몇 분 남았나"와
 "몇 분째 말하고 있나"를 둘 다 알아야 하기 때문입니다.
@@ -320,66 +419,45 @@ extension TimerView {
 - 구간 **번호(1·2·3)** 는 대기 중에만 붙인다 — 진행 중에는 구간이 하나씩 사라지며 번호만 바뀌어
   어지럽다.
 
-### 타이머 모양 (설정에서 고른다 · 한 번에 하나)
-실행 중 화면의 모양은 **설정 > 타이머 모양**에서 고른다 — 원형 링 / 이중 링 / 구간 막대 /
-접은 줄(ㄹ자). 정의는 `Shared/Modules/TimerShape.swift` 한 곳, 저장은 `@AppStorage("timer.shape")`.
+### 대기 중 화면 — 구간 길이를 걸기 전에 보여준다
+알림을 두 개 이상 켜 두면 원 아래에 **구간 길이 칩 한 줄**이 선다(`SectionLengthBar`) —
+`○ 9:00  ○ 1:00` 처럼.
 
-- **한 번에 하나만 그린다.** 예전엔 원과 구간 막대를 같이 세웠는데, 같은 시간을 두 번 그리는
-  셈이라 눈이 매번 어느 쪽을 볼지 골라야 했다. 그래서 원 아래 `SectionProgressBar` 자리는
-  없어지고, 막대는 **모양 중 하나**가 됐다.
-- **대기 중에는 언제나 다이얼(원)이다.** 흰 핸들·종 노브를 끌어 시간과 알림을 정하는 조작이
-  원에 묶여 있어서, 모양 선택은 **실행 중 표시**에만 적용한다(`usesLinearShape`).
-- 고르는 화면은 이름이 아니라 **실루엣**을 보여준다(`TimerShapeSilhouette`) — "이중 링"이라는
-  말로는 무엇을 고르는 건지 알 수 없다. 실루엣은 **실제 화면과 같은 컴포넌트**로 그린다
-  (`SectionInnerRing`·`SectionProgressBar`·`SnakeTimerView`). 미리보기만 따로 그리면
-  고르고 나서 "이게 아닌데"가 된다. 네 그림은 **같은 예시 타이머의 같은 순간**을 그린다.
-- 가운데 큰 숫자는 원형 링에서만 전체 남은 시간이고, 나머지 셋은 **이 구간**의 남은 시간 +
-  아래 작은 `Total:` 줄이다(`centerSection`).
-- **접은 줄**(`SnakeTimerView`)은 경로 길이가 곧 시간이라 구간을 길이 비율로 자른다.
-  U턴에 얹힌 짧은 구간은 곡선으로 말려 실제보다 짧아 보이므로 줄 수를 늘리지 말 것(4줄).
-- **알림 지점에는 어디서나 종이 선다.** 링은 종 노브, 막대·접은 줄은 구간 사이에 주황 종.
-  구간 경계를 틈으로만 표시하면 "줄이 왜 끊겼지"로 읽힌다 — 왜 끊겼는지는 종이 말해 준다.
-  막대의 칸 사이 여백(`gap`)은 종이 앉을 자리라 막대 두께를 따라 같이 벌어진다.
-- **버튼(시작·정지)은 원 밖에 있다** (`TimerActionBar`). 원 안에 두면 가운데를 반 넘게 먹어서
-  시간 두 줄이 들어갈 자리가 없고, 링 위의 종·핸들 터치까지 버튼이 가져간다.
-  - 주 동작은 **채운 캡슐 하나**(아이콘 + 글자) — ▶ 하나만 있으면 "시작"인지 "재개"인지 유추해야
-    한다. 정지는 곁들이라 회색 원, 대기 중에는 아예 없다.
-  - 색은 **테마 강조색**. 예전 시작 버튼은 분홍 고정(`DSColor.positive`)이라 파란 링 아래에서
-    혼자 튀었다. **주황은 쓰지 않는다** — 이 화면에서 주황은 알림 종의 색이다.
-  - **움직임은 하나의 스프링으로 묶는다.** 정지 버튼이 들어오는 것·캡슐이 밀리는 것·글자가
-    바뀌는 것이 각자 다른 속도로 움직이면 그게 허접해 보이는 이유다.
-    심볼은 `.contentTransition(.symbolEffect(.replace))`, 글자는 `.contentTransition(.opacity)`,
-    정지 버튼은 옆에서 밀려들지 않고 제자리에서 커지며 나타난다.
-  - **일시정지 ↔ 재개에서 캡슐 폭이 변하면 안 된다.** 도는 동안 나올 수 있는 글자를 전부
-    ZStack 에 겹쳐 두고(보이지 않게) 그중 가장 넓은 것으로 폭을 잡는다.
-    ⚠️ `.background` 에 유령 글자를 깔면 폭이 안 잡힌다(배경은 부모 크기를 따를 뿐).
-    ⚠️ 글자 수로 긴 쪽을 고르지 말 것 — 언어마다 폭이 다르다.
-- **이중 링을 고르면 60분이 넘어도 링은 '전체 한 바퀴'다**(`usesAbsoluteRing` 예외).
-  절대 각도로 그리면 안쪽 줄이 "2바퀴째" 몫이 되어, 100분 타이머를 걸었을 때 시작하자마자
-  안쪽이 40/60 만 찬 채로 도는 것처럼 보였다. 안쪽이 '지금 구간'이려면 바깥이 전체여야 한다.
-- 가운데는 **전체가 크게, 그 아래 지금 구간이 따로 돈다**(구간 색 점 + 남은 시간).
-  예전의 "Next 알림" 안내 박스는 없앴다 — 같은 이야기를 원 밖에서 한 번 더 하던 자리였다.
+왜: 알림을 옮기는 조작은 링 위에서 **각도**로 한다. 각도는 "몇 분짜리 구간이 생겼나"를 말해
+주지 못해서, 종을 옮겨 놓고 나서야 "그래서 첫 구간이 몇 분이지?"를 머리로 계산하게 된다.
+그 답을 숫자로 바로 아래에 둔다.
 
-### 이중 링 (바깥=전체, 안쪽=이 구간)
-진행 중에는 원 안쪽에 **얇은 링 한 겹**이 더 선다 — 지금 지나는 구간이 얼마 남았나.
-바깥은 "전체가 얼마 남았나", 안쪽은 "이 구간이 얼마 남았나"다. 원은 각도라 서로 다른 자리에
-놓인 두 호를 비교하는 걸 잘 못 하기 때문에, 두 질문에 각각 자기 층을 준다
-(구간끼리의 크기 비교는 여전히 원 아래 `SectionProgressBar` 몫이다).
+- 색은 `SectionPalette` 그대로 — 링의 그 구간 호와 **같은 색**이어야 "저 파란 조각이 이 9:00"
+  이라는 연결이 산다. 점 모양(빈 원)도 `SectionCountdownList` 의 '아직 오지 않은 구간'과 맞춘다.
+- **실행 중에는 서지 않는다** — 그 자리는 줄어드는 숫자(`SectionCountdownList`) 몫이다.
+  둘을 같이 세우면 같은 구간을 두 번 그리는 셈이고, 도는 동안 알고 싶은 건 남은 시간이다.
+- 다 들어가면 **가운데**, 넘치면 가로로 민다(`ViewThatFits`). ⚠️ 스크롤뷰만 쓰면 칩이 늘 왼쪽에
+  붙는데 바로 위의 원은 가운데라 어긋나 보인다.
 
-- 계산은 **`TimerSections.progress`** 하나뿐이다. iPhone(`TimerMainView.sectionProgress`)과
-  워치(`TimerView.sectionProgress`)가 같은 함수를 본다 — 따로 세면 두 기기가 다른 구간을 가리킨다.
-- 그리는 것도 공용이다: **`SectionInnerRing`**(`Shared/DesignSystem/`). 두께(본 링의 0.5배)와
-  간격(본 링 안쪽에서 0.45배)도 그 파일이 갖는다. 워치는 링이 4pt라 끝점 흰 점만 끈다.
-- **안 그리는 경우가 셋**: 두 줄 링(60분 초과 — 그 자리가 이미 2바퀴째다), 구간이 하나
-  (안쪽이 바깥과 같은 말을 한다), 오버타임(지날 구간이 없다).
-- 안쪽 링 색은 `SectionPalette` 그대로 — 바깥 링의 그 구간과 **같은 색**이어야 "이 링이 저 구간"이
-  읽힌다. 대신 두께·간격·끝점 흰 점으로 층을 가른다. **색으로 구분하려 들지 말 것.**
-- 구간이 바뀌면 `.id(index)` 로 새로 그린다. 비율이 0 → 1 로 튀는 걸 애니메이션으로 이으면
-  링이 거꾸로 감기는 것처럼 보인다.
-- **가운데 큰 숫자는 이때 "이 구간"의 남은 시간이고, 전체는 그 아래 작은 줄(`Total: …`)로
-  내려간다.** 달리는 사람이 1초에 한 번 확인하는 값이 "전체 17분"이 아니라 "이 구간 12분"이라서다
-  (발표 모드 큰 화면 `PresentationDisplayView` 와 같은 문법). 가운데가 두 줄이 되므로
-  `centerContentDiameter` 도 안쪽 링 안쪽을 한계로 잡는다 — 넘치면 글자가 링 조작을 가로챈다.
+### 실행 중 화면 — 링 한 겹 + 원 아래 구간 카운트다운
+실행 중에도 화면은 **원 하나**다. 링은 알림 경계로 나뉜 구간 색을 그대로 유지하고
+(`showsAlertSectionColors`), 가운데는 **전체 남은 시간 한 줄**, 그 아래에 동작 버튼 두 개,
+원 밖 아래에 **구간별 카운트다운 리스트**(`SectionCountdownList`)가 선다.
+
+⚠️ **2.2.0 에서 넣었던 "타이머 모양 선택"(원형 링 / 이중 링 / 구간 막대 / 접은 줄)과
+이중 링·원 밖 버튼 바·선형 막대는 그 직후 전부 걷어냈다 — 모양 선택 자체를 없앴다.**
+같은 시간을 두 군데에 그리면(원 두 겹, 또는 원 + 막대) 볼 때마다 어느 쪽이 무엇인지
+골라야 해서 오히려 느리다.
+`TimerShape`·`TimerActionBar`·`SectionProgressBar`·`SectionBarLayout`·`SnakeTimerView`·
+`TimerShapeSilhouette`·`TotalTimelineStrip` 은 삭제됐다 — **되살리지 말 것.**
+
+- **버튼은 원 안에 있다**(`TimerButtonStyle`, `buttonRow`) — 가운데 시간 바로 아래.
+  원 밖으로 뺐던 이유는 가운데를 두 줄(전체 + 구간)로 쓰려던 것인데, 그 두 줄이 없어졌으므로
+  버튼이 다시 안으로 들어왔다. 정지는 회색 원(`DSColor.plain`, 대기 중에는 없다),
+  시작·재개는 `DSColor.positive`, 일시정지는 `DSColor.negativeSoft`(주황).
+- **가운데는 전체 남은 시간 한 줄뿐이다.** "지금 구간이 얼마 남았나"는 원 아래 리스트가 답한다.
+- **SectionCountdownList** (`Rereminder/Views/Components/SectionCountdownList.swift`):
+  45분을 20+25로 나눴다면 앞의 20:00 만 줄고 25:00 은 제자리에 서 있다가 경계를 지나면
+  줄기 시작한다. 색은 링의 구간 색(`SectionPalette`)과 같고 **지금 구간만 100%**.
+  남은 시간 계산은 `TimerSections.remainingSeconds` 하나만 쓴다.
+  알림이 하나뿐이라 구간이 하나면 대신 `nextAlertInfo` 한 줄이 선다(둘 다 두면 같은 말이 두 번).
+- **SectionInnerRing 은 워치 전용으로 남아 있다** — 워치는 화면이 좁아 리스트를 세울 자리가
+  없어서 안쪽 링이 그 역할을 한다. iPhone 에서 안 쓴다고 지우지 말 것.
 
 ### 온보딩 — 읽는 안내가 아니라 해 보는 안내
 `OnboardingFlowView` (2.1.2에서 갈아엎음). 흐름은 **환영 → 어디에 쓸 건가요 → 60배속 체험 →
@@ -517,12 +595,10 @@ extension TimerView {
   `SectionOuterRing` (발표 모드 바깥 얇은 링)도 같은 파일
 - **MarkerDragBadge** (`Rereminder/Views/Components/MarkerDragBadge.swift`): 종을 끌 때 뜨는
   두 줄 배지. 색은 부르는 쪽이 링 구간 색으로 정해 넘긴다 (위 "알림 배지" 규칙)
-- **SnakeTimerView** (`Rereminder/Views/Components/SnakeTimerView.swift`): ㄹ자로 접은 줄.
-  선의 길이 비교를 지키면서 가로 폭을 접는다 — 긴 타이머용 (위 "타이머 모양" 참고)
-- **TimerShapeSilhouette** (`Rereminder/Views/Components/TimerShapeSilhouette.swift`): 설정에서
-  모양을 고를 때 보여주는 실루엣. 예시 타이머 값은 이 파일 한 곳에만 둔다
-- **SectionInnerRing** (`Shared/DesignSystem/SectionInnerRing.swift`): 이중 링의 안쪽 링.
-  iPhone·워치가 같은 규칙으로 그리도록 두께·간격까지 이 파일이 갖는다 (위 "이중 링" 참고)
+- **SectionInnerRing** (`Shared/DesignSystem/SectionInnerRing.swift`): **워치 전용**.
+  iPhone 은 링 한 겹 + 원 아래 리스트로 돌아갔다 — 지우지 말 것(워치가 쓴다)
+- **TimerButtonStyle** (`Rereminder/Views/Components/TimerButtonStyle.swift`): 원 안의 동그란
+  동작 버튼 모양
 - **TimePresetButtons** (`Rereminder/Views/Components/TimePresetButtons.swift`): 시간 프리셋 버튼
 - **ToastViewModifier** (`Rereminder/Views/Components/ToastViewModifier.swift`): 토스트 메시지
 
@@ -726,6 +802,27 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
 ```
 
 ## 버전 히스토리
+
+### v2.2.1 (2026-08-23)
+- **타이머 모양 선택 철회** — 2.2.0에서 넣은 원형 링/이중 링/구간 막대/접은 줄과 이중 링·원 밖
+  버튼 바를 전부 걷어내고 **링 한 겹 + 원 안 버튼 + 원 아래 구간 카운트다운**(2.1.1 화면)으로
+  되돌렸다. 같은 시간을 두 군데에 그리면 볼 때마다 어느 쪽이 무엇인지 고르게 된다
+- **구간 목록에 길이 비례 막대**: 4분/8분/8분 → 폭 1:2:2, 오른쪽 정렬로 함께 줄어든다
+  (`SectionCountdownList.trackWidth`/`fillRatio`, 테스트 7개)
+- **대기 중 구간 길이**(`SectionLengthBar`): 걸기 전에도 각 구간이 몇 분인지 보인다
+- **무료 알림 한도 1 → 2** + **막힌 자리에 하루 한 번 유예**(`PrealertGrace`) —
+  가치를 경험하기 전에 벽을 만나면 결제가 아니라 이탈이 된다
+- **반복 감지**(`RepeatDetector`): 같은 설정을 **서로 다른 날 2일 이상** 걸면 저장을 먼저 제안.
+  한 설정에 한 번, 전체 3회 상한, 다른 안내에 양보
+- **측정**: "알림이 실제로 울린 채로 끝까지 간 완주"(`alertedCompletions`)를 따로 세고,
+  알림 개수 분포를 **결제 여부로 가른다**(`UsageInsights.PlanFilter`) — 무료 분포는 한도에
+  눌린 값이라 그것만 보면 한도 판단이 통째로 틀어진다
+- **라이브 액티비티 수정 둘**: ① 다이나믹 아일랜드 버튼이 **아무 일도 하지 않던 문제** —
+  `LiveActivityIntent` 는 앱 프로세스에서 도는데 인텐트가 확장 타겟에만 있었다.
+  ② 앱과 같은 색 체계(`SharedAccent` 로 테마 강조색 전달) + 카운트다운이 "8 minutes" 로
+  뭉뚱그려지던 것을 `Text(timerInterval:countsDown:)` 로 교정
+- **`LocalDay` 신설**: 날짜를 UTC 로 세면 한국에서는 **오전 9시에 하루가 바뀐다**
+- 테스트 202 → 222개, 릴리즈 노트: `docs/release-notes-2.2.1.md` (ko/en/ja)
 
 ### v2.2.0 (2026-08-22)
 - **타이머 모양 선택** (`TimerShape` + 설정 > 화면 > 타이머 모양): 원형 링 / 이중 링 / 구간 막대 /

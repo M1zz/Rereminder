@@ -206,6 +206,12 @@ struct AlertPresetButtons: View {
             withAnimation(.easeInOut(duration: 0.25)) {
                 _ = screenVM.selectedOffsets.insert(offset)
             }
+        case .grace:
+            // 막힌 자리에서 문을 닫지 않는다 — 그 순간이 이 앱을 가장 원하는 순간이다
+            withAnimation(.easeInOut(duration: 0.25)) {
+                _ = screenVM.selectedOffsets.insert(offset)
+            }
+            screenVM.showToast?(String(localized: "Turned this one on for you. Pro keeps them unlimited."))
         case .blocked(let stage):
             paywallStage = stage
             pendingGatedOffset = offset

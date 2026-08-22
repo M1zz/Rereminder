@@ -88,9 +88,30 @@ final class TimerViewModel: ObservableObject {
         }
     }
 
-    @objc private func handlePause() { pause() }
-    @objc private func handleResume() { resume() }
-    @objc private func handleStop() { stop() }
+    // 다이나믹 아일랜드 버튼이 앱 프로세스에서 부르는 자리.
+    //
+    // ⚠️ **처리했으면 반드시 `LiveActivityCommandStore.clear()` 를 부른다.** 인텐트는 그 기록이
+    //    지워졌는지로 "앱이 받았나"를 판정하고, 못 받았다고 보이면 표시를 앞질러 바꾼다
+    //    (`LiveActivityCommand.dispatch`). 여기서 안 지우면 진짜 상태를 어림값이 덮는다.
+    // ⚠️ 지금 상태에 맞지 않는 명령은 **처리하지 않고 기록도 남겨 둔다** — 앱이 아직 타이머를
+    //    복원하기 전(cold launch)일 수 있고, 그때는 복원 뒤 `applyPendingLiveActivityCommand` 몫이다.
+    @objc private func handlePause() {
+        guard state == .running || state == .overtime else { return }
+        pause()
+        LiveActivityCommandStore.clear()
+    }
+
+    @objc private func handleResume() {
+        guard state == .paused else { return }
+        resume()
+        LiveActivityCommandStore.clear()
+    }
+
+    @objc private func handleStop() {
+        guard state != .idle else { return }
+        stop()
+        LiveActivityCommandStore.clear()
+    }
 
     // MARK: - Cold Launch Restore
 
@@ -154,6 +175,13 @@ final class TimerViewModel: ObservableObject {
 
         engine.start()
         state = .running
+
+        // 같은 설정을 여러 날 반복해서 거는지 남긴다 — 그 반복을 앱이 먼저 알아채고
+        // "저장해 둘까요?"라고 묻는 근거다(`RepeatDetector`).
+        if let template = currentTemplate {
+            RepeatDetector.record(.init(mainSec: template.mainSeconds,
+                                        offsets: template.prealertOffsetsSec))
+        }
 
         // Live Activity
         if let template = currentTemplate {

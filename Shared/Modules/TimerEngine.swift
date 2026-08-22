@@ -370,7 +370,10 @@ final class TimerEngine {
                 DispatchQueue.main.async { self.onFinish?() }
                 #if !APPCLIP
                 AnalyticsManager.log(.timerCompleted(
-                    durationSeconds: Int(cfg.mainDuration)
+                    durationSeconds: Int(cfg.mainDuration),
+                    // 걸어 둔 개수가 아니라 **실제로 울린 개수**다 — 중간에 알림을 지나치지 않고
+                    // 끝까지 간 실행만이 "이 앱이 도움이 됐다"의 증거다.
+                    firedAlertCount: self.firedOffsets.count
                 ))
                 #endif
             }

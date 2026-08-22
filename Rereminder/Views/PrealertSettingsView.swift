@@ -219,6 +219,10 @@ struct PrealertSettingsView: View {
                         switch ProGate.requestPrealert(currentCount: screenVM.selectedOffsets.count) {
                         case .allowed:
                             screenVM.selectedOffsets.insert(sec)
+                        case .grace:
+                            // 막힌 자리에서 문을 닫지 않는다 — 원하던 걸 손에 쥔 채로 다음 문장을 듣는다
+                            screenVM.selectedOffsets.insert(sec)
+                            screenVM.showToast?(String(localized: "Turned this one on for you. Pro keeps them unlimited."))
                         case .blocked(let stage):
                             paywallFeature = .unlimitedPrealerts
                             paywallStage = stage

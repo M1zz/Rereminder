@@ -28,7 +28,10 @@ enum AnalyticsManager {
     enum Event {
         // 타이머 행동
         case timerStarted(durationSeconds: Int, alertCount: Int, presetName: String?)
-        case timerCompleted(durationSeconds: Int)
+        /// - Parameter firedAlertCount: 그 실행에서 **실제로 울린 예비 알림 수**.
+        ///   완주 횟수만으로는 "이 앱이 도움이 됐나"를 알 수 없다 — 알림이 한 번도 울리지 않은
+        ///   완주는 평범한 타이머를 쓴 것과 같다. 이 앱의 aha 는 *울린 알림이 있는 완주*다.
+        case timerCompleted(durationSeconds: Int, firedAlertCount: Int)
         case timerCancelled(remainingSeconds: Int)
         case presetSaved(name: String, durationSeconds: Int)
         case presetUsed(name: String)
@@ -41,6 +44,9 @@ enum AnalyticsManager {
         case paywallShown(trigger: ProGate.Feature?)
         case paywallDismissed(trigger: ProGate.Feature?, didPurchase: Bool)
         case paywallOneMoreClicked(trigger: ProGate.Feature)
+        /// 한도에 막힌 순간 페이월 대신 **이번 한 번**을 내줬다 (하루 1회).
+        /// 이 사람이 나중에 결제하는지가 그 설계의 유일한 판정 기준이다.
+        case prealertGraceGranted(stage: ProGate.PaywallStage)
         case purchaseStarted(productId: String)
         case purchaseCompleted(productId: String)
         case purchaseFailed(productId: String, reason: String)
@@ -77,6 +83,7 @@ enum AnalyticsManager {
             case .paywallShown:            return "paywall_shown"
             case .paywallDismissed:        return "paywall_dismissed"
             case .paywallOneMoreClicked:   return "paywall_one_more_clicked"
+            case .prealertGraceGranted:    return "prealert_grace_granted"
             case .purchaseStarted:         return "purchase_started"
             case .purchaseCompleted:       return "purchase_completed"
             case .purchaseFailed:          return "purchase_failed"
@@ -121,8 +128,8 @@ enum AnalyticsManager {
                 var p: [String: Any] = ["duration_seconds": duration, "alert_count": alertCount]
                 if let preset = preset { p["preset_name"] = preset }
                 return p
-            case .timerCompleted(let duration):
-                return ["duration_seconds": duration]
+            case .timerCompleted(let duration, let firedAlerts):
+                return ["duration_seconds": duration, "fired_alert_count": firedAlerts]
             case .timerCancelled(let remaining):
                 return ["remaining_seconds": remaining]
             case .presetSaved(let name, let duration):
@@ -139,6 +146,8 @@ enum AnalyticsManager {
                 return ["trigger": trigger?.rawValue ?? "general", "did_purchase": didPurchase]
             case .paywallOneMoreClicked(let trigger):
                 return ["trigger": trigger.rawValue]
+            case .prealertGraceGranted(let stage):
+                return ["stage": stage.rawValue]
             case .purchaseStarted(let id), .purchaseCompleted(let id):
                 return ["product_id": id]
             case .purchaseFailed(let id, let reason):

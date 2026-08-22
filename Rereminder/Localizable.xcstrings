@@ -399,22 +399,6 @@
         }
       }
     },
-    "%lld sections": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lldセクション"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld개 섹션"
-          }
-        }
-      }
-    },
     "%lld/%lld": {
       "localizations": {
         "en": {
@@ -663,22 +647,6 @@
           "stringUnit": {
             "state": "translated",
             "value": ">>"
-          }
-        }
-      }
-    },
-    "A 10-minute timer with two alerts, about halfway through.": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "10分のタイマーにアラート2つ、半分ほど進んだ状態です。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "10분 타이머에 알림 두 개, 절반쯤 지난 모습이에요."
           }
         }
       }
@@ -1229,22 +1197,6 @@
         }
       }
     },
-    "Compares section sizes as lengths on one line.": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "セクションの大きさを一直線上の長さで比べます。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "구간의 크기를 한 줄 위의 길이로 비교해요."
-          }
-        }
-      }
-    },
     "Completed": {
       "localizations": {
         "ja": {
@@ -1535,22 +1487,6 @@
         }
       }
     },
-    "Double Ring": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "二重リング"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "이중 링"
-          }
-        }
-      }
-    },
     "Double tap to toggle this alert.": {
       "localizations": {
         "ja": {
@@ -1777,22 +1713,6 @@
         }
       }
     },
-    "Finished": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "終了"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "완료"
-          }
-        }
-      }
-    },
     "Focus": {
       "localizations": {
         "ja": {
@@ -1805,38 +1725,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "집중"
-          }
-        }
-      }
-    },
-    "Folded Line": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "折り返しライン"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "접은 줄"
-          }
-        }
-      }
-    },
-    "Folds that line into rows, so a long timer fits a narrow screen.": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "その線を折り返して、長いタイマーも狭い画面に収めます。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "그 줄을 여러 줄로 접어서, 긴 타이머도 좁은 화면에 들어가요."
           }
         }
       }
@@ -2615,28 +2503,6 @@
         }
       }
     },
-    "Next: %@ (%@)": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Next: %1$@ (%2$@)"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "次: %1$@（%2$@）"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "다음: %1$@ (%2$@)"
-          }
-        }
-      }
-    },
     "Next: %@ alert (%lld min %lld sec left)": {
       "localizations": {
         "en": {
@@ -2859,6 +2725,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "연결 안 됨"
+          }
+        }
+      }
+    },
+    "Not now": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あとで"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "나중에"
           }
         }
       }
@@ -3245,22 +3127,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mac에서 두번알림을 여세요. 메뉴 막대에 남은 시간이 보여요."
-          }
-        }
-      }
-    },
-    "Outer ring is the whole timer, inner ring is the section you are in.": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "外側のリングは全体、内側のリングは今のセクションです。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "바깥 링은 전체, 안쪽 링은 지금 지나는 구간이에요."
           }
         }
       }
@@ -3988,22 +3854,6 @@
         }
       }
     },
-    "Ring": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "リング"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "원형 링"
-          }
-        }
-      }
-    },
     "Running": {
       "localizations": {
         "ja": {
@@ -4016,6 +3866,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "실행 중"
+          }
+        }
+      }
+    },
+    "Same time as usual": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いつもこの時間ですね"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "늘 이맘때 하시던 거네요"
           }
         }
       }
@@ -4132,6 +3998,22 @@
         }
       }
     },
+    "Saving it means one tap to start next time.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存しておけば、次回はワンタップで始められます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장해 두면 다음엔 한 번만 눌러서 시작할 수 있어요."
+          }
+        }
+      }
+    },
     "Script": {
       "localizations": {
         "ja": {
@@ -4180,62 +4062,18 @@
         }
       }
     },
-    "Section %lld of %lld, %@": {
+    "Section lengths": {
       "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Section %1$lld of %2$lld, %3$@"
-          }
-        },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "セクション %1$lld/%2$lld、%3$@"
+            "value": "セクションの長さ"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "섹션 %1$lld/%2$lld, %3$@"
-          }
-        }
-      }
-    },
-    "Section %lld/%lld": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "new",
-            "value": "Section %1$lld/%2$lld"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "セクション %lld/%lld"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "섹션 %lld/%lld"
-          }
-        }
-      }
-    },
-    "Section Bar": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "セクションバー"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "구간 막대"
+            "value": "구간 길이"
           }
         }
       }
@@ -4352,6 +4190,38 @@
         }
       }
     },
+    "Set it up": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "その設定にする"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "그 설정으로"
+          }
+        }
+      }
+    },
+    "Set up your usual timer": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "いつもの設定にしました"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "늘 쓰시던 설정으로 맞췄어요"
+          }
+        }
+      }
+    },
     "Settings": {
       "localizations": {
         "ja": {
@@ -4428,22 +4298,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "현재 타이머 상태를 표시합니다"
-          }
-        }
-      }
-    },
-    "Shows how much of the whole timer is left.": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "タイマー全体の残りを見せます。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "전체가 얼마나 남았는지 보여줘요."
           }
         }
       }
@@ -5026,22 +4880,6 @@
         }
       }
     },
-    "This is how a running timer looks. While you set the time, the dial stays a ring — that is what you drag the handle and bells on.": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "タイマーが動いている間の見た目です。時間を決めるときダイヤルはリングのまま — ハンドルとベルをドラッグする場所だからです。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "타이머가 도는 동안의 모습이에요. 시간을 정할 때 다이얼은 원 그대로예요 — 핸들과 종을 끄는 자리라서요."
-          }
-        }
-      }
-    },
     "This shows on screen while you present, when this section's turn comes.": {
       "localizations": {
         "ja": {
@@ -5251,22 +5089,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "타이머 설정"
-          }
-        }
-      }
-    },
-    "Timer Shape": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "タイマーの形"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "타이머 모양"
           }
         }
       }
@@ -5720,6 +5542,22 @@
         }
       }
     },
+    "Turned this one on for you. Pro keeps them unlimited.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今回は1つ追加しました。Proなら制限なしで使えます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이번 한 번은 켜 드렸어요. Pro면 개수 제한이 없어요."
+          }
+        }
+      }
+    },
     "Unknown": {
       "localizations": {
         "ja": {
@@ -6145,6 +5983,38 @@
           "stringUnit": {
             "state": "translated",
             "value": "설정에서 원하는 알림 시간으로 바꿀 수 있어요."
+          }
+        }
+      }
+    },
+    "You use this setup a lot": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この設定をよく使っていますね"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 설정을 자주 쓰시네요"
+          }
+        }
+      }
+    },
+    "You usually run %1$@ with %2$lld alerts around now.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この時間帯はいつも %1$@・通知 %2$lld 個で使っています。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이맘때면 %1$@ 에 알림 %2$lld 개로 쓰시더라고요."
           }
         }
       }
@@ -7468,22 +7338,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "타이머 하나로\n모든 기기에서"
-          }
-        }
-      }
-    },
-    "s": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "秒"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "초"
           }
         }
       }

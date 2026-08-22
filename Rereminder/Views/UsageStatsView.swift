@@ -37,6 +37,8 @@ struct UsageStatsView: View {
     /// 알림 개수 분포를 어느 쪽으로 볼지 — **실행 기준**과 **사람 기준**은 단위가 달라
     /// 한 차트에 겹쳐 그리지 않고 갈아 끼운다(축이 둘이면 없는 관계가 보인다).
     @State private var alertMeasure: AlertMeasure = .runs
+    /// 알림 개수 분포를 결제 여부로 갈라 본다 — **무료 한도를 몇 개로 둘지는 이걸로만 정할 수 있다.**
+    @State private var alertPlan: UsageInsights.PlanFilter = .all
 
     enum AlertMeasure: String, CaseIterable, Identifiable {
         /// 타이머 실행 하나하나를 센다 — "이 앱이 실제로 돌아가는 모양".
@@ -153,10 +155,22 @@ struct UsageStatsView: View {
             statRow("완주 총 횟수", "\(summary.totalCompletions)")
             statRow("완주해 본 설치당 완주", String(format: "%.1f회", summary.completionsPerActiveInstall))
             statRow("이 앱으로 관리한 시간", focusText(summary.totalFocusMinutes))
+
+            // **완주보다 이게 진짜 aha 다.** 알림이 한 번도 울리지 않은 완주는
+            // 평범한 타이머를 쓴 것과 같다 — 이 앱이 판 것이 아니다.
+            let heard = UsageInsights.alertedValueSummary(metrics: metrics)
+            if heard.completions > 0 {
+                highlightRow(title: "알림을 듣고 완주",
+                             value: percent(heard.alertedRunRate),
+                             detail: "완주 \(heard.completions)회 중 \(heard.alertedCompletions)회는 "
+                                   + "끝나기 전 알림이 실제로 울렸어요.")
+                statRow("가치를 경험한 설치",
+                        "\(heard.installsWithAlertedCompletion)곳 (\(percent(heard.alertedInstallRate)))")
+            }
         } header: {
             Text(verbatim: "핵심 가치")
         } footer: {
-            Text(verbatim: "완주율이 이 앱에서 가장 중요한 숫자예요. 타이머를 걸어 놓고 알림이 울릴 때까지 함께 있었다는 뜻이고, 낮으면 도중에 그만두게 만드는 무언가가 있다는 신호예요. 횟수는 기기에서 세서 스냅샷에 실어 보내니 쓰로틀과 무관하게 정확해요.")
+            Text(verbatim: "완주율이 이 앱에서 가장 중요한 숫자예요. 타이머를 걸어 놓고 알림이 울릴 때까지 함께 있었다는 뜻이고, 낮으면 도중에 그만두게 만드는 무언가가 있다는 신호예요.\n\n'알림을 듣고 완주'는 그중에서도 이 앱만의 숫자예요 — 끝에만 울리는 평범한 타이머와 달리, 끝나기 전에 알림이 실제로 울린 실행이에요. 이 비율이 낮으면 사람들이 이 앱을 그냥 타이머로 쓰고 있다는 뜻이고, 그러면 알림 개수로 돈을 받는 구조 자체가 어긋나 있어요.\n\n횟수는 기기에서 세서 스냅샷에 실어 보내니 쓰로틀과 무관하게 정확해요. 2.2.x 이전 버전은 '알림을 듣고 완주'를 보내지 않아 실제보다 낮게 시작해요.")
         }
     }
 
@@ -257,9 +271,9 @@ struct UsageStatsView: View {
     /// 여기는 "평소 몇 개를 거는가"다 — 한 번 5개를 해 본 사람과 늘 5개를 거는 사람은 다르다.
     @ViewBuilder
     private var alertUsageSection: some View {
-        let summary = UsageInsights.alertUsageSummary(metrics: metrics)
+        let summary = UsageInsights.alertUsageSummary(metrics: metrics, plan: alertPlan)
         if summary.totalRuns > 0 {
-            let buckets = UsageInsights.alertRunDistribution(metrics: metrics)
+            let buckets = UsageInsights.alertRunDistribution(metrics: metrics, plan: alertPlan)
             let values = buckets.map { alertMeasure == .runs ? $0.runs : $0.installs }
             let peak = values.max() ?? 0
             Section {
@@ -269,6 +283,18 @@ struct UsageStatsView: View {
                     }
                 } label: {
                     Text(verbatim: "보는 기준")
+                }
+                .pickerStyle(.segmented)
+                .labelsHidden()
+
+                // 무료 사용자의 분포는 한도에 눌린 값이다(1개에서 잘린다).
+                // 눌리지 않은 수요는 **결제한 사람**에게서만 보인다 — 그래서 갈라 본다.
+                Picker(selection: $alertPlan) {
+                    ForEach(UsageInsights.PlanFilter.allCases) { plan in
+                        Text(verbatim: plan.label).tag(plan)
+                    }
+                } label: {
+                    Text(verbatim: "결제 여부")
                 }
                 .pickerStyle(.segmented)
                 .labelsHidden()
@@ -287,13 +313,14 @@ struct UsageStatsView: View {
                                  detail: "타이머 실행 \(summary.totalRuns)회 중 가장 많았던 개수예요.")
                 }
                 statRow("실행당 평균 알림", String(format: "%.1f개", summary.averageAlerts))
-                statRow("알림 2개 이상 건 실행", percent(summary.multiAlertRunRate))
+                statRow("무료 한도(\(ProGate.freePrealertLimit)개) 초과 실행",
+                        percent(summary.multiAlertRunRate))
                 statRow("이 값을 보내온 설치",
                         "\(summary.reportingInstalls)곳 (\(percent(summary.coverageRate)))")
             } header: {
                 Text(verbatim: "주로 쓰는 알림 개수")
             } footer: {
-                Text(verbatim: "타이머를 시작할 때마다 그때 건 알림 개수를 기기에서 세어 보낸 값이에요. '실행 기준'은 타이머 하나하나를, '사람 기준'은 설치마다 가장 자주 쓰는 개수 하나씩을 세요. 아래 '알림 개수 수요'는 최대값이라 한 번만 해 본 것도 잡히는데, 여기는 평소 습관이 보여요. 2.1.2 이전 버전은 아직 이 값을 보내지 않아 '보내온 설치' 비율이 낮게 시작해요.")
+                Text(verbatim: "타이머를 시작할 때마다 그때 건 알림 개수를 기기에서 세어 보낸 값이에요. '실행 기준'은 타이머 하나하나를, '사람 기준'은 설치마다 가장 자주 쓰는 개수 하나씩을 세요.\n\n무료 한도를 올릴지는 '결제'만 켜고 보세요 — 무료 분포는 한도(현재 \(ProGate.freePrealertLimit)개)에 눌린 값이라 '다들 이 정도면 충분하다'는 잘못된 결론이 나요. 결제한 사람이 주로 쓰는 개수가 한도보다 넉넉히 크면 한도를 올려도 팔 것이 남아요.\n\n2.1.2 이전 버전은 아직 이 값을 보내지 않아 '보내온 설치' 비율이 낮게 시작해요.")
             }
         }
     }
