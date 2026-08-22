@@ -731,12 +731,40 @@ enum UsageInsights {
         return histogram.filter { $0.value == maxRuns }.keys.min()
     }
 
+    /// 결제 여부로 표본을 가르는 필터.
+    ///
+    /// **무료 한도를 몇 개로 둘지는 이 두 갈래를 나란히 놓고서만 정할 수 있다.**
+    /// 무료 사용자의 분포는 한도에 눌린 값이라(1개에서 잘린다) 그것만 보면 "다들 1개면 충분하다"는
+    /// 잘못된 결론이 난다. 눌리지 않은 값은 **결제한 사람의 분포**뿐이다 — 거기서 주로 쓰는
+    /// 개수가 3개 이상이라면 무료를 2개로 올려도 팔 것이 남고, 2개라면 파는 것을 그대로 주는 셈이다.
+    enum PlanFilter: String, CaseIterable, Identifiable {
+        case all, free, paid
+        var id: String { rawValue }
+        var label: String {
+            switch self {
+            case .all:  return "전체"
+            case .free: return "무료"
+            case .paid: return "결제"
+            }
+        }
+
+        func includes(_ metrics: [String: Double]) -> Bool {
+            let isPro = (metrics["flag.isPro"] ?? 0) > 0
+            switch self {
+            case .all:  return true
+            case .free: return !isPro
+            case .paid: return isPro
+            }
+        }
+    }
+
     /// 알림 개수 분포 — 실행 기준 합계와 "주로 그 개수를 쓰는 사람" 수를 한 칸에 담아 돌려준다.
-    static func alertRunDistribution(metrics snapshots: [[String: Double]]) -> [AlertRunBucket] {
+    static func alertRunDistribution(metrics snapshots: [[String: Double]],
+                                     plan: PlanFilter = .all) -> [AlertRunBucket] {
         var runsByBucket: [Int: Int] = [:]
         var typicalByBucket: [Int: Int] = [:]
 
-        for metrics in snapshots {
+        for metrics in snapshots where plan.includes(metrics) {
             for (bucket, runs) in alertRunHistogram(metrics: metrics) {
                 runsByBucket[bucket, default: 0] += runs
             }
@@ -750,6 +778,57 @@ enum UsageInsights {
                            runs: runsByBucket[bucket] ?? 0,
                            installs: typicalByBucket[bucket] ?? 0)
         }
+    }
+
+    /// **가치를 경험했나** — 알림을 실제로 듣고 끝까지 간 실행이 얼마나 되나.
+    ///
+    /// 이 앱의 aha 는 "타이머를 끝냈다"가 아니라 **"끝나기 전에 알림이 울려서 도움이 됐다"** 다.
+    /// 그래서 완주(`timerCompletions`) 중 **알림이 울린 완주**(`alertedCompletions`)의 몫을 따로 본다.
+    /// 이 비율이 낮으면 사람들이 이 앱을 *평범한 타이머로* 쓰고 있다는 뜻이고, 그러면 알림 개수로
+    /// 돈을 받는 지금 구조 자체가 어긋나 있다.
+    struct AlertedValueSummary {
+        /// 완주가 한 번이라도 있는 설치 수.
+        let installsWithCompletion: Int
+        /// 알림을 들은 완주가 한 번이라도 있는 설치 수 = **가치를 경험한 사람.**
+        let installsWithAlertedCompletion: Int
+        /// 완주 횟수 합계.
+        let completions: Int
+        /// 그중 알림이 울린 완주 횟수 합계.
+        let alertedCompletions: Int
+
+        /// 실행 기준 — 완주 중 알림을 들은 몫.
+        var alertedRunRate: Double {
+            completions > 0 ? Double(alertedCompletions) / Double(completions) : 0
+        }
+        /// 사람 기준 — 완주해 본 사람 중 알림까지 들어 본 몫.
+        var alertedInstallRate: Double {
+            installsWithCompletion > 0
+                ? Double(installsWithAlertedCompletion) / Double(installsWithCompletion)
+                : 0
+        }
+    }
+
+    static func alertedValueSummary(metrics snapshots: [[String: Double]],
+                                    plan: PlanFilter = .all) -> AlertedValueSummary {
+        var installsWithCompletion = 0
+        var installsWithAlerted = 0
+        var completions = 0
+        var alerted = 0
+
+        for metrics in snapshots where plan.includes(metrics) {
+            let done = Int((metrics[UsageMetrics.Key.timerCompletions.rawValue] ?? 0).rounded())
+            let heard = Int((metrics[UsageMetrics.Key.alertedCompletions.rawValue] ?? 0).rounded())
+            if done > 0 { installsWithCompletion += 1 }
+            if heard > 0 { installsWithAlerted += 1 }
+            completions += done
+            // 옛 버전은 이 값을 보내지 않는다 — 없으면 0 이라 비율만 낮아지고 합계는 망가지지 않는다.
+            alerted += min(heard, done)
+        }
+
+        return AlertedValueSummary(installsWithCompletion: installsWithCompletion,
+                                   installsWithAlertedCompletion: installsWithAlerted,
+                                   completions: completions,
+                                   alertedCompletions: alerted)
     }
 
     /// 분포를 한 줄로 요약한 것 — 차트 위에 세우는 숫자들.
@@ -772,15 +851,17 @@ enum UsageInsights {
         }
     }
 
-    static func alertUsageSummary(metrics snapshots: [[String: Double]]) -> AlertUsageSummary {
-        let buckets = alertRunDistribution(metrics: snapshots)
+    static func alertUsageSummary(metrics snapshots: [[String: Double]],
+                                  plan: PlanFilter = .all) -> AlertUsageSummary {
+        let sample = snapshots.filter { plan.includes($0) }
+        let buckets = alertRunDistribution(metrics: sample)
         let totalRuns = buckets.reduce(0) { $0 + $1.runs }
         let weighted = buckets.reduce(0) { $0 + $1.alerts * $1.runs }
         let paidRuns = buckets.filter { $0.alerts > ProGate.freePrealertLimit }.reduce(0) { $0 + $1.runs }
 
         return AlertUsageSummary(
-            reportingInstalls: snapshots.filter { !alertRunHistogram(metrics: $0).isEmpty }.count,
-            totalInstalls: snapshots.count,
+            reportingInstalls: sample.filter { !alertRunHistogram(metrics: $0).isEmpty }.count,
+            totalInstalls: sample.count,
             totalRuns: totalRuns,
             modeAlerts: buckets.filter { $0.runs > 0 }.max { $0.runs < $1.runs }?.alerts,
             averageAlerts: totalRuns > 0 ? Double(weighted) / Double(totalRuns) : 0,

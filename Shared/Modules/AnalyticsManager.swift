@@ -28,7 +28,10 @@ enum AnalyticsManager {
     enum Event {
         // 타이머 행동
         case timerStarted(durationSeconds: Int, alertCount: Int, presetName: String?)
-        case timerCompleted(durationSeconds: Int)
+        /// - Parameter firedAlertCount: 그 실행에서 **실제로 울린 예비 알림 수**.
+        ///   완주 횟수만으로는 "이 앱이 도움이 됐나"를 알 수 없다 — 알림이 한 번도 울리지 않은
+        ///   완주는 평범한 타이머를 쓴 것과 같다. 이 앱의 aha 는 *울린 알림이 있는 완주*다.
+        case timerCompleted(durationSeconds: Int, firedAlertCount: Int)
         case timerCancelled(remainingSeconds: Int)
         case presetSaved(name: String, durationSeconds: Int)
         case presetUsed(name: String)
@@ -121,8 +124,8 @@ enum AnalyticsManager {
                 var p: [String: Any] = ["duration_seconds": duration, "alert_count": alertCount]
                 if let preset = preset { p["preset_name"] = preset }
                 return p
-            case .timerCompleted(let duration):
-                return ["duration_seconds": duration]
+            case .timerCompleted(let duration, let firedAlerts):
+                return ["duration_seconds": duration, "fired_alert_count": firedAlerts]
             case .timerCancelled(let remaining):
                 return ["remaining_seconds": remaining]
             case .presetSaved(let name, let duration):

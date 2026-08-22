@@ -26,10 +26,12 @@ final class AnalyticsManagerTests: XCTestCase {
         XCTAssertEqual(event.parameters["preset_name"] as? String, "Workout")
     }
 
-    func test_timerCompleted_includesDuration() {
-        let event = AnalyticsManager.Event.timerCompleted(durationSeconds: 1500)
+    func test_timerCompleted_includesDurationAndFiredAlertCount() {
+        let event = AnalyticsManager.Event.timerCompleted(durationSeconds: 1500, firedAlertCount: 2)
         XCTAssertEqual(event.name, "timer_completed")
         XCTAssertEqual(event.parameters["duration_seconds"] as? Int, 1500)
+        // 완주 횟수만으로는 "이 앱이 도움이 됐나"를 알 수 없다 — 울린 알림 수가 그 답이다.
+        XCTAssertEqual(event.parameters["fired_alert_count"] as? Int, 2)
     }
 
     func test_timerCancelled_includesRemainingSeconds() {

@@ -402,4 +402,76 @@ final class UsageInsightsTests: XCTestCase {
         let histogram = UsageInsights.alertRunHistogram(metrics: [key: 4])
         XCTAssertEqual(histogram[UsageMetrics.AlertRun.topBucket], 4)
     }
+
+    // MARK: - 무료 한도를 몇 개로 둘까 (결제 여부로 가른 분포)
+
+    func test_alertRunDistribution_planFilterSplitsFreeAndPaid() {
+        let snapshots: [[String: Double]] = [
+            ["alertRuns.1": 8],                         // 무료 — 한도에 눌려 1개
+            ["alertRuns.1": 5],                         // 무료
+            ["alertRuns.3": 6, "flag.isPro": 1],        // 결제 — 눌리지 않은 값
+            ["alertRuns.4": 4, "flag.isPro": 1]         // 결제
+        ]
+
+        let free = UsageInsights.alertRunDistribution(metrics: snapshots, plan: .free)
+        let paid = UsageInsights.alertRunDistribution(metrics: snapshots, plan: .paid)
+
+        XCTAssertEqual(free.first { $0.alerts == 1 }?.runs, 13)
+        XCTAssertEqual(free.first { $0.alerts == 3 }?.runs, 0,
+                       "무료 표본에 결제 사용자의 실행이 섞이면 한도 판단이 통째로 틀어진다")
+        XCTAssertEqual(paid.first { $0.alerts == 3 }?.runs, 6)
+        XCTAssertEqual(paid.first { $0.alerts == 4 }?.runs, 4)
+        XCTAssertEqual(paid.first { $0.alerts == 1 }?.runs, 0)
+
+        // 전체는 둘의 합이어야 한다
+        let all = UsageInsights.alertRunDistribution(metrics: snapshots, plan: .all)
+        XCTAssertEqual(all.reduce(0) { $0 + $1.runs }, 23)
+    }
+
+    func test_alertUsageSummary_respectsPlanFilter() {
+        let snapshots: [[String: Double]] = [
+            ["alertRuns.1": 10],
+            ["alertRuns.4": 5, "flag.isPro": 1]
+        ]
+        let paid = UsageInsights.alertUsageSummary(metrics: snapshots, plan: .paid)
+        XCTAssertEqual(paid.totalInstalls, 1)
+        XCTAssertEqual(paid.totalRuns, 5)
+        XCTAssertEqual(paid.modeAlerts, 4)
+    }
+
+    // MARK: - 가치 경험 (알림을 들은 완주)
+
+    func test_alertedValueSummary_countsOnlyCompletionsWithAlerts() {
+        let snapshots: [[String: Double]] = [
+            ["timerCompletions": 10, "alertedCompletions": 4],
+            ["timerCompletions": 3],                       // 완주는 했지만 알림은 못 들었다
+            ["timerCompletions": 2, "alertedCompletions": 2]
+        ]
+        let summary = UsageInsights.alertedValueSummary(metrics: snapshots)
+
+        XCTAssertEqual(summary.completions, 15)
+        XCTAssertEqual(summary.alertedCompletions, 6)
+        XCTAssertEqual(summary.installsWithCompletion, 3)
+        XCTAssertEqual(summary.installsWithAlertedCompletion, 2,
+                       "가치를 경험한 사람 = 알림을 들은 완주가 한 번이라도 있는 설치")
+        XCTAssertEqual(summary.alertedRunRate, 6.0 / 15.0, accuracy: 0.0001)
+        XCTAssertEqual(summary.alertedInstallRate, 2.0 / 3.0, accuracy: 0.0001)
+    }
+
+    func test_alertedValueSummary_clampsToCompletionsForOldSnapshots() {
+        // 옛 버전은 alertedCompletions 를 보내지 않는다 — 없으면 0. 그리고 완주보다 클 수는 없다.
+        let snapshots: [[String: Double]] = [
+            ["timerCompletions": 5],
+            ["timerCompletions": 2, "alertedCompletions": 9]
+        ]
+        let summary = UsageInsights.alertedValueSummary(metrics: snapshots)
+        XCTAssertEqual(summary.alertedCompletions, 2)
+        XCTAssertLessThanOrEqual(summary.alertedCompletions, summary.completions)
+    }
+
+    func test_alertedValueSummary_withNoData_doesNotDivideByZero() {
+        let summary = UsageInsights.alertedValueSummary(metrics: [])
+        XCTAssertEqual(summary.alertedRunRate, 0)
+        XCTAssertEqual(summary.alertedInstallRate, 0)
+    }
 }

@@ -26,8 +26,15 @@ enum UsageMetrics {
     enum Key: String, CaseIterable {
         /// 타이머를 시작한 횟수.
         case timerStarts
-        /// 타이머를 끝까지 마친 횟수 — 이 앱이 실제로 쓰였다는 가장 직접적인 증거.
+        /// 타이머를 끝까지 마친 횟수.
         case timerCompletions
+        /// **예비 알림이 실제로 울린 채로** 끝까지 마친 횟수 — 이 앱의 aha moment 카운터.
+        ///
+        /// 왜 `timerCompletions` 로는 부족한가: 알림이 한 번도 울리지 않은 완주는 평범한
+        /// 타이머를 쓴 것과 같다. 이 앱이 파는 것은 "끝나기 전에 여러 번 알려 준다"이므로,
+        /// **그 알림을 실제로 들은 완주**만이 가치를 경험했다는 증거다.
+        /// 결제 판단(무료 한도를 몇 개로 둘까)의 기준선이 되는 값이라 따로 센다.
+        case alertedCompletions
         /// 도중에 그만둔 횟수.
         case timerCancels
         /// 완주한 타이머의 시간 합계(분) — "이 앱으로 관리한 시간"의 총량.
@@ -93,8 +100,10 @@ enum UsageMetrics {
             noteMax(.alertsMax, Double(alertCount))
             incrementAlertRun(alertCount)
             if alertCount > ProGate.freePrealertLimit { increment(.multiAlertRuns) }
-        case .timerCompleted(let durationSeconds):
+        case .timerCompleted(let durationSeconds, let firedAlertCount):
             increment(.timerCompletions)
+            // 알림을 실제로 들은 완주만 따로 센다 — 이게 "이 앱이 도움이 됐다"의 유일한 증거다.
+            if firedAlertCount > 0 { increment(.alertedCompletions) }
             // 초가 아니라 분으로 누적한다 — 초로 쌓으면 Double 정밀도만 낭비되고 읽기도 어렵다.
             increment(.focusMinutes, by: Double(max(0, durationSeconds)) / 60)
         case .timerCancelled:
