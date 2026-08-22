@@ -715,6 +715,22 @@
         }
       }
     },
+    "A line on top holds the whole timer, and the ring counts down just the section you are in.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "上のラインが全体を受け持ち、リングは今のセクションだけを数えます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "위의 줄이 전체를 갖고, 링은 지금 지나는 구간만 셉니다."
+          }
+        }
+      }
+    },
     "A mode to quickly verify that the timer works correctly.\n\n• 10x: 10-minute timer finishes in 1 minute\n• 30x: 10-minute timer finishes in 20 seconds\n• 60x: 10-minute timer finishes in 10 seconds\n\nYou can quickly test all features including alerts, pre-alerts, and overtime.\n\n⚠️ Make sure to turn off test mode for actual use!": {
       "localizations": {
         "ja": {
@@ -1531,22 +1547,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "완료"
-          }
-        }
-      }
-    },
-    "Double Ring": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "二重リング"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "이중 링"
           }
         }
       }
@@ -2385,6 +2385,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "라이트"
+          }
+        }
+      }
+    },
+    "Line and Ring": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ライン + リング"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "줄 + 링"
           }
         }
       }
@@ -3245,22 +3261,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mac에서 두번알림을 여세요. 메뉴 막대에 남은 시간이 보여요."
-          }
-        }
-      }
-    },
-    "Outer ring is the whole timer, inner ring is the section you are in.": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "外側のリングは全体、内側のリングは今のセクションです。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "바깥 링은 전체, 안쪽 링은 지금 지나는 구간이에요."
           }
         }
       }
@@ -5523,6 +5523,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "타이머, %@"
+          }
+        }
+      }
+    },
+    "Total": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "全体"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "전체"
           }
         }
       }

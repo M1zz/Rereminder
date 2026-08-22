@@ -28,10 +28,20 @@ struct SectionProgressBar: View {
 
     var barHeight: CGFloat = 14
 
+    /// 칸 아래 남은 시간 숫자를 붙일지.
+    ///
+    /// **끄는 자리는 하나 — "줄 + 링" 모양의 원 위 일자 줄이다.** 거기서는 이 막대가 주인공이
+    /// 아니라 *전체가 어디쯤인가*만 답하고, 숫자는 링 안쪽(지금 구간)과 줄 끝(전체) 둘로 충분하다.
+    /// 칸마다 숫자를 또 붙이면 한 화면에 시간이 다섯 개가 되어 원래 문제로 돌아간다.
+    var showsLabels: Bool = true
+
     /// 칸 사이 여백 — 여기 종이 앉는다(막대가 두꺼울수록 종도 커지므로 같이 벌어진다).
     private var gap: CGFloat { max(3, barHeight * 0.32) }
     private let minSlotWidth: CGFloat = 6
     private let labelSpacing: CGFloat = 6
+
+    /// 숫자가 없으면 좌우로 더 벌려 쓴다 — 잘릴 글자가 없으므로 여백을 남길 이유가 없다.
+    private var horizontalPadding: CGFloat { showsLabels ? 24 : 8 }
 
     var body: some View {
         GeometryReader { geometry in
@@ -41,11 +51,13 @@ struct SectionProgressBar: View {
                                                minWidth: minSlotWidth)
             VStack(alignment: .leading, spacing: labelSpacing) {
                 bar(slots: slots)
-                labels(slots: slots, totalWidth: geometry.size.width)
+                if showsLabels {
+                    labels(slots: slots, totalWidth: geometry.size.width)
+                }
             }
         }
-        .frame(height: barHeight + labelSpacing + Self.labelHeight)
-        .padding(.horizontal, 24)
+        .frame(height: showsLabels ? barHeight + labelSpacing + Self.labelHeight : barHeight)
+        .padding(.horizontal, horizontalPadding)
         // 1초마다 툭툭 끊기지 않게 재생헤드가 미끄러진다. 구간 id 는 그대로라 칸이 새로 생기지 않는다.
         .animation(.linear(duration: 0.2), value: elapsedSec)
         .accessibilityElement(children: .contain)

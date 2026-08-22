@@ -159,12 +159,6 @@ struct OnboardingDemoRing: View {
                 }
             }
 
-            if let progress = sectionProgress, progress.isDivided {
-                SectionInnerRing(progress: progress,
-                                 diameter: SectionInnerRing.diameter(ringSize: size, lineWidth: lineWidth),
-                                 lineWidth: SectionInnerRing.lineWidth(ringLineWidth: lineWidth))
-            }
-
             // 알림 종 — 이 앱의 주인공이라 체험에서도 그대로 보인다
             ForEach(alerts, id: \.self) { alert in
                 let fraction = Double(alert) / Double(totalSeconds)

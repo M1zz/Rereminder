@@ -91,11 +91,9 @@ struct TimerMainView: View {
     /// 다만 60분을 넘는 타이머까지 비율로 누르면 90분이 한 바퀴로 압축돼, 방금 대기 화면에서 보던
     /// **두 줄이 사라진다.** 그래서 긴 타이머는 진행 중에도 절대 각도를 유지한다.
     private var usesAbsoluteRing: Bool {
-        // **이중 링을 고른 경우는 예외다.** 절대 각도로 그리면 60분을 넘는 타이머의 안쪽 줄이
-        // "2바퀴째"가 되어, 사람이 기대한 안쪽 링(=지금 구간)과 자리가 겹친다.
-        // 100분 타이머를 걸면 시작하자마자 안쪽이 40/60 만 찬 채로 도는 것처럼 보였다.
-        // 이중 링에서는 바깥이 **전체 한 바퀴**여야 안쪽(이 구간)과 짝이 맞는다.
-        if isProgressMode, timerShape.showsSectionRing { return false }
+        // **링이 지금 구간을 셀 때는 예외다.** 그때 링의 한 바퀴는 "이 구간"이지 60분이 아니다.
+        // (전체 길이는 원 위의 일자 줄이 맡으므로 링에서 바퀴 수를 셀 이유가 없다.)
+        if ringSectionProgress != nil { return false }
         return DialRing.usesAbsoluteCoordinates(isRunning: isProgressMode,
                                                 configuredSeconds: screenVM.configuredMainSeconds)
     }
@@ -130,7 +128,9 @@ struct TimerMainView: View {
     }
 
     private var hasSecondRow: Bool {
-        DialRing.rows(laps: usesAbsoluteRing
+        // 링이 한 구간만 그리면 두 줄이 생길 수 없다 — 구간은 언제나 전체보다 짧다.
+        if ringSectionProgress != nil { return false }
+        return DialRing.rows(laps: usesAbsoluteRing
                       ? (isProgressMode ? remainingLaps : CGFloat(max(0, screenVM.mainAngle) / 360.0))
                       : ratio).inner > 0
     }
@@ -141,11 +141,6 @@ struct TimerMainView: View {
         if hasSecondRow {
             // 두 줄이면 안쪽 줄 안쪽이 한계
             return max(0, innerRingSize(size, lineWidth: lineWidth) - lineWidth * 2 - 24)
-        }
-        if innerSectionRing != nil {
-            // 이중 링이면 안쪽 구간 링 안쪽이 한계 (그 링은 본 링보다 얇다)
-            let ring = sectionRingSize(size, lineWidth: lineWidth)
-            return max(0, ring - sectionRingWidth(lineWidth) * 2 - 20)
         }
         // 링 두께(양쪽) + 링에 닿지 않을 여백
         return max(0, size - lineWidth * 2 - 24)
@@ -163,6 +158,9 @@ struct TimerMainView: View {
     }
 
     private var markers: [CGFloat] {
+        // 링이 "지금 구간"만 그리는 동안 알림 지점은 링 좌표에 없다 — 전체 시간 좌표의 값이라
+        // 그대로 얹으면 엉뚱한 각도에 종이 선다. 그 종들은 원 위의 일자 줄이 갖고 있다.
+        guard ringSectionProgress == nil else { return [] }
         let offsets = liveOffsets.sorted()
         guard usesAbsoluteRing else {
             // 비율 좌표: 10분 타이머의 1분 전 알림 = 링의 10% 지점
@@ -176,8 +174,11 @@ struct TimerMainView: View {
         GeometryReader { geometry in
             let availableHeight = geometry.size.height
             let availableWidth = geometry.size.width
+            // 원 위에 전체 줄이 서면 그 높이만큼 원이 자리를 내준다.
+            // (원을 그대로 두면 작은 화면에서 줄이 동작 버튼을 밀어낸다)
+            let stripReserve: CGFloat = showsTotalStrip ? 52 : 0
             // 발표 모드: 하단 구간 리스트 공간 확보를 위해 원을 축소
-            let clockSize = min(availableWidth * 0.85, availableHeight * 0.55)
+            let clockSize = min(availableWidth * 0.85, (availableHeight - stripReserve) * 0.55)
                 * (isPresentationMode ? 0.72 : 1.0)
             let lineWidth = clockSize * 0.083
             let spacing = availableHeight * 0.01
@@ -207,6 +208,18 @@ struct TimerMainView: View {
                         .zIndex(1)
                         .transition(.opacity)
                 } else {
+                    // **전체는 줄, 지금 구간은 링.** 같은 질문 둘을 같은 모양으로 그리지 않는다 —
+                    // 원 두 겹이던 시절에는 볼 때마다 어느 링이 무엇인지 골라야 했다.
+                    if showsTotalStrip {
+                        TotalTimelineStrip(
+                            segments: derivedSegments,
+                            elapsedSec: elapsedSec,
+                            totalRemainingText: screenVM.timeString(
+                                from: max(0, screenVM.timerVM.remaining))
+                        )
+                            .padding(.bottom, spacing * 2)
+                            .transition(.opacity)
+                    }
                     // 드래그 배지가 원 밖으로 나가므로 아래쪽 템플릿 바·구간 리스트보다 위에 그린다
                     clockView(size: clockSize, lineWidth: lineWidth, geometry: geometry)
                         .zIndex(1)
@@ -379,14 +392,6 @@ struct TimerMainView: View {
                     .transition(.opacity)
             }
 
-            // 이중 링의 안쪽 링 — 지금 지나는 구간이 얼마 남았나 (진행 중, 구간 2개 이상, 한 줄일 때)
-            if let progress = innerSectionRing {
-                SectionInnerRing(progress: progress,
-                                 diameter: sectionRingSize(size, lineWidth: lineWidth),
-                                 lineWidth: sectionRingWidth(lineWidth))
-                    .transition(.opacity)
-            }
-
             // 실행/일시정지 중: 줄어드는 호의 끝점을 동그라미로 표시
             if screenVM.state == .running || screenVM.state == .paused {
                 progressEdgeDot(size: size, lineWidth: lineWidth)
@@ -397,8 +402,12 @@ struct TimerMainView: View {
                 dragPointer(size: size, lineWidth: lineWidth)
             }
 
-            // 알림 노브: 대기 중엔 드래그 핸들, 실행/일시정지 중엔 알림 시점 표시
-            alertKnobs(size: size, lineWidth: lineWidth)
+            // 알림 노브: 대기 중엔 드래그 핸들, 실행/일시정지 중엔 알림 시점 표시.
+            // 링이 "지금 구간"만 그리는 동안에는 숨긴다 — 알림 지점은 전체 시간 좌표의 값이라
+            // 구간 한 바퀴 위에 얹으면 엉뚱한 각도에 선다(그 종들은 원 위의 줄이 갖고 있다).
+            if ringSectionProgress == nil {
+                alertKnobs(size: size, lineWidth: lineWidth)
+            }
 
             // 드래그 중 뜨는 배지는 언제나 최상단이다.
             // 3시·9시 방향 종은 배지가 가운데 시간 글자와 같은 높이에 오는데,
@@ -454,7 +463,9 @@ struct TimerMainView: View {
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
                 }
-                centerTimeDisplay(fontSize: fontSize, section: centerSection)
+                centerTimeDisplay(fontSize: fontSize,
+                                  section: centerSection,
+                                  sectionIsPrimary: centerShowsSectionAsPrimary)
             }
             // 링 안쪽으로 가둔다 — 넘치면 그 부분이 링 위 조작을 먹는다
             .frame(maxWidth: centerDiameter)
@@ -521,7 +532,8 @@ struct TimerMainView: View {
 
     /// 줄어드는 호의 움직이는 끝점 표시 — 대기 중 드래그 핸들과 같은 시각 언어(흰 원)
     private func progressEdgeDot(size: CGFloat, lineWidth: CGFloat) -> some View {
-        let angle = Double(usesAbsoluteRing ? remainingLaps : ratio) * 360.0
+        let angle = ringSectionProgress.map { $0.remainingRatio * 360.0 }
+            ?? Double(usesAbsoluteRing ? remainingLaps : ratio) * 360.0
         return Circle()
             .fill(.white)
             .frame(width: lineWidth * 0.9, height: lineWidth * 0.9)
@@ -547,7 +559,9 @@ struct TimerMainView: View {
     /// 남은 호만 줄어들고 색 경계는 그 자리에 그대로 있어서, 경계를 지날 때마다 색이 하나씩 없어진다.
     /// 오버타임에서는 그릴 호 자체가 없어(0) 빨간 단색 경로로 넘긴다.
     private var showsAlertSectionColors: Bool {
-        !liveOffsets.isEmpty && screenVM.state != .overtime
+        // 링이 "지금 구간" 하나만 그리는 동안에는 나눌 경계가 링 위에 없다 — 그 구간의 색 하나다.
+        guard ringSectionProgress == nil else { return false }
+        return !liveOffsets.isEmpty && screenVM.state != .overtime
     }
 
     /// 이중 링의 **안쪽 링** — "이 구간이 얼마 남았나".
@@ -573,13 +587,18 @@ struct TimerMainView: View {
     /// 대기 중에는 언제나 다이얼이라 여기서 걸러진다.
     private var usesLinearShape: Bool { isProgressMode && !timerShape.usesDial }
 
-    /// 원 안쪽에 "이 구간" 링을 한 겹 더 그릴 때인가.
-    /// **두 줄 링(60분 초과)이면 그리지 않는다** — 그 자리가 이미 2바퀴째다. 같은 자리에 다른
-    /// 뜻을 겹치면 어느 링이 무엇인지 매번 배워야 한다.
-    private var innerSectionRing: TimerSections.Progress? {
-        guard timerShape.showsSectionRing, !hasSecondRow else { return nil }
+    /// **링이 이 구간을 셀 때의 그 구간.** nil 이면 링은 예전처럼 전체를 센다.
+    ///
+    /// 구간이 하나뿐이면(`isDivided == false` → `sectionProgress` 가 nil) 여기도 nil 이다 —
+    /// 나눌 것이 없는데 링만 구간으로 바꾸면 위의 줄과 링이 같은 말을 두 번 하게 된다.
+    private var ringSectionProgress: TimerSections.Progress? {
+        guard timerShape.ringShowsSection else { return nil }
         return sectionProgress
     }
+
+    /// 원 위에 전체를 그리는 일자 줄을 세울 때인가 — 링이 구간을 세는 동안에만.
+    /// 링이 전체를 세고 있는데 줄까지 전체를 그리면 그게 바로 "타이머 2개"다.
+    private var showsTotalStrip: Bool { ringSectionProgress != nil }
 
     /// 가운데 큰 숫자를 "이 구간"의 남은 시간으로 바꿀 때인가.
     /// 원형 링 하나만 고른 사람은 전체를 보려는 것이므로 바꾸지 않는다.
@@ -587,14 +606,9 @@ struct TimerMainView: View {
         timerShape == .ring ? nil : sectionProgress
     }
 
-    // 두께·간격 규칙은 링을 그리는 쪽(`SectionInnerRing`)이 갖는다 — 워치와 같은 값을 써야 한다.
-    private func sectionRingWidth(_ lineWidth: CGFloat) -> CGFloat {
-        SectionInnerRing.lineWidth(ringLineWidth: lineWidth)
-    }
-
-    private func sectionRingSize(_ size: CGFloat, lineWidth: CGFloat) -> CGFloat {
-        SectionInnerRing.diameter(ringSize: size, lineWidth: lineWidth)
-    }
+    /// 가운데 큰 숫자가 **구간 시간**인가(전체는 위의 줄이 갖는다).
+    /// 막대·접은 줄은 여전히 전체가 크고 구간이 그 아래 작은 줄이다.
+    private var centerShowsSectionAsPrimary: Bool { ringSectionProgress != nil }
 
     /// 한 바퀴(60분)를 넘어간 시간은 **안쪽 줄**에 그린다.
     /// 다이얼 최대가 2바퀴(120분, `TimeMapper.maxAngle`)라 줄은 둘이면 충분하다.
@@ -643,7 +657,12 @@ struct TimerMainView: View {
         let inner: CGFloat
         let color: Color
 
-        if screenVM.state == .running || screenVM.state == .paused {
+        if let section = ringSectionProgress {
+            // 링이 **이 구간 하나**를 센다 — 한 바퀴 = 이 구간의 길이. 전체는 원 위의 줄이 갖는다.
+            // 색은 그 구간의 색 그대로여야 위의 줄에서 지금 지나는 칸과 이어져 읽힌다.
+            (outer, inner, color) = (CGFloat(section.remainingRatio), 0,
+                                     SectionPalette.color(section.index))
+        } else if screenVM.state == .running || screenVM.state == .paused {
             // 실행/Pause 중: 남은 시간이 줄어드는 링.
             // 짧은 타이머는 비율(설정 시간 = 한 바퀴), 60분을 넘으면 절대 각도라 두 줄이 유지된다.
             let rows = DialRing.rows(laps: usesAbsoluteRing ? remainingLaps : ratio)
@@ -664,9 +683,11 @@ struct TimerMainView: View {
             outerFraction: outer,
             innerFraction: inner,
             // 설정 시간 전체 길이(바퀴 수 포함) — 구간 색 분할이 바퀴를 걸쳐도 이어지도록
-            totalFraction: isProgressMode
-                ? outer + inner
-                : CGFloat(max(0, screenVM.mainAngle) / 360.0),
+            totalFraction: ringSectionProgress != nil
+                ? 1
+                : (isProgressMode
+                   ? outer + inner
+                   : CGFloat(max(0, screenVM.mainAngle) / 360.0)),
             innerRingReveal: innerRingReveal,
             markers: markers,
             showsSectionColors: showsAlertSectionColors,
@@ -898,35 +919,34 @@ struct TimerMainView: View {
     /// 아래 줄 앞의 점은 링의 그 구간 색이라 "저 링 = 이 숫자"가 이어진다.
     ///
     /// ⚠️ 버튼은 원 밖에 있다(`body`). 안에 두면 이 두 줄이 들어갈 자리가 없다.
-    private func centerTimeDisplay(fontSize: CGFloat, section: TimerSections.Progress?) -> some View {
+    /// - Parameter sectionIsPrimary: 큰 숫자를 **이 구간**의 남은 시간으로 놓는가.
+    ///   "줄 + 링"에서만 켠다 — 거기서는 전체가 이미 원 위의 줄에 있어서, 가운데까지 전체를
+    ///   적으면 같은 숫자가 한 화면에 둘이 된다. 나머지 모양은 전체가 크고 구간이 그 아래다.
+    private func centerTimeDisplay(fontSize: CGFloat,
+                                   section: TimerSections.Progress?,
+                                   sectionIsPrimary: Bool = false) -> some View {
         let isTicking = screenVM.state == .running || screenVM.state == .overtime
         let totalText = isTicking
             ? screenVM.timeString(from: screenVM.timerVM.remaining)
             : mmss(sec: screenVM.mainSeconds, min: screenVM.mainMinutes)
+        let primarySection = sectionIsPrimary ? section : nil
 
         return VStack(spacing: fontSize * 0.08) {
-            Text(totalText)
+            // 구간이 주인공일 때도 **색 점을 붙이지 않는다** — 링이 이미 그 구간 색이라 같은 말을
+            // 한 번 더 하는 셈이고, 무엇보다 점만큼 숫자가 밀려 원 한가운데에서 벗어난다.
+            Text(primarySection.map { screenVM.timeString(from: TimeInterval($0.remainingSec)) }
+                 ?? totalText)
                 .font(.system(size: fontSize, weight: .bold, design: .rounded))
                 .monospacedDigit()
                 .minimumScaleFactor(0.5)
                 .lineLimit(1)
                 .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
-
-            if let section {
-                HStack(spacing: fontSize * 0.16) {
-                    Circle()
-                        .fill(SectionPalette.color(section.index))
-                        .frame(width: fontSize * 0.2, height: fontSize * 0.2)
-                    Text(screenVM.timeString(from: TimeInterval(section.remainingSec)))
-                        .monospacedDigit()
-                }
-                // 이 줄도 **읽으라고 있는 숫자**다 — 흐린 회색 작은 글씨로 두면 안 보인다.
-                // 전체보다는 작게 두되(주는 전체), 멀리서도 읽히는 크기로.
-                .font(.system(size: fontSize * 0.62, weight: .bold, design: .rounded))
-                .foregroundStyle(.primary.opacity(0.85))
-                .lineLimit(1)
-                .minimumScaleFactor(0.6)
-                .transition(.opacity)
+                // 구간이 바뀌면 새 숫자다 — 이어서 세는 것처럼 보이면 안 된다
+                .id(primarySection?.index ?? -1)
+            // 전체가 큰 숫자일 때만 구간이 그 아래 한 줄로 따라붙는다.
+            // (여기서는 색 점이 필요하다 — 위아래 두 숫자 중 어느 것이 구간인지 가릴 표시가 없다.)
+            if !sectionIsPrimary, let section {
+                sectionTimeRow(section, fontSize: fontSize * 0.62)
             }
         }
         .onTapGesture {
@@ -956,6 +976,25 @@ struct TimerMainView: View {
         }
     }
 
+    /// "● 4:12" — 구간 색 점 + 그 구간의 남은 시간. 전체 숫자 **아래 붙는 작은 줄** 전용이다.
+    ///
+    /// 점 색이 링(또는 위 줄의 지금 칸)과 같아야 "이 숫자가 저 그림"이 읽힌다.
+    /// 이 줄도 **읽으라고 있는 숫자**다 — 흐린 회색 작은 글씨로 두면 안 보인다.
+    private func sectionTimeRow(_ section: TimerSections.Progress, fontSize: CGFloat) -> some View {
+        HStack(spacing: fontSize * 0.16) {
+            Circle()
+                .fill(SectionPalette.color(section.index))
+                .frame(width: fontSize * 0.2, height: fontSize * 0.2)
+            Text(screenVM.timeString(from: TimeInterval(section.remainingSec)))
+                .monospacedDigit()
+        }
+        .font(.system(size: fontSize, weight: .bold, design: .rounded))
+        .foregroundStyle(.primary.opacity(0.85))
+        .lineLimit(1)
+        .minimumScaleFactor(0.6)
+        .transition(.opacity)
+    }
+
     /// 실행/일시정지/오버타임이 아닐 때만 시간 편집 가능
     /// (발표 모드에서도 다이얼·알림 편집 가능 — 알림이 구간 경계를 정의한다)
     private var isTimeEditable: Bool {
@@ -964,11 +1003,13 @@ struct TimerMainView: View {
 
     /// VoiceOver가 읽어줄 시간 값 (편집 중이면 설정값, 진행 중이면 남은 시간)
     private var accessibilityTimeValue: String {
-        // 가운데가 두 줄이면 화면에 값이 둘이다 — 큰 숫자(전체)와 그 아래(이 구간). 둘 다 읽어 준다.
         if let section = centerSection {
-            let totalTime = spokenTime(totalSeconds: max(0, Int(screenVM.timerVM.remaining)))
-            let sectionTime = spokenTime(totalSeconds: section.remainingSec)
-            return "\(totalTime), \(String(localized: "Section time remaining")) \(sectionTime)"
+            let sectionTime = "\(String(localized: "Section time remaining")) "
+                + spokenTime(totalSeconds: section.remainingSec)
+            // 링이 구간을 세면 가운데 값은 그 구간 하나다 — 전체는 원 위의 줄이 따로 읽어 준다.
+            // 아니면 화면에 값이 둘이다(큰 숫자=전체, 그 아래=이 구간) — 둘 다 읽어 준다.
+            guard !centerShowsSectionAsPrimary else { return sectionTime }
+            return "\(spokenTime(totalSeconds: max(0, Int(screenVM.timerVM.remaining)))), \(sectionTime)"
         }
         if screenVM.state == .running || screenVM.state == .overtime {
             return spokenTime(totalSeconds: max(0, Int(screenVM.timerVM.remaining)))
