@@ -67,6 +67,9 @@ final class ThemeManager: ObservableObject {
     @Published var currentTheme: Theme {
         didSet {
             UserDefaults.standard.set(currentTheme.id, forKey: "selectedThemeID")
+            // 위젯·Live Activity 가 같은 색을 쓰도록 앱 그룹에도 한 벌 적어 둔다 —
+            // 확장은 `UserDefaults.standard` 를 읽지 못한다(자기 컨테이너를 본다).
+            SharedAccent.write(hex: currentTheme.hex)
         }
     }
 
@@ -86,6 +89,9 @@ final class ThemeManager: ObservableObject {
         currentTheme = Theme.presets.first { $0.id == savedID } ?? Theme.presets[0]
         let savedMode = UserDefaults.standard.string(forKey: "appearanceMode") ?? "dark"
         appearanceMode = AppearanceMode(rawValue: savedMode) ?? .dark
+        // ⚠️ init 에서는 didSet 이 돌지 않는다 — 여기서 한 번 써 주지 않으면 테마를 바꾸기 전까지
+        //    확장은 기본색만 보게 된다(업데이트 직후 라이브 액티비티가 혼자 파란색으로 남는다).
+        SharedAccent.write(hex: currentTheme.hex)
     }
 
     // MARK: - Theme Selection
@@ -117,24 +123,4 @@ final class ThemeManager: ObservableObject {
     }
     #endif
 
-}
-
-// MARK: - Color hex init
-
-extension Color {
-    init(hex: String) {
-        let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        var int: UInt64 = 0
-        Scanner(string: hex).scanHexInt64(&int)
-        let r, g, b: UInt64
-        switch hex.count {
-        case 3:
-            (r, g, b) = ((int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-        case 6:
-            (r, g, b) = (int >> 16, int >> 8 & 0xFF, int & 0xFF)
-        default:
-            (r, g, b) = (0, 122, 255)
-        }
-        self.init(red: Double(r) / 255, green: Double(g) / 255, blue: Double(b) / 255)
-    }
 }

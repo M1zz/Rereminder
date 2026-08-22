@@ -336,6 +336,25 @@ extension TimerView {
   복원하기 전일 수 있고, 그때는 복원 뒤에 적용되어야 한다.
 - 테스트: `RereminderTests/LiveActivityCommandTests.swift`
 
+### Live Activity 생김새 — 앱과 같은 색 체계
+잠금화면·다이나믹 아일랜드는 **앱과 같은 색 규칙**을 쓴다. 예전에는 여기만 초록(재개)·주황
+(일시정지)·빨강(정지) 세 원색을 `.borderedProminent` 사각 버튼으로 칠하고 keyline 도 주황
+고정이라, 앱을 보다가 잠금화면을 보면 **다른 앱처럼** 보였다.
+
+- 진행·강조 = **사용자가 고른 테마 강조색**. ⚠️ 확장은 `UserDefaults.standard` 를 읽지 못하므로
+  (자기 컨테이너를 본다) 앱이 테마를 바꿀 때마다 **앱 그룹에 hex 를 한 벌 적어 둔다**
+  (`SharedAccent`). `ThemeManager` 의 `didSet` **과 `init` 양쪽**에서 쓴다 — init 에서는 didSet 이
+  돌지 않아, 그것만 빼먹으면 업데이트 직후 잠금화면만 기본색으로 남는다.
+- 버튼은 **동그라미**, 색도 앱과 같다: 정지 `DSColor.plain`(회색, 왼쪽) / 일시정지
+  `DSColor.negativeSoft`(주황) / 재개 `DSColor.positive`. 배치도 앱의 원 안과 같은 순서다.
+- ⚠️ **주황을 진행 표시에 쓰지 말 것** — 이 앱에서 주황은 알림 종의 색이다.
+- ⚠️ 카운트다운은 **`Text(timerInterval:countsDown:)`** 으로 그린다.
+  `Text(endDate, style: .timer)` 는 잠금화면의 큰 글씨에서 iOS 가 **"8 minutes" 같은 자연어**로
+  대체해 버려 초가 사라진다(다이나믹 아일랜드 컴팩트에서는 "9:10" 으로 나와 더 헷갈렸다).
+- `Color(hex:)` 는 `SharedAccent.swift` 에 있다(예전엔 `ThemeManager` 안). ⚠️ 그 파일은 앱·위젯
+  확장·**App Clip** 세 타겟에 모두 들어가야 한다 — 클립도 `ThemeManager` 를 쓰므로 빠지면
+  클립 빌드가 깨진다.
+
 ### 알림 배지 (종을 옮길 때 뜨는 툴팁)
 종 노브를 끌면 그 지점을 **두 가지로** 읽어줍니다. 발표자는 "몇 분 남았나"와
 "몇 분째 말하고 있나"를 둘 다 알아야 하기 때문입니다.
