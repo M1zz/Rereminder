@@ -33,8 +33,16 @@ struct DeviceLinkChips: View {
 
     /// 칩 안쪽 높이 — **심볼만 있는 칩과 글자까지 있는 칩의 높이를 같게 맞춘다.**
     /// 그냥 두면 글자가 있는 쪽만 커져서 나란히 선 두 칩의 키가 달라 보인다.
-    /// (글자 크기 설정을 키우면 이 값도 같이 커진다)
+    /// (글자 크기 설정을 키우면 이 값도 같이 커지되, 아래 폰트 상한만큼만 커진다)
     @ScaledMetric(relativeTo: .caption) private var chipContentHeight: CGFloat = 16
+
+    /// ⚠️ 칩 글자는 **상한을 둔다.** `.caption` 은 접근성 크기에서 끝없이 커져서
+    ///    "Not connected" 가 캡슐 밖으로 삐져나오고 두 칩이 서로 겹쳤다.
+    ///    칩은 보조 정보다 — 주인공은 원 안의 시간이다.
+    private let labelBase: CGFloat = 12
+    private let labelMax: CGFloat = 19
+    private let symbolBase: CGFloat = 13
+    private let symbolMax: CGFloat = 21
 
     private var showsWatch: Bool {
         watchOwnershipRaw == DeviceOwnership.Answer.yes.rawValue && watchStatus != .unavailable
@@ -48,23 +56,37 @@ struct DeviceLinkChips: View {
 
     var body: some View {
         if showsWatch || showsMac {
-            HStack(spacing: 8) {
-                if showsWatch {
-                    chipButton(device: .watch,
-                               symbol: watchSymbol,
-                               isConnected: watchStatus == .connected,
-                               deviceName: "Apple Watch")
-                }
-                if showsMac {
-                    chipButton(device: .mac,
-                               symbol: macSymbol,
-                               isConnected: isMacConnected,
-                               deviceName: "Mac")
-                }
+            // 두 칩을 **무조건** 가로로 두면 큰 글씨 설정에서 "Not connected" 가
+            // "No…" 로 잘려 아무 정보도 주지 못한다. 한 줄에 안 들어가면 세로로 쌓는다.
+            ViewThatFits(in: .horizontal) {
+                chipStack(axis: .horizontal)
+                chipStack(axis: .vertical)
             }
             .padding(.horizontal, 16)
             .sheet(item: $helpDevice) { device in
                 DeviceConnectionHelpView(device: device)
+            }
+        }
+    }
+
+    /// 같은 칩 두 개를 가로/세로 중 한 방향으로 담는다 (`ViewThatFits` 의 후보).
+    @ViewBuilder
+    private func chipStack(axis: Axis) -> some View {
+        let layout: AnyLayout = axis == .horizontal
+            ? AnyLayout(HStackLayout(spacing: 8))
+            : AnyLayout(VStackLayout(spacing: 8))
+        layout {
+            if showsWatch {
+                chipButton(device: .watch,
+                           symbol: watchSymbol,
+                           isConnected: watchStatus == .connected,
+                           deviceName: "Apple Watch")
+            }
+            if showsMac {
+                chipButton(device: .mac,
+                           symbol: macSymbol,
+                           isConnected: isMacConnected,
+                           deviceName: "Mac")
             }
         }
     }
@@ -97,14 +119,21 @@ struct DeviceLinkChips: View {
     private func chip(symbol: String, isConnected: Bool, deviceName: LocalizedStringKey) -> some View {
         HStack(spacing: 5) {
             Image(systemName: symbol)
-                .font(.footnote.weight(.semibold))
+                .dsScaledFont(symbolBase, weight: .semibold,
+                              relativeTo: .footnote, maxSize: symbolMax)
             // 잘 되고 있으면 심볼만 — 안 될 때만 이유를 적는다.
             if !isConnected {
                 Text("Not connected")
-                    .font(.caption.weight(.medium))
+                    .dsScaledFont(labelBase, weight: .medium,
+                                  relativeTo: .caption, maxSize: labelMax)
+                    // 그래도 좁으면 잘리는 대신 두 줄로 접힌다 — "No…" 보다는 낫다
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
             }
         }
-        .frame(height: chipContentHeight)
+        // ⚠️ 고정 높이(frame(height:))로 두면 글자가 커질 때 잘린다.
+        //    최소 높이로 두어야 심볼만 있는 칩과 키를 맞추면서도 자랄 수 있다.
+        .frame(minHeight: chipContentHeight)
         .foregroundStyle(isConnected ? Color.green : Color.secondary)
         .padding(.horizontal, 10)
         .padding(.vertical, 5)
