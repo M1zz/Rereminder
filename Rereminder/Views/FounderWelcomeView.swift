@@ -43,10 +43,10 @@ struct FounderChange: Identifiable {
         ),
         FounderChange(
             id: "pro",
-            symbol: "person.wave.2.fill",
+            symbol: "bookmark.fill",
             subject: String(localized: "What Pro unlocks"),
             before: String(localized: "More pre-alerts"),
-            after: String(localized: "Session tools — section names, scripts, templates and history")
+            after: String(localized: "The app remembers your setups — saved setups, last timer, session tools")
         ),
         FounderChange(
             id: "price",

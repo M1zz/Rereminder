@@ -463,7 +463,7 @@ enum UsageInsights {
         /// 과거 스냅샷을 위해 옛 축(알림 한도)의 흔적도 함께 본다 — 그때 막혔던 사람은
         /// 지금 기준으로도 "유료를 원한 사람"이다.
         var hasPaidToolDemand: Bool {
-            presentationRuns > 0 || templates > ProGate.freeTemplateLimit || trialUsed > 0
+            presentationRuns > 0 || templates >= templateUserThreshold || trialUsed > 0
                 || limitHits > 0 || alertsMax > legacyFreeAlertLimit
         }
     }
@@ -483,6 +483,11 @@ enum UsageInsights {
     /// 예전 무료 알림 한도(2개). **과거 스냅샷을 읽을 때만** 쓴다 —
     /// 그때 "한도에 막혔다"는 기록이 지금 축에서도 유료 수요의 흔적이기 때문이다.
     static let legacyFreeAlertLimit = 2
+
+    /// "템플릿을 실제로 쓰는 사람" 판정 기준 — **고정값 1이다.**
+    /// ⚠️ 게이트(`ProGate.canRememberSetup`)를 따라가게 만들지 말 것. 템플릿을 하나라도 가진
+    ///    설치는 예전에도 지금도 "기억을 원한 사람"이고, 자를 고정해야 변경 전후를 비교할 수 있다.
+    static let templateUserThreshold = 1
 
     /// 스냅샷 한 묶음을 결제 관점 프로필로 바꾼다.
     static func profiles(from users: [UserRecord],
@@ -567,7 +572,7 @@ enum UsageInsights {
         // 옛 축(알림 한도)의 흔적도 함께 본다 — 예전 스냅샷을 계속 읽어야 하고,
         // 그때 막혔던 사람은 지금 기준으로도 유료를 원한 사람이다.
         let touchedPaidArea = trialUsed > 0 || presentationRuns > 0
-            || templates > ProGate.freeTemplateLimit
+            || templates >= templateUserThreshold
             || limitHits > 0 || alertsMax > legacyFreeAlertLimit
 
         if touchedPaidArea {

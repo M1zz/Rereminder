@@ -399,28 +399,6 @@
         }
       }
     },
-    "%lld/%lld": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$lld/%2$lld"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld/%lld"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld/%lld"
-          }
-        }
-      }
-    },
     "%lldm": {
       "localizations": {
         "ja": {
@@ -2389,6 +2367,22 @@
         }
       }
     },
+    "Let the app remember your setups": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "設定を覚えさせる"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱이 설정을 기억하게 하기"
+          }
+        }
+      }
+    },
     "Light": {
       "localizations": {
         "ja": {
@@ -3822,6 +3816,22 @@
         }
       }
     },
+    "Remembers your last timer": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最後のタイマーを記憶"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "마지막 타이머 기억"
+          }
+        }
+      }
+    },
     "Remind me": {
       "localizations": {
         "ja": {
@@ -4174,22 +4184,6 @@
         }
       }
     },
-    "Save template": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "テンプレートを保存"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "템플릿 저장"
-          }
-        }
-      }
-    },
     "Save the current settings as a template": {
       "localizations": {
         "ja": {
@@ -4218,6 +4212,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "저장했어요"
+          }
+        }
+      }
+    },
+    "Saved setups": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存した設定"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장한 설정"
           }
         }
       }
@@ -4538,22 +4548,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "세션 모드·템플릿·기록은 전체 앱에서"
-          }
-        }
-      }
-    },
-    "Session tools — section names, scripts, templates and history": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "進行ツール — 区間名・台本・テンプレート・記録"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "진행 도구 — 구간 이름·대본·템플릿·기록"
           }
         }
       }
@@ -5232,6 +5226,38 @@
         }
       }
     },
+    "The app remembers your setups": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アプリがあなたの設定を覚えます"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱이 당신의 설정을 기억합니다"
+          }
+        }
+      }
+    },
+    "The app remembers your setups — saved setups, last timer, session tools": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アプリが設定を覚えます — 保存した設定・最後のタイマー・セッション道具"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱이 설정을 기억합니다 — 저장한 설정·마지막 타이머·세션 도구"
+          }
+        }
+      }
+    },
     "Theme": {
       "localizations": {
         "ja": {
@@ -5765,22 +5791,6 @@
         }
       }
     },
-    "Tools for running a session": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "レッスン・発表・ワークショップを進めるための道具"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "수업·발표·워크숍을 운영하는 도구"
-          }
-        }
-      }
-    },
     "Total Sessions": {
       "localizations": {
         "ja": {
@@ -6002,22 +6012,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "모든 기능 잠금 해제 · 일회성 구매"
-          }
-        }
-      }
-    },
-    "Unlock unlimited templates": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "テンプレートを無制限に解除"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "무제한 템플릿 잠금 해제"
           }
         }
       }
@@ -6367,6 +6361,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "다음 자리는 언제인가요?"
+          }
+        }
+      }
+    },
+    "With Pro, the app keeps setups like this and brings them back in one tap.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proでは、こうした設定をそのまま保存してワンタップで呼び出せます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pro에서는 이런 설정을 저장해 두고 한 번에 불러올 수 있어요."
           }
         }
       }

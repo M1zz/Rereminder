@@ -208,17 +208,17 @@ final class ProGateTests: XCTestCase {
 
     // MARK: - Legacy bool API
 
-    func test_canSaveTemplate_underFreeLimit_returnsTrue() {
-        XCTAssertTrue(ProGate.canSaveTemplate(currentCount: 2))
-    }
-
-    func test_canSaveTemplate_atFreeLimit_returnsFalse() {
-        XCTAssertFalse(ProGate.canSaveTemplate(currentCount: 3))
+    /// ⚠️ 무료 몫이 없다 — **저장 자체가 Pro** 다. 개수로 다시 나누지 말 것(`ProGate` 머리말).
+    func test_canSaveTemplate_freeUser_isAlwaysFalse() {
+        setProUser(false)
+        XCTAssertFalse(ProGate.canSaveTemplate(currentCount: 0))
+        XCTAssertFalse(ProGate.canRememberSetup)
     }
 
     func test_canSaveTemplate_proUser_returnsTrue() {
         setProUser(true)
         XCTAssertTrue(ProGate.canSaveTemplate(currentCount: 100))
+        XCTAssertTrue(ProGate.canRememberSetup)
     }
 
     // MARK: - Full lifecycle integration

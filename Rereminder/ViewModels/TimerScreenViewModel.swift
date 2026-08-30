@@ -415,9 +415,18 @@ final class TimerScreenViewModel: ObservableObject {
 
     /// 앱 시작 시 마지막으로 사용한 타이머 설정을 다이얼에 복원한다 (타이머 시작은 하지 않음).
     /// 실행 중 타이머 복원(restoreTimerIfNeeded)이 성공했으면 건드리지 않는다.
+    ///
+    /// ⚠️ **무료 사용자에게는 복원하지 않는다** — 이 앱이 파는 한 문장이 "설정을 기억한다"이기
+    ///    때문이다(`ProGate.canRememberSetup`). 이 함수는 `onAppear` 에서 **콜드 런치에 한 번만**
+    ///    돌므로(`didRestoreLastUsedConfig`), 홈에 다녀오는 정도로는 초기화되지 않는다 —
+    ///    그건 제한이 아니라 고장으로 읽힌다.
+    ///
+    /// ⚠️ 저장(`persistLastUsedConfig`)은 무료에서도 계속 한다. 결제하는 순간 마지막에 쓰던
+    ///    설정이 그대로 돌아오는 편이, 결제하고 나서 빈손으로 시작하는 것보다 낫다.
     func restoreLastUsedConfigIfNeeded() {
         guard !didRestoreLastUsedConfig else { return }
         didRestoreLastUsedConfig = true
+        guard ProGate.canRememberSetup else { return }
         guard timerVM.state == .idle,
               let data = Self.lastUsedDefaults.data(forKey: Self.lastUsedConfigKey),
               let cfg = try? JSONDecoder().decode(LastUsedConfig.self, from: data),

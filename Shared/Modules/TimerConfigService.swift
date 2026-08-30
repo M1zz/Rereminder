@@ -14,9 +14,10 @@ final class TimerConfigService {
 
     private var context: ModelContext?
 
-    /// Pro는 무제한, 무료는 ProGate.freeTemplateLimit
+    /// Pro는 무제한, 무료는 **저장 자체가 없다**(`ProGate.canRememberSetup`).
+    /// 개수로 나누던 시절의 한도(3개)는 사라졌다 — 저장·불러오기가 이 앱이 파는 한 문장이다.
     private var templateLimit: Int {
-        StoreManager.isProUser ? 100 : ProGate.freeTemplateLimit
+        ProGate.canRememberSetup ? 100 : 0
     }
 
     func attachContext(_ ctx: ModelContext) {

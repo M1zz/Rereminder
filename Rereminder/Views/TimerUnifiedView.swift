@@ -502,6 +502,9 @@ struct TimerUnifiedView: View {
     /// ⚠️ 대기 중일 때만. 타이머가 도는 중에 저장 이야기를 꺼내면 화면의 주인공을 가린다.
     private func offerToSaveRecurringSetupIfDue() {
         guard isIdle, !showOnboarding else { return }
+        // ⚠️ 무료 사용자에게는 권하지 않는다 — 저장은 Pro 다(`ProGate.canRememberSetup`).
+        //    못 하는 일을 권해 놓고 누르는 순간 막는 것이 이 앱에서 가장 나쁜 순간이다.
+        guard ProGate.canRememberSetup else { return }
         guard !showFeedbackNudge, !showGrandfatherThanks, !showFounderWelcome, deviceQuestion == nil else { return }
 
         let cfg = screenVM.normalizedCurrentConfig

@@ -12,6 +12,9 @@
 //   • **있다고 답한 기기만** 나온다(설정 > 내 기기). 없는 기기의 연결 상태는 소음일 뿐이다.
 //   • 안 될 때만 말을 건다 — 연결 안 됨은 심볼 + 글자, 연결됨은 초록 심볼만.
 //     잘 되고 있을 때까지 문장으로 떠들면 다음부터 아무도 안 읽는다.
+//   • ⚠️ **채운 캡슐을 다시 씌우지 말 것.** 예전에는 회색 캡슐 두 개가 각각 "연결 안 됨"을
+//     외쳐서, 화면 아래 절반에서 **가장 눈에 띄는 것이 실패 문구**였다. 이 줄은 상태 표시지
+//     행동을 부르는 버튼이 아니다 — 글자는 secondary, 배경은 없다.
 //   • 워치 상태는 `WatchConnectivityManager.linkStatus`(실시간), 맥은 `DevicePresence`
 //     (iCloud에 남긴 표시 — "최근에 켜져 있었다")가 답한다.
 //   • **누르면 무엇을 하면 되는지 알려 준다**(`DeviceConnectionHelpView`).
@@ -48,7 +51,7 @@ struct DeviceLinkChips: View {
 
     var body: some View {
         if showsWatch || showsMac {
-            HStack(spacing: 8) {
+            HStack(spacing: DSSpacing.lg) {
                 if showsWatch {
                     chipButton(device: .watch,
                                symbol: watchSymbol,
@@ -62,7 +65,6 @@ struct DeviceLinkChips: View {
                                deviceName: "Mac")
                 }
             }
-            .padding(.horizontal, 16)
             .sheet(item: $helpDevice) { device in
                 DeviceConnectionHelpView(device: device)
             }
@@ -95,22 +97,18 @@ struct DeviceLinkChips: View {
     }
 
     private func chip(symbol: String, isConnected: Bool, deviceName: LocalizedStringKey) -> some View {
-        HStack(spacing: 5) {
+        HStack(spacing: DSSpacing.xs) {
             Image(systemName: symbol)
-                .font(.footnote.weight(.semibold))
+                .font(.caption.weight(.medium))
             // 잘 되고 있으면 심볼만 — 안 될 때만 이유를 적는다.
             if !isConnected {
                 Text("Not connected")
-                    .font(.caption.weight(.medium))
+                    .font(.caption2)
             }
         }
         .frame(height: chipContentHeight)
         .foregroundStyle(isConnected ? Color.green : Color.secondary)
-        .padding(.horizontal, 10)
-        .padding(.vertical, 5)
-        .background(
-            Capsule().fill(isConnected ? Color.green.opacity(0.12) : Color.secondary.opacity(0.12))
-        )
+        .contentShape(Rectangle())
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(deviceName))
         .accessibilityValue(Text(isConnected ? "Connected" : "Not connected"))

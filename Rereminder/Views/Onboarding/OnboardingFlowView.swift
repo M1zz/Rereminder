@@ -267,20 +267,32 @@ struct OnboardingFlowView: View {
             )
             .padding(.horizontal, DSSpacing.xl)
 
-            Button {
-                screenVM.saveCurrentAsTemplate()
-                didSaveTemplate = true
-                #if canImport(UIKit)
-                UINotificationFeedbackGenerator().notificationOccurred(.success)
-                #endif
-            } label: {
-                Label(didSaveTemplate ? String(localized: "Saved") : String(localized: "Save as template"),
-                      systemImage: didSaveTemplate ? "checkmark" : "plus")
-                    .font(DSFont.body.weight(.semibold))
+            // ⚠️ 저장은 Pro 다(`ProGate.canRememberSetup`). 무료 사용자에게 저장 버튼을 보여 주고
+            //    눌렀을 때 막거나 조용히 실패하면, 온보딩이 첫 화면부터 거짓말을 하는 셈이 된다.
+            //    대신 **그런 것이 있다는 사실만** 알리고 넘어간다 — 페이월은 온보딩에 세우지 않는다.
+            if ProGate.canRememberSetup {
+                Button {
+                    screenVM.saveCurrentAsTemplate()
+                    didSaveTemplate = true
+                    #if canImport(UIKit)
+                    UINotificationFeedbackGenerator().notificationOccurred(.success)
+                    #endif
+                } label: {
+                    Label(didSaveTemplate ? String(localized: "Saved") : String(localized: "Save as template"),
+                          systemImage: didSaveTemplate ? "checkmark" : "plus")
+                        .font(DSFont.body.weight(.semibold))
+                }
+                .buttonStyle(.bordered)
+                .tint(Color.accentColor)
+                .disabled(didSaveTemplate)
+            } else {
+                Text("With Pro, the app keeps setups like this and brings them back in one tap.")
+                    .font(DSFont.callout)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.horizontal, DSSpacing.xl)
             }
-            .buttonStyle(.bordered)
-            .tint(Color.accentColor)
-            .disabled(didSaveTemplate)
 
             Spacer()
         }
