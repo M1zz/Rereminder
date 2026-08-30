@@ -434,6 +434,10 @@ enum UsageInsights {
         /// 알림을 더 켜려다 막힌 횟수.
         let limitHits: Int
         let paywallViews: Int
+        /// 발표 모드로 들어간 횟수 — 지금의 유료 축이 실제로 쓰인 횟수다.
+        let presentationRuns: Int
+        /// 지금 가지고 있는 템플릿 수.
+        let templates: Int
         let trialUsed: Int
         /// 남은 체험 횟수(0이면 결제해야 더 쓴다).
         let trialRemaining: Int
@@ -449,15 +453,36 @@ enum UsageInsights {
             return String(raw.prefix(8)).uppercased()
         }
 
-        /// 알림 한도(무료 1개)를 실제로 넘겨 본 사람인지 = 유료 기능 수요가 확인된 사람.
+        /// 알림을 **여러 개 쓰는** 사람인지(고정 기준 `heavyAlertThreshold`).
+        /// ⚠️ 이제 결제 신호가 아니라 **수요의 크기**다 — 알림은 무료다.
         var hasAlertDemand: Bool {
-            alertsMax > ProGate.freePrealertLimit || multiAlertRuns > 0 || trialUsed > 0 || limitHits > 0
+            alertsMax >= heavyAlertThreshold || multiAlertRuns > 0 || limitHits > 0
+        }
+
+        /// 지금의 유료 영역(세션 운영 도구)을 실제로 건드려 본 사람인지.
+        /// 과거 스냅샷을 위해 옛 축(알림 한도)의 흔적도 함께 본다 — 그때 막혔던 사람은
+        /// 지금 기준으로도 "유료를 원한 사람"이다.
+        var hasPaidToolDemand: Bool {
+            presentationRuns > 0 || templates > ProGate.freeTemplateLimit || trialUsed > 0
+                || limitHits > 0 || alertsMax > legacyFreeAlertLimit
         }
     }
 
-    /// 반복 사용으로 "곧 알림이 더 필요해질 사람"으로 보는 완주 횟수 기준.
+    /// 반복 사용으로 "곧 유료 기능이 필요해질 사람"으로 보는 완주 횟수 기준.
     /// 3회면 우연이 아니라 습관으로 쓰는 쪽에 가깝다.
     static let repeatUseThreshold = 3
+
+    /// "알림을 여러 개 쓰는 사람" 판정 기준 — **고정값 3이다.**
+    ///
+    /// ⚠️ 게이트를 따라가게 만들지 말 것. 예전에는 `ProGate.freePrealertLimit` 을 봤는데,
+    ///    한도를 없애자 이 지표의 뜻이 통째로 바뀌어 **변경 전후를 같은 자로 비교할 수 없게**
+    ///    된다. 알림은 이제 무료지만 개수는 여전히 **수요의 크기**를 말해 주므로, 자를 고정해
+    ///    계속 잰다(`UsageMetrics.multiAlertThreshold` 와 같은 이유·다른 값).
+    static let heavyAlertThreshold = 3
+
+    /// 예전 무료 알림 한도(2개). **과거 스냅샷을 읽을 때만** 쓴다 —
+    /// 그때 "한도에 막혔다"는 기록이 지금 축에서도 유료 수요의 흔적이기 때문이다.
+    static let legacyFreeAlertLimit = 2
 
     /// 스냅샷 한 묶음을 결제 관점 프로필로 바꾼다.
     static func profiles(from users: [UserRecord],
@@ -468,8 +493,10 @@ enum UsageInsights {
             func flag(_ key: String) -> Bool { (user.metrics[key] ?? 0) > 0 }
 
             let isPro = flag("flag.isPro")
-            let trialUsed = metric("trial.prealerts")
-            let trialLimit = flag("flag.prealertTrialExtended")
+            // 지금 축(발표 모드)의 체험 소진을 먼저 보고, 없으면 옛 축(알림)의 기록을 읽는다 —
+            // 예전 스냅샷에는 `trial.presentation` 이 아예 없다.
+            let trialUsed = max(metric("trial.presentation"), metric("trial.prealerts"))
+            let trialLimit = (flag("flag.presentationTrialExtended") || flag("flag.prealertTrialExtended"))
                 ? TrialCounter.secondStageLimit
                 : TrialCounter.firstStageLimit
             let trialRemaining = max(0, trialLimit - trialUsed)
@@ -478,6 +505,8 @@ enum UsageInsights {
             let multiAlertRuns = metric("multiAlertRuns")
             let limitHits = metric("alertLimitHits")
             let paywallViews = metric("paywallViews")
+            let presentationRuns = metric("presentationRuns")
+            let templates = metric("templates")
 
             let daysSinceActive = user.lastActiveAt.map {
                 calendar.dateComponents([.day], from: calendar.startOfDay(for: $0),
@@ -489,7 +518,8 @@ enum UsageInsights {
                                    trialRemaining: trialRemaining,
                                    limitHits: limitHits,
                                    alertsMax: alertsMax,
-                                   multiAlertRuns: multiAlertRuns,
+                                   presentationRuns: presentationRuns,
+                                   templates: templates,
                                    completions: completions)
 
             return UserProfile(
@@ -509,6 +539,8 @@ enum UsageInsights {
                 multiAlertRuns: multiAlertRuns,
                 limitHits: limitHits,
                 paywallViews: paywallViews,
+                presentationRuns: presentationRuns,
+                templates: templates,
                 trialUsed: trialUsed,
                 trialRemaining: trialRemaining,
                 lastActiveAt: user.lastActiveAt,
@@ -526,12 +558,17 @@ enum UsageInsights {
                               trialRemaining: Int,
                               limitHits: Int,
                               alertsMax: Int,
-                              multiAlertRuns: Int,
+                              presentationRuns: Int,
+                              templates: Int,
                               completions: Int) -> PaymentStage {
         if isPro { return .pro }
 
-        let touchedPaidArea = trialUsed > 0 || limitHits > 0
-            || alertsMax > ProGate.freePrealertLimit || multiAlertRuns > 0
+        // 지금의 유료 영역은 **세션 운영 도구**(발표 모드·템플릿)다.
+        // 옛 축(알림 한도)의 흔적도 함께 본다 — 예전 스냅샷을 계속 읽어야 하고,
+        // 그때 막혔던 사람은 지금 기준으로도 유료를 원한 사람이다.
+        let touchedPaidArea = trialUsed > 0 || presentationRuns > 0
+            || templates > ProGate.freeTemplateLimit
+            || limitHits > 0 || alertsMax > legacyFreeAlertLimit
 
         if touchedPaidArea {
             if trialRemaining == 0 || limitHits > 0 { return .blocked }
@@ -567,7 +604,7 @@ enum UsageInsights {
         score += min(15, limitHits * 5)          // 막힌 경험 = 필요를 몸으로 겪은 횟수
         score += min(10, paywallViews * 3)       // 가격을 이미 본 사람
         score += min(15, completions)            // 값을 실제로 받은 정도
-        if alertsMax > ProGate.freePrealertLimit { score += 10 }
+        if alertsMax >= heavyAlertThreshold { score += 10 }   // 알림을 여러 개 쓰는 = 수요가 큰
 
         switch daysSinceActive {
         case .some(let days) where days <= 7:  score += 5
@@ -586,7 +623,7 @@ enum UsageInsights {
         let steps: [(String, (UserProfile) -> Bool)] = [
             ("설치", { _ in true }),
             ("가치 경험 (완주 1회+)", { $0.isPro || $0.completions > 0 }),
-            ("알림 2개 이상 사용", { $0.isPro || $0.hasAlertDemand }),
+            ("알림 3개 이상 사용", { $0.isPro || $0.hasAlertDemand }),
             ("한도 도달·임박", { $0.isPro || $0.stage.isNearPurchase }),
             ("페이월 노출", { $0.isPro || $0.paywallViews > 0 }),
             ("결제", { $0.isPro })
@@ -843,9 +880,9 @@ enum UsageInsights {
         let modeAlerts: Int?
         /// 실행 1회당 평균 알림 개수 — "6개 이상" 칸은 6으로 세므로 실제보다 낮게 나올 수 있다.
         let averageAlerts: Double
-        /// **무료 한도를 넘긴** 실행의 비율 = 유료 영역이 실제로 돌아가는 몫.
-        /// ⚠️ 한도(`ProGate.freePrealertLimit`)를 따라가는 값이라 한도를 바꾸면 뜻도 바뀐다 —
-        ///    한도 변경 전후를 같은 자로 비교하려면 기기 카운터 `multiAlertRuns`(2개 이상 고정)를 볼 것.
+        /// **알림을 여러 개(3개 이상) 건** 실행의 비율 = 이 앱의 문장이 실제로 쓰이는 몫.
+        /// ⚠️ 기준은 `heavyAlertThreshold` 로 **고정**이다 — 게이트를 따라가게 만들면
+        ///    변경 전후를 같은 자로 비교할 수 없게 된다.
         let multiAlertRunRate: Double
 
         var coverageRate: Double {
@@ -859,7 +896,7 @@ enum UsageInsights {
         let buckets = alertRunDistribution(metrics: sample)
         let totalRuns = buckets.reduce(0) { $0 + $1.runs }
         let weighted = buckets.reduce(0) { $0 + $1.alerts * $1.runs }
-        let paidRuns = buckets.filter { $0.alerts > ProGate.freePrealertLimit }.reduce(0) { $0 + $1.runs }
+        let heavyRuns = buckets.filter { $0.alerts >= heavyAlertThreshold }.reduce(0) { $0 + $1.runs }
 
         return AlertUsageSummary(
             reportingInstalls: sample.filter { !alertRunHistogram(metrics: $0).isEmpty }.count,
@@ -867,7 +904,7 @@ enum UsageInsights {
             totalRuns: totalRuns,
             modeAlerts: buckets.filter { $0.runs > 0 }.max { $0.runs < $1.runs }?.alerts,
             averageAlerts: totalRuns > 0 ? Double(weighted) / Double(totalRuns) : 0,
-            multiAlertRunRate: totalRuns > 0 ? Double(paidRuns) / Double(totalRuns) : 0
+            multiAlertRunRate: totalRuns > 0 ? Double(heavyRuns) / Double(totalRuns) : 0
         )
     }
 }

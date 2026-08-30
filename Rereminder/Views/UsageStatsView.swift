@@ -313,14 +313,14 @@ struct UsageStatsView: View {
                                  detail: "타이머 실행 \(summary.totalRuns)회 중 가장 많았던 개수예요.")
                 }
                 statRow("실행당 평균 알림", String(format: "%.1f개", summary.averageAlerts))
-                statRow("무료 한도(\(ProGate.freePrealertLimit)개) 초과 실행",
+                statRow("알림 \(UsageInsights.heavyAlertThreshold)개 이상 실행",
                         percent(summary.multiAlertRunRate))
                 statRow("이 값을 보내온 설치",
                         "\(summary.reportingInstalls)곳 (\(percent(summary.coverageRate)))")
             } header: {
                 Text(verbatim: "주로 쓰는 알림 개수")
             } footer: {
-                Text(verbatim: "타이머를 시작할 때마다 그때 건 알림 개수를 기기에서 세어 보낸 값이에요. '실행 기준'은 타이머 하나하나를, '사람 기준'은 설치마다 가장 자주 쓰는 개수 하나씩을 세요.\n\n무료 한도를 올릴지는 '결제'만 켜고 보세요 — 무료 분포는 한도(현재 \(ProGate.freePrealertLimit)개)에 눌린 값이라 '다들 이 정도면 충분하다'는 잘못된 결론이 나요. 결제한 사람이 주로 쓰는 개수가 한도보다 넉넉히 크면 한도를 올려도 팔 것이 남아요.\n\n2.1.2 이전 버전은 아직 이 값을 보내지 않아 '보내온 설치' 비율이 낮게 시작해요.")
+                Text(verbatim: "타이머를 시작할 때마다 그때 건 알림 개수를 기기에서 세어 보낸 값이에요. '실행 기준'은 타이머 하나하나를, '사람 기준'은 설치마다 가장 자주 쓰는 개수 하나씩을 세요.\n\n알림 개수는 이제 결제 경계가 아니라(무제한 무료) **수요의 크기**예요. 결제한 사람이 주로 몇 개를 쓰는지 보면, 지금 파는 것(세션 운영 도구)이 그 사람들에게 맞는지 가늠할 수 있어요.\n\n기준(\(UsageInsights.heavyAlertThreshold)개)은 게이트와 무관하게 고정이에요 — 따라 움직이면 변경 전후를 같은 자로 비교할 수 없어요.\n\n2.1.2 이전 버전은 아직 이 값을 보내지 않아 '보내온 설치' 비율이 낮게 시작해요.")
             }
         }
     }
@@ -336,7 +336,7 @@ struct UsageStatsView: View {
                     // 무료 한도(1개) 바로 위 칸이 이 차트의 관전 포인트다.
                     .init(label: $0.label,
                           value: $0.installs,
-                          isKey: $0.lowerBound > ProGate.freePrealertLimit)
+                          isKey: $0.lowerBound >= UsageInsights.heavyAlertThreshold)
                 })
             } header: {
                 Text(verbatim: "알림 개수 수요 (한 타이머 최대)")
@@ -707,7 +707,7 @@ struct UsageStatsView: View {
         case "templates":         return "보유 템플릿 수"
         case "alertsMax":         return "알림 최대 개수"
         case "multiAlertRuns":    return "알림 2개 이상 실행"
-        case "alertLimitHits":    return "알림 한도에 막힌 횟수"
+        case "alertLimitHits":    return "알림 한도에 막힌 횟수(옛 지표)"
         case "paywallViews":      return "페이월 노출 횟수"
         case "trial.prealerts":   return "알림 체험 사용 횟수"
         default:                  return key

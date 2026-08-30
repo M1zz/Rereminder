@@ -44,9 +44,6 @@ enum AnalyticsManager {
         case paywallShown(trigger: ProGate.Feature?)
         case paywallDismissed(trigger: ProGate.Feature?, didPurchase: Bool)
         case paywallOneMoreClicked(trigger: ProGate.Feature)
-        /// 한도에 막힌 순간 페이월 대신 **이번 한 번**을 내줬다 (하루 1회).
-        /// 이 사람이 나중에 결제하는지가 그 설계의 유일한 판정 기준이다.
-        case prealertGraceGranted(stage: ProGate.PaywallStage)
         case purchaseStarted(productId: String)
         case purchaseCompleted(productId: String)
         case purchaseFailed(productId: String, reason: String)
@@ -64,6 +61,14 @@ enum AnalyticsManager {
 
         // 기기 보유 여부 (앱이 직접 물어본 답) — 워치·맥 안내를 누구에게 할지 가르는 값
         case deviceOwnershipAnswered(device: String, owns: Bool)
+
+        /// "다음 자리"를 예약했다 — 주기가 긴 사용자(학회 발표자·분기 워크숍)를 앱이 다시 부르는 경로.
+        /// 이 예약이 실제로 복귀로 이어지는지가 그 설계의 판정 기준이다.
+        case nextOccasionBooked
+
+        /// 창단 후원자에게 혜택 변경 안내를 보여줬다.
+        /// 이 사람들이 그 뒤로도 남아 있는지가 "약속이 통했나"의 유일한 근거다.
+        case founderWelcomeShown
 
         // 기타
         case reviewRequested
@@ -83,7 +88,6 @@ enum AnalyticsManager {
             case .paywallShown:            return "paywall_shown"
             case .paywallDismissed:        return "paywall_dismissed"
             case .paywallOneMoreClicked:   return "paywall_one_more_clicked"
-            case .prealertGraceGranted:    return "prealert_grace_granted"
             case .purchaseStarted:         return "purchase_started"
             case .purchaseCompleted:       return "purchase_completed"
             case .purchaseFailed:          return "purchase_failed"
@@ -94,6 +98,8 @@ enum AnalyticsManager {
             case .feedbackNudgeShown:      return "feedback_nudge_shown"
             case .feedbackNudgeAccepted:   return "feedback_nudge_accepted"
             case .feedbackNudgeSnoozed:    return "feedback_nudge_snoozed"
+            case .nextOccasionBooked:      return "next_occasion_booked"
+            case .founderWelcomeShown:     return "founder_welcome_shown"
             case .reviewRequested:         return "review_requested"
             case .reviewCompleted:         return "review_completed"
             case .presentationModeStarted: return "presentation_mode_started"
@@ -146,8 +152,6 @@ enum AnalyticsManager {
                 return ["trigger": trigger?.rawValue ?? "general", "did_purchase": didPurchase]
             case .paywallOneMoreClicked(let trigger):
                 return ["trigger": trigger.rawValue]
-            case .prealertGraceGranted(let stage):
-                return ["stage": stage.rawValue]
             case .purchaseStarted(let id), .purchaseCompleted(let id):
                 return ["product_id": id]
             case .purchaseFailed(let id, let reason):
@@ -160,7 +164,8 @@ enum AnalyticsManager {
                  .onboardingShown, .onboardingCompleted,
                  .feedbackNudgeShown, .feedbackNudgeAccepted, .feedbackNudgeSnoozed,
                  .reviewRequested, .reviewCompleted,
-                 .presentationModeStarted, .watchSyncUsed:
+                 .presentationModeStarted, .watchSyncUsed,
+                 .founderWelcomeShown, .nextOccasionBooked:
                 return [:]
             }
         }

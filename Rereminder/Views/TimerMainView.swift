@@ -894,7 +894,7 @@ struct TimerMainView: View {
             }
             .buttonStyle(TimerButtonStyle(tint: DSColor.positive, size: buttonSize))
             .accessibilityLabel(isPresentationMode
-                                ? String(localized: "Start Presentation")
+                                ? String(localized: "Start Session")
                                 : String(localized: "Start Timer"))
 
         case .running, .overtime:

@@ -2,7 +2,7 @@
 //  KeychainHelper.swift
 //  Rereminder
 //
-//  구매 상태를 Keychain에 저장 (앱 삭제 후 재설치에도 유지)
+//  구매 상태·창단 후원자 자격을 Keychain에 저장 (앱 삭제 후 재설치에도 유지)
 //
 
 import Foundation
@@ -13,8 +13,25 @@ enum KeychainHelper {
     /// Bool 값을 Keychain에 저장. 실패 시 false 반환.
     @discardableResult
     static func save(key: String, value: Bool) -> Bool {
-        let data = Data([value ? 1 : 0])
+        saveData(key: key, data: Data([value ? 1 : 0]))
+    }
 
+    /// 문자열을 Keychain에 저장. 실패 시 false 반환.
+    @discardableResult
+    static func save(key: String, value: String) -> Bool {
+        saveData(key: key, data: Data(value.utf8))
+    }
+
+    /// Keychain에서 문자열 로드
+    static func loadString(key: String) -> String? {
+        guard let data = loadData(key: key), !data.isEmpty else { return nil }
+        return String(data: data, encoding: .utf8)
+    }
+
+    // MARK: - 원시 저장소
+
+    @discardableResult
+    private static func saveData(key: String, data: Data) -> Bool {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: key,
@@ -41,6 +58,11 @@ enum KeychainHelper {
 
     /// Keychain에서 Bool 값 로드
     static func load(key: String) -> Bool? {
+        guard let data = loadData(key: key), !data.isEmpty else { return nil }
+        return data[0] == 1
+    }
+
+    private static func loadData(key: String) -> Data? {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
             kSecAttrAccount as String: key,
@@ -52,11 +74,8 @@ enum KeychainHelper {
         var result: AnyObject?
         let status = SecItemCopyMatching(query as CFDictionary, &result)
 
-        guard status == errSecSuccess, let data = result as? Data, !data.isEmpty else {
-            return nil
-        }
-
-        return data[0] == 1
+        guard status == errSecSuccess, let data = result as? Data else { return nil }
+        return data
     }
 
     /// Keychain 항목 삭제
