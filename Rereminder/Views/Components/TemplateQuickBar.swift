@@ -58,13 +58,19 @@ struct TemplateQuickBar: View {
 
     var body: some View {
         HStack(spacing: DSSpacing.sm) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: DSSpacing.xs) {
-                    ForEach(recentTemplates) { template in
-                        templateChip(template)
+            // 저장해 둔 템플릿이 없으면 스크롤뷰가 빈 자리를 다 먹어 버튼 둘이 오른쪽 끝에
+            // 붙는다 — 바로 위의 연결 칩은 가운데라 축이 어긋나 보인다. 그때는 가운데로 모은다.
+            if recentTemplates.isEmpty {
+                Spacer(minLength: 0)
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: DSSpacing.xs) {
+                        ForEach(recentTemplates) { template in
+                            templateChip(template)
+                        }
                     }
+                    .padding(.horizontal, 2)
                 }
-                .padding(.horizontal, 2)
             }
 
             if canReset {
@@ -110,6 +116,10 @@ struct TemplateQuickBar: View {
                 .transition(.opacity.combined(with: .scale(scale: 0.9)))
                 // 같은 설정을 여러 번 맞춰 본 뒤에야 뜬다 (타이머 3회 시작 + 저장 이력 없음)
                 .modifier(SaveTemplateTipAnchor())
+            }
+
+            if recentTemplates.isEmpty {
+                Spacer(minLength: 0)
             }
         }
         .animation(.easeInOut(duration: 0.2), value: hasUnsavedChanges)
