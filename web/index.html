@@ -151,7 +151,11 @@
             align-items: center; justify-content: center; gap: 14px; pointer-events: none;
         }
         .demo-time {
-            font-size: clamp(38px, 11vw, 56px); font-weight: 600; letter-spacing: -2px;
+            /* 크기는 **다이얼을 따라간다**(--dial). 뷰포트 폭만 보면 짧고 넓은 화면에서
+               글자가 원보다 커진다 — 앱도 같은 규칙이다(TimerMainView 의 fontSize).
+               nowrap 은 마지막 안전장치: 타이머 숫자는 어떤 경우에도 한 줄이다. */
+            font-size: max(22px, min(56px, calc(var(--dial, 400px) * 0.24)));
+            font-weight: 600; letter-spacing: -2px; white-space: nowrap;
             font-variant-numeric: tabular-nums; line-height: 1; color: var(--text);
         }
         .demo-time.overtime { color: #FF9F0A; }
@@ -250,7 +254,7 @@
         font-size: 11px; font-weight: 600; letter-spacing: 0.3px;
         color: var(--text3); text-align: center;
     }
-    .dev-time { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--text); }
+    .dev-time { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--text); white-space: nowrap; }
 
     /* 워치 — 밴드가 위아래로 살짝 보이는 실루엣 */
     .dev-watch { position: relative; display: flex; align-items: center; justify-content: center; }
@@ -307,7 +311,8 @@
     /* ── 한 화면에 들어오게 ─────────────────────────────────────────────────
        다이얼은 정사각형이라 세로를 가장 많이 먹는다. 폭만 보고 크기를 정하면
        세로가 짧은 화면에서 조작 줄이 화면 밖으로 밀린다 — 남는 세로도 함께 본다. */
-    .demo-stage { max-width: min(400px, 30svh); }
+    /* --dial 은 아래 가운데 시간 글자 크기가 참조한다 — max-width 를 바꾸면 함께 바뀐다 */
+    .demo-stage { --dial: min(400px, 30svh); max-width: var(--dial); }
 
     /* 배너는 4초 떴다 사라지는 토스트인데 늘 자리를 차지하고 있었다.
        겹쳐 띄우면 그 자리(약 74px)가 통째로 돌아온다. */
@@ -379,7 +384,7 @@
         }
         /* 다이얼을 조금 양보해 오른쪽 열을 넓힌다 — 좁으면 조작 줄이 두 줄씩 접혀
            오히려 세로를 더 먹는다(재 보니 조작만 266px 이었다). */
-        .demo-stage { grid-column: 1; grid-row: 1 / -1; max-width: min(290px, 62svh); }
+        .demo-stage { grid-column: 1; grid-row: 1 / -1; --dial: min(290px, 62svh); max-width: var(--dial); }
         .demo-card > *:not(.demo-stage) { grid-column: 2; }
         .demo-devices { margin-top: 0; justify-content: flex-start; }
         .demo-banner { margin: 10px 0 0; }

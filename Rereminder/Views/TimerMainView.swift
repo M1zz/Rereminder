@@ -687,6 +687,8 @@ struct TimerMainView: View {
         return Text(timeText)
             .font(.body.weight(.semibold))
             .monospacedDigit()
+            .lineLimit(1)                       // 타이머 숫자는 접히지 않는다
+            .fixedSize(horizontal: true, vertical: false)
             .padding(.horizontal, 12)
             .padding(.vertical, 6)
             .background(Color.accentColor)
