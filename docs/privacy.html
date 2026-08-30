@@ -367,7 +367,7 @@
 <script>
 (function () {
     var KEY = 'rereminder-lang';
-    function apply(lang) {
+    function apply(lang, persist) {
         document.body.classList.remove('lang-en', 'lang-ko');
         document.body.classList.add('lang-' + lang);
         document.documentElement.lang = lang;
@@ -375,15 +375,28 @@
         for (var i = 0; i < buttons.length; i++) {
             buttons[i].setAttribute('aria-pressed', String(buttons[i].dataset.setLang === lang));
         }
-        try { localStorage.setItem(KEY, lang); } catch (e) {}
+        // 자동 감지 결과는 저장하지 않는다 — 저장해 버리면 기기 언어를 바꿔도
+        // 첫 방문에 감지한 언어가 계속 따라온다. 저장은 사용자가 눌렀을 때만.
+        if (persist) { try { localStorage.setItem(KEY, lang); } catch (e) {} }
     }
-    var saved = null;
-    try { saved = localStorage.getItem(KEY); } catch (e) {}
-    var initial = saved || ((navigator.language || '').toLowerCase().indexOf('ko') === 0 ? 'ko' : 'en');
-    apply(initial);
+    function detect() {
+        var saved = null;
+        // 'lang' 은 index.html 이 예전에 쓰던 키다 — 이미 고른 사람의 선택을 잇는다.
+        try { saved = localStorage.getItem(KEY) || localStorage.getItem('lang'); } catch (e) {}
+        if (saved === 'ko' || saved === 'en') return saved;
+        // navigator.language 하나만 보면 "영어를 1순위로 두고 한국어도 쓰는" 기기를 놓친다.
+        var tags = (navigator.languages && navigator.languages.length)
+            ? navigator.languages
+            : [navigator.language || navigator.userLanguage || ''];
+        for (var i = 0; i < tags.length; i++) {
+            if (String(tags[i]).toLowerCase().indexOf('ko') === 0) return 'ko';
+        }
+        return 'en';
+    }
+    apply(detect(), false);
     document.addEventListener('click', function (event) {
         var button = event.target && event.target.closest ? event.target.closest('[data-set-lang]') : null;
-        if (button) { apply(button.dataset.setLang); }
+        if (button) { apply(button.dataset.setLang, true); }
     });
 })();
 </script>

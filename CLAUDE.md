@@ -666,6 +666,13 @@ extension TimerView {
     두 페이지는 배포처가 달라(이 저장소 `docs/` vs 블로그 저장소) 경로 대소문자도 다릅니다.
     자세한 건 `web/README.md` 참고.
   - **도메인을 바꾸면 엔타이틀먼트·AASA·App Store Connect 세 곳을 모두 고쳐야 합니다.**
+  - **웹 페이지 넷은 기기 언어를 보고 한국어·영어를 고른다**(`web/index.html`,
+    `docs/index.html`·`support.html`·`privacy.html`). `navigator.languages` 를 훑어
+    `ko` 로 시작하는 태그가 있으면 한국어이고, 오른쪽 위 버튼으로 바꿀 수 있다.
+    ⚠️ **저장 키는 네 페이지가 모두 `rereminder-lang` 이어야 한다** — 다르면 소개 페이지에서
+    고른 언어가 지원·개인정보 페이지로 이어지지 않는다(예전에 `docs/index.html` 만 `lang` 을
+    써서 실제로 끊겨 있었다). ⚠️ **자동 감지 결과는 저장하지 않는다** — 저장하면 기기 언어를
+    바꿔도 첫 방문에 감지한 언어가 계속 따라온다. 자세한 건 `web/README.md` 참고.
 - **주의**: 클립 버전(`MARKETING_VERSION`)은 메인 앱과 **반드시 일치**해야 제출이 통과합니다.
 
 ### Models

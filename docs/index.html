@@ -1143,10 +1143,16 @@ const i18n = {
 
 let currentLang = 'en';
 
-function setLang(lang) {
+// 저장 키는 support.html / privacy.html 과 같아야 한다 — 다르면 홈에서 고른 언어가
+// 지원·개인정보 페이지로 이어지지 않는다. 'lang' 은 그 전에 쓰던 키다.
+var LANG_KEY = 'rereminder-lang';
+
+function setLang(lang, persist) {
     currentLang = lang;
     document.documentElement.lang = lang;
-    localStorage.setItem('lang', lang);
+    // 자동 감지 결과는 저장하지 않는다. 저장해 버리면 기기 언어를 바꿔도
+    // 첫 방문에 감지한 언어가 계속 따라온다.
+    if (persist) { try { localStorage.setItem(LANG_KEY, lang); } catch (e) {} }
 
     const strings = i18n[lang];
 
@@ -1182,15 +1188,21 @@ function setLang(lang) {
 }
 
 function detectLang() {
-    var saved = localStorage.getItem('lang');
+    var saved = null;
+    try { saved = localStorage.getItem(LANG_KEY) || localStorage.getItem('lang'); } catch (e) {}
     if (saved && i18n[saved]) return saved;
-    var browserLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
-    if (browserLang.startsWith('ko')) return 'ko';
+    // navigator.language 하나만 보면 "영어를 1순위로 두고 한국어도 쓰는" 기기를 놓친다.
+    var tags = (navigator.languages && navigator.languages.length)
+        ? navigator.languages
+        : [navigator.language || navigator.userLanguage || ''];
+    for (var i = 0; i < tags.length; i++) {
+        if (String(tags[i]).toLowerCase().indexOf('ko') === 0) return 'ko';
+    }
     return 'en';
 }
 
 document.getElementById('lang-toggle').addEventListener('click', function() {
-    setLang(currentLang === 'en' ? 'ko' : 'en');
+    setLang(currentLang === 'en' ? 'ko' : 'en', true);
 });
 
 // Hamburger menu
@@ -1212,12 +1224,12 @@ mobileMenu.querySelectorAll('a').forEach(function(link) {
 
 // Mobile language toggle
 document.getElementById('mobile-lang-toggle').addEventListener('click', function() {
-    setLang(currentLang === 'en' ? 'ko' : 'en');
+    setLang(currentLang === 'en' ? 'ko' : 'en', true);
     hamburger.classList.remove('active');
     mobileMenu.classList.remove('active');
 });
 
-setLang(detectLang());
+setLang(detectLang(), false);
 </script>
 
 
