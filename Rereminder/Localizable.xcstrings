@@ -399,28 +399,6 @@
         }
       }
     },
-    "%lld/%lld": {
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "new",
-            "value": "%1$lld/%2$lld"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld/%lld"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld/%lld"
-          }
-        }
-      }
-    },
     "%lldm": {
       "localizations": {
         "ja": {
@@ -699,22 +677,6 @@
         }
       }
     },
-    "A nudge to stir or flip, then one when it's done.": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "混ぜる・裏返すタイミングで一度、出来上がりで一度。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "저을 때·뒤집을 때 한 번, 다 됐을 때 한 번."
-          }
-        }
-      }
-    },
     "Accurate notifications in background": {
       "localizations": {
         "ja": {
@@ -907,18 +869,18 @@
         }
       }
     },
-    "All Pro features — Presentation Mode, unlimited pre-alerts, overtime tracking, and timer history — are yours free forever. Nothing you had has been taken away.": {
+    "All Pro features — Session Mode, section scripts, unlimited templates, overtime tracking and history — are yours free forever. Nothing you had has been taken away.": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "プレゼンモード、無制限の事前通知、オーバータイム記録、タイマー統計などすべてのPro機能を永久無料でご利用いただけます。お使いだった機能は何も失われていません。"
+            "value": "セッションモード（区間名・台本）、無制限のテンプレート、超過時間の記録など、すべてのPro機能を永久に無料でご利用いただけます。今までお使いの機能は一つもなくなりません。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "발표 모드, 무제한 예비 알림, 오버타임 추적, 타이머 통계 등 모든 Pro 기능을 평생 무료로 이용하실 수 있어요. 쓰시던 기능은 하나도 사라지지 않았습니다."
+            "value": "세션 모드(구간 이름·대본), 무제한 템플릿, 오버타임 추적, 기록 등 모든 Pro 기능을 평생 무료로 이용하실 수 있어요. 쓰시던 기능은 하나도 사라지지 않았습니다."
           }
         }
       }
@@ -1165,6 +1127,22 @@
         }
       }
     },
+    "Class": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レッスン"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "수업"
+          }
+        }
+      }
+    },
     "Close": {
       "localizations": {
         "ja": {
@@ -1177,6 +1155,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "닫기"
+          }
+        }
+      }
+    },
+    "Closing": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クロージング"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "정리"
           }
         }
       }
@@ -1277,18 +1271,18 @@
         }
       }
     },
-    "Cooking": {
+    "Cool-down": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "料理"
+            "value": "クールダウン"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "요리"
+            "value": "쿨다운"
           }
         }
       }
@@ -1354,6 +1348,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "데이터"
+          }
+        }
+      }
+    },
+    "Date": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "日付"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "날짜"
           }
         }
       }
@@ -1664,6 +1674,38 @@
         }
       }
     },
+    "Every future Pro feature is included for you.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今後追加されるPro機能もすべて含まれます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앞으로 생기는 Pro 기능도 전부 포함됩니다."
+          }
+        }
+      }
+    },
+    "Every future Pro feature, included": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今後追加されるPro機能もすべて含まれます"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앞으로 생기는 Pro 기능도 전부 포함"
+          }
+        }
+      }
+    },
     "Everything from the first-run walkthrough is here — including how to use Rereminder on Apple Watch, Mac, widgets, and Siri.": {
       "comment": "Settings Help section footer",
       "localizations": {
@@ -1741,6 +1783,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "알림을 켜려면 다음 단계를 따라주세요:\n\n1. '설정으로 이동' 버튼을 탭하세요\n2. 설정에서 '%@' 앱을 찾으세요\n3. '알림' 메뉴를 선택하세요\n4. '알림 허용'을 켜세요\n\n💡 권장 설정:\n• 잠금 화면에 표시\n• 알림 센터에 표시\n• 배너로 표시\n\n이렇게 하면 타이머 알림을 놓치지 않아요!"
+          }
+        }
+      }
+    },
+    "Founding Supporter": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "創設サポーター"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "창단 후원자"
           }
         }
       }
@@ -1825,6 +1883,22 @@
         }
       }
     },
+    "Got it": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "確認しました"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "확인했어요"
+          }
+        }
+      }
+    },
     "Help": {
       "localizations": {
         "ja": {
@@ -1837,6 +1911,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "도움말"
+          }
+        }
+      }
+    },
+    "Higher for new buyers": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新規購入者は値上げ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "신규 구매자는 인상"
           }
         }
       }
@@ -1987,22 +2077,6 @@
         }
       }
     },
-    "In Presentation mode these messages are written for you from the section names, so what you type here is replaced.": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "プレゼンモードではセクション名からこの文言が自動で作られるため、ここに書いた内容は置き換わります。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "발표 모드에서는 구간 이름으로 이 문구가 자동으로 만들어져서, 여기 적은 내용은 대체돼요."
-          }
-        }
-      }
-    },
     "In Progress": {
       "localizations": {
         "ja": {
@@ -2015,6 +2089,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "진행 중"
+          }
+        }
+      }
+    },
+    "In Session mode these messages are written for you from the section names, so what you type here is replaced.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "セッションモードでは区間名からこの文言が自動で作られるため、ここに書いた内容は置き換わります。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "세션 모드에서는 구간 이름으로 이 문구가 자동으로 만들어져서, 여기 적은 내용은 대체돼요."
           }
         }
       }
@@ -2064,6 +2154,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "도입"
+          }
+        }
+      }
+    },
+    "Keep the cool-down from getting squeezed.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "クールダウンが削られないように。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "쿨다운이 쪼그라들지 않게."
           }
         }
       }
@@ -2261,6 +2367,22 @@
         }
       }
     },
+    "Let the app remember your setups": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "設定を覚えさせる"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱이 설정을 기억하게 하기"
+          }
+        }
+      }
+    },
     "Light": {
       "localizations": {
         "ja": {
@@ -2273,6 +2395,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "라이트"
+          }
+        }
+      }
+    },
+    "Limited on the free plan": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "無料プランでは個数制限あり"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "무료에서는 개수 제한"
           }
         }
       }
@@ -2338,6 +2476,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "본론"
+          }
+        }
+      }
+    },
+    "Main work": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "メイン"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "본운동"
           }
         }
       }
@@ -2419,6 +2573,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "모드"
+          }
+        }
+      }
+    },
+    "More pre-alerts": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "事前アラートの追加"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "미리 알림 추가"
           }
         }
       }
@@ -2617,6 +2787,22 @@
         }
       }
     },
+    "No next one planned": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "次の予定はありません"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다음 자리는 없어요"
+          }
+        }
+      }
+    },
     "No pre-alerts set": {
       "localizations": {
         "ja": {
@@ -2757,6 +2943,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "아직 모르겠어요"
+          }
+        }
+      }
+    },
+    "Nothing you already have is going away.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今お持ちのものは一つもなくなりません。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지금 갖고 계신 것은 하나도 사라지지 않습니다."
           }
         }
       }
@@ -3131,6 +3333,22 @@
         }
       }
     },
+    "Opening": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "オープニング"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "열기"
+          }
+        }
+      }
+    },
     "Overtime": {
       "localizations": {
         "ja": {
@@ -3378,29 +3596,13 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "プレゼンテーション"
+            "value": "発表"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "프레젠테이션"
-          }
-        }
-      }
-    },
-    "Presentation mode, templates, and history in the full app": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "プレゼンモード・テンプレート・履歴は製品版アプリで"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "발표 모드·템플릿·기록은 전체 앱에서"
+            "value": "발표"
           }
         }
       }
@@ -3437,6 +3639,22 @@
         }
       }
     },
+    "Price": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "価格"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "가격"
+          }
+        }
+      }
+    },
     "Privacy Policy": {
       "localizations": {
         "ja": {
@@ -3465,6 +3683,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pro"
+          }
+        }
+      }
+    },
+    "Pro is changing shape. Here's what that means for you — and what it doesn't.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proの内容が変わります。それがあなたにとって何を意味するのか、そして何は変わらないのかをお伝えします。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pro가 파는 것이 달라집니다. 그것이 당신에게 무엇을 뜻하는지, 그리고 무엇은 그대로인지 알려 드립니다."
           }
         }
       }
@@ -3578,6 +3812,38 @@
           "stringUnit": {
             "state": "translated",
             "value": "남은 시간: %@"
+          }
+        }
+      }
+    },
+    "Remembers your last timer": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最後のタイマーを記憶"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "마지막 타이머 기억"
+          }
+        }
+      }
+    },
+    "Remind me": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "知らせてください"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "알려 주세요"
           }
         }
       }
@@ -3918,22 +4184,6 @@
         }
       }
     },
-    "Save template": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "テンプレートを保存"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "템플릿 저장"
-          }
-        }
-      }
-    },
     "Save the current settings as a template": {
       "localizations": {
         "ja": {
@@ -3962,6 +4212,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "저장했어요"
+          }
+        }
+      }
+    },
+    "Saved setups": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "保存した設定"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "저장한 설정"
           }
         }
       }
@@ -4062,6 +4328,22 @@
         }
       }
     },
+    "Section Scripts": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "区間の台本"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "구간 대본"
+          }
+        }
+      }
+    },
     "Section lengths": {
       "localizations": {
         "ja": {
@@ -4106,6 +4388,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "섹션 남은 시간"
+          }
+        }
+      }
+    },
+    "See what's changing": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "変更内容を見る"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "바뀌는 내용 보기"
           }
         }
       }
@@ -4186,6 +4484,70 @@
           "stringUnit": {
             "state": "translated",
             "value": "테스트 알림 보내기"
+          }
+        }
+      }
+    },
+    "Session 1": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "セッション1"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "세션 1"
+          }
+        }
+      }
+    },
+    "Session 2": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "セッション2"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "세션 2"
+          }
+        }
+      }
+    },
+    "Session Mode": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "セッションモード"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "세션 모드"
+          }
+        }
+      }
+    },
+    "Session mode, templates, and history in the full app": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "セッションモード・テンプレート・記録は完全版アプリで"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "세션 모드·템플릿·기록은 전체 앱에서"
           }
         }
       }
@@ -4334,6 +4696,22 @@
         }
       }
     },
+    "Six sessions, and the last one still gets its time.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "セッションが6つあっても、最後の1つまで時間を確保。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "세션이 여섯 개여도 마지막 하나까지 제 시간을 갖게."
+          }
+        }
+      }
+    },
     "Skip": {
       "localizations": {
         "ja": {
@@ -4398,18 +4776,18 @@
         }
       }
     },
-    "Start Presentation": {
+    "Start Session": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "プレゼンテーションを開始"
+            "value": "セッション開始"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "프레젠테이션 시작"
+            "value": "세션 시작"
           }
         }
       }
@@ -4800,6 +5178,22 @@
         }
       }
     },
+    "Thank you for backing this early": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "早くから支えてくださりありがとうございます"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "먼저 믿어 주셔서 고맙습니다"
+          }
+        }
+      }
+    },
     "Thank you for being an early user 💙": {
       "localizations": {
         "ja": {
@@ -4828,6 +5222,38 @@
           "stringUnit": {
             "state": "translated",
             "value": "Apple Watch에 앱이 설치돼 있지 않아요"
+          }
+        }
+      }
+    },
+    "The app remembers your setups": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アプリがあなたの設定を覚えます"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱이 당신의 설정을 기억합니다"
+          }
+        }
+      }
+    },
+    "The app remembers your setups — saved setups, last timer, session tools": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "アプリが設定を覚えます — 保存した設定・最後のタイマー・セッション道具"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱이 설정을 기억합니다 — 저장한 설정·마지막 타이머·세션 도구"
           }
         }
       }
@@ -4880,18 +5306,18 @@
         }
       }
     },
-    "This shows on screen while you present, when this section's turn comes.": {
+    "This shows on screen while you run the session, when this section's turn comes.": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "発表中、このセクションの番になると画面に出ます。"
+            "value": "セッション中にこの区間の番になると画面に表示されます。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "발표 중 이 구간 차례가 되면 화면에 떠요."
+            "value": "세션이 도는 동안 이 구간 차례가 되면 화면에 떠요."
           }
         }
       }
@@ -5349,6 +5775,22 @@
         }
       }
     },
+    "Tomorrow's the day. Want to run through it once?": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "明日ですね。一度通してみますか？"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "내일이네요. 한 번 돌려 볼까요?"
+          }
+        }
+      }
+    },
     "Total Sessions": {
       "localizations": {
         "ja": {
@@ -5446,22 +5888,6 @@
         }
       }
     },
-    "Trial %lld left": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "体験あと%lld回"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "체험 %lld회 남음"
-          }
-        }
-      }
-    },
     "Trial: %lld views remaining": {
       "localizations": {
         "ja": {
@@ -5542,22 +5968,6 @@
         }
       }
     },
-    "Turned this one on for you. Pro keeps them unlimited.": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "今回は1つ追加しました。Proなら制限なしで使えます。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "이번 한 번은 켜 드렸어요. Pro면 개수 제한이 없어요."
-          }
-        }
-      }
-    },
     "Unknown": {
       "localizations": {
         "ja": {
@@ -5574,18 +5984,18 @@
         }
       }
     },
-    "Unlock all features": {
+    "Unlimited for everyone": {
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "すべての機能を解除"
+            "value": "すべての人に無制限"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "모든 기능 잠금 해제"
+            "value": "모두에게 무제한"
           }
         }
       }
@@ -5602,22 +6012,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "모든 기능 잠금 해제 · 일회성 구매"
-          }
-        }
-      }
-    },
-    "Unlock unlimited templates": {
-      "localizations": {
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "テンプレートを無制限に解除"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "무제한 템플릿 잠금 해제"
           }
         }
       }
@@ -5779,6 +6173,38 @@
         }
       }
     },
+    "Warm-up": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ウォームアップ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "워밍업"
+          }
+        }
+      }
+    },
+    "We'll remind you the evening before, with this setup ready to go.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "その前日の夕方にお知らせします。今の設定はそのまま用意しておきます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "그 전날 저녁에 알려 드릴게요. 지금 설정 그대로 준비해 둡니다."
+          }
+        }
+      }
+    },
     "Wear your Apple Watch and keep it near this iPhone.": {
       "localizations": {
         "ja": {
@@ -5791,6 +6217,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Apple Watch를 착용하고 이 iPhone 가까이 두세요."
+          }
+        }
+      }
+    },
+    "What Pro unlocks": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proで解放されるもの"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pro가 여는 것"
           }
         }
       }
@@ -5875,6 +6317,70 @@
         }
       }
     },
+    "What you paid": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "お支払いいただいた金額"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "결제하신 금액"
+          }
+        }
+      }
+    },
+    "What's changing": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "変わること"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이렇게 바뀝니다"
+          }
+        }
+      }
+    },
+    "When's the next one?": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "次はいつですか？"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다음 자리는 언제인가요?"
+          }
+        }
+      }
+    },
+    "With Pro, the app keeps setups like this and brings them back in one tap.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Proでは、こうした設定をそのまま保存してワンタップで呼び出せます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pro에서는 이런 설정을 저장해 두고 한 번에 불러올 수 있어요."
+          }
+        }
+      }
+    },
     "Without notification permission, the following features won't work properly:": {
       "localizations": {
         "ja": {
@@ -5919,6 +6425,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "실시간으로 동작합니다"
+          }
+        }
+      }
+    },
+    "Workshop": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ワークショップ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "워크숍"
           }
         }
       }
@@ -5971,6 +6493,22 @@
         }
       }
     },
+    "You backed this app early. Anything we add to Pro from now on unlocks for you automatically — no extra purchase, ever.": {
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "このアプリがまだ始まったばかりの頃に購入してくださいました。今後Proに何が追加されても自動的に解放されます — 追加購入は一切ありません。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 앱이 막 시작할 때 값을 치러 주셨습니다. 앞으로 Pro에 무엇이 추가되든 자동으로 열립니다 — 추가 결제는 영원히 없습니다."
+          }
+        }
+      }
+    },
     "You can set your own alert times in Settings.": {
       "localizations": {
         "ja": {
@@ -6003,18 +6541,24 @@
         }
       }
     },
-    "You usually run %1$@ with %2$lld alerts around now.": {
+    "You usually run %@ with %lld alerts around now.": {
       "localizations": {
-        "ja": {
+        "en": {
           "stringUnit": {
-            "state": "translated",
-            "value": "この時間帯はいつも %1$@・通知 %2$lld 個で使っています。"
+            "state": "new",
+            "value": "You usually run %1$@ with %2$lld alerts around now."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
             "value": "이맘때면 %1$@ 에 알림 %2$lld 개로 쓰시더라고요."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この時間帯はいつも %1$@・通知 %2$lld 個で使っています。"
           }
         }
       }
@@ -7479,19 +8023,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Presentation mode divides your time into sections — intro, main, Q&A — and alerts you at each boundary."
+            "value": "In Session mode, split the time into parts — you'll be told at every change."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "発表モードでイントロ・本編・Q&Aのように時間を分けると、区間が変わるたびに知らせます。"
+            "value": "セッションモードで導入・本編・まとめのように時間を分けると、区間が変わるたびに知らせます。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "발표 모드로 인트로·본론·Q&A처럼 시간을 나누면, 구간이 바뀔 때마다 알려줍니다."
+            "value": "세션 모드로 도입·본론·마무리처럼 시간을 나누면, 구간이 바뀔 때마다 알려줍니다."
           }
         }
       }
@@ -7503,19 +8047,19 @@
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Split a long talk into sections"
+            "value": "Split a long session into sections"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "長い発表は区間に分けましょう"
+            "value": "長いセッションは区間に分けてみましょう"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "긴 발표는 구간으로 나눠 보세요"
+            "value": "긴 세션은 구간으로 나눠 보세요"
           }
         }
       }

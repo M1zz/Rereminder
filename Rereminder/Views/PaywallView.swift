@@ -96,7 +96,7 @@ struct PaywallView: View {
             Text(AppName.pro)
                 .dsScaledFont(32, weight: .bold, design: .rounded, relativeTo: .title, maxSize: 44)
 
-            Text("Unlock all features")
+            Text("The app remembers your setups")
                 .font(.title3)
                 .foregroundStyle(.secondary)
 
@@ -174,15 +174,22 @@ struct PaywallView: View {
                 Divider()
 
                 // Rows
+                // ⚠️ 첫 두 줄이 이 페이월의 문장이다 — "당신 설정을 기억한다".
+                //    기능 나열이 아니라 **무엇을 사는지**가 맨 위에 와야 한다.
+                comparisonRow("Saved setups", free: false, pro: true)
+                comparisonRow("Remembers your last timer", free: false, pro: true)
+                Divider()
                 comparisonRow("Timer", free: true, pro: true)
-                comparisonRow("Pre-alerts", free: "1", pro: "∞")
+                // 알림은 이제 양쪽 다 무제한이다 — 이 줄이 곧 이번 변경의 문장이다.
+                comparisonRow("Pre-alerts", free: "∞", pro: "∞")
                 comparisonRow("Live Activity", free: true, pro: true)
                 comparisonRow("Watch / Widget", free: true, pro: true)
                 Divider()
-                comparisonRow("Presentation Mode", free: false, pro: true)
-                comparisonRow("Overtime Tracking", free: false, pro: true)
-                comparisonRow("Templates", free: "3", pro: "∞")
                 comparisonRow("Custom Messages", free: true, pro: true)
+                Divider()
+                comparisonRow("Session Mode", free: false, pro: true)
+                comparisonRow("Section Scripts", free: false, pro: true)
+                comparisonRow("Overtime Tracking", free: false, pro: true)
                 comparisonRow("Timer History", free: false, pro: true)
             }
             .background(Color(uiColor: .secondarySystemBackground).opacity(0.5))
@@ -238,11 +245,21 @@ struct PaywallView: View {
         VStack(spacing: 12) {
             if store.isPro {
                 // 이미 Pro
-                HStack(spacing: 8) {
-                    Image(systemName: "checkmark.seal.fill")
-                        .foregroundStyle(.green)
-                    Text("You're already a Pro member!")
-                        .font(.headline)
+                VStack(spacing: 10) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "checkmark.seal.fill")
+                            .foregroundStyle(.green)
+                        Text("You're already a Pro member!")
+                            .font(.headline)
+                    }
+                    // 값을 먼저 치른 사람은 여기서도 그 사실이 보여야 한다.
+                    if FoundingSupporter.isFounder {
+                        FounderBadge()
+                        Text("Every future Pro feature is included for you.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
                 }
                 .padding(.vertical, 16)
 

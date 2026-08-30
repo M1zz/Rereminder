@@ -19,7 +19,7 @@ struct NotificationMessageSettingView: View {
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                     // 발표 모드와 겹치는 지점 — 모르고 쓰면 "적었는데 왜 다른 게 뜨지"가 된다.
-                    Text("In Presentation mode these messages are written for you from the section names, so what you type here is replaced.")
+                    Text("In Session mode these messages are written for you from the section names, so what you type here is replaced.")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }

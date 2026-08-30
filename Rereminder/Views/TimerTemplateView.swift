@@ -66,14 +66,14 @@ struct TimerTemplateView: View {
             .navigationTitle("Timer Templates")
             .navigationBarTitleDisplayMode(.inline)
             .safeAreaInset(edge: .bottom) {
-                if !StoreManager.isProUser && templates.count >= ProGate.freeTemplateLimit {
+                if !ProGate.canRememberSetup {
                     Button {
                         paywallFeature = .unlimitedTemplates
                         showPaywall = true
                     } label: {
                         HStack(spacing: 8) {
                             ProBadge(small: true)
-                            Text("Unlock unlimited templates")
+                            Text("Let the app remember your setups")
                                 .font(.subheadline.weight(.medium))
                             Spacer()
                             Image(systemName: "chevron.right")

@@ -113,8 +113,11 @@ enum ActivityReporter {
         // 이벤트에는 6시간 쓰로틀이 걸려 있고 과거형이지만, 스냅샷은 설치당 1건 upsert라 **현재 상태**다.
         // 남은 체험 횟수는 여기서 계산하지 않는다(한도 상수는 바뀔 수 있다) — 원자료만 보내고
         // 해석은 UsageInsights가 한다.
-        metrics["trial.prealerts"] = Double(TrialCounter.count(for: .unlimitedPrealerts))
-        metrics["flag.prealertTrialExtended"] = TrialCounter.extensionAccepted(for: .unlimitedPrealerts) ? 1 : 0
+        // 지금의 유료 축은 **세션 운영**(발표 모드)이다. 옛 키(`trial.prealerts`)는 알림 한도를
+        // 없애며 늘지 않게 됐지만, 예전 스냅샷과 합산되려면 이름을 재활용하면 안 된다 —
+        // 새 키를 따로 보내고 해석은 `UsageInsights` 가 한다.
+        metrics["trial.presentation"] = Double(TrialCounter.count(for: .presentationMode))
+        metrics["flag.presentationTrialExtended"] = TrialCounter.extensionAccepted(for: .presentationMode) ? 1 : 0
 
         // 워치·맥 보유 여부 — 앱이 직접 물어본 답이라 "아직 안 물어봄"과 "없음"이 다르다.
         // 그래서 답을 들은 설치만 보낸다(모르는 사람을 '없음'으로 세면 워치 앱의 값이 과소평가된다).

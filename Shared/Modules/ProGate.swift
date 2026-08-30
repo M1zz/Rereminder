@@ -4,12 +4,31 @@
 //
 //  무료/Pro 기능 제한 게이트 (5+5 trial 모델)
 //
+//  **파는 축은 "알림 개수"가 아니라 "세션 운영"이다.**
+//
+//  왜 바꿨나: 이 앱이 기본 시계 앱 대신 설치될 이유는 "끝나기 전에 여러 번 알려 준다" 하나뿐인데,
+//  바로 그것을 개수로 세면 무료 사용자가 손에 쥔 것은 **기능적으로 기본 타이머**다. 결제는
+//  잔존 위에서만 일어나는데, 잔존이 생길 자리를 게이트가 먼저 막고 있었다. 게다가 그 벽에
+//  걸리는 사람은 **발표자·강사·퍼실리테이터**(= 실제로 돈을 낼 사람)이고, 25/5로 고정된
+//  포모도로 사용자는 알림 2개로 충분해 페이월을 한 번도 보지 않았다 — 정확히 반대로 작동했다.
+//
 //  잠금 원칙:
-//  - 무료: 타이머, 예비알림 1개, Live Activity, 소리/진동, Watch, 위젯, 커스텀 메시지, 테마/라벨 색상
-//  - Pro: 예비알림 무제한, 발표 모드, 오버타임 추적, 템플릿 무제한, 통계
+//  - 무료: 타이머, **예비 알림 무제한**, Live Activity, 소리/진동, Watch, 위젯, 커스텀 메시지,
+//    테마/라벨 색상. ⚠️ **워치·맥을 유료로 돌리지 말 것** — 수업 중 강사 손목에서 진동하는
+//    워치 화면은 다른 강사에게 보이는 유일한 광고다. 막으면 획득 경로를 스스로 끊는다.
+//  - Pro 가 파는 한 문장은 **"앱이 당신의 설정을 기억한다"**이다.
+//    템플릿 저장·불러오기 + **마지막 설정 복원**이 그 문장의 알맹이고, 세션 모드(구간 이름·대본)·
+//    오버타임·기록도 같은 Pro 안에 있다. 게이트는 흩어지지 않고 여기 하나로 통일된다.
+//
+//  ⚠️ **무료 사용자는 앱을 껐다 켜면 다이얼이 기본값으로 돌아온다**(`ProGate.canRememberSetup`).
+//     백그라운드에 다녀오는 것은 초기화하지 않는다 — 그건 제한이 아니라 고장으로 읽힌다.
+//
+//  ⚠️ 이름은 "발표 모드"가 아니라 **"세션 모드"**다. 필라테스 강사는 "발표 모드"를 보고 자기
+//     것이라고 생각하지 않는데, 실제로는 그가 이 기능의 주 사용자다("세션"은 강사·트레이너가
+//     쓰는 말이고 학회 발표자에게도 통한다). 코드 식별자(`presentationMode`)는 계약이라 그대로다.
 //
 //  5+5 trial:
-//  - presentationMode, unlimitedPrealerts, overtimeTracking, timerHistory 에 적용
+//  - presentationMode, overtimeTracking, timerHistory 에 적용
 //  - unlimitedTemplates 는 슬롯 개념이라 hard gate 유지 (3개 free)
 //
 
@@ -20,28 +39,31 @@ enum ProGate {
     // MARK: - Pro 기능 정의
 
     enum Feature: String, CaseIterable {
-        case unlimitedPrealerts       // 예비 알림 2개 이상
-        case presentationMode         // 발표 모드
+        /// 세션 모드 — 구간 이름·대본. ⚠️ `rawValue`("presentationMode")는 **바꾸지 말 것**:
+        /// 분석 이벤트 슬라이스(`paywall_shown:presentationMode`)와 스냅샷이 이 문자열을 쓴다.
+        /// 사람에게 보이는 이름만 "세션 모드"다.
+        case presentationMode
         case overtimeTracking         // 오버타임 카운트
-        case unlimitedTemplates       // 템플릿 4개 이상 저장
+        /// **기억하기** — 템플릿 저장·불러오기 + 마지막 설정 복원.
+        /// ⚠️ `rawValue`("unlimitedTemplates")는 **바꾸지 말 것**: 분석 이벤트 슬라이스와
+        /// 스냅샷이 이 문자열을 쓴다. 파는 것이 "개수"에서 "기억"으로 바뀌었을 뿐이다.
+        case unlimitedTemplates
         case timerHistory             // 타이머 사용 통계
 
         var displayName: String {
             switch self {
-            case .unlimitedPrealerts:     return "Unlimited Pre-alerts"
-            case .presentationMode:       return "Presentation Mode"
+            case .presentationMode:       return "Session Mode"
             case .overtimeTracking:       return "Overtime Tracking"
-            case .unlimitedTemplates:     return "Unlimited Templates"
+            case .unlimitedTemplates:     return "Saved setups"
             case .timerHistory:           return "Timer History & Stats"
             }
         }
 
         var icon: String {
             switch self {
-            case .unlimitedPrealerts:     return "bell.badge.fill"
             case .presentationMode:       return "person.and.background.dotted"
             case .overtimeTracking:       return "timer.circle.fill"
-            case .unlimitedTemplates:     return "square.stack.3d.up.fill"
+            case .unlimitedTemplates:     return "bookmark.fill"
             case .timerHistory:           return "chart.bar.fill"
             }
         }
@@ -57,16 +79,13 @@ enum ProGate {
 
     // MARK: - Free Limits
 
-    /// 무료로 켤 수 있는 예비 알림 수.
-    ///
-    /// ⚠️ **1 → 2 로 올렸다.** 이 앱이 파는 문장은 "끝나기 전에 **여러 번** 알려 준다"인데,
-    ///    무료 1개는 그 문장이 성립하지 않는 상태다(그냥 'N분 전 알림 하나' = 기본 타이머로도 되는 것).
-    ///    가치를 경험하기 전에 벽을 만나면 결제가 아니라 이탈이 된다. 2개면 "한 번 더"가 성립하고,
-    ///    3개째부터 받으면 그건 실제로 **구간을 설계하는 사람**(발표자·트레이너)이다.
-    ///    ⚠️ 올리기 전에 통계 > "주로 쓰는 알림 개수"에서 **결제** 표본만 켜고 확인할 것 —
-    ///       결제한 사람이 주로 쓰는 개수가 이 값보다 넉넉히 커야 팔 것이 남는다.
-    static let freePrealertLimit = 2
-    static let freeTemplateLimit = 3
+    // ⚠️ **예비 알림에는 한도가 없다.** 예전에 있던 `freePrealertLimit` 은 삭제됐다 —
+    //    되살리지 말 것. 그 한도는 이 앱을 설치할 이유 자체를 무료 사용자에게서 빼앗았고,
+    //    벽에 걸리는 사람이 하필 결제 가능성이 가장 큰 사람(발표자·강사·퍼실리테이터)이었다.
+    //    자세한 근거는 파일 머리말 참고.
+    //
+    // ⚠️ 템플릿에도 **무료 몫이 없다**(예전의 `freeTemplateLimit = 3` 은 삭제). 저장·불러오기
+    //    자체가 Pro 다 — 그게 이제 이 앱이 파는 한 문장이기 때문이다. 개수로 다시 나누지 말 것.
 
     // MARK: - Gate Result
 
@@ -120,53 +139,6 @@ enum ProGate {
         return .blocked(stage: .second)
     }
 
-    // MARK: - 알림 추가 게이트
-    //
-    // "1번째 알림은 free, 2번째부터 체험 평가" 정책이 알림을 켤 수 있는 화면마다 복사돼 있었다.
-    // 한쪽만 고치면 같은 앱 안에서 규칙이 갈라지므로 여기 한 곳에 둔다.
-
-    enum PrealertAdmission: Equatable {
-        case allowed
-        /// 체험은 소진됐지만 **오늘치 유예가 남아 있다** — 페이월 대신 이번 한 번을 내준다.
-        ///
-        /// 왜: 한도에 막힌 순간은 사용자가 이 앱의 가치를 **가장 강하게 원하는 순간**이다.
-        /// 그 자리에서 문을 닫으면 결제가 아니라 이탈이 된다("이 앱은 안 되는 앱"). 한 번 내주면
-        /// 원하던 것을 손에 넣은 채로 "다음부터는 Pro"라는 문장을 듣게 되고, 그게 훨씬 잘 팔린다.
-        /// 하루 한 번으로 묶어 두어 게이트 자체가 무의미해지지는 않는다.
-        case grace(stage: PaywallStage)
-        case blocked(stage: PaywallStage)
-    }
-
-    /// 지금 알림을 하나 더 켤 수 있는지 — **부작용 없는 판정**.
-    /// 자물쇠 아이콘처럼 그릴 때마다 물어보는 곳에서도 안전하게 쓸 수 있다.
-    static func prealertAdmission(currentCount: Int) -> PrealertAdmission {
-        guard currentCount >= freePrealertLimit else { return .allowed }
-        switch evaluate(.unlimitedPrealerts) {
-        case .allowed, .allowedWithTrial:
-            return .allowed
-        case .blocked(let stage):
-            return PrealertGrace.isAvailable ? .grace(stage: stage) : .blocked(stage: stage)
-        }
-    }
-
-    /// 사용자가 실제로 알림을 켜려 할 때 — 판정은 같고 막혔을 때 이벤트를 남긴다.
-    /// ⚠️ 화면을 그리는 경로에서 부르지 말 것(그릴 때마다 이벤트가 쌓인다). 그 용도는 위 함수다.
-    static func requestPrealert(currentCount: Int) -> PrealertAdmission {
-        let admission = prealertAdmission(currentCount: currentCount)
-        switch admission {
-        case .allowed:
-            break
-        case .grace(let stage):
-            // 유예도 "한도를 몸으로 겪은" 순간이다 — 소진 이벤트는 그대로 남긴다.
-            AnalyticsManager.log(.premiumTrialExhausted(feature: .unlimitedPrealerts, stage: stage))
-            PrealertGrace.consume()
-            AnalyticsManager.log(.prealertGraceGranted(stage: stage))
-        case .blocked(let stage):
-            AnalyticsManager.log(.premiumTrialExhausted(feature: .unlimitedPrealerts, stage: stage))
-        }
-        return admission
-    }
-
     /// 사용자가 기능을 실제로 사용했을 때 호출 (Pro면 no-op)
     static func recordUsage(_ feature: Feature) {
         guard !StoreManager.isProUser else { return }
@@ -190,16 +162,14 @@ enum ProGate {
         evaluate(feature).isAllowed
     }
 
-    /// 예비 알림 추가 가능 여부 (무료 한도까지는 항상 free, 그 위는 trial)
-    static func canAddPrealert(currentCount: Int) -> Bool {
-        if currentCount < freePrealertLimit { return true }
-        return evaluate(.unlimitedPrealerts).isAllowed
-    }
+    /// **앱이 설정을 기억해도 되는가** — 템플릿 저장·불러오기와 마지막 설정 복원의 단일 판정.
+    ///
+    /// 체험(5+5)이 없는 hard gate 다. "몇 번 더 써 보세요"가 성립하지 않는 종류의 기능이라
+    /// (기억은 쌓여야 값이 나오는데 체험이 끝나면 쌓인 것이 사라진다) 처음부터 명확히 가른다.
+    static var canRememberSetup: Bool { StoreManager.isProUser }
 
-    /// 템플릿 저장 가능 여부 (slot 기반 — trial 적용 안 됨)
-    static func canSaveTemplate(currentCount: Int) -> Bool {
-        StoreManager.isProUser || currentCount < freeTemplateLimit
-    }
+    /// 템플릿 저장 가능 여부. ⚠️ 개수는 보지 않는다 — 저장 자체가 Pro 다.
+    static func canSaveTemplate(currentCount: Int = 0) -> Bool { canRememberSetup }
 
     /// 발표 모드 사용 가능 여부
     static var canUsePresentationMode: Bool {
