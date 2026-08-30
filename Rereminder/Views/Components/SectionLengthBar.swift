@@ -54,6 +54,10 @@ struct SectionLengthBar: View {
                 .dsScaledFont(15, weight: .semibold, design: .rounded,
                               relativeTo: .footnote, maxSize: 21)
                 .monospacedDigit()
+                // 타이머 숫자는 접히지 않는다 — 큰 글씨 설정에서 "110:00" 이 두 줄이 되면
+                // 칩 높이가 들쭉날쭉해지고 무엇보다 시간이 시간처럼 안 읽힌다.
+                .lineLimit(1)
+                .fixedSize(horizontal: true, vertical: false)
                 .foregroundStyle(color)
         }
         .padding(.horizontal, 10)

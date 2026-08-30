@@ -168,6 +168,14 @@ struct TimerMainView: View {
             let lineWidth = clockSize * 0.083
             let spacing = availableHeight * 0.01
             let buttonSize = clockSize * 0.18
+            // 링의 **보이는** 아래 끝은 레이아웃 프레임보다 아래에 있다 — 흰 핸들(지름 lineWidth)과
+            // 종 노브(lineWidth × 1.6)는 원 위에 중심을 두고 그려져 절반이 프레임 밖으로 나간다.
+            // 그 몫을 빼 두지 않으면 원 아래에 세우는 것(구간 길이 칩·카운트다운)이 6시 방향
+            // 핸들·종에 달라붙는다. 30분(=180°)처럼 핸들이 정확히 아래로 오는 설정에서 특히 그렇다.
+            let knobOverflow = lineWidth * 0.8
+            // 원 아래 묶음의 **공통 간격**. 구간 길이·기기 연결·템플릿 바가 이 값 하나를
+            // 나눠 쓰기 때문에 여백이 균등해진다. 간격을 바꾸려면 여기만 고친다.
+            let stackGap = max(DSSpacing.md, spacing * 2)
 
             VStack(spacing: 0) {
                 // 빠른Settings 영역 — 알림 프리셋(종) 칩은 타이머 모드 전용.
@@ -183,79 +191,83 @@ struct TimerMainView: View {
                     }
                 }
 
-                Spacer()
+                Spacer(minLength: 0)
 
                 // 드래그 배지가 원 밖으로 나가므로 아래쪽 템플릿 바·구간 리스트보다 위에 그린다
                 clockView(size: clockSize,
                           lineWidth: lineWidth,
                           geometry: geometry,
                           buttonSize: buttonSize)
+                    .padding(.bottom, knobOverflow)
                     .zIndex(1)
 
-                // **걸기 전에도 구간이 몇 분짜리인지 보인다.** 종을 옮기는 조작은 각도라
-                // "그래서 첫 구간이 몇 분이지?"를 머리로 계산하게 되는데, 그 답을 바로 옆에 둔다.
-                // 실행 중에는 세우지 않는다 — 그 자리는 원 아래 줄어드는 숫자(SectionCountdownList) 몫이다.
-                if !isProgressMode, !isPresentationMode, derivedSegments.count > 1 {
-                    SectionLengthBar(segments: derivedSegments)
-                        .padding(.top, spacing * 2)
-                        .transition(.opacity)
-                }
+                // ── 원 아래 묶음: 구간 길이 → 기기 연결 → 템플릿·초기화 ─────────────────
+                // 셋이 **같은 간격**(stackGap)으로 쌓인다. 각자 padding 을 갖지 않는 이유가
+                // 이것이다 — 여백을 한 곳에서만 정해야 균등이 유지된다.
+                // ⚠️ 예전에는 구간 칩 바로 아래에 Spacer() 가 하나 더 있어서 남는 세로가
+                //    통째로 그 한 자리에 쏟아졌다(칩은 원에 달라붙고 그 아래만 휑했다).
+                //    남는 세로는 위아래 Spacer 가 반씩 나눠 갖는다 — 다시 끼워 넣지 말 것.
+                VStack(spacing: stackGap) {
+                    // **걸기 전에도 구간이 몇 분짜리인지 보인다.** 종을 옮기는 조작은 각도라
+                    // "그래서 첫 구간이 몇 분이지?"를 머리로 계산하게 되는데, 그 답을 바로 아래 둔다.
+                    // 실행 중에는 세우지 않는다 — 그 자리는 줄어드는 숫자(SectionCountdownList) 몫이다.
+                    if !isProgressMode, !isPresentationMode, derivedSegments.count > 1 {
+                        SectionLengthBar(segments: derivedSegments)
+                            .transition(.opacity)
+                    }
 
-                Spacer()
+                    // "손목에서도 볼 수 있나?"는 **걸기 전에** 알아야 고칠 수 있다.
+                    // 그래서 대기 중에도 그대로 둔다(설정 화면에만 두면 아무도 안 본다).
+                    // 발표 모드에서만 뺀다 — 구간 리스트가 화면 절반을 쓰는 자리라 한 줄이 아쉽다.
+                    if !isPresentationMode {
+                        DeviceLinkChips(watchStatus: watchLink.linkStatus, macStatus: macLinkStatus)
+                            .transition(.opacity)
+                    }
 
-                // "손목에서도 볼 수 있나?"는 **걸기 전에** 알아야 고칠 수 있다.
-                // 그래서 대기 중에도 그대로 둔다(설정 화면에만 두면 아무도 안 본다).
-                // 발표 모드에서만 뺀다 — 구간 리스트가 화면 절반을 쓰는 자리라 한 줄이 아쉽다.
-                if !isPresentationMode {
-                    DeviceLinkChips(watchStatus: watchLink.linkStatus, macStatus: macLinkStatus)
-                        .padding(.bottom, spacing)
-                        .transition(.opacity)
+                    // 마지막 칸 — 상태에 따라 하나만 선다
+                    if isPresentationMode, isProgressMode, let panel = currentScript {
+                        // 발표 중에는 **지금 구간의 대본**이 그 자리를 쓴다 — 목록은 고칠 때 필요한 것이고,
+                        // 도는 동안에는 읽을 것만 남는다.
+                        PresentationScriptPanel(sectionIndex: panel.index,
+                                                sectionName: panel.name,
+                                                script: panel.script,
+                                                nextName: panel.nextName,
+                                                maxHeight: availableHeight * 0.26)
+                            .transition(.opacity)
+                    } else if isPresentationMode {
+                        // 알림 지점 기준 파생 구간 리스트 (원 밖 아래쪽)
+                        // 이름을 편집하는 동안에는 키보드가 화면을 절반 가까이 먹으므로 리스트 몫을 늘린다
+                        // (원은 그만큼 작아지지만, 그때 중요한 건 지금 고치는 구간이 보이는 것이다)
+                        PresentationSectionList(
+                            screenVM: screenVM,
+                            focusedSectionIndex: $focusedSectionIndex,
+                            segments: derivedSegments,
+                            maxHeight: availableHeight * (isEditingSectionName ? 0.55 : 0.4),
+                            isEditable: isTimeEditable
+                        )
+                            .transition(.move(edge: .bottom).combined(with: .opacity))
+                    } else if isProgressMode && derivedSegments.count > 1 {
+                        // 구간별 카운트다운 (원 밖 아래쪽) — 링이 "전체가 얼마나 남았나"라면
+                        // 이건 "지금 이 구간이 얼마 남았나"다. 다음 알림까지의 시간이 곧 지금 구간의
+                        // 남은 시간이라 `nextAlertInfo` 자리를 대신한다(둘 다 두면 같은 말이 두 번).
+                        SectionCountdownList(
+                            segments: derivedSegments,
+                            elapsedSec: elapsedSec,
+                            maxHeight: availableHeight * 0.22
+                        )
+                            .transition(.opacity)
+                    } else if isProgressMode && !screenVM.nextAlertText.isEmpty {
+                        // Next 알림 Info (원 밖 아래쪽) — 알림이 하나뿐이라 구간 리스트가 무의미할 때
+                        nextAlertInfo
+                    } else if screenVM.state == .idle || screenVM.state == .finished {
+                        // 대기 상태: 최근 템플릿 칩 + 수정 시 저장 버튼 (원 밖 아래쪽)
+                        TemplateQuickBar(screenVM: screenVM)
+                            .padding(.horizontal)
+                    }
                 }
+                .padding(.top, stackGap)
 
-                if isPresentationMode, isProgressMode, let panel = currentScript {
-                    // 발표 중에는 **지금 구간의 대본**이 그 자리를 쓴다 — 목록은 고칠 때 필요한 것이고,
-                    // 도는 동안에는 읽을 것만 남는다.
-                    PresentationScriptPanel(sectionIndex: panel.index,
-                                            sectionName: panel.name,
-                                            script: panel.script,
-                                            nextName: panel.nextName,
-                                            maxHeight: availableHeight * 0.26)
-                        .padding(.bottom, spacing * 2)
-                        .transition(.opacity)
-                } else if isPresentationMode {
-                    // 알림 지점 기준 파생 구간 리스트 (원 밖 아래쪽)
-                    // 이름을 편집하는 동안에는 키보드가 화면을 절반 가까이 먹으므로 리스트 몫을 늘린다
-                    // (원은 그만큼 작아지지만, 그때 중요한 건 지금 고치는 구간이 보이는 것이다)
-                    PresentationSectionList(
-                        screenVM: screenVM,
-                        focusedSectionIndex: $focusedSectionIndex,
-                        segments: derivedSegments,
-                        maxHeight: availableHeight * (isEditingSectionName ? 0.55 : 0.4),
-                        isEditable: isTimeEditable
-                    )
-                        .padding(.bottom, spacing * 2)
-                        .transition(.move(edge: .bottom).combined(with: .opacity))
-                } else if isProgressMode && derivedSegments.count > 1 {
-                    // 구간별 카운트다운 (원 밖 아래쪽) — 링이 "전체가 얼마나 남았나"라면
-                    // 이건 "지금 이 구간이 얼마 남았나"다. 다음 알림까지의 시간이 곧 지금 구간의
-                    // 남은 시간이라 `nextAlertInfo` 자리를 대신한다(둘 다 두면 같은 말이 두 번).
-                    SectionCountdownList(
-                        segments: derivedSegments,
-                        elapsedSec: elapsedSec,
-                        maxHeight: availableHeight * 0.22
-                    )
-                        .padding(.bottom, spacing * 2)
-                        .transition(.opacity)
-                } else if isProgressMode && !screenVM.nextAlertText.isEmpty {
-                    // Next 알림 Info (원 밖 아래쪽) — 알림이 하나뿐이라 구간 리스트가 무의미할 때
-                    nextAlertInfo
-                        .padding(.vertical, spacing * 3)
-                } else if screenVM.state == .idle || screenVM.state == .finished {
-                    // 대기 상태: 최근 템플릿 칩 + 수정 시 저장 버튼 (원 밖 아래쪽)
-                    TemplateQuickBar(screenVM: screenVM)
-                        .padding(.horizontal)
-                        .padding(.bottom, spacing * 2)
-                }
+                Spacer(minLength: 0)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             // 리스트가 커지면 원이 작아진다 — 두 변화가 한 몸으로 움직여야 매끄럽다
@@ -675,6 +687,8 @@ struct TimerMainView: View {
         return Text(timeText)
             .font(.body.weight(.semibold))
             .monospacedDigit()
+            .lineLimit(1)                       // 타이머 숫자는 접히지 않는다
+            .fixedSize(horizontal: true, vertical: false)
             .padding(.horizontal, 12)
             .padding(.vertical, 6)
             .background(Color.accentColor)
