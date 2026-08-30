@@ -88,6 +88,11 @@ struct AlertPresetButtons: View {
         if #available(iOS 17.0, *) {
             TipView(AlertPresetTip())
                 .padding(.horizontal, DSSpacing.md)
+                // ⚠️ 팁은 **상한을 둔다.** 접근성 최대 크기에서 이 카드 하나가 화면의 1/3(약 380pt)을
+                //    먹어서, 원 아래 기기 칩이 탭 바 뒤로 밀려 겹쳤다. 팁은 지나가는 힌트이고
+                //    닫을 수도 있다 — 주인공(원 안의 시간)이 밀려나면 안 된다.
+                //    가운데 시간도 같은 방식으로 상한을 둔다(TimerMainView.centerTimeDisplay).
+                .dynamicTypeSize(...DynamicTypeSize.xxLarge)
         }
     }
 
@@ -95,7 +100,8 @@ struct AlertPresetButtons: View {
             HStack(spacing: DSSpacing.sm) {
                 // 텍스트 설명 대신 심볼 — 링 위 알림 마커와 같은 색
                 Image(systemName: "bell.fill")
-                    .font(.title2.weight(.semibold))
+                    // 상한을 둔다 — 이 줄이 부풀면 아래 링 위로 올라탄다(큰 글씨에서 실제로 겹쳤다)
+                    .dsScaledFont(22, weight: .semibold, relativeTo: .title2, maxSize: 30)
                     .foregroundStyle(DSColor.marker)
                     .accessibilityHidden(true)
 
@@ -114,7 +120,9 @@ struct AlertPresetButtons: View {
                             } label: {
                                 HStack(spacing: 2) {
                                     Text(offsetLabel(offset))
-                                        .font(DSFont.callout.weight(.medium))
+                                        .dsScaledFont(16, weight: .medium,
+                                                      relativeTo: .callout, maxSize: 24)
+                                        .lineLimit(1)
                                     if isLocked(offset: offset, selected: selected) {
                                         Image(systemName: "lock.fill")
                                             .font(.caption2)

@@ -12,6 +12,12 @@ struct TimerMainView: View {
     private var remaining: TimeInterval { screenVM.remaining }
 
     @State private var showTimeInput = false
+
+    /// 원 아래 묶음의 최소 여백 — 글자 크기 설정을 키우면 함께 커진다.
+    @ScaledMetric(relativeTo: .body) private var gapUnit: CGFloat = 14
+
+    /// 글자 크기 설정. 접근성 크기에서는 원이 자리를 양보한다(`clockHeightRatio`).
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     @State private var isDragging = false
 
     /// 구간 이름 입력 포커스 (키보드 내리기 제어용)
@@ -163,7 +169,8 @@ struct TimerMainView: View {
             let availableHeight = geometry.size.height
             let availableWidth = geometry.size.width
             // 발표 모드: 하단 구간 리스트 공간 확보를 위해 원을 축소
-            let clockSize = min(availableWidth * 0.85, availableHeight * 0.55)
+            let clockSize = min(availableWidth * clockWidthRatio,
+                                availableHeight * clockHeightRatio)
                 * (isPresentationMode ? 0.72 : 1.0)
             let lineWidth = clockSize * 0.083
             let spacing = availableHeight * 0.01
@@ -175,7 +182,9 @@ struct TimerMainView: View {
             let knobOverflow = lineWidth * 0.8
             // 원 아래 묶음의 **공통 간격**. 구간 길이·기기 연결·템플릿 바가 이 값 하나를
             // 나눠 쓰기 때문에 여백이 균등해진다. 간격을 바꾸려면 여기만 고친다.
-            let stackGap = max(DSSpacing.md, spacing * 2)
+            // 바닥값이 글자 크기를 따라간다(gapUnit) — 글자가 커지면 요소도 커지는데
+            // 여백만 그대로면 화면이 빽빽해 보인다.
+            let stackGap = max(gapUnit, spacing * 2)
 
             VStack(spacing: 0) {
                 // 빠른Settings 영역 — 알림 프리셋(종) 칩은 타이머 모드 전용.
@@ -468,6 +477,24 @@ struct TimerMainView: View {
             }
             AccessibilityNotification.Announcement(announcement).post()
         }
+    }
+
+    /// 원이 세로로 쓰는 몫. **글자가 커지면 원이 먼저 양보한다.**
+    /// ⚠️ 고정 55% 로 두면 큰 글씨 설정에서 위쪽(안내 카드·알림 칩)이 부풀어
+    ///    원 아래 기기 칩이 탭 바 뒤로 밀려 겹치고, 알림 칩이 링 위로 올라탔다.
+    ///    다 보이지 않는 큰 원보다 조금 작아도 전부 보이는 화면이 낫다.
+    private var clockHeightRatio: CGFloat {
+        switch dynamicTypeSize {
+        case .accessibility3, .accessibility4, .accessibility5: return 0.34
+        case .accessibility1, .accessibility2:                  return 0.40
+        case .xxxLarge:                                         return 0.50
+        default:                                                return 0.55
+        }
+    }
+
+    /// 가로 몫도 같이 줄인다 — 큰 글씨에서는 원 옆 여백이 숨 쉴 자리가 된다.
+    private var clockWidthRatio: CGFloat {
+        dynamicTypeSize.isAccessibilitySize ? 0.72 : 0.85
     }
 
     /// 지금 주목해야 할 알림 — 끌고 있는 종, 없으면 방금 놓은 종.
