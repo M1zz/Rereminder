@@ -7,7 +7,19 @@ Rereminder(두번알림)는 원하는 시점마다 알림을 받을 수 있는 �
 
 [![App Store](https://img.shields.io/badge/App%20Store-Download-blue?logo=apple&logoColor=white)](https://apps.apple.com/app/id6752551268)
 
-> **랜딩 페이지**: [https://m1zz.github.io/Rereminder](https://m1zz.github.io/Rereminder)
+### 링크
+
+| | |
+|---|---|
+| **소개 페이지** | https://m1zz.github.io/Rereminder/ |
+| **지원 (Support)** | https://m1zz.github.io/Rereminder/support.html |
+| **개인정보 처리방침** | https://m1zz.github.io/Rereminder/privacy.html |
+| **App Clip (설치 없이 체험)** | https://m1zz.github.io/rereminder/ |
+| **App Store** | https://apps.apple.com/app/id6752551268 |
+
+> 위 네 페이지 중 앞의 셋은 이 저장소 `docs/` 가 곧 배포본입니다 (GitHub Pages: `main` 브랜치 `/docs`).
+> App Clip 초대 URL만 블로그 저장소(`M1zz/m1zz.github.io`)에 있고 **경로 대소문자가 다릅니다** — `web/README.md` 참고.
+> App Store Connect 의 **Support URL · Privacy Policy URL** 에 위 두 주소를 넣습니다.
 
 ---
 
@@ -40,7 +52,7 @@ Rereminder/
 ├── Shared/                  # 공유 모듈 (Models, Modules, Intents)
 ├── Config/                  # 버전 관리 (Version.xcconfig)
 ├── scripts/                 # 빌드 스크립트
-└── docs/                    # 랜딩 페이지 (GitHub Pages)
+└── docs/                    # 소개 · 지원 · 개인정보 페이지 (GitHub Pages)
 ```
 
 ## 빌드 환경
@@ -48,8 +60,9 @@ Rereminder/
 | 항목 | 요구 사항 |
 |------|----------|
 | Xcode | 15.0+ |
-| iOS | 16.0+ |
-| watchOS | 9.0+ |
+| iOS | 26.0+ |
+| watchOS | 11.6+ |
+| macOS (Catalyst) | 26.0+ |
 | Swift | 5.9+ |
 
 ## 로컬 빌드

@@ -4,112 +4,353 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Privacy Policy – Rereminder</title>
+    <meta name="description" content="Exactly what Rereminder sends and what never leaves your device. No ads, no trackers, no third-party analytics.">
+    <link rel="icon" href="app-icon.jpeg">
+    <meta property="og:title" content="Privacy Policy – Rereminder">
+    <meta property="og:description" content="Exactly what Rereminder sends and what never leaves your device. No ads, no trackers, no third-party analytics.">
+    <meta property="og:type" content="website">
     <style>
         :root {
+            --accent: #007AFF;
             --bg: #000000;
             --surface: #111111;
+            --surface2: #1a1a1a;
             --text: #f5f5f7;
             --text2: #86868b;
+            --text3: #6e6e73;
             --border: #2a2a2a;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
             background: var(--bg);
             color: var(--text);
-            line-height: 1.8;
+            line-height: 1.7;
             -webkit-font-smoothing: antialiased;
         }
-        .container {
-            max-width: 720px;
-            margin: 0 auto;
-            padding: 80px 24px;
+        nav {
+            position: sticky; top: 0; z-index: 100;
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            background: rgba(0,0,0,0.72);
+            border-bottom: 1px solid var(--border);
         }
-        h1 {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            letter-spacing: -1px;
+        .nav-inner {
+            max-width: 760px; margin: 0 auto; padding: 14px 24px;
+            display: flex; align-items: center; justify-content: space-between; gap: 16px;
         }
-        .updated {
-            color: var(--text2);
-            font-size: 14px;
-            margin-bottom: 48px;
+        .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); font-weight: 600; letter-spacing: -0.3px; }
+        .nav-brand img { width: 28px; height: 28px; border-radius: 7px; }
+        .nav-links { display: flex; align-items: center; gap: 18px; font-size: 14px; }
+        .nav-links a { color: var(--text2); text-decoration: none; }
+        .nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--text); }
+        .lang { display: flex; gap: 2px; background: var(--surface2); border-radius: 999px; padding: 3px; }
+        .lang button {
+            appearance: none; border: 0; background: transparent; color: var(--text2);
+            font: inherit; font-size: 12px; font-weight: 600; padding: 4px 10px;
+            border-radius: 999px; cursor: pointer; line-height: 1.4;
         }
-        h2 {
-            font-size: 22px;
-            font-weight: 600;
-            margin-top: 40px;
-            margin-bottom: 16px;
-            letter-spacing: -0.3px;
-        }
-        p, li {
-            color: var(--text2);
-            font-size: 15px;
-            margin-bottom: 12px;
-        }
-        ul { padding-left: 20px; }
-        li { margin-bottom: 8px; }
-        a { color: #007AFF; text-decoration: none; }
+        .lang button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+
+        .container { max-width: 760px; margin: 0 auto; padding: 56px 24px 96px; }
+        h1 { font-size: 38px; font-weight: 700; letter-spacing: -1px; margin-bottom: 8px; line-height: 1.2; }
+        .lede { color: var(--text2); font-size: 17px; margin-bottom: 12px; }
+        .updated { color: var(--text3); font-size: 13px; margin-bottom: 44px; }
+        h2 { font-size: 23px; font-weight: 600; letter-spacing: -0.3px; margin: 52px 0 14px; }
+        h3 { font-size: 16px; font-weight: 600; margin: 26px 0 6px; }
+        p, li { color: var(--text2); font-size: 15px; }
+        p { margin-bottom: 12px; }
+        ul, ol { padding-left: 22px; margin-bottom: 12px; }
+        li { margin-bottom: 7px; }
+        strong { color: var(--text); font-weight: 600; }
+        a { color: var(--accent); text-decoration: none; }
         a:hover { text-decoration: underline; }
-        .back-link {
-            display: inline-block;
-            margin-bottom: 32px;
-            color: #007AFF;
-            font-size: 14px;
+        code, .ui {
+            background: var(--surface2); border: 1px solid var(--border); border-radius: 5px;
+            padding: 1px 6px; font-size: 13.5px; color: var(--text);
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: nowrap;
         }
+        .ui { font-family: inherit; font-size: 14px; }
+
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; margin-bottom: 14px; }
+        .card h3 { margin-top: 0; }
+        .card p:last-child { margin-bottom: 0; }
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 8px; }
+        .contact-grid .card { margin-bottom: 0; }
+        .big-link { font-size: 17px; font-weight: 600; }
+
+        details {
+            border: 1px solid var(--border); border-radius: 12px;
+            background: var(--surface); margin-bottom: 10px; overflow: hidden;
+        }
+        details summary {
+            cursor: pointer; list-style: none; padding: 16px 20px;
+            font-size: 15.5px; font-weight: 600; color: var(--text);
+            display: flex; align-items: center; justify-content: space-between; gap: 12px;
+        }
+        details summary::-webkit-details-marker { display: none; }
+        details summary::after { content: "+"; color: var(--text3); font-weight: 400; font-size: 20px; line-height: 1; }
+        details[open] summary::after { content: "\2212"; }
+        details .body { padding: 0 20px 18px; border-top: 1px solid var(--border); padding-top: 14px; }
+        details .body > :last-child { margin-bottom: 0; }
+
+        table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 14.5px; }
+        th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text2); }
+        th { color: var(--text); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.4px; }
+        td:first-child { color: var(--text); white-space: nowrap; }
+
+        .note { border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 10px 10px 0; padding: 14px 18px; margin-bottom: 16px; }
+        .note p:last-child { margin-bottom: 0; }
+
+        footer { border-top: 1px solid var(--border); padding: 32px 24px 56px; text-align: center; }
+        footer p { color: var(--text3); font-size: 13px; margin-bottom: 8px; }
+        footer a { color: var(--text2); margin: 0 8px; font-size: 13px; }
+
+        [data-lang] { display: none; }
+        body.lang-en [data-lang="en"], body.lang-ko [data-lang="ko"] { display: block; }
+        li[data-lang], td[data-lang], span[data-lang] { display: none; }
+        body.lang-en li[data-lang="en"], body.lang-ko li[data-lang="ko"] { display: list-item; }
+        body.lang-en span[data-lang="en"], body.lang-ko span[data-lang="ko"] { display: inline; }
+
+        @media (max-width: 560px) {
+            h1 { font-size: 30px; }
+            .container { padding: 40px 20px 72px; }
+            .nav-links { gap: 12px; font-size: 13px; }
+            .nav-brand span { display: none; }
+        }
+
+        /* No-JS / pre-hydration fallback: show English */
+        body:not(.lang-en):not(.lang-ko) div[data-lang="en"] { display: block; }
+        body:not(.lang-en):not(.lang-ko) li[data-lang="en"] { display: list-item; }
+        body:not(.lang-en):not(.lang-ko) span[data-lang="en"] { display: inline; }
     </style>
 </head>
 <body>
+<nav>
+    <div class="nav-inner">
+        <a class="nav-brand" href="./"><img src="app-icon.jpeg" alt="Rereminder"><span>Rereminder</span></a>
+        <div class="nav-links">
+            <a href="./">Home</a>
+            <a href="support.html">Support</a>
+            <a href="privacy.html" aria-current="page">Privacy</a>
+            <div class="lang" role="group" aria-label="Language">
+                <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
+                <button type="button" data-set-lang="ko" aria-pressed="false">한국어</button>
+            </div>
+        </div>
+    </div>
+</nav>
+
 <div class="container">
-    <a href="./" class="back-link">&larr; Back to Rereminder</a>
 
+<!-- ============================= ENGLISH ============================= -->
+<div data-lang="en">
     <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: March 2, 2026</p>
+    <p class="lede">Rereminder is developed by Hyunho Lee. This page says exactly what leaves your phone and what does not.</p>
+    <p class="updated">Last updated: August 30, 2026 &middot; Applies to app version 2.2.1</p>
 
-    <h2>Overview</h2>
-    <p>Rereminder ("the App") is developed by Hyunho Lee. We respect your privacy and are committed to protecting it. This policy explains what data the App collects, how it is used, and your rights.</p>
+    <h2>The short version</h2>
+    <div class="note">
+        <p><strong>Everything you write stays on your phone.</strong> Timer names, alert messages, section titles, presentation scripts, history &mdash; none of it is ever sent anywhere.</p>
+        <p><strong>The app does send me anonymous numbers.</strong> Counts like "how many timers were started" and "how many ran to the end," tied to a random ID that is not you. That is how I decide what to fix. It is described in full below.</p>
+        <p><strong>There are no ads, no trackers, and no third-party analytics SDKs.</strong> Nothing is sold or shared with anyone.</p>
+    </div>
 
-    <h2>Data We Collect</h2>
-    <p><strong>We do not collect any personal data.</strong> The App operates entirely on your device. Specifically:</p>
+    <h2>What stays on your device</h2>
+    <p>The following is stored locally and is <strong>never transmitted to me</strong>:</p>
     <ul>
-        <li>No account creation or login is required.</li>
-        <li>No personal information (name, email, phone number) is collected.</li>
-        <li>No usage analytics or tracking tools are integrated.</li>
-        <li>No data is sent to external servers.</li>
+        <li><strong>Timer settings</strong> &mdash; durations, where you placed each alert, custom alert messages.</li>
+        <li><strong>Templates</strong> &mdash; saved setups and their names.</li>
+        <li><strong>Session content</strong> &mdash; section names and the scripts or notes you write for each section.</li>
+        <li><strong>History</strong> &mdash; records of the sessions you have run.</li>
+        <li><strong>Preferences</strong> &mdash; theme colour, sound and vibration mode, which devices you told the app you own.</li>
+        <li><strong>Purchase status</strong> &mdash; whether you own Rereminder Pro, stored in the iOS Keychain.</li>
+    </ul>
+    <p>Deleting the app deletes all of it.</p>
+
+    <h2>What the app sends me</h2>
+    <p>All of it goes to a <strong>CloudKit database I own</strong> (container <code>iCloud.com.Ysoup.FeedbackHub</code>). There is no other server, and no other company receives any of it.</p>
+
+    <h3>1. Anonymous usage counts</h3>
+    <p>One record per installation, updated at most twice a day. It contains:</p>
+    <ul>
+        <li>A <strong>random ID the app generates for itself</strong> on first launch. It is not your Apple Account, not your device's identifier, and not linked to anything about you. Delete the app and the ID is gone; reinstalling creates a fresh, unconnected one.</li>
+        <li>App version, platform (iPhone / Watch / Mac), OS version, and language setting.</li>
+        <li><strong>Counts, and nothing but counts</strong> &mdash; timers started, completed, and cancelled; total minutes managed; how many alerts a typical timer had; templates saved and used; whether session mode has been used; whether the watch has been used; days since install; when the app was last active.</li>
+        <li>Two yes/no flags: whether Pro was purchased, and whether notification permission is granted.</li>
     </ul>
 
-    <h2>Data Stored on Your Device</h2>
-    <p>The App stores the following data locally on your device to provide its functionality:</p>
+    <h3>2. Anonymous events</h3>
+    <p>When something notable happens &mdash; the app was opened, a timer was started, the paywall was shown &mdash; the app records the <strong>name of that event</strong> with the app version, platform, the same random ID, and a timestamp. Each event name is recorded <strong>at most once every six hours</strong>, so these show <em>whether</em> something happens, never how often.</p>
+
+    <h3>3. Feedback you choose to send</h3>
+    <p>Only when you tap <span class="ui">Send Feedback</span> or answer a satisfaction prompt. It sends <strong>the message you wrote</strong>, plus the app version and platform so I can reproduce the problem. Nothing is sent from that screen unless you press send.</p>
+
+    <h3>4. Crash and hang reports</h3>
+    <p>Collected through <strong>Apple's MetricKit</strong>, which aggregates crash and performance data at the OS level. These contain stack traces and timing, never the content of your timers.</p>
+
+    <div class="note">
+        <p><strong>One thing worth naming:</strong> when your device writes any of the above to CloudKit, Apple stamps the record with an opaque per-app iCloud identifier. It is generated by Apple, is different for every app, is not your email address, and I cannot use it to contact you or to look you up anywhere else. It is a side effect of how CloudKit works, not something the app collects on purpose.</p>
+    </div>
+
+    <h2>What is never sent, under any circumstance</h2>
     <ul>
-        <li><strong>Timer settings</strong>: Duration, pre-alert offsets, and custom messages.</li>
-        <li><strong>Timer templates</strong>: Saved timer configurations for quick access.</li>
-        <li><strong>Timer history</strong>: Records of completed timer sessions.</li>
-        <li><strong>App preferences</strong>: Theme color, sound/vibration mode, and other settings.</li>
-        <li><strong>Purchase status</strong>: Whether you have purchased Rereminder Pro (stored in Keychain).</li>
+        <li>Timer names, alert messages, section titles, presentation scripts &mdash; <strong>any text you type.</strong></li>
+        <li>Your name, email address, or phone number (unless you type one into a feedback message yourself).</li>
+        <li>Advertising identifiers (IDFA), your device's vendor identifier (IDFV), or any device fingerprint.</li>
+        <li>Location, contacts, photos, calendar, health data, or microphone.</li>
     </ul>
-    <p>This data never leaves your device and is not accessible to us.</p>
 
-    <h2>Apple Watch & Widget</h2>
-    <p>Timer state is shared between your iPhone, Apple Watch, and widgets using Apple's App Group and WatchConnectivity frameworks. This communication happens directly between your own devices and does not pass through any external server.</p>
+    <h2>Syncing between your own devices</h2>
+    <p>Your iPhone, Apple Watch, and Mac keep timers in step with each other. This runs on <strong>your own iCloud account and Apple's WatchConnectivity</strong> &mdash; the data goes device to device through your iCloud, not through me. <strong>I cannot read any of it.</strong> It includes the running timer's state and name and the device name shown in the app's connection status.</p>
+    <p>Turning off iCloud Drive stops this sync; the app continues to work on each device on its own.</p>
 
-    <h2>In-App Purchases</h2>
-    <p>The App offers a one-time "Rereminder Pro" purchase through Apple's App Store. All payment processing is handled by Apple. We do not have access to your payment information.</p>
+    <h2>Third parties and payments</h2>
+    <p>Rereminder integrates <strong>no third-party analytics, advertising, or tracking services</strong>. No data is sold, rented, or shared with any other company.</p>
+    <p>Rereminder Pro is a <strong>one-time purchase handled entirely by Apple</strong>. I never see your payment details &mdash; only whether a purchase exists.</p>
 
     <h2>Notifications</h2>
-    <p>The App uses local notifications to alert you about timer events. These notifications are scheduled on your device and do not involve any remote push notification service.</p>
+    <p>All alerts are <strong>local notifications</strong> scheduled on your device. There is no push server, and no notification content ever reaches me.</p>
 
-    <h2>Third-Party Services</h2>
-    <p>The App does not integrate any third-party analytics, advertising, or tracking services.</p>
+    <h2>How long it is kept, and how to stop it</h2>
+    <ul>
+        <li><strong>Deleting the app stops all collection immediately</strong> and removes the random ID along with everything stored on the device.</li>
+        <li>Anonymous usage records are kept while they are useful for deciding what to build, and are deleted when they no longer are. Because they carry no identifier that leads back to you, I have no way to single out "your" rows on request &mdash; which is the same reason they cannot be used to identify you.</li>
+        <li><strong>Feedback you sent is different</strong> &mdash; you wrote it, so I can find it. Email me and I will delete it.</li>
+        <li>I can switch off usage collection and crash reporting remotely for everyone, and will if it ever stops being worth it.</li>
+    </ul>
 
-    <h2>Children's Privacy</h2>
-    <p>The App does not knowingly collect data from children under 13. Since we do not collect any personal data from any user, the App is safe for all ages.</p>
+    <h2>Children's privacy</h2>
+    <p>Rereminder does not knowingly collect personal data from anyone, children included. It requires no account, asks for no personal information, and has no social features, chat, or user-to-user content.</p>
 
-    <h2>Changes to This Policy</h2>
-    <p>We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated date.</p>
+    <h2>Changes to this policy</h2>
+    <p>If what the app collects changes, this page changes with it, and the date at the top moves. Material changes will also appear in the release notes for the version that makes them.</p>
 
     <h2>Contact</h2>
-    <p>If you have questions about this Privacy Policy, please contact us at <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>.</p>
+    <p>Questions about any of this &mdash; including "why do you need that?" &mdash; go to <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. See also the <a href="support.html">support page</a>.</p>
 </div>
+
+<!-- ============================= 한국어 ============================= -->
+<div data-lang="ko">
+    <h1>개인정보 처리방침</h1>
+    <p class="lede">Rereminder는 이현호가 개발합니다. 이 페이지에는 무엇이 기기 밖으로 나가고 무엇이 나가지 않는지를 그대로 적었습니다.</p>
+    <p class="updated">최종 수정: 2026년 8월 30일 &middot; 앱 버전 2.2.1 기준</p>
+
+    <h2>요약</h2>
+    <div class="note">
+        <p><strong>적으신 것은 전부 기기 안에 남습니다.</strong> 타이머 이름, 알림 문구, 구간 제목, 발표 대본, 기록 &mdash; 어느 것도 밖으로 나가지 않습니다.</p>
+        <p><strong>대신 익명 숫자는 개발자에게 보냅니다.</strong> "타이머를 몇 번 시작했나", "몇 번 끝까지 갔나" 같은 횟수이고, 신원과 무관한 무작위 ID에 묶입니다. 무엇을 고칠지 판단하는 근거입니다. 아래에 전부 적어 두었습니다.</p>
+        <p><strong>광고도, 추적도, 외부 분석 SDK도 없습니다.</strong> 어떤 데이터도 판매하거나 공유하지 않습니다.</p>
+    </div>
+
+    <h2>기기 안에만 남는 것</h2>
+    <p>다음은 기기에 저장되며 <strong>개발자에게 전송되지 않습니다</strong>:</p>
+    <ul>
+        <li><strong>타이머 설정</strong> &mdash; 시간, 알림을 둔 위치, 직접 쓰신 알림 문구.</li>
+        <li><strong>템플릿</strong> &mdash; 저장한 설정과 그 이름.</li>
+        <li><strong>세션 내용</strong> &mdash; 구간 이름, 구간마다 적어 두신 대본과 메모.</li>
+        <li><strong>기록</strong> &mdash; 지금까지 진행한 세션.</li>
+        <li><strong>환경 설정</strong> &mdash; 테마 색, 소리·진동 방식, "내 기기"에 답하신 내용.</li>
+        <li><strong>구매 상태</strong> &mdash; Pro 보유 여부(iOS 키체인에 저장).</li>
+    </ul>
+    <p>앱을 삭제하면 전부 함께 사라집니다.</p>
+
+    <h2>앱이 개발자에게 보내는 것</h2>
+    <p>모두 <strong>개발자 본인의 CloudKit 데이터베이스</strong>(컨테이너 <code>iCloud.com.Ysoup.FeedbackHub</code>)로 갑니다. 다른 서버는 없고, 다른 회사가 받아 가는 것도 없습니다.</p>
+
+    <h3>1. 익명 사용 횟수</h3>
+    <p>설치당 한 건이고 하루에 최대 두 번 갱신됩니다. 내용은 이렇습니다.</p>
+    <ul>
+        <li><strong>앱이 처음 실행될 때 스스로 만든 무작위 ID.</strong> Apple 계정도, 기기 식별자도 아니며 신원과 연결되지 않습니다. 앱을 지우면 ID도 사라지고, 다시 설치하면 이전과 이어지지 않는 새 값이 됩니다.</li>
+        <li>앱 버전, 플랫폼(iPhone / Watch / Mac), OS 버전, 언어 설정.</li>
+        <li><strong>숫자, 오직 숫자뿐입니다</strong> &mdash; 타이머 시작·완주·취소 횟수, 관리한 총 시간, 한 타이머에 보통 몇 개의 알림을 걸었는지, 템플릿 저장·사용 횟수, 세션 모드를 써 봤는지, 워치를 써 봤는지, 설치 후 며칠이 지났는지, 마지막으로 활동한 시각.</li>
+        <li>예·아니오 두 가지: Pro 구매 여부, 알림 권한 허용 여부.</li>
+    </ul>
+
+    <h3>2. 익명 이벤트</h3>
+    <p>앱을 열었다, 타이머를 시작했다, 결제 화면이 떴다 같은 일이 생기면 <strong>그 이벤트의 이름</strong>을 앱 버전·플랫폼·같은 무작위 ID·발생 시각과 함께 남깁니다. 이름 하나당 <strong>여섯 시간에 한 번만</strong> 기록하므로, 어떤 일이 <em>있었는지</em>는 알 수 있어도 몇 번인지는 알 수 없습니다.</p>
+
+    <h3>3. 직접 보내신 피드백</h3>
+    <p><span class="ui">피드백 보내기</span>를 누르거나 만족도 질문에 답하셨을 때만 전송됩니다. <strong>작성하신 내용</strong>과, 문제를 재현하는 데 필요한 앱 버전·플랫폼이 함께 갑니다. 보내기를 누르지 않으면 그 화면에서 나가는 것은 없습니다.</p>
+
+    <h3>4. 크래시·멈춤 리포트</h3>
+    <p><strong>Apple의 MetricKit</strong>을 통해 수집됩니다. OS가 집계해 주는 크래시·성능 데이터로, 스택 트레이스와 시간 정보만 들어 있고 타이머 내용은 들어 있지 않습니다.</p>
+
+    <div class="note">
+        <p><strong>한 가지 밝혀 둘 것:</strong> 위 내용을 CloudKit에 기록할 때 Apple이 레코드에 앱별 익명 iCloud 식별자를 함께 찍습니다. Apple이 만드는 값이고 앱마다 다르며, 이메일 주소가 아니고, 이것으로 연락하거나 다른 곳에서 조회할 수 없습니다. 앱이 일부러 수집하는 것이 아니라 CloudKit의 동작 방식에서 따라오는 값입니다.</p>
+    </div>
+
+    <h2>어떤 경우에도 보내지 않는 것</h2>
+    <ul>
+        <li>타이머 이름, 알림 문구, 구간 제목, 발표 대본 &mdash; <strong>직접 입력하신 모든 글.</strong></li>
+        <li>이름, 이메일, 전화번호(피드백 본문에 직접 적으신 경우는 예외).</li>
+        <li>광고 식별자(IDFA), 기기 벤더 식별자(IDFV), 그 밖의 기기 지문.</li>
+        <li>위치, 연락처, 사진, 캘린더, 건강 데이터, 마이크.</li>
+    </ul>
+
+    <h2>내 기기끼리의 동기화</h2>
+    <p>iPhone·Apple Watch·Mac은 타이머 상태를 서로 맞춥니다. 이 동기화는 <strong>사용자 본인의 iCloud 계정과 Apple의 WatchConnectivity</strong>로 이뤄집니다. 개발자를 거치지 않고 기기에서 기기로 갑니다. <strong>개발자는 이 내용을 볼 수 없습니다.</strong> 여기에는 실행 중인 타이머의 상태와 이름, 앱의 연결 상태에 표시되는 기기 이름이 포함됩니다.</p>
+    <p>iCloud Drive를 끄면 이 동기화는 멈추고, 각 기기에서 앱은 그대로 동작합니다.</p>
+
+    <h2>제3자와 결제</h2>
+    <p>Rereminder에는 <strong>외부 분석·광고·추적 서비스가 하나도 들어 있지 않습니다.</strong> 어떤 데이터도 판매·대여·공유하지 않습니다.</p>
+    <p>Rereminder Pro는 <strong>Apple이 전부 처리하는 1회 결제</strong>입니다. 개발자는 결제 정보를 볼 수 없고, 구매가 있었는지만 알 수 있습니다.</p>
+
+    <h2>알림</h2>
+    <p>모든 알림은 기기에서 예약되는 <strong>로컬 알림</strong>입니다. 푸시 서버가 없고, 알림 내용이 개발자에게 닿는 경로도 없습니다.</p>
+
+    <h2>보관 기간과 중단 방법</h2>
+    <ul>
+        <li><strong>앱을 삭제하면 수집이 즉시 멈추고</strong> 무작위 ID도 기기에 저장된 모든 것과 함께 사라집니다.</li>
+        <li>익명 사용 기록은 무엇을 만들지 판단하는 데 쓸모가 있는 동안 보관하고, 쓸모가 없어지면 삭제합니다. 신원으로 이어지는 식별자가 없어서 요청하셔도 "그분의 기록"만 골라낼 방법이 없습니다 &mdash; 같은 이유로 그 기록으로 누군가를 특정할 수도 없습니다.</li>
+        <li><strong>보내신 피드백은 다릅니다.</strong> 직접 쓰신 글이라 찾을 수 있습니다. 메일 주시면 삭제해 드립니다.</li>
+        <li>사용 통계와 크래시 수집은 개발자가 원격으로 전체 중단할 수 있고, 유지할 가치가 없어지면 그렇게 합니다.</li>
+    </ul>
+
+    <h2>아동의 개인정보</h2>
+    <p>Rereminder는 아동을 포함한 누구의 개인정보도 알면서 수집하지 않습니다. 계정이 필요 없고, 개인정보를 묻지 않으며, 소셜 기능·채팅·사용자 간 콘텐츠가 없습니다.</p>
+
+    <h2>방침 변경</h2>
+    <p>수집하는 내용이 바뀌면 이 페이지도 함께 바뀌고 맨 위 날짜가 갱신됩니다. 중요한 변경은 그 변경이 나가는 버전의 릴리즈 노트에도 적습니다.</p>
+
+    <h2>문의</h2>
+    <p>"그건 왜 필요한가요"를 포함해 무엇이든 <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>으로 문의해 주세요. <a href="support.html">지원 페이지</a>도 함께 참고하실 수 있습니다.</p>
+</div>
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Rereminder (두번알림)</p>
+    <p>
+        <a href="./">Home</a>
+        <a href="support.html">Support</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="https://apps.apple.com/us/app/rereminder/id6752551268" target="_blank" rel="noopener">App Store</a>
+    </p>
+</footer>
+
+<script>
+(function () {
+    var KEY = 'rereminder-lang';
+    function apply(lang) {
+        document.body.classList.remove('lang-en', 'lang-ko');
+        document.body.classList.add('lang-' + lang);
+        document.documentElement.lang = lang;
+        var buttons = document.querySelectorAll('[data-set-lang]');
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].setAttribute('aria-pressed', String(buttons[i].dataset.setLang === lang));
+        }
+        try { localStorage.setItem(KEY, lang); } catch (e) {}
+    }
+    var saved = null;
+    try { saved = localStorage.getItem(KEY); } catch (e) {}
+    var initial = saved || ((navigator.language || '').toLowerCase().indexOf('ko') === 0 ? 'ko' : 'en');
+    apply(initial);
+    document.addEventListener('click', function (event) {
+        var button = event.target && event.target.closest ? event.target.closest('[data-set-lang]') : null;
+        if (button) { apply(button.dataset.setLang); }
+    });
+})();
+</script>
 </body>
 </html>

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support – Rereminder</title>
+    <meta name="description" content="Help, FAQ, and contact for Rereminder — the timer that alerts you before time runs out.">
+    <link rel="icon" href="app-icon.jpeg">
+    <meta property="og:title" content="Support – Rereminder">
+    <meta property="og:description" content="Help, FAQ, and contact for Rereminder — the timer that alerts you before time runs out.">
+    <meta property="og:type" content="website">
+    <style>
+        :root {
+            --accent: #007AFF;
+            --bg: #000000;
+            --surface: #111111;
+            --surface2: #1a1a1a;
+            --text: #f5f5f7;
+            --text2: #86868b;
+            --text3: #6e6e73;
+            --border: #2a2a2a;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+        nav {
+            position: sticky; top: 0; z-index: 100;
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            background: rgba(0,0,0,0.72);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-inner {
+            max-width: 760px; margin: 0 auto; padding: 14px 24px;
+            display: flex; align-items: center; justify-content: space-between; gap: 16px;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); font-weight: 600; letter-spacing: -0.3px; }
+        .nav-brand img { width: 28px; height: 28px; border-radius: 7px; }
+        .nav-links { display: flex; align-items: center; gap: 18px; font-size: 14px; }
+        .nav-links a { color: var(--text2); text-decoration: none; }
+        .nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--text); }
+        .lang { display: flex; gap: 2px; background: var(--surface2); border-radius: 999px; padding: 3px; }
+        .lang button {
+            appearance: none; border: 0; background: transparent; color: var(--text2);
+            font: inherit; font-size: 12px; font-weight: 600; padding: 4px 10px;
+            border-radius: 999px; cursor: pointer; line-height: 1.4;
+        }
+        .lang button[aria-pressed="true"] { background: var(--accent); color: #fff; }
+
+        .container { max-width: 760px; margin: 0 auto; padding: 56px 24px 96px; }
+        h1 { font-size: 38px; font-weight: 700; letter-spacing: -1px; margin-bottom: 8px; line-height: 1.2; }
+        .lede { color: var(--text2); font-size: 17px; margin-bottom: 12px; }
+        .updated { color: var(--text3); font-size: 13px; margin-bottom: 44px; }
+        h2 { font-size: 23px; font-weight: 600; letter-spacing: -0.3px; margin: 52px 0 14px; }
+        h3 { font-size: 16px; font-weight: 600; margin: 26px 0 6px; }
+        p, li { color: var(--text2); font-size: 15px; }
+        p { margin-bottom: 12px; }
+        ul, ol { padding-left: 22px; margin-bottom: 12px; }
+        li { margin-bottom: 7px; }
+        strong { color: var(--text); font-weight: 600; }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        code, .ui {
+            background: var(--surface2); border: 1px solid var(--border); border-radius: 5px;
+            padding: 1px 6px; font-size: 13.5px; color: var(--text);
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: nowrap;
+        }
+        .ui { font-family: inherit; font-size: 14px; }
+
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; margin-bottom: 14px; }
+        .card h3 { margin-top: 0; }
+        .card p:last-child { margin-bottom: 0; }
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 8px; }
+        .contact-grid .card { margin-bottom: 0; }
+        .big-link { font-size: 17px; font-weight: 600; }
+
+        details {
+            border: 1px solid var(--border); border-radius: 12px;
+            background: var(--surface); margin-bottom: 10px; overflow: hidden;
+        }
+        details summary {
+            cursor: pointer; list-style: none; padding: 16px 20px;
+            font-size: 15.5px; font-weight: 600; color: var(--text);
+            display: flex; align-items: center; justify-content: space-between; gap: 12px;
+        }
+        details summary::-webkit-details-marker { display: none; }
+        details summary::after { content: "+"; color: var(--text3); font-weight: 400; font-size: 20px; line-height: 1; }
+        details[open] summary::after { content: "\2212"; }
+        details .body { padding: 0 20px 18px; border-top: 1px solid var(--border); padding-top: 14px; }
+        details .body > :last-child { margin-bottom: 0; }
+
+        table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 14.5px; }
+        th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text2); }
+        th { color: var(--text); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.4px; }
+        td:first-child { color: var(--text); white-space: nowrap; }
+
+        .note { border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 10px 10px 0; padding: 14px 18px; margin-bottom: 16px; }
+        .note p:last-child { margin-bottom: 0; }
+
+        footer { border-top: 1px solid var(--border); padding: 32px 24px 56px; text-align: center; }
+        footer p { color: var(--text3); font-size: 13px; margin-bottom: 8px; }
+        footer a { color: var(--text2); margin: 0 8px; font-size: 13px; }
+
+        [data-lang] { display: none; }
+        body.lang-en [data-lang="en"], body.lang-ko [data-lang="ko"] { display: block; }
+        li[data-lang], td[data-lang], span[data-lang] { display: none; }
+        body.lang-en li[data-lang="en"], body.lang-ko li[data-lang="ko"] { display: list-item; }
+        body.lang-en span[data-lang="en"], body.lang-ko span[data-lang="ko"] { display: inline; }
+
+        @media (max-width: 560px) {
+            h1 { font-size: 30px; }
+            .container { padding: 40px 20px 72px; }
+            .nav-links { gap: 12px; font-size: 13px; }
+            .nav-brand span { display: none; }
+        }
+
+        /* No-JS / pre-hydration fallback: show English */
+        body:not(.lang-en):not(.lang-ko) div[data-lang="en"] { display: block; }
+        body:not(.lang-en):not(.lang-ko) li[data-lang="en"] { display: list-item; }
+        body:not(.lang-en):not(.lang-ko) span[data-lang="en"] { display: inline; }
+    </style>
+</head>
+<body>
+<nav>
+    <div class="nav-inner">
+        <a class="nav-brand" href="./"><img src="app-icon.jpeg" alt="Rereminder"><span>Rereminder</span></a>
+        <div class="nav-links">
+            <a href="./">Home</a>
+            <a href="support.html" aria-current="page">Support</a>
+            <a href="privacy.html">Privacy</a>
+            <div class="lang" role="group" aria-label="Language">
+                <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
+                <button type="button" data-set-lang="ko" aria-pressed="false">한국어</button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+
+<!-- ============================= ENGLISH ============================= -->
+<div data-lang="en">
+    <h1>Support</h1>
+    <p class="lede">Rereminder is made by one person. Write to me and you are writing to the developer — not a ticket queue.</p>
+    <p class="updated">Last updated: August 30, 2026 &middot; App version 2.2.1</p>
+
+    <h2>Get in touch</h2>
+    <div class="contact-grid">
+        <div class="card">
+            <h3>Email</h3>
+            <p class="big-link"><a href="mailto:leeo@kakao.com">leeo@kakao.com</a></p>
+            <p>Best for bugs, refunds, and anything that needs a screenshot.</p>
+        </div>
+        <div class="card">
+            <h3>From inside the app</h3>
+            <p><span class="ui">Settings &rsaquo; Help &rsaquo; Send Feedback</span></p>
+            <p>Goes straight to my inbox. No email app needed &mdash; just iCloud sign-in.</p>
+        </div>
+        <div class="card">
+            <h3>Instagram</h3>
+            <p class="big-link"><a href="https://instagram.com/lee25_ios" target="_blank" rel="noopener">@lee25_ios</a></p>
+            <p>DMs are open. Fine for quick questions.</p>
+        </div>
+        <div class="card">
+            <h3>Bugs &amp; feature requests</h3>
+            <p class="big-link"><a href="https://github.com/M1zz/Rereminder/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+            <p>Public, so other people can find the answer too.</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>I usually reply within 2&ndash;3 days.</strong> If it has been longer than a week, assume the message got lost and send it again &mdash; I would rather read it twice than not at all.</p>
+    </div>
+
+    <h3>What to include in a bug report</h3>
+    <ul>
+        <li><strong>App version</strong> &mdash; <span class="ui">Settings &rsaquo; Info</span> shows it at the bottom.</li>
+        <li><strong>Device and OS</strong> &mdash; e.g. iPhone 15 Pro, iOS 26.1. Mention the Apple Watch model if the problem is on the watch.</li>
+        <li><strong>What you expected, and what happened instead.</strong> "The 5-minute alert never fired" tells me far more than "notifications are broken."</li>
+        <li><strong>Whether it happens every time</strong> or just once.</li>
+    </ul>
+
+    <h2>Common questions</h2>
+
+    <details>
+        <summary>My alerts didn't fire</summary>
+        <div class="body">
+            <p>Rereminder uses <strong>local notifications</strong>, so this is almost always a permission or a Focus setting. Check in this order:</p>
+            <ol>
+                <li><strong>Notification permission.</strong> Open <span class="ui">Settings &rsaquo; Notification Method</span> in the app &mdash; it shows the current status and offers to request permission or send you to iOS Settings.</li>
+                <li><strong>Focus / Do Not Disturb.</strong> If a Focus is on, add Rereminder to its allowed apps in iOS <span class="ui">Settings &rsaquo; Focus</span>.</li>
+                <li><strong>Ring/Silent switch and volume.</strong> Silent mode suppresses the sound; the vibration still comes through.</li>
+                <li><strong>Scheduled Summary.</strong> iOS <span class="ui">Settings &rsaquo; Notifications &rsaquo; Scheduled Summary</span> can hold notifications back until a set hour. Rereminder should not be in it.</li>
+            </ol>
+            <p>If all four are fine and it still happens, tell me the timer length and where the alerts were placed &mdash; that combination is what I need to reproduce it.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>My Apple Watch isn't syncing</summary>
+        <div class="body">
+            <p>Open <span class="ui">Settings &rsaquo; My Devices</span> in the app. The status next to Apple Watch tells you which step is missing, and tapping it opens a walkthrough for that exact state.</p>
+            <ol>
+                <li>The watch is <strong>paired</strong> to this iPhone.</li>
+                <li><strong>Rereminder is installed on the watch.</strong> Open the Watch app on iPhone, scroll to Rereminder, and install it if it is not there.</li>
+                <li><strong>Open Rereminder on the watch once.</strong> A freshly installed watch app has never run, and the first sync needs it to have launched.</li>
+            </ol>
+            <p>Timer state crosses over even when the watch app is in the background, so you do not need to keep it open.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>My Mac says "not connected" even though the app is open</summary>
+        <div class="body">
+            <p>"Connected" here means <strong>the app was running on that Mac within roughly the last 10 minutes</strong> &mdash; not a live socket. Devices leave a mark in your own iCloud every five minutes, and iCloud cannot wake a sleeping app, so a Mac that just woke up can take a few minutes to appear.</p>
+            <p>If it never appears: both devices must be signed into the <strong>same iCloud account</strong> with <strong>iCloud Drive on</strong>. <span class="ui">Settings &rsaquo; My Devices</span> has a "check again" button that re-reads immediately.</p>
+            <p>The Mac version needs <strong>macOS 26 or later</strong>.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>I bought Pro but it isn't showing up</summary>
+        <div class="body">
+            <p>Open the Pro screen and tap <strong>Restore Purchases</strong>. Purchases are tied to the Apple Account that made them, so make sure you are signed into that same account &mdash; not a family member's, and not a different regional account.</p>
+            <p>Pro is a <strong>one-time purchase</strong>. It is not a subscription and it does not expire, so it survives reinstalls and new devices.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>What does Pro actually include?</summary>
+        <div class="body">
+            <p><strong>Pro is one idea: the app remembers your setups.</strong></p>
+            <ul>
+                <li><strong>Templates</strong> &mdash; save a timer with its alerts and start it again in one tap.</li>
+                <li><strong>Your last setup is restored</strong> when you reopen the app, instead of resetting to the default.</li>
+                <li><strong>Session mode</strong> &mdash; name each section ("intro / demo / Q&amp;A") and keep a script per section that unfolds when that section starts.</li>
+                <li><strong>Overtime</strong> &mdash; the clock keeps counting past 00:00 so you know how far over you ran.</li>
+                <li><strong>History</strong> &mdash; a record of the sessions you have run.</li>
+            </ul>
+            <p><strong>Alerts themselves are free and unlimited</strong>, and so is the Apple Watch app. Alerting before time runs out is the reason this app exists, so it is not the part I charge for.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>I want a refund</summary>
+        <div class="body">
+            <p>Refunds go through Apple, not through me &mdash; I have no access to your payment details and cannot issue one. Request it at <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a> with the Apple Account that made the purchase.</p>
+            <p>If the reason is something broken, please tell me too. A refund closes your ticket; it does not fix the bug for the next person.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Can I try it without installing?</summary>
+        <div class="body">
+            <p>Yes. Open <a href="https://m1zz.github.io/rereminder/" target="_blank" rel="noopener">m1zz.github.io/rereminder</a> on an iPhone and the App Clip runs the timer right away &mdash; no App Store trip. It has the dial and the alerts; templates, session mode, and the watch app are in the full app.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Which languages and devices are supported?</summary>
+        <div class="body">
+            <table>
+                <tr><td>Languages</td><td>English, Korean, Japanese</td></tr>
+                <tr><td>iPhone</td><td>iOS 26.0 or later</td></tr>
+                <tr><td>Apple Watch</td><td>watchOS 11.6 or later</td></tr>
+                <tr><td>Mac</td><td>macOS 26.0 or later</td></tr>
+                <tr><td>iPad</td><td>Not supported yet</td></tr>
+            </table>
+        </div>
+    </details>
+
+    <details>
+        <summary>How do I delete my data?</summary>
+        <div class="body">
+            <p>Everything you create &mdash; timers, templates, section names, scripts, history &mdash; lives on your device. <strong>Deleting the app removes all of it.</strong></p>
+            <p>The anonymous usage counts the app sends are described in full on the <a href="privacy.html">privacy page</a>, including what stops when you delete the app.</p>
+        </div>
+    </details>
+
+    <h2>Still stuck?</h2>
+    <p>Write to <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Tell me what you were trying to do &mdash; not just what went wrong &mdash; and I will get back to you.</p>
+</div>
+
+<!-- ============================= 한국어 ============================= -->
+<div data-lang="ko">
+    <h1>지원</h1>
+    <p class="lede">Rereminder는 한 사람이 만들고 있습니다. 문의를 보내시면 상담 창구가 아니라 개발자에게 바로 닿습니다.</p>
+    <p class="updated">최종 수정: 2026년 8월 30일 &middot; 앱 버전 2.2.1</p>
+
+    <h2>문의하기</h2>
+    <div class="contact-grid">
+        <div class="card">
+            <h3>이메일</h3>
+            <p class="big-link"><a href="mailto:leeo@kakao.com">leeo@kakao.com</a></p>
+            <p>버그·환불·스크린샷이 필요한 문의에 가장 좋습니다.</p>
+        </div>
+        <div class="card">
+            <h3>앱 안에서</h3>
+            <p><span class="ui">설정 &rsaquo; 도움말 &rsaquo; 피드백 보내기</span></p>
+            <p>바로 제 인박스로 들어옵니다. 메일 앱 없이 iCloud 로그인만 돼 있으면 됩니다.</p>
+        </div>
+        <div class="card">
+            <h3>인스타그램</h3>
+            <p class="big-link"><a href="https://instagram.com/lee25_ios" target="_blank" rel="noopener">@lee25_ios</a></p>
+            <p>DM 열려 있습니다. 짧은 질문은 여기가 편합니다.</p>
+        </div>
+        <div class="card">
+            <h3>버그 · 기능 제안</h3>
+            <p class="big-link"><a href="https://github.com/M1zz/Rereminder/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+            <p>공개돼 있어서 같은 문제를 겪는 분도 답을 찾을 수 있습니다.</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>보통 2~3일 안에 답장드립니다.</strong> 일주일이 넘었다면 메일이 유실된 것이니 한 번 더 보내 주세요. 두 번 읽는 편이 못 읽는 것보다 낫습니다.</p>
+    </div>
+
+    <h3>버그를 알려 주실 때 함께 적어 주시면 좋은 것</h3>
+    <ul>
+        <li><strong>앱 버전</strong> &mdash; <span class="ui">설정 &rsaquo; Info</span> 맨 아래에 있습니다.</li>
+        <li><strong>기기와 OS 버전</strong> &mdash; 예: iPhone 15 Pro, iOS 26.1. 워치에서 생긴 문제면 워치 모델도 알려 주세요.</li>
+        <li><strong>기대한 동작과 실제 동작.</strong> "알림이 안 돼요"보다 "5분 전 알림이 울리지 않았어요"가 훨씬 많은 것을 알려 줍니다.</li>
+        <li><strong>매번 그런지, 한 번뿐이었는지.</strong></li>
+    </ul>
+
+    <h2>자주 묻는 질문</h2>
+
+    <details>
+        <summary>알림이 울리지 않았어요</summary>
+        <div class="body">
+            <p>Rereminder는 <strong>로컬 알림</strong>을 씁니다. 그래서 대부분 권한이나 집중 모드 설정 문제입니다. 이 순서로 확인해 보세요.</p>
+            <ol>
+                <li><strong>알림 권한.</strong> 앱의 <span class="ui">설정 &rsaquo; 알림 방식</span>에 현재 상태가 보이고, 그 자리에서 권한을 요청하거나 iOS 설정으로 넘어갈 수 있습니다.</li>
+                <li><strong>집중 모드 / 방해금지.</strong> 집중 모드가 켜져 있다면 iOS <span class="ui">설정 &rsaquo; 집중 모드</span>에서 Rereminder를 허용 앱으로 추가해 주세요.</li>
+                <li><strong>무음 스위치와 볼륨.</strong> 무음 모드에서는 소리가 나지 않습니다(진동은 옵니다).</li>
+                <li><strong>알림 요약.</strong> iOS <span class="ui">설정 &rsaquo; 알림 &rsaquo; 예약된 요약</span>에 들어가 있으면 정해진 시각까지 알림이 묶여 있습니다. Rereminder는 여기 없어야 합니다.</li>
+            </ol>
+            <p>네 가지가 다 정상인데도 그렇다면, 타이머 길이와 알림을 어디에 두셨는지 알려 주세요. 재현하는 데 그 조합이 필요합니다.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Apple Watch와 동기화가 안 돼요</summary>
+        <div class="body">
+            <p>앱의 <span class="ui">설정 &rsaquo; 내 기기</span>를 열어 보세요. Apple Watch 옆 상태가 어느 단계가 빠졌는지 알려 주고, 누르면 그 상태에 맞는 안내로 들어갑니다.</p>
+            <ol>
+                <li>워치가 이 iPhone에 <strong>페어링</strong>돼 있어야 합니다.</li>
+                <li><strong>워치에 Rereminder가 설치</strong>돼 있어야 합니다. iPhone의 Watch 앱에서 Rereminder를 찾아 설치해 주세요.</li>
+                <li><strong>워치에서 앱을 한 번 실행</strong>해 주세요. 갓 설치한 워치 앱은 아직 한 번도 돈 적이 없어서, 첫 동기화에는 실행이 필요합니다.</li>
+            </ol>
+            <p>타이머 상태는 워치 앱이 꺼져 있어도 넘어갑니다. 계속 켜 두실 필요는 없습니다.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Mac에서 앱을 켜 뒀는데 "연결 안 됨"으로 나와요</summary>
+        <div class="body">
+            <p>여기서 "연결됨"은 실시간 연결이 아니라 <strong>최근 10분 안에 그 Mac에서 앱이 켜져 있었다</strong>는 뜻입니다. 각 기기는 5분마다 내 iCloud에 표시를 남기는데, iCloud는 잠든 앱을 깨우지 못하므로 방금 깨어난 Mac은 몇 분 뒤에 나타납니다.</p>
+            <p>계속 나타나지 않는다면 두 기기가 <strong>같은 iCloud 계정</strong>에 로그인돼 있고 <strong>iCloud Drive가 켜져</strong> 있어야 합니다. <span class="ui">설정 &rsaquo; 내 기기</span>에 "다시 확인" 버튼이 있어 즉시 다시 읽습니다.</p>
+            <p>Mac 버전은 <strong>macOS 26 이상</strong>이 필요합니다.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Pro를 구매했는데 적용이 안 돼요</summary>
+        <div class="body">
+            <p>Pro 화면을 열고 <strong>구매 복원</strong>을 눌러 주세요. 구매는 결제한 Apple 계정에 묶여 있으므로, 그때와 같은 계정으로 로그인돼 있어야 합니다(가족 구성원 계정이나 다른 국가 계정이 아니어야 합니다).</p>
+            <p>Pro는 <strong>한 번만 결제</strong>하는 방식입니다. 구독이 아니고 만료되지 않아서, 앱을 지웠다 깔거나 기기를 바꿔도 그대로 돌아옵니다.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Pro에는 무엇이 들어 있나요?</summary>
+        <div class="body">
+            <p><strong>Pro가 파는 것은 한 문장입니다 &mdash; 앱이 당신의 설정을 기억합니다.</strong></p>
+            <ul>
+                <li><strong>템플릿</strong> &mdash; 시간과 알림을 통째로 저장해 두고 한 번에 다시 시작합니다.</li>
+                <li><strong>마지막 설정 복원</strong> &mdash; 앱을 다시 열면 기본값이 아니라 지난번 설정이 그대로 올라옵니다.</li>
+                <li><strong>세션 모드</strong> &mdash; 구간마다 이름("도입 / 시연 / 질의응답")과 대본을 적어 두면, 그 구간 차례에 펼쳐집니다.</li>
+                <li><strong>오버타임</strong> &mdash; 00:00에서 멈추지 않고 얼마나 넘겼는지 계속 셉니다.</li>
+                <li><strong>기록</strong> &mdash; 지금까지 진행한 세션이 남습니다.</li>
+            </ul>
+            <p><strong>알림 자체는 개수 제한 없이 무료</strong>이고, Apple Watch 앱도 무료입니다. 끝나기 전에 미리 알려 주는 것이 이 앱이 존재하는 이유라서, 그 부분에는 값을 매기지 않습니다.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>환불하고 싶어요</summary>
+        <div class="body">
+            <p>환불은 제가 아니라 Apple이 처리합니다. 저는 결제 정보에 접근할 수 없어서 직접 환불해 드릴 수 없습니다. 결제한 Apple 계정으로 <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a>에서 요청해 주세요.</p>
+            <p>고장 때문이라면 저에게도 알려 주시면 좋겠습니다. 환불은 그 문의를 닫을 뿐, 다음 사람에게 같은 버그가 남습니다.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>설치 없이 먼저 써 볼 수 있나요?</summary>
+        <div class="body">
+            <p>됩니다. iPhone에서 <a href="https://m1zz.github.io/rereminder/" target="_blank" rel="noopener">m1zz.github.io/rereminder</a>를 열면 App Clip으로 타이머가 바로 돕니다. 다이얼과 알림은 그대로 있고, 템플릿·세션 모드·워치 앱은 정식 앱에 있습니다.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>지원 언어와 기기가 어떻게 되나요?</summary>
+        <div class="body">
+            <table>
+                <tr><td>언어</td><td>한국어, English, 日本語</td></tr>
+                <tr><td>iPhone</td><td>iOS 26.0 이상</td></tr>
+                <tr><td>Apple Watch</td><td>watchOS 11.6 이상</td></tr>
+                <tr><td>Mac</td><td>macOS 26.0 이상</td></tr>
+                <tr><td>iPad</td><td>아직 지원하지 않습니다</td></tr>
+            </table>
+        </div>
+    </details>
+
+    <details>
+        <summary>제 데이터를 삭제하려면 어떻게 하나요?</summary>
+        <div class="body">
+            <p>만드신 것 &mdash; 타이머·템플릿·구간 이름·대본·기록 &mdash; 은 전부 기기 안에 있습니다. <strong>앱을 삭제하면 함께 사라집니다.</strong></p>
+            <p>앱이 보내는 익명 사용 통계는 <a href="privacy.html">개인정보 처리방침</a>에 전부 적어 두었습니다. 앱을 삭제했을 때 무엇이 멈추는지도 함께 적혀 있습니다.</p>
+        </div>
+    </details>
+
+    <h2>그래도 해결되지 않으면</h2>
+    <p><a href="mailto:leeo@kakao.com">leeo@kakao.com</a>으로 보내 주세요. 무엇이 잘못됐는지뿐 아니라 <strong>무엇을 하려고 하셨는지</strong>도 함께 적어 주시면 답을 드리기가 훨씬 쉽습니다.</p>
+</div>
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Rereminder (두번알림)</p>
+    <p>
+        <a href="./">Home</a>
+        <a href="support.html">Support</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="https://apps.apple.com/us/app/rereminder/id6752551268" target="_blank" rel="noopener">App Store</a>
+    </p>
+</footer>
+
+<script>
+(function () {
+    var KEY = 'rereminder-lang';
+    function apply(lang) {
+        document.body.classList.remove('lang-en', 'lang-ko');
+        document.body.classList.add('lang-' + lang);
+        document.documentElement.lang = lang;
+        var buttons = document.querySelectorAll('[data-set-lang]');
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].setAttribute('aria-pressed', String(buttons[i].dataset.setLang === lang));
+        }
+        try { localStorage.setItem(KEY, lang); } catch (e) {}
+    }
+    var saved = null;
+    try { saved = localStorage.getItem(KEY); } catch (e) {}
+    var initial = saved || ((navigator.language || '').toLowerCase().indexOf('ko') === 0 ? 'ko' : 'en');
+    apply(initial);
+    document.addEventListener('click', function (event) {
+        var button = event.target && event.target.closest ? event.target.closest('[data-set-lang]') : null;
+        if (button) { apply(button.dataset.setLang); }
+    });
+})();
+</script>
+</body>
+</html>
