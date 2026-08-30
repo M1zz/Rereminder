@@ -205,7 +205,14 @@
     <p>When something notable happens &mdash; the app was opened, a timer was started, the paywall was shown &mdash; the app records the <strong>name of that event</strong> with the app version, platform, the same random ID, and a timestamp. Each event name is recorded <strong>at most once every six hours</strong>, so these show <em>whether</em> something happens, never how often.</p>
 
     <h3>3. Feedback you choose to send</h3>
-    <p>Only when you tap <span class="ui">Send Feedback</span> or answer a satisfaction prompt. It sends <strong>the message you wrote</strong>, plus the app version and platform so I can reproduce the problem. Nothing is sent from that screen unless you press send.</p>
+    <p>Only when you open <span class="ui">Send Feedback</span> and press send. That record carries:</p>
+    <ul>
+        <li><strong>Your message</strong> and the category you picked.</li>
+        <li><strong>A name and a reply-to email &mdash; both optional and both blank by default.</strong> Fill them in only if you want an answer back. They are used to reply to you and for nothing else.</li>
+        <li><strong>One device line</strong> &mdash; app version, kind of device, OS version, like <code>App 2.2.1 | iPhone | iOS 26.1</code>. That is the <em>kind</em> of device, not <em>which</em> device; nothing in it is unique to you. The form shows you this exact line before you send.</li>
+        <li>Your language setting (for example <code>ko_KR</code>) and platform.</li>
+    </ul>
+    <p>Nothing leaves that screen unless you press send. Tapping 👍 on the "enjoying the app?" prompt opens the App Store review sheet and sends me nothing; 👎 just opens this same feedback form.</p>
 
     <h3>4. Crash and hang reports</h3>
     <p>Collected through <strong>Apple's MetricKit</strong>, which aggregates crash and performance data at the OS level. These contain stack traces and timing, never the content of your timers.</p>
@@ -217,7 +224,7 @@
     <h2>What is never sent, under any circumstance</h2>
     <ul>
         <li>Timer names, alert messages, section titles, presentation scripts &mdash; <strong>any text you type.</strong></li>
-        <li>Your name, email address, or phone number (unless you type one into a feedback message yourself).</li>
+        <li>Your name or email address &mdash; except the two optional fields in the feedback form above, which you fill in yourself and can leave blank.</li>
         <li>Advertising identifiers (IDFA), your device's vendor identifier (IDFV), or any device fingerprint.</li>
         <li>Location, contacts, photos, calendar, health data, or microphone.</li>
     </ul>
@@ -292,7 +299,14 @@
     <p>앱을 열었다, 타이머를 시작했다, 결제 화면이 떴다 같은 일이 생기면 <strong>그 이벤트의 이름</strong>을 앱 버전·플랫폼·같은 무작위 ID·발생 시각과 함께 남깁니다. 이름 하나당 <strong>여섯 시간에 한 번만</strong> 기록하므로, 어떤 일이 <em>있었는지</em>는 알 수 있어도 몇 번인지는 알 수 없습니다.</p>
 
     <h3>3. 직접 보내신 피드백</h3>
-    <p><span class="ui">피드백 보내기</span>를 누르거나 만족도 질문에 답하셨을 때만 전송됩니다. <strong>작성하신 내용</strong>과, 문제를 재현하는 데 필요한 앱 버전·플랫폼이 함께 갑니다. 보내기를 누르지 않으면 그 화면에서 나가는 것은 없습니다.</p>
+    <p><span class="ui">피드백 보내기</span>를 열고 <strong>보내기를 누르셨을 때만</strong> 전송됩니다. 그 기록에는 이런 것이 담깁니다.</p>
+    <ul>
+        <li><strong>작성하신 내용</strong>과 고르신 분류.</li>
+        <li><strong>이름과 회신 받을 이메일 &mdash; 둘 다 선택 항목이고 기본은 빈칸입니다.</strong> 답을 받고 싶으실 때만 적어 주세요. 답장에만 쓰고 다른 데는 쓰지 않습니다.</li>
+        <li><strong>기기 줄 한 줄</strong> &mdash; 앱 버전, 기기 종류, OS 버전입니다. <code>App 2.2.1 | iPhone | iOS 26.1</code> 같은 모양이고, <em>어떤 종류</em>의 기기인지일 뿐 <em>어느</em> 기기인지가 아닙니다. 여기에 사용자를 특정할 수 있는 값은 없습니다. 보내기 전에 화면에서 이 줄을 그대로 보여 드립니다.</li>
+        <li>언어 설정(예: <code>ko_KR</code>)과 플랫폼.</li>
+    </ul>
+    <p>보내기를 누르지 않으면 그 화면에서 나가는 것은 없습니다. "즐겁게 쓰고 계신가요?"에서 👍를 누르면 App Store 리뷰 창이 열릴 뿐 저에게 오는 것은 없고, 👎는 이 피드백 화면을 열어 줍니다.</p>
 
     <h3>4. 크래시·멈춤 리포트</h3>
     <p><strong>Apple의 MetricKit</strong>을 통해 수집됩니다. OS가 집계해 주는 크래시·성능 데이터로, 스택 트레이스와 시간 정보만 들어 있고 타이머 내용은 들어 있지 않습니다.</p>
@@ -304,7 +318,7 @@
     <h2>어떤 경우에도 보내지 않는 것</h2>
     <ul>
         <li>타이머 이름, 알림 문구, 구간 제목, 발표 대본 &mdash; <strong>직접 입력하신 모든 글.</strong></li>
-        <li>이름, 이메일, 전화번호(피드백 본문에 직접 적으신 경우는 예외).</li>
+        <li>이름과 이메일 &mdash; 위 피드백 화면의 선택 입력란 두 개는 예외이고, 직접 적으실 때만 갑니다(비워 두셔도 됩니다).</li>
         <li>광고 식별자(IDFA), 기기 벤더 식별자(IDFV), 그 밖의 기기 지문.</li>
         <li>위치, 연락처, 사진, 캘린더, 건강 데이터, 마이크.</li>
     </ul>
