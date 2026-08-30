@@ -168,6 +168,11 @@ struct TimerMainView: View {
             let lineWidth = clockSize * 0.083
             let spacing = availableHeight * 0.01
             let buttonSize = clockSize * 0.18
+            // 링의 **보이는** 아래 끝은 레이아웃 프레임보다 아래에 있다 — 흰 핸들(지름 lineWidth)과
+            // 종 노브(lineWidth × 1.6)는 원 위에 중심을 두고 그려져 절반이 프레임 밖으로 나간다.
+            // 그 몫을 빼 두지 않으면 원 아래에 세우는 것(구간 길이 칩·카운트다운)이 6시 방향
+            // 핸들·종에 달라붙는다. 30분(=180°)처럼 핸들이 정확히 아래로 오는 설정에서 특히 그렇다.
+            let knobOverflow = lineWidth * 0.8
 
             VStack(spacing: 0) {
                 // 빠른Settings 영역 — 알림 프리셋(종) 칩은 타이머 모드 전용.
@@ -190,6 +195,7 @@ struct TimerMainView: View {
                           lineWidth: lineWidth,
                           geometry: geometry,
                           buttonSize: buttonSize)
+                    .padding(.bottom, knobOverflow)
                     .zIndex(1)
 
                 // **걸기 전에도 구간이 몇 분짜리인지 보인다.** 종을 옮기는 조작은 각도라
@@ -197,7 +203,8 @@ struct TimerMainView: View {
                 // 실행 중에는 세우지 않는다 — 그 자리는 원 아래 줄어드는 숫자(SectionCountdownList) 몫이다.
                 if !isProgressMode, !isPresentationMode, derivedSegments.count > 1 {
                     SectionLengthBar(segments: derivedSegments)
-                        .padding(.top, spacing * 2)
+                        // 화면이 짧아도 최소 간격은 지킨다 (spacing 은 화면 높이의 1%)
+                        .padding(.top, max(DSSpacing.md, spacing * 2))
                         .transition(.opacity)
                 }
 
