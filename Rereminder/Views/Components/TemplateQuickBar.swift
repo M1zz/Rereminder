@@ -4,10 +4,14 @@
 //
 //  타이머 다이얼 아래 빠른 템플릿 바
 //  - 왼쪽: 최근 사용한 템플릿 이름 칩 (탭하면 설정만 다이얼에 반영, 시작하지 않음)
-//  - 오른쪽: 초기화 + 템플릿 저장 버튼
+//  - 오른쪽: 초기화(아이콘) + 저장(캡슐)
 //
 //  두 버튼 다 **사용자가 뭔가 바꿨을 때만** 나온다.
 //  갓 설치한 기본 설정 그대로면 저장할 것도 되돌릴 것도 없어서 바에는 템플릿 칩만 남는다.
+//
+//  ⚠️ 버튼 위계 — 초기화는 **아이콘만**(되돌리는 일은 자주 쓰지 않고, 글자를 달면 저장 버튼과
+//     같은 무게로 보여 무엇이 주된 행동인지 흐려진다), 저장만 채운 캡슐로 남긴다.
+//     아이콘만이라 예전의 글자 잘림 문제(layoutPriority)도 사라졌다.
 //
 
 import SwiftData
@@ -48,25 +52,19 @@ struct TemplateQuickBar: View {
 
     var body: some View {
         HStack(spacing: DSSpacing.sm) {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: DSSpacing.sm) {
-                    ForEach(recentTemplates) { template in
-                        Button {
-                            withAnimation(.easeInOut(duration: 0.25)) {
-                                screenVM.load(template: template)
-                            }
-                        } label: {
-                            Text(displayName(template))
-                                .font(DSFont.callout.weight(.medium))
-                                .lineLimit(1)
-                                .padding(.horizontal, DSSpacing.sm)
-                                .frame(minHeight: 36)
+            // 저장해 둔 템플릿이 없으면 스크롤뷰가 빈 자리를 다 먹어 버튼 둘이 오른쪽 끝에
+            // 붙는다 — 바로 위의 연결 칩은 가운데라 축이 어긋나 보인다. 그때는 가운데로 모은다.
+            if recentTemplates.isEmpty {
+                Spacer(minLength: 0)
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: DSSpacing.xs) {
+                        ForEach(recentTemplates) { template in
+                            templateChip(template)
                         }
-                        .buttonStyle(.bordered)
-                        .accessibilityLabel(String(localized: "Applies this template to the timer"))
                     }
+                    .padding(.horizontal, 2)
                 }
-                .padding(.horizontal, 2)
             }
 
             // 저장 버튼 왼쪽 — 갓 설치했을 때의 설정으로 되돌린다
@@ -76,15 +74,13 @@ struct TemplateQuickBar: View {
                         screenVM.resetToDefaultSetup()
                     }
                 } label: {
-                    Label(String(localized: "Reset"), systemImage: "arrow.counterclockwise")
-                        .font(DSFont.callout.weight(.medium))
-                        .lineLimit(1)
-                        .frame(minHeight: 36)
+                    Image(systemName: "arrow.counterclockwise")
+                        .font(.footnote.weight(.semibold))
                 }
                 .buttonStyle(.bordered)
+                .buttonBorderShape(.circle)
+                .controlSize(.small)
                 .accessibilityLabel(String(localized: "Reset the timer to the default setup"))
-                // 템플릿 칩 스크롤뷰보다 먼저 제 너비를 가져간다 (안 그러면 글자가 잘린다)
-                .layoutPriority(1)
                 .transition(.opacity.combined(with: .scale(scale: 0.9)))
             }
 
@@ -96,21 +92,46 @@ struct TemplateQuickBar: View {
                     // 한 번 저장해 본 사람에게는 더 권하지 않는다
                     FeatureTips.markTemplateSaved()
                 } label: {
-                    Label(String(localized: "Save template"), systemImage: "square.and.arrow.down")
-                        .font(DSFont.callout.weight(.medium))
-                        .lineLimit(1)
-                        .frame(minHeight: 36)
+                    HStack(spacing: DSSpacing.xs) {
+                        Image(systemName: "bookmark.fill")
+                            .font(.caption2.weight(.semibold))
+                        Text("Save")
+                            .font(DSFont.callout.weight(.semibold))
+                            .lineLimit(1)
+                    }
                 }
                 .buttonStyle(.borderedProminent)
+                .buttonBorderShape(.capsule)
+                .controlSize(.small)
                 .accessibilityLabel(String(localized: "Save the current settings as a template"))
-                .layoutPriority(1)
                 .transition(.opacity.combined(with: .scale(scale: 0.9)))
                 // 같은 설정을 여러 번 맞춰 본 뒤에야 뜬다 (타이머 3회 시작 + 저장 이력 없음)
                 .modifier(SaveTemplateTipAnchor())
             }
+
+            if recentTemplates.isEmpty {
+                Spacer(minLength: 0)
+            }
         }
         .animation(.easeInOut(duration: 0.2), value: hasUnsavedChanges)
         .animation(.easeInOut(duration: 0.2), value: canReset)
+    }
+
+    /// 저장해 둔 설정 하나 — 작은 캡슐 칩.
+    private func templateChip(_ template: Timer) -> some View {
+        Button {
+            withAnimation(.easeInOut(duration: 0.25)) {
+                screenVM.load(template: template)
+            }
+        } label: {
+            Text(displayName(template))
+                .font(DSFont.callout.weight(.medium))
+                .lineLimit(1)
+        }
+        .buttonStyle(.bordered)
+        .buttonBorderShape(.capsule)
+        .controlSize(.small)
+        .accessibilityLabel(String(localized: "Applies this template to the timer"))
     }
 
     /// 되돌릴 것이 있는가 — 기본 설정 그대로면 눌러도 아무 일이 없으니 숨긴다
