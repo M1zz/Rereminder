@@ -240,6 +240,161 @@
     }
     .lang button[aria-pressed="true"] { background: var(--accent); color: #fff; }
 
+    /* ── 기기 미러 (워치 · 맥) ──────────────────────────────────────────── */
+    .demo-devices {
+        display: flex; justify-content: center; align-items: flex-end;
+        gap: 26px; margin-top: 20px;
+    }
+    .dev { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 7px; }
+    .dev figcaption {
+        font-size: 11px; font-weight: 600; letter-spacing: 0.3px;
+        color: var(--text3); text-align: center;
+    }
+    .dev-time { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--text); }
+
+    /* 워치 — 밴드가 위아래로 살짝 보이는 실루엣 */
+    .dev-watch { position: relative; display: flex; align-items: center; justify-content: center; }
+    .dev-band {
+        position: absolute; top: -9px; bottom: -9px; left: 50%; width: 26px;
+        transform: translateX(-50%); border-radius: 6px;
+        background: var(--surface2); border: 1px solid var(--border);
+    }
+    .dev-watch-screen {
+        position: relative; z-index: 1;
+        width: 56px; height: 66px; border-radius: 17px;
+        background: #000; border: 2px solid var(--border);
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+    .dev-watch-ring { position: absolute; inset: 8px; width: auto; height: auto; }
+    .dev-watch .dev-time { font-size: 13px; color: #f5f5f7; position: relative; z-index: 1; }
+    .dev-track2 { stroke: rgba(255,255,255,0.16); }
+    .dev-arc { stroke: var(--accent); transition: stroke-dashoffset .3s linear; }
+
+    /* 맥 — 메뉴 막대에 남은 시간이 뜬다 (RereminderMenuBar) */
+    .dev-mac { position: relative; width: 108px; }
+    .dev-menubar {
+        display: flex; align-items: center; justify-content: flex-end; gap: 4px;
+        height: 15px; padding: 0 5px;
+        background: var(--surface2); border: 1px solid var(--border); border-bottom: 0;
+        border-radius: 6px 6px 0 0;
+    }
+    .dev-bell { font-size: 8px; line-height: 1; }
+    .dev-mac .dev-time { font-size: 9px; }
+    .dev-screen-body {
+        height: 47px; background: #000;
+        border: 1px solid var(--border); border-top: 0; border-radius: 0 0 6px 6px;
+    }
+    .dev-foot {
+        display: block; width: 128px; height: 4px; margin: 0 auto;
+        margin-left: -10px; border-radius: 0 0 5px 5px;
+        background: var(--surface2); border: 1px solid var(--border); border-top: 0;
+    }
+
+    /* 종이 울리는 순간 두 기기가 함께 반응한다 — 같이 돈다는 말의 증거다 */
+    .demo-devices.ring .dev-watch-screen,
+    .demo-devices.ring .dev-menubar { animation: devRing .5s ease 2; }
+    @keyframes devRing {
+        0%, 100% { transform: none; }
+        30% { transform: translateX(-2px); }
+        70% { transform: translateX(2px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .demo-devices.ring .dev-watch-screen,
+        .demo-devices.ring .dev-menubar { animation: none; }
+    }
+
+    /* ── 한 화면에 들어오게 ─────────────────────────────────────────────────
+       다이얼은 정사각형이라 세로를 가장 많이 먹는다. 폭만 보고 크기를 정하면
+       세로가 짧은 화면에서 조작 줄이 화면 밖으로 밀린다 — 남는 세로도 함께 본다. */
+    .demo-stage { max-width: min(400px, 30svh); }
+
+    /* 배너는 4초 떴다 사라지는 토스트인데 늘 자리를 차지하고 있었다.
+       겹쳐 띄우면 그 자리(약 74px)가 통째로 돌아온다. */
+    .demo-card { position: relative; }
+    .demo-banner {
+        position: absolute; z-index: 6; left: 50%; top: 12px;
+        width: min(420px, calc(100% - 44px)); margin: 0;
+        transform: translate(-50%, -8px);
+        box-shadow: var(--badge-shadow);
+    }
+    .demo-banner.show { transform: translate(-50%, 0); }
+
+    @media (max-height: 860px) {
+        .demo-section h2 { font-size: 21px; margin-bottom: 6px; }
+        .demo-sub { font-size: 15px; margin-bottom: 14px; }
+        .demo-card { padding: 14px 14px 12px; }
+        .demo-sections { margin-top: 12px; }
+        .demo-devices { margin-top: 10px; gap: 18px; }
+        .dev figcaption { font-size: 10px; }
+        .demo-controls { margin-top: 12px; gap: 8px; }
+        .demo-hint { margin-top: 6px; font-size: 12px; }
+        .demo-note { margin-top: 8px; font-size: 12px; line-height: 1.5; }
+        .demo-btn { width: 48px; height: 48px; }
+
+        /* 조작 줄 제목이 한 줄을 통째로 쓰고 있었다 — 알약과 같은 줄에 둔다 */
+        .demo-row-label { width: auto; margin: 0 2px 0 0; text-align: left; }
+        .demo-row { gap: 6px; }
+        .demo-pill { padding: 5px 11px; font-size: 13px; }
+
+        /* 기기 미러도 한 치수 작게 */
+        .dev-watch-screen { width: 48px; height: 57px; border-radius: 15px; }
+        .dev-watch .dev-time { font-size: 11px; }
+        .dev-mac { width: 94px; }
+        .dev-screen-body { height: 40px; }
+        .dev-foot { width: 112px; margin-left: -9px; }
+    }
+
+    /* 더 짧은 화면(주소창이 있는 실제 폰 브라우저) — 각주부터 접는다.
+       다이얼·조작은 이 데모의 본체라 마지막까지 남긴다. */
+    @media (max-height: 760px) {
+        .demo-section h2 { font-size: 19px; }
+        .demo-sub { font-size: 14px; margin-bottom: 10px; }
+        .demo-hint { display: none; }          /* 종을 지우는 법은 해 보면 안다 */
+        .demo-note { margin-top: 6px; font-size: 11px; }
+        .demo-devices { margin-top: 8px; }
+        .demo-controls { margin-top: 10px; gap: 6px; }
+        .demo-sections { margin-top: 8px; }
+    }
+
+    /* 가장 짧은 화면 — 데모 안내문까지 접는다. 남기는 것은 다이얼·기기·조작뿐이다.
+       (문구는 DOM 에 그대로 있어 화면 낭독기에는 읽힌다) */
+    @media (max-height: 620px) {
+        .demo-note { display: none; }
+        .demo-devices { gap: 14px; margin-top: 6px; }
+        .demo-controls { margin-top: 8px; }
+        .demo-sections { margin-top: 6px; }
+    }
+
+    /* 눕히면 세로가 더 짧아진다 — 그때는 다이얼을 왼쪽에 두고 나머지를 오른쪽으로 보낸다.
+       세로로 쌓아서는 어차피 한 화면에 못 넣는다. */
+    @media (orientation: landscape) and (max-height: 640px) {
+        .demo-card {
+            display: grid;
+            grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+            /* 오른쪽에 쌓이는 다섯 덩이 — 다이얼이 그 전체 높이를 차지한다 */
+            grid-template-rows: repeat(5, auto);
+            column-gap: 24px; align-items: center;
+            max-width: 940px;
+        }
+        /* 다이얼을 조금 양보해 오른쪽 열을 넓힌다 — 좁으면 조작 줄이 두 줄씩 접혀
+           오히려 세로를 더 먹는다(재 보니 조작만 266px 이었다). */
+        .demo-stage { grid-column: 1; grid-row: 1 / -1; max-width: min(290px, 62svh); }
+        .demo-card > *:not(.demo-stage) { grid-column: 2; }
+        .demo-devices { margin-top: 0; justify-content: flex-start; }
+        .demo-banner { margin: 10px 0 0; }
+        .demo-sections { margin-top: 10px; justify-content: flex-start; }
+        .demo-controls { margin-top: 12px; }
+        .demo-row, .demo-row-label { justify-content: flex-start; text-align: left; }
+        .demo-row { gap: 5px; }
+        .demo-pill { padding: 4px 10px; font-size: 12.5px; }
+        .demo-hint, .demo-note { text-align: left; }
+    }
+
+    @media (max-width: 380px) {
+        .demo-devices { gap: 16px; }
+    }
+
     /* 이 페이지는 소개 페이지보다 좁다 — 데모 블록만 폭·여백을 다시 잡는다 */
     .demo-section { padding: 0; margin: 36px 0 0; max-width: 100%; }
     .demo-section h2 { font-size: 24px; letter-spacing: -0.02em; margin-bottom: 10px; }
@@ -295,6 +450,38 @@
                 </div>
             </div>
             <div class="demo-badge" id="demo-badge" aria-hidden="true"></div>
+        </div>
+
+        <!-- 같은 타이머가 손목과 맥에서도 함께 돈다 — 데모의 남은 시간을 그대로 따라간다.
+             장식이 아니라 이 앱이 파는 문장이라 숫자가 진짜로 같이 움직여야 한다. -->
+        <div class="demo-devices" id="demo-devices">
+            <figure class="dev">
+                <div class="dev-watch">
+                    <span class="dev-band" aria-hidden="true"></span>
+                    <div class="dev-watch-screen">
+                        <svg class="dev-watch-ring" viewBox="0 0 40 40" aria-hidden="true">
+                            <circle class="dev-track2" cx="20" cy="20" r="16.5" fill="none" stroke-width="4"/>
+                            <circle class="dev-arc" id="dev-watch-arc" cx="20" cy="20" r="16.5" fill="none"
+                                    stroke-width="4" stroke-linecap="round"
+                                    transform="rotate(-90 20 20)"/>
+                        </svg>
+                        <span class="dev-time" id="dev-watch-time">10:00</span>
+                    </div>
+                </div>
+                <figcaption>Apple Watch</figcaption>
+            </figure>
+
+            <figure class="dev">
+                <div class="dev-mac">
+                    <div class="dev-menubar">
+                        <span class="dev-bell" aria-hidden="true">🔔</span>
+                        <span class="dev-time" id="dev-mac-time">10:00</span>
+                    </div>
+                    <div class="dev-screen-body"></div>
+                    <span class="dev-foot" aria-hidden="true"></span>
+                </div>
+                <figcaption data-demo-i18n="macCaption">Mac 메뉴 막대</figcaption>
+            </figure>
         </div>
 
         <div class="demo-banner" id="demo-banner" role="status" aria-live="polite">
@@ -475,6 +662,7 @@
             unitMin: 'm',
             unitSec: 's',
             beforeSuffix: '',
+            macCaption: 'Mac menu bar',
             title: 'Try it right here',
             subtitle: 'Drag the white handle to set the length, drag the orange bells to place your alerts, then press start. No install, no sign-up — this runs in your browser.',
             lengthLabel: 'Length',
@@ -496,6 +684,7 @@
             unitMin: '분',
             unitSec: '초',
             beforeSuffix: ' 전',
+            macCaption: 'Mac 메뉴 막대',
             title: '여기서 바로 써 보세요',
             subtitle: '흰 핸들을 끌어 시간을, 주황 종을 끌어 알림 지점을 정하고 시작을 누르세요. 설치도 가입도 없이, 브라우저에서 그대로 돕니다.',
             lengthLabel: '전체 시간',
@@ -516,6 +705,10 @@
     };
 
     var el = {
+        devices: document.getElementById('demo-devices'),
+        watchTime: document.getElementById('dev-watch-time'),
+        watchArc: document.getElementById('dev-watch-arc'),
+        macTime: document.getElementById('dev-mac-time'),
         svg: document.getElementById('demo-svg'),
         stage: document.getElementById('demo-stage'),
         arcs: document.getElementById('demo-arcs'),
@@ -683,6 +876,8 @@
             el.time.classList.remove('overtime');
         }
 
+        renderDevices();
+
         el.start.hidden = (state === 'running');
         el.pause.hidden = (state !== 'running');
         el.stop.hidden = (state === 'idle');
@@ -690,6 +885,37 @@
         renderSections();
         renderBadge();
         renderPills();
+    }
+
+    // 워치·맥은 가운데 시간과 **같은 값**을 쓴다. 따로 계산하면 한 틱 어긋나 보이고,
+    // 그러면 "같이 돈다"는 말 자체가 의심스러워진다.
+    function renderDevices() {
+        if (!el.watchTime) { return; }
+        var over = (state !== 'idle' && remaining() < 0);
+        var label = over ? '+' + clock(-remaining())
+                         : clock(state === 'idle' ? total : Math.max(0, remaining()));
+        el.watchTime.textContent = label;
+        el.macTime.textContent = label;
+
+        // 워치 링은 남은 비율 (r=16.5 → 둘레 2πr)
+        var C = 2 * Math.PI * 16.5;
+        var left = state === 'idle' ? 1 : clamp(Math.max(0, remaining()) / total, 0, 1);
+        el.watchArc.setAttribute('stroke-dasharray', C.toFixed(2));
+        el.watchArc.setAttribute('stroke-dashoffset', (C * (1 - left)).toFixed(2));
+        // ⚠️ setAttribute('stroke', …) 는 presentation attribute 라 .dev-arc 의 CSS 규칙에
+        // 진다 — 오버타임 색이 안 먹는다. 인라인 스타일이라야 이긴다.
+        el.watchArc.style.stroke = over ? '#FF9F0A' : 'var(--accent)';
+    }
+
+    // 종이 울리면 두 기기가 함께 반응한다 (배너와 같은 순간)
+    var devRingTimer = null;
+    function pulseDevices() {
+        if (!el.devices) { return; }
+        el.devices.classList.remove('ring');
+        void el.devices.offsetWidth;          // 애니메이션을 다시 태우려면 리플로우가 필요하다
+        el.devices.classList.add('ring');
+        clearTimeout(devRingTimer);
+        devRingTimer = setTimeout(function () { el.devices.classList.remove('ring'); }, 1100);
     }
 
     function renderSections() {
@@ -863,6 +1089,7 @@
         el.bannerText.textContent = text;
         el.bannerSub.textContent = sub;
         el.banner.classList.add('show');
+        pulseDevices();
         clearTimeout(bannerTimer);
         bannerTimer = setTimeout(function () { el.banner.classList.remove('show'); }, 4200);
     }
