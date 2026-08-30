@@ -18,6 +18,11 @@
 import SwiftUI
 
 struct SectionLengthBar: View {
+    /// 위쪽 **바닥 여백**. 부모(TimerMainView.stackGap)가 주는 간격에 더해지는 최소값이다.
+    /// ⚠️ 부모만 믿지 않는다 — 예전에 부모의 Spacer 하나 때문에 이 줄이 링에 9pt 까지
+    ///    달라붙은 적이 있다. 컴포넌트가 스스로 최소한을 보장한다.
+    @ScaledMetric(relativeTo: .footnote) private var minTopInset: CGFloat = 6
+
     let segments: [TimerSections.Segment]
 
     var body: some View {
@@ -29,6 +34,8 @@ struct SectionLengthBar: View {
                 row.padding(.horizontal, 24)
             }
         }
+        // 어떤 부모 아래에서도 원(또는 위 요소)에 달라붙지 않는다
+        .padding(.top, minTopInset)
         .accessibilityElement(children: .contain)
         .accessibilityLabel(Text("Section lengths"))
     }
