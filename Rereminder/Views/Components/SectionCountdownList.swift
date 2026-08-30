@@ -66,6 +66,12 @@ struct SectionCountdownList: View {
                               relativeTo: .body,
                               maxSize: phase == .active ? 30 : 24)
                 .monospacedDigit()
+                // ⚠️ 시간은 **절대 접히지 않는다.** 이게 없으면 폭이 모자랄 때 SwiftUI 가
+                //    텍스트부터 접어서 "8:56" 이 "8:5 / 6" 으로 두 줄이 된다
+                //    (큰 글씨 설정이면 글자가 30pt 까지 커져 더 쉽게 걸린다).
+                //    양보하는 쪽은 막대다 — 아래 bar(...) 가 남는 폭만 쓴다.
+                .lineLimit(1)
+                .fixedSize(horizontal: true, vertical: false)
                 .foregroundStyle(color)
 
             Spacer(minLength: 8)
@@ -96,13 +102,18 @@ struct SectionCountdownList: View {
                                     minWidth: barMinWidth)
         let ratio = Self.fillRatio(remaining: remaining, durationSec: segment.durationSec)
 
-        return ZStack(alignment: .trailing) {
-            Capsule().fill(color.opacity(0.22))
-            Capsule()
-                .fill(color)
-                .frame(width: width * ratio)
+        // ⚠️ 폭을 고정(frame(width:))하면 좁은 화면에서 시간 텍스트를 밀어내 접히게 만든다.
+        //    maxWidth 로 두어 **막대가 양보**하고, 채움은 GeometryReader 가 준
+        //    **실제 그려진 폭**을 쓴다(비례 폭으로 계산하면 좁아졌을 때 비율이 어긋난다).
+        return GeometryReader { geo in
+            ZStack(alignment: .trailing) {
+                Capsule().fill(color.opacity(0.22))
+                Capsule()
+                    .fill(color)
+                    .frame(width: geo.size.width * ratio)
+            }
         }
-        .frame(width: width, height: barHeight)
+        .frame(maxWidth: width, minHeight: barHeight, maxHeight: barHeight)
         // 1초마다 툭툭 끊기지 않게 미끄러진다(원 아래 막대와 같은 값).
         .animation(.linear(duration: 0.2), value: remaining)
         .accessibilityHidden(true)
