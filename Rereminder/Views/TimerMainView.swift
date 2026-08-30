@@ -185,6 +185,9 @@ struct TimerMainView: View {
             // 바닥값이 글자 크기를 따라간다(gapUnit) — 글자가 커지면 요소도 커지는데
             // 여백만 그대로면 화면이 빽빽해 보인다.
             let stackGap = max(gapUnit, spacing * 2)
+            // 아래 묶음 **안쪽** 간격 — 구간 칩·기기 칩·버튼이 한 덩이로 보이도록 더 좁다.
+            // 셋이 같은 값을 쓰는 것은 그대로다(균등).
+            let clusterGap = max(DSSpacing.sm, gapUnit * 0.6)
 
             VStack(spacing: 0) {
                 // 빠른Settings 영역 — 알림 프리셋(종) 칩은 타이머 모드 전용.
@@ -200,23 +203,27 @@ struct TimerMainView: View {
                     }
                 }
 
-                Spacer(minLength: 0)
-
                 // 드래그 배지가 원 밖으로 나가므로 아래쪽 템플릿 바·구간 리스트보다 위에 그린다
                 clockView(size: clockSize,
                           lineWidth: lineWidth,
                           geometry: geometry,
                           buttonSize: buttonSize)
+                    // 원 위 여백은 **신축이 아니라 정해진 값**이다. 여기에 Spacer 를 두면
+                    // 남는 세로가 위에도 나뉘어 아래 묶음이 중간에 떠 버린다.
+                    .padding(.top, stackGap)
                     .padding(.bottom, knobOverflow)
                     .zIndex(1)
 
+                // 이 화면의 **유일한 신축 공간**. 남는 세로가 전부 여기로 모이므로
+                // 아래 묶음은 화면 아래쪽으로 내려가 버튼과 한 덩이가 된다.
+                Spacer(minLength: stackGap)
+
                 // ── 원 아래 묶음: 구간 길이 → 기기 연결 → 템플릿·초기화 ─────────────────
-                // 셋이 **같은 간격**(stackGap)으로 쌓인다. 각자 padding 을 갖지 않는 이유가
-                // 이것이다 — 여백을 한 곳에서만 정해야 균등이 유지된다.
-                // ⚠️ 예전에는 구간 칩 바로 아래에 Spacer() 가 하나 더 있어서 남는 세로가
-                //    통째로 그 한 자리에 쏟아졌다(칩은 원에 달라붙고 그 아래만 휑했다).
-                //    남는 세로는 위아래 Spacer 가 반씩 나눠 갖는다 — 다시 끼워 넣지 말 것.
-                VStack(spacing: stackGap) {
+                // 셋이 **같은 간격**(clusterGap)으로 한 덩이처럼 붙는다. 각자 padding 을
+                // 갖지 않는 이유가 이것이다 — 여백을 한 곳에서만 정해야 균등이 유지된다.
+                // ⚠️ 이 묶음 안에 Spacer 를 끼워 넣지 말 것. 예전에 구간 칩 바로 아래에
+                //    Spacer() 가 있어서 칩이 원에 달라붙고 그 아래만 휑하게 벌어졌다.
+                VStack(spacing: clusterGap) {
                     // **걸기 전에도 구간이 몇 분짜리인지 보인다.** 종을 옮기는 조작은 각도라
                     // "그래서 첫 구간이 몇 분이지?"를 머리로 계산하게 되는데, 그 답을 바로 아래 둔다.
                     // 실행 중에는 세우지 않는다 — 그 자리는 줄어드는 숫자(SectionCountdownList) 몫이다.
@@ -274,9 +281,7 @@ struct TimerMainView: View {
                             .padding(.horizontal)
                     }
                 }
-                .padding(.top, stackGap)
-
-                Spacer(minLength: 0)
+                .padding(.bottom, stackGap)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             // 리스트가 커지면 원이 작아진다 — 두 변화가 한 몸으로 움직여야 매끄럽다
