@@ -6541,18 +6541,24 @@
         }
       }
     },
-    "You usually run %1$@ with %2$lld alerts around now.": {
+    "You usually run %@ with %lld alerts around now.": {
       "localizations": {
-        "ja": {
+        "en": {
           "stringUnit": {
-            "state": "translated",
-            "value": "この時間帯はいつも %1$@・通知 %2$lld 個で使っています。"
+            "state": "new",
+            "value": "You usually run %1$@ with %2$lld alerts around now."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
             "value": "이맘때면 %1$@ 에 알림 %2$lld 개로 쓰시더라고요."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この時間帯はいつも %1$@・通知 %2$lld 個で使っています。"
           }
         }
       }
