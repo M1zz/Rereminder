@@ -25,6 +25,9 @@
 import SwiftUI
 
 struct SectionCountdownList: View {
+    /// 위쪽 **바닥 여백** — 대기 중의 `SectionLengthBar` 와 같은 이유, 같은 값.
+    @ScaledMetric(relativeTo: .footnote) private var minTopInset: CGFloat = 6
+
     let segments: [TimerSections.Segment]
     /// 시작 후 경과 시간(초).
     let elapsedSec: Int
@@ -49,6 +52,8 @@ struct SectionCountdownList: View {
         }
         .frame(maxHeight: maxHeight)
         .padding(.horizontal, 24)
+        // 어떤 부모 아래에서도 원에 달라붙지 않는다 (대기 중 SectionLengthBar 와 같은 규칙)
+        .padding(.top, minTopInset)
     }
 
     private func row(_ segment: TimerSections.Segment) -> some View {
