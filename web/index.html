@@ -9,6 +9,27 @@
 <meta property="og:title" content="두번알림 — 발표 종료 전 미리 알림">
 <meta property="og:description" content="끝나기 전 원하는 시점마다 미리 알려주는 타이머.">
 <meta property="og:type" content="website">
+<script>
+/* 기기 언어를 보고 ko/en 을 고른다. <head> 에서 html 클래스를 정하므로 첫 그림부터
+   맞는 언어가 그려진다 — body 클래스로 하면 본문이 한 번 그려진 뒤에 바뀌어 깜빡인다.
+   키는 docs/ 의 세 페이지와 같은 'rereminder-lang' 이다(한 번 고르면 사이트 전체에서 유지). */
+(function () {
+    var KEY = 'rereminder-lang';
+    var saved = null;
+    try { saved = localStorage.getItem(KEY) || localStorage.getItem('lang'); } catch (e) {}
+    var lang = (saved === 'ko' || saved === 'en') ? saved : null;
+    if (!lang) {
+        var tags = (navigator.languages && navigator.languages.length)
+            ? navigator.languages : [navigator.language || navigator.userLanguage || ''];
+        lang = 'en';
+        for (var i = 0; i < tags.length; i++) {
+            if (String(tags[i]).toLowerCase().indexOf('ko') === 0) { lang = 'ko'; break; }
+        }
+    }
+    document.documentElement.className = 'lang-' + lang;
+    document.documentElement.lang = lang;
+})();
+</script>
 <style>
   :root {
     color-scheme: dark;
@@ -33,6 +54,15 @@
   .dial { width: 132px; height: 132px; margin: 0 auto 24px; display: block; }
   h1 { font-size: 30px; line-height: 1.3; margin: 0 0 12px; letter-spacing: -0.02em; }
   .lede { color: var(--muted); margin: 0; font-size: 18px; }
+
+  .langbar { display: flex; justify-content: flex-end; margin-bottom: 20px; }
+  .lang { display: flex; gap: 2px; background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 3px; }
+  .lang button {
+    appearance: none; border: 0; background: transparent; color: var(--muted);
+    font: inherit; font-size: 12px; font-weight: 600; padding: 4px 10px;
+    border-radius: 999px; cursor: pointer; line-height: 1.4;
+  }
+  .lang button[aria-pressed="true"] { background: var(--accent); color: #fff; }
 
   .cta {
     display: block;
@@ -59,7 +89,9 @@
     padding: 16px 18px;
   }
   ul.feats b { display: block; margin-bottom: 4px; }
-  ul.feats span { color: var(--muted); font-size: 15px; }
+  /* 설명 줄만 흐리게. 자손 전체(`ul.feats span`)를 잡으면 <b> 안의 .bell 까지
+     회색·15px 로 덮어써서 주황 종 강조가 사라진다. */
+  ul.feats li > span { color: var(--muted); font-size: 15px; }
 
   .bell { color: var(--marker); font-weight: 700; }
 
@@ -69,10 +101,29 @@
     color: var(--muted); font-size: 14px; text-align: center;
   }
   footer a { color: var(--muted); }
+
+  /* 한 언어만 보인다. 기본 display 가 제각각(블록·리스트·인라인)이라 셋으로 나눠 적는다. */
+  [data-lang] { display: none; }
+  html.lang-en [data-lang="en"], html.lang-ko [data-lang="ko"] { display: block; }
+  html.lang-en li[data-lang="en"], html.lang-ko li[data-lang="ko"] { display: list-item; }
+  html.lang-en span[data-lang="en"], html.lang-ko span[data-lang="ko"],
+  html.lang-en br[data-lang="en"], html.lang-ko br[data-lang="ko"] { display: inline; }
+
+  /* JS 가 꺼져 있으면 한국어를 보여준다 — 이 초대 페이지의 기본 언어다. */
+  html:not(.lang-en):not(.lang-ko) [data-lang="ko"] { display: block; }
+  html:not(.lang-en):not(.lang-ko) li[data-lang="ko"] { display: list-item; }
+  html:not(.lang-en):not(.lang-ko) span[data-lang="ko"] { display: inline; }
 </style>
 </head>
 <body>
 <div class="wrap">
+
+  <div class="langbar">
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-set-lang="en" aria-pressed="false">EN</button>
+      <button type="button" data-set-lang="ko" aria-pressed="false">한국어</button>
+    </div>
+  </div>
 
   <header>
     <svg class="dial" viewBox="0 0 120 120" role="img" aria-label="타이머 다이얼과 알림 지점 3개">
@@ -85,44 +136,120 @@
       <circle cx="65" cy="10.3" r="7.5" fill="#ff9500"/>
     </svg>
 
-    <h1>끝나기 전에<br>미리 알려주는 타이머</h1>
-    <p class="lede">발표가 끝나갈 때 시계를 흘끔거리지 않아도 됩니다.</p>
+    <h1 data-lang="ko">끝나기 전에<br>미리 알려주는 타이머</h1>
+    <h1 data-lang="en">A timer that warns you<br>before time runs out</h1>
+    <p class="lede" data-lang="ko">발표가 끝나갈 때 시계를 흘끔거리지 않아도 됩니다.</p>
+    <p class="lede" data-lang="en">Stop glancing at the clock as your talk winds down.</p>
   </header>
 
-  <a class="cta" href="https://apps.apple.com/app/id6752551268">App Store에서 받기</a>
-  <p class="cta-note">iPhone에서 이 페이지를 열면 App Clip으로 설치 없이 바로 써볼 수 있어요.</p>
+  <a class="cta" href="https://apps.apple.com/app/id6752551268" data-lang="ko">App Store에서 받기</a>
+  <a class="cta" href="https://apps.apple.com/app/id6752551268" data-lang="en">Get it on the App Store</a>
+  <p class="cta-note" data-lang="ko">iPhone에서 이 페이지를 열면 App Clip으로 설치 없이 바로 써볼 수 있어요.</p>
+  <p class="cta-note" data-lang="en">Open this page on iPhone to try it right away with App Clip — no install needed.</p>
 
   <section>
-    <h2>어떻게 쓰나요</h2>
+    <h2 data-lang="ko">어떻게 쓰나요</h2>
+    <h2 data-lang="en">How it works</h2>
     <ul class="feats">
-      <li>
+      <li data-lang="ko">
         <b>1. 다이얼을 돌려 시간을 정합니다</b>
         <span>10분·30분·60분 프리셋도 있습니다.</span>
       </li>
-      <li>
+      <li data-lang="en">
+        <b>1. Turn the dial to set the time</b>
+        <span>10, 30, and 60-minute presets are there too.</span>
+      </li>
+      <li data-lang="ko">
         <b>2. <span class="bell">종</span>을 끌어 알림 지점을 옮깁니다</b>
         <span>30분으로 맞추면 10분·5분·1분 전이 기본으로 잡힙니다.</span>
       </li>
-      <li>
+      <li data-lang="en">
+        <b>2. Drag a <span class="bell">bell</span> to move an alert</b>
+        <span>Set 30 minutes and you get 10, 5, and 1 minute before by default.</span>
+      </li>
+      <li data-lang="ko">
         <b>3. 시작하면 그 지점마다 알려줍니다</b>
         <span>화면을 보고 있지 않아도, 잠금 상태여도 알림이 옵니다.</span>
+      </li>
+      <li data-lang="en">
+        <b>3. Start it, and every bell rings</b>
+        <span>Alerts reach you even when you are not watching the screen, even when it is locked.</span>
       </li>
     </ul>
   </section>
 
   <section>
-    <h2>전체 앱에는 더 있습니다</h2>
+    <h2 data-lang="ko">전체 앱에는 더 있습니다</h2>
+    <h2 data-lang="en">The full app has more</h2>
     <ul class="feats">
-      <li><b>발표 모드</b><span>구간을 나눠 순서대로 진행하고, 남은 구간을 한눈에 봅니다.</span></li>
-      <li><b>템플릿</b><span>자주 쓰는 시간·알림 구성을 저장해 두고 한 번에 불러옵니다.</span></li>
-      <li><b>Apple Watch · 위젯 · 실시간 현황</b><span>손목과 잠금화면에서 바로 확인하고 제어합니다.</span></li>
+      <li data-lang="ko"><b>발표 모드</b><span>구간을 나눠 순서대로 진행하고, 남은 구간을 한눈에 봅니다.</span></li>
+      <li data-lang="en"><b>Presentation mode</b><span>Split a talk into sections, run them in order, and see what is left at a glance.</span></li>
+      <li data-lang="ko"><b>템플릿</b><span>자주 쓰는 시간·알림 구성을 저장해 두고 한 번에 불러옵니다.</span></li>
+      <li data-lang="en"><b>Templates</b><span>Save the durations and alerts you use often, then load them in one tap.</span></li>
+      <li data-lang="ko"><b>Apple Watch · 위젯 · 실시간 현황</b><span>손목과 잠금화면에서 바로 확인하고 제어합니다.</span></li>
+      <li data-lang="en"><b>Apple Watch · Widgets · Live Activity</b><span>Check it and control it from your wrist and Lock Screen.</span></li>
     </ul>
   </section>
 
   <footer>
-    <p>두번알림 · <a href="https://apps.apple.com/app/id6752551268">App Store</a></p>
+    <p data-lang="ko">두번알림 · <a href="https://apps.apple.com/app/id6752551268">App Store</a></p>
+    <p data-lang="en">Rereminder · <a href="https://apps.apple.com/app/id6752551268">App Store</a></p>
   </footer>
 
 </div>
+
+<script>
+/* 언어 전환 — <head> 가 정한 값을 이어받아 제목·설명·버튼 상태를 맞춘다. */
+(function () {
+    var KEY = 'rereminder-lang';
+    var META = {
+        ko: {
+            title: '두번알림 — 발표 종료 전 미리 알림',
+            description: '발표·운동·스터디 중 끝나기 전 원하는 시점마다 미리 알려주는 타이머. App Clip으로 설치 없이 바로 써보세요.',
+            ogTitle: '두번알림 — 발표 종료 전 미리 알림',
+            ogDescription: '끝나기 전 원하는 시점마다 미리 알려주는 타이머.',
+            dial: '타이머 다이얼과 알림 지점 3개'
+        },
+        en: {
+            title: 'Rereminder — alerts before your timer ends',
+            description: 'A timer that alerts you at any point before time runs out — talks, workouts, study sessions. Try it with App Clip, no install needed.',
+            ogTitle: 'Rereminder — alerts before your timer ends',
+            ogDescription: 'A timer that alerts you at any point before time runs out.',
+            dial: 'Timer dial with three pre-alert points'
+        }
+    };
+
+    function setMeta(selector, value) {
+        var el = document.querySelector(selector);
+        if (el) el.setAttribute('content', value);
+    }
+
+    function apply(lang, persist) {
+        var meta = META[lang] || META.en;
+        document.documentElement.className = 'lang-' + lang;
+        document.documentElement.lang = lang;
+        document.title = meta.title;
+        setMeta('meta[name="description"]', meta.description);
+        setMeta('meta[property="og:title"]', meta.ogTitle);
+        setMeta('meta[property="og:description"]', meta.ogDescription);
+        var dial = document.querySelector('.dial');
+        if (dial) dial.setAttribute('aria-label', meta.dial);
+        var buttons = document.querySelectorAll('[data-set-lang]');
+        for (var i = 0; i < buttons.length; i++) {
+            buttons[i].setAttribute('aria-pressed', String(buttons[i].getAttribute('data-set-lang') === lang));
+        }
+        // 자동 감지 결과는 저장하지 않는다 — 저장해 버리면 기기 언어를 바꿔도
+        // 첫 방문에 감지한 언어가 계속 따라온다. 저장은 사용자가 눌렀을 때만.
+        if (persist) { try { localStorage.setItem(KEY, lang); } catch (e) {} }
+    }
+
+    apply(document.documentElement.classList.contains('lang-ko') ? 'ko' : 'en', false);
+
+    document.addEventListener('click', function (event) {
+        var button = event.target && event.target.closest ? event.target.closest('[data-set-lang]') : null;
+        if (button) { apply(button.getAttribute('data-set-lang'), true); }
+    });
+})();
+</script>
 </body>
 </html>
