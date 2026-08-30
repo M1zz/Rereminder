@@ -1084,8 +1084,6 @@ struct TimerMainView: View {
         return String(localized: "Timer, \(state)")
     }
 
-    // 왼쪽 버튼 (Cancel) - Start Timer 후에만 표시
-    @ViewBuilder
     /// 시작 버튼이 하는 일 — 발표 모드는 구간을 먼저 만들고 시작한다.
     private func startTapped() {
         if isPresentationMode {
