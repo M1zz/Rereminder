@@ -539,6 +539,95 @@
             .hero { padding: 140px 20px 80px; }
             .feature-grid { grid-template-columns: 1fr; }
         }
+
+        /* ===================== Live Demo (in-page timer) ===================== */
+        .demo-section { padding: 100px 24px; max-width: 1080px; margin: 0 auto; }
+        .demo-section h2 { font-size: clamp(32px, 5vw, 48px); font-weight: 700; letter-spacing: -1.5px; text-align: center; margin-bottom: 14px; line-height: 1.15; }
+        .demo-sub { text-align: center; color: var(--text2); font-size: 17px; max-width: 620px; margin: 0 auto 44px; }
+
+        .demo-card {
+            background: var(--surface); border: 1px solid var(--border); border-radius: 28px;
+            padding: 32px 28px 26px; max-width: 560px; margin: 0 auto;
+        }
+        .demo-stage { position: relative; width: 100%; max-width: 400px; margin: 0 auto; aspect-ratio: 1; touch-action: none; }
+        .demo-dial { width: 100%; height: 100%; display: block; overflow: visible; }
+        .demo-dial .hit { cursor: grab; }
+        .demo-dial .hit:active { cursor: grabbing; }
+
+        .demo-center {
+            position: absolute; inset: 0; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 14px; pointer-events: none;
+        }
+        .demo-time {
+            font-size: clamp(38px, 11vw, 56px); font-weight: 600; letter-spacing: -2px;
+            font-variant-numeric: tabular-nums; line-height: 1; color: var(--text);
+        }
+        .demo-time.overtime { color: #FF9F0A; }
+        .demo-buttons { display: flex; gap: 14px; pointer-events: auto; }
+        .demo-btn {
+            width: 54px; height: 54px; border-radius: 50%; border: 0; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: transform .12s ease, opacity .12s ease;
+        }
+        .demo-btn:active { transform: scale(0.93); }
+        .demo-btn svg { width: 22px; height: 22px; }
+        .demo-btn-start { background: #30D158; color: #04220d; }
+        .demo-btn-pause { background: #FF9F0A; color: #2b1800; }
+        .demo-btn-stop  { background: #48484a; color: #f5f5f7; }
+        .demo-btn[hidden] { display: none; }
+
+        /* Drag badge — two lines, coloured by the ring sections either side of the bell */
+        .demo-badge {
+            position: absolute; pointer-events: none; z-index: 5;
+            background: rgba(20,20,22,0.94); border: 1px solid var(--border);
+            border-radius: 10px; padding: 6px 10px; font-size: 13px; font-weight: 600;
+            font-variant-numeric: tabular-nums; line-height: 1.45; white-space: nowrap;
+            transform: translate(-50%, -50%); opacity: 0; transition: opacity .2s ease;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+        .demo-badge.show { opacity: 1; }
+        .demo-badge .row { display: flex; gap: 6px; align-items: center; }
+
+        .demo-banner {
+            margin: 22px auto 0; max-width: 420px; border-radius: 14px; padding: 14px 18px;
+            background: var(--surface2); border: 1px solid var(--border);
+            display: flex; align-items: center; gap: 12px;
+            opacity: 0; transform: translateY(-6px); transition: opacity .25s ease, transform .25s ease;
+        }
+        .demo-banner.show { opacity: 1; transform: none; }
+        .demo-banner .icon { font-size: 20px; line-height: 1; }
+        .demo-banner .text { font-size: 15px; font-weight: 600; color: var(--text); }
+        .demo-banner .sub { font-size: 13px; color: var(--text2); font-weight: 400; }
+
+        .demo-sections { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 16px; margin-top: 24px; min-height: 26px; }
+        .demo-chip { display: flex; align-items: center; gap: 7px; font-size: 14px; color: var(--text2); font-variant-numeric: tabular-nums; }
+        .demo-chip .dot-ring { width: 9px; height: 9px; border-radius: 50%; border: 2px solid currentColor; }
+        .demo-chip .dot-fill { width: 9px; height: 9px; border-radius: 50%; background: currentColor; }
+        .demo-chip.current { color: var(--text); font-weight: 600; }
+        .demo-chip.done { opacity: 0.35; }
+
+        .demo-controls { margin-top: 26px; display: flex; flex-direction: column; gap: 14px; }
+        .demo-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; }
+        .demo-row-label { font-size: 12px; font-weight: 600; letter-spacing: 0.4px; text-transform: uppercase; color: var(--text3); width: 100%; text-align: center; margin-bottom: -4px; }
+        .demo-pill {
+            appearance: none; background: var(--surface2); border: 1px solid var(--border);
+            color: var(--text2); font: inherit; font-size: 14px; font-weight: 500;
+            padding: 8px 15px; border-radius: 999px; cursor: pointer; transition: all .15s ease;
+        }
+        .demo-pill:hover { color: var(--text); border-color: #3a3a3a; }
+        .demo-pill.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+        .demo-pill[disabled] { opacity: 0.4; cursor: not-allowed; }
+        .demo-pill.icon-pill { display: inline-flex; align-items: center; gap: 6px; }
+
+        .demo-note { margin-top: 20px; text-align: center; color: var(--text3); font-size: 13px; line-height: 1.6; }
+        .demo-note strong { color: var(--text2); font-weight: 600; }
+        .demo-hint { text-align: center; color: var(--text3); font-size: 13px; margin-top: 10px; }
+
+        @media (max-width: 560px) {
+            .demo-section { padding: 72px 16px; }
+            .demo-card { padding: 22px 16px 20px; border-radius: 22px; }
+            .demo-btn { width: 48px; height: 48px; }
+        }
     </style>
 </head>
 <body>
@@ -553,6 +642,7 @@
         <div class="nav-links">
             <a href="#why-switch" data-i18n="nav.whySwitch">Why Switch</a>
             <a href="#features" data-i18n="nav.features">Features</a>
+            <a href="#demo" data-i18n="nav.demo">Live Demo</a>
             <a href="#how-it-works" data-i18n="nav.howItWorks">How It Works</a>
             <a href="#use-cases" data-i18n="nav.useCases">Use Cases</a>
             <a href="#pro">Pro</a>
@@ -569,6 +659,7 @@
 <div class="mobile-menu" id="mobile-menu">
     <a href="#why-switch" data-i18n="nav.whySwitch">Why Switch</a>
     <a href="#features" data-i18n="nav.features">Features</a>
+    <a href="#demo" data-i18n="nav.demo">Live Demo</a>
     <a href="#how-it-works" data-i18n="nav.howItWorks">How It Works</a>
     <a href="#use-cases" data-i18n="nav.useCases">Use Cases</a>
     <a href="#pro">Pro</a>
@@ -603,6 +694,76 @@
         </a>
     </div>
     <p class="hero-clip-note" data-i18n="hero.clipNote">Open on iPhone to run it right away with App Clip — no install needed.</p>
+</section>
+
+<!-- Live Demo — 실제로 돌아가는 다이얼 (저장 없음) -->
+<section class="demo-section" id="demo">
+    <h2 data-demo-i18n="title">Try it right here</h2>
+    <p class="demo-sub" data-demo-i18n="subtitle">Drag the white handle to set the time, drag the orange bells to place your alerts, then press start. This is the real thing, running in your browser.</p>
+
+    <div class="demo-card">
+        <div class="demo-stage" id="demo-stage">
+            <svg class="demo-dial" viewBox="0 0 400 400" id="demo-svg" aria-label="Timer dial">
+                <circle cx="200" cy="200" r="150" fill="none" stroke="#48484a" stroke-opacity="0.5" stroke-width="25"/>
+                <g id="demo-arcs"></g>
+                <g id="demo-knobs"></g>
+            </svg>
+            <div class="demo-center">
+                <div class="demo-time" id="demo-time">10:00</div>
+                <div class="demo-buttons">
+                    <button class="demo-btn demo-btn-stop" id="demo-stop" hidden aria-label="Stop">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+                    </button>
+                    <button class="demo-btn demo-btn-start" id="demo-start" aria-label="Start">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg>
+                    </button>
+                    <button class="demo-btn demo-btn-pause" id="demo-pause" hidden aria-label="Pause">
+                        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="7" y="5.5" width="3.5" height="13" rx="1.2"/><rect x="13.5" y="5.5" width="3.5" height="13" rx="1.2"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="demo-badge" id="demo-badge" aria-hidden="true"></div>
+        </div>
+
+        <div class="demo-banner" id="demo-banner" role="status" aria-live="polite">
+            <span class="icon" id="demo-banner-icon">🔔</span>
+            <span>
+                <span class="text" id="demo-banner-text"></span><br>
+                <span class="sub" id="demo-banner-sub"></span>
+            </span>
+        </div>
+
+        <div class="demo-sections" id="demo-sections"></div>
+
+        <div class="demo-controls">
+            <div class="demo-row">
+                <span class="demo-row-label" data-demo-i18n="lengthLabel">Length</span>
+                <button class="demo-pill" data-demo-preset="300">5m</button>
+                <button class="demo-pill" data-demo-preset="600">10m</button>
+                <button class="demo-pill" data-demo-preset="1500">25m</button>
+                <button class="demo-pill" data-demo-preset="2700">45m</button>
+                <button class="demo-pill" data-demo-preset="3600">60m</button>
+            </div>
+            <div class="demo-row">
+                <span class="demo-row-label" data-demo-i18n="alertsLabel">Alerts before the end</span>
+                <button class="demo-pill" data-demo-alert="600">10m</button>
+                <button class="demo-pill" data-demo-alert="300">5m</button>
+                <button class="demo-pill" data-demo-alert="120">2m</button>
+                <button class="demo-pill" data-demo-alert="60">1m</button>
+                <button class="demo-pill" data-demo-alert="30">30s</button>
+                <button class="demo-pill" data-demo-alert="10">10s</button>
+            </div>
+            <div class="demo-row">
+                <span class="demo-row-label" data-demo-i18n="speedLabel">Speed</span>
+                <button class="demo-pill" id="demo-speed-fast" data-demo-i18n="speedFast">Preview 60&times;</button>
+                <button class="demo-pill" id="demo-speed-real" data-demo-i18n="speedReal">Real time</button>
+                <button class="demo-pill icon-pill" id="demo-sound"><span id="demo-sound-icon">🔊</span><span data-demo-i18n="sound">Sound</span></button>
+            </div>
+        </div>
+
+        <p class="demo-hint" data-demo-i18n="hint">Tip: drag a bell off the ring to remove it.</p>
+        <p class="demo-note" data-demo-i18n="note"></p>
+    </div>
 </section>
 
 <!-- Pain Points / Why Switch -->
@@ -818,6 +979,7 @@ const i18n = {
         "nav.whySwitch": "Why Switch",
         "nav.features": "Features",
         "nav.howItWorks": "How It Works",
+        "nav.demo": "Live Demo",
         "nav.useCases": "Use Cases",
         "nav.download": "Download",
         "nav.tryClip": "Try Now",
@@ -899,6 +1061,7 @@ const i18n = {
         "nav.whySwitch": "왜 바꿔야 할까",
         "nav.features": "기능",
         "nav.howItWorks": "사용법",
+        "nav.demo": "지금 해보기",
         "nav.useCases": "활용 사례",
         "nav.download": "다운로드",
         "nav.tryClip": "바로 써보기",
@@ -1013,6 +1176,9 @@ function setLang(lang) {
     var btnText = lang === 'en' ? '한국어' : 'English';
     document.getElementById('lang-toggle').textContent = btnText;
     document.getElementById('mobile-lang-toggle').textContent = btnText;
+
+    // 인페이지 데모는 자체 사전을 쓴다 — 언어가 바뀌면 알려 준다
+    window.dispatchEvent(new CustomEvent('langchange', { detail: lang }));
 }
 
 function detectLang() {
@@ -1052,6 +1218,515 @@ document.getElementById('mobile-lang-toggle').addEventListener('click', function
 });
 
 setLang(detectLang());
+</script>
+
+
+<!-- ===================== Live Demo — in-page timer ===================== -->
+<script>
+(function () {
+    'use strict';
+
+    // 앱과 같은 규칙을 그대로 쓴다 (Shared/Modules/AngleCalculator.swift, Shared/DesignSystem/SectionPalette.swift)
+    var SEC_PER_DEG = 10;          // TimeMapper.secondsPerDegree — 1° = 10초
+    var MAX_TOTAL = 3600;          // 데모는 한 바퀴(60분)까지. 앱은 120분(두 바퀴)
+    var CX = 200, CY = 200, R = 150, STROKE = 25;
+    // SectionPalette: blue, green, purple, teal, pink, indigo (주황은 알림 종 전용이라 뺀다)
+    var PALETTE = ['#0A84FF', '#30D158', '#BF5AF2', '#64D2FF', '#FF375F', '#5E5CE6'];
+    var MARKER = '#FF9F0A';
+    var LINGER_MS = 3000;          // tooltipLingerSeconds
+    var REMOVE_RADIUS = R + 58;    // 이보다 밖으로 끌면 종을 지운다
+
+    var STR = {
+        en: {
+            title: 'Try it right here',
+            subtitle: 'Drag the white handle to set the length, drag the orange bells to place your alerts, then press start. No install, no sign-up — this runs in your browser.',
+            lengthLabel: 'Length',
+            alertsLabel: 'Alerts before the end',
+            speedLabel: 'Speed',
+            speedFast: 'Preview 60×',
+            speedReal: 'Real time',
+            sound: 'Sound',
+            hint: 'Drag a bell off the ring to remove it.',
+            note: 'Nothing here is saved — refresh and it is gone. In the app you keep a setup as a template and start it again in one tap. <a href="https://apps.apple.com/us/app/rereminder/id6752551268" target="_blank" rel="noopener">Get Rereminder</a>',
+            fastNote: 'Running at 60× so you can see the alerts — a 10-minute timer finishes in 10 seconds.',
+            alertTitle: function (t) { return t + ' left'; },
+            alertSub: 'This is the nudge you would get on your phone, watch, and Lock Screen.',
+            endTitle: 'Time’s up',
+            endSub: 'The clock keeps counting so you know how far over you ran.',
+            sectionOf: 'Section'
+        },
+        ko: {
+            title: '여기서 바로 써 보세요',
+            subtitle: '흰 핸들을 끌어 시간을, 주황 종을 끌어 알림 지점을 정하고 시작을 누르세요. 설치도 가입도 없이, 브라우저에서 그대로 돕니다.',
+            lengthLabel: '전체 시간',
+            alertsLabel: '종료 전 알림',
+            speedLabel: '속도',
+            speedFast: '미리보기 60배',
+            speedReal: '실시간',
+            sound: '소리',
+            hint: '종을 링 밖으로 끌면 지워집니다.',
+            note: '이 데모는 저장되지 않습니다 — 새로고침하면 사라집니다. 앱에서는 이 설정을 템플릿으로 저장해 한 번에 불러옵니다. <a href="https://apps.apple.com/us/app/rereminder/id6752551268" target="_blank" rel="noopener">앱 받기</a>',
+            fastNote: '알림이 울리는 것을 보시라고 60배속으로 돕니다 — 10분 타이머가 10초에 끝나요.',
+            alertTitle: function (t) { return t + ' 남았어요'; },
+            alertSub: '휴대폰·워치·잠금화면에서 받게 되는 그 알림입니다.',
+            endTitle: '시간이 끝났어요',
+            endSub: '00:00 에서 멈추지 않고 얼마나 넘겼는지 계속 셉니다.',
+            sectionOf: '구간'
+        }
+    };
+
+    var el = {
+        svg: document.getElementById('demo-svg'),
+        stage: document.getElementById('demo-stage'),
+        arcs: document.getElementById('demo-arcs'),
+        knobs: document.getElementById('demo-knobs'),
+        time: document.getElementById('demo-time'),
+        start: document.getElementById('demo-start'),
+        pause: document.getElementById('demo-pause'),
+        stop: document.getElementById('demo-stop'),
+        badge: document.getElementById('demo-badge'),
+        banner: document.getElementById('demo-banner'),
+        bannerIcon: document.getElementById('demo-banner-icon'),
+        bannerText: document.getElementById('demo-banner-text'),
+        bannerSub: document.getElementById('demo-banner-sub'),
+        sections: document.getElementById('demo-sections'),
+        note: null,
+        hint: null,
+        speedFast: document.getElementById('demo-speed-fast'),
+        speedReal: document.getElementById('demo-speed-real'),
+        sound: document.getElementById('demo-sound'),
+        soundIcon: document.getElementById('demo-sound-icon')
+    };
+    if (!el.svg) { return; }
+    el.note = document.querySelector('[data-demo-i18n="note"]');
+    el.hint = document.querySelector('[data-demo-i18n="hint"]');
+
+    // ---- state -------------------------------------------------------------
+    var total = 600;               // TimerScreenViewModel.DefaultSetup — 10분
+    var alerts = [60];             // 종료 60초 전 알림 하나
+    var state = 'idle';            // idle | running | paused
+    var elapsed = 0;               // 초 (실수)
+    var speed = 60;
+    var soundOn = true;
+    var fired = {};
+    var endFired = false;
+    var drag = null;
+    var focusIndex = -1;           // 배지를 띄우고 있는 종
+    var focusUntil = 0;
+    var rafId = null, lastTs = 0;
+    var audioCtx = null;
+    var lang = document.documentElement.lang === 'ko' ? 'ko' : 'en';
+
+    function t() { return STR[lang]; }
+
+    // ---- helpers -----------------------------------------------------------
+    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+    function mmss(s) {
+        s = Math.max(0, Math.round(s));
+        return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    }
+    function clock(s) {
+        s = Math.max(0, Math.round(s));
+        return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+    }
+    function deg(sec) { return sec / SEC_PER_DEG; }
+    function pt(r, d) {
+        var rad = (d - 90) * Math.PI / 180;
+        return { x: CX + r * Math.cos(rad), y: CY + r * Math.sin(rad) };
+    }
+    // 반원 두 개로 그린다 — large-arc 플래그를 안 써도 되고 360°도 그려진다
+    function arcPath(r, d0, d1) {
+        if (d1 - d0 <= 0.01) { return ''; }
+        var m = (d0 + d1) / 2, a = pt(r, d0), b = pt(r, m), c = pt(r, d1);
+        return 'M ' + a.x.toFixed(2) + ' ' + a.y.toFixed(2) +
+               ' A ' + r + ' ' + r + ' 0 0 1 ' + b.x.toFixed(2) + ' ' + b.y.toFixed(2) +
+               ' A ' + r + ' ' + r + ' 0 0 1 ' + c.x.toFixed(2) + ' ' + c.y.toFixed(2);
+    }
+    function color(i) { return PALETTE[((i % PALETTE.length) + PALETTE.length) % PALETTE.length]; }
+    function sortedAlerts() { return alerts.slice().sort(function (a, b) { return a - b; }); }
+    function remaining() { return total - elapsed; }
+    function ringSeconds() { return state === 'idle' ? total : Math.max(0, remaining()); }
+    function svgEl(name) { return document.createElementNS('http://www.w3.org/2000/svg', name); }
+
+    // 링 조각: 12시부터 시계방향으로 "남은 시간" 좌표.
+    // 색 번호는 경과 순서(0부터)라 조각이 사라져도 남은 조각의 색이 밀리지 않는다.
+    function pieces(ring) {
+        var asc = sortedAlerts(), n = asc.length, out = [], prev = 0, j;
+        for (j = 0; j < n; j++) {
+            if (asc[j] >= ring - 0.01) { break; }
+            out.push({ from: prev, to: asc[j], ci: n - j });
+            prev = asc[j];
+        }
+        out.push({ from: prev, to: ring, ci: n - j });
+        return out;
+    }
+
+    // 경과 순서의 구간 목록 (원 아래 칩·카운트다운이 쓴다)
+    function elapsedSections() {
+        var asc = sortedAlerts(), bounds = [], out = [], prev = 0;
+        asc.forEach(function (a) { var b = total - a; if (b > 0 && b < total) { bounds.push(b); } });
+        bounds.sort(function (x, y) { return x - y; });
+        bounds.forEach(function (b) { out.push({ start: prev, end: b }); prev = b; });
+        out.push({ start: prev, end: total });
+        return out;
+    }
+
+    // ---- rendering ---------------------------------------------------------
+    function render() {
+        var ring = ringSeconds();
+        var ps = pieces(ring);
+
+        el.arcs.textContent = '';
+        ps.forEach(function (p) {
+            var d = arcPath(R, deg(p.from), deg(p.to));
+            if (!d) { return; }
+            var path = svgEl('path');
+            path.setAttribute('d', d);
+            path.setAttribute('fill', 'none');
+            path.setAttribute('stroke', color(p.ci));
+            path.setAttribute('stroke-width', STROKE);
+            path.setAttribute('stroke-linecap', 'butt');
+            el.arcs.appendChild(path);
+        });
+
+        el.knobs.textContent = '';
+        var asc = sortedAlerts();
+        var focused = focusIndex >= 0 && Date.now() < focusUntil;
+
+        asc.forEach(function (a, i) {
+            if (a >= ring - 0.01) { return; }        // 지나간 알림은 링에서 빠진다
+            var p = pt(R, deg(a));
+            var dim = focused && i !== focusIndex;
+            var g = svgEl('g');
+            g.setAttribute('opacity', dim ? '0.25' : '1');
+            var c = svgEl('circle');
+            c.setAttribute('cx', p.x); c.setAttribute('cy', p.y);
+            c.setAttribute('r', (focused && i === focusIndex) ? 14 : 11);
+            c.setAttribute('fill', MARKER);
+            c.setAttribute('stroke', '#000'); c.setAttribute('stroke-width', '2');
+            g.appendChild(c);
+            if (state === 'idle') {
+                var hit = svgEl('circle');
+                hit.setAttribute('cx', p.x); hit.setAttribute('cy', p.y);
+                hit.setAttribute('r', 24); hit.setAttribute('fill', 'transparent');
+                hit.setAttribute('class', 'hit');
+                hit.dataset.kind = 'alert';
+                hit.dataset.index = String(i);
+                g.appendChild(hit);
+            }
+            el.knobs.appendChild(g);
+        });
+
+        // 흰 손잡이(대기 중) / 줄어드는 호 끝의 흰 점(실행 중)
+        var hp = pt(R, deg(ring));
+        var handle = svgEl('circle');
+        handle.setAttribute('cx', hp.x); handle.setAttribute('cy', hp.y);
+        handle.setAttribute('r', state === 'idle' ? 13 : 7);
+        handle.setAttribute('fill', '#ffffff');
+        el.knobs.appendChild(handle);
+        if (state === 'idle') {
+            var hh = svgEl('circle');
+            hh.setAttribute('cx', hp.x); hh.setAttribute('cy', hp.y);
+            hh.setAttribute('r', 26); hh.setAttribute('fill', 'transparent');
+            hh.setAttribute('class', 'hit');
+            hh.dataset.kind = 'total';
+            el.knobs.appendChild(hh);
+        }
+
+        // 가운데 시간
+        if (state !== 'idle' && remaining() < 0) {
+            el.time.textContent = '+' + clock(-remaining());
+            el.time.classList.add('overtime');
+        } else {
+            el.time.textContent = clock(state === 'idle' ? total : Math.max(0, remaining()));
+            el.time.classList.remove('overtime');
+        }
+
+        el.start.hidden = (state === 'running');
+        el.pause.hidden = (state !== 'running');
+        el.stop.hidden = (state === 'idle');
+
+        renderSections();
+        renderBadge();
+        renderPills();
+    }
+
+    function renderSections() {
+        var secs = elapsedSections();
+        el.sections.textContent = '';
+        if (secs.length < 2 && state === 'idle') { return; }
+        secs.forEach(function (s, i) {
+            var len = s.end - s.start;
+            var chip = document.createElement('span');
+            chip.className = 'demo-chip';
+            var value, isCurrent = false, isDone = false;
+            if (state === 'idle') {
+                value = mmss(len);
+            } else {
+                var left = clamp(s.end - elapsed, 0, len);
+                value = mmss(left);
+                isDone = elapsed >= s.end;
+                isCurrent = elapsed >= s.start && elapsed < s.end;
+            }
+            if (isCurrent) { chip.classList.add('current'); }
+            if (isDone) { chip.classList.add('done'); }
+            chip.style.color = isCurrent || state === 'idle' ? color(i) : '';
+            var dot = document.createElement('span');
+            dot.className = isDone ? 'dot-fill' : 'dot-ring';
+            dot.style.color = color(i);
+            chip.appendChild(dot);
+            var txt = document.createElement('span');
+            txt.textContent = value;
+            chip.appendChild(txt);
+            el.sections.appendChild(chip);
+        });
+    }
+
+    // 배지 두 줄의 색은 그 종의 양옆 링 구간 색을 그대로 쓴다
+    function renderBadge() {
+        var asc = sortedAlerts();
+        if (focusIndex < 0 || focusIndex >= asc.length || Date.now() >= focusUntil) {
+            el.badge.classList.remove('show');
+            return;
+        }
+        var a = asc[focusIndex], n = asc.length;
+        var innerColor = color(n - focusIndex);       // 종보다 뒤(종료 쪽) 구간
+        var outerColor = color(n - focusIndex - 1);   // 종보다 앞(시작 쪽) 구간
+        el.badge.innerHTML =
+            '<div class="row" style="color:' + innerColor + '">⚑ ' + mmss(a) + '</div>' +
+            '<div class="row" style="color:' + outerColor + '">▶ ' + mmss(total - a) + '</div>';
+
+        var box = el.stage.getBoundingClientRect();
+        var scale = box.width / 400;
+        var p = pt(R + 46, deg(a));
+        var x = clamp(p.x * scale, 46, box.width - 46);
+        el.badge.style.left = x + 'px';
+        el.badge.style.top = (p.y * scale) + 'px';
+        el.badge.classList.add('show');
+    }
+
+    function renderPills() {
+        document.querySelectorAll('[data-demo-preset]').forEach(function (b) {
+            b.classList.toggle('active', Number(b.dataset.demoPreset) === total);
+            b.disabled = (state !== 'idle');
+        });
+        document.querySelectorAll('[data-demo-alert]').forEach(function (b) {
+            var v = Number(b.dataset.demoAlert);
+            b.classList.toggle('active', alerts.indexOf(v) >= 0);
+            b.disabled = (state !== 'idle') || v >= total;
+        });
+        el.speedFast.classList.toggle('active', speed === 60);
+        el.speedReal.classList.toggle('active', speed === 1);
+        el.sound.classList.toggle('active', soundOn);
+        el.soundIcon.textContent = soundOn ? '🔊' : '🔇';
+    }
+
+    // ---- drag --------------------------------------------------------------
+    function angleAt(evt) {
+        var box = el.svg.getBoundingClientRect();
+        var x = (evt.clientX - box.left) / box.width * 400 - CX;
+        var y = (evt.clientY - box.top) / box.height * 400 - CY;
+        var a = Math.atan2(x, -y) * 180 / Math.PI;
+        return a < 0 ? a + 360 : a;
+    }
+    function radiusAt(evt) {
+        var box = el.svg.getBoundingClientRect();
+        var x = (evt.clientX - box.left) / box.width * 400 - CX;
+        var y = (evt.clientY - box.top) / box.height * 400 - CY;
+        return Math.sqrt(x * x + y * y);
+    }
+    function norm180(a) { while (a > 180) { a -= 360; } while (a < -180) { a += 360; } return a; }
+    function unwrap(a, ref) { while (a - ref > 180) { a -= 360; } while (ref - a > 180) { a += 360; } return a; }
+
+    el.svg.addEventListener('pointerdown', function (e) {
+        if (state !== 'idle') { return; }
+        var target = e.target;
+        if (!target.dataset || !target.dataset.kind) { return; }
+        var kind = target.dataset.kind;
+        var current = kind === 'total' ? deg(total) : deg(sortedAlerts()[Number(target.dataset.index)]);
+        drag = {
+            kind: kind,
+            index: kind === 'alert' ? Number(target.dataset.index) : -1,
+            grab: norm180(angleAt(e) - current),   // 집는 순간 손끝으로 순간이동하지 않게
+            removing: false
+        };
+        if (kind === 'alert') { focusIndex = drag.index; focusUntil = Infinity; }
+        el.svg.setPointerCapture(e.pointerId);
+        e.preventDefault();
+        render();
+    });
+
+    el.svg.addEventListener('pointermove', function (e) {
+        if (!drag) { return; }
+        var asc = sortedAlerts();
+        var ref = drag.kind === 'total' ? deg(total) : deg(asc[drag.index]);
+        var raw = unwrap(angleAt(e) - drag.grab, ref);
+        var secs = Math.round(raw) * SEC_PER_DEG;   // 10초 단위
+
+        if (drag.kind === 'total') {
+            var maxAlert = asc.length ? asc[asc.length - 1] : 0;
+            total = clamp(secs, Math.max(30, maxAlert + SEC_PER_DEG), MAX_TOTAL);
+        } else {
+            drag.removing = radiusAt(e) > REMOVE_RADIUS;
+            asc[drag.index] = clamp(secs, SEC_PER_DEG, total - SEC_PER_DEG);
+            alerts = asc;
+        }
+        render();
+        if (drag.removing) { el.badge.classList.remove('show'); }
+    });
+
+    function endDrag(e) {
+        if (!drag) { return; }
+        if (drag.kind === 'alert') {
+            if (drag.removing) {
+                var asc = sortedAlerts();
+                asc.splice(drag.index, 1);
+                alerts = asc;
+                focusIndex = -1;
+                focusUntil = 0;
+            } else {
+                focusUntil = Date.now() + LINGER_MS;   // 손을 뗀 뒤 3초 더 남는다
+                setTimeout(render, LINGER_MS + 30);
+            }
+        }
+        drag = null;
+        if (e && e.pointerId !== undefined && el.svg.hasPointerCapture(e.pointerId)) {
+            el.svg.releasePointerCapture(e.pointerId);
+        }
+        render();
+    }
+    el.svg.addEventListener('pointerup', endDrag);
+    el.svg.addEventListener('pointercancel', endDrag);
+
+    // ---- sound -------------------------------------------------------------
+    function beep(freq, when, dur) {
+        if (!soundOn || !audioCtx) { return; }
+        var osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.0001, audioCtx.currentTime + when);
+        gain.gain.exponentialRampToValueAtTime(0.22, audioCtx.currentTime + when + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + when + dur);
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(audioCtx.currentTime + when);
+        osc.stop(audioCtx.currentTime + when + dur + 0.02);
+    }
+    function ringPreAlert() { beep(880, 0, 0.16); beep(1174, 0.20, 0.20); vibrate([60, 60, 60]); }
+    function ringEnd() { beep(660, 0, 0.25); beep(660, 0.32, 0.25); beep(880, 0.64, 0.45); vibrate([120, 80, 120, 80, 240]); }
+    function vibrate(pattern) { if (navigator.vibrate) { try { navigator.vibrate(pattern); } catch (err) {} } }
+
+    // ---- banner ------------------------------------------------------------
+    var bannerTimer = null;
+    function showBanner(icon, text, sub) {
+        el.bannerIcon.textContent = icon;
+        el.bannerText.textContent = text;
+        el.bannerSub.textContent = sub;
+        el.banner.classList.add('show');
+        clearTimeout(bannerTimer);
+        bannerTimer = setTimeout(function () { el.banner.classList.remove('show'); }, 4200);
+    }
+    function hideBanner() { clearTimeout(bannerTimer); el.banner.classList.remove('show'); }
+
+    // ---- run loop ----------------------------------------------------------
+    function tick(ts) {
+        if (state !== 'running') { return; }
+        if (!lastTs) { lastTs = ts; }
+        var dt = (ts - lastTs) / 1000;
+        lastTs = ts;
+        elapsed += dt * speed;
+
+        var rem = remaining();
+        sortedAlerts().forEach(function (a) {
+            if (!fired[a] && rem <= a) {
+                fired[a] = true;
+                if (rem > 0) { showBanner('🔔', t().alertTitle(mmss(a)), t().alertSub); ringPreAlert(); }
+            }
+        });
+        if (!endFired && rem <= 0) {
+            endFired = true;
+            showBanner('⏰', t().endTitle, t().endSub);
+            ringEnd();
+        }
+        if (rem < -300) { doStop(); return; }   // 오버타임 5분이면 스스로 멈춘다
+
+        render();
+        rafId = requestAnimationFrame(tick);
+    }
+
+    function doStart() {
+        if (!audioCtx && window.AudioContext) {
+            try { audioCtx = new AudioContext(); } catch (err) { audioCtx = null; }
+        }
+        if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume(); }
+        if (state === 'idle') { elapsed = 0; fired = {}; endFired = false; }
+        state = 'running';
+        focusIndex = -1; focusUntil = 0;
+        lastTs = 0;
+        rafId = requestAnimationFrame(tick);
+        render();
+    }
+    function doPause() {
+        state = 'paused';
+        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+        render();
+    }
+    function doStop() {
+        state = 'idle';
+        elapsed = 0; fired = {}; endFired = false;
+        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+        hideBanner();
+        render();
+    }
+
+    el.start.addEventListener('click', doStart);
+    el.pause.addEventListener('click', doPause);
+    el.stop.addEventListener('click', doStop);
+
+    document.querySelectorAll('[data-demo-preset]').forEach(function (b) {
+        b.addEventListener('click', function () {
+            if (state !== 'idle') { return; }
+            total = Number(b.dataset.demoPreset);
+            alerts = alerts.filter(function (a) { return a < total; });
+            render();
+        });
+    });
+    document.querySelectorAll('[data-demo-alert]').forEach(function (b) {
+        b.addEventListener('click', function () {
+            if (state !== 'idle') { return; }
+            var v = Number(b.dataset.demoAlert);
+            if (v >= total) { return; }
+            var i = alerts.indexOf(v);
+            if (i >= 0) { alerts.splice(i, 1); } else { alerts.push(v); }
+            focusIndex = -1; focusUntil = 0;
+            render();
+        });
+    });
+    el.speedFast.addEventListener('click', function () { speed = 60; applyStrings(); render(); });
+    el.speedReal.addEventListener('click', function () { speed = 1; applyStrings(); render(); });
+    el.sound.addEventListener('click', function () { soundOn = !soundOn; render(); });
+
+    // ---- i18n --------------------------------------------------------------
+    function applyStrings() {
+        var s = t();
+        document.querySelectorAll('[data-demo-i18n]').forEach(function (node) {
+            var key = node.getAttribute('data-demo-i18n');
+            if (key === 'note') { return; }
+            if (s[key] !== undefined && typeof s[key] === 'string') { node.textContent = s[key]; }
+        });
+        if (el.note) {
+            el.note.innerHTML = (speed === 60 ? '<strong>' + s.fastNote + '</strong><br>' : '') + s.note;
+        }
+    }
+    window.addEventListener('langchange', function (e) {
+        lang = (e.detail === 'ko') ? 'ko' : 'en';
+        applyStrings();
+        render();
+    });
+    window.addEventListener('resize', renderBadge);
+
+    applyStrings();
+    render();
+})();
 </script>
 
 </body>
