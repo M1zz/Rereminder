@@ -29,6 +29,8 @@ struct NoticeSettingView: View {
     @State private var showTestModeInfo = false
     @State private var showPermissionGuide = false
     @State private var showPaywall = false
+    /// 창단 후원자의 혜택 변경 안내 — 설정에서 언제든 다시 열 수 있다.
+    @State private var showFounderWelcome = false
     @State private var showFeedback = false
 
     // 내 기기 — 타이머 중에 물어본 답이 여기에 저장된다.
@@ -63,8 +65,15 @@ struct NoticeSettingView: View {
                             .font(.title2)
                             .foregroundStyle(.orange)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text(AppName.pro)
-                                .font(.headline)
+                            HStack(spacing: 6) {
+                                Text(AppName.pro)
+                                    .font(.headline)
+                                // 값을 먼저 치른 사람에게는 표식이 남아 있어야 한다 —
+                                // 안내는 한 번뿐이지만 대접받고 있다는 사실은 계속 보여야 한다.
+                                if FoundingSupporter.isFounder {
+                                    FounderBadge()
+                                }
+                            }
                             // 기존 사용자에게는 평생 무료임을 명시해 손해 보지 않았음을 안심시킨다
                             Text(StoreManager.isGrandfathered
                                  ? String(localized: "Free forever as an early supporter 🎉")
@@ -75,6 +84,22 @@ struct NoticeSettingView: View {
                         Spacer()
                         Image(systemName: "checkmark.seal.fill")
                             .foregroundStyle(.green)
+                    }
+
+                    // 약속의 상설 위치. 안내 화면은 한 번만 뜨므로, 다시 읽고 싶은 사람은 여기로 온다.
+                    if FoundingSupporter.isFounder {
+                        FounderPromiseRow()
+                        Button {
+                            showFounderWelcome = true
+                        } label: {
+                            HStack {
+                                Text("See what's changing")
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
                     }
                 } else {
                     Button {
@@ -620,6 +645,10 @@ struct NoticeSettingView: View {
             FeedbackView()
         }
         .paywallGate(isPresented: $showPaywall)
+        .sheet(isPresented: $showFounderWelcome) {
+            // 설정에서 다시 열어 본 것이라 "봤음" 표시를 다시 남기지 않는다.
+            FounderWelcomeView(isFirstShowing: false)
+        }
     }
 
     /// 개발자(마스터 모드) 전용 진입점 — 본문 타입체크 부담을 줄이려 별도 프로퍼티로 분리

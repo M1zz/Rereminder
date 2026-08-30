@@ -71,6 +71,10 @@ struct TimerUnifiedView: View {
     private static let grandfatherThankedKey = "rereminder.grandfather.thanked"
     @State private var showGrandfatherThanks = false
 
+    // 창단 후원자에게 혜택 변경을 알리는 화면 — 최초 1회.
+    // ⚠️ 그랜드파더링 안내보다 **우선한다** — 같은 말을 더 자세히 하므로, 둘 다 띄우면 겹친다.
+    @State private var showFounderWelcome = false
+
     // 가끔 먼저 물어보는 의견 요청 — 조건 판정은 FeedbackNudge가 한다
     @State private var showFeedbackNudge = false
     @State private var showFeedbackSheet = false
@@ -85,6 +89,10 @@ struct TimerUnifiedView: View {
 
     // "지금이 그 시간"일 때 그 설정을 올려 드릴지 묻는다(같은 요일·비슷한 시각의 반복).
     @State private var timeSuggestion: RepeatDetector.Config?
+
+    // 세션을 끝낸 직후 "다음 자리 언제세요?"를 묻는다 — 주기가 긴 사람(학회 발표자·분기
+    // 워크숍 진행자)은 석 달 뒤에 앱을 기억하지 못한다. 판정은 NextOccasionReminder 가 한다.
+    @State private var showNextOccasion = false
 
     /// 지금 다이얼에 올라온 설정과 같은 템플릿을 이미 갖고 있는가.
     /// (저장돼 있으면 제안할 이유가 없다 — 이미 앱이 기억하고 있다.)
@@ -154,7 +162,18 @@ struct TimerUnifiedView: View {
             .alert(String(localized: "Thank you for being an early user 💙"), isPresented: $showGrandfatherThanks) {
                 Button(String(localized: "OK"), role: .cancel) {}
             } message: {
-                Text(String(localized: "All Pro features — Presentation Mode, unlimited pre-alerts, overtime tracking, and timer history — are yours free forever. Nothing you had has been taken away."))
+                Text(String(localized: "All Pro features — Session Mode, section scripts, unlimited templates, overtime tracking and history — are yours free forever. Nothing you had has been taken away."))
+            }
+            // 값을 먼저 치른 사람에게 "무엇이 바뀌고, 무엇은 그대로인지"를 보여 준다.
+            // 알림 한 줄로는 "내가 산 게 값이 떨어졌나"라는 불안이 풀리지 않는다.
+            .sheet(isPresented: $showFounderWelcome) {
+                FounderWelcomeView()
+            }
+            // 석 달 뒤에 돌아와 주길 기대하지 않는다 — 전날 저녁에 앱이 먼저 찾아간다.
+            .sheet(isPresented: $showNextOccasion) {
+                NextOccasionSheet(mainSec: screenVM.normalizedCurrentConfig.mainSec,
+                                  offsets: screenVM.normalizedCurrentConfig.offsets,
+                                  completions: Int(UsageMetrics.value(.timerCompletions)))
             }
             .onAppear(perform: setupOnAppear)
             // 사용 중 적절한 시점에 "즐겁게 쓰고 계신가요?" → 👍 앱스토어 리뷰 / 👎 피드백.
@@ -268,7 +287,7 @@ struct TimerUnifiedView: View {
                     .accessibilityLabel(String(localized: "Timer"))
                     .tag(AppMode.timer)
                 Image(systemName: "rectangle.inset.filled.and.person.filled")
-                    .accessibilityLabel(String(localized: "Presentation"))
+                    .accessibilityLabel(String(localized: "Session Mode"))
                     .tag(AppMode.presentation)
             } label: {
                 Text(String(localized: "Mode"))
@@ -324,8 +343,25 @@ struct TimerUnifiedView: View {
             showFeedbackNudge = true
         }
 
+        // 지난 예약은 치운다 — 남겨 두면 "예약이 있다"고 판단해 영영 다시 묻지 않는다.
+        NextOccasionReminder.clearIfPassed()
+
+        // 창단 후원자 자격을 먼저 확정한다 — 안내를 띄울지 판단하기 전에.
+        // 결제 시각을 아는 StoreKit 조회는 느리므로, 지금 상태만으로 되는 판정을 먼저 한다.
+        FoundingSupporter.refreshFromCurrentState()
+        Task { await FoundingSupporter.refreshFromStoreKit() }
+
+        // 혜택 변경 안내 (최초 1회). 그랜드파더링 안내와 **같은 말을 더 자세히** 하므로,
+        // 이게 뜨는 차례면 그쪽은 본 것으로 처리해 두 번 뜨지 않게 한다.
+        if FoundingSupporter.shouldAnnounce {
+            UserDefaults.standard.set(true, forKey: Self.grandfatherThankedKey)
+            showFounderWelcome = true
+            AnalyticsManager.log(.founderWelcomeShown)
+        }
+
         // 그랜드파더링된 기존 사용자에게 무료 Pro 안내 (최초 1회)
-        if StoreManager.isGrandfathered,
+        if !showFounderWelcome,
+           StoreManager.isGrandfathered,
            !UserDefaults.standard.bool(forKey: Self.grandfatherThankedKey) {
             UserDefaults.standard.set(true, forKey: Self.grandfatherThankedKey)
             showGrandfatherThanks = true
@@ -395,9 +431,39 @@ struct TimerUnifiedView: View {
         // 막 시작한 순간에만 — 일시정지에서 돌아올 때마다 물으면 잔소리가 된다.
         if newState == .running, oldState != .paused { askOrRemindAboutDevices() }
 
+        // 끝까지 마친 순간에만 — 도중에 멈춘 사람에게 "다음 자리"를 묻는 건 눈치가 없다.
+        if newState == .finished, oldState != .finished { offerNextOccasionIfDue() }
+
         #if targetEnvironment(macCatalyst)
         MenuBarManager.shared.update(remaining: screenVM.remaining, state: newState)
         #endif
+    }
+
+    // MARK: - 다음 자리 예약
+
+    /// 세션을 끝낸 직후 "다음 자리가 언제인가요?"를 한 번 묻는다.
+    ///
+    /// ⚠️ `RepeatDetector` 로는 이 사람을 못 잡는다 — 그쪽은 **주 단위 반복**을 보는 장치라
+    ///    분기 주기(학회 발표·분기 워크숍)에는 영영 걸리지 않는다. 그래서 별도 경로다.
+    /// ⚠️ 다른 안내가 뜨는 차례면 양보한다 — 완주 직후는 만족도 게이트도 노리는 자리다.
+    private func offerNextOccasionIfDue() {
+        guard !showOnboarding else { return }
+        guard !showFeedbackNudge, !showGrandfatherThanks, !showFounderWelcome,
+              deviceQuestion == nil, repeatProposal == nil, timeSuggestion == nil else { return }
+
+        let config = screenVM.normalizedCurrentConfig
+        let repeatsWeekly = RepeatDetector.distinctDays(
+            of: .init(mainSec: config.mainSec, offsets: config.offsets)
+        ) >= 2
+
+        guard NextOccasionReminder.shouldAsk(
+            didUseSessionMode: screenVM.currentMode == .presentation,
+            completions: Int(UsageMetrics.value(.timerCompletions)),
+            repeatsWeekly: repeatsWeekly
+        ) else { return }
+
+        NextOccasionReminder.markAsked()
+        showNextOccasion = true
     }
 
     // MARK: - 반복 설정 저장 제안
@@ -417,7 +483,7 @@ struct TimerUnifiedView: View {
     @discardableResult
     private func offerTimeOfDaySetupIfDue() -> Bool {
         guard isIdle, !showOnboarding else { return false }
-        guard !showFeedbackNudge, !showGrandfatherThanks, deviceQuestion == nil else { return false }
+        guard !showFeedbackNudge, !showGrandfatherThanks, !showFounderWelcome, deviceQuestion == nil else { return false }
         guard let config = RepeatDetector.timeOfDaySuggestion() else { return false }
 
         // 이미 그 설정이 다이얼에 올라와 있으면 권할 것이 없다(마지막 사용 설정이 그것이었던 경우).
@@ -436,7 +502,10 @@ struct TimerUnifiedView: View {
     /// ⚠️ 대기 중일 때만. 타이머가 도는 중에 저장 이야기를 꺼내면 화면의 주인공을 가린다.
     private func offerToSaveRecurringSetupIfDue() {
         guard isIdle, !showOnboarding else { return }
-        guard !showFeedbackNudge, !showGrandfatherThanks, deviceQuestion == nil else { return }
+        // ⚠️ 무료 사용자에게는 권하지 않는다 — 저장은 Pro 다(`ProGate.canRememberSetup`).
+        //    못 하는 일을 권해 놓고 누르는 순간 막는 것이 이 앱에서 가장 나쁜 순간이다.
+        guard ProGate.canRememberSetup else { return }
+        guard !showFeedbackNudge, !showGrandfatherThanks, !showFounderWelcome, deviceQuestion == nil else { return }
 
         let cfg = screenVM.normalizedCurrentConfig
         let config = RepeatDetector.Config(mainSec: cfg.mainSec, offsets: cfg.offsets)
@@ -459,6 +528,8 @@ struct TimerUnifiedView: View {
     /// 타이머를 걸 때마다 한 번씩 확인한다 — 물어볼 게 있으면 묻고, 없으면 가끔 권한다.
     /// 둘 중 하나만 한다(같은 실행에서 질문과 안내가 겹치면 시끄럽다).
     private func askOrRemindAboutDevices() {
+        // 혜택 변경 안내가 떠 있으면 양보한다 — 그 화면 뒤에서 질문이 쌓이면 둘 다 안 읽힌다.
+        guard !showFounderWelcome else { return }
         let starts = Int(UsageMetrics.value(.timerStarts))
 
         if let device = DeviceOwnership.pendingQuestion(timerStarts: starts) {

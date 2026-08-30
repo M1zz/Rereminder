@@ -167,12 +167,6 @@ final class TimerViewModel: ObservableObject {
             : 1.0
         engine.timeMultiplier = multiplier
 
-        // 5+5 trial 카운트: 2개 이상의 예비 알림으로 시작 시
-        if let template = currentTemplate,
-           template.prealertOffsetsSec.count > ProGate.freePrealertLimit {
-            ProGate.recordUsage(.unlimitedPrealerts)
-        }
-
         engine.start()
         state = .running
 

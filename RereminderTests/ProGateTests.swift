@@ -208,32 +208,17 @@ final class ProGateTests: XCTestCase {
 
     // MARK: - Legacy bool API
 
-    func test_canAddPrealert_freeUserUnderLimit_returnsTrue() {
-        XCTAssertTrue(ProGate.canAddPrealert(currentCount: 0))
-    }
-
-    func test_canAddPrealert_freeUserAtLimitWithTrial_returnsTrue() {
-        // count == freePrealertLimit, trial 가능 (count: 0)
-        XCTAssertTrue(ProGate.canAddPrealert(currentCount: ProGate.freePrealertLimit))
-    }
-
-    func test_canAddPrealert_freeUserExhaustedTrial_returnsFalse() {
-        for _ in 0..<5 { TrialCounter.increment(.unlimitedPrealerts) }
-        // 1차 페이월 이후, 확장 미수락 — 한도 **위**에서만 막힌다
-        XCTAssertFalse(ProGate.canAddPrealert(currentCount: ProGate.freePrealertLimit))
-    }
-
-    func test_canSaveTemplate_underFreeLimit_returnsTrue() {
-        XCTAssertTrue(ProGate.canSaveTemplate(currentCount: 2))
-    }
-
-    func test_canSaveTemplate_atFreeLimit_returnsFalse() {
-        XCTAssertFalse(ProGate.canSaveTemplate(currentCount: 3))
+    /// ⚠️ 무료 몫이 없다 — **저장 자체가 Pro** 다. 개수로 다시 나누지 말 것(`ProGate` 머리말).
+    func test_canSaveTemplate_freeUser_isAlwaysFalse() {
+        setProUser(false)
+        XCTAssertFalse(ProGate.canSaveTemplate(currentCount: 0))
+        XCTAssertFalse(ProGate.canRememberSetup)
     }
 
     func test_canSaveTemplate_proUser_returnsTrue() {
         setProUser(true)
         XCTAssertTrue(ProGate.canSaveTemplate(currentCount: 100))
+        XCTAssertTrue(ProGate.canRememberSetup)
     }
 
     // MARK: - Full lifecycle integration
@@ -279,99 +264,20 @@ final class ProGateTests: XCTestCase {
         }
     }
 
-    // MARK: - 알림 추가 게이트 (prealertAdmission / requestPrealert)
+    // MARK: - 알림에는 한도가 없다
     //
-    // 이 정책은 알림을 켤 수 있는 화면마다 복사돼 있었고, 지금은 ProGate 한 곳이 답한다.
-    // 화면들이 같은 답을 쓰는 한 여기서 규칙을 지키면 된다.
+    // 예전에는 여기서 "몇 개까지 무료인가"를 지켰다. 그 한도를 없앴으므로,
+    // 이제 지킬 것은 **한도가 다시 생기지 않는 것**이다.
+    // 알림 개수는 이 앱을 설치할 유일한 이유이고, 거기에 벽을 세우면 걸리는 사람이 하필
+    // 결제 가능성이 가장 큰 사람(발표자·강사·퍼실리테이터)이다.
 
-    func test_prealertAdmission_firstAlertIsFree_evenWhenTrialExhausted() {
-        setProUser(false)
-        for _ in 0..<10 { TrialCounter.increment(.unlimitedPrealerts) }   // 1·2차 체험 모두 소진
-
-        XCTAssertEqual(ProGate.prealertAdmission(currentCount: 0), .allowed,
-                       "1번째 알림은 무료 기능이다 — 체험이 다 떨어져도 막으면 안 된다")
+    func test_alertCountIsNotAProFeature() {
+        XCTAssertFalse(ProGate.Feature.allCases.contains { $0.rawValue.lowercased().contains("prealert") },
+                       "예비 알림이 다시 Pro 기능 목록에 들어왔다 — ProGate 머리말 참고")
     }
 
-    func test_prealertAdmission_secondAlert_allowedWhileTrialRemains() {
-        setProUser(false)
-        XCTAssertEqual(ProGate.prealertAdmission(currentCount: ProGate.freePrealertLimit), .allowed)
+    func test_paidFeaturesAreTheSessionTools() {
+        XCTAssertEqual(Set(ProGate.Feature.allCases),
+                       [.presentationMode, .overtimeTracking, .unlimitedTemplates, .timerHistory])
     }
-
-    func test_prealertAdmission_freeLimitIsTwo_soSecondAlertIsAlwaysFree() {
-        setProUser(false)
-        for _ in 0..<10 { TrialCounter.increment(.unlimitedPrealerts) }   // 체험 전부 소진
-
-        // 이 앱이 파는 문장은 "여러 번 알려 준다"다 — 2개까지는 체험과 무관하게 무료여야
-        // 그 문장이 성립한다(1개면 그냥 평범한 타이머다).
-        XCTAssertEqual(ProGate.freePrealertLimit, 2)
-        XCTAssertEqual(ProGate.prealertAdmission(currentCount: 1), .allowed)
-    }
-
-    func test_prealertAdmission_offersGraceAtLimit_whenTrialExhausted() {
-        setProUser(false)
-        PrealertGrace.reset()
-        for _ in 0..<TrialCounter.firstStageLimit { TrialCounter.increment(.unlimitedPrealerts) }
-
-        // 막힌 자리에서 문을 닫지 않는다 — 오늘치 유예가 남아 있으면 그 자리에서 내준다
-        XCTAssertEqual(ProGate.prealertAdmission(currentCount: ProGate.freePrealertLimit),
-                       .grace(stage: .first))
-    }
-
-    func test_prealertAdmission_blocksAfterGraceIsUsedToday() {
-        setProUser(false)
-        PrealertGrace.reset()
-        for _ in 0..<TrialCounter.firstStageLimit { TrialCounter.increment(.unlimitedPrealerts) }
-
-        PrealertGrace.consume()
-
-        // 하루 한 번이라 두 번째부터는 원래대로 막힌다 — 아니면 게이트가 없는 것과 같다
-        XCTAssertEqual(ProGate.prealertAdmission(currentCount: ProGate.freePrealertLimit),
-                       .blocked(stage: .first))
-    }
-
-    func test_prealertGrace_isAvailableAgainTheNextDay() {
-        PrealertGrace.reset()
-        let today = Date()
-        PrealertGrace.consume(now: today)
-
-        XCTAssertFalse(PrealertGrace.isAvailable(now: today))
-        XCTAssertTrue(PrealertGrace.isAvailable(now: today.addingTimeInterval(86_400 + 60)))
-    }
-
-    func test_prealertAdmission_proUser_isNeverBlocked() {
-        setProUser(true)
-        for _ in 0..<10 { TrialCounter.increment(.unlimitedPrealerts) }
-
-        XCTAssertEqual(ProGate.prealertAdmission(currentCount: 99), .allowed)
-    }
-
-    func test_prealertAdmission_hasNoSideEffect() {
-        setProUser(false)
-        let before = TrialCounter.count(for: .unlimitedPrealerts)
-
-        // 자물쇠 아이콘처럼 그릴 때마다 물어보는 경로다 — 물어본 것만으로 상태가 변하면 안 된다
-        for _ in 0..<5 { _ = ProGate.prealertAdmission(currentCount: 3) }
-
-        XCTAssertEqual(TrialCounter.count(for: .unlimitedPrealerts), before)
-    }
-
-    func test_requestPrealert_matchesPureAdmission_whenNothingIsConsumed() {
-        setProUser(false)
-
-        // 허용되는 경우에는 부작용이 없으므로 두 함수의 답이 같아야 한다
-        XCTAssertEqual(ProGate.requestPrealert(currentCount: 0),
-                       ProGate.prealertAdmission(currentCount: 0))
-    }
-
-    func test_requestPrealert_consumesTheGrace_soTheNextTryIsBlocked() {
-        setProUser(false)
-        PrealertGrace.reset()
-        for _ in 0..<TrialCounter.firstStageLimit { TrialCounter.increment(.unlimitedPrealerts) }
-
-        let count = ProGate.freePrealertLimit
-        XCTAssertEqual(ProGate.requestPrealert(currentCount: count), .grace(stage: .first))
-        // 유예는 하루 한 번 — 실제로 소진돼야 한다(안 그러면 무제한이 된다)
-        XCTAssertEqual(ProGate.prealertAdmission(currentCount: count), .blocked(stage: .first))
-    }
-
 }

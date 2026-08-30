@@ -10,6 +10,14 @@
 //
 //  "아직 모르겠다"도 답이다 — 그때는 우리가 기본 한 벌을 권한다(고르지 않아도 막히지 않게).
 //
+//  ⚠️ **여기 있는 상황이 곧 "이 앱은 누구 것인가"의 선언이다.** 앱을 처음 연 사람은 이 목록에서
+//     자기를 찾고, 못 찾으면 자기 앱이 아니라고 결론 내린다. 그래서 **돈을 내는 사람**(남 앞에서
+//     시간을 운영하는 사람 — 발표자·강사·퍼실리테이터)을 맨 위에 둔다.
+//
+//  ⚠️ **요리는 뺐다 — 되살리지 말 것.** "헤이 시리, 8분 타이머"를 이길 수 없는 싸움이고,
+//     그 카드를 고른 사람은 이틀 뒤 앱을 지운다. 이기지 못하는 상황으로 신규 사용자를
+//     안내하는 것은 획득이 아니라 이탈 비용이다.
+//
 //  ⚠️ 추천 값은 **알림이 두 개 이상**이 되게 잡는다. 하나짜리는 이 앱을 쓸 이유가 없는 설정이라
 //     체험에서 보여 줄 것이 없다(단, "아직 모르겠다"만 기본 설정 그대로 하나다).
 //
@@ -55,6 +63,31 @@ struct OnboardingUseCase: Identifiable, Hashable {
                            String(localized: "Main"),
                            String(localized: "Wrap-up")]
         ),
+        // 수업·워크숍이 이 앱의 주 고객이다 — 매주 되풀이하고, 구간·템플릿·워치를 전부 쓴다.
+        OnboardingUseCase(
+            id: "class",
+            symbol: "person.3.fill",
+            title: String(localized: "Class"),
+            reason: String(localized: "Keep the cool-down from getting squeezed."),
+            minutes: 50,
+            alerts: [2400, 600],
+            sectionNames: [String(localized: "Warm-up"),
+                           String(localized: "Main work"),
+                           String(localized: "Cool-down")]
+        ),
+        OnboardingUseCase(
+            id: "workshop",
+            symbol: "rectangle.split.3x1.fill",
+            title: String(localized: "Workshop"),
+            reason: String(localized: "Six sessions, and the last one still gets its time."),
+            minutes: 90,
+            alerts: [4800, 3000, 1200, 300],
+            sectionNames: [String(localized: "Opening"),
+                           String(localized: "Session 1"),
+                           String(localized: "Session 2"),
+                           String(localized: "Wrap-up"),
+                           String(localized: "Closing")]
+        ),
         OnboardingUseCase(
             id: "workout",
             symbol: "figure.run",
@@ -71,15 +104,6 @@ struct OnboardingUseCase: Identifiable, Hashable {
             reason: String(localized: "Ease out of deep work instead of being cut off."),
             minutes: 25,
             alerts: [300, 60],
-            sectionNames: []
-        ),
-        OnboardingUseCase(
-            id: "cooking",
-            symbol: "frying.pan.fill",
-            title: String(localized: "Cooking"),
-            reason: String(localized: "A nudge to stir or flip, then one when it's done."),
-            minutes: 12,
-            alerts: [360, 60],
             sectionNames: []
         ),
         OnboardingUseCase(

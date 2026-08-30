@@ -12,10 +12,6 @@ struct PrealertSettingsView: View {
     @ObservedObject private var store = PresetStore.shared
     @Environment(\.dismiss) private var dismiss
 
-    @State private var showPaywall = false
-    @State private var paywallFeature: ProGate.Feature?
-    @State private var paywallStage: ProGate.PaywallStage = .second
-    @State private var pendingPrealertSec: Int?
     @State private var showAddOffset = false
 
     private let columns = [GridItem(.adaptive(minimum: 88), spacing: 8)]
@@ -31,42 +27,20 @@ struct PrealertSettingsView: View {
                     }
                 }
         }
-        .paywallGate(
-            isPresented: $showPaywall,
-            feature: paywallFeature,
-            stage: paywallStage,
-            onAcceptExtension: applyPendingPrealert
-        )
     }
 
     @ViewBuilder
     private var content: some View {
         let mainSeconds = screenVM.mainMinutes * 60 + screenVM.mainSeconds
         let presets = store.prealertSeconds
-        let prealertGate = ProGate.evaluate(.unlimitedPrealerts)
-
         ScrollView {
             VStack(alignment: .leading, spacing: DSSpacing.md) {
-                HStack(alignment: .firstTextBaseline) {
-                    Text("Get a heads-up before the timer ends.")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-
-                    Spacer()
-
-                    if !StoreManager.isProUser {
-                        if let remaining = prealertGate.trialRemaining,
-                           screenVM.selectedOffsets.count >= ProGate.freePrealertLimit {
-                            Text("Trial \(remaining) left")
-                                .font(.caption.weight(.medium))
-                                .foregroundStyle(.orange)
-                        } else {
-                            Text("\(screenVM.selectedOffsets.count)/\(ProGate.freePrealertLimit)")
-                                .font(.caption.weight(.medium))
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-                }
+                // 개수 표시(n/한도)와 체험 잔여 배지는 알림 한도와 함께 사라졌다 —
+                // 셀 것이 없으면 세지 않는다.
+                Text("Get a heads-up before the timer ends.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
                 LazyVGrid(columns: columns, alignment: .leading, spacing: 8) {
                     ForEach(presets, id: \.self) { sec in
@@ -198,14 +172,6 @@ struct PrealertSettingsView: View {
         .accessibilityLabel(String(localized: "Add a custom pre-alert"))
     }
 
-    private func applyPendingPrealert() {
-        if let sec = pendingPrealertSec {
-            screenVM.selectedOffsets.insert(sec)
-            screenVM.showPrealertToast(for: sec, isEnabled: true)
-            pendingPrealertSec = nil
-        }
-    }
-
     private func prealertToggle(sec: Int, mainSeconds: Int) -> some View {
         let isDisabled = sec >= mainSeconds
         let isSelected = screenVM.selectedOffsets.contains(sec)
@@ -214,22 +180,9 @@ struct PrealertSettingsView: View {
             isOn: Binding(
                 get: { isSelected },
                 set: { on in
+                    // 알림 개수에는 한도가 없다 — 켜고 끄는 것이 전부다.
                     if on {
-                        // 정책(1번째 free, 그 다음부터 체험 평가)은 ProGate 가 단독으로 안다
-                        switch ProGate.requestPrealert(currentCount: screenVM.selectedOffsets.count) {
-                        case .allowed:
-                            screenVM.selectedOffsets.insert(sec)
-                        case .grace:
-                            // 막힌 자리에서 문을 닫지 않는다 — 원하던 걸 손에 쥔 채로 다음 문장을 듣는다
-                            screenVM.selectedOffsets.insert(sec)
-                            screenVM.showToast?(String(localized: "Turned this one on for you. Pro keeps them unlimited."))
-                        case .blocked(let stage):
-                            paywallFeature = .unlimitedPrealerts
-                            paywallStage = stage
-                            pendingPrealertSec = sec
-                            showPaywall = true
-                            return
-                        }
+                        screenVM.selectedOffsets.insert(sec)
                     } else {
                         screenVM.selectedOffsets.remove(sec)
                     }
@@ -237,18 +190,8 @@ struct PrealertSettingsView: View {
                 }
             )
         ) {
-            HStack(spacing: 4) {
-                Text(sec < 60 ? String(localized: "\(sec) sec") : String(localized: "\(sec/60) min"))
-                    .dsScaledFont(14, weight: .medium, relativeTo: .callout, maxSize: 20)
-
-                // 제한 초과 프리셋에 잠금 아이콘 (trial 도 소진된 경우)
-                if !isSelected && !StoreManager.isProUser && !isDisabled
-                    && ProGate.prealertAdmission(currentCount: screenVM.selectedOffsets.count) != .allowed {
-                    Image(systemName: "lock.fill")
-                        .font(.caption2)
-                        .foregroundStyle(.orange)
-                }
-            }
+            Text(sec < 60 ? String(localized: "\(sec) sec") : String(localized: "\(sec/60) min"))
+                .dsScaledFont(14, weight: .medium, relativeTo: .callout, maxSize: 20)
             .frame(maxWidth: .infinity)
             .padding(.horizontal, 10)
             .padding(.vertical, 8)

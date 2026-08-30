@@ -226,7 +226,7 @@ struct ClipTimerView: View {
         Button {
             viewModel.showAppStoreOverlay = true
         } label: {
-            Text("Presentation mode, templates, and history in the full app")
+            Text("Session mode, templates, and history in the full app")
                 .font(DSFont.caption)
                 .multilineTextAlignment(.center)
                 .underline()

@@ -50,16 +50,18 @@ enum UsageMetrics {
         /// 지금 가지고 있는 템플릿 수(누적이 아니라 현재값).
         case templates
         /// 한 타이머에 걸어 본 알림 개수의 **최대값**(누적이 아니라 최고 기록).
-        /// 이 앱의 결제는 "알림을 몇 개까지 켤 수 있나"로 갈리므로, 이 값이 곧 그 사람의 수요 크기다.
+        /// 결제 경계는 아니지만(무제한 무료) 이 값이 곧 그 사람의 **수요 크기**다.
         case alertsMax
         /// **알림을 2개 이상** 걸고 시작한 횟수 — 이 앱의 문장("여러 번 알려 준다")이 실제로
-        /// 쓰인 횟수다. ⚠️ 기준(2개)은 무료 한도와 무관하게 **고정**이다(`multiAlertThreshold`) —
-        /// 한도를 올렸다고 이 정의를 따라 바꾸면 과거 스냅샷과 합산되지 않아 지표가 조용히 끊긴다.
+        /// 쓰인 횟수다. ⚠️ 기준(2개)은 게이트와 무관하게 **고정**이다(`multiAlertThreshold`) —
+        /// 게이트를 따라 바꾸면 과거 스냅샷과 합산되지 않아 지표가 조용히 끊긴다.
         case multiAlertRuns
-        /// 알림을 더 켜려다 한도에 막힌 횟수 — 결제 필요를 몸으로 겪은 횟수다.
+        /// 알림을 더 켜려다 한도에 막힌 횟수.
+        /// ⚠️ **더 이상 늘지 않는다** — 알림 한도를 없앴다(`ProGate` 머리말). 키를 지우면 예전
+        ///    스냅샷이 통째로 읽히지 않으므로 **역사 기록으로 남겨 둔다.** 되살리지 말 것.
         case alertLimitHits
-        /// 막힌 자리에서 **이번 한 번**을 내준 횟수(하루 1회 유예).
-        /// `alertLimitHits` 대비 이 값이 곧 "문을 닫는 대신 열어 준 비율"이다.
+        /// 막힌 자리에서 이번 한 번을 내준 횟수(하루 1회 유예).
+        /// ⚠️ `alertLimitHits` 와 같은 이유로 **늘지 않지만 남겨 둔** 키다.
         case graceGrants
         /// 페이월을 본 횟수.
         case paywallViews
@@ -67,8 +69,8 @@ enum UsageMetrics {
         var storageKey: String { "usage.metric.\(rawValue)" }
     }
 
-    /// `multiAlertRuns` 가 세는 기준 — **고정값이다.** 무료 한도가 바뀌어도 이 정의는 그대로 둬야
-    /// 한도를 올리기 전후를 같은 자로 비교할 수 있다.
+    /// `multiAlertRuns` 가 세는 기준 — **고정값이다.** 게이트가 바뀌어도 이 정의는 그대로 둬야
+    /// 변경 전후를 같은 자로 비교할 수 있다.
     static let multiAlertThreshold = 2
 
     /// 한 타이머에 **알림을 몇 개 걸었는지**의 히스토그램 — 실행할 때마다 그 개수 칸을 하나 올린다.
@@ -103,13 +105,13 @@ enum UsageMetrics {
         switch event {
         case .timerStarted(_, let alertCount, _):
             increment(.timerStarts)
-            // 알림 개수는 이 앱의 결제 경계다(무료 1개).
-            // 최대값·"한도를 넘긴 실행 횟수"에 더해 **개수별 실행 횟수**까지 남긴다 —
-            // 최대값만으로는 "한 번 해 봤다"와 "늘 그렇게 쓴다"가 구분되지 않는다.
+            // 알림 개수는 이제 결제 경계가 아니지만(무제한 무료), **수요의 크기**를 재는 값으로
+            // 계속 센다 — "이 앱이 실제로 팔고 있는 크기"가 여기서 나온다.
+            // 최대값만으로는 "한 번 해 봤다"와 "늘 그렇게 쓴다"가 구분되지 않아 히스토그램도 남긴다.
             noteMax(.alertsMax, Double(alertCount))
             incrementAlertRun(alertCount)
-            // ⚠️ 임계값을 `freePrealertLimit` 에 묶지 말 것 — 한도를 올리면 이 지표의 뜻이 바뀌어
-            //    과거 스냅샷과 합산되지 않는다. **"알림 2개 이상"으로 고정된 정의다.**
+            // ⚠️ 임계값은 **"알림 2개 이상"으로 고정된 정의다.** 게이트가 어떻게 바뀌든 따라가지
+            //    말 것 — 정의가 바뀌면 과거 스냅샷과 합산되지 않아 지표가 조용히 끊긴다.
             if alertCount >= multiAlertThreshold { increment(.multiAlertRuns) }
         case .timerCompleted(let durationSeconds, let firedAlertCount):
             increment(.timerCompletions)
@@ -127,11 +129,6 @@ enum UsageMetrics {
             increment(.presentationRuns)
         case .watchSyncUsed:
             increment(.watchSyncUses)
-        case .premiumTrialExhausted(let feature, _):
-            // 알림 한도에 막힌 것만 센다 — 발표 모드 등 다른 기능의 소진과 섞이면 뜻이 흐려진다.
-            if feature == .unlimitedPrealerts { increment(.alertLimitHits) }
-        case .prealertGraceGranted:
-            increment(.graceGrants)
         case .paywallShown:
             increment(.paywallViews)
         default:

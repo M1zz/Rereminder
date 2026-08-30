@@ -60,7 +60,7 @@ struct SectionScriptSheet: View {
                         }
                     }
 
-                Text("This shows on screen while you present, when this section's turn comes.")
+                Text("This shows on screen while you run the session, when this section's turn comes.")
                     .font(DSFont.caption)
                     .foregroundStyle(.secondary)
                     .padding(.horizontal, DSSpacing.lg)
