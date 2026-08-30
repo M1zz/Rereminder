@@ -31,14 +31,22 @@ struct MarkerDragBadge: View {
     let colors: (beforeEnd: Color, afterStart: Color)
 
     /// 배지 반쪽 폭 어림값 — 화면 밖으로 나가지 않게 자를 때 쓴다.
-    static let halfWidth: CGFloat = 58
+    /// ⚠️ **글자 크기를 따라가야 한다.** 고정값이면 큰 글씨에서 실제 배지가 이 값보다
+    ///    넓어져, 자른다고 자른 위치가 이미 화면 밖이다(그래서 숫자가 잘렸다).
+    @ScaledMetric(relativeTo: .title3) private var halfWidth: CGFloat = 58
+
+    /// 배지가 원 밖으로 나가는 거리. 값이 클수록 화면 가장자리에서 잘리기 쉽다.
+    @ScaledMetric(relativeTo: .title3) private var outset: CGFloat = 38
 
     var body: some View {
         let tooltipAngle = angle - 90
-        // 두 줄 배지는 높이 절반이 34pt 쯤 되므로, 12시·6시에서 링을 덮지 않을 만큼 띄운다
-        let distance = size / 2 + 52
+        // 두 줄 배지는 높이 절반이 34pt 쯤 되므로, 12시·6시에서 링을 덮지 않을 만큼 띄운다.
+        // ⚠️ 예전엔 +52 로 더 밀어냈는데, 좁은 화면(디스플레이 확대 등)에서는 그만큼
+        //    가장자리에 먼저 닿아 잘렸다. 원 쪽으로 조금 당긴다.
+        let distance = size / 2 + outset
         let rawX = cos(tooltipAngle * .pi / 180) * distance
-        let limit = max(0, availableWidth / 2 - Self.halfWidth - 4)
+        // 화면 안쪽으로 자른다. 여백 8pt 는 그림자·모서리 몫이다.
+        let limit = max(0, availableWidth / 2 - halfWidth - 8)
         let xOffset = min(max(rawX, -limit), limit)
         let yOffset = sin(tooltipAngle * .pi / 180) * distance
 
@@ -56,10 +64,12 @@ struct MarkerDragBadge: View {
     private func row(icon: String, seconds: Int, background: Color) -> some View {
         HStack(spacing: 6) {
             Image(systemName: icon)
-                .font(.footnote.weight(.bold))
+                .dsScaledFont(13, weight: .bold, relativeTo: .footnote, maxSize: 17)
             Text(TimeMapper.mmss(max(0, seconds)))
-                .font(.title3.weight(.bold))
+                // 상한을 둔다 — 위 halfWidth 어림값이 유효하려면 글자가 무한정 크면 안 된다
+                .dsScaledFont(20, weight: .bold, relativeTo: .title3, maxSize: 26)
                 .monospacedDigit()
+                .lineLimit(1)
         }
         .foregroundStyle(.white)
         .padding(.horizontal, 12)

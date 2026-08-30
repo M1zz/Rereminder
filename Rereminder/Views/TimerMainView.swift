@@ -210,7 +210,10 @@ struct TimerMainView: View {
                           buttonSize: buttonSize)
                     // 원 위 여백은 **신축이 아니라 정해진 값**이다. 여기에 Spacer 를 두면
                     // 남는 세로가 위에도 나뉘어 아래 묶음이 중간에 떠 버린다.
-                    .padding(.top, stackGap)
+                    // ⚠️ 아래와 마찬가지로 **노브가 프레임 위로 나가는 몫(knobOverflow)을 함께**
+                    //    비운다. 12시 방향 종은 프레임보다 약 22pt 위까지 그려지므로, 이걸
+                    //    빼먹으면 알림 칩 줄과 원이 맞닿는다(실제로 그렇게 됐다).
+                    .padding(.top, knobOverflow + stackGap)
                     .padding(.bottom, knobOverflow)
                     .zIndex(1)
 
@@ -380,7 +383,7 @@ struct TimerMainView: View {
             // 3시·9시 방향 종은 배지가 가운데 시간 글자와 같은 높이에 오는데,
             // 시간+버튼 묶음이 이 ZStack 의 마지막 자식이라 zIndex 없이는 배지를 덮는다.
             if showDragTooltip && isTimeEditable {
-                dragTooltip(size: size)
+                dragTooltip(size: size, availableWidth: geometry.size.width)
                     .zIndex(2)
             }
 
@@ -711,10 +714,15 @@ struct TimerMainView: View {
             }
     }
 
-    private func dragTooltip(size: CGFloat) -> some View {
+    private func dragTooltip(size: CGFloat, availableWidth: CGFloat) -> some View {
         let timeText = mmss(sec: screenVM.mainSeconds, min: screenVM.mainMinutes)
-        let xOffset = cos(dragTooltipAngle * .pi / 180) * (size / 2 + 32)
-        let yOffset = sin(dragTooltipAngle * .pi / 180) * (size / 2 + 32)
+        let distance = size / 2 + 32
+        let rawX = cos(dragTooltipAngle * .pi / 180) * distance
+        // ⚠️ 여기엔 자르는 코드가 아예 없어서 3시·9시 방향에서 화면 밖으로 나갔다.
+        //    배지와 같은 규칙으로 화면 안에 가둔다(어림 반폭 44pt + 여백 8pt).
+        let limit = max(0, availableWidth / 2 - 44 - 8)
+        let xOffset = min(max(rawX, -limit), limit)
+        let yOffset = sin(dragTooltipAngle * .pi / 180) * distance
 
         return Text(timeText)
             .font(.body.weight(.semibold))
