@@ -203,22 +203,26 @@ struct TimerMainView: View {
                     }
                 }
 
+                // 원 **위** 신축 공간. 아래 것과 짝을 이뤄 남는 세로를 반씩 나눠 갖는다
+                // → 원의 위아래 여백이 같아진다.
+                // ⚠️ `minLength` 가 최소 여백의 **보장**이다. 구간 칩·카운트다운이 각자
+                //    갖고 있던 여백은 이 대칭을 깨뜨려서(아래만 6pt 더) 걷어냈다 —
+                //    다시 넣지 말고 이 값을 조절할 것.
+                Spacer(minLength: stackGap)
+
                 // 드래그 배지가 원 밖으로 나가므로 아래쪽 템플릿 바·구간 리스트보다 위에 그린다
                 clockView(size: clockSize,
                           lineWidth: lineWidth,
                           geometry: geometry,
                           buttonSize: buttonSize)
-                    // 원 위 여백은 **신축이 아니라 정해진 값**이다. 여기에 Spacer 를 두면
-                    // 남는 세로가 위에도 나뉘어 아래 묶음이 중간에 떠 버린다.
-                    // ⚠️ 아래와 마찬가지로 **노브가 프레임 위로 나가는 몫(knobOverflow)을 함께**
-                    //    비운다. 12시 방향 종은 프레임보다 약 22pt 위까지 그려지므로, 이걸
-                    //    빼먹으면 알림 칩 줄과 원이 맞닿는다(실제로 그렇게 됐다).
-                    .padding(.top, knobOverflow + stackGap)
-                    .padding(.bottom, knobOverflow)
+                    // ⚠️ 노브가 프레임 밖으로 나가는 몫은 **위아래 대칭**으로 비운다.
+                    //    아래만 비우면 노브 기준으로 위가 그만큼 좁아진다 —
+                    //    실제로 위 3pt / 아래 79pt 까지 어긋났다.
+                    .padding(.vertical, knobOverflow)
                     .zIndex(1)
 
-                // 이 화면의 **유일한 신축 공간**. 남는 세로가 전부 여기로 모이므로
-                // 아래 묶음은 화면 아래쪽으로 내려가 버튼과 한 덩이가 된다.
+                // 원 **아래** 신축 공간. 위 것과 같은 몫을 갖는다.
+                // 묶음 뒤에는 Spacer 가 없으므로 묶음은 그대로 화면 아래에 붙는다.
                 Spacer(minLength: stackGap)
 
                 // ── 원 아래 묶음: 구간 길이 → 기기 연결 → 템플릿·초기화 ─────────────────
