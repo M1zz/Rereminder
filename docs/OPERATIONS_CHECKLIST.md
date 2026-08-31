@@ -45,3 +45,44 @@
 
 TelemetryDeck 은 2026-08 에 제거했다(App ID 미설정으로 실제 전송이 없었고, 사용 통계는
 CloudKit 허브가 담당). 분석 관련 대시보드 작업은 3번(사용 통계)만 보면 된다.
+
+## 5. 워치 스마트 스택 위젯 — 🚨 첫 배포 **전에** 서명 준비
+
+`RereminderWatchWidgetExtension` 타겟이 새로 생겼고, 워치 앱과 위젯이 **앱 그룹으로** 타이머
+상태를 주고받는다(`Shared/Modules/WatchTimerState.swift`). 설계 배경은 CLAUDE.md 의
+"워치 스마트 스택" 절.
+
+- [ ] Developer Portal 에 App ID `com.xa.toki.watchkitapp.widget` 생성
+- [ ] **App Groups** capability 를 두 App ID 에 켜고 `group.leeo.toki` 를 배정
+  - `com.xa.toki.watchkitapp` (워치 앱 — 지금까지 엔타이틀먼트가 없었다)
+  - `com.xa.toki.watchkitapp.widget` (새 위젯 확장)
+- [ ] 프로비저닝 프로파일 재생성 (Xcode 자동 서명이나 `xcodebuild -allowProvisioningUpdates`
+      를 쓰면 자동으로 처리된다 — 수동 서명이라면 직접 내려받을 것)
+- [ ] 업로드 후 TestFlight 빌드를 실기기 워치에 설치해 스마트 스택 편집 목록에 뜨는지 확인
+
+⚠️ **앱 그룹이 한쪽에만 걸리면 조용히 실패한다** — 빌드도 되고 앱도 멀쩡히 돌지만 위젯이 늘
+"활성 타이머 없음"만 보여준다(`WatchTimerStore` 가 앱 전용 저장소로 물러서기 때문). 그래서
+위 두 줄은 **둘 다** 확인해야 한다.
+
+⚠️ 위젯 확장의 `MARKETING_VERSION` 은 `Config/Version.xcconfig` 를 따라가므로 따로 맞출 것이
+없다. 다만 **번들 ID 는 워치 앱 ID 로 시작해야** 한다(`com.xa.toki.watchkitapp.` + `widget`) —
+어긋나면 업로드가 거부된다.
+
+## 6. 확인할 때까지 알림 — 선택 사항(있으면 더 좋음)
+
+되풀이 종료 알림(`Shared/Modules/EscalatingAlert.swift`)은 `interruptionLevel = .timeSensitive`
+로 보낸다. 이 수준으로 **실제 전달**되려면 App ID 에 capability 가 필요하다.
+
+- [ ] (선택) Developer Portal 에서 `com.xa.toki` · `com.xa.toki.watchkitapp` 에
+      **Time Sensitive Notifications** capability 를 켜고,
+      두 엔타이틀먼트 파일에 `com.apple.developer.usernotifications.time-sensitive` = true 추가
+
+⚠️ **켜지 않아도 앱은 정상 동작한다** — 엔타이틀먼트가 없으면 시스템이 조용히 `.active` 수준으로
+내려서 보낼 뿐 예약이 실패하지는 않는다. 다만 **집중 모드(방해 금지)를 뚫지 못한다.**
+"놓치면 안 되는 타이머"가 이 기능의 전부이므로 켜는 쪽을 권한다.
+
+⚠️ 엔타이틀먼트를 코드에 먼저 넣지 말 것 — capability 가 꺼진 App ID 로는 서명이 실패해
+빌드가 통째로 막힌다. **포털에서 켠 뒤에** 엔타이틀먼트 파일을 고칠 것.
+
+참고: 알림 예약은 앱당 **64개**가 상한이고 예비 알림과 같은 주머니를 쓴다. 되풀이 개수는
+`EscalationSchedule.maxAlerts`(24)로 막아 두었다 — 상한을 올릴 때 이 숫자도 함께 볼 것.

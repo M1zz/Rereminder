@@ -21,6 +21,10 @@ Rereminder/
 │   ├── ViewModels/           # Watch 뷰모델
 │   └── RereminderWatchApp.swift    # Watch 앱 진입점
 │
+├── RereminderWatchWidget/    # 워치 스마트 스택 위젯 (워치 앱에 임베드)
+│   ├── RereminderWatchWidgetBundle.swift   # 위젯 묶음 진입점
+│   └── RereminderWatchTimerWidget.swift    # 타이머 카드 (4가지 accessory 가족)
+│
 ├── RereminderAlarm/                # 위젯 & Live Activity
 │   ├── RereminderAlarm.swift       # 위젯 구현
 │   └── RereminderAlarmLiveActivity.swift  # Live Activity 구현
@@ -199,6 +203,13 @@ extension TimerView {
 - **TimerEngine** (`Shared/Modules/TimerEngine.swift`): 타이머 로직의 핵심 엔진
 - **AppStateManager** (`Shared/Modules/AppStateManager.swift`): 앱 상태 관리
 - **WatchConnectivityManager** (`Shared/Modules/WatchConnectivityManager.swift`): iOS-Watch 통신
+- **EscalatingAlert** (`Shared/Modules/EscalatingAlert.swift`): "확인할 때까지 알린다" —
+  종료 알림 되풀이 + 다른 기기로 번지기 (아래 절 참고)
+- **RoundedRectRing** (`Shared/DesignSystem/RoundedRectRing.swift`): 화면 테두리를 따라가는
+  둥근 사각 링의 경로·좌표(순수 함수). **워치 실행 화면**이 쓴다
+- **WatchTimerState** (`Shared/Modules/WatchTimerState.swift`): 워치 앱 ↔ 워치 스마트 스택 위젯이
+  함께 보는 타이머 상태 한 벌. 두 프로세스가 같은 숫자를 말하게 하는 유일한 장치
+  (아래 "워치 스마트 스택" 참고)
 - **RereminderAlarmManager** (`Shared/Modules/RereminderAlarmManager.swift`): 알림 관리
 - **ReviewRequestManager** (`Shared/Modules/ReviewRequestManager.swift`): 앱스토어 리뷰 요청 관리
 
@@ -459,6 +470,159 @@ extension TimerView {
 - `Color(hex:)` 는 `SharedAccent.swift` 에 있다(예전엔 `ThemeManager` 안). ⚠️ 그 파일은 앱·위젯
   확장·**App Clip** 세 타겟에 모두 들어가야 한다 — 클립도 `ThemeManager` 를 쓰므로 빠지면
   클립 빌드가 깨진다.
+
+### 워치 스마트 스택 — 손목에서 앱을 열지 않고 보는 자리
+`RereminderWatchWidget/` (타겟 `RereminderWatchWidgetExtension`, 번들 ID
+`com.xa.toki.watchkitapp.widget`). **워치 앱 안에 임베드된다** — `RereminderWatch.app/PlugIns/`.
+
+⚠️ **아이폰 위젯(`RereminderAlarm`)을 아무리 고쳐도 손목에는 나타나지 않는다.** 스마트 스택에는
+워치 앱의 확장만 올라가므로 별도 타겟이 필요하다. 2.2.2 까지 그 타겟이 없어서 사용자가 이 앱을
+스마트 스택에 고정할 방법이 **아예 없었다**(실제로 들어온 피드백이다).
+
+- 카드에서 가장 큰 숫자는 **전체 남은 시간**, 그 아래 한 줄은 **다음 알림까지**다.
+  ⚠️ 그 한 줄을 빼지 말 것 — 빼는 순간 이 카드는 기본 시계 앱의 타이머 위젯과 구별되지 않는다.
+  구간이 둘 이상이면 오른쪽 위에 `2/4`(`TimerSections`)가 붙는다.
+- 가족은 넷 — `accessoryRectangular`(스마트 스택 카드) · `accessoryCircular` ·
+  `accessoryInline` · `accessoryCorner`. 뒤 셋은 **워치 페이스 컴플리케이션**이기도 하다.
+- **관련도**(`relevance()`, watchOS 11+): 타이머가 도는 동안(`RelevantContext.date(from:to:)`)만
+  스마트 스택이 이 카드를 위로 올린다. 없으면 사용자가 직접 고정하지 않는 한 좀처럼 보이지 않는다.
+- 탭하면 워치 앱이 열린다(`widgetURL` 없이 기본 동작). 타이머가 돌고 있으면 앱이 켜지면서
+  `restoreFromSavedState` 가 실행 화면을 세우므로, 따로 딥링크를 만들지 않았다.
+
+**상태를 넘기는 길** — `Shared/Modules/WatchTimerState.swift`:
+
+- 위젯은 앱과 **다른 프로세스**라 `UserDefaults.standard` 로는 서로를 못 본다(각자 제 컨테이너를
+  본다). 그래서 앱 그룹(`group.leeo.toki`)에 한 벌 적고 양쪽이 그것만 읽는다.
+  ⚠️ 워치 앱(`RereminderWatch/RereminderWatch.entitlements`)과 위젯
+  (`RereminderWatchWidget/RereminderWatchWidget.entitlements`) **양쪽에 같은 그룹**이 있어야
+  한다 — 하나만 빠지면 위젯이 늘 "활성 타이머 없음"만 보여준다.
+  (앱 그룹 컨테이너는 **기기마다 따로**다 — 아이폰과 이어지는 통로가 아니다. 아이폰↔워치는
+  `WatchConnectivityManager` 가 담당한다.)
+- ⚠️ **남은 시간을 저장하지 않는다.** 시작 시각만 적고 읽는 쪽에서 뺀다
+  (`WatchTimerState.remainingSeconds`). 그래서 앱이 꺼져 있어도 카운트다운이 정확하고,
+  초마다 저장하지 않아 배터리도 덜 쓴다.
+- ⚠️ **카운트다운을 타임라인 항목으로 세지 말 것.** `Text(timerInterval:)`·
+  `ProgressView(timerInterval:)` 로 **시스템이** 세게 하고, 항목은 표시가 실제로 바뀌는
+  순간(알림 경계·종료 = `refreshDates`)에만 세운다. 초마다 항목을 만들면 위젯 갱신 예산을
+  그날 안에 다 써 버려 정작 필요할 때 카드가 멈춘다.
+- ⚠️ **일시정지 중에는 `endDate` 가 nil 이다** — 멈춘 채로 흘러가는 카운트다운은 거짓말이다.
+  그때는 고정된 숫자(`TimeMapper.clockText`)를 그린다.
+- ⚠️ `WatchTimerStore.clear()` 는 **앱 그룹과 옛 저장소를 다 지운다.** 옛 저장소(2.2.2 이하가
+  쓰던 `UserDefaults.standard`)를 남겨 두면 `load()` 의 되돌아보기가 이미 끝난 타이머를 되살려
+  손목에 **유령 카드**가 선다. 그 되돌아보기는 타이머가 도는 중에 업데이트한 사용자의 복원이
+  끊기지 않게 하려고 있는 것이다.
+- 워치 앱의 `TimerViewModel` 은 저장·복원에 **`WatchTimerStore` 한 곳만** 쓴다. 여기서 따로
+  `UserDefaults.standard` 에 적으면 위젯은 다른 컨테이너를 보고 있어 그 변화를 영영 모른다.
+- 상태를 적으면 `reloadWidgets()` 가 함께 돈다 — 떼어 놓으면 "앱에서는 멈췄는데 위젯은 계속
+  도는" 상태가 남는다.
+- 테스트: `RereminderTests/WatchTimerStateTests.swift` (15개)
+
+**빌드 배선** (Xcode 없이 pbxproj 를 고칠 때 함께 볼 것):
+- 워치 앱 타겟에 `Embed Foundation Extensions`(dstSubfolderSpec 13) 페이즈와 위젯 타겟
+  의존성이 있어야 한다. 없으면 확장이 `.app` 에 들어가지 않아 **빌드는 되는데 위젯이 안 보인다.**
+- 위젯 타겟이 `Shared/` 에서 가져다 쓰는 파일은 pbxproj 의
+  `Exceptions for "Shared" folder in "RereminderWatchWidgetExtension" target` 에 적혀 있다
+  (`WatchTimerState`·`TimerSections`·`AngleCalculator`·`AppName`).
+  **파일을 옮기거나 이름을 바꾸면 이 목록도 함께 고칠 것.**
+- 문구를 쓰려면 `Localizable.xcstrings` 도 그 타겟에 있어야 한다(같은 방식의 예외로 걸려 있다).
+
+### 워치 cold launch 복원 — 되살린 타이머를 다시 걸지 않는다
+앱을 완전히 껐다 켜면 `SettingView.onAppear` 가 `TimerViewModel.restoreFromSavedState()` 로
+돌던 타이머를 되살려 `fullScreenCover` 로 띄운다. 그 화면은 새 타이머와 **같은 `TimerView`** 다.
+
+- ⚠️ **`start()` 는 이미 걸려 있으면 아무것도 하지 않는다**(`guard startDate == nil`).
+  이걸 부르는 곳은 `TimerView.onAppear` 하나인데, 거기에는 복원한 타이머도 실린다. 가드가
+  없으면 `startDate` 가 지금으로 덮여 **30분 타이머가 껐다 켤 때마다 30:00 부터 다시 시작**했다
+  (스마트 스택 위젯도 같은 값을 읽으므로 손목까지 되감겼다). `onAppear` 는 화면이 다시 그려질
+  때도 오므로 복원이 아니어도 다시 걸면 안 된다.
+- ⚠️ **끝난 타이머는 되풀이 알림이 아직 울릴 때만 되살린다**(`shouldRestore`). 그때 화면이
+  필요한 이유는 하나 — **확인 버튼을 주기 위해서**다. 이걸 빼면 알림은 울리는데 앱을 열면
+  설정 화면이 떠서 **끌 방법이 화면에 없다**(알림을 직접 탭하는 길만 남는다).
+  반대로 조건 없이 되살리면 세 시간 전에 끝난 타이머가 "00:00" 으로 떠오른다.
+  되살리지 않을 때는 치우고, 그러면 스마트 스택의 "완료" 카드도 함께 정리된다.
+  ⚠️ 판정은 `shouldRestore` **한 곳**에서만 한다 — `hasSavedState()` 도 그걸 본다.
+- ⚠️ **복원 화면은 `path` 로 닫히지 않는다.** `fullScreenCover` 로 뜨고 `path` 가
+  `.constant([])` 라, 정지를 눌러도 화면에 갇혀 있었다. 그래서 `TimerView` 가 닫는 법
+  (`onExit`)을 부르는 쪽에서 받는다 — 밀어 넣은 화면은 `path` 를 비우고, 복원 화면은
+  `restoredTimerVM = nil`.
+- 일시정지 상태로 껐다 켜면 멈춘 채로 복원되고, 재개할 때 `togglePause` 가 **앱이 꺼져 있던
+  시간까지** `accumulatedPause` 에 더한다.
+
+### 워치 실행 화면 — 둥근 사각 링 (원이 아니다)
+`RereminderWatch/Views/TimerView.swift` + `Shared/DesignSystem/RoundedRectRing.swift`.
+
+애플워치 화면은 **둥근 사각형**이라 원을 그리면 네 모서리가 통째로 남는다. 예전에는 지름 120pt
+원을 **고정으로** 그렸는데, 40mm(162×197pt)에서는 그 낭비 때문에 **아래 동작 버튼 두 개가
+화면 밖으로 잘려** 있었고 알림 라벨("10분")도 오른쪽 가장자리에 걸쳤다. 링을 테두리로 밀어내면
+가운데가 통째로 남아 상태·시간·버튼이 다 들어간다(40mm·46mm 스크린샷으로 확인).
+
+- ⚠️ **링 경로와 알림 종 위치는 `RoundedRectRing` 하나에서 나온다.** `Ring`(Shape)의
+  `trim(from:0,to:t)` 이 끝나는 자리가 곧 `point(atFraction: t)` 여야 한다 — 따로 계산하면
+  줄어드는 호의 끝과 종이 서로 다른 시각을 가리킨다. 둘 다 `segments(in:cornerRadius:)` 를 쓴다.
+- **12시에서 시작해 시계 방향**이다(원형 링과 같은 문법 — 사용자가 다시 배우지 않는다).
+- ⚠️ 둘레를 걸을 때 **길이 0인 조각(모서리 반지름 0)은 건너뛴다.** 안 그러면 t 와 상관없이
+  첫 모서리 좌표가 나와 **종이 전부 한 자리에 몰린다**(`RoundedRectRingTests` 가 잡는다).
+- ⚠️ **링은 안전 영역을 넘고, 글자는 넘지 않는다.** 둘 다 가장자리로 내보내면 상태 줄이
+  시스템 시계와 겹쳐 읽을 수 없다. 가운데 묶음은 `Spacer` 로 늘리지 **않는다** — 늘리면
+  상태 줄이 화면 맨 위로 붙어 같은 문제가 난다.
+- 알림 종은 **점만** 찍는다. 테두리 위에는 라벨 자리가 없고, 몇 분 남았는지는 가운데 큰 숫자가
+  말한다(그 숫자 = 이 구간 남은 시간 = **다음 알림까지**).
+- 링은 iPhone 과 같은 **구간 색**으로 나뉜다. 구간 번호는 반드시
+  `TimerSections.ringSectionIndex` 로 센다(자리 번호로 세면 진행 중에 색이 한 칸씩 밀린다).
+- 끝나면(`isFinished`) 화면이 한 가지만 말한다 — 🔔 + `00:00` + **확인 버튼 하나**.
+  ⚠️ 시간 표시는 `max(0,…)` 로 자른다. 음수를 그대로 넣으면 `formattedTimeString` 이
+  분·초를 따로 나눠 **"-1:-5"** 같은 값을 낸다.
+- ⚠️ **`SectionInnerRing`(원형 이중 링)은 이제 아무도 쓰지 않는다.** 워치가 마지막 사용처였고
+  둥근 사각 링으로 옮기며 빠졌다(모양이 섞이면 어지럽고, 40mm 에서는 안쪽 링을 넣을 자리도 없다).
+  파일은 남겨 두었으니 되살릴 생각이 없으면 지워도 된다.
+- 진행 방향 화살표(">>")는 걷어냈다 — 사각 경로에서는 접선 방향 계산이 필요한데, 작은 화면에서
+  얻는 것보다 어수선함이 크다.
+
+### 확인할 때까지 알림 — 놓친 알림은 알림이 아니다
+`Shared/Modules/EscalatingAlert.swift` + 설정 > 알림 > **타이머가 끝나면**.
+
+이 앱을 쓰는 이유는 **놓치면 안 되는 시간**인데 진동 한 번은(특히 손목에서) 놓치기 쉽다.
+그래서 종료 알림을 사용자가 **정지·다시 알림**을 누를 때까지 되풀이한다.
+
+- ⚠️ **되풀이는 알림 하나를 반복시키는 게 아니라 여러 개를 미리 깔아 두는 것이다.**
+  `UNTimeIntervalNotificationTrigger(repeats:)` 는 60초 미만을 허용하지 않고, 무엇보다
+  **앱이 꺼져 있으면 반복을 멈출 방법이 없다.** 그래서 종료 시각 기준으로 필요한 만큼 미리
+  깔고, 확인하는 순간 남은 것을 전부 걷어낸다.
+- ⚠️ **알림 예약은 앱당 64개가 상한이고 예비 알림과 같은 주머니를 쓴다.** 넘치면 iOS 가 조용히
+  앞의 것을 버려 **정작 중요한 종료 알림이 사라진다.** 그래서 `EscalationSchedule.maxAlerts`(24)
+  로 뚜껑을 씌웠다 — 설정에 더 긴 간격·시간을 열어 줄 때 이 숫자를 함께 볼 것.
+- ⚠️ **기본값은 꺼짐이다.** 이 앱은 잔소리가 되는 순간 지워진다 — 켠 사람에게만 간다.
+- **기기 사이로 번지기**: 손목이 먼저 울리고(워치 = 언제나 `.primary`), 30초
+  (`EscalationSchedule.crossDeviceDelay`) 동안 확인이 없으면 iPhone 이 합류한다.
+  iPhone 이 `.secondary` 가 되는 조건은 **워치가 돌리는 타이머를 받아 왔을 때**
+  (`TimerEngine.applyRemoteRunning`)이고, 직접 시작한 타이머는 `.primary` 다.
+  ⚠️ 둘 다 primary 로 두면 동시에 울려 "번진다"는 뜻이 사라진다.
+- ⚠️ **반대 방향(iPhone → 워치)은 성립하지 않는다.** 워치 앱은 폰이 시작한 타이머를 받아
+  처리하지 않고, 무엇보다 **꺼져 있는 워치 앱은 알림을 미리 깔 수 없다.** 대신 iOS 알림은
+  잠긴 아이폰에서 페어링된 워치로 시스템이 전달하므로 손목은 그 경로로 울린다.
+- **어느 기기에서 눌러도 전부 멈춘다** — `EscalatingAlert.acknowledgeEverywhere()` 하나로
+  들어온다(알림 버튼·알림 탭·앱 안의 정지). 다른 기기에는 `WatchConnectivityManager` 가
+  **두 경로**로 보낸다: `sendMessage`(상대 앱이 떠 있을 때 즉시) + `transferUserInfo`
+  (꺼져 있어도 큐에 쌓였다가 전달). ⚠️ 후자만 쓰면 즉시성이 없고, 전자만 쓰면 주머니 속 폰에는
+  영영 닿지 않는다.
+- ⚠️ **정지든 다시 알림이든 그냥 탭이든 전부 "확인"으로 본다.** 알림을 탭해 앱을 열었는데
+  계속 울리면 그건 기능이 아니라 고장으로 읽힌다.
+- **다시 알림**(5분)은 **이 기기에서만** 다시 부른다 — 다른 기기엔 "멈춰"가 간다.
+- `AlertNotificationDelegate`(`Rereminder/Modules/`): ⚠️ **이게 없으면 iOS 는 알림 버튼을
+  눌러도 앱에 아무것도 전달하지 않는다.** 2.2.2 까지 이 앱에는 알림 델리게이트가 아예 없었다.
+  앞에 있을 때는 **종료·되풀이 알림만** 배너로 띄운다(예비 알림까지 띄우면 타이머를 보는 내내
+  배너가 쏟아지는데 그 숫자는 이미 화면에 있다).
+- 워치는 앞에 있을 때 `willPresent` 가 매번 햅틱을 울리므로 **되풀이 햅틱이 그냥 따라온다** —
+  따로 반복 타이머를 두지 않는다.
+- ⚠️ 종료·예비 알림 문구는 iPhone·워치가 **같은 카탈로그 키**를 쓴다. 예전에는 워치 쪽만
+  영어 리터럴이라, 되풀이를 켜면 첫 알림은 영어로 뜨고 두 번째부터 한국어로 바뀌었다.
+- `interruptionLevel = .timeSensitive` — 엔타이틀먼트가 없으면 조용히 `.active` 로 내려앉을 뿐
+  예약이 실패하지는 않는다. 집중 모드를 뚫으려면 포털에서 켤 것(`docs/OPERATIONS_CHECKLIST.md` 6번).
+  ⚠️ **포털에서 켜기 전에 엔타이틀먼트 파일을 먼저 고치지 말 것** — 서명이 실패해 빌드가 막힌다.
+- 설정 키(`alertRepeatInterval`·`alertRepeatDuration`·`alertEscalateAcrossDevices`)는
+  iPhone 에서 고르고 `sendEscalationPolicy` 로 워치에 넘어간다. **양쪽이 같은 키를 읽는다.**
+- 테스트: `RereminderTests/EscalatingAlertTests.swift` (12개),
+  `RereminderTests/RoundedRectRingTests.swift` (9개)
 
 ### 알림 배지 (종을 옮길 때 뜨는 툴팁)
 종 노브를 끌면 그 지점을 **두 가지로** 읽어줍니다. 발표자는 "몇 분 남았나"와
@@ -839,6 +1003,37 @@ extension TimerView {
 - [ ] Watch 독립 실행 확인
 - [ ] 컴플리케이션 업데이트 확인
 
+### 확인할 때까지 알림
+- [ ] 설정 > 알림 > 타이머가 끝나면에서 반복을 켜고, 타이머가 끝난 뒤 계속 울리는지
+- [ ] 알림을 길게 눌러 **정지**를 누르면 그 뒤로 안 울리는지
+- [ ] **다시 알림**을 누르면 5분 뒤에 다시 오는지
+- [ ] 알림을 그냥 탭해 앱을 열어도 멈추는지 (열었는데 계속 울리면 고장으로 읽힌다)
+- [ ] 되풀이가 우는 동안 **앱을 직접 열면** 확인(✓) 화면이 뜨는지
+- [ ] 워치에서 타이머를 걸고 확인하지 않으면 30초 뒤 iPhone 도 울리는지
+- [ ] 한쪽에서 정지하면 **다른 기기도** 멈추는지 (핵심 약속)
+- [ ] 반복을 끈 상태(기본값)에서는 예전처럼 한 번만 울리는지
+
+### 워치 실행 화면 (둥근 사각 링)
+- [ ] 40mm 에서 아래 버튼이 잘리지 않는지
+- [ ] 상태 줄이 시스템 시계와 겹치지 않는지
+- [ ] 알림 종(주황 점)이 링 위 제자리에 찍히는지 (호 끝과 어긋나면 안 된다)
+- [ ] 끝나면 00:00 + 확인 버튼 하나로 바뀌는지 (음수 시간이 뜨면 안 된다)
+
+### 워치 cold launch 복원
+- [ ] 타이머를 걸고 앱을 완전히 종료 → 다시 열면 **지나간 만큼 줄어든 상태로** 이어지는지
+      (30:00 으로 되감기면 `start()` 가드가 빠진 것)
+- [ ] 그 화면에서 정지(✕)를 누르면 화면이 닫히고 설정으로 돌아오는지
+- [ ] 일시정지한 채로 종료 → 다시 열면 멈춘 그대로이고, 재개하면 꺼져 있던 시간이 빠지는지
+- [ ] 타이머가 끝난 뒤 열면 설정 화면으로 돌아오는지(음수 시간이 뜨면 안 된다)
+
+### 워치 스마트 스택 위젯
+- [ ] 스마트 스택 편집(화면 아래에서 위로 쓸어올림 → 길게 누름 → +)에 두번알림이 뜨는지
+- [ ] 실행 중 카드의 남은 시간·"다음" 알림이 **앱 화면과 같은 값**인지
+- [ ] 일시정지하면 카드 숫자가 멈추는지 (흘러가면 `endDate` 가 nil 이 아니라는 뜻)
+- [ ] 앱을 완전히 종료해도 카드가 계속 정확한지 (시작 시각으로 세므로 정확해야 한다)
+- [ ] 타이머를 정지하면 카드가 "활성 타이머 없음"으로 돌아오는지 (유령 카드 확인)
+- [ ] 워치 페이스 컴플리케이션(원형·한 줄·모서리)에도 붙는지
+
 ### 위젯
 - [ ] 홈 화면 위젯 표시 확인
 - [ ] 잠금 화면 위젯 표시 확인
@@ -925,6 +1120,33 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
 ```
 
 ## 버전 히스토리
+
+### v2.2.2 (2026-09-01)
+⚠️ 번호가 2.3.0 보다 작다 — `Config/Version.xcconfig` 의 `MARKETING_VERSION` 을 그렇게 정했다.
+v2.3.0 은 노트(`docs/release-notes-2.3.0.md`)만 있고 **태그가 없다**(마지막 태그는 `v2.2.1`).
+즉 2.3.0 로 적힌 작업도 아직 출시되지 않았고 이 릴리즈에 함께 들어간다 — 스토어에 올리기 전에
+두 노트를 어떻게 낼지 정할 것.
+
+- **워치 스마트 스택 위젯**(`RereminderWatchWidget/`, 새 타겟 `RereminderWatchWidgetExtension`):
+  손목에서 앱을 열지 않고 남은 시간·다음 알림을 본다. 워치 페이스 컴플리케이션 네 가족에도 붙는다.
+  ⚠️ 아이폰 위젯을 아무리 고쳐도 손목에는 안 나온다 — 스마트 스택에는 워치 앱의 확장만 올라간다
+  (그래서 지금까지 아예 목록에 없었다). 상태는 앱 그룹으로 넘긴다(`WatchTimerState`).
+  **배포 전 앱 그룹 서명 준비 필요** — `docs/OPERATIONS_CHECKLIST.md` 5번
+- **워치 실행 화면을 둥근 사각 링으로**(`RoundedRectRing`): 화면이 둥근 사각형인데 원을 그려
+  네 모서리가 남았고, 40mm 에서는 **아래 버튼이 화면 밖으로 잘려** 있었다. 링을 테두리로
+  밀어내고 가운데를 통째로 쓴다. `SectionInnerRing`(원형 이중 링)은 이제 쓰이지 않는다
+- **확인할 때까지 알림**(`EscalatingAlert` + 설정 > 알림 > 타이머가 끝나면): 종료 알림을
+  15/30/60초 간격으로 1·2·5분 동안 되풀이하고, 정지·다시 알림을 누르면 멈춘다.
+  **기기 사이로 번지기** — 워치가 먼저, 30초 뒤 아이폰이 합류, **어디서 눌러도 전부 멈춘다**.
+  기본값은 꺼짐. ⚠️ 알림 예약 64개 상한 때문에 `maxAlerts`(24) 로 뚜껑을 씌웠다
+- **`AlertNotificationDelegate` 신설** — ⚠️ 2.2.2 까지 이 앱에는 iOS 알림 델리게이트가 **아예
+  없었다.** 그래서 알림 버튼을 눌러도 앱에 아무것도 전달되지 않았다
+- **버그 수정 셋**: ① 워치 cold launch 복원이 `start()` 로 `startDate` 를 덮어써 **타이머가
+  처음부터 다시 시작**하던 문제(+ 복원 화면에서 정지를 눌러도 닫히지 않던 문제)
+  ② 워치의 종료·예비 알림 문구가 영어 리터럴이라 되풀이를 켜면 첫 알림만 영어로 뜨던 문제
+  ③ `"Time is up"` 의 한국어가 **"총 시간"** 으로 오역돼 있던 것(iOS `TimerAlertView` 도 같이 틀렸다)
+- 테스트 +21개(`RoundedRectRingTests` 9 · `EscalatingAlertTests` 12 · `WatchTimerStateTests` 15
+  — 스마트 스택 몫 포함), 릴리즈 노트: `docs/release-notes-2.2.2.md` (ko/en/ja)
 
 ### v2.3.0 (2026-08-30)
 - **파는 축을 "알림 개수"에서 "세션 운영"으로 옮겼다.** 예비 알림은 **무제한 무료**가 됐고
@@ -1131,6 +1353,6 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
 
 ---
 
-**최종 업데이트**: 2026-08-30
-**문서 버전**: 2.3.0
+**최종 업데이트**: 2026-09-01
+**문서 버전**: 2.2.2
 **작성자**: Claude AI Assistant

@@ -14,6 +14,7 @@
 		58AA3EB02ECF5509007D4BBD /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AA3EAF2ECF5509007D4BBD /* WidgetKit.framework */; };
 		58AA3EB22ECF5509007D4BBD /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AA3EB12ECF5509007D4BBD /* SwiftUI.framework */; };
 		58AA3EC32ECF550B007D4BBD /* RereminderAlarmExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 58AA3EAD2ECF5509007D4BBD /* RereminderAlarmExtension.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		9D00000E2F4000000000000E /* RereminderWatchWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 9D0000012F40000000000001 /* RereminderWatchWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AA10AB0D2F20C0000000000D /* RereminderMenuBar.bundle in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = AA10AB012F20C00000000001 /* RereminderMenuBar.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -46,6 +47,13 @@
 			remoteGlobalIDString = 6ED914668010A8B195B84C58;
 			remoteInfo = RereminderClip;
 		};
+		9D00000F2F4000000000000F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 260414C32E1B9FA200CBA29B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9D0000062F40000000000006;
+			remoteInfo = RereminderWatchWidgetExtension;
+		};
 		AA10AB0A2F20C0000000000A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 260414C32E1B9FA200CBA29B /* Project object */;
@@ -74,6 +82,17 @@
 			dstSubfolderSpec = 13;
 			files = (
 				58AA3EC32ECF550B007D4BBD /* RereminderAlarmExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9D00000D2F4000000000000D /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				9D00000E2F4000000000000E /* RereminderWatchWidgetExtension.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -111,6 +130,7 @@
 		58AA3EB12ECF5509007D4BBD /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		58AA3ECA2ECF5541007D4BBD /* RereminderAlarmExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RereminderAlarmExtension.entitlements; sourceTree = "<group>"; };
 		7E57AB012F30000000000001 /* RereminderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RereminderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9D0000012F40000000000001 /* RereminderWatchWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = RereminderWatchWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A78942BCAED1D1FFB2FDB397 /* RereminderClip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RereminderClip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA10AB012F20C00000000001 /* RereminderMenuBar.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RereminderMenuBar.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB6620CC6445D6B84083B6BC /* Version.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Version.xcconfig; path = Config/Version.xcconfig; sourceTree = "<group>"; };
@@ -173,12 +193,15 @@
 				DesignSystem/DSOpacity.swift,
 				DesignSystem/DSRadius.swift,
 				DesignSystem/DSSpacing.swift,
+				DesignSystem/RoundedRectRing.swift,
 				DesignSystem/SectionInnerRing.swift,
 				DesignSystem/SectionPalette.swift,
 				Modules/AppName.swift,
+				Modules/EscalatingAlert.swift,
 				Modules/ring.swift,
 				Modules/TimerSections.swift,
 				Modules/WatchConnectivityManager.swift,
+				Modules/WatchTimerState.swift,
 			);
 			target = 2B302B092E4375150089A14A /* RereminderWatch */;
 		};
@@ -195,6 +218,30 @@
 				Localizable.xcstrings,
 			);
 			target = 58AA3EAC2ECF5509007D4BBD /* RereminderAlarmExtension */;
+		};
+		9D0000032F40000000000003 /* Exceptions for "RereminderWatchWidget" folder in "RereminderWatchWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 9D0000062F40000000000006 /* RereminderWatchWidgetExtension */;
+		};
+		9D0000042F40000000000004 /* Exceptions for "Shared" folder in "RereminderWatchWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Modules/AngleCalculator.swift,
+				Modules/AppName.swift,
+				Modules/TimerSections.swift,
+				Modules/WatchTimerState.swift,
+			);
+			target = 9D0000062F40000000000006 /* RereminderWatchWidgetExtension */;
+		};
+		9D0000052F40000000000005 /* Exceptions for "Rereminder" folder in "RereminderWatchWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Localizable.xcstrings,
+			);
+			target = 9D0000062F40000000000006 /* RereminderWatchWidgetExtension */;
 		};
 		A1A1A1A12F20B473004ABF40 /* Exceptions for "Shared" folder in "RereminderAlarmExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
@@ -223,6 +270,7 @@
 				9CA0A72F2F20B473004ABF40 /* Exceptions for "Rereminder" folder in "RereminderWatch" target */,
 				9CA0A7302F20B473004ABF40 /* Exceptions for "Rereminder" folder in "RereminderAlarmExtension" target */,
 				883ED4870A7A84F47F564D59 /* Exceptions for "Rereminder" folder in "RereminderClip" target */,
+				9D0000052F40000000000005 /* Exceptions for "Rereminder" folder in "RereminderWatchWidgetExtension" target */,
 			);
 			path = Rereminder;
 			sourceTree = "<group>";
@@ -233,6 +281,7 @@
 				9C1569E52ED04576004A4BB4 /* Exceptions for "Shared" folder in "RereminderWatch" target */,
 				A1A1A1A12F20B473004ABF40 /* Exceptions for "Shared" folder in "RereminderAlarmExtension" target */,
 				674325E3A9FF16648D7C6C22 /* Exceptions for "Shared" folder in "RereminderClip" target */,
+				9D0000042F40000000000004 /* Exceptions for "Shared" folder in "RereminderWatchWidgetExtension" target */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -261,6 +310,14 @@
 		7E57AB022F30000000000002 /* RereminderTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = RereminderTests;
+			sourceTree = "<group>";
+		};
+		9D0000022F40000000000002 /* RereminderWatchWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				9D0000032F40000000000003 /* Exceptions for "RereminderWatchWidget" folder in "RereminderWatchWidgetExtension" target */,
+			);
+			path = RereminderWatchWidget;
 			sourceTree = "<group>";
 		};
 		AA10AB022F20C00000000002 /* RereminderMenuBar */ = {
@@ -297,6 +354,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		7E57AB0A2F3000000000000A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9D0000082F40000000000008 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -341,6 +405,7 @@
 				260414CC2E1B9FA200CBA29B /* Products */,
 				EB6620CC6445D6B84083B6BC /* Version.xcconfig */,
 				717C82F4F68208C4105E4595 /* RereminderClip */,
+				9D0000022F40000000000002 /* RereminderWatchWidget */,
 			);
 			sourceTree = "<group>";
 		};
@@ -353,6 +418,7 @@
 				AA10AB012F20C00000000001 /* RereminderMenuBar.bundle */,
 				7E57AB012F30000000000001 /* RereminderTests.xctest */,
 				A78942BCAED1D1FFB2FDB397 /* RereminderClip.app */,
+				9D0000012F40000000000001 /* RereminderWatchWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -410,10 +476,12 @@
 				2B302B062E4375150089A14A /* Sources */,
 				2B302B072E4375150089A14A /* Frameworks */,
 				2B302B082E4375150089A14A /* Resources */,
+				9D00000D2F4000000000000D /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				9D0000102F40000000000010 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				2B302B0B2E4375150089A14A /* RereminderWatch */,
@@ -483,6 +551,26 @@
 			productName = RereminderTests;
 			productReference = 7E57AB012F30000000000001 /* RereminderTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		9D0000062F40000000000006 /* RereminderWatchWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9D00000A2F4000000000000A /* Build configuration list for PBXNativeTarget "RereminderWatchWidgetExtension" */;
+			buildPhases = (
+				9D0000072F40000000000007 /* Sources */,
+				9D0000082F40000000000008 /* Frameworks */,
+				9D0000092F40000000000009 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				9D0000022F40000000000002 /* RereminderWatchWidget */,
+			);
+			name = RereminderWatchWidgetExtension;
+			productName = RereminderWatchWidgetExtension;
+			productReference = 9D0000012F40000000000001 /* RereminderWatchWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		AA10AB032F20C00000000003 /* RereminderMenuBar */ = {
 			isa = PBXNativeTarget;
@@ -554,6 +642,7 @@
 				AA10AB032F20C00000000003 /* RereminderMenuBar */,
 				7E57AB032F30000000000003 /* RereminderTests */,
 				6ED914668010A8B195B84C58 /* RereminderClip */,
+				9D0000062F40000000000006 /* RereminderWatchWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -581,6 +670,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		7E57AB0B2F3000000000000B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9D0000092F40000000000009 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -639,6 +735,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9D0000072F40000000000007 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AA10AB042F20C00000000004 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -671,6 +774,11 @@
 			isa = PBXTargetDependency;
 			target = 260414CA2E1B9FA200CBA29B /* Rereminder */;
 			targetProxy = 7E57AB052F30000000000005 /* PBXContainerItemProxy */;
+		};
+		9D0000102F40000000000010 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9D0000062F40000000000006 /* RereminderWatchWidgetExtension */;
+			targetProxy = 9D00000F2F4000000000000F /* PBXContainerItemProxy */;
 		};
 		AA10AB0B2F20C0000000000B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -891,6 +999,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = RereminderWatch/RereminderWatch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QGAQ3AY3R3;
 				ENABLE_PREVIEWS = YES;
@@ -919,6 +1028,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = RereminderWatch/RereminderWatch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QGAQ3AY3R3;
 				ENABLE_PREVIEWS = YES;
@@ -1069,6 +1179,62 @@
 			};
 			name = Release;
 		};
+		9D00000B2F4000000000000B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = RereminderWatchWidget/RereminderWatchWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = QGAQ3AY3R3;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RereminderWatchWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = RereminderWatchWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.watchkitapp.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.6;
+			};
+			name = Debug;
+		};
+		9D00000C2F4000000000000C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = RereminderWatchWidget/RereminderWatchWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = QGAQ3AY3R3;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = RereminderWatchWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = RereminderWatchWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.watchkitapp.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 11.6;
+			};
+			name = Release;
+		};
 		AA10AB072F20C00000000007 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1190,6 +1356,15 @@
 			buildConfigurations = (
 				7E57AB0C2F3000000000000C /* Debug */,
 				7E57AB0D2F3000000000000D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9D00000A2F4000000000000A /* Build configuration list for PBXNativeTarget "RereminderWatchWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9D00000B2F4000000000000B /* Debug */,
+				9D00000C2F4000000000000C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -869,6 +869,22 @@
         }
       }
     },
+    "Alert once": {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1回だけ通知"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "한 번만 알림"
+          }
+        }
+      }
+    },
     "All Pro features — Session Mode, section scripts, unlimited templates, overtime tracking and history — are yours free forever. Nothing you had has been taken away.": {
       "localizations": {
         "ja": {
@@ -913,6 +929,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "허용됨"
+          }
+        }
+      }
+    },
+    "Also alert my other devices": {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "他のデバイスでも通知"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다른 기기에서도 알리기"
           }
         }
       }
@@ -1674,6 +1706,38 @@
         }
       }
     },
+    "Every 15 seconds": {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "15秒ごと"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "15초마다"
+          }
+        }
+      }
+    },
+    "Every 30 seconds": {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "30秒ごと"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "30초마다"
+          }
+        }
+      }
+    },
     "Every future Pro feature is included for you.": {
       "localizations": {
         "ja": {
@@ -1702,6 +1766,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "앞으로 생기는 Pro 기능도 전부 포함"
+          }
+        }
+      }
+    },
+    "Every minute": {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1分ごと"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1분마다"
           }
         }
       }
@@ -1783,6 +1863,54 @@
           "stringUnit": {
             "state": "translated",
             "value": "알림을 켜려면 다음 단계를 따라주세요:\n\n1. '설정으로 이동' 버튼을 탭하세요\n2. 설정에서 '%@' 앱을 찾으세요\n3. '알림' 메뉴를 선택하세요\n4. '알림 허용'을 켜세요\n\n💡 권장 설정:\n• 잠금 화면에 표시\n• 알림 센터에 표시\n• 배너로 표시\n\n이렇게 하면 타이머 알림을 놓치지 않아요!"
+          }
+        }
+      }
+    },
+    "For 1 minute": {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1分間"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1분 동안"
+          }
+        }
+      }
+    },
+    "For 2 minutes": {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2分間"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2분 동안"
+          }
+        }
+      }
+    },
+    "For 5 minutes": {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5分間"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "5분 동안"
           }
         }
       }
@@ -2077,6 +2205,22 @@
         }
       }
     },
+    "If your Apple Watch alerts first and you don't respond, this iPhone joins in after 30 seconds. Stopping on either device stops both.": {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watchが先に通知し、反応がなければ30秒後にこのiPhoneも通知します。どちらのデバイスで停止しても両方止まります。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch가 먼저 알리고 반응이 없으면 30초 뒤 이 iPhone도 함께 알려요. 어느 기기에서 정지해도 둘 다 멈춰요."
+          }
+        }
+      }
+    },
     "In Progress": {
       "localizations": {
         "ja": {
@@ -2158,6 +2302,22 @@
         }
       }
     },
+    "Keep repeating": {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "くり返す時間"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "반복 시간"
+          }
+        }
+      }
+    },
     "Keep the cool-down from getting squeezed.": {
       "localizations": {
         "ja": {
@@ -2186,6 +2346,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "이 설정 저장할까요?"
+          }
+        }
+      }
+    },
+    "Keeps alerting until you tap Stop or Snooze on the notification.": {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知で「停止」または「スヌーズ」を押すまで通知し続けます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "알림에서 정지나 다시 알림을 누를 때까지 계속 알려요."
           }
         }
       }
@@ -3880,6 +4056,22 @@
         }
       }
     },
+    "Repeat the end alert": {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "終了通知をくり返す"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "종료 알림 반복"
+          }
+        }
+      }
+    },
     "Replay": {
       "localizations": {
         "ja": {
@@ -4728,6 +4920,22 @@
         }
       }
     },
+    "Snooze": {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スヌーズ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다시 알림"
+          }
+        }
+      }
+    },
     "Sound": {
       "localizations": {
         "ja": {
@@ -5049,6 +5257,23 @@
         }
       }
     },
+    "Tap to start": {
+      "comment": "Watch Smart Stack widget, idle state",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "タップして開始"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "탭해서 시작"
+          }
+        }
+      }
+    },
     "Tell us what you need or what felt off — the developer reads every message.": {
       "comment": "Feedback nudge message",
       "localizations": {
@@ -5350,7 +5575,7 @@
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "총 시간"
+            "value": "시간이 다 됐어요"
           }
         }
       }
@@ -6345,6 +6570,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "이렇게 바뀝니다"
+          }
+        }
+      }
+    },
+    "When the timer ends": {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマー終了時"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머가 끝나면"
           }
         }
       }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  워치 앱이 적어 둔 타이머 상태를 읽는 통로. 앱 그룹 컨테이너는 **기기마다 따로**라
+	  이 그룹은 워치 앱 ↔ 워치 위젯 사이에서만 쓰인다(아이폰과 이어지지 않는다).
+	  ⚠️ 워치 앱(RereminderWatch.entitlements)과 **같은 이름**이어야 한다 — 다르면 위젯이
+	     늘 "활성 타이머 없음"만 보여준다.
+	-->
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.leeo.toki</string>
+	</array>
+</dict>
+</plist>

@@ -141,6 +141,8 @@ struct NoticeSettingView: View {
                 }
             }
 
+            PersistentAlertSection()
+
             // 권한 거부 경고 배너
             if appStateManager.notificationAuthStatus == .denied {
                 Section {

@@ -73,6 +73,15 @@ final class TimerEngine {
     // MARK: - Notification IDs
     private static let notificationPrefix = "rereminder.timer."
 
+    #if !APPCLIP
+    /// 되풀이 알림 사슬에서 이 기기가 몇 번째인가.
+    ///
+    /// 직접 시작한 타이머면 `.primary`(종료 순간 바로 울린다), 워치가 돌리는 것을 받아 온
+    /// 것이면 `.secondary`(손목이 먼저 울리고, 확인이 없을 때만 30초 뒤 합류한다).
+    /// ⚠️ 둘 다 primary 로 두면 폰과 워치가 **동시에** 울려 "번지는" 뜻이 사라진다.
+    private var escalationRole: EscalationRole = .primary
+    #endif
+
     // MARK: - Public API
 
     func configure(mainSeconds: Int, prealertOffsetsSec: [Int], name: String = "") {
@@ -94,6 +103,10 @@ final class TimerEngine {
         state = .running
 
         onTick?(cfg.mainDuration)
+
+        #if !APPCLIP
+        escalationRole = .primary
+        #endif
 
         // 백그라운드 알림 스케줄
         scheduleNotifications(duration: cfg.mainDuration, offsets: cfg.prealertOffsetsSec)
@@ -162,6 +175,8 @@ final class TimerEngine {
 
         if wasActive {
             #if !APPCLIP
+            // 정지는 "확인했다"이기도 하다 — 워치에서 뒤늦게 합류할 알림까지 함께 멈춘다.
+            EscalatingAlert.acknowledgeEverywhere()
             AnalyticsManager.log(.timerCancelled(remainingSeconds: remainingForCancel))
             #endif
         }
@@ -273,6 +288,11 @@ final class TimerEngine {
             DispatchQueue.main.async { self.onFinish?() }
             return
         }
+
+        #if !APPCLIP
+        // 워치가 돌리는 타이머다 — 손목이 먼저 울리고 이 기기는 확인이 없을 때만 합류한다.
+        escalationRole = .secondary
+        #endif
 
         // 이 기기에서도 알림이 울리도록 남은 시점 기준으로 스케줄
         let futureOffsets = offsets.filter { $0 < remaining }
@@ -433,10 +453,23 @@ final class TimerEngine {
             let id = "\(Self.notificationPrefix)finish"
             let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
             center.add(request)
+
+            #if !APPCLIP
+            // 확인할 때까지 다시 부른다. 켠 사람에게만 간다(기본값은 꺼짐).
+            EscalatingAlert.schedule(policy: EscalationPolicy.current(),
+                                     role: escalationRole,
+                                     finishFireAfter: finishFireAfter)
+            #endif
         }
     }
 
     private func cancelScheduledNotifications() {
+        #if !APPCLIP
+        // ⚠️ 되풀이 알림은 접두어가 달라 아래 필터에 걸리지 않는다 — 따로 걷지 않으면
+        //    타이머를 정지해도 종료 시각에 알림이 계속 울린다.
+        EscalatingAlert.cancel()
+        #endif
+
         let center = UNUserNotificationCenter.current()
         center.getPendingNotificationRequests { requests in
             let ids = requests

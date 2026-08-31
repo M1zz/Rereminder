@@ -4,6 +4,7 @@
 included:
   - Rereminder
   - RereminderWatch
+  - RereminderWatchWidget
   - RereminderAlarm
   - RereminderMenuBar
   - RereminderTests

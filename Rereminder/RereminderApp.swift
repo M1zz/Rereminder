@@ -31,6 +31,9 @@ struct RereminderApp: App {
         // 기존 한국어 ringMode 값 마이그레이션
         RingMode.migrateIfNeeded()
 
+        // 알림 버튼(정지·다시 알림)을 받는 델리게이트 — 되풀이 알림을 끌 수 있는 유일한 경로다
+        AlertNotificationDelegate.install()
+
         // WatchConnectivity 초기화
         _ = WatchConnectivityManager.shared
 

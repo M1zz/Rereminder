@@ -55,7 +55,11 @@ struct SettingView: View {
             }
             .fullScreenCover(item: $restoredTimerVM) { vm in
                 NavigationStack {
-                    TimerView(timerViewModel: vm, path: .constant([]))
+                    // 여기 뜨는 타이머는 이미 돌고 있던 것이다 — `path` 로는 닫히지 않으므로
+                    // 닫는 법을 직접 넘긴다.
+                    TimerView(timerViewModel: vm,
+                              path: .constant([]),
+                              onExit: { restoredTimerVM = nil })
                 }
             }
             .navigationDestination(for: NavigationTarget.self) { target in

@@ -18,6 +18,8 @@ enum DSOpacity {
     static let disabled: Double = 0.4
     /// 0.5 — 트랙/가이드 라인
     static let track: Double = 0.5
+    /// 0.6 — 눌린 버튼
+    static let pressed: Double = 0.6
     /// 0.9 — 강한 오버레이 배경
     static let strong: Double = 0.9
 }

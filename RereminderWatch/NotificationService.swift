@@ -110,6 +110,18 @@ struct NotificationService {
 }
 
 class NotificationDelegate: NSObject, ObservableObject, UNUserNotificationCenterDelegate {
+
+    /// 알림의 정지·다시 알림 버튼, 그리고 알림 자체를 탭한 경우.
+    /// ⚠️ 이게 없으면 되풀이 알림을 **멈출 방법이 앱을 열어 정지를 누르는 것뿐**이 된다.
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        EscalatingAlert.handle(response: response)
+        completionHandler()
+    }
+
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification,

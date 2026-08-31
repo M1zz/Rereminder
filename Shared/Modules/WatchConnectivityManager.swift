@@ -58,6 +58,8 @@ class WatchConnectivityManager: NSObject, ObservableObject {
     var onTimerPause: (() -> Void)?
     var onTimerResume: (() -> Void)?
     var onTimerStop: (() -> Void)?
+    /// 다른 기기에서 종료 알림을 확인했다 — 이 기기의 되풀이도 멈춰야 한다.
+    var onAlertAcknowledged: (() -> Void)?
 
     private override init() {
         super.init()
@@ -136,6 +138,48 @@ class WatchConnectivityManager: NSObject, ObservableObject {
 
     func sendTimerStop() {
         send(["action": "stop"])
+    }
+
+    /// **종료 알림을 확인했다**를 다른 기기에 알린다 — 거기서도 되풀이를 멈추라는 뜻.
+    ///
+    /// ⚠️ 두 경로로 보낸다. `sendMessage` 는 상대 앱이 지금 떠 있을 때만 닿고,
+    ///    `transferUserInfo` 는 꺼져 있어도 **큐에 쌓였다가** 다음에 깨어날 때 전달된다.
+    ///    후자만 쓰면 즉시성이 없고, 전자만 쓰면 주머니 속 폰에는 영영 닿지 않는다.
+    ///    양쪽 다 받는 쪽에서 여러 번 와도 문제없다(멈추는 일은 여러 번 해도 같다).
+    func sendAlertAcknowledged() {
+        guard WCSession.isSupported() else { return }
+
+        #if os(iOS)
+        guard WCSession.default.isPaired else { return }
+        #endif
+        guard WCSession.default.activationState == .activated else { return }
+
+        let payload: [String: Any] = ["action": "acknowledgeAlert",
+                                      "timestamp": Date().timeIntervalSince1970]
+        WCSession.default.transferUserInfo(payload)
+        if WCSession.default.isReachable {
+            WCSession.default.sendMessage(payload, replyHandler: nil) { error in
+                print("❌ acknowledgeAlert 전송 실패: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    /// 되풀이 알림 설정을 Watch로 동기화 (iPhone 에서 고르고 워치가 따라간다)
+    func sendEscalationPolicy(_ policy: EscalationPolicy) {
+        guard WCSession.isSupported() else { return }
+
+        #if os(iOS)
+        guard WCSession.default.isPaired,
+              WCSession.default.activationState == .activated else { return }
+        #endif
+
+        do {
+            var context = WCSession.default.applicationContext
+            for (key, value) in policy.syncPayload { context[key] = value }
+            try WCSession.default.updateApplicationContext(context)
+        } catch {
+            print("❌ 되풀이 알림 설정 동기화 실패: \(error.localizedDescription)")
+        }
     }
 
     /// iOS ringMode 설정을 Watch로 동기화
@@ -247,6 +291,11 @@ extension WatchConnectivityManager: WCSessionDelegate {
             #endif
 
             switch action {
+            case "acknowledgeAlert":
+                EscalatingAlert.cancel()
+                onAlertAcknowledged?()
+                return
+
             case "start":
                 guard let duration = message["duration"] as? TimeInterval else { return }
                 let prealertOffsets = message["prealertOffsets"] as? [Int] ?? []
@@ -274,8 +323,20 @@ extension WatchConnectivityManager: WCSessionDelegate {
         }
     }
 
+    /// 앱이 꺼져 있는 동안 쌓인 것도 여기로 온다 — "확인했다"가 반드시 닿아야 하는 경로.
+    nonisolated func session(_ session: WCSession, didReceiveUserInfo userInfo: [String: Any]) {
+        Task { @MainActor in
+            guard userInfo["action"] as? String == "acknowledgeAlert" else { return }
+            EscalatingAlert.cancel()
+            onAlertAcknowledged?()
+        }
+    }
+
     nonisolated func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
         Task { @MainActor in
+            // 되풀이 알림 설정 동기화
+            EscalationPolicy.applySyncPayload(applicationContext)
+
             // ringMode 동기화 (Watch에서 수신)
             if let ringMode = applicationContext["ringMode"] as? String {
                 UserDefaults.standard.set(ringMode, forKey: "ringMode")
@@ -320,6 +381,7 @@ final class WatchConnectivityManager: ObservableObject {
     var onTimerPause: (() -> Void)?
     var onTimerResume: (() -> Void)?
     var onTimerStop: (() -> Void)?
+    var onAlertAcknowledged: (() -> Void)?
 
     private init() {}
 
@@ -328,6 +390,8 @@ final class WatchConnectivityManager: ObservableObject {
     func sendTimerResume(remainingDuration: TimeInterval) {}
     func sendTimerStop() {}
     func sendRingMode(_ mode: String) {}
+    func sendAlertAcknowledged() {}
+    func sendEscalationPolicy(_ policy: EscalationPolicy) {}
     func updateTimerContext(duration: TimeInterval?, remaining: TimeInterval?, state: String) {}
 }
 

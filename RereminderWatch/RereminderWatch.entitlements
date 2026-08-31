@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  스마트 스택 위젯(RereminderWatchWidget)에게 타이머 상태를 넘기는 통로.
+	  ⚠️ 위젯 쪽 엔타이틀먼트와 **같은 이름**이어야 한다.
+	-->
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.leeo.toki</string>
+	</array>
+</dict>
+</plist>
