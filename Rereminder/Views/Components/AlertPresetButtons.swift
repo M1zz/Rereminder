@@ -106,7 +106,7 @@ struct AlertPresetButtons: View {
                                     insert(offset)
                                 }
                             } label: {
-                                // 2.3.0 에서 알림 개수 잠금(자물쇠)이 사라졌다 —
+                                // 2.2.2 에서 알림 개수 잠금(자물쇠)이 사라졌다 —
                                 // 파는 축이 "알림 개수"에서 "세션 운영"으로 옮겨졌기 때문.
                                 // 글자 상한은 유지한다(큰 글씨에서 이 줄이 링 위로 올라탔다).
                                 Text(offsetLabel(offset))

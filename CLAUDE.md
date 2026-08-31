@@ -1122,10 +1122,10 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
 ## 버전 히스토리
 
 ### v2.2.2 (2026-09-01)
-⚠️ 번호가 2.3.0 보다 작다 — `Config/Version.xcconfig` 의 `MARKETING_VERSION` 을 그렇게 정했다.
-v2.3.0 은 노트(`docs/release-notes-2.3.0.md`)만 있고 **태그가 없다**(마지막 태그는 `v2.2.1`).
-즉 2.3.0 로 적힌 작업도 아직 출시되지 않았고 이 릴리즈에 함께 들어간다 — 스토어에 올리기 전에
-두 노트를 어떻게 낼지 정할 것.
+⚠️ **원래 2.3.0 으로 준비하던 릴리즈다.** 코드는 그대로 두고 **번호만 2.2.2 로** 정했다.
+그래서 아래에는 가격 축 개편(옛 2.3.0)과 워치 작업이 **한 릴리즈로** 들어 있고, 릴리즈 노트도
+`docs/release-notes-2.2.2.md` 한 장이다(옛 `release-notes-2.3.0.md` 는 여기 합치고 지웠다).
+⚠️ 마지막 태그는 여전히 `v2.2.1` 이다 — 2.3.0 은 태그도 출시도 없이 main 까지만 갔다.
 
 - **워치 스마트 스택 위젯**(`RereminderWatchWidget/`, 새 타겟 `RereminderWatchWidgetExtension`):
   손목에서 앱을 열지 않고 남은 시간·다음 알림을 본다. 워치 페이스 컴플리케이션 네 가족에도 붙는다.
@@ -1145,10 +1145,7 @@ v2.3.0 은 노트(`docs/release-notes-2.3.0.md`)만 있고 **태그가 없다**(
   처음부터 다시 시작**하던 문제(+ 복원 화면에서 정지를 눌러도 닫히지 않던 문제)
   ② 워치의 종료·예비 알림 문구가 영어 리터럴이라 되풀이를 켜면 첫 알림만 영어로 뜨던 문제
   ③ `"Time is up"` 의 한국어가 **"총 시간"** 으로 오역돼 있던 것(iOS `TimerAlertView` 도 같이 틀렸다)
-- 테스트 +21개(`RoundedRectRingTests` 9 · `EscalatingAlertTests` 12 · `WatchTimerStateTests` 15
-  — 스마트 스택 몫 포함), 릴리즈 노트: `docs/release-notes-2.2.2.md` (ko/en/ja)
 
-### v2.3.0 (2026-08-30)
 - **파는 축을 "알림 개수"에서 "세션 운영"으로 옮겼다.** 예비 알림은 **무제한 무료**가 됐고
   (`freePrealertLimit`·`unlimitedPrealerts`·`PrealertGrace` 삭제 — 되살리지 말 것),
   Pro 가 파는 한 문장은 **"앱이 당신의 설정을 기억한다"**(`ProGate.canRememberSetup`)로 통일했다.
@@ -1177,7 +1174,8 @@ v2.3.0 은 노트(`docs/release-notes-2.3.0.md`)만 있고 **태그가 없다**(
   임계값(`heavyAlertThreshold` 3·`multiAlertThreshold` 2·`templateUserThreshold` 1)은 고정
 - **l10n 수정**: 시간대 제안 문구가 **키에도 위치지정 서식**으로 적혀 있어 번역이 있는데도
   영어 원문이 나가던 문제(이 카탈로그의 규칙은 키=비위치지정, 값=위치지정)
-- 테스트 240 → 253개, 릴리즈 노트: `docs/release-notes-2.3.0.md` (ko/en/ja)
+- 테스트 240 → 289개(이번에 `RoundedRectRingTests` 9 · `EscalatingAlertTests` 12 ·
+  `WatchTimerStateTests` 15 추가), 릴리즈 노트: `docs/release-notes-2.2.2.md` (ko/en/ja)
 
 ### v2.2.1 (2026-08-23)
 - **타이머 모양 선택 철회** — 2.2.0에서 넣은 원형 링/이중 링/구간 막대/접은 줄과 이중 링·원 밖
