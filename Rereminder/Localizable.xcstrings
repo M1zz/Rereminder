@@ -53,7 +53,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ – %2$@"
           }
         },
@@ -91,7 +91,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@ %2$@"
           }
         },
@@ -145,7 +145,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$@: %2$@ %3$@, %4$@ %5$@"
           }
         },
@@ -231,7 +231,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$lld min %2$lld sec"
           }
         },
@@ -333,7 +333,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$lld minutes %2$lld seconds"
           }
         },
@@ -451,7 +451,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "%1$lldm %2$llds"
           }
         },
@@ -3488,7 +3488,21 @@
       }
     },
     "Instagram DM (@lee25_ios)" : {
-
+      "comment" : "Settings row that opens a DM to the developer on Instagram",
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "InstagramでDM (@lee25_ios)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "인스타그램 DM (@lee25_ios)"
+          }
+        }
+      }
     },
     "Install Rereminder on your Mac from the App Store." : {
       "localizations" : {
@@ -4122,7 +4136,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Next: %1$@ alert (%2$lld min %3$lld sec left)"
           }
         },
@@ -4144,7 +4158,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Next: %1$@ alert (%2$lld sec left)"
           }
         },
@@ -4166,7 +4180,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "Next: End alert (%1$lld min %2$lld sec left)"
           }
         },
@@ -8385,7 +8399,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "You usually run %1$@ with %2$lld alerts around now."
           }
         },

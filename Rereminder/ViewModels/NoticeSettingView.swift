@@ -561,7 +561,7 @@ struct NoticeSettingView: View {
                     developerLinks
                 }
 
-                // TODO: localize (handle is a proper noun, shown as-is)
+                // 핸들(@lee25_ios)만 고유명사이고 문장은 언어별로 번역돼 있다.
                 Link(destination: URL(string: "https://instagram.com/lee25_ios")!) {
                     HStack {
                         Label("Instagram DM (@lee25_ios)", systemImage: "paperplane.fill")

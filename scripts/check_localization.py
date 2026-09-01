@@ -19,9 +19,12 @@ CATALOGS = [
 LANGS = ("ko", "ja")
 
 # 번역 없이 두는 게 맞는 키 (고유명사·포맷 전용 등)
-ALLOW_UNTRANSLATED: set[str] = {
-    "Instagram DM (@lee25_ios)",  # 계정 핸들 — 고유명사라 번역하지 않는다
-}
+#
+# ⚠️ 여기에 키를 넣는 것은 **검사를 끄는 것**이다. 배포 도구(DeployBar)는 이 목록을 모르므로
+#    여기서 눈감아 준 키가 거기서는 그대로 "번역 구멍"으로 잡힌다. 두 게이트가 갈라지면
+#    어느 쪽을 믿어야 할지 알 수 없게 되니, 넣기 전에 **정말 번역할 수 없는지** 먼저 볼 것.
+#    (예: "Instagram DM (@lee25_ios)" 는 핸들만 고유명사이고 문장은 번역할 수 있어서 뺐다.)
+ALLOW_UNTRANSLATED: set[str] = set()
 
 HANGUL = re.compile(r"[가-힣]")
 
