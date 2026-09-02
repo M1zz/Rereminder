@@ -25,6 +25,10 @@ struct RereminderWatchApp: App {
                 .environmentObject(watchConnectivity)
                 .onAppear {
                     setupNotifications()
+                    // ⚠️ 되풀이 알림 설정은 **아이폰이 주인**이다. 컨텍스트는 마지막 한 벌만
+                    //    남으므로(타이머 상태가 덮어쓴다) 워치가 열릴 때 직접 물어봐야 한다 —
+                    //    그러지 않으면 아이폰에서 켠 되풀이가 손목에서는 영영 꺼진 채로 돈다.
+                    watchConnectivity.requestSettingsFromPhone()
                 }
         }
     }

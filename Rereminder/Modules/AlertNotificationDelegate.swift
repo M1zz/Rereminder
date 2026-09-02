@@ -48,6 +48,14 @@ final class AlertNotificationDelegate: NSObject, UNUserNotificationCenterDelegat
             completionHandler([])
             return
         }
-        completionHandler(RingMode.notificationSound != nil ? [.banner, .sound] : [.banner])
+        // ⚠️ 진동 모드에서는 `.sound` 를 주어도 **무음 파일이 재생될 뿐**이다. 앞에 있을 때는
+        //    시스템이 진동을 주지 않으므로 직접 울린다 — 그러지 않으면 "진동으로 해 뒀는데
+        //    앱을 보고 있으면 아무 반응이 없다"가 된다.
+        if RingMode.presentsNotificationSound {
+            completionHandler([.banner, .sound])
+        } else {
+            ring()
+            completionHandler([.banner])
+        }
     }
 }

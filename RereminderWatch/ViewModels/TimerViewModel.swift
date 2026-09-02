@@ -280,7 +280,19 @@ class TimerViewModel: ObservableObject, Identifiable {
         return vm
     }
 
+    /// ⚠️ **여기서 `stop()` 을 부르지 말 것.**
+    ///
+    /// `stop()` 은 예약된 알림을 전부 걷고(`removeAllNotifications`), 아이폰에 "확인했다"를 보내고
+    /// (`acknowledgeEverywhere`), 저장된 상태까지 지운다(`WatchTimerStore.clear`). 그런데 이
+    /// 뷰모델은 **버려지는 사본이 수시로 만들어진다** — `SettingView.destination(for:)` 는 화면을
+    /// 다시 그릴 때마다 `TimerViewModel(...)` 을 새로 만들고, `@StateObject` 는 처음 것만 쓰고
+    /// 나머지를 버린다. 그 사본이 죽을 때마다 **지금 돌고 있는 타이머의 알림이 통째로 사라졌다.**
+    /// (그래서 워치에서 타이머를 걸어도 끝날 때 아무 진동이 없었다.)
+    ///
+    /// 정리는 화면을 실제로 떠날 때 `TimerView` 가 `stop()` 으로 한다. 여기서는 이 사본이
+    /// 들고 있던 1초 타이머만 놓아준다.
     deinit {
-        stop()
+        timer?.invalidate()
+        timer = nil
     }
 }

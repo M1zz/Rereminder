@@ -19,6 +19,9 @@ public struct TimerView: View {
     @StateObject private var timerViewModel: TimerViewModel
     @Binding var path: [NavigationTarget]
 
+    /// ⚠️ 화면이 **정말로 닫히는 것인지** 가리는 데 쓴다 — 아래 `onDisappear` 참고.
+    @Environment(\.scenePhase) private var scenePhase
+
     /// 이 화면을 닫는 법 — 정지 버튼이 부른다.
     ///
     /// ⚠️ 닫는 방법이 두 가지라 부르는 쪽이 넘긴다. 설정에서 밀어 넣은 화면은 `path` 를 비우면
@@ -26,10 +29,14 @@ public struct TimerView: View {
     ///    `.constant([])`** 라 아무리 비워도 닫히지 않는다(정지를 눌러도 화면에 갇혀 있었다).
     private let onExit: (() -> Void)?
 
-    init(timerViewModel: TimerViewModel,
+    /// ⚠️ 뷰모델은 **`@autoclosure` 로 받는다.** 그냥 값으로 받으면 부르는 쪽
+    ///    (`SettingView.destination(for:)`)이 화면을 다시 그릴 때마다 `TimerViewModel(...)` 을
+    ///    실제로 만들어 버리고, `@StateObject` 는 처음 것만 쓰고 나머지를 곧바로 버린다.
+    ///    버려지는 사본이 생기지 않아야 타이머 하나에 뷰모델 하나가 유지된다.
+    init(timerViewModel: @autoclosure @escaping () -> TimerViewModel,
          path: Binding<[NavigationTarget]>,
          onExit: (() -> Void)? = nil) {
-        self._timerViewModel = StateObject(wrappedValue: timerViewModel)
+        self._timerViewModel = StateObject(wrappedValue: timerViewModel())
         self._path = path
         self.onExit = onExit
     }
@@ -53,7 +60,15 @@ public struct TimerView: View {
         // 45pt 가 통째로 비어 원형 시절과 크게 다르지 않다. 애플의 기본 타이머도 가장자리까지 그린다.
         .ignoresSafeArea()
         .onAppear { timerViewModel.start() }
-        .onDisappear { timerViewModel.stop() }
+        .onDisappear {
+            // ⚠️ **앱이 뒤로 갈 때는 정지하지 않는다.** watchOS 는 손목을 내리거나 크라운을
+            //    누르는 것만으로도 이 화면에 `onDisappear` 를 보낸다. 거기서 `stop()` 을 부르면
+            //    예약해 둔 종료·되풀이 알림이 전부 걷히고 아이폰에도 "확인했다"가 나가서,
+            //    **정작 타이머가 끝날 때 아무 데서도 울리지 않는다.**
+            //    (사용자가 정지를 누르는 길은 `exitTimer()` 가 따로 맡는다.)
+            guard scenePhase == .active else { return }
+            timerViewModel.stop()
+        }
         .navigationBarBackButtonHidden(true)
     }
 

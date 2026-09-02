@@ -128,6 +128,40 @@ final class EscalatingAlertTests: XCTestCase {
         XCTAssertEqual(EscalationPolicy.current(store).interval, .thirtySeconds)
     }
 
+    /// ⚠️ **타이머 상태와 섞여 오는 payload 에서 아는 키만 골라 적어야 한다.**
+    ///    예전에는 세 키가 전부 갖춰져야 적용했는데, 이 payload 는 타이머 상태와 같은
+    ///    application context 에 실려 오므로 한 키만 빠져도 통째로 무시됐다.
+    func test_partialSyncPayloadStillApplies() {
+        let store = temporaryDefaults()
+        policy(.off, .twoMinutes, escalates: false).save(to: store)
+
+        XCTAssertTrue(EscalationPolicy.applySyncPayload(["alertRepeatInterval": 15,
+                                                         "state": "running"], to: store))
+        XCTAssertEqual(EscalationPolicy.current(store).interval, .fifteenSeconds)
+        // 안 온 키는 건드리지 않는다.
+        XCTAssertEqual(EscalationPolicy.current(store).duration, .twoMinutes)
+    }
+
+    /// 모르는 값(옛 버전이 보낸 간격 등)으로 설정을 망가뜨리지 않는다.
+    func test_unknownRawValueIsIgnored() {
+        let store = temporaryDefaults()
+        policy(.thirtySeconds, escalates: true).save(to: store)
+        XCTAssertFalse(EscalationPolicy.applySyncPayload(["alertRepeatInterval": 7], to: store))
+        XCTAssertEqual(EscalationPolicy.current(store).interval, .thirtySeconds)
+    }
+
+    /// ⚠️ **진동 모드가 알림을 조용히 만들면 안 된다.** `sound` 가 nil 이면 시스템은 소리뿐
+    ///    아니라 진동·햅틱까지 뺀 채로 전달한다 — "진동으로 해 뒀는데 아무 반응이 없다"의 정체.
+    func test_vibrationModeStillCarriesASound() {
+        let previous = UserDefaults.standard.string(forKey: "ringMode")
+        defer { UserDefaults.standard.set(previous, forKey: "ringMode") }
+
+        UserDefaults.standard.set(RingMode.vibration.rawValue, forKey: "ringMode")
+        XCTAssertNotNil(RingMode.notificationSound,
+                        "진동 모드에서도 알림에는 사운드가 실려야 진동/햅틱이 온다")
+        XCTAssertNotNil(AlertContent.timerFinished.sound)
+    }
+
     // MARK: -
 
     private var suiteNames: [String] = []

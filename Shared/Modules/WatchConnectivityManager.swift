@@ -164,41 +164,85 @@ class WatchConnectivityManager: NSObject, ObservableObject {
         }
     }
 
-    /// 되풀이 알림 설정을 Watch로 동기화 (iPhone 에서 고르고 워치가 따라간다)
-    func sendEscalationPolicy(_ policy: EscalationPolicy) {
-        guard WCSession.isSupported() else { return }
+    // MARK: - 설정 동기화 (되풀이 알림 · 소리/진동)
 
+    /// 워치가 따라 읽어야 하는 설정 한 벌.
+    ///
+    /// ⚠️ **되풀이 알림과 소리 모드를 따로 보내지 말 것.** 예전에는 각각 따로 보냈는데,
+    ///    `updateApplicationContext` 는 **가장 마지막 것 하나만** 워치에 전달한다. 그래서
+    ///    설정을 바꾼 뒤 타이머를 한 번만 걸어도(그때 컨텍스트가 타이머 상태로 덮인다)
+    ///    워치는 그 설정을 **영영 보지 못했다** — 손목에서 되풀이가 안 울리던 원인이다.
+    nonisolated static var settingsPayload: [String: Any] {
+        var payload = EscalationPolicy.current().syncPayload
+        payload["ringMode"] = RingMode.current.rawValue
+        return payload
+    }
+
+    /// 넘어온 설정을 이 기기에 적는다.
+    ///
+    /// ⚠️ **설정의 주인은 아이폰 하나다 — 방향을 뒤집지 말 것.** 워치도 이걸 적용하게 두면,
+    ///    워치가 들고 있던 옛 값이 아이폰으로 되돌아가 사용자가 방금 고른 설정을 조용히 덮는다.
+    @discardableResult
+    nonisolated static func applySettingsPayload(_ payload: [String: Any]) -> Bool {
         #if os(iOS)
+        return false
+        #else
+        var applied = EscalationPolicy.applySyncPayload(payload)
+        if let ringMode = payload["ringMode"] as? String,
+           RingMode(rawValue: ringMode) != nil {
+            UserDefaults.standard.set(ringMode, forKey: "ringMode")
+            applied = true
+        }
+        return applied
+        #endif
+    }
+
+    /// 설정을 워치로 밀어 넣는다. 설정을 바꿀 때뿐 아니라 **세션이 살아날 때마다** 부른다 —
+    /// 한 번만 보내고 마는 구조라 워치 앱을 나중에 깐 사람에게는 아무것도 닿지 않았다.
+    func syncSettings() {
+        #if !os(iOS)
+        // 워치는 설정을 받기만 한다 (위 `applySettingsPayload` 주석 참고).
+        return
+        #else
+        guard WCSession.isSupported() else { return }
         guard WCSession.default.isPaired,
               WCSession.default.activationState == .activated else { return }
-        #endif
 
         do {
             var context = WCSession.default.applicationContext
-            for (key, value) in policy.syncPayload { context[key] = value }
+            for (key, value) in Self.settingsPayload { context[key] = value }
             try WCSession.default.updateApplicationContext(context)
         } catch {
-            print("❌ 되풀이 알림 설정 동기화 실패: \(error.localizedDescription)")
+            print("❌ 설정 동기화 실패: \(error.localizedDescription)")
         }
+        #endif
+    }
+
+    /// 되풀이 알림 설정을 Watch로 동기화 (iPhone 에서 고르고 워치가 따라간다)
+    func sendEscalationPolicy(_ policy: EscalationPolicy) {
+        syncSettings()
     }
 
     /// iOS ringMode 설정을 Watch로 동기화
     func sendRingMode(_ mode: String) {
-        guard WCSession.isSupported() else { return }
+        syncSettings()
+    }
 
-        #if os(iOS)
-        guard WCSession.default.isPaired,
-              WCSession.default.activationState == .activated else { return }
-        #endif
+    #if os(watchOS)
+    /// **아이폰에 지금 설정을 물어본다.** 컨텍스트는 마지막 한 벌만 남으므로, 워치가 먼저
+    /// 묻는 길이 없으면 "설정을 바꾼 뒤 워치 앱을 처음 연" 사람은 옛 설정으로 계속 돈다.
+    func requestSettingsFromPhone() {
+        guard WCSession.isSupported(),
+              WCSession.default.activationState == .activated,
+              WCSession.default.isReachable else { return }
 
-        do {
-            var context = WCSession.default.applicationContext
-            context["ringMode"] = mode
-            try WCSession.default.updateApplicationContext(context)
-        } catch {
-            print("❌ ringMode 동기화 실패: \(error.localizedDescription)")
+        WCSession.default.sendMessage(["action": "requestSettings"]) { reply in
+            Self.applySettingsPayload(reply)
+        } errorHandler: { error in
+            print("❌ 설정 요청 실패: \(error.localizedDescription)")
         }
     }
+    #endif
 
     // MARK: - Application Context (백그라운드 동기화)
 
@@ -212,10 +256,15 @@ class WatchConnectivityManager: NSObject, ObservableObject {
 
         guard WCSession.default.activationState == .activated else { return }
 
-        var context: [String: Any] = [
-            "state": state,
-            "timestamp": Date().timeIntervalSince1970
-        ]
+        // ⚠️ **덮어쓰지 말고 얹는다.** `updateApplicationContext` 는 컨텍스트를 통째로 갈아치우고
+        //    워치에는 마지막 한 벌만 전달되므로, 여기서 새 딕셔너리를 만들면 조금 전에 보낸
+        //    되풀이 알림·소리 설정이 통째로 사라진다(워치는 그 설정을 영영 못 받는다).
+        var context = WCSession.default.applicationContext
+        #if os(iOS)
+        for (key, value) in Self.settingsPayload { context[key] = value }
+        #endif
+        context["state"] = state
+        context["timestamp"] = Date().timeIntervalSince1970
 
         if let duration = duration {
             context["duration"] = duration
@@ -250,6 +299,12 @@ extension WatchConnectivityManager: WCSessionDelegate {
             // 워치가 페어링돼 있으면 "워치 있으세요?"를 물어볼 이유가 없다 — 아는 건 묻지 않는다.
             // (소유만 확정할 뿐 사용은 아니므로, 워치 앱을 권하는 안내는 그대로 나간다.)
             if isPaired { DeviceOwnership.confirmOwned(.watch) }
+            // 세션이 살아난 지금이 설정을 밀어 넣을 자리다 — 설정 화면을 다시 열지 않는 사람에게도
+            // 되풀이 알림 설정이 손목까지 가야 한다.
+            syncSettings()
+            #else
+            // 워치는 반대로 **물어본다** — 마지막 컨텍스트가 타이머 상태였다면 설정은 안 실려 있다.
+            requestSettingsFromPhone()
             #endif
         }
     }
@@ -265,6 +320,10 @@ extension WatchConnectivityManager: WCSessionDelegate {
     nonisolated func sessionReachabilityDidChange(_ session: WCSession) {
         Task { @MainActor in
             refreshLinkStatus()
+            #if os(watchOS)
+            // 이제 막 닿았다 — 활성화 순간에는 못 물어봤을 수 있다.
+            requestSettingsFromPhone()
+            #endif
         }
     }
 
@@ -273,11 +332,29 @@ extension WatchConnectivityManager: WCSessionDelegate {
     nonisolated func sessionWatchStateDidChange(_ session: WCSession) {
         Task { @MainActor in
             refreshLinkStatus()
+            // 워치 앱이 방금 깔렸을 수도 있다 — 그 기기는 아직 아무 설정도 받은 적이 없다.
+            syncSettings()
         }
     }
     #endif
 
     // MARK: - Receive Messages
+
+    /// 답장을 기다리는 메시지 — 지금은 워치의 **설정 요청**뿐이다.
+    /// ⚠️ 이 변형을 구현하지 않으면 `replyHandler` 를 단 `sendMessage` 는 상대에게 닿지 못하고
+    ///    바로 실패한다(워치가 설정을 물어볼 길이 없어진다).
+    nonisolated func session(_ session: WCSession,
+                             didReceiveMessage message: [String: Any],
+                             replyHandler: @escaping ([String: Any]) -> Void) {
+        #if os(iOS)
+        if message["action"] as? String == "requestSettings" {
+            replyHandler(Self.settingsPayload)
+            return
+        }
+        #endif
+        replyHandler([:])
+        self.session(session, didReceiveMessage: message)
+    }
 
     nonisolated func session(_ session: WCSession, didReceiveMessage message: [String: Any]) {
         Task { @MainActor in
@@ -291,6 +368,10 @@ extension WatchConnectivityManager: WCSessionDelegate {
             #endif
 
             switch action {
+            case "requestSettings":
+                syncSettings()
+                return
+
             case "acknowledgeAlert":
                 EscalatingAlert.cancel()
                 onAlertAcknowledged?()
@@ -334,13 +415,8 @@ extension WatchConnectivityManager: WCSessionDelegate {
 
     nonisolated func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String: Any]) {
         Task { @MainActor in
-            // 되풀이 알림 설정 동기화
-            EscalationPolicy.applySyncPayload(applicationContext)
-
-            // ringMode 동기화 (Watch에서 수신)
-            if let ringMode = applicationContext["ringMode"] as? String {
-                UserDefaults.standard.set(ringMode, forKey: "ringMode")
-            }
+            // 되풀이 알림 · 소리 모드 동기화 (한 벌로 들어온다)
+            Self.applySettingsPayload(applicationContext)
 
             guard let state = applicationContext["state"] as? String else { return }
 
@@ -392,6 +468,7 @@ final class WatchConnectivityManager: ObservableObject {
     func sendRingMode(_ mode: String) {}
     func sendAlertAcknowledged() {}
     func sendEscalationPolicy(_ policy: EscalationPolicy) {}
+    func syncSettings() {}
     func updateTimerContext(duration: TimeInterval?, remaining: TimeInterval?, state: String) {}
 }
 

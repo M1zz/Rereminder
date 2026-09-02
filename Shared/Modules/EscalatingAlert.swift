@@ -320,15 +320,29 @@ extension EscalationPolicy {
     }
 
     /// 넘어온 표현을 저장한다. 아는 키가 하나도 없으면 아무것도 하지 않는다.
+    ///
+    /// ⚠️ **아는 키만 골라 적는다 — 전부 있어야 적용하던 예전 방식으로 되돌리지 말 것.**
+    ///    이 payload 는 타이머 상태와 **같은 컨텍스트에 섞여** 오고, 보내는 쪽이 조금이라도
+    ///    달라지면(옛 버전의 아이폰 등) 세 키가 다 갖춰지지 않는다. 그때 통째로 무시하면
+    ///    워치는 되풀이 설정을 영영 못 받는다.
     @discardableResult
     static func applySyncPayload(_ payload: [String: Any],
                                  to defaults: UserDefaults = .standard) -> Bool {
-        guard let interval = payload[Key.interval] as? Int,
-              let duration = payload[Key.duration] as? Int,
-              let escalate = payload[Key.escalate] as? Bool else { return false }
-        defaults.set(interval, forKey: Key.interval)
-        defaults.set(duration, forKey: Key.duration)
-        defaults.set(escalate, forKey: Key.escalate)
-        return true
+        var applied = false
+        if let interval = payload[Key.interval] as? Int,
+           AlertRepeatInterval(rawValue: interval) != nil {
+            defaults.set(interval, forKey: Key.interval)
+            applied = true
+        }
+        if let duration = payload[Key.duration] as? Int,
+           AlertRepeatDuration(rawValue: duration) != nil {
+            defaults.set(duration, forKey: Key.duration)
+            applied = true
+        }
+        if let escalate = payload[Key.escalate] as? Bool {
+            defaults.set(escalate, forKey: Key.escalate)
+            applied = true
+        }
+        return applied
     }
 }

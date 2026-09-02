@@ -69,16 +69,23 @@ struct NotificationService {
 
     // 공통 Content 생성
     private func makeContent(title: String, body: String, identifier: String) -> UNMutableNotificationContent {
+        let isFinish = identifier == "main_timer_notification"
+
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
         content.sound = RingMode.notificationSound
         content.badge = 1
-        content.interruptionLevel = .active
         content.relevanceScore = 1.0
-        if identifier == "main_timer_notification" {
+        if isFinish {
+            // ⚠️ **종료 알림에도 카테고리를 붙여야** 정지·다시 알림 버튼이 달린다. 붙이지 않으면
+            //    되풀이 알림(`EscalatingAlert`)에만 버튼이 있어서, 첫 알림에서 멈추려는 사람은
+            //    끄는 법을 찾지 못하고 15초 뒤 두 번째 알림을 기다려야 했다.
+            content.categoryIdentifier = EscalatingAlert.categoryIdentifier
+            content.interruptionLevel = .timeSensitive
             content.userInfo = ["haptic": "success"]
         } else {
+            content.interruptionLevel = .active
             content.userInfo = ["haptic": "warning"]
         }
         return content
@@ -127,7 +134,10 @@ class NotificationDelegate: NSObject, ObservableObject, UNUserNotificationCenter
         willPresent notification: UNNotification,
         withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
     ) {
-        let options: UNNotificationPresentationOptions = RingMode.notificationSound != nil ? [.sound] : []
+        // ⚠️ **배너를 함께 줘야 한다.** 예전에는 `[.sound]` 뿐이라(진동 모드에서는 `[]`) 앱을 보고
+        //    있는 동안 알림이 통째로 사라졌고, 그러면 정지·다시 알림 버튼에 닿을 길이 없어진다.
+        var options: UNNotificationPresentationOptions = [.banner, .list]
+        if RingMode.presentsNotificationSound { options.insert(.sound) }
         completionHandler(options)
 
         #if canImport(WatchKit)

@@ -651,9 +651,51 @@ extension TimerView {
   예약이 실패하지는 않는다. 집중 모드를 뚫으려면 포털에서 켤 것(`docs/OPERATIONS_CHECKLIST.md` 6번).
   ⚠️ **포털에서 켜기 전에 엔타이틀먼트 파일을 먼저 고치지 말 것** — 서명이 실패해 빌드가 막힌다.
 - 설정 키(`alertRepeatInterval`·`alertRepeatDuration`·`alertEscalateAcrossDevices`)는
-  iPhone 에서 고르고 `sendEscalationPolicy` 로 워치에 넘어간다. **양쪽이 같은 키를 읽는다.**
-- 테스트: `RereminderTests/EscalatingAlertTests.swift` (12개),
+  iPhone 에서 고르고 워치로 넘어간다. **양쪽이 같은 키를 읽고, 주인은 iPhone 하나다**
+  (`applySettingsPayload` 는 워치에서만 적용된다 — 방향을 뒤집으면 워치의 옛 값이 아이폰이
+  방금 고른 설정을 덮는다).
+- ⚠️ **설정과 타이머 상태를 같은 application context 에 실어 한 번에 보낸다**
+  (`WatchConnectivityManager.settingsPayload` + `syncSettings`). `updateApplicationContext` 는
+  컨텍스트를 **통째로 갈아치우고 워치에는 마지막 한 벌만** 전달되므로, 설정을 따로 보내면
+  그다음 타이머 상태 전송이 그것을 지운다 — 실제로 그래서 **아이폰에서 켠 되풀이가 손목에서는
+  영영 꺼진 채로** 돌았다. 새 키를 워치에 보낼 때는 반드시 이 payload 에 얹을 것.
+- 보내는 시점도 한 번이 아니다 — 설정을 바꿀 때뿐 아니라 **세션 활성화·워치 상태 변화**마다
+  다시 밀어 넣고, **워치는 열릴 때 직접 물어본다**(`requestSettingsFromPhone` →
+  iOS 의 `didReceiveMessage:replyHandler:`). ⚠️ 답장 변형을 지우면 워치가 물어볼 길이 사라진다.
+- `applySyncPayload` 는 **아는 키만 골라 적는다.** 세 키가 다 있어야 적용하던 시절에는
+  섞여 온 payload 하나만 어긋나도 통째로 무시됐다.
+- ⚠️ **워치 `TimerViewModel` 의 `deinit` 에서 `stop()` 을 부르지 말 것.**
+  `stop()` 은 예약 알림을 전부 걷고·아이폰에 "확인했다"를 보내고·저장 상태까지 지운다. 그런데
+  `SettingView.destination(for:)` 는 화면을 다시 그릴 때마다 `TimerViewModel(...)` 을 새로 만들고
+  `@StateObject` 가 그것을 버리므로, **돌고 있는 타이머의 알림이 그때마다 통째로 사라졌다.**
+  같은 이유로 `TimerView.init` 은 뷰모델을 `@autoclosure` 로 받는다(사본을 아예 안 만든다).
+- ⚠️ **`TimerView.onDisappear` 에서도 `scenePhase == .active` 일 때만 정지한다.** watchOS 는
+  손목을 내리는 것만으로도 `onDisappear` 를 보내는데, 거기서 정지하면 예약이 다 걷혀
+  **정작 끝날 때 아무 데서도 울리지 않는다.** 사용자의 정지는 `exitTimer()` 가 맡는다.
+- 테스트: `RereminderTests/EscalatingAlertTests.swift` (15개),
   `RereminderTests/RoundedRectRingTests.swift` (9개)
+
+### 진동 모드 — `sound = nil` 은 "조용히"가 아니라 "아무것도 없음"이다
+설정 > 알림의 **소리 / 진동**(`RingMode`). 진동을 고르면 예전에는
+`UNNotificationContent.sound` 에 `nil` 을 넣었는데, **그건 진동으로 바꾸라는 뜻이 아니라
+알림을 조용히 전달하라는 뜻이다** — 소리도 **진동·햅틱도 없이** 알림 센터에만 쌓인다.
+"진동으로 해 뒀는데 워치가 아무 반응도 없다"는 제보의 정체가 이것이었고, 되풀이 알림도
+같은 값을 쓰므로 **되풀이가 걸려 있어도 조용했다.**
+
+- **iOS**: 길이만 있고 소리는 없는 파일(`Shared/Silence.wav`)을 싣는다. 시스템은 정상적으로
+  "울리는" 알림으로 취급해 진동을 주고 귀에는 아무것도 들리지 않는다.
+  ⚠️ 번들에 파일이 없으면 시스템이 **기본 소리로 대체**하므로, 없을 때는 예전처럼 `nil` 로 둔다
+  (App Clip 이 그 경우다 — 클립 타겟에는 이 리소스가 없다).
+- **watchOS**: `UNNotificationSound(named:)` 이 **아예 unavailable** 이라 커스텀 음을 쓸 수 없다.
+  그래서 `.default` 를 준다 — 애플워치는 **자기 무음 모드**가 소리/햅틱을 가르므로 그쪽이
+  "진동"에 맞는 동작이고, 무엇보다 **울리기는 한다.**
+- 앞에 있을 때(`willPresent`)는 iOS 가 `ring()` 으로 직접 진동을 울린다(무음 파일을 재생해 봐야
+  아무 느낌이 없다). ⚠️ 워치 델리게이트는 **반드시 `.banner` 를 함께** 돌려줄 것 — 예전에는
+  `[.sound]` 뿐이라(진동 모드에서는 `[]`) 앱을 보는 동안 알림이 통째로 사라져 **정지 버튼에
+  닿을 길이 없었다.**
+- ⚠️ **종료 알림에도 `categoryIdentifier` 를 붙인다**(iPhone `TimerEngine`·워치
+  `NotificationService` 양쪽). 되풀이 알림에만 붙어 있어서 첫 알림에서 끄려던 사람은 버튼을
+  찾지 못하고 다음 되풀이까지 기다려야 했다.
 
 ### 알림 배지 (종을 옮길 때 뜨는 툴팁)
 종 노브를 끌면 그 지점을 **두 가지로** 읽어줍니다. 발표자는 "몇 분 남았나"와

@@ -445,6 +445,13 @@ final class TimerEngine {
             content.title = AppName.notification
             content.body = String(localized: "Timer finished")
             content.sound = RingMode.notificationSound
+            #if !APPCLIP
+            // ⚠️ **첫 종료 알림에도 카테고리를 붙여야** 정지·다시 알림 버튼이 달린다.
+            //    되풀이 알림에만 붙어 있어서, 첫 알림을 길게 눌러 끄려던 사람은 버튼을 못 찾고
+            //    다음 되풀이까지 기다려야 했다.
+            content.categoryIdentifier = EscalatingAlert.categoryIdentifier
+            content.interruptionLevel = .timeSensitive
+            #endif
 
             let trigger = UNTimeIntervalNotificationTrigger(
                 timeInterval: finishFireAfter,
