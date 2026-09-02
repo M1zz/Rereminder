@@ -13,11 +13,11 @@ struct NoticeSettingView: View {
     @AppStorage("ringMode") private var ringMode: RingMode = .sound
     @AppStorage("pushEnabled") private var pushEnabled: Bool = true
     @AppStorage("toastEnabled") private var toastEnabled: Bool = true
-    #if targetEnvironment(macCatalyst)
+    /// ⚠️ **기본값은 꺼짐이다 — 켜 두지 말 것.** 이건 무음 모드와 집중 모드를 뚫고 알람 볼륨으로
+    ///    우는 전체 화면 알람이다. 회의 중에 타이머를 건 사람에게 이게 기본으로 울리면 그건
+    ///    기능이 아니라 사고다(이 앱은 잔소리가 되는 순간 지워진다).
+    ///    2.2.2 까지 이 값의 기본이 `true` 였지만 토글이 아무 일도 하지 않아 아무도 몰랐다.
     @AppStorage("useAlarmKit") private var useAlarmKit: Bool = false
-    #else
-    @AppStorage("useAlarmKit") private var useAlarmKit: Bool = true
-    #endif
     @AppStorage("testModeEnabled") private var testModeEnabled: Bool = false
     @AppStorage("testModeMultiplier") private var testModeMultiplier: Double = 1.0
     @EnvironmentObject var appStateManager: AppStateManager
@@ -25,6 +25,7 @@ struct NoticeSettingView: View {
     @ObservedObject private var store = StoreManager.shared
     @ObservedObject private var themeManager = ThemeManager.shared
     @State private var showAlarmKitInfo = false
+    @State private var showAlarmPermissionDenied = false
     @State private var showOnboarding = false
     @State private var showTestModeInfo = false
     @State private var showPermissionGuide = false
@@ -138,6 +139,17 @@ struct NoticeSettingView: View {
                     .onChange(of: ringMode) { _, newMode in
                         WatchConnectivityManager.shared.sendRingMode(newMode.rawValue)
                     }
+                }
+            }
+
+            // ⚠️ **되풀이·알람·햅틱은 있는 줄 몰라서 안 쓰인다.** 제보로 들어온 요청 셋 중 둘이
+            //    이미 있는 기능이었다. 그래서 설정 안쪽이 아니라 알림 구역 **맨 앞**에 세운다.
+            Section {
+                NavigationLink {
+                    FeatureIntroView()
+                } label: {
+                    Label(String(localized: "Things you might not know"),
+                          systemImage: "sparkles")
                 }
             }
 
@@ -279,7 +291,7 @@ struct NoticeSettingView: View {
                 #if !targetEnvironment(macCatalyst)
                 Toggle(isOn: $useAlarmKit) {
                     HStack {
-                        Text("Use Enhanced Notifications (Recommended)")
+                        Text("End with a full alarm")
                         Button(action: {
                             showAlarmKitInfo.toggle()
                         }) {
@@ -288,35 +300,35 @@ struct NoticeSettingView: View {
                         }
                     }
                 }
+                // ⚠️ 권한은 **여기서** 묻는다. 타이머를 시작하는 순간에 시스템 창을 띄우면
+                //    그 타이머는 이미 놓친 것이다. 거부당하면 토글을 되돌린다 —
+                //    켜져 있는데 울리지 않는 것이 가장 나쁜 상태다.
+                .onChange(of: useAlarmKit) { _, isOn in
+                    guard isOn else {
+                        RereminderAlarmManager.shared.cancelFinishAlarm()
+                        return
+                    }
+                    Task { @MainActor in
+                        if await RereminderAlarmManager.shared.requestAuthorization() == false {
+                            useAlarmKit = false
+                            showAlarmPermissionDenied = true
+                        }
+                    }
+                }
 
                 if useAlarmKit {
                     VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            Image(systemName: "checkmark.circle.fill")
-                                .foregroundStyle(.green)
-                            Text("Accurate notifications in background")
-                        }
-                        .font(.caption)
-
-                        HStack {
-                            Image(systemName: "checkmark.circle.fill")
-                                .foregroundStyle(.green)
-                            Text("Automatic Permission Management")
-                        }
-                        .font(.caption)
-
-                        HStack {
-                            Image(systemName: "checkmark.circle.fill")
-                                .foregroundStyle(.green)
-                            Text("Prevent Duplicate Alerts")
-                        }
-                        .font(.caption)
+                        Label("Rings at alarm volume, through Silent Mode and Focus",
+                              systemImage: "speaker.wave.3.fill")
+                        Label("Keeps ringing until you press Stop",
+                              systemImage: "bell.badge.fill")
                     }
+                    .font(.caption)
                     .foregroundStyle(.secondary)
                     .padding(.top, 4)
-                } else {
-                    Toggle("Send Push Notification", isOn: $pushEnabled)
                 }
+
+                Toggle("Send Push Notification", isOn: $pushEnabled)
                 #else
                 Toggle("Send Push Notification", isOn: $pushEnabled)
                     .disabled(false)
@@ -497,6 +509,12 @@ struct NoticeSettingView: View {
                 .foregroundStyle(.primary)
 
                 NavigationLink {
+                    FeatureIntroView()
+                } label: {
+                    Label("Things you might not know", systemImage: "sparkles")
+                }
+
+                NavigationLink {
                     MultiDeviceGuideView()
                 } label: {
                     Label("Use on All Your Devices", systemImage: "square.stack.3d.up.fill")
@@ -607,10 +625,16 @@ struct NoticeSettingView: View {
         .onAppear {
             appStateManager.checkNotificationPermission()
         }
-        .alert("What are Enhanced Notifications?", isPresented: $showAlarmKitInfo) {
+        .alert("What is a full alarm?", isPresented: $showAlarmKitInfo) {
             Button("OK", role: .cancel) {}
         } message: {
-            Text("A dedicated notification system for timers.\n\n• Alerts at exact times even in background\n• Automatic permission management for convenience\n• Prevents duplicate notifications\n• Optimized for time management during mentoring or presentations\n\nRecommended: Keep enhanced notifications enabled")
+            Text("When the timer ends, your iPhone rings like an alarm clock instead of showing a notification.\n\nIt plays at alarm volume even in Silent Mode or a Focus, takes over the whole screen, and keeps ringing until you press Stop. Snooze gives you five more minutes.\n\nUse it when you must not miss the end - a workout set, a break you keep skipping. Leave it off for quiet places.")
+        }
+        .alert("Alarm permission needed", isPresented: $showAlarmPermissionDenied) {
+            Button("Open Settings", action: openSettings)
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Allow alarms for Rereminder in Settings to use the full alarm.")
         }
         .alert("What is Quick Test Mode?", isPresented: $showTestModeInfo) {
             Button("OK", role: .cancel) {}

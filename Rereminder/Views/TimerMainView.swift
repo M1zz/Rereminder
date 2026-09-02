@@ -674,6 +674,9 @@ struct TimerMainView: View {
         }
         .frame(width: size, height: size)
         .coordinateSpace(name: Self.dialSpace)
+        // 손끝의 딸깍 — **스냅된 값**이 한 칸 바뀔 때만 온다(각도에 반응시키면 초당 수십 번 울린다)
+        .dialTickFeedback(isDragging ? TimeMapper.angleToSeconds(from: screenVM.mainAngle) : nil)
+        .dialGrabFeedback(isDragging: isDragging)
         .accessibilityHidden(true)
     }
 
@@ -862,6 +865,10 @@ struct TimerMainView: View {
         }
         .frame(width: size, height: size)
         .coordinateSpace(name: Self.alertSpace)
+        .dialTickFeedback(draggingMarkerOffset != nil
+                          ? TimeMapper.angleToSeconds(from: markerDragAngle)
+                          : nil)
+        .dialGrabFeedback(isDragging: draggingMarkerOffset != nil)
         .animation(.easeInOut(duration: 0.25), value: screenVM.sortedOffsetsDesc)
         // 흐려지고 돌아오는 것만 부드럽게 — 각도는 손가락을 그대로 따라가야 한다
         .animation(highlightAnimation, value: draggingMarkerOffset)

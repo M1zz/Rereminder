@@ -466,15 +466,50 @@ final class TimerEngine {
             EscalatingAlert.schedule(policy: EscalationPolicy.current(),
                                      role: escalationRole,
                                      finishFireAfter: finishFireAfter)
+
+            // **끌 때까지 크게 울리는 알람**으로 갈아탈 수 있으면 갈아탄다.
+            // ⚠️ 순서가 중요하다 — 위 UN 알림을 **먼저 깔아 두고**, AlarmKit 예약이 성공한
+            //    뒤에야 그것을 걷는다. 반대로 하면 권한이 없거나 예약이 실패했을 때
+            //    **종료 시각에 아무 데서도 울리지 않는다.**
+            adoptAlarmKitFinishIfPossible(fireAfter: finishFireAfter)
             #endif
         }
     }
+
+    #if !APPCLIP
+    /// 종료 알림을 AlarmKit 알람으로 승격시킨다(성공했을 때만).
+    ///
+    /// ⚠️ **이 기기가 타이머를 직접 돌릴 때만**(`.primary`) 갈아탄다. 워치가 돌리는 타이머를
+    ///    받아 온 경우(`.secondary`)는 "손목이 먼저, 30초 뒤 폰이 합류"라는 사슬이 있는데,
+    ///    AlarmKit 은 종료 순간에 곧바로 울려서 그 순서를 깨뜨린다.
+    private func adoptAlarmKitFinishIfPossible(fireAfter: TimeInterval) {
+        guard escalationRole == .primary else { return }
+        guard RereminderAlarmManager.isPreferred else { return }
+
+        let fireDate = Date().addingTimeInterval(fireAfter)
+        let name = config?.name
+        let finishID = "\(Self.notificationPrefix)finish"
+
+        Task { @MainActor in
+            guard await RereminderAlarmManager.shared.scheduleFinishAlarm(at: fireDate,
+                                                                          timerName: name) else { return }
+            // 알람이 이 몫을 대신하므로 같은 순간에 두 번 울리지 않게 걷는다.
+            UNUserNotificationCenter.current()
+                .removePendingNotificationRequests(withIdentifiers: [finishID])
+            EscalatingAlert.cancel()
+        }
+    }
+    #endif
 
     private func cancelScheduledNotifications() {
         #if !APPCLIP
         // ⚠️ 되풀이 알림은 접두어가 달라 아래 필터에 걸리지 않는다 — 따로 걷지 않으면
         //    타이머를 정지해도 종료 시각에 알림이 계속 울린다.
         EscalatingAlert.cancel()
+        // ⚠️ AlarmKit 알람도 같은 이유로 따로 걷는다. 이건 알림 센터가 아니라 시스템 알람이라
+        //    `removePendingNotificationRequests` 로는 **절대 지워지지 않는다** — 빼먹으면
+        //    타이머를 정지해도 종료 시각에 전체 화면 알람이 울린다.
+        Task { @MainActor in RereminderAlarmManager.shared.cancelFinishAlarm() }
         #endif
 
         let center = UNUserNotificationCenter.current()

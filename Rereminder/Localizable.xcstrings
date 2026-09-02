@@ -709,22 +709,6 @@
         }
       }
     },
-    "A dedicated notification system for timers.\n\n• Alerts at exact times even in background\n• Automatic permission management for convenience\n• Prevents duplicate notifications\n• Optimized for time management during mentoring or presentations\n\nRecommended: Keep enhanced notifications enabled" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "タイマー専用の通知システムです。\n\n• バックグラウンドでも正確な時間に通知\n• 自動的に権限を管理して便利\n• 重複通知を防止\n• メンタリングやプレゼンの時間管理に最適化\n\n推奨：拡張通知を有効にしてください"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "타이머 전용 알림 시스템입니다.\n\n• 백그라운드에서도 정확한 시간에 알림이 울립니다\n• 자동으로 권한을 관리하여 편리합니다\n• 중복 알림을 방지하여 깔끔합니다\n• 멘토링이나 발표 시 시간 관리에 최적화되어 있습니다\n\n권장: 향상된 알림을 켜두는 것을 추천합니다"
-          }
-        }
-      }
-    },
     "A mode to quickly verify that the timer works correctly.\n\n• 10x: 10-minute timer finishes in 1 minute\n• 30x: 10-minute timer finishes in 20 seconds\n• 60x: 10-minute timer finishes in 10 seconds\n\nYou can quickly test all features including alerts, pre-alerts, and overtime.\n\n⚠️ Make sure to turn off test mode for actual use!" : {
       "localizations" : {
         "ja" : {
@@ -737,22 +721,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "타이머가 실제로 잘 동작하는지 빠르게 확인할 수 있는 모드입니다.\n\n• 10배속: 10분 타이머가 1분 만에 종료됩니다\n• 30배속: 10분 타이머가 20초 만에 종료됩니다\n• 60배속: 10분 타이머가 10초 만에 종료됩니다\n\n알림, 예비 알림, 오버타임 등 모든 기능을 빠르게 테스트할 수 있습니다.\n\n⚠️ 실제 사용 시에는 반드시 테스트 모드를 꺼주세요!"
-          }
-        }
-      }
-    },
-    "Accurate notifications in background" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "バックグラウンドでも正確な通知"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "백그라운드에서도 정확한 알림"
           }
         }
       }
@@ -1172,22 +1140,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "적용"
-          }
-        }
-      }
-    },
-    "Automatic Permission Management" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "自動権限管理"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "자동 권한 관리"
           }
         }
       }
@@ -5154,22 +5106,6 @@
         }
       }
     },
-    "Prevent Duplicate Alerts" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "重複アラート防止"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "중복 알림 방지"
-          }
-        }
-      }
-    },
     "Preview" : {
       "localizations" : {
         "ja" : {
@@ -7941,22 +7877,6 @@
         }
       }
     },
-    "Use Enhanced Notifications (Recommended)" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "拡張通知を使用（推奨）"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "향상된 알림 사용 (권장)"
-          }
-        }
-      }
-    },
     "Use on All Your Devices" : {
       "localizations" : {
         "en" : {
@@ -8055,22 +7975,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Apple Watch를 착용하고 이 iPhone 가까이 두세요."
-          }
-        }
-      }
-    },
-    "What are Enhanced Notifications?" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "拡張通知とは？"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "향상된 알림이란?"
           }
         }
       }
@@ -8429,6 +8333,278 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이미 Pro 회원입니다!"
+          }
+        }
+      }
+    },
+    "Things you might not know" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "こんな機能もあります"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이런 것도 있어요"
+          }
+        }
+      }
+    },
+    "Rereminder can do a few things most people never find. Turn on what you need — it all takes effect right here." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "リマインダーには気づかれにくい機能がいくつかあります。必要なものだけオンにしてください。この画面ですぐに反映されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "두번알림에는 잘 알려지지 않은 기능이 몇 가지 있습니다. 필요한 것만 켜세요. 이 화면에서 바로 적용됩니다."
+          }
+        }
+      }
+    },
+    "Keep alerting until I answer" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "確認するまで鳴らし続ける"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "확인할 때까지 계속 알리기"
+          }
+        }
+      }
+    },
+    "One buzz is easy to miss. Rereminder repeats the end alert until you tap Stop or Snooze." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一度の振動は見逃しやすいものです。停止かスヌーズを押すまで終了通知をくり返します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "한 번의 진동은 놓치기 쉽습니다. 정지나 다시 알림을 누를 때까지 종료 알림을 반복합니다."
+          }
+        }
+      }
+    },
+    "End with a full alarm" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "終了時にアラームで鳴らす"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "끝나면 알람으로 울리기"
+          }
+        }
+      }
+    },
+    "For breaks you keep skipping. Your iPhone rings at alarm volume - through Silent Mode and Focus - and does not stop until you get up and press Stop." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "つい後回しにする休憩に向いています。サイレントモードや集中モードを越えてアラーム音量で鳴り、停止を押すまで止まりません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "자꾸 미루게 되는 휴식에 좋습니다. 무음 모드와 집중 모드를 뚫고 알람 볼륨으로 울리며, 일어나서 정지를 누를 때까지 멈추지 않습니다."
+          }
+        }
+      }
+    },
+    "Leave this off in quiet places - it ignores Silent Mode on purpose." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "静かな場所ではオフにしてください。サイレントモードをあえて無視します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "조용한 곳에서는 꺼 두세요. 무음 모드를 일부러 무시합니다."
+          }
+        }
+      }
+    },
+    "What is a full alarm?" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アラームで鳴らすとは？"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "알람으로 울리기란?"
+          }
+        }
+      }
+    },
+    "When the timer ends, your iPhone rings like an alarm clock instead of showing a notification.\n\nIt plays at alarm volume even in Silent Mode or a Focus, takes over the whole screen, and keeps ringing until you press Stop. Snooze gives you five more minutes.\n\nUse it when you must not miss the end - a workout set, a break you keep skipping. Leave it off for quiet places." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーが終わると、通知ではなく目覚まし時計のように鳴ります。\n\nサイレントモードや集中モードでもアラーム音量で画面全体に表示され、停止を押すまで鳴り続けます。スヌーズを押すと5分後にもう一度鳴ります。\n\nトレーニングのセットや、つい飛ばしてしまう休憩など、終わりを逃せないときにお使いください。静かな場所ではオフに。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머가 끝나면 알림 대신 자명종처럼 울립니다.\n\n무음 모드나 집중 모드에서도 알람 볼륨으로 화면 전체를 덮고, 정지를 누를 때까지 계속 울립니다. 다시 알림을 누르면 5분 뒤에 다시 부릅니다.\n\n운동 세트나 자꾸 건너뛰는 휴식처럼 끝을 놓치면 안 될 때 켜세요. 조용한 곳에서는 꺼 두세요."
+          }
+        }
+      }
+    },
+    "Rings at alarm volume, through Silent Mode and Focus" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サイレントモードと集中モードを越えてアラーム音量で鳴ります"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "무음 모드와 집중 모드를 뚫고 알람 볼륨으로 울립니다"
+          }
+        }
+      }
+    },
+    "Keeps ringing until you press Stop" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "停止を押すまで鳴り続けます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "정지를 누를 때까지 계속 울립니다"
+          }
+        }
+      }
+    },
+    "Alarm permission needed" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アラームの許可が必要です"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "알람 권한이 필요합니다"
+          }
+        }
+      }
+    },
+    "Allow alarms for Rereminder in Settings to use the full alarm." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "設定でリマインダーのアラームを許可してください。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "설정에서 두번알림의 알람을 허용해 주세요."
+          }
+        }
+      }
+    },
+    "Feel the dial" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ダイヤルを指先で感じる"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다이얼이 손끝에 걸리게"
+          }
+        }
+      }
+    },
+    "A small tick every time the dial passes a step, so you can set the time without watching your finger." : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ダイヤルが一目盛り進むたびに軽くカチッと伝えます。指先を見なくても時間を合わせられます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다이얼이 한 칸 지날 때마다 가볍게 딸깍합니다. 손가락을 보지 않고도 시간을 맞출 수 있습니다."
+          }
+        }
+      }
+    },
+    "Haptics while adjusting" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "調整中の触覚フィードバック"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "조절할 때 진동"
+          }
+        }
+      }
+    },
+    "Impossible to ignore" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無視できない終わり方"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "무시할 수 없게"
           }
         }
       }

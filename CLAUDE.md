@@ -697,6 +697,82 @@ extension TimerView {
   `NotificationService` 양쪽). 되풀이 알림에만 붙어 있어서 첫 알림에서 끄려던 사람은 버튼을
   찾지 못하고 다음 되풀이까지 기다려야 했다.
 
+### 끝나면 알람으로 울리기 (AlarmKit) — "크게" 는 소리 파일로 되는 일이 아니다
+`Shared/Modules/RereminderAlarmManager.swift` + 설정 > 알림 > **끝나면 알람으로 울리기**.
+
+제보: *"reminder sound를 크게 하고 끝에 반복시켜서, 꺼야만 쉬게 되도록 하고 싶다."*
+
+⚠️ **일반 알림음으로는 이 요구를 만족시킬 수 없다.** `UNNotificationSound` 는 사용자의 알림
+볼륨을 넘지 못하고 무음 스위치·집중 모드에 그대로 막힌다 — 소리 파일을 거칠게 바꿔 봐야
+*더 거슬리는* 것이지 *더 큰* 것이 아니다. `defaultCritical` 은 Apple 심사가 필요한
+엔타이틀먼트고 의료·안전용이 아니면 거의 나오지 않는다. 남는 정식 경로는 **AlarmKit** 하나다:
+알람 볼륨, 무음·집중 모드 돌파, 정지를 누를 때까지 전체 화면.
+
+- ⚠️ **기본값은 꺼짐이다.** 회의 중에 타이머를 건 사람에게 이게 기본으로 울리면 기능이 아니라
+  사고다. 2.2.2 까지 `useAlarmKit` 의 기본이 `true` 였지만 **토글이 아무 일도 하지 않아**
+  아무도 몰랐다(`RereminderAlarmManager` 는 2026-02 `17a13b6` 에서 껍데기만 남았는데 설정 화면은
+  계속 "Enhanced Notifications (Recommended)" 라고 광고하고 있었다).
+- ⚠️ **UN 알림을 대체하지 않고, 성공했을 때만 갈아탄다.** 예약은 비동기이고 권한이 없을 수도
+  있다. 순서는 ① `TimerEngine.scheduleNotifications` 가 늘 하던 대로 UN 종료·되풀이 알림을 깔고
+  ② AlarmKit 예약이 **성공한 뒤에야** 그것을 걷는다(`adoptAlarmKitFinishIfPossible`).
+  뒤집으면 예약 실패 시 **종료 시각에 아무 데서도 울리지 않는다.**
+- ⚠️ **이 기기가 직접 돌리는 타이머(`.primary`)에서만 갈아탄다.** 워치가 돌리는 것을 받아 온
+  경우(`.secondary`)는 "손목 먼저, 30초 뒤 폰 합류" 사슬이 있는데 AlarmKit 은 종료 순간에 곧바로
+  울려 그 순서를 깨뜨린다.
+- ⚠️ **카운트다운을 AlarmKit 에 맡기지 말 것**(`schedule: .fixed` 를 쓰고 `.timer` 를 쓰지 않는다).
+  `AlarmConfiguration.timer` 는 AlarmKit 이 **자기 Live Activity** 를 세우는데 이 앱은 이미
+  제 것을 갖고 있어 같은 타이머가 잠금화면에 두 개 뜬다. AlarmKit 은 **울리는 순간**만 맡는다.
+- ⚠️ **정지는 `stop`+`cancel` 둘 다** 불러야 한다 — `cancel` 은 울리는 알람을 멈추지 못하고
+  `stop` 은 예약을 지우지 못한다. 그리고 이건 알림 센터가 아니라 시스템 알람이라
+  `removePendingNotificationRequests` 로는 **절대 지워지지 않는다**(`cancelScheduledNotifications`
+  에서 따로 걷지 않으면 타이머를 정지해도 종료 시각에 전체 화면 알람이 뜬다).
+- 정지 버튼은 기존 `StopIntent`(`Shared/Intents/LiveActivityIntents.swift`)를 그대로 쓴다.
+  검증법은 Live Activity 절과 같다 — `Rereminder.app/Metadata.appintents/extract.actionsdata` 에
+  `StopIntent` 가 있어야 한다.
+- 권한은 **설정에서 토글을 켜는 순간** 묻는다. 타이머를 시작하는 순간에 시스템 창을 띄우면
+  그 타이머는 이미 놓친 것이다. 거부당하면 토글을 되돌린다 — **켜져 있는데 울리지 않는 것이
+  가장 나쁜 상태다.** 문구는 `InfoPlist.xcstrings` 의 `NSAlarmKitUsageDescription`
+  (예전에는 Info.plist 에 한국어 원문이 박혀 있어 영어·일본어 사용자에게도 한국어가 보였다).
+- ⚠️ AlarmKit 은 **Mac Catalyst 에서 unavailable** 이고 App Clip 에는 없다 —
+  `#if canImport(AlarmKit) && !targetEnvironment(macCatalyst) && !APPCLIP`. 반대편에는 언제나
+  "못 걸었다"고 답하는 no-op 스텁을 둬서 UN 경로가 그대로 남는다.
+- ⚠️ 옛 `Shared/Models/AlarmAttributes.swift` 는 **삭제됐다 — 되살리지 말 것.** 아무도 쓰지
+  않는 죽은 코드였고, 무엇보다 `AlarmAttributes`·`AlarmPresentation`·`AlarmButton` 이라는
+  **AlarmKit 의 실제 타입 이름을 그대로 가리고 있었다.**
+
+### 다이얼 햅틱 — 값이 바뀔 때만 딸깍
+`Rereminder/Modules/Haptics.swift`. 제보: *"Haptics are needed when adjusting timer."*
+
+이 앱의 조작은 원 위에서 **각도**로 이뤄져서 손가락이 링을 덮는다. 값은 10초 단위로 스냅되는데
+그 순간이 화면에만 나타나, 사용자는 자기가 값을 바꾸고 있는지조차 손으로 알 수 없었다
+(온보딩 데모 한 줄 말고는 앱 전체에 햅틱이 **하나도 없었다**).
+
+- ⚠️ **각도가 아니라 스냅된 값에 반응시킨다**(`TimeMapper.angleToSeconds`). 각도는 손가락을 따라
+  연속으로 변하므로 각도에 걸면 초당 수십 번 울려 손목이 저리고 배터리를 먹는다.
+- 드래그를 시작·끝내는 nil 경계에서는 딸깍하지 않는다 — 잡고 놓는 감각은
+  `dialGrabFeedback` 이 따로 맡는다(잡을 때 가볍게, 놓을 때 스냅되므로 또렷하게).
+- 기본값은 **켜짐**이다(iOS 다이얼의 기본 기대치라 없는 것이 결함으로 읽혔다). 끌 수 있어야
+  한다 — 강의 중에 손목이 계속 떨리면 그건 방해다.
+- 흰 핸들(`dialSpace`)과 종 노브(`alertSpace`) **양쪽에** 붙어 있다.
+
+### "이런 것도 있어요" — 있는데 못 찾는 기능을 위한 자리
+`Rereminder/Views/FeatureIntroView.swift`. 설정 > 알림 **맨 앞**과 설정 > Help 에서 들어간다.
+
+들어온 제보 셋 중 **둘이 이미 있는 기능**이었다("끝날 때까지 반복해 줬으면" = `EscalatingAlert`,
+"다이얼에 진동을" = 방금 만든 것). 설정 깊숙한 곳에 스위치로 놓여 있으면, 그게 필요하다고
+느끼는 사람조차 있는 줄 모른다.
+
+- 이 화면은 **안내이면서 동시에 설정**이다. 각 항목이 무엇을 해 주는지 한 문장으로 말하고
+  **켜는 스위치를 바로 그 자리에** 둔다 — 읽고 나서 설정을 다시 찾아 들어가게 하면 거기서
+  절반이 떨어진다. 설정 화면(`PersistentAlertSection`)과 **같은 키**를 본다.
+- ⚠️ **카드마다 제목과 토글 문구를 갈라 둔다** — 제목은 "언제 나에게 필요한가"
+  (무시할 수 없게 / 다이얼이 손끝에 걸리게), 토글은 기능 이름(끝나면 알람으로 울리기 /
+  조절할 때 진동). 같으면 같은 줄이 두 번 있는 것처럼 보인다(실제로 그랬다).
+- ⚠️ **자동으로 띄우지 않는다.** 이 앱에는 이미 양보 순서를 지키는 안내가 여럿 있고
+  (기기 질문·피드백 넛지·반복 감지·창단 후원자·다음 자리 예약), 하나를 더 얹으면 앱을 열자마자
+  무언가가 뜨는 앱이 된다. 여기는 **찾아오면 있는 자리**다.
+- 테스트: `RereminderTests/FeatureSettingsTests.swift` (5개 — 기본값과 키 공유를 지킨다)
+
 ### 알림 배지 (종을 옮길 때 뜨는 툴팁)
 종 노브를 끌면 그 지점을 **두 가지로** 읽어줍니다. 발표자는 "몇 분 남았나"와
 "몇 분째 말하고 있나"를 둘 다 알아야 하기 때문입니다.
