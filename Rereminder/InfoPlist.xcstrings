@@ -10,16 +10,16 @@
             "value": "Rereminder"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "두번알림"
-          }
-        },
         "ja": {
           "stringUnit": {
             "state": "translated",
             "value": "Rereminder"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "두번알림"
           }
         }
       }
@@ -33,22 +33,23 @@
             "value": "Rereminder"
           }
         },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "두번알림"
-          }
-        },
         "ja": {
           "stringUnit": {
             "state": "translated",
             "value": "Rereminder"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "두번알림"
           }
         }
       }
     },
     "NSAlarmKitUsageDescription": {
       "comment": "Shown when the app asks to schedule alarms (설정 > 알림 > 끝나면 알람으로 울리기)",
+      "extractionState": "manual",
       "localizations": {
         "en": {
           "stringUnit": {
