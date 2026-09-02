@@ -353,6 +353,37 @@ extension TimerView {
   안내는 한 번뿐이지만 **대접받고 있다는 사실은 계속 보여야** 한다.
 - 테스트: `RereminderTests/FoundingSupporterTests.swift` (20개)
 
+### 저장소 (SwiftData) — ⚠️ CloudKit 자동 동기화를 켜지 말 것
+템플릿(`Timer`)·기록(`TimerRecord`)은 앱 그룹 안의 로컬 SwiftData 스토어에 저장된다.
+컨테이너는 `RereminderApp.sharedModelContainer` **하나**이고, `cloudKitDatabase: .none` 이다.
+
+- ⚠️ **`.modelContainer(for:)` 를 쓰지 말 것.** 기본값이 `cloudKitDatabase: .automatic` 이라,
+  앱에 iCloud(CloudKit) 엔타이틀먼트가 있으면 로컬 스토어에도 CloudKit 스키마 규칙을 강요한다:
+  모든 속성이 optional 이거나 기본값이 있어야 하고, 관계도 optional 이어야 하며,
+  `@Attribute(.unique)` 는 쓸 수 없다. `Timer`·`TimerRecord` 는 셋 다 어긴다
+  (`id` 가 unique, `runs` 가 non-optional, 기본값 없는 속성 여럿).
+- 그래서 피드백 허브용 iCloud 엔타이틀먼트가 붙은 뒤로 **스토어가 통째로 로드에 실패했고,
+  템플릿·기록이 하나도 저장되지 않았다.** 화면에는 아무 오류도 뜨지 않고 콘솔에만
+  `CoreData: error: Store failed to load` 가 찍힌다 — "템플릿이 저장되지 않는다"는 제보의 정체.
+- 기기 간 타이머 동기화는 CloudKit 이 아니라 `CloudTimerSyncManager`(iCloud KVS)가 한다.
+  템플릿까지 동기화하고 싶어지면 엔타이틀먼트가 아니라 **모델을 먼저** 위 규칙에 맞춰야 한다
+  (unique 제거 + 마이그레이션).
+- 검증: `RereminderTests/TemplateSaveTests.test_appModelContainer_loadsRealStoreAndPersists`
+  (메모리 폴백으로 떨어지지 않았는지까지 본다 — 폴백은 저장이 되는 것처럼 보인다).
+
+### 템플릿 저장 (`TimerConfigService`)
+저장은 Pro 다(`ProGate.canSaveTemplate`). 그 판정은 **`saveIfNeeded` 첫 줄에서 한 번만** 한다.
+
+- ⚠️ **"무료 = 한도 0" 으로 구현하지 말 것.** 저장한 뒤 한도 초과분을 지우는 정리 루프가
+  **시드 템플릿까지 통째로** 지웠다. 무료 사용자는 타이머를 한 번 시작하는 것만으로
+  (시작이 `applyCurrentSettings` → `saveIfNeeded` 를 부른다) 칩이 전부 사라졌다.
+  저장을 막는 것과 갖고 있던 것을 지우는 것은 전혀 다른 일이다 — 칩은 잠긴 채로 남아야 한다
+  (`TemplateQuickBar` 머리말).
+- 중복은 **전체 템플릿**과 견주고, 견주기 전에 알림 오프셋을 저장될 모양(`validateInPlace` —
+  범위 밖 제거 + 오름차순)으로 정규화한다. 맨 앞 하나만 보면 A·B 를 번갈아 쓸 때마다,
+  정렬을 안 맞추면 순서만 다른 같은 설정이 매번 새 칩으로 쌓인다.
+- `saveIfNeeded` 는 저장 결과를 돌려주고, "저장됨" 토스트는 **참일 때만** 뜬다.
+
 ### 사용 통계·피드백 (서비스 판단 루프)
 "이 앱이 실제로 쓸모가 있나"를 개발자가 앱 안에서 확인하는 경로. 설계·운영 문서는
 `docs/USAGE_STATS_HUB.md`(수집·집계)와 `docs/FEEDBACK_CLOUDKIT.md`(피드백).
@@ -1136,6 +1167,25 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
 ```
 
 ## 버전 히스토리
+
+### v2.2.3 (2026-09-02)
+**"템플릿이 저장되지 않는다"는 제보를 따라가 보니 저장 자체가 깨져 있었다.** 원인 두 개:
+
+- **SwiftData 스토어가 아예 로드되지 않았다** — `.modelContainer(for:)` 의 기본값이 CloudKit
+  자동 동기화라, 피드백 허브용 iCloud 엔타이틀먼트(2026-07-19, `c86bc7a`)가 붙은 뒤로
+  `Timer`·`TimerRecord` 가 CloudKit 스키마 규칙에 걸려 스토어가 통째로 열리지 않았다.
+  **템플릿도 기록도 하나도 저장되지 않았고**, 화면에는 아무 오류도 뜨지 않았다
+  → `RereminderApp.sharedModelContainer`(앱 그룹 경로 유지 + `cloudKitDatabase: .none`).
+  자세한 건 위 "저장소 (SwiftData)" 절
+- **무료 사용자의 템플릿이 지워지고 있었다** — "저장은 Pro"를 한도 0 으로 구현해서, 타이머를
+  한 번 시작하면(`applyCurrentSettings` → `saveIfNeeded`) 정리 루프가 시드 템플릿까지 전부
+  삭제했다. 판정을 `saveIfNeeded` 첫 줄로 올려 무료는 저장도 삭제도 하지 않는다
+- 중복 판정을 맨 앞 하나가 아니라 **전체 템플릿** + 정규화된 오프셋 기준으로 바꿨다
+  (순서만 다른 같은 설정이 매번 새 칩으로 쌓이던 문제)
+- "저장됨" 토스트는 실제로 저장됐을 때만 뜬다(`saveIfNeeded` 가 결과를 돌려준다)
+- 테스트 `RereminderTests/TemplateSaveTests.swift` 5개 추가 — 그중 하나는 **앱이 실제로 쓰는
+  컨테이너**가 열리는지 보고, 메모리 폴백으로 떨어지지 않았는지까지 확인한다
+- 릴리즈 노트: `docs/release-notes-2.2.3-{ko,en,ja}.md`
 
 ### v2.2.2 (2026-09-01)
 ⚠️ **원래 2.3.0 으로 준비하던 릴리즈다.** 코드는 그대로 두고 **번호만 2.2.2 로** 정했다.

@@ -349,15 +349,20 @@ final class TimerScreenViewModel: ObservableObject {
     }
 
     /// 현재 설정을 템플릿으로 저장한다 (타이머 시작 없음)
+    ///
+    /// ⚠️ 저장이 실제로 됐을 때만 "저장됨"이라고 말한다. 결과와 상관없이 토스트를 띄우면
+    ///    저장이 안 된 순간에도 됐다고 말하게 되고, 그건 "템플릿이 저장되지 않는다"는 제보가
+    ///    원인을 찾기 어려워지는 이유가 된다.
     func saveCurrentAsTemplate() {
         let cfg = normalizedCurrentConfig
         guard cfg.mainSec > 0 else { return }
-        configService.saveIfNeeded(
+        let saved = configService.saveIfNeeded(
             mainSec: cfg.mainSec,
             offsets: cfg.offsets,
             prealertMessages: prealertMessages,
             finishMessage: finishMessage.isEmpty ? nil : finishMessage
         )
+        guard saved else { return }
         showToast?(String(localized: "Template saved"))
     }
 

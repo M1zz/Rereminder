@@ -14,11 +14,13 @@ final class TimerConfigService {
 
     private var context: ModelContext?
 
-    /// Pro는 무제한, 무료는 **저장 자체가 없다**(`ProGate.canRememberSetup`).
-    /// 개수로 나누던 시절의 한도(3개)는 사라졌다 — 저장·불러오기가 이 앱이 파는 한 문장이다.
-    private var templateLimit: Int {
-        ProGate.canRememberSetup ? 100 : 0
-    }
+    /// 저장해 둘 수 있는 템플릿의 최대 개수. **결제 여부로 갈리지 않는다.**
+    ///
+    /// ⚠️ 무료를 0 으로 두지 말 것. 무료의 뜻은 "저장을 하지 않는다"(`saveIfNeeded` 첫 줄)이지
+    ///    "저장한 뒤 지운다"가 아닌데, 한도를 0 으로 두면 아래 정리 루프가 **시드 템플릿까지
+    ///    통째로** 지웠다 — 무료 사용자는 타이머를 한 번 시작하는 것만으로(시작이
+    ///    `saveIfNeeded` 를 부른다) 칩이 전부 사라졌다. "템플릿이 저장되지 않는다"는 제보의 정체.
+    private let maxTemplates = 100
 
     func attachContext(_ ctx: ModelContext) {
         self.context = ctx
@@ -94,31 +96,46 @@ final class TimerConfigService {
         return recents
     }
 
-    /// 중복이 아닌 경우에만 템플릿 저장, limit 초과 시 오래된 것 삭제
+    /// 같은 설정의 템플릿이 없을 때만 저장하고, 최대 개수를 넘으면 오래된 것을 지운다.
+    ///
+    /// ⚠️ **무료 사용자에게는 아무것도 하지 않는다 — 저장도, 삭제도.**
+    ///    저장이 Pro 인 것(`ProGate.canSaveTemplate`)과 갖고 있던 템플릿이 사라지는 것은
+    ///    전혀 다른 일이다. 칩은 잠긴 채로 남아 있어야 한다(`TemplateQuickBar` 머리말).
+    ///
+    /// 중복은 **전체 템플릿**과 견준다. 맨 앞 하나만 보면 A·B 를 번갈아 쓸 때마다 같은 설정이
+    /// 다시 쌓여 칩이 복사본으로 채워진다(시작할 때마다 이 함수가 불린다).
+    ///
+    /// - Returns: 이 설정이 템플릿으로 남아 있으면 true (새로 저장했거나 이미 있었거나).
+    @discardableResult
     func saveIfNeeded(
         mainSec: Int,
         offsets: [Int],
         prealertMessages: [Int: String],
         finishMessage: String?
-    ) {
-        guard let ctx = context else { return }
+    ) -> Bool {
+        guard ProGate.canSaveTemplate() else { return false }
+        guard let ctx = context else { return false }
 
         let normalizedFinish = (finishMessage?.isEmpty ?? true) ? nil : finishMessage
 
-        // 중복 체크
-        let currentTop = fetchRecents().first
-        if let top = currentTop,
-           top.mainSeconds == mainSec,
-           top.prealertOffsetsSec == offsets,
-           top.prealertMessages == prealertMessages,
-           top.finishMessage == normalizedFinish {
-            return
+        // ⚠️ 견주기 전에 **저장될 모양으로 맞춘다**. `Timer.validateInPlace` 가 범위를 벗어난
+        //    값을 걸러내고 오름차순으로 정렬해 저장하므로, 받은 순서 그대로 비교하면
+        //    [300, 60] 과 저장된 [60, 300] 이 다른 것이 되어 같은 설정이 매번 새로 쌓인다.
+        let normalizedOffsets = Array(Set(offsets.filter { $0 > 0 && $0 < mainSec })).sorted()
+
+        // 중복 체크 — 이미 같은 설정이 있으면 저장한 것과 같다
+        let existing = fetchRecents().contains { template in
+            template.mainSeconds == mainSec
+                && template.prealertOffsetsSec == normalizedOffsets
+                && template.prealertMessages == prealertMessages
+                && template.finishMessage == normalizedFinish
         }
+        if existing { return true }
 
         let entry = Timer(
-            name: makeTemplateName(mainSec: mainSec, offsets: offsets),
+            name: makeTemplateName(mainSec: mainSec, offsets: normalizedOffsets),
             mainSeconds: mainSec,
-            prealertOffsetsSec: offsets,
+            prealertOffsetsSec: normalizedOffsets,
             prealertMessages: prealertMessages,
             finishMessage: normalizedFinish
         )
@@ -128,12 +145,14 @@ final class TimerConfigService {
             AnalyticsManager.log(.presetSaved(name: entry.name, durationSeconds: mainSec))
         } catch {
             print("❌ 타이머 템플릿 저장 실패: \(error)")
+            ctx.delete(entry)
+            return false
         }
 
-        // limit 초과 시 삭제
+        // 최대 개수 초과 시 오래된 것부터 삭제
         let recents = fetchRecents()
-        if recents.count > templateLimit {
-            for old in recents.dropFirst(templateLimit) {
+        if recents.count > maxTemplates {
+            for old in recents.dropFirst(maxTemplates) {
                 ctx.delete(old)
             }
             do {
@@ -142,6 +161,7 @@ final class TimerConfigService {
                 print("❌ 오래된 템플릿 삭제 실패: \(error)")
             }
         }
+        return true
     }
 
     // MARK: - Template Name 생성

@@ -5,6 +5,7 @@
 //  Created by POS on 7/7/25.
 //
 
+import SwiftData
 import SwiftUI
 import TipKit
 import LeeoKit
@@ -69,6 +70,43 @@ struct RereminderApp: App {
                 .environmentObject(storeManager)
                 .environmentObject(themeManager)
         }
-        .modelContainer(for: [Timer.self, TimerRecord.self])
+        .modelContainer(Self.sharedModelContainer)
     }
+
+    // MARK: - SwiftData
+
+    /// 템플릿·기록 저장소. **CloudKit 동기화는 꺼 둔다.**
+    ///
+    /// ⚠️ `.modelContainer(for:)` 의 기본값은 `cloudKitDatabase: .automatic` 이라,
+    ///    앱에 iCloud(CloudKit) 엔타이틀먼트가 있으면 이 **로컬** 스토어까지 CloudKit 스키마
+    ///    규칙을 따지게 된다: 모든 속성이 optional 이거나 기본값이 있어야 하고, 관계도 optional
+    ///    이어야 하며, `@Attribute(.unique)` 는 쓸 수 없다. `Timer`·`TimerRecord` 는 셋 다
+    ///    어기므로 **스토어가 통째로 로드에 실패했고, 템플릿·기록이 하나도 저장되지 않았다**
+    ///    (피드백 허브용 iCloud 엔타이틀먼트가 붙은 2026-07-19 이후 조용히. 화면에는 아무
+    ///    오류도 뜨지 않고 콘솔에만 "Store failed to load" 가 찍힌다 — "저장이 안 된다"는
+    ///    제보의 정체다).
+    ///
+    /// 기기 간 타이머 동기화는 CloudKit 이 아니라 `CloudTimerSyncManager`(iCloud KVS)가 한다.
+    /// 나중에 템플릿까지 동기화하고 싶다면 엔타이틀먼트가 아니라 **모델을 먼저** 위 규칙에
+    /// 맞춰야 한다(unique 제거 + 마이그레이션).
+    static let sharedModelContainer: ModelContainer = {
+        let schema = Schema([Timer.self, TimerRecord.self])
+        // 앱 그룹 컨테이너 — 위젯·인텐트와 같은 자리를 쓰던 기존 스토어 경로를 유지한다
+        let configuration = ModelConfiguration(
+            schema: schema,
+            groupContainer: .identifier("group.leeo.toki"),
+            cloudKitDatabase: .none
+        )
+        do {
+            return try ModelContainer(for: schema, configurations: configuration)
+        } catch {
+            print("❌ SwiftData 컨테이너 로드 실패 — 이번 실행은 저장되지 않는다: \(error)")
+            // 앱을 죽이지는 않는다. 타이머 자체는 SwiftData 없이도 돌아간다.
+            return try! ModelContainer(
+                for: schema,
+                configurations: ModelConfiguration(schema: schema, isStoredInMemoryOnly: true,
+                                                   cloudKitDatabase: .none)
+            )
+        }
+    }()
 }

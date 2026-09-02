@@ -283,6 +283,8 @@ struct TimerHistoryView: View {
 }
 
 #Preview {
+    // 앱과 같은 컨테이너를 쓴다 — `for:` 는 CloudKit 동기화가 기본이라(`.automatic`)
+    // 이 모델로는 스토어가 열리지 않는다(`RereminderApp.sharedModelContainer` 주석 참고).
     TimerHistoryView()
-        .modelContainer(for: [TimerRecord.self, Timer.self])
+        .modelContainer(RereminderApp.sharedModelContainer)
 }
