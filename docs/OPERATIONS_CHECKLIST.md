@@ -86,3 +86,19 @@ CloudKit 허브가 담당). 분석 관련 대시보드 작업은 3번(사용 통
 
 참고: 알림 예약은 앱당 **64개**가 상한이고 예비 알림과 같은 주머니를 쓴다. 되풀이 개수는
 `EscalationSchedule.maxAlerts`(24)로 막아 두었다 — 상한을 올릴 때 이 숫자도 함께 볼 것.
+
+## 7. 끝나면 알람으로 울리기 (AlarmKit) — 2.2.4 신규
+
+설정 > 알림 > **끝나면 알람으로 울리기**(`Shared/Modules/RereminderAlarmManager.swift`).
+설계 배경은 CLAUDE.md 의 AlarmKit 절.
+
+- [ ] 포털 작업 **없음** — AlarmKit 은 capability 가 아니라 권한 프롬프트로 동작한다.
+      문구는 `Rereminder/InfoPlist.xcstrings` 의 `NSAlarmKitUsageDescription`(ko/en/ja 번역 완료)
+- [ ] App Store Connect → App Privacy 변경 **없음**(알람은 수집이 아니다)
+- [ ] TestFlight 실기기 확인: 토글을 켤 때 권한 창이 뜨는지 → 거부하면 토글이 되돌아가는지
+      → 켠 채로 타이머를 끝내면 **무음 스위치·집중 모드에서도** 전체 화면 알람이 뜨는지
+- [ ] 타이머를 **정지**한 뒤 종료 예정 시각에 알람이 뜨지 않는지
+      (`removePendingNotificationRequests` 로는 안 지워진다 — `stop`+`cancel` 둘 다 필요)
+
+⚠️ 기본값은 **꺼짐**이다. 회의 중에 기본으로 울리면 기능이 아니라 사고다.
+⚠️ Mac Catalyst·App Clip 에는 AlarmKit 이 없다(no-op 스텁 → UN 알림 경로 유지).
