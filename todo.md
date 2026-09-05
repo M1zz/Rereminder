@@ -1,6 +1,13 @@
 # Rereminder 작업 메모
 
 ## 완료 (이번 라운드)
+- [x] **App Clip 을 업로드에서 잠시 뺀다** (타겟은 남기고 연결만 끊음)
+  - `Embed App Clips` 항목 + 메인 앱 `dependencies` 두 줄 제거 → `Rereminder.app/AppClips/` 가
+    생기지 않는 것으로 확인. 워치 앱·위젯 확장 임베드는 그대로
+  - 되살리는 법은 `CLAUDE.md` 의 App Clip 절 머리말에 적어 뒀다 (정의는 pbxproj 에 남겨 둠)
+  - iOS·Mac Catalyst 빌드 성공, 테스트 311개 통과
+  - [ ] ⚠️ **App Store Connect 쪽은 따로 정리해야 한다** — 빌드에서 빠질 뿐, 이미 등록된
+        App Clip 경험·AASA(`m1zz.github.io`)는 그대로 남는다
 - [x] **"프로모션 코드를 썼는데 여전히 결제하라고 뜬다" — 원인 3개 수정**
   - ① **가장 큰 것: 구매 기록이 실패한 조회 한 번에 지워졌다.** `syncFromStore` 가
     `store.hasPro` 를 그대로 미러링해 false 를 Keychain 에 적었는데,

@@ -1072,6 +1072,17 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - **ToastViewModifier** (`Rereminder/Views/Components/ToastViewModifier.swift`): 토스트 메시지
 
 ### App Clip (RereminderClip)
+
+> ⚠️ **지금 App Clip 은 앱에 임베드되지 않는다 — 잠시 끊어 둔 상태다(2026-09-05).**
+> 타겟·소스·엔타이틀먼트는 **그대로 살아 있고**, 메인 앱과의 연결 두 줄만 뺐다:
+> ① `Embed App Clips` 페이즈의 `RereminderClip.app in Embed App Clips` 항목
+> ② 메인 앱 타겟 `dependencies` 의 `454D3869CE4B00C1FF7146B1 /* PBXTargetDependency */`
+> 두 정의(`07C42068B7266377CF890D07`, `454D3869CE4B00C1FF7146B1`)는 pbxproj 에 남겨 뒀으므로
+> **되살릴 때는 그 두 줄을 각 목록에 도로 넣으면 된다.** 확인법: 빌드한 `Rereminder.app` 에
+> `AppClips/` 폴더가 생기는지 본다.
+> 되살릴 때 함께 볼 것 — 클립 `MARKETING_VERSION` 이 메인 앱과 같아야 하고(제출 게이트),
+> Catalyst 빌드를 위해 임베드 항목에 `platformFilter = ios;` 가 붙어 있어야 한다.
+
 앱의 핵심 가치인 **"끝나기 전 여러 번 알림"**만 남긴 경량 체험판입니다.
 
 - **번들 ID**: `com.xa.toki.Clip` (부모 앱 `com.xa.toki`에 임베드)

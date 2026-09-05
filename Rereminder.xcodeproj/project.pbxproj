@@ -114,7 +114,6 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/AppClips";
 			dstSubfolderSpec = 16;
 			files = (
-				07C42068B7266377CF890D07 /* RereminderClip.app in Embed App Clips */,
 			);
 			name = "Embed App Clips";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -455,7 +454,6 @@
 				2B302B132E4375170089A14A /* PBXTargetDependency */,
 				58AA3EC22ECF550B007D4BBD /* PBXTargetDependency */,
 				AA10AB0B2F20C0000000000B /* PBXTargetDependency */,
-				454D3869CE4B00C1FF7146B1 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				260414CD2E1B9FA200CBA29B /* Rereminder */,
