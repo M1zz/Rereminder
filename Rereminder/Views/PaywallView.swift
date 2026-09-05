@@ -61,6 +61,13 @@ struct PaywallView: View {
                 }
             }
         }
+        .task {
+            // ⚠️ 호출부가 한 곳도 없어 상품이 로드되지 않았다 — 가격(`proPrice`)이 빈 문자열로
+            //    뜨는 페이월은 "얼마인지 모르고 누르라"는 화면이다.
+            //    권한도 함께 확인한다: 페이월을 여는 순간이 "이미 샀는데 왜 또"를 잡을 마지막 기회다.
+            await store.loadProducts()
+            await store.verifyCurrentEntitlements()
+        }
         .onAppear {
             AnalyticsManager.log(.paywallShown(trigger: triggeredBy))
         }

@@ -1,6 +1,27 @@
 # Rereminder 작업 메모
 
 ## 완료 (이번 라운드)
+- [x] **"프로모션 코드를 썼는데 여전히 결제하라고 뜬다" — 원인 3개 수정**
+  - ① **가장 큰 것: 구매 기록이 실패한 조회 한 번에 지워졌다.** `syncFromStore` 가
+    `store.hasPro` 를 그대로 미러링해 false 를 Keychain 에 적었는데,
+    `Transaction.currentEntitlements` 는 App Store 로그아웃·기기 초기화 직후에도 조용히 빈 값을
+    낸다 → **돈 낸 사람의 평생 해제가 지워지고 페이월이 다시 떴다**
+    → 기록을 **래치**로 바꿈. 내리는 근거는 `Transaction.all` 로 확인한 **회수(환불)** 하나뿐
+    (`isRevoked(proTransactionRevocationDates:)` 순수 함수)
+  - ② **`ProGate` 가 static 이라 SwiftUI 가 다시 그리지 않았다** — 구매·복원·코드 교환이 끝나도
+    자물쇠가 그대로 남아 앱을 껐다 켜야 풀렸다 → 게이트를 읽는 뷰 5곳에
+    `@ObservedObject StoreManager.shared` 추가 (`TemplateQuickBar`·`TimerTemplateView`·
+    `TimerHistoryView`·`OnboardingFlowView`·`NoticeSettingView`)
+  - ③ **전경 복귀 시 권한을 다시 확인하지 않았다** — `verifyCurrentEntitlements` 는 정의만 있고
+    **호출부가 0곳**이었다. 코드 교환은 언제나 "앱 → App Store → 복귀"인데 복귀에서 아무것도
+    안 했다 → `handleScenePhase(.active)` 에서 호출
+  - 덤: `loadProducts` 도 호출부가 0곳이라 페이월 가격이 빈 문자열로 뜰 수 있었다
+    → `PaywallView.task` 에서 로드
+  - 테스트 9개 추가(`StorePurchaseLatchTests`), 전체 **311개 통과** / iOS·Mac Catalyst 빌드 성공 /
+    다국어 검사 통과
+  - [ ] ⚠️ **실기기 확인 필요** — 인앱결제 프로모션 코드를 실제로 교환해 앱 복귀만으로 풀리는지
+  - [ ] ⚠️ 제보자에게 먼저 확인할 것: 준 코드가 **앱** 코드인가 **인앱결제** 코드인가
+        (앱은 원래 무료라 앱 코드는 Pro 를 열지 않는다)
 - [x] **"템플릿이 저장되지 않는다" 제보 — 원인 2개 수정**
   - ① **진짜 원인: SwiftData 스토어가 아예 열리지 않았다.** `.modelContainer(for:)` 의 기본값이
     CloudKit 자동 동기화라, 피드백 허브용 iCloud 엔타이틀먼트(2026-07-19)가 붙은 뒤로

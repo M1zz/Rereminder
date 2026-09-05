@@ -468,7 +468,7 @@ struct NoticeSettingView: View {
                     HStack {
                         Label("Timer History", systemImage: "chart.bar.fill")
                         Spacer()
-                        if !StoreManager.isProUser {
+                        if !store.isPro {
                             ProBadge(small: true)
                         }
                     }

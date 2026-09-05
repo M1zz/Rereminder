@@ -312,6 +312,46 @@ extension TimerView {
   합산돼 지표가 조용히 틀어진다. `UsageMetrics` 의 `alertLimitHits`·`graceGrants` 도 같은 이유로
   **늘지 않지만 남겨 둔** 키다.
 
+### 구매 기록은 래치다 — 조회가 비었다고 내리지 않는다
+`Shared/Modules/StoreManager.swift`. **이 앱에서 가장 비싼 버그는 "돈 낸 사람에게 페이월이
+다시 뜨는 것"이다** — 그건 기능 결함이 아니라 신뢰의 문제이고, 앱스토어 리뷰에 그대로 남는다.
+
+예전에는 `syncFromStore` 가 `store.hasPro` 를 그대로 미러링해서, false 가 되면 Keychain 에도
+false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store 계정 로그아웃·기기
+초기화 직후·StoreKit 캐시 미형성**에서도 조용히 빈 값을 낸다. 그 한 번이 재설치에도 살아남으라고
+넣어 둔 평생 해제 기록을 지웠다.
+
+- ⚠️ **올릴 때와 내릴 때가 대칭이 아니다.** 올리는 근거("권한이 보인다")는 확실하지만 내리는
+  근거("권한이 안 보인다")는 확실하지 않다 — 조회가 실패해도 똑같이 안 보인다.
+  그래서 기록을 내리는 근거는 **회수(환불)를 직접 확인했을 때** 하나뿐이다.
+- ⚠️ 회수 확인은 **`Transaction.all`** 로 한다. `currentEntitlements` 는 회수된 트랜잭션을
+  **아예 내보내지 않아서** 거기서는 "환불됐다"와 "조회가 비었다"를 구분할 수 없다.
+- 판정은 순수 함수 `StoreManager.isRevoked(proTransactionRevocationDates:)` 에 있다 —
+  **목록이 비어 있으면 false**(근거 없음), 살아 있는 트랜잭션이 하나라도 있으면 false
+  (환불 후 재구매), 전부 회수됐을 때만 true.
+- `isPro`(@Published)와 `isProUser`(static)는 **언제나 같은 답**을 내야 한다. 갈라지면
+  페이월은 "구매하세요"라고 하는데 기능은 열려 있는(또는 그 반대의) 상태가 된다.
+
+**⚠️ `ProGate` 는 static 이라 SwiftUI 가 다시 그리지 않는다.**
+`ProGate.canRememberSetup` → `StoreManager.isProUser` 는 Keychain 을 읽는 정적 프로퍼티라,
+값이 바뀌어도 뷰는 그것을 모른다. 그래서 구매·복원·**프로모션 코드 교환**이 끝나도 자물쇠가
+그대로 남아 앱을 껐다 켜야만 풀렸다. 게이트를 읽는 뷰는 **반드시**
+`@ObservedObject private var store = StoreManager.shared` 를 함께 들고
+`store.isPro || ProGate.…` 형태로 읽는다 (`TemplateQuickBar`·`TimerTemplateView`·
+`TimerHistoryView`·`OnboardingFlowView`·`NoticeSettingView`). 새로 게이트를 읽는 화면을
+만들 때도 같은 규칙을 지킬 것.
+
+**⚠️ 전경 복귀마다 권한을 다시 확인한다** (`TimerUnifiedView.handleScenePhase`).
+프로모션 코드 교환·가족 공유·다른 기기 구매는 전부 앱 밖(App Store)에서 일어나고 흐름은 언제나
+"앱 → App Store → 복귀"다. 2.2.3 까지 `verifyCurrentEntitlements` 는 **정의만 있고 호출부가 한
+곳도 없어서**, 코드를 교환하고 돌아와도 잠긴 그대로였다. `loadProducts` 도 마찬가지라 페이월
+가격이 빈 문자열로 뜰 수 있었다 (지금은 `PaywallView.task` 에서 부른다).
+
+- 프로모션 코드 제보를 받으면 먼저 가를 것: **앱 프로모션 코드**(무료 다운로드)인가
+  **인앱결제 프로모션 코드**인가. 앱은 원래 무료라 전자는 Pro 를 열지 않는다.
+  그다음이 스토어프론트(발급한 한국 스토어 계정에서만 유효)와 Apple ID 불일치다.
+- 테스트: `RereminderTests/StorePurchaseLatchTests.swift` (9개)
+
 ### 창단 후원자 — 먼저 산 사람에게 값이 떨어지지 않게
 `Rereminder/Modules/FoundingSupporter.swift`. 파는 물건의 축이 바뀌고(알림 개수 → 세션 운영)
 가격이 오를 때, **먼저 산 사람이 손해를 봤다**가 되면 그 사람들은 두 번 다시 이 앱을 편들지

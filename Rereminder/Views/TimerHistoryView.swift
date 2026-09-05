@@ -18,7 +18,11 @@ struct TimerHistoryView: View {
     @State private var paywallStage: ProGate.PaywallStage = .second
     @State private var historyGate: ProGate.GateResult = .blocked(stage: .first)
 
-    private var isPro: Bool { StoreManager.isProUser }
+    /// ⚠️ 관찰이 목적 — 정적 `StoreManager.isProUser` 만 읽으면 구매·복원 후에도
+    ///    이 화면은 잠긴 그대로 남는다(앱을 껐다 켜야 풀렸다).
+    @ObservedObject private var store = StoreManager.shared
+
+    private var isPro: Bool { store.isPro || StoreManager.isProUser }
 
     var body: some View {
         NavigationStack {

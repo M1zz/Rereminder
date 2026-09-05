@@ -42,6 +42,11 @@ struct TimerTemplateView: View {
     @State private var showPaywall = false
     @State private var paywallFeature: ProGate.Feature? = .unlimitedTemplates
 
+    /// ⚠️ 관찰이 목적 — `ProGate` 는 static 이라 Pro 상태 변화로 다시 그려지지 않는다.
+    @ObservedObject private var store = StoreManager.shared
+
+    private var canRememberSetup: Bool { store.isPro || ProGate.canRememberSetup }
+
     let onSelect: (Timer) -> Void
 
     var body: some View {
@@ -66,7 +71,7 @@ struct TimerTemplateView: View {
             .navigationTitle("Timer Templates")
             .navigationBarTitleDisplayMode(.inline)
             .safeAreaInset(edge: .bottom) {
-                if !ProGate.canRememberSetup {
+                if !canRememberSetup {
                     Button {
                         paywallFeature = .unlimitedTemplates
                         showPaywall = true

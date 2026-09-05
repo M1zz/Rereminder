@@ -13,6 +13,15 @@
 //  - 개발/샌드박스/맥앱 자동 Pro → unlockOverride 로 LeeoStore 에 주입
 //  - 기존 사용자 그랜드파더링 → grandfather 클로저로 LeeoStore 에 주입
 //
+//  ⚠️ **구매 기록은 래치다 — 조회가 비었다고 내리지 않는다.**
+//     예전에는 `store.hasPro` 가 false 로 바뀌면 그대로 Keychain 에 false 를 적었다. 그런데
+//     `Transaction.currentEntitlements` 는 App Store 계정 로그아웃·기기 초기화 직후·StoreKit
+//     캐시 미형성에서도 **조용히 빈 값**을 내므로, 그 한 번이 재설치에도 살아남으라고 넣어 둔
+//     평생 해제 기록을 지웠다. 결과는 **돈을 낸 사람에게 페이월이 다시 뜨는 것**이고, 이건
+//     기능 결함이 아니라 신뢰의 문제다.
+//     그래서 기록을 내리는 근거는 **회수(환불)를 직접 확인했을 때** 하나뿐이다
+//     (`hasRevokedProTransaction`). 자세한 이유는 그 함수 주석 참고.
+//
 
 import Foundation
 import Combine
@@ -53,6 +62,9 @@ final class StoreManager: ObservableObject {
     private var cancellable: AnyCancellable?
     private let keychainKey = "rereminder.pro.purchased"
     private let defaultsKey = "rereminder.pro.purchased"
+    /// 회수 확인이 이미 돌고 있는지. `syncFromStore` 는 상품 로드·복원 등으로도 자주 불리는데,
+    /// 그때마다 `Transaction.all` 을 훑으면 낭비다.
+    private var isCheckingRevocation = false
 
     // MARK: - TestFlight / Sandbox
 
@@ -158,17 +170,66 @@ final class StoreManager: ObservableObject {
     /// LeeoStore 의 현재 상태를 파사드의 @Published 로 옮기고,
     /// 논isolated 정적 isProUser 가 어디서든 올바른 값을 읽도록
     /// Pro 상태를 Keychain + UserDefaults(rereminder.pro.purchased) 로 미러링한다.
+    ///
+    /// ⚠️ **올릴 때와 내릴 때가 대칭이 아니다.** 올리는 근거(권한이 보인다)는 확실하지만,
+    ///    내리는 근거(권한이 안 보인다)는 확실하지 않다 — 조회가 실패해도 똑같이 안 보인다.
+    ///    그래서 내리는 쪽만 회수 확인(`clearStoredPurchaseIfRevoked`)을 한 겹 더 거친다.
     private func syncFromStore() {
         products = store.products
 
-        let pro = store.hasPro
-        let changed = (pro != isPro)
-        isPro = pro
+        let live = store.hasPro
 
-        // 자동 Pro 환경은 영속화하지 않는다(원본과 동일). 실제 구매/그랜드파더링만 저장.
-        if changed, !Self.isAutoProEnvironment {
-            savePurchaseState(pro)
+        if !Self.isAutoProEnvironment {
+            if live {
+                // 권한이 보인다 — 근거가 확실하므로 바로 기록한다.
+                if !Self.storedPurchaseFlag { savePurchaseState(true) }
+            } else if Self.storedPurchaseFlag {
+                // 갖고 있던 기록이 조회에서 사라졌다. 환불인지 조회 실패인지 따로 확인한다.
+                Task { [weak self] in await self?.clearStoredPurchaseIfRevoked() }
+            }
         }
+
+        // 화면에 보이는 값(@Published)은 최종 판정과 언제나 같아야 한다 — 여기가 갈라지면
+        // 페이월은 "구매하세요"라고 하는데 기능은 열려 있는(또는 그 반대의) 상태가 된다.
+        isPro = Self.isProUser || live
+    }
+
+    /// 회수(환불)가 확인된 경우에만 저장된 구매 기록을 내린다.
+    ///
+    /// 확인은 `Transaction.all` 로 한다. `Transaction.currentEntitlements` 는 회수된
+    /// 트랜잭션을 **아예 내보내지 않으므로** 거기서는 "환불됐다"와 "조회가 비었다"를 구분할
+    /// 수 없다 — 구분하지 못한 채 내렸던 것이 바로 결제한 사용자에게 페이월이 다시 뜨던 원인이다.
+    private func clearStoredPurchaseIfRevoked() async {
+        guard !isCheckingRevocation else { return }
+        isCheckingRevocation = true
+        defer { isCheckingRevocation = false }
+
+        let revocations = await Self.proTransactionRevocationDates()
+        guard Self.isRevoked(proTransactionRevocationDates: revocations) else { return }
+        savePurchaseState(false)
+        isPro = Self.isProUser || store.hasPro
+    }
+
+    /// pro 상품 트랜잭션의 회수 시각 목록 (살아 있으면 nil). StoreKit 접촉은 여기까지다.
+    nonisolated private static func proTransactionRevocationDates() async -> [Date?] {
+        var dates: [Date?] = []
+        for await result in Transaction.all {
+            guard case .verified(let transaction) = result,
+                  transaction.productID == ProductID.pro.rawValue else { continue }
+            dates.append(transaction.revocationDate)
+        }
+        return dates
+    }
+
+    /// 회수 판정 (순수 함수 — 테스트 대상).
+    ///
+    /// - 살아 있는 트랜잭션이 하나라도 있으면 회수가 아니다(환불 후 재구매 등).
+    /// - ⚠️ **목록이 비어 있으면 false 다.** "조회에 아무것도 안 잡혔다"는 환불의 근거가
+    ///   아니라 근거가 없다는 뜻이다. 여기서 true 를 돌려주면 App Store 로그아웃 한 번으로
+    ///   결제한 사용자의 평생 해제가 지워진다 — 고치려던 바로 그 버그다.
+    nonisolated static func isRevoked(proTransactionRevocationDates dates: [Date?]) -> Bool {
+        guard !dates.isEmpty else { return false }
+        return dates.allSatisfy { $0 != nil }
     }
 
     // MARK: - Load Products / Entitlements (LeeoStore 로 위임)
@@ -277,11 +338,18 @@ extension StoreManager {
             .displayName ?? AppName.pro
     }
 
+    /// 저장된 구매 기록(래치). Keychain 우선, 없으면 UserDefaults.
+    /// ⚠️ 이 값은 회수를 확인했을 때만 내려간다 — `clearStoredPurchaseIfRevoked` 참고.
+    nonisolated static var storedPurchaseFlag: Bool {
+        KeychainHelper.load(key: "rereminder.pro.purchased")
+            ?? UserDefaults.standard.bool(forKey: "rereminder.pro.purchased")
+    }
+
     /// 빠른 Pro 체크 (저장된 값, 네트워크 불필요)
     /// nonisolated — Keychain/UserDefaults만 읽으므로 어디서든 호출 가능
     /// TestFlight/Sandbox 환경과 기존 사용자(그랜드파더링)는 항상 true 를 반환
     nonisolated static var isProUser: Bool {
         if isAutoProEnvironment || isGrandfathered { return true }
-        return KeychainHelper.load(key: "rereminder.pro.purchased") ?? UserDefaults.standard.bool(forKey: "rereminder.pro.purchased")
+        return storedPurchaseFlag
     }
 }

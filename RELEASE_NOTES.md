@@ -9,6 +9,32 @@ DeployBar 가 배포할 때 아래 버전 절의 언어별 문구를 읽어 스�
 사용자에게 무엇이 좋아졌는지만 쓴다. 내부 구조나 빌드 설정 이야기는 쓰지 않는다.
 언어마다 다시 쓴다. 기계번역하지 말고 항목 수와 순서만 맞춘다.
 
+## 2.2.5
+
+### 앱스토어 (한국어)
+
+이미 구매했는데 다시 결제하라던 문제를 고쳤습니다.
+구매나 코드 사용이 이제 바로 반영됩니다.
+앱을 껐다 켜지 않아도 잠금이 풀립니다.
+앱으로 돌아올 때마다 구매 상태를 확인합니다.
+Pro 화면에 가격이 없던 문제를 고쳤습니다.
+
+### App Store (English)
+
+Fixed being asked to pay for Pro twice.
+Purchases and codes apply immediately.
+No need to restart the app to unlock.
+Your purchase is rechecked on reopen.
+Fixed the missing Pro price display.
+
+### App Store (日本語)
+
+購入済みなのに再度請求される問題を修正。
+購入やコードがすぐに反映されます。
+再起動しなくてもロックが解除されます。
+アプリに戻るたびに購入状態を確認します。
+Pro画面に価格が出ない問題を修正しました。
+
 ## 2.2.4
 
 ### 앱스토어 (한국어)

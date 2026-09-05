@@ -421,6 +421,11 @@ struct TimerUnifiedView: View {
             screenVM.applyPendingLiveActivityCommand()
             // 며칠씩 살아 있는 프로세스에서도 "오늘 열었다"를 놓치지 않게 복귀마다 확인한다.
             ActivityReporter.reportForegroundOpen()
+            // ⚠️ **구매 권한을 복귀마다 다시 확인한다.** 프로모션 코드 교환·가족 공유·다른 기기
+            //    구매는 전부 앱 밖(App Store)에서 일어나고 흐름은 언제나 "앱 → App Store → 복귀"다.
+            //    예전에는 이 시점에 아무것도 하지 않아, 코드를 교환하고 돌아와도 잠긴 그대로였다
+            //    (`verifyCurrentEntitlements` 는 정의만 있고 호출부가 한 곳도 없었다).
+            Task { await StoreManager.shared.verifyCurrentEntitlements() }
         }
     }
 

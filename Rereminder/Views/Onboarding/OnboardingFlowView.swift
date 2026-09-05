@@ -21,6 +21,9 @@ import SwiftUI
 struct OnboardingFlowView: View {
     @Binding var isPresented: Bool
     @EnvironmentObject var screenVM: TimerScreenViewModel
+
+    /// ⚠️ 관찰이 목적 — `ProGate` 는 static 이라 Pro 상태 변화로 다시 그려지지 않는다.
+    @ObservedObject private var store = StoreManager.shared
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     private enum Step: Int, CaseIterable {
@@ -270,7 +273,7 @@ struct OnboardingFlowView: View {
             // ⚠️ 저장은 Pro 다(`ProGate.canRememberSetup`). 무료 사용자에게 저장 버튼을 보여 주고
             //    눌렀을 때 막거나 조용히 실패하면, 온보딩이 첫 화면부터 거짓말을 하는 셈이 된다.
             //    대신 **그런 것이 있다는 사실만** 알리고 넘어간다 — 페이월은 온보딩에 세우지 않는다.
-            if ProGate.canRememberSetup {
+            if store.isPro || ProGate.canRememberSetup {
                 Button {
                     screenVM.saveCurrentAsTemplate()
                     didSaveTemplate = true

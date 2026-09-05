@@ -24,7 +24,15 @@ import SwiftUI
 struct TemplateQuickBar: View {
     @ObservedObject var screenVM: TimerScreenViewModel
 
+    /// ⚠️ **관찰이 목적이다.** `ProGate` 는 static 이라 Pro 상태가 바뀌어도 SwiftUI 가
+    ///    다시 그리지 않는다. 그래서 구매·복원·프로모션 코드 교환이 끝나도 자물쇠가 그대로
+    ///    남아 "돈 냈는데 또 사라고 한다"가 됐다 — 앱을 껐다 켜야만 풀렸다.
+    @ObservedObject private var store = StoreManager.shared
+
     @State private var showPaywall = false
+
+    /// 저장·불러오기 가능 여부. `store.isPro` 를 함께 읽어야 위 관찰이 실제로 걸린다.
+    private var canRememberSetup: Bool { store.isPro || ProGate.canRememberSetup }
 
     @Query(sort: [SortDescriptor(\Timer.createdAt, order: .reverse)])
     private var allTemplates: [Timer]
@@ -91,7 +99,7 @@ struct TemplateQuickBar: View {
 
             if hasUnsavedChanges {
                 Button {
-                    guard ProGate.canRememberSetup else {
+                    guard canRememberSetup else {
                         showPaywall = true
                         return
                     }
@@ -102,7 +110,7 @@ struct TemplateQuickBar: View {
                     FeatureTips.markTemplateSaved()
                 } label: {
                     HStack(spacing: DSSpacing.xs) {
-                        Image(systemName: ProGate.canRememberSetup ? "bookmark.fill" : "lock.fill")
+                        Image(systemName: canRememberSetup ? "bookmark.fill" : "lock.fill")
                             .font(.caption2.weight(.semibold))
                         Text("Save")
                             .font(DSFont.callout.weight(.semibold))
@@ -130,7 +138,7 @@ struct TemplateQuickBar: View {
     /// 저장해 둔 설정 하나. 무료에서는 **잠긴 채로 보인다** — 없애면 잃어버린 것이 된다.
     private func templateChip(_ template: Timer) -> some View {
         Button {
-            guard ProGate.canRememberSetup else {
+            guard canRememberSetup else {
                 showPaywall = true
                 return
             }
@@ -139,7 +147,7 @@ struct TemplateQuickBar: View {
             }
         } label: {
             HStack(spacing: DSSpacing.xs) {
-                if !ProGate.canRememberSetup {
+                if !canRememberSetup {
                     Image(systemName: "lock.fill")
                         .font(.caption2)
                 }
