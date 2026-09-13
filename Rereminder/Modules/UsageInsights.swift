@@ -232,16 +232,17 @@ enum UsageInsights {
         let cancelRate = starts > 0 ? cancels / starts * 100 : 0
         let avgFocus = snapshots.reduce(0.0) { $0 + ($1["focusMinutes"] ?? 0) } / n
 
-        let pro = share { ($0["flag.isPro"] ?? 0) > 0 }
+        // 결제로 센다 — 접근 권한(flag.isPro)이 아니라. 옛 스냅샷은 didPay 가 물러서서 읽는다.
+        let pro = share { UsageInsights.didPay($0) }
         let notifications = share { ($0["flag.notificationsOn"] ?? 0) > 0 }
         let templates = share { ($0["flag.templateUser"] ?? 0) > 0 }
         let presentation = share { ($0["flag.presentationUser"] ?? 0) > 0 }
         let watch = share { ($0["flag.watchUser"] ?? 0) > 0 }
 
         return [
-            AdoptionSignal(name: "Pro 전환율",
+            AdoptionSignal(name: "결제 전환율",
                            value: percentText(pro),
-                           hint: "결제까지 간 비율이에요.",
+                           hint: "실제로 돈을 낸 비율이에요. 그랜드파더·TestFlight는 빠집니다.",
                            ratio: pro),
             AdoptionSignal(name: "알림 권한 허용",
                            value: percentText(notifications),
@@ -497,7 +498,7 @@ enum UsageInsights {
             func metric(_ key: String) -> Int { Int((user.metrics[key] ?? 0).rounded()) }
             func flag(_ key: String) -> Bool { (user.metrics[key] ?? 0) > 0 }
 
-            let isPro = flag("flag.isPro")
+            let isPro = UsageInsights.didPay(user.metrics)
             // 지금 축(발표 모드)의 체험 소진을 먼저 보고, 없으면 옛 축(알림)의 기록을 읽는다 —
             // 예전 스냅샷에는 `trial.presentation` 이 아예 없다.
             let trialUsed = max(metric("trial.presentation"), metric("trial.prealerts"))
@@ -773,6 +774,21 @@ enum UsageInsights {
         return histogram.filter { $0.value == maxRuns }.keys.min()
     }
 
+    /// 이 스냅샷이 **실제로 돈을 낸** 설치인가.
+    ///
+    /// `flag.isPaid`가 있으면 그것만 본다. 없으면(플래그를 나누기 전에 올라온
+    /// 옛 스냅샷) `flag.isPro`로 물러선다 — 그 값은 결제 ∪ 그랜드파더 ∪ autoPro라
+    /// 결제를 부풀리지만, 옛 기록에 남은 단서가 그것뿐이다.
+    ///
+    /// ⚠️ 한 비트로 합쳐 보내면 왜 안 되는지: 다른 앱이 접근 권한을 유료 자리에
+    ///    실었다가 신규 설치의 99%가 유료로 기록됐다. 여기 `PlanFilter`가 그 값에
+    ///    기대면 "결제한 사람의 분포"에 공짜 사용자가 섞여, 무료 한도를 정하는
+    ///    근거 자체가 무너진다.
+    static func didPay(_ metrics: [String: Double]) -> Bool {
+        if let paid = metrics["flag.isPaid"] { return paid > 0 }
+        return (metrics["flag.isPro"] ?? 0) > 0
+    }
+
     /// 결제 여부로 표본을 가르는 필터.
     ///
     /// **무료 한도를 몇 개로 둘지는 이 두 갈래를 나란히 놓고서만 정할 수 있다.**
@@ -791,11 +807,11 @@ enum UsageInsights {
         }
 
         func includes(_ metrics: [String: Double]) -> Bool {
-            let isPro = (metrics["flag.isPro"] ?? 0) > 0
+            let paid = UsageInsights.didPay(metrics)
             switch self {
             case .all:  return true
-            case .free: return !isPro
-            case .paid: return isPro
+            case .free: return !paid
+            case .paid: return paid
             }
         }
     }
