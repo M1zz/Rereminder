@@ -68,6 +68,8 @@ enum RepeatDetector {
     static let memoryDays = 45
     /// 저장 제안의 총 횟수 상한.
     static let maxProposals = 3
+    /// 그중 **무료 사용자**에게 보이는 몫. 무료에게는 저장이 곧 결제라, 두 번째부터는 권유가 된다.
+    static let maxFreeProposals = 1
     /// 시간대 제안의 총 횟수 상한. 저장 제안보다 덜 준다 — 틀렸을 때 더 성가시다.
     static let maxTimeSuggestions = 2
     /// "이맘때"의 폭(시간). 3시에 하던 일을 2시에 열어도 같은 상황으로 본다.
@@ -83,6 +85,7 @@ enum RepeatDetector {
     private static let historyKey = "repeat.history.v2"
     private static let proposedKey = "repeat.proposed"
     private static let proposalCountKey = "repeat.proposalCount"
+    private static let freeProposalCountKey = "repeat.freeProposalCount"
     private static let timeSuggestedKey = "repeat.timeSuggested"
     private static let timeSuggestionCountKey = "repeat.timeSuggestionCount"
 
@@ -130,29 +133,37 @@ enum RepeatDetector {
 
     /// 지금 이 설정에 대해 **저장을 권해도 되는가.**
     ///
-    /// - Parameter isAlreadySaved: 이미 템플릿으로 갖고 있는 설정인지(호출부가 안다).
+    /// - Parameters:
+    ///   - isAlreadySaved: 이미 템플릿으로 갖고 있는 설정인지(호출부가 안다).
+    ///   - canSave: 지금 저장할 수 있는가(Pro). 무료면 `maxFreeProposals` 번까지만 —
+    ///     무료에게 이 제안은 "기억하려면 Pro" 라는 권유이기도 하다(`RememberPitch` ②).
     static func shouldPropose(_ config: Config,
                               isAlreadySaved: Bool,
+                              canSave: Bool = true,
                               now: Date = Date()) -> Bool {
         guard !isAlreadySaved else { return false }
         guard !hasProposed(config) else { return false }
         guard proposalCount < maxProposals else { return false }
+        if !canSave, freeProposalCount >= maxFreeProposals { return false }
         return distinctDays(of: config, now: now) >= minDistinctDays
     }
 
     static var proposalCount: Int { defaults.integer(forKey: proposalCountKey) }
+    static var freeProposalCount: Int { defaults.integer(forKey: freeProposalCountKey) }
 
     static func hasProposed(_ config: Config) -> Bool {
         Set(defaults.stringArray(forKey: proposedKey) ?? []).contains(config.fingerprint)
     }
 
     /// 제안했다 — **거절해도 저장해도 똑같이 기록한다.** 다시 묻지 않기 위해서다.
-    static func markProposed(_ config: Config) {
+    /// - Parameter asFree: 무료 사용자에게 띄운 제안이었나(`maxFreeProposals` 를 소모한다).
+    static func markProposed(_ config: Config, asFree: Bool = false) {
         var seen = Set(defaults.stringArray(forKey: proposedKey) ?? [])
         guard !seen.contains(config.fingerprint) else { return }
         seen.insert(config.fingerprint)
         defaults.set(Array(seen), forKey: proposedKey)
         defaults.set(proposalCount + 1, forKey: proposalCountKey)
+        if asFree { defaults.set(freeProposalCount + 1, forKey: freeProposalCountKey) }
     }
 
     // MARK: - ② 시간대 제안
@@ -215,7 +226,8 @@ enum RepeatDetector {
 
     #if DEBUG
     static func resetAll() {
-        for key in [historyKey, proposedKey, proposalCountKey, timeSuggestedKey, timeSuggestionCountKey] {
+        for key in [historyKey, proposedKey, proposalCountKey, freeProposalCountKey,
+                    timeSuggestedKey, timeSuggestionCountKey] {
             defaults.removeObject(forKey: key)
         }
     }

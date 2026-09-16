@@ -58,6 +58,8 @@ struct TimerMainView: View {
 
     // 실행 중 원 아래에 서는 기기 연결 상태 — 워치는 실시간, 맥은 iCloud에 남긴 표시로 안다.
     @ObservedObject private var watchLink = WatchConnectivityManager.shared
+    /// 결제하는 순간 "Pro 는 이걸 기억해 둡니다" 한 줄이 물러나게 관찰한다(`ProGate` 는 static).
+    @ObservedObject private var store = StoreManager.shared
     @State private var macLinkStatus: DevicePresence.Status = .away(lastSeen: nil)
     @State private var markerLingerTask: Task<Void, Never>?
 
@@ -280,6 +282,16 @@ struct TimerMainView: View {
                         // Next 알림 Info (원 밖 아래쪽) — 알림이 하나뿐이라 구간 리스트가 무의미할 때
                         nextAlertInfo
                     } else if screenVM.state == .idle || screenVM.state == .finished {
+                        // 무료 사용자가 다시 열었을 때 "지난번엔 이랬어요" 한 줄(`RememberPitch` ①).
+                        // 다이얼을 바꾸는 순간 물러난다 — 그때는 이미 할 말이 늦었다.
+                        if let recall = screenVM.rememberRecall,
+                           screenVM.isAtDefaultSetup, !store.isPro {
+                            RememberRecallLine(config: recall) {
+                                withAnimation(.easeInOut(duration: 0.2)) { screenVM.rememberRecall = nil }
+                            }
+                            .padding(.horizontal)
+                            .transition(.opacity)
+                        }
                         // 대기 상태: 최근 템플릿 칩 + 수정 시 저장 버튼 (원 밖 아래쪽)
                         TemplateQuickBar(screenVM: screenVM)
                             .padding(.horizontal)

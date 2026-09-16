@@ -21,4 +21,7 @@ enum RereminderFlag: String, LeeoRemoteFlag, CaseIterable {
     case diagnosticsEnabled
     /// iCloud KVS 타이머 동기화(iPhone ↔ Mac). 끄면 다음 실행부터 초기화 생략.
     case cloudSyncEnabled
+    /// 무료 사용자에게 "앱이 기억한다"를 권하는 세 자리(`RememberPitch`). 끄면 권유만 멈춘다 —
+    /// 다음 자리 전날에 설정을 올려 주는 일은 약속이라 계속한다.
+    case rememberPitchEnabled
 }

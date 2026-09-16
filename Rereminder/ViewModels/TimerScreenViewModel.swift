@@ -380,13 +380,13 @@ final class TimerScreenViewModel: ObservableObject {
     ///
     /// `load(template:)` 과 달리 문구는 건드리지 않는다 — `RepeatDetector` 의 지문은 시간과 알림
     /// 지점만 담으므로, 문구까지 덮으면 사용자가 써 둔 말을 근거 없이 지우게 된다.
-    func applyRepeatConfig(mainSec: Int, offsets: [Int]) {
+    func applyRepeatConfig(mainSec: Int, offsets: [Int], toast: Bool = true) {
         guard mainSec > 0 else { return }
         mainMinutes = mainSec / 60
         mainSeconds = mainSec % 60
         selectedOffsets = Set(offsets.filter { $0 > 0 && $0 < mainSec })
         initialConfiguration()
-        showToast?(String(localized: "Set up your usual timer"))
+        if toast { showToast?(String(localized: "Set up your usual timer")) }
     }
 
     // MARK: - Last Used Config (재실행 시 다이얼 복원)
@@ -405,6 +405,20 @@ final class TimerScreenViewModel: ObservableObject {
         let prealertMessages: [Int: String]
         let finishMessage: String
     }
+
+    /// 마지막으로 쓴 설정(시간 + 알림 지점). **무료에서도 읽을 수 있다** — 복원은 하지 않지만
+    /// "지난번엔 이랬어요"라고 말해 주고(`RememberPitch`), 반복 감지도 이 값으로 판단한다.
+    /// (무료는 콜드 런치에 다이얼이 기본값이라, 다이얼로 판단하면 반복이 영영 잡히지 않는다.)
+    var lastUsedSetup: RepeatDetector.Config? {
+        guard let data = Self.lastUsedDefaults.data(forKey: Self.lastUsedConfigKey),
+              let cfg = try? JSONDecoder().decode(LastUsedConfig.self, from: data),
+              cfg.mainSeconds > 0 else { return nil }
+        return RepeatDetector.Config(mainSec: cfg.mainSeconds, offsets: cfg.offsets)
+    }
+
+    /// 무료 사용자에게 다이얼 아래에 띄우는 "지난번엔 이랬어요" 한 줄. nil 이면 서지 않는다.
+    /// 띄울지는 `TimerUnifiedView` 가 다른 안내와 견줘 정한다(`RememberPitch.recallLine`).
+    @Published var rememberRecall: RepeatDetector.Config?
 
     private func persistLastUsedConfig(mainSec: Int, offsets: [Int]) {
         let cfg = LastUsedConfig(

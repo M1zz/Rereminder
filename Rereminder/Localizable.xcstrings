@@ -14776,6 +14776,248 @@
           }
         }
       }
+    },
+    "Last time: %@ with %lld alerts. Pro remembers it for you." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last time: %1$@ with %2$lld alerts. Pro remembers it for you."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前回は %1$@・通知 %2$lld 個でした。Proならこれを覚えておきます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지난번엔 %1$@, 알림 %2$lld개였어요. Pro는 이걸 기억해 둡니다."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上次是 %1$@、%2$lld 个提醒。Pro 会帮你记住。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上次是 %1$@、%2$lld 個提醒。Pro 會幫你記住。"
+          }
+        }
+      }
+    },
+    "Remember it with Pro" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proで覚えておく"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro로 기억해 두기"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用 Pro 记住它"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用 Pro 記住它"
+          }
+        }
+      }
+    },
+    "See Pro" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proを見る"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro 보기"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "了解 Pro"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "了解 Pro"
+          }
+        }
+      }
+    },
+    "Shows what Pro includes" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proの内容を表示します"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro에 무엇이 들어 있는지 보여 줍니다"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看 Pro 包含哪些功能"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看 Pro 包含哪些功能"
+          }
+        }
+      }
+    },
+    "Tomorrow's setup is back on the dial" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "明日の設定をダイヤルに戻しました"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "내일 쓸 설정을 다이얼에 올려 두었어요"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "明天要用的设置已经放回表盘"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "明天要用的設定已經放回錶盤"
+          }
+        }
+      }
+    },
+    "Tomorrow's setup is ready" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "明日の設定を用意しました"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "내일 쓸 설정을 준비했어요"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "明天要用的设置已经准备好了"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "明天要用的設定已經準備好了"
+          }
+        }
+      }
+    },
+    "You've run %@ with %lld alerts on different days. Pro remembers it, so next time it's already on the dial." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You've run %1$@ with %2$lld alerts on different days. Pro remembers it, so next time it's already on the dial."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "別々の日に %1$@・通知 %2$lld 個で使っています。Proならこの設定を覚えて、次に開いたときダイヤルに用意しておきます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "서로 다른 날에 %1$@, 알림 %2$lld개로 쓰셨어요. Pro는 이 설정을 기억해 두었다가 다음에 열면 다이얼에 올려 둡니다."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你在不同的日子里都用了 %1$@、%2$lld 个提醒。Pro 会记住这组设置，下次打开时就已经放在表盘上。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你在不同的日子裡都用了 %1$@、%2$lld 個提醒。Pro 會記住這組設定，下次打開時就已經放在錶盤上。"
+          }
+        }
+      }
+    },
+    "Your %@ setup with %lld alerts is back on the dial. This is what Pro does every time you open the app." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your %1$@ setup with %2$lld alerts is back on the dial. This is what Pro does every time you open the app."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@・通知 %2$lld 個の設定をダイヤルに戻しました。Proなら、アプリを開くたびにこうしておきます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, 알림 %2$lld개 설정을 다이얼에 다시 올려 두었어요. Pro는 앱을 열 때마다 이렇게 해 둡니다."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@、%2$lld 个提醒的设置已经放回表盘。Pro 每次打开 App 都会这样帮你准备好。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@、%2$lld 個提醒的設定已經放回錶盤。Pro 每次打開 App 都會這樣幫你準備好。"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

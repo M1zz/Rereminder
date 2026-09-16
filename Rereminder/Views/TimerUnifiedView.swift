@@ -94,6 +94,16 @@ struct TimerUnifiedView: View {
     // 워크숍 진행자)은 석 달 뒤에 앱을 기억하지 못한다. 판정은 NextOccasionReminder 가 한다.
     @State private var showNextOccasion = false
 
+    // 무료 사용자가 "기억하려면 Pro" 를 누른 자리 — 템플릿 페이월로 연다.
+    @State private var showRememberPaywall = false
+    // 다음 자리 전날, 무료 사용자에게 "이게 Pro 가 매번 하는 일"이라고 알려 준다(`RememberPitch` ③).
+    @State private var eveNotice: NextOccasionReminder.Booking?
+
+    /// Pro 상태를 관찰한다 — `ProGate` 는 static 이라 구매 직후 알림 문구가 갈라지지 않게 함께 본다.
+    @ObservedObject private var store = StoreManager.shared
+
+    private var canRememberSetup: Bool { store.isPro || ProGate.canRememberSetup }
+
     /// 지금 다이얼에 올라온 설정과 같은 템플릿을 이미 갖고 있는가.
     /// (저장돼 있으면 제안할 이유가 없다 — 이미 앱이 기억하고 있다.)
     @Query private var savedTemplates: [Timer]
@@ -158,6 +168,8 @@ struct TimerUnifiedView: View {
                 stage: paywallStage,
                 onAcceptExtension: enterPresentationAfterExtension
             )
+            // "기억하려면 Pro" — 반복 감지·다시 연 순간의 한 줄·전날 안내가 모두 여기로 온다.
+            .paywallGate(isPresented: $showRememberPaywall, feature: .unlimitedTemplates)
             .toast(toast)
             .alert(String(localized: "Thank you for being an early user 💙"), isPresented: $showGrandfatherThanks) {
                 Button(String(localized: "OK"), role: .cancel) {}
@@ -203,19 +215,50 @@ struct TimerUnifiedView: View {
                 Text(deviceQuestionMessage(device))
             }
             // 반복을 앱이 먼저 알아챈다 — 저장은 사용자가 결심해야 하는 일이었고, 결심은 잘 안 난다.
+            // 무료 사용자에게는 같은 순간이 "기억하려면 Pro" 가 된다(한 번뿐 — `maxFreeProposals`).
             .alert(String(localized: "You use this setup a lot"),
                    isPresented: repeatProposalBinding,
                    presenting: repeatProposal) { config in
-                Button(String(localized: "Save as template")) {
-                    RepeatDetector.markProposed(config)
-                    screenVM.saveCurrentAsTemplate()
+                if canRememberSetup {
+                    Button(String(localized: "Save as template")) {
+                        RepeatDetector.markProposed(config)
+                        screenVM.saveCurrentAsTemplate()
+                    }
+                    // 거절해도 markProposed 한다 — 다시 묻지 않기 위해서다.
+                    Button(String(localized: "Not now"), role: .cancel) {
+                        RepeatDetector.markProposed(config)
+                    }
+                } else {
+                    Button(String(localized: "Remember it with Pro")) {
+                        RepeatDetector.markProposed(config, asFree: true)
+                        AnalyticsManager.log(.rememberPitchTapped(kind: "repeat"))
+                        // 다이얼에 먼저 올려 둔다 — 결제하면 바로 저장할 수 있고, 안 해도 오늘은 쓴다.
+                        screenVM.applyRepeatConfig(mainSec: config.mainSec, offsets: config.offsets, toast: false)
+                        screenVM.rememberRecall = nil
+                        showRememberPaywall = true
+                    }
+                    Button(String(localized: "Not now"), role: .cancel) {
+                        RepeatDetector.markProposed(config, asFree: true)
+                    }
                 }
-                // 거절해도 markProposed 한다 — 다시 묻지 않기 위해서다.
-                Button(String(localized: "Not now"), role: .cancel) {
-                    RepeatDetector.markProposed(config)
+            } message: { config in
+                if canRememberSetup {
+                    Text(String(localized: "Saving it means one tap to start next time."))
+                } else {
+                    Text(String(localized: "You've run \(TimeMapper.clockText(config.mainSec)) with \(config.offsets.count) alerts on different days. Pro remembers it, so next time it's already on the dial."))
                 }
-            } message: { _ in
-                Text(String(localized: "Saving it means one tap to start next time."))
+            }
+            // 예약해 둔 자리의 전날 — 설정은 이미 다이얼에 올렸고, 무료 사용자에게만 그 뜻을 말해 준다.
+            .alert(String(localized: "Tomorrow's setup is ready"),
+                   isPresented: eveNoticeBinding,
+                   presenting: eveNotice) { _ in
+                Button(String(localized: "See Pro")) {
+                    AnalyticsManager.log(.rememberPitchTapped(kind: "eve"))
+                    showRememberPaywall = true
+                }
+                Button(String(localized: "OK"), role: .cancel) {}
+            } message: { booking in
+                Text(String(localized: "Your \(TimeMapper.clockText(booking.mainSec)) setup with \(booking.offsets.count) alerts is back on the dial. This is what Pro does every time you open the app."))
             }
             // 저장 제안이 "이 설정을 기억해 둘까"라면, 이건 "지금 이걸 하려던 참 아닌가"다.
             .alert(String(localized: "Same time as usual"),
@@ -380,11 +423,19 @@ struct TimerUnifiedView: View {
         screenVM.cleanUpOrphanLiveActivities()
         // 실행 중 타이머가 없으면 마지막 사용 설정을 다이얼에 복원
         screenVM.restoreLastUsedConfigIfNeeded()
+        // 예약해 둔 자리의 전날이면 그 설정이 오늘의 주인공이다 — 다른 제안은 모두 건너뛴다.
+        guard !prepareOccasionEveIfDue() else { return finishSetupOnAppear() }
         // 복원된 그 설정이 여러 날 반복된 것이면 저장을 먼저 제안한다(복원 **뒤에** 판단해야 한다).
-        // ⚠️ 둘 중 **하나만** 띄운다 — 앱을 열자마자 두 번 물으면 둘 다 안 읽힌다.
-        if !offerTimeOfDaySetupIfDue() {
-            offerToSaveRecurringSetupIfDue()
+        // ⚠️ 셋 중 **하나만** 띄운다 — 앱을 열자마자 두 번 물으면 둘 다 안 읽힌다.
+        //    (시간대 제안 → 저장 제안 → 무료 사용자의 "지난번엔 이랬어요" 한 줄)
+        if !offerTimeOfDaySetupIfDue(), !offerToSaveRecurringSetupIfDue() {
+            showRememberRecallIfDue()
         }
+        finishSetupOnAppear()
+    }
+
+    /// 화면이 뜰 때 마지막에 하는 플랫폼 설정 — 안내 판정이 어디서 끝나든 반드시 돈다.
+    private func finishSetupOnAppear() {
 
         #if targetEnvironment(macCatalyst)
         // 지금 맥에서 돌고 있으니 "맥 있으세요?"를 물어볼 이유가 없다 — 아는 건 묻지 않는다.
@@ -419,6 +470,8 @@ struct TimerUnifiedView: View {
             screenVM.timerVM.engine.recalculateOnForeground()
             handleControlWidgetAction()
             screenVM.applyPendingLiveActivityCommand()
+            // 전날 알림을 탭해 돌아온 경우 — 콜드 런치가 아니어도 설정을 올려 준다.
+            prepareOccasionEveIfDue()
             // 며칠씩 살아 있는 프로세스에서도 "오늘 열었다"를 놓치지 않게 복귀마다 확인한다.
             ActivityReporter.reportForegroundOpen()
             // ⚠️ **구매 권한을 복귀마다 다시 확인한다.** 프로모션 코드 교환·가족 공유·다른 기기
@@ -503,20 +556,90 @@ struct TimerUnifiedView: View {
 
     /// 지금 다이얼에 올라온 설정이 **여러 날 반복된 것인데 아직 저장돼 있지 않으면** 한 번 묻는다.
     ///
+    /// 무료 사용자에게는 같은 순간이 "기억하려면 Pro" 가 된다 — **한 번뿐**이고
+    /// (`RepeatDetector.maxFreeProposals`), 누르면 저장 대신 페이월을 연다. 문구가 처음부터
+    /// Pro 라고 말하므로 "권해 놓고 누르는 순간 막는" 일은 없다.
+    /// ⚠️ 무료는 콜드 런치에 다이얼이 기본값이라 **마지막으로 쓴 설정**으로 판단한다 —
+    ///    다이얼로 보면 무료에서는 반복이 영영 잡히지 않는다.
     /// ⚠️ 다른 안내가 뜨는 차례면 양보한다 — 한 화면에 두 개가 겹치면 둘 다 읽히지 않는다.
     /// ⚠️ 대기 중일 때만. 타이머가 도는 중에 저장 이야기를 꺼내면 화면의 주인공을 가린다.
-    private func offerToSaveRecurringSetupIfDue() {
-        guard isIdle, !showOnboarding else { return }
-        // ⚠️ 무료 사용자에게는 권하지 않는다 — 저장은 Pro 다(`ProGate.canRememberSetup`).
-        //    못 하는 일을 권해 놓고 누르는 순간 막는 것이 이 앱에서 가장 나쁜 순간이다.
-        guard ProGate.canRememberSetup else { return }
-        guard !showFeedbackNudge, !showGrandfatherThanks, !showFounderWelcome, deviceQuestion == nil else { return }
+    /// - Returns: 띄웠으면 `true`.
+    @discardableResult
+    private func offerToSaveRecurringSetupIfDue() -> Bool {
+        guard isIdle, !showOnboarding else { return false }
+        guard !showFeedbackNudge, !showGrandfatherThanks, !showFounderWelcome, deviceQuestion == nil else { return false }
 
-        let cfg = screenVM.normalizedCurrentConfig
-        let config = RepeatDetector.Config(mainSec: cfg.mainSec, offsets: cfg.offsets)
-        guard RepeatDetector.shouldPropose(config, isAlreadySaved: hasTemplate(matching: config)) else { return }
+        let canSave = canRememberSetup
+        if !canSave, !LeeoRemoteFlags.isEnabled(RereminderFlag.rememberPitchEnabled) { return false }
+
+        let config: RepeatDetector.Config
+        if canSave {
+            let cfg = screenVM.normalizedCurrentConfig
+            config = RepeatDetector.Config(mainSec: cfg.mainSec, offsets: cfg.offsets)
+        } else {
+            guard let lastUsed = screenVM.lastUsedSetup else { return false }
+            config = lastUsed
+        }
+        guard RepeatDetector.shouldPropose(config,
+                                           isAlreadySaved: hasTemplate(matching: config),
+                                           canSave: canSave) else { return false }
 
         repeatProposal = config
+        if !canSave { AnalyticsManager.log(.rememberPitchShown(kind: "repeat")) }
+        return true
+    }
+
+    // MARK: - "앱이 기억한다" 를 보여 주는 자리 (RememberPitch)
+
+    /// 무료 사용자가 앱을 다시 열어 다이얼이 기본값으로 돌아갔을 때, 다이얼 아래에
+    /// "지난번엔 25:00, 알림 3개였어요" 한 줄을 세운다. 모달이 아니다 — 하루 한 번, 일주일까지.
+    private func showRememberRecallIfDue() {
+        guard isIdle, !showOnboarding, screenVM.currentMode == .timer else { return }
+        guard !showFeedbackNudge, !showGrandfatherThanks, !showFounderWelcome, deviceQuestion == nil else { return }
+        guard LeeoRemoteFlags.isEnabled(RereminderFlag.rememberPitchEnabled) else { return }
+
+        let defaultConfig = RepeatDetector.Config(
+            mainSec: TimerScreenViewModel.DefaultSetup.mainSeconds,
+            offsets: Array(TimerScreenViewModel.DefaultSetup.offsets)
+        )
+        guard let config = RememberPitch.recallLine(lastUsed: screenVM.lastUsedSetup,
+                                                    canRemember: canRememberSetup,
+                                                    isAtDefaultSetup: screenVM.isAtDefaultSetup,
+                                                    defaultConfig: defaultConfig) else { return }
+        RememberPitch.markRecallShown()
+        screenVM.rememberRecall = config
+        AnalyticsManager.log(.rememberPitchShown(kind: "recall"))
+    }
+
+    private var eveNoticeBinding: Binding<Bool> {
+        Binding(get: { eveNotice != nil },
+                set: { if !$0 { eveNotice = nil } })
+    }
+
+    /// 예약해 둔 자리의 **전날 저녁부터 그날까지** 앱을 열면, 그때 쓰던 설정을 다이얼에 올린다.
+    ///
+    /// 예약 시트가 "이 설정 그대로 준비해 둘게요"라고 약속했으므로 **Pro·무료 모두** 올린다.
+    /// 무료 사용자에게는 여기에 "이게 Pro 가 매번 하는 일" 이라는 말을 얹는다 — 체험은 이날 한 번이다.
+    /// ⚠️ 한 예약에 한 번만 — 그 뒤에 사용자가 바꾼 설정을 다시 덮으면 안 된다.
+    /// - Returns: 올렸으면 `true`.
+    @discardableResult
+    private func prepareOccasionEveIfDue() -> Bool {
+        guard isIdle, !showOnboarding else { return false }
+        guard let booking = RememberPitch.eveBookingToPrepare(NextOccasionReminder.booking) else { return false }
+
+        RememberPitch.markEvePrepared(booking)
+        screenVM.rememberRecall = nil
+        withAnimation(.easeInOut(duration: 0.25)) {
+            screenVM.applyRepeatConfig(mainSec: booking.mainSec, offsets: booking.offsets, toast: false)
+        }
+
+        if canRememberSetup || !LeeoRemoteFlags.isEnabled(RereminderFlag.rememberPitchEnabled) {
+            toast.show(Toast(String(localized: "Tomorrow's setup is back on the dial"), duration: 3.0))
+        } else {
+            eveNotice = booking
+            AnalyticsManager.log(.rememberPitchShown(kind: "eve"))
+        }
+        return true
     }
 
     /// 같은 시간·같은 알림 지점의 템플릿이 이미 있는가.
