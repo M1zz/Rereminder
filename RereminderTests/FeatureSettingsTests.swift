@@ -56,7 +56,11 @@ final class FeatureSettingsTests: XCTestCase {
         XCTAssertFalse(RereminderAlarmManager.isPreferred)
     }
 
-    func test_fullAlarmFollowsTheSetting() {
+    func test_fullAlarmFollowsTheSetting() throws {
+        // AlarmKit 이 없는 SDK(CI 러너의 Xcode 등)에서는 스텁이 늘 "안 씀"이라 켤 수 없다 — 그게 맞는 동작이다.
+        #if !canImport(AlarmKit)
+        throw XCTSkip("AlarmKit 이 없는 SDK — 스텁은 설정과 무관하게 꺼져 있다")
+        #endif
         UserDefaults.standard.set(true, forKey: RereminderAlarmManager.enabledKey)
         XCTAssertTrue(RereminderAlarmManager.isPreferred)
 

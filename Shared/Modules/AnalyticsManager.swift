@@ -66,6 +66,12 @@ enum AnalyticsManager {
         /// 이 예약이 실제로 복귀로 이어지는지가 그 설계의 판정 기준이다.
         case nextOccasionBooked
 
+        /// 무료 사용자에게 "앱이 기억한다"를 권했다(`RememberPitch`).
+        /// `kind` = recall(다시 연 순간의 한 줄) / repeat(반복 감지) / eve(다음 자리 전날).
+        case rememberPitchShown(kind: String)
+        /// 그 권유에서 Pro 를 보러 갔다. 노출 대비 이 비율이 세 자리 중 어디가 통하는지 가른다.
+        case rememberPitchTapped(kind: String)
+
         /// 창단 후원자에게 혜택 변경 안내를 보여줬다.
         /// 이 사람들이 그 뒤로도 남아 있는지가 "약속이 통했나"의 유일한 근거다.
         case founderWelcomeShown
@@ -100,6 +106,8 @@ enum AnalyticsManager {
             case .feedbackNudgeSnoozed:    return "feedback_nudge_snoozed"
             case .nextOccasionBooked:      return "next_occasion_booked"
             case .founderWelcomeShown:     return "founder_welcome_shown"
+            case .rememberPitchShown:      return "remember_pitch_shown"
+            case .rememberPitchTapped:     return "remember_pitch_tapped"
             case .reviewRequested:         return "review_requested"
             case .reviewCompleted:         return "review_completed"
             case .presentationModeStarted: return "presentation_mode_started"
@@ -120,6 +128,8 @@ enum AnalyticsManager {
             case .premiumTrialExhausted(let feature, _):   return "premium_trial_exhausted:\(feature.rawValue)"
             case .deviceOwnershipAnswered(let device, let owns):
                 return "device_ownership:\(device)_\(owns ? "yes" : "no")"
+            case .rememberPitchShown(let kind):            return "remember_pitch_shown:\(kind)"
+            case .rememberPitchTapped(let kind):           return "remember_pitch_tapped:\(kind)"
             case .paywallShown(let trigger):               return "paywall_shown:\(trigger?.rawValue ?? "general")"
             case .paywallDismissed(let trigger, let didPurchase):
                 return didPurchase ? "paywall_converted:\(trigger?.rawValue ?? "general")"
@@ -160,6 +170,8 @@ enum AnalyticsManager {
                 return ["page": page]
             case .deviceOwnershipAnswered(let device, let owns):
                 return ["device": device, "owns": owns]
+            case .rememberPitchShown(let kind), .rememberPitchTapped(let kind):
+                return ["kind": kind]
             case .purchaseRestored,
                  .onboardingShown, .onboardingCompleted,
                  .feedbackNudgeShown, .feedbackNudgeAccepted, .feedbackNudgeSnoozed,

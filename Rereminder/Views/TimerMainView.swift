@@ -58,6 +58,8 @@ struct TimerMainView: View {
 
     // 실행 중 원 아래에 서는 기기 연결 상태 — 워치는 실시간, 맥은 iCloud에 남긴 표시로 안다.
     @ObservedObject private var watchLink = WatchConnectivityManager.shared
+    /// 결제하는 순간 "Pro 는 이걸 기억해 둡니다" 한 줄이 물러나게 관찰한다(`ProGate` 는 static).
+    @ObservedObject private var store = StoreManager.shared
     @State private var macLinkStatus: DevicePresence.Status = .away(lastSeen: nil)
     @State private var markerLingerTask: Task<Void, Never>?
 
@@ -280,6 +282,7 @@ struct TimerMainView: View {
                         // Next 알림 Info (원 밖 아래쪽) — 알림이 하나뿐이라 구간 리스트가 무의미할 때
                         nextAlertInfo
                     } else if screenVM.state == .idle || screenVM.state == .finished {
+                        rememberLines
                         // 대기 상태: 최근 템플릿 칩 + 수정 시 저장 버튼 (원 밖 아래쪽)
                         TemplateQuickBar(screenVM: screenVM)
                             .padding(.horizontal)
@@ -1150,4 +1153,34 @@ struct TimerMainView: View {
 #Preview {
     TimerMainView()
         .environmentObject(TimerScreenViewModel())
+}
+
+// MARK: - "앱이 기억한다" 한 줄 (무료 사용자)
+
+extension TimerMainView {
+    /// 다시 연 순간(`recall`)·손으로 다시 맞춘 순간(`reentry`)의 한 줄. 둘은 동시에 서지 않는다 —
+    /// 앞의 것은 다이얼이 기본값일 때, 뒤의 것은 지난번 설정일 때만 선다.
+    @ViewBuilder
+    var rememberLines: some View {
+        // 무료 사용자가 다시 열었을 때 "지난번엔 이랬어요" 한 줄(`RememberPitch` ①).
+        // 다이얼을 바꾸는 순간 물러난다 — 그때는 이미 할 말이 늦었다.
+        if let recall = screenVM.rememberRecall,
+           screenVM.isAtDefaultSetup, !store.isPro {
+            RememberRecallLine(config: recall) {
+                withAnimation(.easeInOut(duration: 0.2)) { screenVM.rememberRecall = nil }
+            }
+            .padding(.horizontal)
+            .transition(.opacity)
+        }
+        // 손으로 지난번 설정에 다시 맞춘 직후의 한 줄 — 그 설정에서 벗어나면 물러난다.
+        if let reentry = screenVM.rememberReentry, !store.isPro,
+           reentry.mainSec == screenVM.normalizedCurrentConfig.mainSec,
+           reentry.offsets == screenVM.normalizedCurrentConfig.offsets {
+            RememberRecallLine(config: reentry, kind: .reentry) {
+                withAnimation(.easeInOut(duration: 0.2)) { screenVM.rememberReentry = nil }
+            }
+            .padding(.horizontal)
+            .transition(.opacity)
+        }
+    }
 }

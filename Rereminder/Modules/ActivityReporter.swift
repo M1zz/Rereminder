@@ -130,6 +130,14 @@ enum ActivityReporter {
         // 지금의 유료 축은 **세션 운영**(발표 모드)이다. 옛 키(`trial.prealerts`)는 알림 한도를
         // 없애며 늘지 않게 됐지만, 예전 스냅샷과 합산되려면 이름을 재활용하면 안 된다 —
         // 새 키를 따로 보내고 해석은 `UsageInsights` 가 한다.
+        // 권유 예산·문구 실험(`ProMention`). 갈래는 **정해진 설치만** 보낸다 — 실험 밖(세션 모드를 안 쓴
+        // 사람)을 0 으로 보내면 "remember 갈래"와 구분되지 않는다. 결제 여부는 `flag.isPaid` 와 겹쳐 본다.
+        metrics["pitch.mentions"] = Double(ProMention.count)
+        metrics["flag.pitchTapped"] = ProMention.wasTapped ? 1 : 0
+        if let variant = ProMention.assignedCopyVariant {
+            metrics["flag.pitchCopySession"] = variant == .session ? 1 : 0
+            metrics["flag.pitchCopyRemember"] = variant == .remember ? 1 : 0
+        }
         metrics["trial.presentation"] = Double(TrialCounter.count(for: .presentationMode))
         metrics["flag.presentationTrialExtended"] = TrialCounter.extensionAccepted(for: .presentationMode) ? 1 : 0
 
