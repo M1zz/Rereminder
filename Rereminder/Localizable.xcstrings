@@ -5573,34 +5573,6 @@
         }
       }
     },
-    "Higher for new buyers" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新規購入者は値上げ"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "신규 구매자는 인상"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新购买者涨价"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新購買者調漲"
-          }
-        }
-      }
-    },
     "History will appear after you use timers" : {
       "comment" : "History empty state",
       "localizations" : {
@@ -9038,34 +9010,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "預覽"
-          }
-        }
-      }
-    },
-    "Price" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "価格"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "가격"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "价格"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "價格"
           }
         }
       }
@@ -14263,34 +14207,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "你打算用它做什麼？"
-          }
-        }
-      }
-    },
-    "What you paid" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "お支払いいただいた金額"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "결제하신 금액"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "你支付的金额"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "你支付的金額"
           }
         }
       }

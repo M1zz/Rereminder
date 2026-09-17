@@ -47,14 +47,10 @@ struct FounderChange: Identifiable {
             subject: String(localized: "What Pro unlocks"),
             before: String(localized: "More pre-alerts"),
             after: String(localized: "The app remembers your setups — saved setups, last timer, session tools")
-        ),
-        FounderChange(
-            id: "price",
-            symbol: "tag.fill",
-            subject: String(localized: "Price"),
-            before: String(localized: "What you paid"),
-            after: String(localized: "Higher for new buyers")
         )
+        // ⚠️ "새로 사는 분은 가격이 오릅니다" 줄은 2026-09-17 에 뺐다. App Store Connect 의 Pro 가격은
+        //    처음부터 $9.99 한 건이고 바뀐 기록이 없었다 — 안 오른 가격을 올랐다고 말하면 이 화면은
+        //    신뢰를 얻는 대신 잃는다. 실제로 가격을 올리는 릴리즈에서 그때 다시 넣을 것.
     ]
 }
 

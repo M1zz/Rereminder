@@ -435,6 +435,8 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
   둘 다 띄우면 겹친다. 다른 안내(기기 질문·피드백 넛지·반복 감지)는 이 화면에 양보한다.
 - ⚠️ `FounderChange.current` 의 문구는 **실제로 그 변경이 나가는 릴리즈에 맞춰** 고칠 것.
   아직 안 바뀐 것을 바뀐다고 적으면 이 화면은 신뢰를 얻는 대신 잃는다.
+  실제로 2.2.8 에서 "새로 사는 분은 가격이 오릅니다" 줄을 뺐다 — App Store Connect 의 Pro 가격은
+  $9.99 한 건뿐이고 바뀐 기록이 없었다. 가격을 올리는 릴리즈에서 그때 다시 넣을 것.
 - `FounderBadge` / `FounderPromiseRow` (`Views/Components/`): 설정 Pro 줄과 페이월에 남는 표식.
   안내는 한 번뿐이지만 **대접받고 있다는 사실은 계속 보여야** 한다.
 - 테스트: `RereminderTests/FoundingSupporterTests.swift` (20개)
@@ -1484,6 +1486,7 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
 - **손으로 다시 맞춘 순간** 한 줄(`reentry`) 신설
 - **문구 실험**: 세션 모드 사용자 절반에게 세션을 앞세운 문구
 - 의견 요청 알림창이 혜택 변경 안내 시트를 가려 **안내가 뜨지 않던 문제** 수정
+- 창단 후원자 화면에서 **사실이 아닌 "가격 인상" 줄 제거**(ASC 가격이 바뀐 적 없음)
 - 통계 스펙 `docs/usage-spec.json` 에 "권유" 섹션(권유 → 결제 퍼널·문구 실험·예산)
 - 릴리즈 노트: `docs/release-notes-2.2.8-{ko,en,ja,zh-Hans,zh-Hant}.md`
 
