@@ -80,6 +80,26 @@
     "flag.prealertTrialExtended": {
       "label": "체험 연장을 받은 설치",
       "excludeFromAverages": true
+    },
+    "pitch.mentions": {
+      "label": "Pro 권유를 들은 횟수 (예산 안)",
+      "excludeFromAverages": true
+    },
+    "flag.pitchTapped": {
+      "label": "Pro 권유를 누른 적 있음",
+      "excludeFromAverages": true
+    },
+    "flag.pitchCopySession": {
+      "label": "문구 실험: 세션 문구",
+      "excludeFromAverages": true
+    },
+    "flag.pitchCopyRemember": {
+      "label": "문구 실험: 기억 문구",
+      "excludeFromAverages": true
+    },
+    "flag.isPaid": {
+      "label": "실제로 결제함",
+      "excludeFromAverages": true
     }
   },
   "metricPrefixLabels": {
@@ -110,7 +130,9 @@
     "paywall_dismissed": "페이월을 닫음",
     "purchase_started": "결제를 시작함",
     "purchase_failed": "결제가 실패함",
-    "paywall_converted": "페이월에서 결제함"
+    "paywall_converted": "페이월에서 결제함",
+    "remember_pitch_shown": "Pro 권유를 봄",
+    "remember_pitch_tapped": "Pro 권유를 누름"
   },
   "derived": [
     {
@@ -250,6 +272,113 @@
         {
           "label": "5개 이상",
           "from": 5
+        }
+      ]
+    },
+    {
+      "kind": "funnel",
+      "section": "권유",
+      "title": "Pro 권유 → 결제",
+      "note": "앱이 먼저 꺼낸 Pro 권유(다시 연 순간·손으로 다시 맞춘 순간·반복 저장·전날·달라진 점)가 결제까지 가는 길이에요. 2.2.8 부터 권유는 설치당 3번까지라, 누른 비율보다 **마지막 칸**을 보세요. 자리별(:recall, :reentry …)로는 합쳐 셉니다.",
+      "basis": "installs",
+      "steps": [
+        {
+          "label": "권유를 봄",
+          "event": "remember_pitch_shown"
+        },
+        {
+          "label": "권유를 누름",
+          "event": "remember_pitch_tapped",
+          "hint": "여기서 크게 새면 문구가 아니라 자리(순간)가 틀린 거예요."
+        },
+        {
+          "label": "페이월을 봄",
+          "event": "paywall_shown",
+          "hint": "잠긴 칩을 눌러 연 페이월도 섞여 있어요."
+        },
+        {
+          "label": "결제를 마침",
+          "anyOf": [
+            "paywall_converted",
+            "purchase_completed"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "segments",
+      "section": "권유",
+      "title": "문구 실험 (세션 모드 사용자)",
+      "note": "세션 모드를 써 본 사람만 반씩 나눠, 한쪽엔 '앱이 기억한다', 다른 쪽엔 '구간 이름·대본까지 저장'을 앞세웠어요. 갈래 안에서 결제한 칸 ÷ 갈래 전체로 비교하세요. 갈래당 결제가 몇 건 안 되면 결론 내리지 말 것.",
+      "rules": [
+        {
+          "name": "세션 문구 · 결제함",
+          "when": [
+            {
+              "metric": "flag.pitchCopySession",
+              "gt": 0
+            },
+            {
+              "metric": "flag.isPaid",
+              "gt": 0
+            }
+          ]
+        },
+        {
+          "name": "세션 문구 · 아직",
+          "when": [
+            {
+              "metric": "flag.pitchCopySession",
+              "gt": 0
+            }
+          ]
+        },
+        {
+          "name": "기억 문구 · 결제함",
+          "when": [
+            {
+              "metric": "flag.pitchCopyRemember",
+              "gt": 0
+            },
+            {
+              "metric": "flag.isPaid",
+              "gt": 0
+            }
+          ]
+        },
+        {
+          "name": "기억 문구 · 아직",
+          "when": [
+            {
+              "metric": "flag.pitchCopyRemember",
+              "gt": 0
+            }
+          ]
+        },
+        {
+          "name": "실험 밖",
+          "hint": "세션 모드를 안 썼거나, 아직 권유를 본 적이 없어요.",
+          "when": []
+        }
+      ]
+    },
+    {
+      "kind": "tiles",
+      "section": "권유",
+      "icon": "hand.raised",
+      "title": "권유 예산",
+      "note": "권유는 설치당 3번, 3일 간격, 한 번 누르거나 페이월을 두 번 보면 멈춰요. 알아들은 사람에게 계속 말하면 결제가 아니라 삭제로 끝나기 때문이에요.",
+      "tiles": [
+        {
+          "label": "권유를 들은 설치",
+          "kind": "installsWithMetric",
+          "metric": "pitch.mentions"
+        },
+        {
+          "label": "권유를 누른 설치",
+          "kind": "installsWithMetric",
+          "metric": "flag.pitchTapped",
+          "format": "percent"
         }
       ]
     },

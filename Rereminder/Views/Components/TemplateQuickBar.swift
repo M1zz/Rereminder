@@ -12,6 +12,8 @@
 //  ⚠️ **저장·불러오기는 Pro 다**(`ProGate.canRememberSetup`) — 이 앱이 파는 한 문장이
 //     "설정을 기억한다"이기 때문이다. 무료에서는 칩이 **사라지지 않고 잠긴 채로** 보인다:
 //     예전에 저장해 둔 것이 소리 없이 없어지면 "잃어버렸다"가 되고, 그건 결제가 아니라 분노다.
+//  ⚠️ 예외 하나 — **개편 전에 만든 템플릿은 무료에서도 불러온다**(`LegacyFreeNotice.isPreChangeTemplate`).
+//     그 사람들이 무료로 쓰던 것이다. 새로 저장하는 것만 Pro 다.
 //
 //  ⚠️ 버튼 위계 — 초기화는 **아이콘만**(되돌리는 일은 자주 쓰지 않고, 글자를 달면 저장 버튼과
 //     같은 무게로 보여 무엇이 주된 행동인지 흐려진다), 저장만 채운 캡슐로 남긴다.
@@ -135,10 +137,15 @@ struct TemplateQuickBar: View {
         .paywallGate(isPresented: $showPaywall, feature: .unlimitedTemplates)
     }
 
+    /// 이 칩을 지금 불러올 수 있는가 — Pro 거나, 개편 전에 만든 템플릿이거나.
+    private func canLoad(_ template: Timer) -> Bool {
+        canRememberSetup || LegacyFreeNotice.isPreChangeTemplate(createdAt: template.createdAt)
+    }
+
     /// 저장해 둔 설정 하나. 무료에서는 **잠긴 채로 보인다** — 없애면 잃어버린 것이 된다.
     private func templateChip(_ template: Timer) -> some View {
         Button {
-            guard canRememberSetup else {
+            guard canLoad(template) else {
                 showPaywall = true
                 return
             }
@@ -147,7 +154,7 @@ struct TemplateQuickBar: View {
             }
         } label: {
             HStack(spacing: DSSpacing.xs) {
-                if !canRememberSetup {
+                if !canLoad(template) {
                     Image(systemName: "lock.fill")
                         .font(.caption2)
                 }

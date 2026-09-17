@@ -15018,6 +15018,596 @@
           }
         }
       }
+    },
+    "Now free for everyone" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모두에게 무료가 된 것"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全員に無料になったもの"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "现在对所有人免费"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在對所有人免費"
+          }
+        }
+      }
+    },
+    "Moved to Pro" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro로 옮긴 것"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proに移ったもの"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "移至 Pro 的功能"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "移至 Pro 的功能"
+          }
+        }
+      }
+    },
+    "Saved templates" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "저장한 템플릿"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存したテンプレート"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已保存的模板"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已儲存的範本"
+          }
+        }
+      }
+    },
+    "Up to 3 on the free plan" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "무료는 3개까지"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無料は3件まで"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "免费版最多 3 个"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "免費版最多 3 個"
+          }
+        }
+      }
+    },
+    "Reopening the app" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "앱을 다시 열 때"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリを開き直したとき"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新打开 App 时"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新開啟 App 時"
+          }
+        }
+      }
+    },
+    "Your last setup came back" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "마지막 설정이 돌아왔음"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前回の設定が戻っていた"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上次的设置会恢复"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上次的設定會恢復"
+          }
+        }
+      }
+    },
+    "Starts from the default on the free plan" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "무료는 기본값에서 시작"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "無料はデフォルトから始まる"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "免费版从默认设置开始"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "免費版從預設設定開始"
+          }
+        }
+      }
+    },
+    "What changed for you" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "달라진 점을 알려 드립니다"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "変わったことをお知らせします"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有哪些变化"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "有哪些變化"
+          }
+        }
+      }
+    },
+    "You've been using this app since before Pro changed. Here is exactly what is different now." : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro가 바뀌기 전부터 써 주셨습니다. 지금 무엇이 달라졌는지 그대로 적었습니다."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proが変わる前から使っていただいています。今なにが変わったのか、そのままお伝えします。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你在 Pro 调整之前就开始使用了。下面如实列出现在有哪些不同。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你在 Pro 調整之前就開始使用了。以下如實列出現在有哪些不同。"
+          }
+        }
+      }
+    },
+    "Your last setup is still saved" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "마지막으로 쓰신 설정도 그대로 저장돼 있습니다"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前回使った設定もそのまま保存されています"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你上次使用的设置也仍然保存着"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你上次使用的設定也仍然儲存著"
+          }
+        }
+      }
+    },
+    "Nothing was deleted. If you upgrade, everything comes back exactly as you left it." : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지워진 것은 없습니다. Pro로 바꾸시면 두셨던 그대로 돌아옵니다."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "削除されたものはありません。Proにすると、残していたとおりに戻ります。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有任何内容被删除。升级到 Pro 后，一切都会原样恢复。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "沒有任何內容被刪除。升級到 Pro 後，一切都會原樣恢復。"
+          }
+        }
+      }
+    },
+    "Getting several alerts before time runs out is why this app exists, so it is now free for everyone. Pro does one thing instead: it remembers your setups." : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "끝나기 전에 여러 번 알려 주는 것이 이 앱이 있는 이유라서 누구에게나 열었습니다. 대신 Pro는 한 가지를 합니다. 설정을 기억해 둡니다."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "終わる前に何度も知らせることがこのアプリの存在理由なので、誰にでも開放しました。その代わりProはひとつのことをします。設定を覚えておきます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在时间结束前多次提醒，是这个 App 存在的理由，所以现在对所有人开放。相应地，Pro 只做一件事：记住你的设置。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在時間結束前多次提醒，是這個 App 存在的理由，所以現在對所有人開放。相對地，Pro 只做一件事：記住你的設定。"
+          }
+        }
+      }
+    },
+    "You set %@ with %lld alerts again by hand. Pro keeps it on the dial for you." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You set %1$@ with %2$lld alerts again by hand. Pro keeps it on the dial for you."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, 알림 %2$lld개를 다시 손으로 맞추셨네요. Pro는 이걸 다이얼에 기억해 둡니다."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@・通知 %2$lld 個をもう一度手で合わせましたね。Proならダイヤルに覚えておきます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你又手动调回了 %1$@、%2$lld 个提醒。Pro 会把它留在表盘上。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你又手動調回了 %1$@、%2$lld 個提醒。Pro 會把它留在錶盤上。"
+          }
+        }
+      }
+    },
+    "Saving new ones is Pro" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새로 저장하는 것은 Pro"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新しく保存するのはPro"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新保存的模板属于 Pro"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新儲存的範本屬於 Pro"
+          }
+        }
+      }
+    },
+    "Your %lld saved templates still work" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "저장해 두신 템플릿 %lld개는 계속 쓰실 수 있습니다"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存したテンプレート%lld件は引き続き使えます"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你保存的 %lld 个模板仍可继续使用"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你儲存的 %lld 個範本仍可繼續使用"
+          }
+        }
+      }
+    },
+    "Templates you saved before the change keep loading on the free plan. Only saving new ones is Pro." : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "바뀌기 전에 저장하신 템플릿은 무료에서도 그대로 불러옵니다. 새로 저장하는 것만 Pro입니다."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "変更前に保存したテンプレートは、無料でもそのまま呼び出せます。新しく保存するのだけがProです。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "改版前保存的模板在免费版中也能照常调用。只有保存新模板才需要 Pro。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "改版前儲存的範本在免費版中也能照常套用。只有儲存新範本才需要 Pro。"
+          }
+        }
+      }
+    },
+    "You set %@ with %lld alerts again by hand. Pro saves it with your section names and scripts." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You set %1$@ with %2$lld alerts again by hand. Pro saves it with your section names and scripts."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, 알림 %2$lld개를 다시 손으로 맞추셨네요. Pro는 구간 이름과 대본까지 함께 저장해 둡니다."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@・通知 %2$lld 個をもう一度手で合わせましたね。Proなら区間名と台本まで一緒に保存できます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你又手动调回了 %1$@、%2$lld 个提醒。Pro 可以连同分段名称和讲稿一起保存。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你又手動調回了 %1$@、%2$lld 個提醒。Pro 可以連同分段名稱和講稿一起儲存。"
+          }
+        }
+      }
+    },
+    "Last time: %@ with %lld alerts. Pro saves it with your section names and scripts." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last time: %1$@ with %2$lld alerts. Pro saves it with your section names and scripts."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지난번엔 %1$@, 알림 %2$lld개였어요. Pro는 구간 이름과 대본까지 함께 저장해 둡니다."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前回は %1$@・通知 %2$lld 個でした。Proなら区間名と台本まで一緒に保存できます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上次是 %1$@、%2$lld 个提醒。Pro 可以连同分段名称和讲稿一起保存。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "上次是 %1$@、%2$lld 個提醒。Pro 可以連同分段名稱和講稿一起儲存。"
+          }
+        }
+      }
+    },
+    "You've run %@ with %lld alerts on different days. Pro saves it with your section names and scripts, ready for the next session." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You've run %1$@ with %2$lld alerts on different days. Pro saves it with your section names and scripts, ready for the next session."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "서로 다른 날에 %1$@, 알림 %2$lld개로 쓰셨어요. Pro는 구간 이름과 대본까지 함께 저장해 다음 세션에 바로 꺼내 씁니다."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "別々の日に %1$@・通知 %2$lld 個で使いました。Proなら区間名と台本まで一緒に保存して、次のセッションですぐ使えます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你在不同的日子用过 %1$@、%2$lld 个提醒。Pro 可以连同分段名称和讲稿一起保存，下次直接调用。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你在不同的日子用過 %1$@、%2$lld 個提醒。Pro 可以連同分段名稱和講稿一起儲存，下次直接套用。"
+          }
+        }
+      }
+    },
+    "Your %@ setup with %lld alerts is back on the dial. Pro saves setups like this with your section names and scripts." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your %1$@ setup with %2$lld alerts is back on the dial. Pro saves setups like this with your section names and scripts."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@, 알림 %2$lld개 설정을 다이얼에 다시 올려 두었어요. Pro는 이런 설정을 구간 이름과 대본까지 함께 저장합니다."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@・通知 %2$lld 個の設定をダイヤルに戻しました。Proならこうした設定を区間名と台本まで一緒に保存できます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已把 %1$@、%2$lld 个提醒的设置放回表盘。Pro 可以把这样的设置连同分段名称和讲稿一起保存。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已把 %1$@、%2$lld 個提醒的設定放回錶盤。Pro 可以把這樣的設定連同分段名稱和講稿一起儲存。"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

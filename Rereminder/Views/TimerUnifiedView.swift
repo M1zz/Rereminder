@@ -74,6 +74,10 @@ struct TimerUnifiedView: View {
     // 창단 후원자에게 혜택 변경을 알리는 화면 — 최초 1회.
     // ⚠️ 그랜드파더링 안내보다 **우선한다** — 같은 말을 더 자세히 하므로, 둘 다 띄우면 겹친다.
     @State private var showFounderWelcome = false
+    /// 개편 전부터 무료로 쓰던 사람에게 달라진 점 안내 (`LegacyFreeNotice`).
+    @State private var showLegacyFreeNotice = false
+    /// 혜택 변경 안내 둘 중 하나가 떠 있는가 — 떠 있으면 다른 안내는 전부 양보한다.
+    private var isShowingPlanChangeNotice: Bool { showFounderWelcome || showLegacyFreeNotice }
 
     // 가끔 먼저 물어보는 의견 요청 — 조건 판정은 FeedbackNudge가 한다
     @State private var showFeedbackNudge = false
@@ -96,8 +100,13 @@ struct TimerUnifiedView: View {
 
     // 무료 사용자가 "기억하려면 Pro" 를 누른 자리 — 템플릿 페이월로 연다.
     @State private var showRememberPaywall = false
+    /// 안내 시트에서 "Pro 알아보기"를 눌렀다 — 시트가 다 닫힌 뒤에 페이월을 연다(겹치면 안 뜬다).
+    @State private var showRememberPaywallAfterNotice = false
     // 다음 자리 전날, 무료 사용자에게 "이게 Pro 가 매번 하는 일"이라고 알려 준다(`RememberPitch` ③).
     @State private var eveNotice: NextOccasionReminder.Booking?
+    /// 이번 실행에서 다이얼이 기본값으로 돌아간 무료 사용자의 **지난번 설정**.
+    /// 사용자가 손으로 그 설정에 다시 맞추면 한 번 말을 건다(`checkReentry`). 앱이 대신 올려 준 경우는 아니다.
+    @State private var reentryTarget: RepeatDetector.Config?
 
     /// Pro 상태를 관찰한다 — `ProGate` 는 static 이라 구매 직후 알림 문구가 갈라지지 않게 함께 본다.
     @ObservedObject private var store = StoreManager.shared
@@ -181,6 +190,14 @@ struct TimerUnifiedView: View {
             .sheet(isPresented: $showFounderWelcome) {
                 FounderWelcomeView()
             }
+            // 개편 전부터 무료로 쓰던 사람 — 얻은 것·잃은 것·그대로 남은 것을 그대로 적어 보여 준다.
+            .sheet(isPresented: $showLegacyFreeNotice, onDismiss: {
+                guard showRememberPaywallAfterNotice else { return }
+                showRememberPaywallAfterNotice = false
+                showRememberPaywall = true
+            }) {
+                LegacyFreeNoticeView(onSeePro: { showRememberPaywallAfterNotice = true })
+            }
             // 석 달 뒤에 돌아와 주길 기대하지 않는다 — 전날 저녁에 앱이 먼저 찾아간다.
             .sheet(isPresented: $showNextOccasion) {
                 NextOccasionSheet(mainSec: screenVM.normalizedCurrentConfig.mainSec,
@@ -232,7 +249,9 @@ struct TimerUnifiedView: View {
                     Button(String(localized: "Remember it with Pro")) {
                         RepeatDetector.markProposed(config, asFree: true)
                         AnalyticsManager.log(.rememberPitchTapped(kind: "repeat"))
+                        ProMention.markTapped()
                         // 다이얼에 먼저 올려 둔다 — 결제하면 바로 저장할 수 있고, 안 해도 오늘은 쓴다.
+                        reentryTarget = nil
                         screenVM.applyRepeatConfig(mainSec: config.mainSec, offsets: config.offsets, toast: false)
                         screenVM.rememberRecall = nil
                         showRememberPaywall = true
@@ -244,6 +263,8 @@ struct TimerUnifiedView: View {
             } message: { config in
                 if canRememberSetup {
                     Text(String(localized: "Saving it means one tap to start next time."))
+                } else if ProMention.usesSessionCopy {
+                    Text(String(localized: "You've run \(TimeMapper.clockText(config.mainSec)) with \(config.offsets.count) alerts on different days. Pro saves it with your section names and scripts, ready for the next session."))
                 } else {
                     Text(String(localized: "You've run \(TimeMapper.clockText(config.mainSec)) with \(config.offsets.count) alerts on different days. Pro remembers it, so next time it's already on the dial."))
                 }
@@ -254,11 +275,16 @@ struct TimerUnifiedView: View {
                    presenting: eveNotice) { _ in
                 Button(String(localized: "See Pro")) {
                     AnalyticsManager.log(.rememberPitchTapped(kind: "eve"))
+                    ProMention.markTapped()
                     showRememberPaywall = true
                 }
                 Button(String(localized: "OK"), role: .cancel) {}
             } message: { booking in
-                Text(String(localized: "Your \(TimeMapper.clockText(booking.mainSec)) setup with \(booking.offsets.count) alerts is back on the dial. This is what Pro does every time you open the app."))
+                if ProMention.usesSessionCopy {
+                    Text(String(localized: "Your \(TimeMapper.clockText(booking.mainSec)) setup with \(booking.offsets.count) alerts is back on the dial. Pro saves setups like this with your section names and scripts."))
+                } else {
+                    Text(String(localized: "Your \(TimeMapper.clockText(booking.mainSec)) setup with \(booking.offsets.count) alerts is back on the dial. This is what Pro does every time you open the app."))
+                }
             }
             // 저장 제안이 "이 설정을 기억해 둘까"라면, 이건 "지금 이걸 하려던 참 아닌가"다.
             .alert(String(localized: "Same time as usual"),
@@ -266,6 +292,7 @@ struct TimerUnifiedView: View {
                    presenting: timeSuggestion) { config in
                 Button(String(localized: "Set it up")) {
                     RepeatDetector.markTimeSuggested(config)
+                    reentryTarget = nil
                     screenVM.applyRepeatConfig(mainSec: config.mainSec, offsets: config.offsets)
                 }
                 Button(String(localized: "Not now"), role: .cancel) {
@@ -279,6 +306,9 @@ struct TimerUnifiedView: View {
             }
             .onChange(of: screenVM.state) { oldState, newState in
                 handleStateChange(oldState, newState)
+            }
+            .onChange(of: dialFingerprint) { _, _ in
+                checkReentry()
             }
             .onChange(of: screenVM.remaining) { _, newValue in
                 #if targetEnvironment(macCatalyst)
@@ -380,17 +410,12 @@ struct TimerUnifiedView: View {
         // 콜드 런치는 scenePhase onChange가 안 오므로 여기서 남긴다(내부 쓰로틀로 중복 없음).
         ActivityReporter.reportForegroundOpen()
 
-        // 실행 횟수를 올린 뒤에 판정한다 — 순서가 뒤바뀌면 10회째가 아니라 11회째에 뜬다.
-        if FeedbackNudge.isDue(policy: Self.satisfactionPolicy) {
-            FeedbackNudge.markShown()
-            showFeedbackNudge = true
-        }
-
         // 지난 예약은 치운다 — 남겨 두면 "예약이 있다"고 판단해 영영 다시 묻지 않는다.
         NextOccasionReminder.clearIfPassed()
 
         // 창단 후원자 자격을 먼저 확정한다 — 안내를 띄울지 판단하기 전에.
         // 결제 시각을 아는 StoreKit 조회는 느리므로, 지금 상태만으로 되는 판정을 먼저 한다.
+        let windowWasOpen = FoundingSupporter.windowClosedAt == nil
         FoundingSupporter.refreshFromCurrentState()
         Task { await FoundingSupporter.refreshFromStoreKit() }
 
@@ -402,8 +427,28 @@ struct TimerUnifiedView: View {
             AnalyticsManager.log(.founderWelcomeShown)
         }
 
-        // 그랜드파더링된 기존 사용자에게 무료 Pro 안내 (최초 1회)
+        // 개편 전부터 무료로 쓰던 사람 — 흔적은 창이 닫히기 **전** 상태까지 봐야 한다.
+        // ⚠️ 이 판정과 창 닫기는 `seedTemplatesIfNeeded` 보다 **앞에** 있어야 한다. 시드가 먼저 심기면
+        //    새로 설치한 사람의 시드가 "창보다 먼저 만든 템플릿"이 되어 신규 사용자 전원이 이 안내를 본다.
+        LegacyFreeNotice.refresh(context: context, windowJustClosed: windowWasOpen)
         if !showFounderWelcome,
+           LegacyFreeNotice.shouldAnnounce(isPro: StoreManager.isProUser, isFounder: FoundingSupporter.isFounder) {
+            showLegacyFreeNotice = true
+            AnalyticsManager.log(.rememberPitchShown(kind: "legacy"))
+            ProMention.markMentioned(.legacy)
+        }
+
+        // 실행 횟수를 올린 뒤에 판정한다 — 순서가 뒤바뀌면 10회째가 아니라 11회째에 뜬다.
+        // ⚠️ 혜택 변경 안내보다 **뒤에서** 판정하고 양보한다. 알림창이 먼저 뜨면 그 시트가 가려져
+        //    뜨지 못한다(시뮬레이터에서 실제로 그랬다). 의견 요청은 다음 차례에 와도 되지만
+        //    혜택 변경 안내는 그날이 아니면 의미가 줄어든다.
+        if !isShowingPlanChangeNotice, FeedbackNudge.isDue(policy: Self.satisfactionPolicy) {
+            FeedbackNudge.markShown()
+            showFeedbackNudge = true
+        }
+
+        // 그랜드파더링된 기존 사용자에게 무료 Pro 안내 (최초 1회)
+        if !isShowingPlanChangeNotice,
            StoreManager.isGrandfathered,
            !UserDefaults.standard.bool(forKey: Self.grandfatherThankedKey) {
             UserDefaults.standard.set(true, forKey: Self.grandfatherThankedKey)
@@ -431,6 +476,7 @@ struct TimerUnifiedView: View {
         if !offerTimeOfDaySetupIfDue(), !offerToSaveRecurringSetupIfDue() {
             showRememberRecallIfDue()
         }
+        armReentryWatch()
         finishSetupOnAppear()
     }
 
@@ -486,6 +532,9 @@ struct TimerUnifiedView: View {
         UIApplication.shared.isIdleTimerDisabled =
             (newState == .running || newState == .paused || newState == .overtime)
 
+        // 걸기 시작하면 "다시 맞추셨네요" 한 줄은 할 일을 다했다 — 끝난 화면에 다시 서지 않게 치운다.
+        if newState == .running { screenVM.rememberReentry = nil }
+
         // 막 시작한 순간에만 — 일시정지에서 돌아올 때마다 물으면 잔소리가 된다.
         if newState == .running, oldState != .paused { askOrRemindAboutDevices() }
 
@@ -506,7 +555,7 @@ struct TimerUnifiedView: View {
     /// ⚠️ 다른 안내가 뜨는 차례면 양보한다 — 완주 직후는 만족도 게이트도 노리는 자리다.
     private func offerNextOccasionIfDue() {
         guard !showOnboarding else { return }
-        guard !showFeedbackNudge, !showGrandfatherThanks, !showFounderWelcome,
+        guard !showFeedbackNudge, !showGrandfatherThanks, !isShowingPlanChangeNotice,
               deviceQuestion == nil, repeatProposal == nil, timeSuggestion == nil else { return }
 
         let config = screenVM.normalizedCurrentConfig
@@ -541,7 +590,7 @@ struct TimerUnifiedView: View {
     @discardableResult
     private func offerTimeOfDaySetupIfDue() -> Bool {
         guard isIdle, !showOnboarding else { return false }
-        guard !showFeedbackNudge, !showGrandfatherThanks, !showFounderWelcome, deviceQuestion == nil else { return false }
+        guard !showFeedbackNudge, !showGrandfatherThanks, !isShowingPlanChangeNotice, deviceQuestion == nil else { return false }
         guard let config = RepeatDetector.timeOfDaySuggestion() else { return false }
 
         // 이미 그 설정이 다이얼에 올라와 있으면 권할 것이 없다(마지막 사용 설정이 그것이었던 경우).
@@ -567,10 +616,12 @@ struct TimerUnifiedView: View {
     @discardableResult
     private func offerToSaveRecurringSetupIfDue() -> Bool {
         guard isIdle, !showOnboarding else { return false }
-        guard !showFeedbackNudge, !showGrandfatherThanks, !showFounderWelcome, deviceQuestion == nil else { return false }
+        guard !showFeedbackNudge, !showGrandfatherThanks, !isShowingPlanChangeNotice, deviceQuestion == nil else { return false }
 
         let canSave = canRememberSetup
         if !canSave, !LeeoRemoteFlags.isEnabled(RereminderFlag.rememberPitchEnabled) { return false }
+        // 무료에게 이 제안은 Pro 권유다 — 설치당 예산 안에서만(`ProMention`).
+        if !canSave, !ProMention.canMention(.repeatSetup, isPro: false) { return false }
 
         let config: RepeatDetector.Config
         if canSave {
@@ -585,7 +636,10 @@ struct TimerUnifiedView: View {
                                            canSave: canSave) else { return false }
 
         repeatProposal = config
-        if !canSave { AnalyticsManager.log(.rememberPitchShown(kind: "repeat")) }
+        if !canSave {
+            AnalyticsManager.log(.rememberPitchShown(kind: "repeat"))
+            ProMention.markMentioned(.repeatSetup)
+        }
         return true
     }
 
@@ -595,8 +649,9 @@ struct TimerUnifiedView: View {
     /// "지난번엔 25:00, 알림 3개였어요" 한 줄을 세운다. 모달이 아니다 — 하루 한 번, 일주일까지.
     private func showRememberRecallIfDue() {
         guard isIdle, !showOnboarding, screenVM.currentMode == .timer else { return }
-        guard !showFeedbackNudge, !showGrandfatherThanks, !showFounderWelcome, deviceQuestion == nil else { return }
+        guard !showFeedbackNudge, !showGrandfatherThanks, !isShowingPlanChangeNotice, deviceQuestion == nil else { return }
         guard LeeoRemoteFlags.isEnabled(RereminderFlag.rememberPitchEnabled) else { return }
+        guard ProMention.canMention(.recall, isPro: canRememberSetup) else { return }
 
         let defaultConfig = RepeatDetector.Config(
             mainSec: TimerScreenViewModel.DefaultSetup.mainSeconds,
@@ -609,6 +664,57 @@ struct TimerUnifiedView: View {
         RememberPitch.markRecallShown()
         screenVM.rememberRecall = config
         AnalyticsManager.log(.rememberPitchShown(kind: "recall"))
+        ProMention.markMentioned(.recall)
+    }
+
+    // MARK: - 손으로 다시 맞춘 순간
+
+    private var dialFingerprint: String {
+        let config = screenVM.normalizedCurrentConfig
+        return "\(config.mainSec)|\(config.offsets)"
+    }
+
+    /// 콜드 런치에 다이얼이 기본값으로 돌아간 무료 사용자라면 지난번 설정을 기억해 둔다.
+    private func armReentryWatch() {
+        guard !canRememberSetup, isIdle, screenVM.isAtDefaultSetup,
+              let lastUsed = screenVM.lastUsedSetup else { return }
+        let defaultConfig = RepeatDetector.Config(
+            mainSec: TimerScreenViewModel.DefaultSetup.mainSeconds,
+            offsets: Array(TimerScreenViewModel.DefaultSetup.offsets).sorted()
+        )
+        guard lastUsed != defaultConfig else { return }
+        reentryTarget = lastUsed
+    }
+
+    /// 사용자가 다이얼을 **손으로** 지난번 설정에 다시 맞췄으면 한 줄로 말을 건다.
+    ///
+    /// "지난번엔 이랬어요"(열 때)보다 이 순간이 낫다 — 불편을 방금 몸으로 겪었다.
+    /// ⚠️ 드래그 도중 그 값을 스쳐 지나갈 수 있으므로 1초 머문 뒤에 판단한다.
+    /// ⚠️ 한 실행에 한 번, 설치당으로는 `ProMention` 예산 안에서 한 번이다.
+    private func checkReentry() {
+        guard let target = reentryTarget else { return }
+        let current = screenVM.normalizedCurrentConfig
+        guard RepeatDetector.Config(mainSec: current.mainSec, offsets: current.offsets) == target else { return }
+
+        Task { @MainActor in
+            try? await Task.sleep(for: .seconds(1))
+            let settled = screenVM.normalizedCurrentConfig
+            guard reentryTarget == target,
+                  RepeatDetector.Config(mainSec: settled.mainSec, offsets: settled.offsets) == target else { return }
+            reentryTarget = nil
+
+            guard isIdle, !canRememberSetup, !isShowingPlanChangeNotice,
+                  repeatProposal == nil, timeSuggestion == nil, eveNotice == nil,
+                  LeeoRemoteFlags.isEnabled(RereminderFlag.rememberPitchEnabled),
+                  ProMention.canMention(.reentry, isPro: false) else { return }
+
+            withAnimation(.easeInOut(duration: 0.25)) {
+                screenVM.rememberRecall = nil
+                screenVM.rememberReentry = target
+            }
+            AnalyticsManager.log(.rememberPitchShown(kind: "reentry"))
+            ProMention.markMentioned(.reentry)
+        }
     }
 
     private var eveNoticeBinding: Binding<Bool> {
@@ -630,14 +736,19 @@ struct TimerUnifiedView: View {
         RememberPitch.markEvePrepared(booking)
         screenVM.rememberRecall = nil
         withAnimation(.easeInOut(duration: 0.25)) {
+            reentryTarget = nil
             screenVM.applyRepeatConfig(mainSec: booking.mainSec, offsets: booking.offsets, toast: false)
         }
 
-        if canRememberSetup || !LeeoRemoteFlags.isEnabled(RereminderFlag.rememberPitchEnabled) {
+        // 혜택 변경 안내가 떠 있으면 알림창은 그 시트에 가려 뜨지 못한다 — 토스트로 알린다.
+        // 설정을 올려 주는 건 약속이라 늘 하고, "이게 Pro 가 하는 일" 이라는 말만 예산 안에서 한다.
+        if canRememberSetup || !LeeoRemoteFlags.isEnabled(RereminderFlag.rememberPitchEnabled)
+            || isShowingPlanChangeNotice || !ProMention.canMention(.eve, isPro: false) {
             toast.show(Toast(String(localized: "Tomorrow's setup is back on the dial"), duration: 3.0))
         } else {
             eveNotice = booking
             AnalyticsManager.log(.rememberPitchShown(kind: "eve"))
+            ProMention.markMentioned(.eve)
         }
         return true
     }
@@ -657,7 +768,7 @@ struct TimerUnifiedView: View {
     /// 둘 중 하나만 한다(같은 실행에서 질문과 안내가 겹치면 시끄럽다).
     private func askOrRemindAboutDevices() {
         // 혜택 변경 안내가 떠 있으면 양보한다 — 그 화면 뒤에서 질문이 쌓이면 둘 다 안 읽힌다.
-        guard !showFounderWelcome else { return }
+        guard !isShowingPlanChangeNotice else { return }
         let starts = Int(UsageMetrics.value(.timerStarts))
 
         if let device = DeviceOwnership.pendingQuestion(timerStarts: starts) {

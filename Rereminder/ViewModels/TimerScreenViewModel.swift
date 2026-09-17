@@ -420,6 +420,10 @@ final class TimerScreenViewModel: ObservableObject {
     /// 띄울지는 `TimerUnifiedView` 가 다른 안내와 견줘 정한다(`RememberPitch.recallLine`).
     @Published var rememberRecall: RepeatDetector.Config?
 
+    /// 기본값으로 돌아간 다이얼을 **손으로 지난번 설정에 다시 맞춘** 무료 사용자에게 띄우는 한 줄.
+    /// 다이얼이 그 설정에서 벗어나면 화면에서 물러난다(`TimerMainView`).
+    @Published var rememberReentry: RepeatDetector.Config?
+
     private func persistLastUsedConfig(mainSec: Int, offsets: [Int]) {
         let cfg = LastUsedConfig(
             mainSeconds: mainSec,

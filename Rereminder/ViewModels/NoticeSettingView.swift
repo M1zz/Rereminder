@@ -32,6 +32,9 @@ struct NoticeSettingView: View {
     @State private var showPaywall = false
     /// 창단 후원자의 혜택 변경 안내 — 설정에서 언제든 다시 열 수 있다.
     @State private var showFounderWelcome = false
+    @State private var showLegacyFreeNotice = false
+    /// 달라진 점 안내에서 "Pro 알아보기"를 눌렀다 — 시트가 닫힌 뒤 페이월을 연다.
+    @State private var showPaywallAfterLegacyNotice = false
     @State private var showFeedback = false
 
     // 내 기기 — 타이머 중에 물어본 답이 여기에 저장된다.
@@ -122,6 +125,22 @@ struct NoticeSettingView: View {
                             Image(systemName: "chevron.right")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
+                        }
+                    }
+
+                    // 개편 전부터 무료로 쓰던 사람 — 안내는 한 번 뜨므로, 다시 읽을 자리를 여기 둔다.
+                    if LegacyFreeNotice.isEligible {
+                        Button {
+                            showLegacyFreeNotice = true
+                        } label: {
+                            HStack {
+                                Text("What changed for you")
+                                    .foregroundStyle(.primary)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
                         }
                     }
                 }
@@ -678,6 +697,13 @@ struct NoticeSettingView: View {
             FeedbackView()
         }
         .paywallGate(isPresented: $showPaywall)
+        .sheet(isPresented: $showLegacyFreeNotice, onDismiss: {
+            guard showPaywallAfterLegacyNotice else { return }
+            showPaywallAfterLegacyNotice = false
+            showPaywall = true
+        }) {
+            LegacyFreeNoticeView(isFirstShowing: false, onSeePro: { showPaywallAfterLegacyNotice = true })
+        }
         .sheet(isPresented: $showFounderWelcome) {
             // 설정에서 다시 열어 본 것이라 "봤음" 표시를 다시 남기지 않는다.
             FounderWelcomeView(isFirstShowing: false)
