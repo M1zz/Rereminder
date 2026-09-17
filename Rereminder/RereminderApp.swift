@@ -102,6 +102,8 @@ struct RereminderApp: App {
         } catch {
             print("❌ SwiftData 컨테이너 로드 실패 — 이번 실행은 저장되지 않는다: \(error)")
             // 앱을 죽이지는 않는다. 타이머 자체는 SwiftData 없이도 돌아간다.
+            // 메모리 스토어는 파일·CloudKit 규칙을 타지 않아 실패할 길이 없다 — 여기서 실패하면 되돌아갈 곳도 없다.
+            // swiftlint:disable:next force_try
             return try! ModelContainer(
                 for: schema,
                 configurations: ModelConfiguration(schema: schema, isStoredInMemoryOnly: true,
