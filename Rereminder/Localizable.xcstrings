@@ -15524,6 +15524,146 @@
           }
         }
       }
+    },
+    "Had Pro before but it is gone?" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro를 쓰고 있었는데 사라졌나요?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proが使えていたのに消えましたか？"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "之前有 Pro，现在不见了？"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "之前有 Pro，現在不見了？"
+          }
+        }
+      }
+    },
+    "Your Pro access is back" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro가 돌아왔습니다"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proが戻りました"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro 已经恢复"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro 已經恢復"
+          }
+        }
+      }
+    },
+    "We could not find a record on this device" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 기기에서는 기록을 찾지 못했습니다"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この端末では記録が見つかりませんでした"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在这台设备上没有找到记录"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在這台裝置上沒有找到記錄"
+          }
+        }
+      }
+    },
+    "Everything is unlocked again. Sorry for the trouble." : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모든 기능이 다시 열렸습니다. 불편을 드려 죄송합니다."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべての機能がまた使えます。ご不便をおかけしました。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所有功能已重新开启。给你带来不便，很抱歉。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "所有功能已重新開啟。造成不便，很抱歉。"
+          }
+        }
+      }
+    },
+    "If you bought Pro, open the Pro screen above and tap Restore Purchases. If you had it for free as an early user, send us a message from Feedback below and we will bring it back for you." : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구매하셨다면 위의 Pro 줄을 열어 구매 복원을 눌러 주세요. 초기 사용자로 무료로 쓰고 계셨다면 아래 피드백으로 알려 주시면 되돌려 드리겠습니다."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "購入された場合は上のProの行を開いて購入の復元を押してください。初期ユーザーとして無料でお使いだった場合は、下のフィードバックからお知らせいただければ元に戻します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "如果你购买过 Pro，请打开上方的 Pro 页面并点按恢复购买。如果你是早期用户免费获得的，请通过下方的反馈告诉我们，我们会为你恢复。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "如果你購買過 Pro，請開啟上方的 Pro 頁面並點一下回復購買。如果你是早期使用者免費獲得的，請透過下方的意見回饋告訴我們，我們會為你恢復。"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

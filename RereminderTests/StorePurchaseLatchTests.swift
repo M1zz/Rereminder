@@ -45,6 +45,15 @@ final class StorePurchaseLatchTests: XCTestCase {
 
     // MARK: - Helpers
 
+    private func deleteKeychain(_ key: String) {
+        let query: [String: Any] = [
+            kSecClass as String: kSecClassGenericPassword,
+            kSecAttrAccount as String: key,
+            kSecAttrService as String: Bundle.main.bundleIdentifier ?? "com.Ysoup.Rereminder",
+        ]
+        SecItemDelete(query as CFDictionary)
+    }
+
     private func clearStoredPurchase() {
         UserDefaults.standard.removeObject(forKey: Self.proKey)
         let query: [String: Any] = [
@@ -108,5 +117,49 @@ final class StorePurchaseLatchTests: XCTestCase {
         UserDefaults.standard.set(true, forKey: Self.proKey)
         XCTAssertTrue(ProGate.canRememberSetup)
         XCTAssertTrue(ProGate.canSaveTemplate())
+    }
+
+    // MARK: - 평생 무료를 잃어버리는 길 (2026-09-18 제보)
+
+    /// ⚠️ **앱을 지웠다 깔아도 평생 무료는 남아야 한다.** 예전에는 이 자격이 UserDefaults 에만
+    ///    있어서 재설치 한 번에 통째로 사라졌고, 재판정에 쓰는 흔적도 같이 지워져 영영 돌아오지 않았다.
+    func test_grandfatheredSurvivesReinstall_viaKeychain() {
+        let key = Self.grandfatherKey
+        defer { deleteKeychain(key); UserDefaults.standard.removeObject(forKey: key) }
+
+        // 재설치 직후: UserDefaults 는 비었고 Keychain 에만 기록이 남아 있다.
+        UserDefaults.standard.removeObject(forKey: key)
+        XCTAssertTrue(KeychainHelper.save(key: key, value: true))
+
+        XCTAssertTrue(StoreManager.isGrandfathered)
+        XCTAssertTrue(StoreManager.isProUser)
+        // 한 번 읽으면 UserDefaults 도 되살아나 다음부터는 빠르게 판정한다.
+        XCTAssertTrue(UserDefaults.standard.bool(forKey: key))
+    }
+
+    /// 창단 후원자 표식은 결제·그랜드파더링에만 주어진다 — 앱을 지워도 남는 마지막 근거다.
+    func test_founderRecordAloneRestoresPro() {
+        let founderKey = "rereminder.founder"
+        defer { deleteKeychain(founderKey); deleteKeychain(Self.grandfatherKey)
+                UserDefaults.standard.removeObject(forKey: Self.grandfatherKey) }
+
+        deleteKeychain(Self.grandfatherKey)
+        UserDefaults.standard.removeObject(forKey: Self.grandfatherKey)
+        XCTAssertFalse(StoreManager.isProUser)
+
+        XCTAssertTrue(KeychainHelper.save(key: founderKey, value: true))
+        XCTAssertTrue(StoreManager.recoverLostEntitlementIfPossible())
+        XCTAssertTrue(StoreManager.isProUser)
+    }
+
+    /// ⚠️ **아무 근거도 없는 사람에게 평생 무료를 주지 않는다.** 복구는 Keychain 에 남은 기록만 본다 —
+    ///    옛 흔적 검사(테마·완주 횟수)를 다시 돌리면 새로 깐 사람에게도 자격이 나간다.
+    func test_recoveryGivesNothingWithoutARecord() {
+        deleteKeychain(Self.grandfatherKey)
+        deleteKeychain("rereminder.founder")
+        UserDefaults.standard.removeObject(forKey: Self.grandfatherKey)
+
+        XCTAssertFalse(StoreManager.recoverLostEntitlementIfPossible())
+        XCTAssertFalse(StoreManager.isProUser)
     }
 }

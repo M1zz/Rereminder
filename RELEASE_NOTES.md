@@ -13,30 +13,35 @@ DeployBar 가 배포할 때 아래 버전 절의 언어별 문구를 읽어 스�
 
 ### 앱스토어 (한국어)
 
+앱을 다시 깔아도 Pro가 유지됩니다.
 예전에 저장한 템플릿을 다시 불러올 수 있습니다.
 무엇이 달라졌는지 한 화면에 정리해 드립니다.
 Pro 안내가 뜨는 횟수를 크게 줄였습니다.
 
 ### App Store (English)
 
+Pro now survives reinstalling the app.
 Templates you saved earlier load again.
 See what changed, all on one screen.
 You will see far fewer Pro prompts.
 
 ### App Store (日本語)
 
+アプリを入れ直してもProが続きます。
 以前保存したテンプレートをまた呼び出せます。
 変わったことを1つの画面にまとめました。
 Proのご案内が出る回数を大きく減らしました。
 
 ### 앱스토어 (중국어 간체)
 
+重新安装 App 后 Pro 也会保留。
 以前保存的模板可以再次调用。
 在一个画面中说明有哪些变化。
 大幅减少了 Pro 提示出现的次数。
 
 ### 앱스토어 (중국어 번체)
 
+重新安裝 App 後 Pro 也會保留。
 以前儲存的範本可以再次套用。
 在一個畫面中說明有哪些變化。
 大幅減少了 Pro 提示出現的次數。

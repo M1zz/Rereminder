@@ -107,17 +107,35 @@ final class StoreManager: ObservableObject {
     /// v1 에서 부여받았다 잃은 사용자를 위해 흔적 검사를 한 번 더 수행한다.
     private static let grandfatherCheckKey = "rereminder.grandfather.checked.v2"
     nonisolated private static let grandfatherGrantedKey = "rereminder.grandfather.granted"
+    /// 창단 후원자 자격이 남는 자리(`FoundingSupporter.keychainKey`). 앱 전용 파일이라
+    /// 여기서는 **문자열로** 읽는다 — `Shared/` 는 워치·위젯에서도 컴파일된다.
+    nonisolated private static let founderKeychainKey = "rereminder.founder"
 
     /// 기존 사용자 무료 Pro 여부 — verifyCurrentEntitlements 가 구매 부재로
-    /// Pro 를 회수하지 않도록 보호하는 근거
+    /// Pro 를 회수하지 않도록 보호하는 근거.
+    ///
+    /// ⚠️ **Keychain 도 함께 본다.** 예전에는 이 자격이 `UserDefaults` 에만 있어서
+    ///    **앱을 지웠다 다시 깔면 평생 무료가 통째로 사라졌다** — 재판정에 쓰는 흔적
+    ///    (테마·완주 횟수)도 같은 곳에 있어 함께 지워지므로 영영 돌아오지 않았다.
+    ///    실제 제보로 확인된 경로다(2026-09-18). 구매 기록과 같은 급으로 다뤄야 한다.
     nonisolated static var isGrandfathered: Bool {
-        UserDefaults.standard.bool(forKey: grandfatherGrantedKey)
+        if UserDefaults.standard.bool(forKey: grandfatherGrantedKey) { return true }
+        guard KeychainHelper.load(key: grandfatherGrantedKey) == true else { return false }
+        // 재설치 뒤 처음 읽은 순간 — 빠른 판정을 위해 UserDefaults 도 되살려 둔다.
+        UserDefaults.standard.set(true, forKey: grandfatherGrantedKey)
+        return true
+    }
+
+    /// 창단 후원자 기록이 Keychain 에 남아 있는가 — 결제했거나 그랜드파더링된 사람만 받는 표식이라
+    /// 그 자체가 "이 사람은 값을 치렀거나 평생 무료를 약속받았다"는 증거다. 앱을 지워도 남는다.
+    nonisolated static var hasFounderRecord: Bool {
+        KeychainHelper.load(key: founderKeychainKey) == true
     }
 
     /// LeeoStore 의 grandfather 클로저로 주입되는 판정.
     /// 실제 구매/그랜드파더링이 없을 때 LeeoStore 가 1회만 호출한다(결과 캐시).
     /// 부여하면 rereminder.grandfather.granted 를 기록해 정적 isGrandfathered 가 읽는다.
-    private static func grandfatherExistingUserIfNeeded() -> Bool {
+    nonisolated private static func grandfatherExistingUserIfNeeded() -> Bool {
         let defaults = UserDefaults.standard
 
         // 이미 체크 완료된 경우 스킵
@@ -134,10 +152,34 @@ final class StoreManager: ObservableObject {
             || defaults.integer(forKey: "timerCompletionCount") > 0
 
         if isExistingUser {
-            defaults.set(true, forKey: grandfatherGrantedKey)
+            grantGrandfather()
             return true
         }
         return false
+    }
+
+    /// 그랜드파더링 자격을 **두 벌로** 남긴다 — 앱을 지워도 Keychain 에 남아야 한다.
+    nonisolated private static func grantGrandfather() {
+        UserDefaults.standard.set(true, forKey: grandfatherGrantedKey)
+        KeychainHelper.save(key: grandfatherGrantedKey, value: true)
+    }
+
+    /// **"예전에 Pro 였는데 사라졌어요" 를 되돌리는 자리.**
+    ///
+    /// 앱을 지웠다 깐 사람의 `UserDefaults` 는 비어 있지만 Keychain 은 남아 있다. 남은 표식
+    /// (그랜드파더링 기록·창단 후원자 기록·구매 기록)이 하나라도 있으면 자격을 되살린다.
+    ///
+    /// ⚠️ **흔적 검사(`grandfatherExistingUserIfNeeded`)를 다시 돌리지 말 것.** 그 검사가 보는
+    ///    흔적(테마를 골랐나·완주한 적 있나)은 **신규 사용자도 며칠이면 만든다.** 처음 한 번,
+    ///    즉 Pro 도입 버전으로 막 올라온 순간에만 뜻이 있는 신호다. 나중에 다시 돌리면
+    ///    새로 깐 사람에게 평생 무료가 나간다.
+    /// - Returns: 복구했거나 이미 자격이 있으면 `true`.
+    @discardableResult
+    nonisolated static func recoverLostEntitlementIfPossible() -> Bool {
+        if isGrandfathered || storedPurchaseFlag { return true }
+        guard hasFounderRecord else { return false }
+        grantGrandfather()
+        return true
     }
 
     // MARK: - Init
@@ -150,6 +192,10 @@ final class StoreManager: ObservableObject {
             // 기존 사용자 그랜드파더링 (구매 없을 때 LeeoStore 가 1회 호출).
             grandfather: { Self.grandfatherExistingUserIfNeeded() }
         )
+
+        // ⚠️ **먼저 잃어버린 자격부터 되살린다.** 앱을 지웠다 깐 그랜드파더링 사용자는
+        //    UserDefaults 가 비어 있어 "평생 무료"가 사라진 채로 시작한다(Keychain 에는 남아 있다).
+        Self.recoverLostEntitlementIfPossible()
 
         // 공용 스토어의 초기 상태를 파사드에 반영 + 키체인 미러링
         syncFromStore()
@@ -298,6 +344,8 @@ final class StoreManager: ObservableObject {
         errorMessage = nil
 
         await store.restore()
+        // 구매 기록이 없어도 평생 무료 자격이 Keychain 에 남아 있을 수 있다 — 복원은 그것도 되살린다.
+        Self.recoverLostEntitlementIfPossible()
         syncFromStore()
 
         if isPro {
@@ -350,6 +398,8 @@ extension StoreManager {
     /// TestFlight/Sandbox 환경과 기존 사용자(그랜드파더링)는 항상 true 를 반환
     nonisolated static var isProUser: Bool {
         if isAutoProEnvironment || isGrandfathered { return true }
+        // 창단 후원자 표식은 결제·그랜드파더링에만 주어진다 — 앱을 지워도 남으므로 마지막 근거가 된다.
+        if hasFounderRecord { return true }
         return storedPurchaseFlag
     }
 }
