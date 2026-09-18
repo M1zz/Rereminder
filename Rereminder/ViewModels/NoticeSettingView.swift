@@ -33,6 +33,8 @@ struct NoticeSettingView: View {
     /// 창단 후원자의 혜택 변경 안내 — 설정에서 언제든 다시 열 수 있다.
     @State private var showFounderWelcome = false
     @State private var showLegacyFreeNotice = false
+    @State private var showLostProResult = false
+    @State private var lostProRecovered = false
     /// 달라진 점 안내에서 "Pro 알아보기"를 눌렀다 — 시트가 닫힌 뒤 페이월을 연다.
     @State private var showPaywallAfterLegacyNotice = false
     @State private var showFeedback = false
@@ -121,6 +123,23 @@ struct NoticeSettingView: View {
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+
+                    // "예전에 Pro 였는데 사라졌어요" — 앱을 지웠다 깐 그랜드파더링 사용자의 자격이
+                    // UserDefaults 에만 있어 통째로 사라지던 시절이 있었다(2.2.8 에서 Keychain 에도
+                    // 남기게 고쳤다). 남은 기록으로 되살릴 수 있으면 여기서 되살린다.
+                    Button {
+                        lostProRecovered = StoreManager.recoverLostEntitlementIfPossible()
+                        showLostProResult = true
+                    } label: {
+                        HStack {
+                            Text("Had Pro before but it is gone?")
+                                .foregroundStyle(.primary)
                             Spacer()
                             Image(systemName: "chevron.right")
                                 .font(.caption)
@@ -697,6 +716,16 @@ struct NoticeSettingView: View {
             FeedbackView()
         }
         .paywallGate(isPresented: $showPaywall)
+        .alert(lostProRecovered
+               ? String(localized: "Your Pro access is back")
+               : String(localized: "We could not find a record on this device"),
+               isPresented: $showLostProResult) {
+            Button(String(localized: "OK"), role: .cancel) {}
+        } message: {
+            Text(lostProRecovered
+                 ? String(localized: "Everything is unlocked again. Sorry for the trouble.")
+                 : String(localized: "If you bought Pro, open the Pro screen above and tap Restore Purchases. If you had it for free as an early user, send us a message from Feedback below and we will bring it back for you."))
+        }
         .sheet(isPresented: $showLegacyFreeNotice, onDismiss: {
             guard showPaywallAfterLegacyNotice else { return }
             showPaywallAfterLegacyNotice = false
