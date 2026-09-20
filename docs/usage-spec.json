@@ -7,11 +7,22 @@
     "카드의 종류·차례·묶음은 아래 cards 가 정한다. 적은 차례가 그리는 차례이고,",
     "section 이 같은 카드끼리 제목 아래 묶인다. 옛 절(tileGroups·distributions·",
     "segments·funnels)도 아직 읽히지만 순서를 못 정하므로 새로 쓸 때는 cards 를 쓸 것.",
-    "경계값(무료 알림 1개 등)은 이 앱의 정책이라 여기 숫자로 적는다. 뷰어 코드는 안 고친다."
+    "",
+    "⚠️ 유료 축은 '알림 개수'가 아니라 **세션 운영·기억하기**다(Shared/Modules/ProGate.swift).",
+    "   예비 알림에는 한도가 없다 — 무료로 무제한이다. 그래서 alertsMax·multiAlertRuns 는",
+    "   '결제에 가까운 정도'가 아니라 **수요의 크기**를 재는 값이고, 그 자리로만 쓴다.",
+    "   한때 이 파일은 옛 알림 한도(trial.prealerts·alertLimitHits)로 '막힌 사람'을 셌는데,",
+    "   앱이 그 한도를 없앤 뒤로 그 칸은 늘 0이었다. 같은 실수를 되풀이하지 않도록,",
+    "   한도(5+5)를 여기 숫자로 베껴 적지 않는다 — 앱이 flag.isTrial·flag.trialExhausted 로",
+    "   **게이트의 판정 자체**를 보낸다. 한도를 바꿔도 이 파일은 안 낡는다."
   ],
   "specVersion": 1,
   "appId": "com.xa.toki",
   "appName": "두번알림",
+  "accessFlag": "flag.isPro",
+  "paidFlag": "flag.isPaid",
+  "trialFlag": "flag.isTrial",
+  "compedFlag": "flag.isComped",
   "metricLabels": {
     "timerStarts": {
       "label": "타이머 시작 횟수"
@@ -49,16 +60,16 @@
       "label": "알림 2개 이상 실행"
     },
     "alertLimitHits": {
-      "label": "알림 한도에 막힌 횟수"
+      "label": "[옛] 알림 한도에 막힌 횟수"
     },
     "paywallViews": {
       "label": "페이월 노출 횟수"
     },
     "trial.prealerts": {
-      "label": "알림 체험 사용 횟수"
+      "label": "[옛] 알림 체험 사용 횟수"
     },
     "flag.isPro": {
-      "label": "결제한 사용자",
+      "label": "유료 기능이 열린 설치 (결제 아님)",
       "excludeFromAverages": true
     },
     "flag.notificationsOn": {
@@ -78,7 +89,7 @@
       "excludeFromAverages": true
     },
     "flag.prealertTrialExtended": {
-      "label": "체험 연장을 받은 설치",
+      "label": "[옛] 알림 체험 연장을 받음",
       "excludeFromAverages": true
     },
     "pitch.mentions": {
@@ -100,10 +111,50 @@
     "flag.isPaid": {
       "label": "실제로 결제함",
       "excludeFromAverages": true
+    },
+    "alertedCompletions": {
+      "label": "알림이 울린 채 완주"
+    },
+    "trial.overtime": {
+      "label": "오버타임 체험 사용 횟수"
+    },
+    "trial.history": {
+      "label": "기록 체험 사용 횟수"
+    },
+    "flag.overtimeTrialExtended": {
+      "label": "오버타임 체험 연장을 받음",
+      "excludeFromAverages": true
+    },
+    "flag.historyTrialExtended": {
+      "label": "기록 체험 연장을 받음",
+      "excludeFromAverages": true
+    },
+    "flag.isTrial": {
+      "label": "체험을 태우는 중 (아직 안 냄)",
+      "excludeFromAverages": true
+    },
+    "flag.trialExhausted": {
+      "label": "체험을 다 써서 지금 막힘",
+      "excludeFromAverages": true
+    },
+    "flag.isComped": {
+      "label": "돈 없이 열림 (그랜드파더·내부)",
+      "excludeFromAverages": true
+    },
+    "trial.presentation": {
+      "label": "세션 모드 체험 사용 횟수"
+    },
+    "graceGrants": {
+      "label": "[옛] 한도에서 한 번 내준 횟수"
+    },
+    "flag.presentationTrialExtended": {
+      "label": "세션 모드 체험 연장을 받음",
+      "excludeFromAverages": true
     }
   },
   "metricPrefixLabels": {
-    "flag.owns": "기기 보유 응답"
+    "flag.owns": "기기 보유 응답",
+    "alertRuns.": "알림 개수별 시작 횟수"
   },
   "eventLabels": {
     "app_open": "앱을 연 횟수",
@@ -120,7 +171,6 @@
     "feedback_nudge_snoozed": "피드백 권유를 미룸",
     "review_requested": "리뷰를 요청함",
     "review_completed": "리뷰를 남김",
-    "presentation_mode_started": "발표 모드로 들어감",
     "watch_sync_used": "워치와 동기화함",
     "device_ownership_answered": "기기 보유를 답함",
     "device_ownership": "기기 보유 응답",
@@ -132,43 +182,31 @@
     "purchase_failed": "결제가 실패함",
     "paywall_converted": "페이월에서 결제함",
     "remember_pitch_shown": "Pro 권유를 봄",
-    "remember_pitch_tapped": "Pro 권유를 누름"
+    "remember_pitch_tapped": "Pro 권유를 누름",
+    "purchase_completed": "결제를 마침",
+    "purchase_restored": "구매를 복원함",
+    "paywall_one_more_clicked": "\"5번 더 체험\"을 받음",
+    "preset_used": "템플릿으로 채움",
+    "next_occasion_booked": "다음 일정을 예약함",
+    "founder_welcome_shown": "창단 후원자 인사를 봄"
   },
   "derived": [
     {
-      "$comment": "체험 한도는 연장 수락 여부로 갈린다(TrialCounter.firstStageLimit/secondStageLimit).",
-      "name": "trialLimit",
-      "kind": "choose",
-      "flag": "flag.prealertTrialExtended",
-      "whenSet": 10,
-      "whenUnset": 5
-    },
-    {
-      "name": "trialRemaining",
-      "kind": "difference",
-      "from": "trialLimit",
-      "subtract": "trial.prealerts"
-    },
-    {
-      "$comment": "유료 영역(알림 2개 이상)을 한 번이라도 건드린 설치. 무료 한도는 1개다.",
-      "name": "paidAreaTouched",
+      "$comment": "지금의 유료 영역(세션 모드·오버타임·기록)을 한 번이라도 건드린 설치. 옛 paidAreaTouched 는 alertsMax>1·multiAlertRuns 를 포함해서, 이제 무료인 '알림 2개'를 쓴 사람까지 전부 체험자로 셌다.",
+      "name": "trialTouched",
       "kind": "anyAbove",
       "terms": [
         {
-          "metric": "trial.prealerts",
+          "metric": "trial.presentation",
           "gt": 0
         },
         {
-          "metric": "alertLimitHits",
+          "metric": "trial.overtime",
           "gt": 0
         },
         {
-          "metric": "multiAlertRuns",
+          "metric": "trial.history",
           "gt": 0
-        },
-        {
-          "metric": "alertsMax",
-          "gt": 1
         }
       ]
     }
@@ -179,30 +217,31 @@
       "section": "결제",
       "icon": "creditcard",
       "title": "결제 준비도 (지금)",
-      "note": "이 앱의 결제는 '알림을 몇 개까지 켤 수 있나'로 갈려요(무료 1개, 그 위는 체험 뒤 결제). 그래서 결제에 가까운 사람 = 알림 한도에 다가간 사람이에요. 스냅샷은 설치당 1건 덮어쓰기라 여기 숫자는 과거 합계가 아니라 지금 상태예요.",
+      "note": "이 앱이 파는 것은 '앱이 당신의 설정을 기억한다' — 세션 모드·오버타임·기록이고, 앞의 셋에는 5+5 체험이 붙어 있어요. 그래서 결제에 가까운 사람 = 체험을 태우는 중이거나 다 써서 막힌 사람이에요. 예비 알림은 무료 무제한이라 여기 안 들어와요. 스냅샷은 설치당 1건 덮어쓰기라 여기 숫자는 과거 합계가 아니라 지금 상태예요.",
       "tiles": [
         {
           "label": "지금 막혀 있는 사람",
-          "kind": "segment",
-          "segment": "막힘 (결제해야 더 씀)",
-          "hint": "알림을 더 켜려면 결제해야 하는 상태예요."
+          "kind": "installsWithMetric",
+          "metric": "flag.trialExhausted",
+          "hint": "체험을 다 썼는데 아직 안 냈어요. 값을 낼 이유가 지금 있는 사람이에요."
         },
         {
-          "label": "한도 임박 (체험 1~2회)",
-          "kind": "segment",
-          "segment": "한도 임박 (체험 1~2회)",
-          "hint": "곧 위 칸으로 넘어와요."
+          "label": "체험을 태우는 중",
+          "kind": "installsWithMetric",
+          "metric": "flag.isTrial",
+          "hint": "써 봤고 아직 남았어요. 곧 위 칸으로 넘어와요."
         },
         {
           "label": "곧 필요해질 사람",
           "kind": "segment",
           "segment": "곧 필요할 사람",
-          "hint": "아직 알림 1개로 쓰지만 반복해서 완주하는 사람이에요(완주 3회 이상)."
+          "hint": "아직 Pro 영역을 안 건드렸지만 반복해서 완주하는 사람이에요(완주 3회 이상)."
         },
         {
           "label": "이미 결제한 사람",
           "kind": "installsWithMetric",
-          "metric": "flag.isPro"
+          "metric": "flag.isPaid",
+          "hint": "접근이 열린 사람(flag.isPro)이 아니라 실제로 낸 사람이에요."
         }
       ]
     },
@@ -210,13 +249,13 @@
       "kind": "funnel",
       "section": "결제",
       "title": "결제 퍼널",
-      "note": "무료 한도(알림 1개)에 부딪힌 사람이 결제까지 가는 길이에요. 한 사람은 한 번만 세고, 슬라이스(:general, :presentationMode …)는 한 단계로 합칩니다.",
+      "note": "한 사람이 페이월을 열 번 봐도 한 명으로 셉니다. 슬라이스(:presentationMode 등)는 한 단계로 합쳐요. 첫 칸과 둘째 칸의 낙차가 '체험으로 충분했다'는 뜻이라 나쁜 게 아니에요 — 셋째 칸부터가 가격 이야기예요.",
       "basis": "installs",
       "steps": [
         {
           "label": "유료 기능을 건드림",
           "event": "premium_feature_used",
-          "hint": "발표 모드·기록·무제한 사전알림. 결제 후보 전체의 크기예요."
+          "hint": "세션 모드·오버타임·기록. 결제 후보 전체의 크기예요. 예비 알림은 이제 무료 무제한이라 여기 안 들어와요(ProGate)."
         },
         {
           "label": "페이월을 봄",
@@ -233,7 +272,75 @@
             "paywall_converted",
             "purchase_completed"
           ],
-          "hint": "이 칸이 '보내지 않음'이면 아무도 결제를 안 한 게 아니라 앱이 결제 성공 이벤트를 안 보내는 거예요. 결제 실패(purchase_failed)만 오고 있어요."
+          "hint": "두 이름을 한 칸으로 합쳐요 — paywall_converted 는 페이월을 닫는 순간 출처 슬라이스와 함께, purchase_completed 는 StoreManager 에서 와요. 취소·실패는 purchase_failed 로 따로 옵니다."
+        }
+      ]
+    },
+    {
+      "kind": "moments",
+      "section": "결제",
+      "icon": "sparkles",
+      "title": "결제 화면이 뜬 순간",
+      "note": "페이월이 뜨기로 **설계된** 자리마다 실제로 떴는지 봐요. 0인 자리는 그 벽이 안 섰다는 뜻이고, 그 자리를 설계한 이유부터 다시 봐야 해요. 이벤트 이름의 슬라이스는 ProGate.Feature 의 rawValue 라 코드와 같은 말이에요.",
+      "moments": [
+        {
+          "label": "세션 모드에서 막힘",
+          "event": "paywall_shown:presentationMode",
+          "note": "발표자·강사가 걸리는 자리 — 실제로 돈을 낼 사람"
+        },
+        {
+          "label": "기억하기에서 막힘",
+          "event": "paywall_shown:unlimitedTemplates",
+          "note": "체험 없는 hard gate. 이 앱이 파는 한 문장이 바로 여기다"
+        },
+        {
+          "label": "오버타임에서 막힘",
+          "event": "paywall_shown:overtimeTracking"
+        },
+        {
+          "label": "기록에서 막힘",
+          "event": "paywall_shown:timerHistory"
+        },
+        {
+          "label": "그 밖 (출처 없음)",
+          "event": "paywall_shown:general",
+          "note": "설정 등에서 스스로 연 것"
+        }
+      ],
+      "tappedEvent": "purchase_started",
+      "purchasedEvent": "purchase_completed"
+    },
+    {
+      "kind": "distribution",
+      "section": "결제",
+      "icon": "chart.bar",
+      "title": "세션 모드 체험 소진",
+      "metric": "trial.presentation",
+      "note": "5회에서 1차 페이월, '5번 더'를 받으면 10회에서 2차 페이월이에요(TrialCounter). 연장을 받았는지는 flag.presentationTrialExtended 가 따로 말해 줘요 — 그래서 여기 칸만 보고 막혔다고 읽지 말고, 막힘 여부는 위 카드의 flag.trialExhausted 를 보세요. 결제한 사람은 카운터가 안 올라가서 '기록 없음'에 섞여요.",
+      "buckets": [
+        {
+          "label": "기록 없음",
+          "from": 0,
+          "to": 0
+        },
+        {
+          "label": "1~2회",
+          "from": 1,
+          "to": 2
+        },
+        {
+          "label": "3~4회",
+          "from": 3,
+          "to": 4
+        },
+        {
+          "label": "5~9회 (1차 페이월 넘음)",
+          "from": 5,
+          "to": 9
+        },
+        {
+          "label": "10회 이상 (2차 페이월)",
+          "from": 10
         }
       ]
     },
@@ -241,7 +348,7 @@
       "kind": "distribution",
       "section": "결제",
       "title": "알림 개수 수요 (한 타이머 최대)",
-      "note": "무료는 1개까지예요. 2개 이상 칸이 크면 지금의 가격 경계가 실제로 매출을 만든다는 뜻이고, 1개 칸만 크면 한도를 조여도 결제는 늘지 않아요. '기록 없음'은 2.1.1 이전 버전이라 아직 이 값을 보내지 않은 설치예요.",
+      "note": "예비 알림은 **무료로 무제한**이에요(ProGate 에서 한도를 없앴어요). 그래서 이 칸은 '결제에 얼마나 가까운가'가 아니라 이 사람이 이 앱을 얼마나 깊이 쓰는가예요. 여러 개를 거는 사람일수록 세션을 운영하는 사람이고, 그게 Pro 가 파는 것과 겹쳐요.",
       "metric": "alertsMax",
       "buckets": [
         {
@@ -301,7 +408,8 @@
           "anyOf": [
             "paywall_converted",
             "purchase_completed"
-          ]
+          ],
+          "hint": "두 이름을 한 칸으로 합쳐요 — paywall_converted 는 페이월을 닫는 순간 출처 슬라이스와 함께, purchase_completed 는 StoreManager 에서 와요. 취소·실패는 purchase_failed 로 따로 옵니다."
         }
       ]
     },
@@ -383,6 +491,40 @@
       ]
     },
     {
+      "kind": "ladder",
+      "section": "가치 경험",
+      "icon": "stairs",
+      "title": "활성화 사다리 (쐐기)",
+      "note": "이 앱이 파는 것은 '끝나기 전에 여러 번 알려 준다'예요. 그 값은 **알림이 실제로 울린 채 완주**해야 전달돼요 — 알림이 한 번도 안 울린 완주는 기본 타이머를 쓴 것과 같아요. 가치를 못 받은 사람에게는 어떤 값도 비싸니까, 결제 카드보다 이 칸이 먼저예요.",
+      "steps": [
+        {
+          "label": "설치"
+        },
+        {
+          "label": "타이머를 시작함",
+          "metric": "timerStarts",
+          "atLeast": 1
+        },
+        {
+          "label": "끝까지 완주함",
+          "metric": "timerCompletions",
+          "atLeast": 1
+        },
+        {
+          "label": "알림이 울린 채 완주함",
+          "metric": "alertedCompletions",
+          "atLeast": 1,
+          "hint": "이 앱의 쐐기 — 여기 못 오면 결제 이야기는 이르다"
+        },
+        {
+          "label": "Pro 영역을 건드림",
+          "metric": "presentationRuns",
+          "atLeast": 1,
+          "hint": "세션 모드를 한 번이라도 열어 본 설치"
+        }
+      ]
+    },
+    {
       "kind": "funnel",
       "section": "가치 경험",
       "title": "첫 가치 경험",
@@ -411,6 +553,12 @@
           "label": "한 번이라도 완주한 사람",
           "kind": "installsWithMetric",
           "metric": "timerCompletions"
+        },
+        {
+          "label": "알림이 울린 채 완주한 사람",
+          "kind": "installsWithMetric",
+          "metric": "alertedCompletions",
+          "hint": "이 앱이 파는 문장을 실제로 겪은 사람이에요. 위 칸과의 낙차가 곧 \"그냥 타이머로 쓴 사람\"이에요."
         },
         {
           "label": "완주 / 시작",
@@ -480,12 +628,33 @@
     {
       "kind": "segments",
       "section": "사람",
+      "icon": "person.3",
       "title": "사용자 구분",
-      "note": "설치 하나하나를 결제까지의 거리로 나눈 거예요. 위가 결제에 가깝고, 한 설치는 한 칸에만 들어가요.",
+      "note": "설치 하나하나를 결제까지의 거리로 나눈 거예요. 위가 결제에 가깝고, 한 설치는 한 칸에만 들어가요. 막힘·체험은 앱의 게이트(ProGate)가 내린 판정을 그대로 받은 거라, 한도를 바꿔도 이 카드는 안 틀어져요.",
       "rules": [
         {
           "name": "결제함",
-          "hint": "결제를 마친 설치예요.",
+          "hint": "실제로 돈을 낸 설치예요.",
+          "when": [
+            {
+              "metric": "flag.isPaid",
+              "gt": 0
+            }
+          ]
+        },
+        {
+          "name": "돈 없이 열림",
+          "hint": "그랜드파더·내부 빌드예요. 기능은 열려 있지만 매출과는 무관하고, 팔 대상도 아니에요.",
+          "when": [
+            {
+              "metric": "flag.isComped",
+              "gt": 0
+            }
+          ]
+        },
+        {
+          "name": "열림 (옛 스냅샷)",
+          "hint": "결제와 무상을 가르기 전에 올라온 설치예요. 어느 쪽인지 알 수 없어요 — 다음 실행에 갈려요.",
           "when": [
             {
               "metric": "flag.isPro",
@@ -495,59 +664,37 @@
         },
         {
           "name": "막힘 (결제해야 더 씀)",
-          "hint": "알림을 더 켜려다 막혀 있어요. 결제 안내가 가장 잘 먹히는 사람들이에요.",
+          "hint": "체험을 다 썼어요. 결제 안내가 가장 잘 먹히는 사람들이에요.",
           "when": [
             {
-              "derived": "paidAreaTouched",
-              "gte": 1
-            },
-            {
-              "derived": "trialRemaining",
-              "lte": 0
+              "metric": "flag.trialExhausted",
+              "gt": 0
             }
           ]
         },
         {
-          "name": "막힘 (결제해야 더 씀)",
-          "hint": "알림을 더 켜려다 막혀 있어요. 결제 안내가 가장 잘 먹히는 사람들이에요.",
+          "name": "체험 태우는 중",
+          "hint": "Pro 기능을 써 봤고 아직 남았어요. 여기서 값을 못 느끼면 그냥 떠나요.",
           "when": [
             {
-              "derived": "paidAreaTouched",
-              "gte": 1
-            },
-            {
-              "metric": "alertLimitHits",
-              "gte": 1
+              "metric": "flag.isTrial",
+              "gt": 0
             }
           ]
         },
         {
-          "name": "한도 임박 (체험 1~2회)",
-          "hint": "체험이 곧 끝나요. 여기서 값을 못 느끼면 그냥 떠나요.",
+          "name": "Pro 영역을 건드려 봄 (판정 없음)",
+          "hint": "체험 횟수는 있는데 막힘·체험 판정을 안 보낸 설치예요 — 그 값을 보내기 전 버전이에요.",
           "when": [
             {
-              "derived": "paidAreaTouched",
-              "gte": 1
-            },
-            {
-              "derived": "trialRemaining",
-              "lte": 2
-            }
-          ]
-        },
-        {
-          "name": "체험 사용 중",
-          "hint": "알림을 여러 개 쓰는 중이에요. 아직 여유가 있어요.",
-          "when": [
-            {
-              "derived": "paidAreaTouched",
+              "derived": "trialTouched",
               "gte": 1
             }
           ]
         },
         {
           "name": "곧 필요할 사람",
-          "hint": "무료 범위지만 반복해서 쓰는 사람이에요. 알림이 하나로 부족해지는 건 시간 문제예요.",
+          "hint": "무료 범위지만 반복해서 쓰는 사람이에요. 세션을 운영하게 되는 건 시간 문제예요.",
           "when": [
             {
               "metric": "timerCompletions",
@@ -557,7 +704,7 @@
         },
         {
           "name": "무료로 충분",
-          "hint": "알림 1개로 충분한 사람이에요. 결제를 기대하기 어렵고, 다른 값을 줘야 움직여요.",
+          "hint": "타이머만으로 충분한 사람이에요. 결제를 기대하기 어렵고, 다른 값을 줘야 움직여요.",
           "when": [
             {
               "metric": "timerCompletions",

@@ -29,7 +29,7 @@
 //
 //  5+5 trial:
 //  - presentationMode, overtimeTracking, timerHistory 에 적용
-//  - unlimitedTemplates 는 슬롯 개념이라 hard gate 유지 (3개 free)
+//  - unlimitedTemplates 는 체험 없이 hard gate — 무료 몫이 아예 없다(아래 Free Limits 참고)
 //
 
 import Foundation
@@ -184,5 +184,35 @@ enum ProGate {
     /// 타이머 통계 사용 가능 여부
     static var canUseHistory: Bool {
         evaluate(.timerHistory).isAllowed
+    }
+
+    // MARK: - 이 설치가 체험의 어디쯤인가 (익명 통계용)
+
+    /// 체험이 도는 기능. `unlimitedTemplates` 는 hard gate 라 빠진다.
+    private static var trialFeatures: [Feature] { Feature.allCases.filter(\.supportsTrial) }
+
+    /// 체험을 **실제로 태우는 중**인가 — 한 번이라도 써 봤고, 아직 열려 있고, 아직 안 냈다.
+    ///
+    /// ⚠️ "아직 안 막혔다"로 세면 안 된다. 갓 깐 설치도 세 기능이 모두
+    ///    `allowedWithTrial(remaining: 5)` 라서, 그렇게 세면 **신규 설치가 전부 체험자가 된다.**
+    ///    다른 앱에서 신규 설치의 99%가 유료로 기록된 것과 같은 실수다.
+    ///    그래서 `count > 0` (실제로 써 봤는가)을 반드시 함께 본다.
+    static var isBurningTrial: Bool {
+        guard !StoreManager.isProUser else { return false }
+        return trialFeatures.contains { feature in
+            guard TrialCounter.count(for: feature) > 0 else { return false }
+            if case .allowedWithTrial = evaluate(feature) { return true }
+            return false
+        }
+    }
+
+    /// 체험을 다 써서 **지금 막혀 있는가.** 값을 낼 이유가 지금 있는 사람이다.
+    ///
+    /// 한 기능이라도 막혔으면 참이다 — 막힌 기능이 하나라도 있으면 그 사람 앞에는 벽이 서 있다.
+    /// `isBurningTrial` 과 동시에 참일 수 있다(기록은 다 썼는데 발표 모드는 아직 남은 사람).
+    /// 그때는 막힌 쪽이 더 급한 사실이라, 허브의 무리 카드가 막힘을 먼저 센다.
+    static var isTrialExhausted: Bool {
+        guard !StoreManager.isProUser else { return false }
+        return trialFeatures.contains { !evaluate($0).isAllowed }
     }
 }
