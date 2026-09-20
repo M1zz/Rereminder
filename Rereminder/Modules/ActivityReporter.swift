@@ -110,9 +110,12 @@ enum ActivityReporter {
         // 기록된 적이 있다.
         //
         // 허브 규약: flag.isPaid(실제 결제) · flag.isTrial(체험) · flag.isComped
-        // (돈 안 내고 열린 접근). 셋 다 0이면 무료. 이 앱엔 체험이 없어서
-        // flag.isTrial은 보내지 않는다 — 없는 값을 0으로 보내면 "체험자가 0명"이
-        // 되어, 체험 제도가 없다는 사실과 구분되지 않는다.
+        // (돈 안 내고 열린 접근). 셋 다 0이면 무료.
+        //
+        // ⚠️ flag.isTrial 은 **아래에서** 보낸다. 예전에는 "이 앱엔 체험이 없다"며 아예
+        //    안 보냈는데, 그 말은 5+5 체험(`ProGate`)이 생기면서 사실이 아니게 됐다.
+        //    그 사이 허브에서는 체험을 태우는 중인 사람 — 결제에 가장 가까운 사람 — 이
+        //    아무것도 안 건드린 사람과 같은 "안 냄" 칸에 들어가 있었다.
         metrics["flag.isPaid"] = StoreManager.storedPurchaseFlag ? 1 : 0
         metrics["flag.isComped"] = (StoreManager.isGrandfathered || StoreManager.isAutoProEnvironment) ? 1 : 0
         // 옛 키는 계속 보낸다 — 앱 자체 통계의 과거 기록과 이어 보려면 필요하다.
@@ -123,13 +126,6 @@ enum ActivityReporter {
         metrics["flag.templateUser"] = UsageMetrics.value(.presetUses) > 0 ? 1 : 0
         metrics["flag.watchUser"] = UsageMetrics.value(.watchSyncUses) > 0 ? 1 : 0
 
-        // 결제 경계(알림 개수)와의 거리 — 이벤트로는 "지금 몇 명이 결제 직전인가"를 셀 수 없다.
-        // 이벤트에는 6시간 쓰로틀이 걸려 있고 과거형이지만, 스냅샷은 설치당 1건 upsert라 **현재 상태**다.
-        // 남은 체험 횟수는 여기서 계산하지 않는다(한도 상수는 바뀔 수 있다) — 원자료만 보내고
-        // 해석은 UsageInsights가 한다.
-        // 지금의 유료 축은 **세션 운영**(발표 모드)이다. 옛 키(`trial.prealerts`)는 알림 한도를
-        // 없애며 늘지 않게 됐지만, 예전 스냅샷과 합산되려면 이름을 재활용하면 안 된다 —
-        // 새 키를 따로 보내고 해석은 `UsageInsights` 가 한다.
         // 권유 예산·문구 실험(`ProMention`). 갈래는 **정해진 설치만** 보낸다 — 실험 밖(세션 모드를 안 쓴
         // 사람)을 0 으로 보내면 "remember 갈래"와 구분되지 않는다. 결제 여부는 `flag.isPaid` 와 겹쳐 본다.
         metrics["pitch.mentions"] = Double(ProMention.count)
@@ -138,8 +134,32 @@ enum ActivityReporter {
             metrics["flag.pitchCopySession"] = variant == .session ? 1 : 0
             metrics["flag.pitchCopyRemember"] = variant == .remember ? 1 : 0
         }
+        // 결제 경계와의 거리 — 이벤트로는 "지금 몇 명이 결제 직전인가"를 셀 수 없다. 이벤트에는
+        // 6시간 쓰로틀이 걸려 있고 과거형이지만, 스냅샷은 설치당 1건 upsert라 **현재 상태**다.
+        //
+        // 지금의 유료 축은 **세션 운영·기억하기**다(`ProGate` 머리말). 옛 키(`trial.prealerts`·
+        // `alertLimitHits`)는 알림 한도를 없애며 늘지 않게 됐지만, 예전 스냅샷과 합산되려면
+        // 이름을 재활용하면 안 된다 — 새 키를 따로 보낸다.
+        //
+        // 체험(5+5)은 **기능마다 따로** 돈다. 세 갈래를 다 보낸다 — 어느 기능이 벽이 되는지가
+        // 값을 어디에 매길지를 정한다. 발표 모드 하나만 보내던 동안은, 오버타임·기록에서
+        // 막힌 사람이 허브에서 아무것도 안 쓰는 사람과 구분되지 않았다.
         metrics["trial.presentation"] = Double(TrialCounter.count(for: .presentationMode))
+        metrics["trial.overtime"] = Double(TrialCounter.count(for: .overtimeTracking))
+        metrics["trial.history"] = Double(TrialCounter.count(for: .timerHistory))
         metrics["flag.presentationTrialExtended"] = TrialCounter.extensionAccepted(for: .presentationMode) ? 1 : 0
+        metrics["flag.overtimeTrialExtended"] = TrialCounter.extensionAccepted(for: .overtimeTracking) ? 1 : 0
+        metrics["flag.historyTrialExtended"] = TrialCounter.extensionAccepted(for: .timerHistory) ? 1 : 0
+
+        // 횟수만 보내지 않고 게이트의 **판정**도 함께 보낸다.
+        //
+        // 위 머리말의 "원자료만 보낸다"와 어긋나 보이지만 다른 종류의 값이다. 남은 횟수는
+        // 한도 상수에서 나오는 해석이라 허브가 계산해도 되지만, "지금 열렸나 막혔나"는
+        // `ProGate` 가 내리는 판정 그 자체다. 허브에 한도를 베껴 적으면 여기서 한도를 바꾼 날
+        // 스펙이 조용히 낡는다 — **실제로 그렇게 낡았다.** 알림 한도를 없앴는데 허브 스펙은
+        // 옛 한도로 "막힌 사람"을 세고 있었고, 그 칸은 그날부터 늘 0이었다.
+        metrics["flag.isTrial"] = ProGate.isBurningTrial ? 1 : 0
+        metrics["flag.trialExhausted"] = ProGate.isTrialExhausted ? 1 : 0
 
         // 워치·맥 보유 여부 — 앱이 직접 물어본 답이라 "아직 안 물어봄"과 "없음"이 다르다.
         // 그래서 답을 들은 설치만 보낸다(모르는 사람을 '없음'으로 세면 워치 앱의 값이 과소평가된다).

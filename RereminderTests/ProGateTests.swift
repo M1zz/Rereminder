@@ -280,4 +280,64 @@ final class ProGateTests: XCTestCase {
         XCTAssertEqual(Set(ProGate.Feature.allCases),
                        [.presentationMode, .overtimeTracking, .unlimitedTemplates, .timerHistory])
     }
+
+    // MARK: - 허브로 나가는 판정 (flag.isTrial · flag.trialExhausted)
+    //
+    // 이 두 값은 익명 통계 허브에서 "결제에 가장 가까운 사람"을 세는 근거다
+    // (`ActivityReporter.currentMetrics`). 한 번 틀리면 화면 전체가 조용히 거짓이 되므로
+    // 경계를 여기서 못박는다.
+
+    /// **갓 깐 설치는 체험자가 아니다.** 세 기능이 모두 `allowedWithTrial(remaining: 5)` 라서
+    /// "아직 안 막혔다"로 세면 신규 설치가 전부 체험자가 된다 — 다른 앱에서 신규 설치의
+    /// 99%가 유료로 기록된 것과 같은 실수다.
+    func test_freshInstall_isNotBurningTrial() {
+        XCTAssertFalse(ProGate.isBurningTrial)
+        XCTAssertFalse(ProGate.isTrialExhausted)
+    }
+
+    func test_afterUsingOnce_isBurningTrial() {
+        TrialCounter.increment(.presentationMode)
+        XCTAssertTrue(ProGate.isBurningTrial)
+        XCTAssertFalse(ProGate.isTrialExhausted)
+    }
+
+    func test_whenTrialRunsOut_isExhaustedNotBurning() {
+        for _ in 0..<5 { TrialCounter.increment(.presentationMode) }
+        XCTAssertTrue(ProGate.isTrialExhausted)
+        XCTAssertFalse(ProGate.isBurningTrial, "막힌 사람을 체험 중으로도 세면 두 칸에 겹쳐 든다")
+    }
+
+    /// 체험은 기능마다 따로 돈다. 하나가 막혀도 다른 하나가 남아 있으면 둘 다 참이다 —
+    /// 그 사람 앞에는 벽이 서 있고(막힘), 동시에 아직 태울 것도 남았다(체험).
+    func test_blockedOnOneFeature_stillBurningOnAnother() {
+        for _ in 0..<5 { TrialCounter.increment(.timerHistory) }
+        TrialCounter.increment(.presentationMode)
+        XCTAssertTrue(ProGate.isTrialExhausted)
+        XCTAssertTrue(ProGate.isBurningTrial)
+    }
+
+    /// 연장을 받으면 벽이 10으로 물러난다. 허브가 한도를 베껴 적지 않고 이 판정을 그대로
+    /// 받는 이유가 이것이다 — 같은 횟수라도 연장 여부에 따라 답이 다르다.
+    func test_extendedTrial_isBurningAgainAtSameCount() {
+        for _ in 0..<5 { TrialCounter.increment(.presentationMode) }
+        XCTAssertTrue(ProGate.isTrialExhausted)
+        ProGate.acceptExtendedTrial(.presentationMode)
+        XCTAssertFalse(ProGate.isTrialExhausted)
+        XCTAssertTrue(ProGate.isBurningTrial)
+    }
+
+    /// 결제한 사람은 어느 쪽도 아니다. 허브의 결제 축에서 체험이 유료를 갉아먹으면 안 된다.
+    func test_proUser_isNeitherTrialNorExhausted() {
+        for _ in 0..<20 { TrialCounter.increment(.presentationMode) }
+        setProUser(true)
+        XCTAssertFalse(ProGate.isBurningTrial)
+        XCTAssertFalse(ProGate.isTrialExhausted)
+    }
+
+    /// 체험이 없는 hard gate(기억하기)는 이 두 판정에 끼어들지 않는다. 끼면 무료 사용자가
+    /// 전부 "막힘"이 되어, 값을 낼 이유가 지금 있는 사람을 못 골라낸다.
+    func test_hardGateFeature_doesNotCountAsExhausted() {
+        XCTAssertFalse(ProGate.Feature.unlimitedTemplates.supportsTrial)
+        XCTAssertFalse(ProGate.isTrialExhausted)
+    }
 }
