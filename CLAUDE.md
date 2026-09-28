@@ -1494,6 +1494,16 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
 
 ## 버전 히스토리
 
+### v2.2.9 (2026-09-28)
+**한국어 앱에 "min" 이 그대로 나가던 자리를 걷었다.**
+- 시간 길이 표기는 `TimeMapper.durationText`(시스템 `Duration.UnitsFormatStyle`) 하나로 한다.
+  ⚠️ `"\(m)min"`·`"\(m)m"` 처럼 단위를 문자열로 붙이지 말 것 — 기록 목록·Live Activity 이름·
+  구간 길이·워치 알림 버튼이 전부 이렇게 영어 단위를 달고 있었다
+- 시드·자동 템플릿 이름은 **저장값은 영어 그대로, 화면에서 `Timer.displayName` 으로 번역**한다.
+  저장값을 바꾸면 `LegacyFreeNotice.seedTemplateNames` 판정이 깨진다. 라벨 칩은 `displayLabel`
+- 예비 알림·종료 토스트(`Timer.getPrealertMessage`/`getFinishMessage`)가 번역 없이 나가던 것 수정
+- 릴리즈 노트: `docs/release-notes-2.2.9-{ko,en,ja,zh-Hans,zh-Hant}.md`
+
 ### v2.2.8 (2026-09-17)
 **Pro 를 덜, 더 맞는 순간에 말한다.** 2.2.7 바로 다음 날 나가서 2.2.7 권유 지표는 하루치뿐이다 —
 효과는 2.2.8 이전(2.2.6 이하) 코호트와 결제율·D30 잔존으로 견준다.

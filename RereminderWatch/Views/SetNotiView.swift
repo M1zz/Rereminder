@@ -120,7 +120,7 @@ struct SetNotiView: View {
                 viewModel.selectedMinutes.insert(minutes)
             }
         } label: {
-            CircleButton(title: title, subtitle: "m", isSelected: isSelected, isDisabled: disabled) {
+            CircleButton(title: title, subtitle: String(localized: "min"), isSelected: isSelected, isDisabled: disabled) {
                 // handled by outer Button
             }
             .contentShape(Circle())

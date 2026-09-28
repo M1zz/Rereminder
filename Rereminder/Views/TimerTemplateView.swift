@@ -123,13 +123,13 @@ struct TimerTemplateView: View {
                 VStack(alignment: .leading, spacing: DSSpacing.xs) {
                     // 1행: 템플릿 이름이 주인공, 라벨은 색 칩으로 보조
                     HStack(spacing: DSSpacing.sm) {
-                        Text(timer.name.isEmpty ? mmssText(timer.mainSeconds) : timer.name)
+                        Text(timer.displayName)
                             .font(DSFont.body.weight(.semibold))
                             .foregroundStyle(.primary)
                             .lineLimit(1)
 
                         if !timer.label.isEmpty {
-                            Text(timer.label)
+                            Text(timer.displayLabel)
                                 .font(DSFont.caption)
                                 .fontWeight(.semibold)
                                 .padding(.horizontal, DSSpacing.sm)

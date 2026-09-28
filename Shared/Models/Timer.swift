@@ -108,10 +108,10 @@ extension Timer {
         }
         // 기본 메시지
         if offsetSec < 60 {
-            return "\(offsetSec) sec remaining"
+            return String(localized: "\(offsetSec) sec remaining")
         }
         let minutes = offsetSec / 60
-        return "\(minutes) min remaining"
+        return String(localized: "\(minutes) min remaining")
     }
 
     /// End Alert Message 가져오기 (커스텀 메시지가 없으면 기본 메시지 반환)
@@ -119,7 +119,7 @@ extension Timer {
         if let customMessage = finishMessage, !customMessage.isEmpty {
             return customMessage
         }
-        return "Timer finished"
+        return String(localized: "Timer finished")
     }
 
     /// 사용 횟수
@@ -130,5 +130,69 @@ extension Timer {
     /// Done 횟수
     var completedCount: Int {
         runs.filter { $0.finished }.count
+    }
+}
+
+// MARK: - 화면에 보이는 이름
+
+/// ⚠️ 저장된 이름은 **영어 그대로 두고 보여 줄 때 번역한다.**
+/// 시드 템플릿("Study 25 min")과 자동 이름("Main 25 min / Pre-alert 5·1 min")은 이미 수많은
+/// 기기의 SwiftData 에 영어로 들어가 있고, `LegacyFreeNotice.seedTemplateNames` 가 그 이름으로
+/// 시드를 가려낸다. 저장값을 번역해 바꾸면 그 판정이 깨지고, 언어를 바꾼 뒤에는 또 틀린 말이 된다.
+extension Timer {
+    /// 시드 템플릿의 라벨 — 이름·라벨 번역에 함께 쓴다
+    static let seedLabels = ["Presentation", "Mentoring", "Study", "Exercise", "Meeting"]
+
+    /// 자동 이름 생성기(영어, 저장용). `TimerConfigService.makeTemplateName` 이 이걸 쓴다
+    static func generatedName(mainSec: Int, offsets: [Int]) -> String {
+        let m = max(0, mainSec) / 60
+        let s = max(0, mainSec) % 60
+        let base = s > 0 ? "Main \(m) min \(s) sec" : "Main \(m) min"
+        if offsets.isEmpty { return base }
+        let pre = offsets.map { "\($0/60)" }.joined(separator: "·")
+        return "\(base) / Pre-alert \(pre) min"
+    }
+
+    /// 시드 이름("Study 25 min")이면 그 분을 돌려준다. 사용자가 붙인 이름이면 nil
+    private var seedNameMinutes: Int? {
+        guard Self.seedLabels.contains(label),
+              name.hasPrefix(label + " "), name.hasSuffix(" min") else { return nil }
+        return Int(name.dropFirst(label.count + 1).dropLast(4))
+    }
+
+    /// 화면·Live Activity 에 보여 줄 이름. 앱이 만든 이름만 지금 언어로 다시 쓴다
+    var displayName: String {
+        if name.isEmpty { return TimeMapper.mmss(mainSeconds) }
+        if let minutes = seedNameMinutes {
+            return "\(displayLabel) \(TimeMapper.durationText(minutes * 60))"
+        }
+        if name == Self.generatedName(mainSec: mainSeconds, offsets: prealertOffsetsSec) {
+            let main = TimeMapper.durationText(mainSeconds)
+            guard !prealertOffsetsSec.isEmpty else { return main }
+            let alerts = prealertOffsetsSec.sorted(by: >)
+                .map { TimeMapper.durationText($0) }
+                .joined(separator: ", ")
+            return String(localized: "\(main) · alerts \(alerts) before end")
+        }
+        return name
+    }
+
+    /// 라벨 칩 문구. 앱이 준 라벨(프리셋)만 번역하고 사용자가 쓴 라벨은 그대로
+    var displayLabel: String {
+        Self.localizedLabel(label)
+    }
+
+    static func localizedLabel(_ label: String) -> String {
+        switch label {
+        case "Presentation": return String(localized: "Presentation")
+        case "Mentoring": return String(localized: "Mentoring")
+        case "Meeting": return String(localized: "Meeting")
+        case "Break": return String(localized: "Break")
+        case "Focus": return String(localized: "Focus")
+        case "Exercise": return String(localized: "Exercise")
+        case "Study": return String(localized: "Study")
+        case "Reading": return String(localized: "Reading")
+        default: return label
+        }
     }
 }

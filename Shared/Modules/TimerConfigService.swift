@@ -166,25 +166,13 @@ final class TimerConfigService {
 
     // MARK: - Template Name 생성
 
+    /// 저장용 영어 이름. 화면에는 `Timer.displayName` 이 지금 언어로 다시 써서 보여 준다
     func makeTemplateName(mainSec: Int, offsets: [Int]) -> String {
-        let m = max(0, mainSec) / 60
-        let s = max(0, mainSec) % 60
-        let base = s > 0 ? "Main \(m) min \(s) sec" : "Main \(m) min"
-        if offsets.isEmpty { return base }
-        let pre = offsets.map { "\($0/60)" }.joined(separator: "·")
-        return "\(base) / Pre-alert \(pre) min"
+        Timer.generatedName(mainSec: mainSec, offsets: offsets)
     }
 
     /// 시간 기반 자동 이름 생성 (Live Activity 등에서 사용)
     func makeAutoName(mainSec: Int) -> String {
-        if mainSec >= 3600 {
-            let hours = mainSec / 3600
-            let minutes = (mainSec % 3600) / 60
-            return minutes > 0 ? "\(hours)h \(minutes)min" : "\(hours)h"
-        } else if mainSec >= 60 {
-            return "\(mainSec / 60)min"
-        } else {
-            return "Timer"
-        }
+        mainSec >= 60 ? TimeMapper.durationText(mainSec) : String(localized: "Timer")
     }
 }

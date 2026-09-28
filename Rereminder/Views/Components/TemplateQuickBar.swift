@@ -176,8 +176,7 @@ struct TemplateQuickBar: View {
 
     /// 이름이 비어있으면 M:SS 시간 표기
     private func displayName(_ template: Timer) -> String {
-        if !template.name.isEmpty { return template.name }
-        return TimeMapper.mmss(template.mainSeconds)
+        template.displayName
     }
 }
 

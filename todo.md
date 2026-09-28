@@ -1,6 +1,10 @@
 # Rereminder 작업 메모
 
 ## 완료 (이번 라운드)
+- [x] **한국어 앱에 "min" 이 나오던 문제 (2.2.9)** — 시간 길이는 `TimeMapper.durationText`,
+      시드·자동 템플릿 이름은 `Timer.displayName` 으로 표시할 때 번역, 알림 토스트 번역.
+      iOS 테스트·워치·Mac Catalyst 빌드 통과
+  - [ ] 실기기에서 한국어·영어·일본어로 템플릿 칩·기록·Live Activity 이름 눈으로 확인
 - [x] **App Clip 을 업로드에서 잠시 뺀다** (타겟은 남기고 연결만 끊음)
   - `Embed App Clips` 항목 + 메인 앱 `dependencies` 두 줄 제거 → `Rereminder.app/AppClips/` 가
     생기지 않는 것으로 확인. 워치 앱·위젯 확장 임베드는 그대로

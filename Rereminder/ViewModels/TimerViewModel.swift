@@ -52,7 +52,7 @@ final class TimerViewModel: ObservableObject {
         engine.onFinish = { [weak self] in
             guard let self else { return }
             ring()
-            let message = self.currentTemplate?.getFinishMessage() ?? "Timer finished"
+            let message = self.currentTemplate?.getFinishMessage() ?? String(localized: "Timer finished")
             self.showToast?(message)
             self.appStateManager?.sendNotificationIfNeeded(message)
 
@@ -150,7 +150,7 @@ final class TimerViewModel: ObservableObject {
         engine.configure(
             mainSeconds: template.mainSeconds,
             prealertOffsetsSec: template.prealertOffsetsSec,
-            name: template.name
+            name: template.displayName
         )
         state = .idle
         remaining = TimeInterval(template.mainSeconds)
@@ -346,7 +346,7 @@ final class TimerViewModel: ObservableObject {
         #if os(iOS) && !targetEnvironment(macCatalyst)
         let duration = TimeInterval(template.mainSeconds)
         let endDate = remoteEndDate ?? Date().addingTimeInterval(duration)
-        let name = template.name
+        let name = template.displayName
 
         if adoptExisting {
             LiveActivityController.adoptOrStart(name: name, duration: duration, endDate: endDate)

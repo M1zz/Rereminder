@@ -266,17 +266,7 @@ struct TimerHistoryView: View {
     }
 
     private func formatSeconds(_ seconds: Int) -> String {
-        if seconds >= 3600 {
-            let h = seconds / 3600
-            let m = (seconds % 3600) / 60
-            return m > 0 ? "\(h)h \(m)m" : "\(h)h"
-        } else if seconds >= 60 {
-            let m = seconds / 60
-            let s = seconds % 60
-            return s > 0 ? "\(m)m \(s)s" : "\(m)m"
-        } else {
-            return "\(seconds)s"
-        }
+        TimeMapper.durationText(seconds, narrow: true)
     }
 
     private func recordsThisWeek() -> [TimerRecord] {

@@ -144,4 +144,17 @@ enum TimeMapper {
             ? String(format: "%d:%02d:%02d", hours, minutes, secs)
             : String(format: "%d:%02d", minutes, secs)
     }
+
+    /// 초 → "25분" / "25 min" / "25分" / "1시간 30분" — **사람이 읽는 길이**, 기기 언어를 따른다.
+    ///
+    /// ⚠️ "\(m)min"·"\(m)m" 처럼 단위를 문자열로 붙이지 말 것 — 한국어 앱에서도 "min" 이 그대로
+    /// 나갔다. 시스템 포맷터가 언어별 단위·띄어쓰기·어순까지 맞춰 준다.
+    /// - Parameter narrow: 좁은 자리(기록 목록 등)용. 영어에서 "1h 30m", 한국어는 그대로 "1시간 30분"
+    static func durationText(_ seconds: Int, narrow: Bool = false) -> String {
+        let style = Duration.UnitsFormatStyle(
+            allowedUnits: [.hours, .minutes, .seconds],
+            width: narrow ? .narrow : .abbreviated
+        )
+        return Duration.seconds(max(0, seconds)).formatted(style)
+    }
 }
