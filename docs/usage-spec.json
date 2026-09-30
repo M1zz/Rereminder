@@ -272,7 +272,7 @@
             "paywall_converted",
             "purchase_completed"
           ],
-          "hint": "두 이름을 한 칸으로 합쳐요 — paywall_converted 는 페이월을 닫는 순간 출처 슬라이스와 함께, purchase_completed 는 StoreManager 에서 와요. 취소·실패는 purchase_failed 로 따로 옵니다."
+          "hint": "두 이름을 한 칸으로 합쳐요 — paywall_converted 는 페이월을 닫는 순간 출처 슬라이스와 함께, purchase_completed 는 StoreManager 에서 결제 하나당 한 번 와요(페이월 밖의 결제·자녀 구매 승인·프로모션 코드 포함 — 둘의 차이가 페이월 밖 결제예요). 취소·실패는 purchase_failed 로 따로 옵니다."
         }
       ]
     },
@@ -409,7 +409,7 @@
             "paywall_converted",
             "purchase_completed"
           ],
-          "hint": "두 이름을 한 칸으로 합쳐요 — paywall_converted 는 페이월을 닫는 순간 출처 슬라이스와 함께, purchase_completed 는 StoreManager 에서 와요. 취소·실패는 purchase_failed 로 따로 옵니다."
+          "hint": "두 이름을 한 칸으로 합쳐요 — paywall_converted 는 페이월을 닫는 순간 출처 슬라이스와 함께, purchase_completed 는 StoreManager 에서 결제 하나당 한 번 와요(페이월 밖의 결제·자녀 구매 승인·프로모션 코드 포함 — 둘의 차이가 페이월 밖 결제예요). 취소·실패는 purchase_failed 로 따로 옵니다."
         }
       ]
     },

@@ -394,6 +394,14 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - 판정은 순수 함수 `StoreManager.isRevoked(proTransactionRevocationDates:)` 에 있다 —
   **목록이 비어 있으면 false**(근거 없음), 살아 있는 트랜잭션이 하나라도 있으면 false
   (환불 후 재구매), 전부 회수됐을 때만 true.
+- **결제 완료 이벤트(`purchase_completed`)는 트랜잭션으로 센다**(`reportNewPurchaseIfNeeded`).
+  ⚠️ 2.2.9 까지는 페이월의 `purchase()` 가 true 일 때만 남겨, 자녀 구매 승인·인앱결제 프로모션 코드처럼
+  **페이월 밖에서 생긴 결제는 이벤트가 없었다.** 지금은 권한이 처음 보이는 순간 7일 안의 본인 결제를
+  원거래 ID 당 한 번(Keychain 기록) 남긴다. 옛 구매 복원·가족 공유는 세지 않는다.
+  테스트: `PurchaseCompletedReportTests`
+- ⚠️ **구매 기록(`storedPurchaseFlag`)은 실제 결제 트랜잭션이 보일 때만 적는다.** LeeoKit 의
+  `hasPro` 는 그랜드파더링까지 참이라, 그걸로 적던 시절에는 평생 무료 사용자도 `flag.isPaid=1` 로
+  나갔다. 이미 적힌 기록은 래치라 지우지 않고, 셀 때 `StoreManager.isPaidPurchase` 가 그랜드파더링을 뺀다.
 - `isPro`(@Published)와 `isProUser`(static)는 **언제나 같은 답**을 내야 한다. 갈라지면
   페이월은 "구매하세요"라고 하는데 기능은 열려 있는(또는 그 반대의) 상태가 된다.
 

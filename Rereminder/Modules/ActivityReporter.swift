@@ -116,7 +116,7 @@ enum ActivityReporter {
         //    안 보냈는데, 그 말은 5+5 체험(`ProGate`)이 생기면서 사실이 아니게 됐다.
         //    그 사이 허브에서는 체험을 태우는 중인 사람 — 결제에 가장 가까운 사람 — 이
         //    아무것도 안 건드린 사람과 같은 "안 냄" 칸에 들어가 있었다.
-        metrics["flag.isPaid"] = StoreManager.storedPurchaseFlag ? 1 : 0
+        metrics["flag.isPaid"] = StoreManager.isPaidPurchase ? 1 : 0
         metrics["flag.isComped"] = (StoreManager.isGrandfathered || StoreManager.isAutoProEnvironment) ? 1 : 0
         // 옛 키는 계속 보낸다 — 앱 자체 통계의 과거 기록과 이어 보려면 필요하다.
         // 다만 이 값은 접근 권한이지 결제가 아니다. 유료를 세는 데 쓰지 말 것.
