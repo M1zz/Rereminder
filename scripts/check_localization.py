@@ -2,7 +2,7 @@
 """Localizable.xcstrings 위생 검사 — predeploy/CI 게이트.
 
 소스 언어가 en 인 카탈로그 기준으로:
-  1. ko/ja/zh-Hans/zh-Hant 번역이 비었거나 state=new 로 방치된 키 → 실패
+  1. ko/ja/zh-Hans/zh-Hant/de/fr/es/pt-BR/it 번역이 비었거나 state=new 로 방치된 키 → 실패
   2. extractionState=stale 키 (코드에서 제거됐는데 카탈로그에 남은 것) → 실패
   3. 키(=영어 소스)에 한글이 섞인 것 (소스 문자열 하드코딩 실수) → 실패
 
@@ -16,7 +16,7 @@ import sys
 CATALOGS = [
     "Rereminder/Localizable.xcstrings",
 ]
-LANGS = ("ko", "ja", "zh-Hans", "zh-Hant")
+LANGS = ("ko", "ja", "zh-Hans", "zh-Hant", "de", "fr", "es", "pt-BR", "it")
 
 # 번역 없이 두는 게 맞는 키 (고유명사·포맷 전용 등)
 #

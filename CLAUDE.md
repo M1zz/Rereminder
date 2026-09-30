@@ -1406,6 +1406,46 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
   앱 안에서는 안 샌다 — 페이월은 지역화된 `AppName.pro` 를 쓰고, ASC 이름을 읽는
   `StoreManager.proDisplayName` 은 어느 화면에서도 쓰이지 않는다.
 
+### 지원 언어는 10개다 (2.3.0)
+`ko`·`en`·`ja`·`zh-Hans`·`zh-Hant` 에 **`de`·`fr`·`es`·`pt-BR`·`it`** 를 더했다(2026-09-30).
+유럽·남미를 고른 이유는 결제율 — 이 앱은 Pro 를 파는 앱이라 설치 수보다 결제로 이어지는 시장이 먼저다.
+언어 목록이 들어가는 곳은 **네 곳이고 늘 같아야 한다**: `knownRegions`(pbxproj) ·
+`Localizable.xcstrings`(+ 세 타겟의 `InfoPlist.xcstrings`) · `deploy.env` 의 `LOCALES` ·
+`scripts/check_localization.py` 의 `LANGS`.
+
+- **용어 고정** (새 문구도 같은 말을 쓸 것 — 갈라지면 같은 기능이 두 이름을 갖는다):
+  | | de | fr | es | pt-BR | it |
+  |---|---|---|---|---|---|
+  | 세션 모드 | Session-Modus | mode Séance | Modo sesión | Modo Sessão | Modalità Sessione |
+  | 구간 | Abschnitt | partie | sección | etapa | sezione |
+  | 예비 알림 | Vorwarnung | pré-alerte | aviso previo | pré-alerta | preavviso |
+  | 템플릿 | Vorlage | modèle | plantilla | modelo | modello |
+  | 대본 | Skript | notes | guion | roteiro | copione |
+  | 호칭 | du | vous | tú | você | tu |
+- 스페인어는 **한 벌로 스페인·중남미를 함께** 쓴다(중립 스페인어). ASC 의 es-ES·es-MX 에 같은 글이 들어간다.
+- 독일어 단위는 `Min.`·`Sek.` 다 — `m` 하나만 쓰면 "미터"로 읽힌다.
+- ⚠️ **스토어 페이지에 언어를 추가하는 건 사람이 한다**(ASC ▸ 앱 정보 ▸ 현지화). 없으면 릴리즈노트·문구·
+  스크린샷이 올라갈 자리가 없다. 인앱결제 표시 이름의 현지화도 따로다(위 "앱 이름" 절).
+- ⚠️ 웹 페이지(소개·지원·개인정보)는 아직 한국어·영어·중국어뿐이라 새 언어 사용자는 영어를 본다.
+- 2.3.0 을 준비하며 **한국어 오역 다섯 개**를 잡았다 — 알림의 정지 버튼이 "타이머 정지됨",
+  권한 상태 "알 수 없음"이 "Pro로 업그레이드", "시간 직접 입력"이 "두번알림 앱을 엽니다" 등.
+  키와 값이 한 칸씩 밀려 들어간 흔적으로 보인다. 새 언어를 번역할 때 영어와 대조하다 드러났다.
+
+### 앱스토어 스크린샷 — 스크립트로 찍고 스크립트로 꾸민다
+언어 10개 × 4장을 손으로 맞추면 다음 릴리즈에 똑같이 다시 찍을 수 없다. 그래서 두 단계 모두 스크립트다:
+
+```bash
+scripts/capture_screenshots.sh [언어 ...]          # → docs/screenshots/raw/<언어>/ (원본, 1320×2868)
+python3 scripts/make_marketing_screenshots.py [언어 ...]  # → docs/screenshots/marketing/<언어>/ (1242×2688)
+```
+- 화면 상태는 **DEBUG 빌드에만 있는** `ScreenshotScene`(`Rereminder/Modules/ScreenshotScene.swift`)이
+  실행 인자 `-screenshotScene <dial|running|session|sessionRunning>` 로 세운다. 장면이 걸리면 안내·팁·
+  기기 질문·알림 권한 창을 전부 건너뛴다. 구간 이름·대본 예시는 사용자 글이라 카탈로그가 아니라 그 파일에 언어별로 있다.
+- DeployBar 는 `docs/screenshots/marketing/<언어>/` 를 그 언어 칸에 올린다(제출본 폴더가 원본 폴더를 이긴다).
+  ⚠️ `marketing/` 바로 아래나 `appstore-65/` 처럼 **언어 없는 제출본 폴더를 다시 만들지 말 것** — 옛 한국어
+  한 벌(2.3.0 에 지웠다, "발표 모드" 시절 화면)이 그런 폴더였다.
+- 헤드라인은 `make_marketing_screenshots.py` 의 `COPY` 에 언어별로 있다. 세션 모드 이름은 앱 안 번역과 같은 말을 쓴다.
+
 ### 중국어(간체·번체) 지원 — 두 언어이지 한 언어가 아니다
 `zh-Hans`(중국 간체)와 `zh-Hant`(대만·홍콩 번체) 를 2026-09-08 에 넣었다. 언어 목록은 네 곳이
 같아야 한다 — `knownRegions`(pbxproj) · `Localizable.xcstrings` · `deploy.env` 의 `LOCALES` ·
@@ -1469,7 +1509,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 (예: `release-notes-2.2.5-ko.md` · `-en.md` · `-ja.md` · `-zh-Hans.md` · `-zh-Hant.md`).
 ⚠️ 두 곳의 문구는 **같아야 한다** — 갈라지면 어느 쪽이 스토어에 나갔는지 나중에 알 수 없다.
 
-- ⚠️ **지원하는 언어를 전부 쓴다.** 지금은 `ko`·`en`·`ja`·`zh-Hans`·`zh-Hant` 다섯이다
+- ⚠️ **지원하는 언어를 전부 쓴다.** 지금은 `ko`·`en`·`ja`·`zh-Hans`·`zh-Hant`·`de`·`fr`·`es`·`pt-BR`·`it` 열이다
   (`knownRegions` 와 `Localizable.xcstrings` 의 언어와 같다). 언어가 늘면 파일도 는다.
   한 언어라도 빠지면 그 지역 사용자는 App Store 에서 영어 원문을 보게 된다.
 - ⚠️ **특수기호를 넣지 않는다.** App Store Connect 의 릴리즈 노트 칸은 **평문**이라
@@ -1501,6 +1541,14 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
 ```
 
 ## 버전 히스토리
+
+### v2.3.0 (준비 중, 2026-09-30)
+**10개 언어** — 독일어·프랑스어·스페인어·포르투갈어(브라질)·이탈리아어 추가(위 "지원 언어는 10개다" 절).
+- 앱 문구 551개 × 5개 언어, 앱 이름 카탈로그 세 타겟, 스토어 문구 `APPSTORE.md`, 릴리즈 노트 10벌
+- 스크린샷을 스크립트로(`capture_screenshots.sh` + `ScreenshotScene` + `make_marketing_screenshots.py`), 언어별 40장
+- 한국어 오역 다섯 개 수정(정지 버튼 등)
+- 결제 완료 이벤트를 페이월 밖 결제까지 트랜잭션 단위로 세고, `flag.isPaid` 에서 평생 무료를 뺐다
+- 릴리즈 노트: `docs/release-notes-2.3.0-{ko,en,ja,zh-Hans,zh-Hant,de,fr,es,pt-BR,it}.md`
 
 ### v2.2.9 (2026-09-28)
 **한국어 앱에 "min" 이 그대로 나가던 자리를 걷었다.**

@@ -403,6 +403,18 @@ struct TimerUnifiedView: View {
     )
 
     private func setupOnAppear() {
+        #if DEBUG
+        // 앱스토어 스크린샷 장면 — 안내는 하나도 띄우지 않는다(`ScreenshotScene`).
+        // 안내 판정보다 **앞에** 있어야 한다. 뒤에 두면 혜택 변경 안내 시트가 화면을 덮는다.
+        if let scene = ScreenshotScene.current {
+            screenVM.attachContext(context)
+            screenVM.seedTemplatesIfNeeded()
+            screenVM.timerVM.modelContext = context
+            screenVM.timerVM.appStateManager = appStateManager
+            scene.apply(to: screenVM)
+            return finishSetupOnAppear()
+        }
+        #endif
         // 콜드 런치에서는 scenePhase onChange 가 오지 않는다 — 여기서도 표시를 남긴다.
         DevicePresence.beginHeartbeat()
 
@@ -769,6 +781,9 @@ struct TimerUnifiedView: View {
     private func askOrRemindAboutDevices() {
         // 혜택 변경 안내가 떠 있으면 양보한다 — 그 화면 뒤에서 질문이 쌓이면 둘 다 안 읽힌다.
         guard !isShowingPlanChangeNotice else { return }
+        #if DEBUG
+        if ScreenshotScene.isActive { return }
+        #endif
         let starts = Int(UsageMetrics.value(.timerStarts))
 
         if let device = DeviceOwnership.pendingQuestion(timerStarts: starts) {

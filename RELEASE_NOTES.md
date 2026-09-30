@@ -9,6 +9,68 @@ DeployBar 가 배포할 때 아래 버전 절의 언어별 문구를 읽어 스�
 사용자에게 무엇이 좋아졌는지만 쓴다. 내부 구조나 빌드 설정 이야기는 쓰지 않는다.
 언어마다 다시 쓴다. 기계번역하지 말고 항목 수와 순서만 맞춘다.
 
+## 2.3.0
+
+### 앱스토어 (한국어)
+
+이제 10개 언어로 쓸 수 있습니다.
+독일어, 프랑스어, 스페인어를 새로 지원합니다.
+포르투갈어와 이탈리아어도 함께 들어왔습니다.
+
+### App Store (English)
+
+Rereminder now speaks 10 languages.
+German, French and Spanish are new.
+Portuguese and Italian are here too.
+
+### App Store (日本語)
+
+10の言語で使えるようになりました。
+ドイツ語、フランス語、スペイン語に対応。
+ポルトガル語とイタリア語にも対応しました。
+
+### 앱스토어 (중국어 간체)
+
+现在支持 10 种语言。
+新增德语、法语和西班牙语。
+葡萄牙语和意大利语也已加入。
+
+### 앱스토어 (중국어 번체)
+
+現在支援 10 種語言。
+新增德文、法文和西班牙文。
+葡萄牙文和義大利文也已加入。
+
+### App Store (Deutsch)
+
+Rereminder gibt es jetzt auf Deutsch.
+Zeiteinheiten folgen der App-Sprache.
+Hinweise erscheinen in deiner Sprache.
+
+### App Store (Français)
+
+Rereminder est désormais en français.
+Les durées suivent la langue de l’app.
+Les alertes parlent votre langue.
+
+### App Store (Español)
+
+Ahora Rereminder está en español.
+Las unidades de tiempo siguen tu idioma.
+Los mensajes de aviso usan tu idioma.
+
+### App Store (Português do Brasil)
+
+O Rereminder agora está em português.
+Unidades de tempo seguem seu idioma.
+Os avisos aparecem no seu idioma.
+
+### App Store (Italiano)
+
+Ora Rereminder è anche in italiano.
+Le unità di tempo seguono la lingua.
+Gli avvisi a comparsa sono in italiano.
+
 ## 2.2.9
 
 ### 앱스토어 (한국어)

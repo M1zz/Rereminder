@@ -4,7 +4,31 @@
     "CFBundleDisplayName" : {
       "comment" : "Bundle display name",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
+          }
+        },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
+          }
+        },
+        "it" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rereminder"
@@ -20,6 +44,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "두번알림"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
           }
         },
         "zh-Hans" : {
@@ -39,7 +69,31 @@
     "CFBundleName" : {
       "comment" : "Bundle name",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
+          }
+        },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
+          }
+        },
+        "it" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rereminder"
@@ -55,6 +109,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "두번알림"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
           }
         },
         "zh-Hans" : {
@@ -75,10 +135,34 @@
       "comment" : "Shown when the app asks to schedule alarms (설정 > 알림 > 끝나면 알람으로 울리기)",
       "extractionState" : "manual",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder nutzt Alarme, damit dich das Ende eines Timers auch im Stumm-Modus erreicht."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rereminder uses alarms so the end of a timer can wake you even in Silent Mode."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder usa alarmas para que el final de un temporizador pueda avisarte incluso en modo silencio."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder utilise les alarmes pour que la fin d’un minuteur puisse vous alerter, même en mode silencieux."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder usa le sveglie così la fine di un timer può avvisarti anche in modalità silenziosa."
           }
         },
         "ja" : {
@@ -91,6 +175,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "무음 모드에서도 타이머가 끝난 것을 알 수 있도록 알람을 사용합니다."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Rereminder usa alarmes para que o fim de um timer chame sua atenção mesmo no modo silencioso."
           }
         },
         "zh-Hans" : {
