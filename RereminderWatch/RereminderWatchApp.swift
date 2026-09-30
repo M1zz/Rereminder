@@ -39,6 +39,10 @@ struct RereminderWatchApp: App {
         // 알림에 정지·다시 알림 버튼을 붙인다 — 되풀이 알림을 손목에서 바로 끌 수 있어야 한다.
         EscalatingAlert.registerCategory()
 
+        #if DEBUG
+        // 스크린샷 장면에서는 권한 창과 종료 배너가 화면을 가린다.
+        if WatchScreenshotScene.isActive { return }
+        #endif
         // Notification Permission 미리 요청
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
     }

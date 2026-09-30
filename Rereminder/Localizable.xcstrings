@@ -25555,19 +25555,19 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Duración del temporizador"
+            "value" : "Duración"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Durée du minuteur"
+            "value" : "Durée"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Durata del timer"
+            "value" : "Durata"
           }
         },
         "ja" : {
@@ -25585,7 +25585,7 @@
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Duração do timer"
+            "value" : "Duração"
           }
         },
         "zh-Hans" : {
@@ -26370,13 +26370,13 @@
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ajustes del temporizador"
+            "value" : "Ajustes"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Réglages du minuteur"
+            "value" : "Réglages"
           }
         },
         "it" : {

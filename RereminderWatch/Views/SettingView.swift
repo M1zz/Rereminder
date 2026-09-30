@@ -48,6 +48,13 @@ struct SettingView: View {
                 if !(minuteRange.contains(settingViewModel.time.minute)) || settingViewModel.time.minute == 0 {
                     settingViewModel.time.minute = 30
                 }
+                #if DEBUG
+                // 앱스토어 스크린샷 장면(`WatchScreenshotScene`) — 복원보다 앞선다.
+                if path.isEmpty, let scene = WatchScreenshotScene.current {
+                    path = scene.initialPath
+                    return
+                }
+                #endif
                 // Cold launch 타이머 복원
                 if path.isEmpty, let vm = TimerViewModel.restoreFromSavedState() {
                     restoredTimerVM = vm
@@ -123,7 +130,7 @@ struct SettingView: View {
         switch target {
         case .setNotiView:
             SetNotiView(
-                viewModel: SetNotiViewModel(maxTimeInSeconds: totalTime),
+                viewModel: makeSetNotiViewModel(),
                 path: $path
             )
         case .timerView(let mainDuration, let notificationDuration):
@@ -143,6 +150,16 @@ struct SettingView: View {
                 path: $path
             )
         }
+    }
+
+    private func makeSetNotiViewModel() -> SetNotiViewModel {
+        let vm = SetNotiViewModel(maxTimeInSeconds: totalTime)
+        #if DEBUG
+        if WatchScreenshotScene.current == .prealerts {
+            vm.selectedMinutes = WatchScreenshotScene.prealertMinutes
+        }
+        #endif
+        return vm
     }
 
     private struct MinuteWheel: View {
