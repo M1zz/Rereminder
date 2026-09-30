@@ -1430,9 +1430,14 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
   (`<div data-lang="…">`), 소개 페이지는 `i18n` 사전 + 데모 `STR` 사전이다. 언어 고르기는 셋 다
   **선택 메뉴**다 — 버튼 10개는 휴대폰 폭을 넘는다. 기기 언어 감지는 `zh-*` → 간체/번체, `pt-*` → `pt-BR`,
   나머지는 언어 코드 앞부분으로 맞춘다. ⚠️ `web/index.html`(App Clip 초대)은 한국어·영어뿐이다 — 클립이 꺼져 있어 미뤘다.
+- 지원·개인정보 페이지의 **앱 메뉴 경로(`<span class="ui">`)와 버튼 이름은 `Localizable.xcstrings` 의 값을 그대로** 쓴다
+  (설정 › 의견 보내기 › 피드백 보내기 · 설정 › 정보 · 알림 방식 · 내 기기 · 구매 복원 · 다시 확인).
+  ⚠️ 설정 화면의 섹션 이름을 바꾸면 이 경로도 10개 언어 모두 고칠 것 — 2.3.0 전까지 피드백이 Help 밖으로
+  옮겨졌는데 페이지는 계속 "설정 › 도움말 › 피드백 보내기"라고 적고 있었다.
+  "iOS 설정 › 집중 모드" 처럼 **iPhone 설정 앱**의 경로는 앱 문구가 아니라 Apple 공식 용어를 따른다.
 - 소개 페이지의 **Pro 목록은 `ProGate.Feature` 와 같아야 한다.** 2.3.0 전까지 "예비 알림 무제한·알림 문구·테마 색"을
   Pro 로 적고 있었다(개편 전 결제 구조). 결제 구조를 바꾸면 이 목록도 10개 언어 모두 고칠 것.
-- 공용 모듈 화면(피드백·페이월 등)은 **LeeoKit** 번역을 쓴다. 2.3.0 에 LeeoKit 을 2.9 → **3.13** 으로 올렸고
+- 공용 모듈 화면(피드백·페이월 등)은 **LeeoKit** 번역을 쓴다. 2.3.0 에 LeeoKit 을 2.9 → **3.14** 로 올렸고
   (3.x 는 `RereminderSpec` 에 `legal`·`monetization` 을 요구한다), 새 5개 언어 번역은 LeeoKit 쪽에 들어갔다.
 - 2.3.0 을 준비하며 **한국어 오역 다섯 개**를 잡았다 — 알림의 정지 버튼이 "타이머 정지됨",
   권한 상태 "알 수 없음"이 "Pro로 업그레이드", "시간 직접 입력"이 "두번알림 앱을 엽니다" 등.
@@ -1489,7 +1494,7 @@ python3 scripts/make_marketing_screenshots.py [언어 ...]  # → docs/screensho
 - **Swift Version**: Swift 5.9+
 
 ## 의존성
-- **LeeoKit** (SPM, 3.13.0+ — 3.x 는 `legal`·`monetization` 선언이 필수): 공용 StoreKit 2 엔진(LeeoStore)·사용 리포터·원격 킬스위치(LeeoRemoteFlags)·MetricKit 크래시 진단(LeeoDiagnostics) 등 자체 공용 모듈. 킬스위치 플래그는 `Rereminder/Modules/RereminderFlags.swift`, Dashboard 수동 작업은 `docs/OPERATIONS_CHECKLIST.md` 참고
+- **LeeoKit** (SPM, 3.14.0+ — 3.x 는 `legal`·`monetization` 선언이 필수. 3.14.0 에 새 5개 언어 번역): 공용 StoreKit 2 엔진(LeeoStore)·사용 리포터·원격 킬스위치(LeeoRemoteFlags)·MetricKit 크래시 진단(LeeoDiagnostics) 등 자체 공용 모듈. 킬스위치 플래그는 `Rereminder/Modules/RereminderFlags.swift`, Dashboard 수동 작업은 `docs/OPERATIONS_CHECKLIST.md` 참고
 - **외부 분석 SDK 없음**: Firebase(2026-07)에 이어 TelemetryDeck(2026-08)도 제거했다.
   App ID 가 비어 있어 실제로 아무것도 보내지 않았고, 사용 통계는 CloudKit 허브가 이미 담당한다.
   이벤트는 `AnalyticsManager` → `ActivityReporter` 한 경로로만 나간다.
