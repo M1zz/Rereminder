@@ -38,4 +38,18 @@ enum RereminderSpec: LeeoAppSpec {
 
     /// LeeoAppSpec witness — 타입을 옵셔널로 명시해야 프로토콜 기본값(nil)에 가려지지 않는다.
     static let paywall: LeeoPaywallConfig? = paywallConfig
+
+    /// 개인정보·지원 페이지 (LeeoKit 3.x 부터 필수). App Store Connect 에 넣은 주소와 같다.
+    static let legal = LeeoLegalConfig(
+        privacyURL: URL(string: "https://m1zz.github.io/Rereminder/privacy.html")!,
+        supportURL: URL(string: "https://m1zz.github.io/Rereminder/support.html")!,
+        marketingURL: URL(string: "https://m1zz.github.io/Rereminder/")
+    )
+
+    /// 수익모델 선언 (LeeoKit 3.x 부터 필수) — 무료로 쓰다가 1회 구매로 Pro 해제.
+    /// 무엇을 막는지는 이 앱의 `ProGate` 가 정하므로 LeeoKit 의 게이트 정책은 비워 둔다.
+    static let monetization = LeeoMonetization.freemium(
+        LeeoPurchaseConfig(productIDs: paywallConfig.productIDs,
+                           cacheSuiteName: "group.leeo.toki")
+    )
 }

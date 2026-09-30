@@ -1251,9 +1251,9 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
     두 페이지는 배포처가 달라(이 저장소 `docs/` vs 블로그 저장소) 경로 대소문자도 다릅니다.
     자세한 건 `web/README.md` 참고.
   - **도메인을 바꾸면 엔타이틀먼트·AASA·App Store Connect 세 곳을 모두 고쳐야 합니다.**
-  - **웹 페이지 넷은 기기 언어를 보고 한국어·영어를 고른다**(`web/index.html`,
-    `docs/index.html`·`support.html`·`privacy.html`). `navigator.languages` 를 훑어
-    `ko` 로 시작하는 태그가 있으면 한국어이고, 오른쪽 위 버튼으로 바꿀 수 있다.
+  - **웹 페이지는 기기 언어를 보고 언어를 고른다**(`web/index.html` 은 한국어·영어, 나머지 셋은 10개 언어 —
+    `docs/index.html`·`support.html`·`privacy.html`). `navigator.languages` 를 앞에서부터 훑어
+    지원하는 언어가 나오면 그것이고, 오른쪽 위 선택 메뉴로 바꿀 수 있다.
     ⚠️ **저장 키는 네 페이지가 모두 `rereminder-lang` 이어야 한다** — 다르면 소개 페이지에서
     고른 언어가 지원·개인정보 페이지로 이어지지 않는다(예전에 `docs/index.html` 만 `lang` 을
     써서 실제로 끊겨 있었다). ⚠️ **자동 감지 결과는 저장하지 않는다** — 저장하면 기기 언어를
@@ -1426,7 +1426,14 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - 독일어 단위는 `Min.`·`Sek.` 다 — `m` 하나만 쓰면 "미터"로 읽힌다.
 - ⚠️ **스토어 페이지에 언어를 추가하는 건 사람이 한다**(ASC ▸ 앱 정보 ▸ 현지화). 없으면 릴리즈노트·문구·
   스크린샷이 올라갈 자리가 없다. 인앱결제 표시 이름의 현지화도 따로다(위 "앱 이름" 절).
-- ⚠️ 웹 페이지(소개·지원·개인정보)는 아직 한국어·영어·중국어뿐이라 새 언어 사용자는 영어를 본다.
+- 웹 페이지(소개·지원·개인정보)도 **10개 언어**다. 지원·개인정보는 언어마다 본문 블록 한 벌
+  (`<div data-lang="…">`), 소개 페이지는 `i18n` 사전 + 데모 `STR` 사전이다. 언어 고르기는 셋 다
+  **선택 메뉴**다 — 버튼 10개는 휴대폰 폭을 넘는다. 기기 언어 감지는 `zh-*` → 간체/번체, `pt-*` → `pt-BR`,
+  나머지는 언어 코드 앞부분으로 맞춘다. ⚠️ `web/index.html`(App Clip 초대)은 한국어·영어뿐이다 — 클립이 꺼져 있어 미뤘다.
+- 소개 페이지의 **Pro 목록은 `ProGate.Feature` 와 같아야 한다.** 2.3.0 전까지 "예비 알림 무제한·알림 문구·테마 색"을
+  Pro 로 적고 있었다(개편 전 결제 구조). 결제 구조를 바꾸면 이 목록도 10개 언어 모두 고칠 것.
+- 공용 모듈 화면(피드백·페이월 등)은 **LeeoKit** 번역을 쓴다. 2.3.0 에 LeeoKit 을 2.9 → **3.13** 으로 올렸고
+  (3.x 는 `RereminderSpec` 에 `legal`·`monetization` 을 요구한다), 새 5개 언어 번역은 LeeoKit 쪽에 들어갔다.
 - 2.3.0 을 준비하며 **한국어 오역 다섯 개**를 잡았다 — 알림의 정지 버튼이 "타이머 정지됨",
   권한 상태 "알 수 없음"이 "Pro로 업그레이드", "시간 직접 입력"이 "두번알림 앱을 엽니다" 등.
   키와 값이 한 칸씩 밀려 들어간 흔적으로 보인다. 새 언어를 번역할 때 영어와 대조하다 드러났다.
@@ -1482,7 +1489,7 @@ python3 scripts/make_marketing_screenshots.py [언어 ...]  # → docs/screensho
 - **Swift Version**: Swift 5.9+
 
 ## 의존성
-- **LeeoKit** (SPM, 2.9.0+): 공용 StoreKit 2 엔진(LeeoStore)·사용 리포터·원격 킬스위치(LeeoRemoteFlags)·MetricKit 크래시 진단(LeeoDiagnostics) 등 자체 공용 모듈. 킬스위치 플래그는 `Rereminder/Modules/RereminderFlags.swift`, Dashboard 수동 작업은 `docs/OPERATIONS_CHECKLIST.md` 참고
+- **LeeoKit** (SPM, 3.13.0+ — 3.x 는 `legal`·`monetization` 선언이 필수): 공용 StoreKit 2 엔진(LeeoStore)·사용 리포터·원격 킬스위치(LeeoRemoteFlags)·MetricKit 크래시 진단(LeeoDiagnostics) 등 자체 공용 모듈. 킬스위치 플래그는 `Rereminder/Modules/RereminderFlags.swift`, Dashboard 수동 작업은 `docs/OPERATIONS_CHECKLIST.md` 참고
 - **외부 분석 SDK 없음**: Firebase(2026-07)에 이어 TelemetryDeck(2026-08)도 제거했다.
   App ID 가 비어 있어 실제로 아무것도 보내지 않았고, 사용 통계는 CloudKit 허브가 이미 담당한다.
   이벤트는 `AnalyticsManager` → `ActivityReporter` 한 경로로만 나간다.

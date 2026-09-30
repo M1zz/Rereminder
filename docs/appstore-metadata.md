@@ -23,7 +23,7 @@
 | 지원 URL | `https://m1zz.github.io/Rereminder/support.html` |
 | 마케팅 URL (선택) | `https://m1zz.github.io/Rereminder/` |
 
-두 페이지는 브라우저 언어를 보고 **한국어·영어·간체·번체** 중 하나를 그린다
+두 페이지는 브라우저 언어를 보고 **10개 언어**(앱과 같은 목록) 중 하나를 그린다
 (`docs/support.html`·`docs/privacy.html`). 그래서 언어마다 다른 주소를 넣을 필요가 없다.
 
 ---
@@ -236,6 +236,28 @@ Rereminder 讓你在結束之前就被提醒 —— 想放幾次就放幾次。
 Pro 是一次買斷，不是訂閱。提前提醒不限個數，Apple Watch App 和 Mac App 都免費。Pro 賣的是一句話：App 會記住你的設定 —— 範本、上次的設定、分段模式、超時和歷史統計。
 ```
 ---
+
+## 인앱결제 `com.xa.toki.pro` 표시 이름·설명
+
+넣는 곳: App Store Connect ▸ 앱 ▸ 수익화 ▸ 인앱 구입 ▸ `com.xa.toki.pro` ▸ App Store 현지화.
+⚠️ **지금은 한국어("두번알림 pro") 하나뿐이라 모든 나라의 결제 확인 창·스토어 목록에 한국어가 나간다.**
+앱 안의 페이월은 지역화된 `AppName.pro` 를 쓰므로 이 값과 무관하다. 한도: 이름 30자, 설명 45자.
+
+| 로케일 | 언어 | 표시 이름 | 설명 | 설명 글자 수 |
+|---|---|---|---|---|
+| `ko` | 한국어 | 두번알림 Pro | 앱이 설정을 기억합니다. 한 번만 구매 | 21 |
+| `en-US` | English (U.S.) | Rereminder Pro | The app remembers your setups. Pay once. | 40 |
+| `ja` | 日本語 | Rereminder Pro | 設定を覚える買い切り。テンプレート・前回の設定・セッションモード・履歴 | 35 |
+| `zh-Hans` | 简体中文 | Rereminder Pro | 一次购买，记住你的设置：模板、上次设置、分段模式、记录 | 27 |
+| `zh-Hant` | 繁體中文 | Rereminder Pro | 一次購買，記住你的設定：範本、上次設定、分段模式、紀錄 | 27 |
+| `de` | Deutsch | Rereminder Pro | Merkt sich deine Setups – einmal kaufen | 39 |
+| `fr` | Français | Rereminder Pro | L’app retient vos réglages. Achat unique. | 41 |
+| `es` | Español (es-ES, es-MX) | Rereminder Pro | Recuerda tus plantillas, sesiones e historial | 45 |
+| `pt-BR` | Português (Brasil) | Rereminder Pro | O app lembra seus timers, modelos e sessões | 43 |
+| `it` | Italiano | Rereminder Pro | Ricorda timer, modelli e Modalità Sessione | 42 |
+
+- 이름은 앱 안 페이월의 `app_name_pro` 와 같게 둔다 — 한국어만 "두번알림 Pro", 나머지는 "Rereminder Pro".
+  결제 창과 페이월이 다른 이름을 말하면 사용자는 다른 상품으로 읽는다.
 
 ## 아직 사람이 해야 하는 것
 
