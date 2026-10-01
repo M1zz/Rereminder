@@ -65,6 +65,12 @@ O Rereminder agora está em português.
 Unidades de tempo seguem seu idioma.
 Os avisos aparecem no seu idioma.
 
+### 앱스토어 (포르투갈어(포르투갈))
+
+O Rereminder já está em português.
+As unidades de tempo seguem a língua.
+Os avisos aparecem na sua língua.
+
 ### App Store (Italiano)
 
 Ora Rereminder è anche in italiano.

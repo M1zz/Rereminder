@@ -267,6 +267,71 @@ https://m1zz.github.io/Rereminder/privacy.html
 
 https://m1zz.github.io/Rereminder/
 
+## pt-PT
+
+<!-- Português (Portugal) — pt-BR 을 옮기지 않고 포르투갈 표현으로 다시 썼다 (ecrã·guardar·subscrição·a horas) -->
+
+### 이름
+
+Rereminder: Temporizador
+
+### 부제
+
+Vários avisos antes do fim
+
+### 키워드
+
+apresentação,palestra,aula,workshop,reunião,pilates,ioga,treino,pomodoro,concentração,ensaio,foco
+
+### 프로모션 텍스트
+
+Avisos antes do fim para terminar a horas, sem cortes bruscos. Para apresentações, aulas, treinos e concentração. Apple Watch, Mac e widgets incluídos, sem custo extra.
+
+### 설명
+
+A maioria dos temporizadores só toca no fim. Quando toca, já é tarde para terminar com calma.
+
+O Rereminder avisa antes do fim, as vezes que quiser.
+
+Um aviso antes do fim
+Arraste os sinos no mostrador e coloque os alertas onde quiser: 10 minutos, 5 minutos, 1 minuto antes do fim. Quantos alertas quiser, sem limite e sem custo extra.
+
+Veja como o tempo está dividido
+Os alertas dividem o tempo em etapas, cada uma com a sua cor no anel. Logo abaixo, uma lista mostra quanto falta em cada etapa.
+
+Modo Sessão (Pro)
+Dê um nome a cada etapa, como abertura, demonstração e perguntas, e escreva o que vai dizer em cada uma. Quando chega a vez dessa etapa, o guião aparece no ecrã.
+
+A app lembra-se das suas definições (Pro)
+Guarde um tempo e os respetivos alertas como modelo e volte a ele com um toque. A última configuração usada também é reposta quando abre a app.
+
+Um fim que não lhe escapa
+O alerta final pode repetir-se até confirmar. Ou pode tocar como um despertador, mesmo no modo silencioso e com o Foco ativo, até premir Parar.
+
+Em todos os seus dispositivos
+App completa para Apple Watch: ajuste e acompanhe o temporizador no pulso. Barra de menus do Mac, widgets do ecrã principal e do ecrã bloqueado, Dynamic Island, Siri e Atalhos. Tudo isto sem pagar nada.
+
+Para estes momentos
+Apresentações e palestras: avisos a 10, 5 e 1 minuto do fim para terminar a horas
+Aulas e workshops: divida a aula em etapas e saiba quando é altura de avançar
+Pilates, ioga e treinos: aquecimento, parte principal e retorno à calma, sem ter de contar
+Trabalho concentrado: saia da concentração aos poucos, em vez de ser interrompido
+
+Sobre o Pro
+O Pro é uma compra única, não uma subscrição. Os pré-alertas são ilimitados e as apps para Apple Watch e Mac são gratuitas. O Pro vende uma única coisa: a app lembra-se das suas definições. Modelos, a última configuração, Modo Sessão, tempo extra e histórico.
+
+### 지원 URL
+
+https://m1zz.github.io/Rereminder/support.html
+
+### 개인정보처리방침 URL
+
+https://m1zz.github.io/Rereminder/privacy.html
+
+### 마케팅 URL
+
+https://m1zz.github.io/Rereminder/
+
 ## it
 
 <!-- Italiano -->
@@ -336,15 +401,15 @@ https://m1zz.github.io/Rereminder/
 
 ### 이름
 
-두번알림
+두번알림 - 발표·수업 타이머
 
 ### 부제
 
-끝나기 전에 미리 알려주는 타이머
+끝나기 전에 여러 번 미리 알려 줘요
 
 ### 키워드
 
-발표 타이머,회의 타이머,예비 알림,멘토링 타이머,스피치,강의,수업,면접,발표연습,남은시간,프레젠테이션,강연,설교,토론,미리알림,진동
+스톱워치,알람,카운트다운,뽀모도로,스피치,강의,강사,필라테스,요가,운동,인터벌,회의,워크숍,리허설,집중,공부,시간관리,진동,애플워치,설교,스터디,PT
 
 ### 프로모션 텍스트
 
@@ -417,15 +482,15 @@ https://m1zz.github.io/Rereminder/privacy.html
 
 ### 이름
 
-Rereminder - Smart alarm
+Rereminder: Presentation Timer
 
 ### 부제
 
-Speech & Presentation Timer
+Countdown with multiple alerts
 
 ### 키워드
 
-talk,presenter,speaker,lecture,meeting,countdown,pre-alert,vibration,class,sermon,debate,warning
+speech,speaker,class,teacher,workshop,meeting,pilates,yoga,hiit,interval,pomodoro,rehearsal,reminder
 
 ### 프로모션 텍스트
 
