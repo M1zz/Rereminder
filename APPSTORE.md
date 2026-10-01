@@ -331,3 +331,365 @@ https://m1zz.github.io/Rereminder/privacy.html
 ### 마케팅 URL
 
 https://m1zz.github.io/Rereminder/
+
+## ko
+
+### 이름
+
+두번알림
+
+### 부제
+
+끝나기 전에 미리 알려주는 타이머
+
+### 키워드
+
+발표 타이머,회의 타이머,예비 알림,멘토링 타이머,스피치,강의,수업,면접,발표연습,남은시간,프레젠테이션,강연,설교,토론,미리알림,진동
+
+### 프로모션 텍스트
+
+발표 5분 전, 회의 마무리 3분 전. 끝나고 나서가 아니라 끝나기 전에 미리 알려줍니다. 알림마다 원하는 메시지를 붙이고, 다이나믹 아일랜드와 Apple Watch에서 남은 시간을 바로 확인하세요.
+
+### 설명
+
+끝나기 전에, 미리 알려줍니다.
+
+발표 5분 전, 회의 마무리 3분 전, 운동 종료 1분 전
+중요한 순간을 놓치지 않도록 단계별로 미리 알려주는 스마트 타이머입니다.
+
+◆ 예비 알림 — 다른 타이머에는 없는 핵심 기능
+
+일반 타이머는 시간이 끝나야 알려줍니다.
+두번알림은 끝나기 전에 알려줍니다.
+
+• 종료 1분, 3분, 5분, 10분, 15분, 30분 전 알림
+• 원하는 시점에 자유롭게 설정
+• 각 알림마다 맞춤 메시지 설정 가능
+  예) "슬라이드 마무리하세요", "쿨다운 시작"
+
+◆ 주요 기능
+
+- 다이나믹 아일랜드 & Live Activity
+  화면을 켜지 않아도 실시간 타이머 확인
+
+- Apple Watch 연동
+  손목 위에서 타이머 시작, 일시정지, 확인
+
+- 타이머 템플릿
+  자주 쓰는 설정을 저장하고 한 번에 실행
+
+- 라벨 & 색상
+  발표, 회의, 운동, 공부 등 용도별 구분
+
+- 소리 & 진동 선택
+  상황에 맞게 알림 방식을 변경
+
+- 오버타임 표시
+  종료 후에도 초과 시간을 실시간 확인
+
+
+이런 분들에게 추천합니다
+
+- 발표나 강연 중 남은 시간을 미리 알고 싶은 분
+- 회의 시간을 칼같이 지키고 싶은 진행자
+- 세트 간 휴식 시간을 관리하는 운동인
+- 뽀모도로 학습에 단계별 알림이 필요한 학생
+- 멘토링, 코칭 세션을 정확히 관리하고 싶은 분
+
+
+두번알림인 이유
+
+re + reminder = 한 번 더 알려주다
+끝나기 전에 다시 한 번, 미리미리 알려드립니다.
+
+광고 없음 · 구독 강요 없음 · 인터넷 연결 불필요
+
+### 지원 URL
+
+https://m1zz.github.io/Rereminder/support.html
+
+### 개인정보처리방침 URL
+
+https://m1zz.github.io/Rereminder/privacy.html
+
+
+## en
+
+### 이름
+
+Rereminder - Smart alarm
+
+### 부제
+
+Speech & Presentation Timer
+
+### 키워드
+
+talk,presenter,speaker,lecture,meeting,countdown,pre-alert,vibration,class,sermon,debate,warning
+
+### 프로모션 텍스트
+
+Get a heads-up 5 min before your talk ends or 3 before a meeting wraps—not after. Add custom messages and see time left on Dynamic Island and Apple Watch.
+
+### 설명
+
+Get warned before time runs out.
+
+5 minutes before your presentation ends.
+3 minutes before the meeting wraps up.
+1 minute before your workout is over.
+
+Rereminder sends step-by-step alerts before your timer hits zero, so you're always prepared and never caught off guard.
+
+
+PRE-ALERTS — The Feature Other Timers Don't Have
+
+Most timers only alert you when time is up.
+Rereminder alerts you before it's up.
+
+- Set alerts at 1, 3, 5, 10, 15, or 30 minutes before end
+- Customize the timing to fit your needs
+- Add custom messages to each alert
+  e.g., "Wrap up your slides", "Start cooldown"
+
+KEY FEATURES
+
+- Dynamic Island & Live Activity
+  See your timer in real-time without unlocking your phone
+
+- Apple Watch
+  Start, pause, and track timers from your wrist
+
+- Timer Templates
+  Save your favorite setups and launch them instantly
+
+- Labels & Colors
+  Organize timers by purpose — Presentation, Meeting, Exercise, Study
+
+- Sound & Vibration
+  Choose the right alert style for any situation
+
+- Overtime Tracking
+  Keep counting after the timer ends so you know how far over you went
+
+PERFECT FOR
+
+- Speakers who need to pace their presentations
+- Meeting hosts who respect everyone's time
+- Athletes managing rest intervals between sets
+- Students using Pomodoro with staged alerts
+- Coaches and mentors running timed sessions
+
+WHY "Rereminder"?
+
+re + reminder = remind you again
+We remind you before it's too late — again and again.
+
+No ads · No forced subscriptions · No internet required
+
+### 지원 URL
+
+https://m1zz.github.io/Rereminder/support.html
+
+### 개인정보처리방침 URL
+
+https://leeo75.notion.site/Privacy-Policy-2efe264a0fdc80ab8303c36da4d194f9
+
+
+## ja
+
+### 이름
+
+Rereminder プレゼンタイマー
+
+### 부제
+
+授業にも。終了前に何度もお知らせ
+
+### 키워드
+
+ストップウォッチ,アラーム,カウントダウン,ポモドーロ,スピーチ,講義,講師,ピラティス,ヨガ,筋トレ,インターバル,会議,ワークショップ,リハーサル,集中,勉強,時間管理,バイブ,アップルウォッチ
+
+### 프로모션 텍스트
+
+発表の5分前、会議終了の3分前。時間が来てからではなく、終わる前にお知らせします。通知ごとに好きなメッセージを設定でき、残り時間はDynamic IslandやApple Watchでひと目で確認できます。
+
+### 설명
+
+終わる前に、前もってお知らせします。
+発表の5分前、会議終了の3分前、トレーニング終了の1分前。大事なタイミングを逃さないよう、段階的に予告してくれるスマートタイマーです。
+
+◆ 予告通知 — ほかのタイマーにはない中心機能
+
+普通のタイマーは、時間になってから鳴ります。
+Rereminderは、終わる前に知らせてくれます。
+
+・終了の1分前、3分前、5分前、10分前、15分前、30分前に通知
+・好きなタイミングを自由に設定
+・通知ごとにメッセージを設定可能
+  例)「スライドをまとめに入る」「クールダウン開始」
+
+◆ 主な機能
+
+・Dynamic Island&ライブアクティビティ
+  画面を開かなくても、タイマーをリアルタイムで確認
+
+・Apple Watch対応
+  手元でタイマーの開始、一時停止、確認ができます
+
+・タイマーテンプレート
+  よく使う設定を保存して、ワンタップで開始
+
+・ラベル&カラー
+  発表、会議、トレーニング、勉強など用途ごとに色分け
+
+・サウンド&バイブレーション
+  場面に合わせて通知方法を切り替え
+
+・オーバータイム表示
+  終了後も、超過した時間をリアルタイムで表示
+
+◆ こんな方におすすめ
+
+・プレゼンや講演の残り時間を前もって把握したい方
+・会議を時間どおりにきっちり終わらせたい司会・進行役の方
+・セット間の休憩時間を管理したいトレーニング中の方
+・ポモドーロ学習で段階的な通知がほしい学生の方
+・メンタリングやコーチングのセッションを正確に管理したい方
+
+◆ Rereminderという名前の理由
+
+re + reminder = もう一度知らせる
+終わる前にもう一度、前もってお知らせします。
+
+広告なし・サブスクの押し売りなし・インターネット接続不要
+
+### 지원 URL
+
+https://m1zz.github.io/Rereminder/support.html
+
+### 개인정보처리방침 URL
+
+https://m1zz.github.io/Rereminder/privacy.html
+
+
+## zh-Hans
+
+### 이름
+
+Rereminder 再提醒
+
+### 부제
+
+演讲计时器，结束前多次提醒
+
+### 키워드
+
+定时器,倒计时,秒表,闹钟,番茄钟,专注,时间管理,间隔训练,教学,上课,讲课,简报,瑜伽,普拉提,健身,冥想,会议,工作坊,培训,主持,排练,自习,备课
+
+### 프로모션 텍스트
+
+演讲结束前5分钟、会议收尾前3分钟，不等时间到了才响，而是提前提醒你。每条提醒都能附上自定义文字，剩余时间在灵动岛和 Apple Watch 上一眼就能看到。
+
+### 설명
+
+大多数计时器只在结束时响一次。等它响的时候，已经来不及收尾了。
+
+Rereminder 让你在结束之前就被提醒 —— 想放几次就放几次。
+
+结束前，先提醒你
+在表盘上拖动铃铛，把提醒放在你想要的位置：结束前 10 分钟、5 分钟、1 分钟。想放几个就放几个，不限个数，也不额外收费。
+
+一眼看懂时间被怎么切开
+提醒会把整段时间切成几块，圆环上用不同颜色分开。哪一块还剩多久，圆环下面一行行写着。
+
+分段模式（Pro）
+给每一段起名 —— 开场、示范、问答 —— 再为每一段写下要说的话。轮到那一段时，讲稿自己展开。
+
+记住你的设置（Pro）
+把一套时间和提醒存成模板，下次点一下就回来。上次用的设置也会在重新打开时自动恢复。
+
+不会被错过的结束
+可以让结束提醒一直响到你确认为止；也可以让它像闹钟一样，穿透静音模式和专注模式响起来，直到你按下停止。
+
+在你所有的设备上
+完整的 Apple Watch App，抬手就能设定和查看。Mac 菜单栏、主屏幕和锁定屏幕小组件、灵动岛、Siri 和快捷指令，全都支持 —— 而且都不需要付费。
+
+适合这些时候
+演讲和学术报告：10 分钟、5 分钟、1 分钟前分别提醒，准时落地
+上课和工作坊：把一节课切成几段，每段结束时知道该往前走了
+健身：热身、主训练、放松，不用自己数
+专注工作：不是被突然打断，而是慢慢收尾
+
+关于 Pro
+Pro 是一次性买断，不是订阅。提前提醒不限个数，Apple Watch App 和 Mac App 都免费。Pro 卖的是一句话：App 会记住你的设置 —— 模板、上次的设置、分段模式、超时和历史统计。
+
+### 지원 URL
+
+https://m1zz.github.io/Rereminder/support.html
+
+### 개인정보처리방침 URL
+
+https://m1zz.github.io/Rereminder/privacy.html
+
+
+## zh-Hant
+
+### 이름
+
+Rereminder 再提醒
+
+### 부제
+
+簡報計時器，結束前多次提醒
+
+### 키워드
+
+定時器,倒數計時,碼錶,鬧鐘,番茄鐘,專注,時間管理,間歇訓練,教學,上課,講課,演講,瑜珈,皮拉提斯,健身,冥想,會議,工作坊,培訓,主持,排練,自習,備課
+
+### 프로모션 텍스트
+
+簡報前 5 分鐘、會議收尾前 3 分鐘，不等時間到才響，而是在結束前就先提醒你。每則提醒都能加上自訂訊息，還能在動態島和 Apple Watch 上隨時查看剩餘時間。
+
+### 설명
+
+大多數計時器只在結束時響一次。等它響的時候，已經來不及收尾了。
+
+Rereminder 讓你在結束之前就被提醒 —— 想放幾次就放幾次。
+
+結束前，先提醒你
+在錶盤上拖曳鈴鐺，把提醒放在你想要的位置：結束前 10 分鐘、5 分鐘、1 分鐘。想放幾個就放幾個，不限個數，也不額外收費。
+
+一眼看懂時間被怎麼切開
+提醒會把整段時間切成幾塊，圓環上用不同顏色分開。哪一塊還剩多久，圓環下面一行行寫著。
+
+分段模式（Pro）
+幫每一段命名 —— 開場、示範、問答 —— 再為每一段寫下要說的話。輪到那一段時，講稿自己展開。
+
+記住你的設定（Pro）
+把一套時間和提醒存成範本，下次點一下就回來。上次用的設定也會在重新開啟時自動恢復。
+
+不會被錯過的結束
+可以讓結束提醒一直響到你確認為止；也可以讓它像鬧鐘一樣，穿透靜音模式和專注模式響起來，直到你按下停止。
+
+在你所有的裝置上
+完整的 Apple Watch App，抬手就能設定和查看。Mac 選單列、主畫面和鎖定畫面小工具、動態島、Siri 和捷徑，全都支援 —— 而且都不需要付費。
+
+適合這些時候
+簡報和學術演講：10 分鐘、5 分鐘、1 分鐘前分別提醒，準時落地
+上課和工作坊：把一堂課切成幾段，每段結束時知道該往前走了
+健身：熱身、主訓練、緩和，不用自己數
+專注工作：不是被突然打斷，而是慢慢收尾
+
+關於 Pro
+Pro 是一次買斷，不是訂閱。提前提醒不限個數，Apple Watch App 和 Mac App 都免費。Pro 賣的是一句話：App 會記住你的設定 —— 範本、上次的設定、分段模式、超時和歷史統計。
+
+### 지원 URL
+
+https://m1zz.github.io/Rereminder/support.html
+
+### 개인정보처리방침 URL
+
+https://m1zz.github.io/Rereminder/privacy.html
+
+
