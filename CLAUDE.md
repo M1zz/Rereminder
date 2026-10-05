@@ -828,6 +828,23 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - 테스트: `RereminderTests/EscalatingAlertTests.swift` (15개),
   `RereminderTests/RoundedRectRingTests.swift` (9개)
 
+### 알림 권한이 꺼져 있으면 — 앱을 보는 동안엔 멀쩡해 보인다
+제보(2026-10-05): *"화면을 끄면 잠금 화면이 울리지 않는다."* 권한이 거부돼 있으면 앱이 앞에 있는
+동안은 토스트·소리가 나서 잘 되는 줄 알고, **화면을 끄는 순간 아무것도 울리지 않는다.**
+
+- ⚠️ 시작 전 경고(`TimerScreenViewModel.holdForPermissionWarning`)가 예전엔 `useAlarmKit` 이
+  켜져 있을 때만 떴다 — 기본값이 꺼짐이라 **아무에게도 뜨지 않았다.** 지금은 권한만 본다.
+  일반·세션·템플릿 칩 시작 세 경로 모두 거치고, **한 번 실행에 한 번**만 묻는다.
+- ⚠️ 권한 상태는 `scenePhase` 에서만 읽혀 콜드 런치엔 `.notDetermined` 로 남았다 —
+  `setupOnAppear` 에서도 `checkNotificationPermission()` 을 부른다.
+- **원 아래 한 줄**(`NotificationOffBanner` + 판정 `NotificationOffNotice`): 권한이 꺼져 있으면
+  **어느 상태에서든**(도는 중에도) 묶음 맨 위에 선다. 누르면 **알림 설정 화면**으로 바로 간다.
+  닫으면 **3일 쉬고 다시 나온다**(영영 닫히면 고장 난 채로 쓴다), 권한을 켜면 쉬는 기록을 지운다.
+  ⚠️ Pro 권유가 아니라 `ProMention` 예산을 쓰지 않는다. 대신 이 줄이 서 있으면
+  `RememberRecallLine` 이 물러난다 — 핵심 기능이 안 되는 사람에게 결제를 권하는 건 순서가 틀렸다.
+- 지표: `notification_off_banner_shown` → `notification_off_banner_tapped`
+- 테스트: `NotificationOffNoticeTests` (4개), `NotificationPermissionWarningTests` (5개)
+
 ### 진동 모드 — `sound = nil` 은 "조용히"가 아니라 "아무것도 없음"이다
 설정 > 알림의 **소리 / 진동**(`RingMode`). 진동을 고르면 예전에는
 `UNNotificationContent.sound` 에 `nil` 을 넣었는데, **그건 진동으로 바꾸라는 뜻이 아니라
@@ -1554,7 +1571,13 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
 
 ## 버전 히스토리
 
-### v2.3.0 (준비 중, 2026-09-30)
+### v2.3.1 (2026-10-05)
+**"화면을 끄면 잠금 화면이 울리지 않는다" 제보** — 알림 권한이 꺼진 사람이 그걸 알 길이 없었다.
+- 시작 전 권한 경고가 `useAlarmKit` 에 묶여 사실상 아무에게도 뜨지 않던 것 수정 + 콜드 런치 권한 상태 읽기
+- 원 아래 알림 꺼짐 한 줄(`NotificationOffBanner`, 3일 주기) — 위 "알림 권한이 꺼져 있으면" 절
+- 릴리즈 노트: `docs/release-notes-2.3.1-{ko,en,ja,zh-Hans,zh-Hant,de,fr,es,pt-BR,pt-PT,it}.md`
+
+### v2.3.0 (2026-09-30)
 **10개 언어** — 독일어·프랑스어·스페인어·포르투갈어(브라질)·이탈리아어 추가(위 "지원 언어는 10개다" 절).
 - 앱 문구 551개 × 5개 언어, 앱 이름 카탈로그 세 타겟, 스토어 문구 `APPSTORE.md`, 릴리즈 노트 10벌
 - 스크린샷을 스크립트로(`capture_screenshots.sh` + `ScreenshotScene` + `make_marketing_screenshots.py`), 언어별 40장

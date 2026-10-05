@@ -9,6 +9,74 @@ DeployBar 가 배포할 때 아래 버전 절의 언어별 문구를 읽어 스�
 사용자에게 무엇이 좋아졌는지만 쓴다. 내부 구조나 빌드 설정 이야기는 쓰지 않는다.
 언어마다 다시 쓴다. 기계번역하지 말고 항목 수와 순서만 맞춘다.
 
+## 2.3.1
+
+### 앱스토어 (한국어)
+
+알림이 꺼져 있으면 화면에서 바로 알려 드립니다.
+켜기 버튼으로 알림 설정에 바로 갈 수 있어요.
+알림 없이 타이머를 시작하면 먼저 확인합니다.
+
+### App Store (English)
+
+You now see when notifications are off.
+Turn On takes you straight to settings.
+We check them before a timer starts.
+
+### App Store (日本語)
+
+通知がオフのときは画面でお知らせします。
+ボタンひとつで通知設定を開けます。
+通知がオフのまま始めると先に確認します。
+
+### 앱스토어 (중국어 간체)
+
+通知关闭时，会在屏幕上提醒你。
+一键即可前往通知设置。
+未开启通知就开始计时，会先提醒你。
+
+### 앱스토어 (중국어 번체)
+
+通知關閉時，會在畫面上提醒你。
+一鍵即可前往通知設定。
+未開啟通知就開始計時，會先提醒你。
+
+### App Store (Deutsch)
+
+Sind Mitteilungen aus, siehst du es.
+Ein Tipp öffnet die Einstellungen.
+Vor dem Start wird das kurz geprüft.
+
+### App Store (Français)
+
+L’app signale les notifications coupées.
+Un bouton mène droit aux réglages.
+On vérifie avant de lancer le minuteur.
+
+### App Store (Español)
+
+Ahora ves si los avisos están apagados.
+Un toque abre los ajustes al momento.
+Se comprueban antes de iniciar.
+
+### App Store (Português do Brasil)
+
+Avisamos se os alertas estão desligados.
+Um toque abre os ajustes de alerta.
+Conferimos isso antes de iniciar.
+
+### 앱스토어 (포르투갈어(포르투갈))
+
+Avisamos se os alertas estão desligados.
+Um toque abre as definições de alertas.
+Verificamos isso antes de começar.
+
+### App Store (Italiano)
+
+Ora vedi se le notifiche sono spente.
+Un tocco apre le impostazioni.
+Le controlliamo prima di iniziare.
+
 ## 2.3.0
 
 ### 앱스토어 (한국어)
