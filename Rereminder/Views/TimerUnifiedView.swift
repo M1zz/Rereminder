@@ -335,6 +335,7 @@ struct TimerUnifiedView: View {
                 })
         }
         .environmentObject(screenVM)
+        .environmentObject(appStateManager)
         // 온보딩은 **여기서** 띄운다 — 고른 상황을 다이얼에 올리고 템플릿까지 저장하므로
         // `screenVM` 이 있는 자리여야 한다(예전엔 ContentView 에 있어서 손이 닿지 않았다).
         .fullScreenCover(isPresented: $showOnboarding) {
@@ -472,6 +473,9 @@ struct TimerUnifiedView: View {
         screenVM.timerVM.showToast = { toast.show(Toast($0)) }
         screenVM.showToast = { toast.show(Toast($0)) }
         screenVM.timerVM.appStateManager = appStateManager
+        // ⚠️ 콜드 런치에서는 scenePhase onChange 가 오지 않아 권한 상태가 `.notDetermined` 로
+        //    남는다 — 그러면 시작 전 알림 권한 경고가 영영 뜨지 않는다. 여기서도 읽어 둔다.
+        appStateManager.checkNotificationPermission()
         screenVM.timerVM.modelContext = context
         screenVM.initialConfiguration()
         screenVM.restoreTimerIfNeeded()

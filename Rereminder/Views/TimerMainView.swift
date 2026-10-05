@@ -59,7 +59,10 @@ struct TimerMainView: View {
     // 실행 중 원 아래에 서는 기기 연결 상태 — 워치는 실시간, 맥은 iCloud에 남긴 표시로 안다.
     @ObservedObject private var watchLink = WatchConnectivityManager.shared
     /// 결제하는 순간 "Pro 는 이걸 기억해 둡니다" 한 줄이 물러나게 관찰한다(`ProGate` 는 static).
-    @ObservedObject private var store = StoreManager.shared
+    @ObservedObject var store = StoreManager.shared
+    /// 알림 권한 — 꺼져 있으면 원 아래에 "화면을 끄면 안 울린다" 한 줄이 선다(`NotificationOffNotice`).
+    @EnvironmentObject var appStateManager: AppStateManager
+    @State var showNotificationOffBanner = false
     @State private var macLinkStatus: DevicePresence.Status = .away(lastSeen: nil)
     @State private var markerLingerTask: Task<Void, Never>?
 
@@ -230,6 +233,11 @@ struct TimerMainView: View {
                 // ⚠️ 이 묶음 안에 Spacer 를 끼워 넣지 말 것. 예전에 구간 칩 바로 아래에
                 //    Spacer() 가 있어서 칩이 원에 달라붙고 그 아래만 휑하게 벌어졌다.
                 VStack(spacing: clusterGap) {
+                    // 알림 권한이 꺼져 있으면 **어느 상태에서든** 맨 위에 선다 — 이 앱의 전부가
+                    // 알림인데, 꺼져 있으면 화면을 끄는 순간 아무것도 울리지 않는다.
+                    // 도는 중에도 빼지 않는다: 지금 화면을 끄려는 사람이 가장 알아야 한다.
+                    notificationOffLine
+
                     // **걸기 전에도 구간이 몇 분짜리인지 보인다.** 종을 옮기는 조작은 각도라
                     // "그래서 첫 구간이 몇 분이지?"를 머리로 계산하게 되는데, 그 답을 바로 아래 둔다.
                     // 실행 중에는 세우지 않는다 — 그 자리는 줄어드는 숫자(SectionCountdownList) 몫이다.
@@ -297,6 +305,9 @@ struct TimerMainView: View {
             //    "화면 아무 데나 눌러 키보드 내리기"가 원·카드 위에서만 동작한다.
             .contentShape(Rectangle())
             .onAppear(perform: refreshDeviceLinks)
+            .onAppear(perform: refreshNotificationOffBanner)
+            // 설정에서 켜고 돌아오면(전경 복귀마다 권한을 다시 읽는다) 그 자리에서 물러난다.
+            .onChange(of: appStateManager.notificationAuthStatus) { _, _ in refreshNotificationOffBanner() }
             // 타이머를 거는 순간 다시 확인한다 — 그 사이 워치가 꺼졌을 수도 있다.
             .onChange(of: screenVM.state) { _, newState in
                 if newState == .running { refreshDeviceLinks() }
@@ -333,15 +344,17 @@ struct TimerMainView: View {
         }
         .alert("Notification permission is required", isPresented: $screenVM.showPermissionWarning) {
             Button("Go to Settings", role: .none) {
-                if let url = URL(string: UIApplication.openSettingsURLString) {
+                // 앱 설정 첫 화면이 아니라 **알림 설정**으로 바로 보낸다 — 한 단계라도 더 들어가야
+                // 하면 거기서 그만둔다.
+                if let url = URL(string: UIApplication.openNotificationSettingsURLString) {
                     UIApplication.shared.open(url)
                 }
             }
             Button("Later", role: .cancel) {
-                // 권한 없이 Start Timer
+                // 권한 없이 하던 시작을 마저 한다(일반·세션 모드 모두 같은 길로).
                 screenVM.showToast?("⚠️ Started without notification permission")
                 withAnimation(.easeInOut(duration: 0.4)) {
-                    screenVM.timerVM.start()
+                    screenVM.continueStartWithoutPermission()
                 }
             }
         } message: {
@@ -1153,34 +1166,5 @@ struct TimerMainView: View {
 #Preview {
     TimerMainView()
         .environmentObject(TimerScreenViewModel())
-}
-
-// MARK: - "앱이 기억한다" 한 줄 (무료 사용자)
-
-extension TimerMainView {
-    /// 다시 연 순간(`recall`)·손으로 다시 맞춘 순간(`reentry`)의 한 줄. 둘은 동시에 서지 않는다 —
-    /// 앞의 것은 다이얼이 기본값일 때, 뒤의 것은 지난번 설정일 때만 선다.
-    @ViewBuilder
-    var rememberLines: some View {
-        // 무료 사용자가 다시 열었을 때 "지난번엔 이랬어요" 한 줄(`RememberPitch` ①).
-        // 다이얼을 바꾸는 순간 물러난다 — 그때는 이미 할 말이 늦었다.
-        if let recall = screenVM.rememberRecall,
-           screenVM.isAtDefaultSetup, !store.isPro {
-            RememberRecallLine(config: recall) {
-                withAnimation(.easeInOut(duration: 0.2)) { screenVM.rememberRecall = nil }
-            }
-            .padding(.horizontal)
-            .transition(.opacity)
-        }
-        // 손으로 지난번 설정에 다시 맞춘 직후의 한 줄 — 그 설정에서 벗어나면 물러난다.
-        if let reentry = screenVM.rememberReentry, !store.isPro,
-           reentry.mainSec == screenVM.normalizedCurrentConfig.mainSec,
-           reentry.offsets == screenVM.normalizedCurrentConfig.offsets {
-            RememberRecallLine(config: reentry, kind: .reentry) {
-                withAnimation(.easeInOut(duration: 0.2)) { screenVM.rememberReentry = nil }
-            }
-            .padding(.horizontal)
-            .transition(.opacity)
-        }
-    }
+        .environmentObject(AppStateManager())
 }
