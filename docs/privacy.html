@@ -127,10 +127,10 @@
         footer a { color: var(--text2); margin: 0 8px; font-size: 13px; }
 
         [data-lang] { display: none; }
-        body.lang-en [data-lang="en"], body.lang-ko [data-lang="ko"], body.lang-ja [data-lang="ja"], body.lang-zh-Hans [data-lang="zh-Hans"], body.lang-zh-Hant [data-lang="zh-Hant"], body.lang-de [data-lang="de"], body.lang-fr [data-lang="fr"], body.lang-es [data-lang="es"], body.lang-pt-BR [data-lang="pt-BR"], body.lang-it [data-lang="it"] { display: block; }
+        body.lang-en [data-lang="en"], body.lang-ko [data-lang="ko"], body.lang-ja [data-lang="ja"], body.lang-zh-Hans [data-lang="zh-Hans"], body.lang-zh-Hant [data-lang="zh-Hant"], body.lang-de [data-lang="de"], body.lang-fr [data-lang="fr"], body.lang-es [data-lang="es"], body.lang-pt-BR [data-lang="pt-BR"], body.lang-pt-PT [data-lang="pt-PT"], body.lang-it [data-lang="it"] { display: block; }
         li[data-lang], td[data-lang], span[data-lang] { display: none; }
-        body.lang-en li[data-lang="en"], body.lang-ko li[data-lang="ko"], body.lang-ja li[data-lang="ja"], body.lang-zh-Hans li[data-lang="zh-Hans"], body.lang-zh-Hant li[data-lang="zh-Hant"], body.lang-de li[data-lang="de"], body.lang-fr li[data-lang="fr"], body.lang-es li[data-lang="es"], body.lang-pt-BR li[data-lang="pt-BR"], body.lang-it li[data-lang="it"] { display: list-item; }
-        body.lang-en span[data-lang="en"], body.lang-ko span[data-lang="ko"], body.lang-ja span[data-lang="ja"], body.lang-zh-Hans span[data-lang="zh-Hans"], body.lang-zh-Hant span[data-lang="zh-Hant"], body.lang-de span[data-lang="de"], body.lang-fr span[data-lang="fr"], body.lang-es span[data-lang="es"], body.lang-pt-BR span[data-lang="pt-BR"], body.lang-it span[data-lang="it"] { display: inline; }
+        body.lang-en li[data-lang="en"], body.lang-ko li[data-lang="ko"], body.lang-ja li[data-lang="ja"], body.lang-zh-Hans li[data-lang="zh-Hans"], body.lang-zh-Hant li[data-lang="zh-Hant"], body.lang-de li[data-lang="de"], body.lang-fr li[data-lang="fr"], body.lang-es li[data-lang="es"], body.lang-pt-BR li[data-lang="pt-BR"], body.lang-pt-PT li[data-lang="pt-PT"], body.lang-it li[data-lang="it"] { display: list-item; }
+        body.lang-en span[data-lang="en"], body.lang-ko span[data-lang="ko"], body.lang-ja span[data-lang="ja"], body.lang-zh-Hans span[data-lang="zh-Hans"], body.lang-zh-Hant span[data-lang="zh-Hant"], body.lang-de span[data-lang="de"], body.lang-fr span[data-lang="fr"], body.lang-es span[data-lang="es"], body.lang-pt-BR span[data-lang="pt-BR"], body.lang-pt-PT span[data-lang="pt-PT"], body.lang-it span[data-lang="it"] { display: inline; }
 
         @media (max-width: 560px) {
             h1 { font-size: 30px; }
@@ -140,10 +140,29 @@
         }
 
         /* No-JS / pre-hydration fallback: show English */
-        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-it) div[data-lang="en"] { display: block; }
-        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-it) li[data-lang="en"] { display: list-item; }
-        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-it) span[data-lang="en"] { display: inline; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it) div[data-lang="en"] { display: block; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it) li[data-lang="en"] { display: list-item; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it) span[data-lang="en"] { display: inline; }
+
+        /* 언어별 페이지 링크 — 같은 글의 다른 언어 주소. scripts/build-lang-pages.py 가 언어 폴더마다 같은 줄을 만든다. */
+        .lang-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; margin: 14px auto 0; padding: 0 16px; font-size: 13px; }
+        .lang-links a { color: inherit; opacity: .75; text-decoration: none; }
+        .lang-links a:hover { opacity: 1; text-decoration: underline; }
+        .lang-links a[aria-current] { opacity: 1; font-weight: 600; }
     </style>
+    <link rel="canonical" href="https://m1zz.github.io/Rereminder/privacy.html">
+    <link rel="alternate" hreflang="ko" href="https://m1zz.github.io/Rereminder/ko/privacy.html">
+    <link rel="alternate" hreflang="en" href="https://m1zz.github.io/Rereminder/en/privacy.html">
+    <link rel="alternate" hreflang="ja" href="https://m1zz.github.io/Rereminder/ja/privacy.html">
+    <link rel="alternate" hreflang="zh-Hans" href="https://m1zz.github.io/Rereminder/zh-Hans/privacy.html">
+    <link rel="alternate" hreflang="zh-Hant" href="https://m1zz.github.io/Rereminder/zh-Hant/privacy.html">
+    <link rel="alternate" hreflang="de" href="https://m1zz.github.io/Rereminder/de/privacy.html">
+    <link rel="alternate" hreflang="fr" href="https://m1zz.github.io/Rereminder/fr/privacy.html">
+    <link rel="alternate" hreflang="es" href="https://m1zz.github.io/Rereminder/es/privacy.html">
+    <link rel="alternate" hreflang="pt-BR" href="https://m1zz.github.io/Rereminder/pt-BR/privacy.html">
+    <link rel="alternate" hreflang="pt-PT" href="https://m1zz.github.io/Rereminder/pt-PT/privacy.html">
+    <link rel="alternate" hreflang="it" href="https://m1zz.github.io/Rereminder/it/privacy.html">
+    <link rel="alternate" hreflang="x-default" href="https://m1zz.github.io/Rereminder/privacy.html">
 </head>
 <body>
 <nav>
@@ -153,7 +172,7 @@
             <a href="./">Home</a>
             <a href="support.html">Support</a>
             <a href="privacy.html" aria-current="page">Privacy</a>
-            <select class="lang" id="lang-select" aria-label="Language"><option value="en">English</option><option value="ko">한국어</option><option value="ja">日本語</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="pt-BR">Português</option><option value="it">Italiano</option></select>
+            <select class="lang" id="lang-select" aria-label="Language"><option value="en">English</option><option value="ko">한국어</option><option value="ja">日本語</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="pt-BR">Português (Brasil)</option><option value="pt-PT">Português (Portugal)</option><option value="it">Italiano</option></select>
         </div>
     </div>
 </nav>
@@ -536,8 +555,6 @@
     <p>關於以上任何一點的疑問 &mdash; 包括「你為什麼需要那個？」 &mdash; 請寄到 <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>。也可以參考<a href="support.html">支援頁面</a>。</p>
 </div>
 
-</div>
-
 <div data-lang="ja">
     <h1>プライバシーポリシー</h1>
     <p class="lede">Rereminder は Hyunho Lee が開発しています。このページでは、何があなたの iPhone の外に出て、何が出ないのかを正確に説明します。</p>
@@ -723,8 +740,6 @@
     <h2>Kontakt</h2>
     <p>Fragen zu all dem &mdash; auch „Wozu brauchst du das?“ &mdash; richte an <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Siehe auch die <a href="support.html">Support-Seite</a>.</p>
 </div>
-
-<!-- ============================= 한국어 ============================= -->
 
 <div data-lang="fr">
     <h1>Politique de confidentialité</h1>
@@ -1005,6 +1020,99 @@
     <p>Dúvidas sobre qualquer parte disto &mdash; inclusive "por que você precisa disso?" &mdash; podem ser enviadas para <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Veja também a <a href="support.html">página de suporte</a>.</p>
 </div>
 
+<div data-lang="pt-PT">
+    <h1>Política de Privacidade</h1>
+    <p class="lede">O Rereminder é desenvolvido por Hyunho Lee. Esta página explica exatamente o que sai do seu telemóvel e o que não sai.</p>
+    <p class="updated">Última atualização: 9 de setembro de 2026 &middot; Aplica-se à versão 2.2.6 da app</p>
+
+    <h2>Em resumo</h2>
+    <div class="note">
+        <p><strong>Tudo o que escreve fica no seu telemóvel.</strong> Nomes de temporizadores, mensagens de aviso, títulos de secções, guiões de apresentação, histórico &mdash; nada disto é alguma vez enviado para lado nenhum.</p>
+        <p><strong>A app envia-me, de facto, números anónimos.</strong> Contagens como "quantos temporizadores foram iniciados" e "quantos chegaram ao fim", associadas a um ID aleatório que não o identifica. É assim que decido o que corrigir. Está tudo descrito abaixo.</p>
+        <p><strong>Não há anúncios, rastreadores nem SDK de análise de terceiros.</strong> Nada é vendido nem partilhado com ninguém.</p>
+    </div>
+
+    <h2>O que fica no seu dispositivo</h2>
+    <p>Os seguintes dados são guardados localmente e <strong>nunca me são transmitidos</strong>:</p>
+    <ul>
+        <li><strong>Definições dos temporizadores</strong> &mdash; durações, onde colocou cada aviso, mensagens de aviso personalizadas.</li>
+        <li><strong>Modelos</strong> &mdash; configurações guardadas e respetivos nomes.</li>
+        <li><strong>Conteúdo das sessões</strong> &mdash; nomes das secções e os guiões ou notas que escreve para cada uma.</li>
+        <li><strong>Histórico</strong> &mdash; registos das sessões que fez.</li>
+        <li><strong>Preferências</strong> &mdash; cor do tema, modo de som e vibração, os dispositivos que indicou à app que tem.</li>
+        <li><strong>Estado da compra</strong> &mdash; se tem o Rereminder Pro, guardado no porta-chaves (Keychain) do iOS.</li>
+    </ul>
+    <p>Apagar a app apaga tudo isto.</p>
+
+    <h2>O que a app me envia</h2>
+    <p>Tudo vai para uma <strong>base de dados CloudKit que me pertence</strong> (contentor <code>iCloud.com.Ysoup.FeedbackHub</code>). Não existe mais nenhum servidor, e nenhuma outra empresa recebe qualquer parte destes dados.</p>
+
+    <h3>1. Contagens de utilização anónimas</h3>
+    <p>Um registo por instalação, atualizado no máximo duas vezes por dia. Contém:</p>
+    <ul>
+        <li>Um <strong>ID aleatório gerado pela própria app</strong> na primeira abertura. Não é a sua conta Apple, não é o identificador do seu dispositivo e não está associado a nada sobre si. Se apagar a app, o ID desaparece; ao reinstalar, é criado um novo, sem qualquer ligação ao anterior.</li>
+        <li>Versão da app, plataforma (iPhone / Watch / Mac), versão do sistema e definição de idioma.</li>
+        <li><strong>Contagens, e apenas contagens</strong> &mdash; temporizadores iniciados, concluídos e cancelados; total de minutos geridos; quantos avisos costuma ter um temporizador; modelos guardados e usados; se o Modo Sessão já foi usado; se o relógio já foi usado; dias desde a instalação; quando a app esteve ativa pela última vez.</li>
+        <li>Dois indicadores sim/não: se o Pro foi comprado e se a permissão de notificações foi concedida.</li>
+    </ul>
+
+    <h3>2. Eventos anónimos</h3>
+    <p>Quando acontece algo relevante &mdash; a app foi aberta, um temporizador foi iniciado, o ecrã de compra foi apresentado &mdash; a app regista o <strong>nome desse evento</strong> com a versão da app, a plataforma, o mesmo ID aleatório e a data e hora. Cada nome de evento é registado <strong>no máximo uma vez a cada seis horas</strong>, pelo que estes registos mostram <em>se</em> algo acontece, nunca com que frequência.</p>
+
+    <h3>3. Comentários que decide enviar</h3>
+    <p>Apenas quando abre <span class="ui">Enviar feedback</span> e toca em enviar. Esse registo inclui:</p>
+    <ul>
+        <li><strong>A sua mensagem</strong> e a categoria que escolheu.</li>
+        <li><strong>Um nome e um e-mail para resposta &mdash; ambos opcionais e ambos em branco por predefinição.</strong> Preencha-os só se quiser receber resposta. Servem apenas para lhe responder e para mais nada.</li>
+        <li><strong>Uma linha sobre o dispositivo</strong> &mdash; versão da app, tipo de dispositivo, versão do sistema, por exemplo <code>App 2.2.6 | iPhone | iOS 26.1</code>. Indica o <em>tipo</em> de dispositivo, não <em>qual</em> dispositivo; nada nela é exclusivo seu. O formulário mostra-lhe esta linha exata antes do envio.</li>
+        <li>A sua definição de idioma (por exemplo, <code>ko_KR</code>) e a plataforma.</li>
+    </ul>
+    <p>Nada sai desse ecrã a não ser que toque em enviar. Tocar em 👍 na pergunta "está a gostar da app?" abre a folha de avaliação da App Store e não me envia nada; 👎 abre apenas este mesmo formulário.</p>
+
+    <h3>4. Relatórios de falhas e bloqueios</h3>
+    <p>Recolhidos através do <strong>MetricKit da Apple</strong>, que agrega dados de falhas e de desempenho ao nível do sistema. Contêm rastreios de pilha (stack traces) e tempos de execução, nunca o conteúdo dos seus temporizadores.</p>
+
+    <div class="note">
+        <p><strong>Uma coisa que convém referir:</strong> quando o seu dispositivo grava algum dos dados acima no CloudKit, a Apple associa ao registo um identificador iCloud opaco, próprio de cada app. É gerado pela Apple, é diferente de app para app, não é o seu endereço de e-mail, e eu não o consigo usar para o contactar nem para o encontrar noutro lado. É uma consequência do funcionamento do CloudKit, não algo que a app recolha de propósito.</p>
+    </div>
+
+    <h2>O que nunca é enviado, em circunstância alguma</h2>
+    <ul>
+        <li>Nomes de temporizadores, mensagens de aviso, títulos de secções, guiões de apresentação &mdash; <strong>qualquer texto que escreva.</strong></li>
+        <li>O seu nome ou endereço de e-mail &mdash; exceto os dois campos opcionais do formulário de comentários acima, que é o próprio utilizador a preencher e que pode deixar em branco.</li>
+        <li>Identificadores de publicidade (IDFA), o identificador de fornecedor do dispositivo (IDFV) ou qualquer impressão digital do dispositivo (fingerprint).</li>
+        <li>Localização, contactos, fotografias, calendário, dados de saúde ou microfone.</li>
+    </ul>
+
+    <h2>Sincronização entre os seus dispositivos</h2>
+    <p>O seu iPhone, Apple Watch e Mac mantêm os temporizadores sincronizados entre si. Isto funciona através da <strong>sua própria conta iCloud e do WatchConnectivity da Apple</strong> &mdash; os dados passam de um dispositivo para outro pelo seu iCloud, não por mim. <strong>Não consigo ler nada disto.</strong> Inclui o estado e o nome do temporizador em curso e o nome do dispositivo apresentado no estado de ligação da app.</p>
+    <p>Desativar o iCloud Drive interrompe esta sincronização; a app continua a funcionar de forma independente em cada dispositivo.</p>
+
+    <h2>Terceiros e pagamentos</h2>
+    <p>O Rereminder não integra <strong>nenhum serviço de análise, publicidade ou rastreamento de terceiros</strong>. Nenhum dado é vendido, alugado ou partilhado com qualquer outra empresa.</p>
+    <p>O Rereminder Pro é uma <strong>compra única processada inteiramente pela Apple</strong>. Nunca vejo os seus dados de pagamento &mdash; apenas se existe uma compra.</p>
+
+    <h2>Notificações</h2>
+    <p>Todos os avisos são <strong>notificações locais</strong> agendadas no seu dispositivo. Não existe servidor de notificações push, e nenhum conteúdo das notificações chega até mim.</p>
+
+    <h2>Durante quanto tempo os dados são guardados e como parar a recolha</h2>
+    <ul>
+        <li><strong>Apagar a app interrompe imediatamente toda a recolha</strong> e remove o ID aleatório, juntamente com tudo o que está guardado no dispositivo.</li>
+        <li>Os registos de utilização anónimos são guardados enquanto forem úteis para decidir o que desenvolver e apagados quando deixarem de o ser. Como não têm nenhum identificador que leve até si, não tenho forma de isolar os "seus" registos a pedido &mdash; que é precisamente a razão pela qual não podem ser usados para o identificar.</li>
+        <li><strong>Os comentários que enviou são diferentes</strong> &mdash; foi o utilizador que os escreveu, por isso consigo encontrá-los. Envie-me um e-mail e eu apago-os.</li>
+        <li>Posso desativar remotamente, para todos, a recolha de utilização e os relatórios de falhas, e fá-lo-ei se um dia deixar de valer a pena.</li>
+    </ul>
+
+    <h2>Privacidade das crianças</h2>
+    <p>O Rereminder não recolhe intencionalmente dados pessoais de ninguém, incluindo crianças. Não exige conta, não pede qualquer informação pessoal e não tem funcionalidades sociais, chat nem conteúdos trocados entre utilizadores.</p>
+
+    <h2>Alterações a esta política</h2>
+    <p>Se aquilo que a app recolhe mudar, esta página muda também, e a data no topo é atualizada. As alterações relevantes aparecem ainda nas notas da versão que as introduzir.</p>
+
+    <h2>Contacto</h2>
+    <p>Dúvidas sobre qualquer parte disto &mdash; incluindo "porque é que precisa disso?" &mdash; podem ser enviadas para <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Consulte também a <a href="support.html">página de suporte</a>.</p>
+</div>
+
 <div data-lang="it">
     <h1>Informativa sulla privacy</h1>
     <p class="lede">Rereminder è sviluppato da Hyunho Lee. Questa pagina dice esattamente cosa esce dal tuo telefono e cosa no.</p>
@@ -1098,6 +1206,8 @@
     <p>Le domande su tutto questo &mdash; compreso "perché ti serve?" &mdash; vanno a <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Vedi anche la <a href="support.html">pagina di assistenza</a>.</p>
 </div>
 
+</div>
+
 <footer>
     <p>&copy; 2026 Rereminder (두번알림)</p>
     <p>
@@ -1106,14 +1216,15 @@
         <a href="privacy.html">Privacy</a>
         <a href="https://apps.apple.com/us/app/rereminder/id6752551268" target="_blank" rel="noopener">App Store</a>
     </p>
+    <nav class="lang-links" aria-label="Language"><a href="ko/privacy.html" hreflang="ko" lang="ko">한국어</a><a href="en/privacy.html" hreflang="en" lang="en">English</a><a href="ja/privacy.html" hreflang="ja" lang="ja">日本語</a><a href="zh-Hans/privacy.html" hreflang="zh-Hans" lang="zh-Hans">简体中文</a><a href="zh-Hant/privacy.html" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a><a href="de/privacy.html" hreflang="de" lang="de">Deutsch</a><a href="fr/privacy.html" hreflang="fr" lang="fr">Français</a><a href="es/privacy.html" hreflang="es" lang="es">Español</a><a href="pt-BR/privacy.html" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a><a href="pt-PT/privacy.html" hreflang="pt-PT" lang="pt-PT">Português (Portugal)</a><a href="it/privacy.html" hreflang="it" lang="it">Italiano</a></nav>
 </footer>
 
 <script>
 (function () {
     var KEY = 'rereminder-lang';
-    var LANGS = ['en', 'ko', 'ja', 'zh-Hans', 'zh-Hant', 'de', 'fr', 'es', 'pt-BR', 'it'];
+    var LANGS = ['en', 'ko', 'ja', 'zh-Hans', 'zh-Hant', 'de', 'fr', 'es', 'pt-BR', 'pt-PT', 'it'];
     function apply(lang, persist) {
-        document.body.classList.remove('lang-en', 'lang-ko', 'lang-ja', 'lang-zh-Hans', 'lang-zh-Hant', 'lang-de', 'lang-fr', 'lang-es', 'lang-pt-BR', 'lang-it');
+        document.body.classList.remove('lang-en', 'lang-ko', 'lang-ja', 'lang-zh-Hans', 'lang-zh-Hant', 'lang-de', 'lang-fr', 'lang-es', 'lang-pt-BR', 'lang-pt-PT', 'lang-it');
         document.body.classList.add('lang-' + lang);
         document.documentElement.lang = lang;
         var select = document.getElementById('lang-select');
@@ -1138,7 +1249,7 @@
             if (tag.indexOf('zh') === 0) {
                 return /hant|-tw|-hk|-mo/.test(tag) ? 'zh-Hant' : 'zh-Hans';
             }
-            if (tag.indexOf('pt') === 0) return 'pt-BR';
+            if (tag.indexOf('pt') === 0) return /-pt$/.test(tag) ? 'pt-PT' : 'pt-BR';
             var base = tag.split('-')[0];
             if (LANGS.indexOf(base) >= 0) return base;
         }
@@ -1146,7 +1257,7 @@
     }
     apply(detect(), false);
     document.getElementById('lang-select').addEventListener('change', function (event) {
-        apply(event.target.value, true);
+        location.href = event.target.value + '/privacy.html';
     });
 })();
 </script>

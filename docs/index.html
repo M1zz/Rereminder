@@ -628,7 +628,26 @@
             .demo-card { padding: 22px 16px 20px; border-radius: 22px; }
             .demo-btn { width: 48px; height: 48px; }
         }
+
+        /* 언어별 페이지 링크 — 같은 글의 다른 언어 주소. scripts/build-lang-pages.py 가 언어 폴더마다 같은 줄을 만든다. */
+        .lang-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; margin: 14px auto 0; padding: 0 16px; font-size: 13px; }
+        .lang-links a { color: inherit; opacity: .75; text-decoration: none; }
+        .lang-links a:hover { opacity: 1; text-decoration: underline; }
+        .lang-links a[aria-current] { opacity: 1; font-weight: 600; }
     </style>
+    <link rel="canonical" href="https://m1zz.github.io/Rereminder/">
+    <link rel="alternate" hreflang="ko" href="https://m1zz.github.io/Rereminder/ko/">
+    <link rel="alternate" hreflang="en" href="https://m1zz.github.io/Rereminder/en/">
+    <link rel="alternate" hreflang="ja" href="https://m1zz.github.io/Rereminder/ja/">
+    <link rel="alternate" hreflang="zh-Hans" href="https://m1zz.github.io/Rereminder/zh-Hans/">
+    <link rel="alternate" hreflang="zh-Hant" href="https://m1zz.github.io/Rereminder/zh-Hant/">
+    <link rel="alternate" hreflang="de" href="https://m1zz.github.io/Rereminder/de/">
+    <link rel="alternate" hreflang="fr" href="https://m1zz.github.io/Rereminder/fr/">
+    <link rel="alternate" hreflang="es" href="https://m1zz.github.io/Rereminder/es/">
+    <link rel="alternate" hreflang="pt-BR" href="https://m1zz.github.io/Rereminder/pt-BR/">
+    <link rel="alternate" hreflang="pt-PT" href="https://m1zz.github.io/Rereminder/pt-PT/">
+    <link rel="alternate" hreflang="it" href="https://m1zz.github.io/Rereminder/it/">
+    <link rel="alternate" hreflang="x-default" href="https://m1zz.github.io/Rereminder/">
 </head>
 <body>
 
@@ -648,7 +667,7 @@
             <a href="#pro">Pro</a>
             <a href="https://m1zz.github.io/rereminder/" data-i18n="nav.tryClip">Try Now</a>
             <a href="https://apps.apple.com/us/app/rereminder/id6752551268" target="_blank" data-i18n="nav.download">Download</a>
-            <select class="lang-btn" id="lang-toggle" aria-label="Language"><option value="en">English</option><option value="ko">한국어</option><option value="ja">日本語</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="pt-BR">Português</option><option value="it">Italiano</option></select>
+            <select class="lang-btn" id="lang-toggle" aria-label="Language"><option value="en">English</option><option value="ko">한국어</option><option value="ja">日本語</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="pt-BR">Português (Brasil)</option><option value="pt-PT">Português (Portugal)</option><option value="it">Italiano</option></select>
         </div>
         <button class="hamburger" id="hamburger" aria-label="Menu">
             <span></span><span></span><span></span>
@@ -665,7 +684,7 @@
     <a href="#pro">Pro</a>
     <a href="https://m1zz.github.io/rereminder/" data-i18n="nav.tryClip">Try Now</a>
     <a href="https://apps.apple.com/us/app/rereminder/id6752551268" target="_blank" data-i18n="nav.download">Download</a>
-    <select class="lang-btn" id="mobile-lang-toggle" aria-label="Language"><option value="en">English</option><option value="ko">한국어</option><option value="ja">日本語</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="pt-BR">Português</option><option value="it">Italiano</option></select>
+    <select class="lang-btn" id="mobile-lang-toggle" aria-label="Language"><option value="en">English</option><option value="ko">한국어</option><option value="ja">日本語</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="pt-BR">Português (Brasil)</option><option value="pt-PT">Português (Portugal)</option><option value="it">Italiano</option></select>
 </div>
 
 <!-- Hero -->
@@ -971,6 +990,7 @@
         </div>
         <p class="footer-copy" data-i18n="footer.copy">© 2026 Rereminder (두번알림). All rights reserved.</p>
     </div>
+    <nav class="lang-links" aria-label="Language"><a href="ko/" hreflang="ko" lang="ko">한국어</a><a href="en/" hreflang="en" lang="en">English</a><a href="ja/" hreflang="ja" lang="ja">日本語</a><a href="zh-Hans/" hreflang="zh-Hans" lang="zh-Hans">简体中文</a><a href="zh-Hant/" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a><a href="de/" hreflang="de" lang="de">Deutsch</a><a href="fr/" hreflang="fr" lang="fr">Français</a><a href="es/" hreflang="es" lang="es">Español</a><a href="pt-BR/" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a><a href="pt-PT/" hreflang="pt-PT" lang="pt-PT">Português (Portugal)</a><a href="it/" hreflang="it" lang="it">Italiano</a></nav>
 </footer>
 
 <script>
@@ -1713,6 +1733,88 @@ const i18n = {
         "footer.tryClip": "Testar sem instalar",
         "footer.copy": "© 2026 Rereminder (두번알림). Todos os direitos reservados."
     },
+    "pt-PT": {
+        "nav.whySwitch": "Porquê mudar",
+        "nav.features": "Funcionalidades",
+        "nav.howItWorks": "Como funciona",
+        "nav.demo": "Demonstração",
+        "nav.useCases": "Utilizações",
+        "nav.download": "Descarregar",
+        "nav.tryClip": "Experimentar",
+        "hero.badge": "Disponível para iOS e Apple Watch",
+        "hero.title": "Saiba antes<br><span class=\"gradient\">de o tempo acabar</span>",
+        "hero.description": "O Rereminder avisa <em>antes</em> de o temporizador terminar. Defina pré-avisos aos 10 min, 5 min e 1 min — e nunca mais seja apanhado de surpresa.",
+        "hero.cta": "Descarregar grátis",
+        "hero.ctaClip": "Experimentar sem instalar",
+        "hero.clipNote": "Abra no iPhone para o usar de imediato com o App Clip — sem instalar nada.",
+        "painPoints.title": "Farto do seu<br><span class=\"gradient\">temporizador básico?</span>",
+        "painPoints.subtitle": "Foram estas frustrações que levaram milhões de pessoas a procurar algo melhor.",
+        "painPoints.noMidAlert.label": "Sem avisos a meio",
+        "painPoints.noMidAlert.problem": "O temporizador do sistema só toca quando termina. Não há forma de ser avisado durante a contagem.",
+        "painPoints.noMidAlert.solution": "O Rereminder avisa quando quiser — 10 min, 5 min, 1 min antes. A escolha é sua.",
+        "painPoints.screenOff.label": "O ecrã desliga-se",
+        "painPoints.screenOff.problem": "O ecrã apaga-se enquanto o temporizador corre e deixa de ver quanto tempo falta.",
+        "painPoints.screenOff.solution": "Ecrã sempre ligado durante o temporizador, mais a Atividade em direto no ecrã bloqueado e na Dynamic Island.",
+        "painPoints.adsSubscription.label": "Anúncios e subscrições",
+        "painPoints.adsSubscription.problem": "A maioria das apps de temporizador está cheia de anúncios ou cobra 6 € por ano por funções básicas.",
+        "painPoints.adsSubscription.solution": "Zero anúncios. Grátis. O Pro é uma compra única — nunca uma subscrição.",
+        "painPoints.rigidPomodoro.label": "Padrões rígidos",
+        "painPoints.rigidPomodoro.problem": "O Pomodoro prende-o aos 25/5 min. Os temporizadores de intervalos não deixam definir tempos diferentes por série.",
+        "painPoints.rigidPomodoro.solution": "Escolha qualquer duração com qualquer combinação de pré-avisos. Guarde-a como modelo e comece com um toque.",
+        "painPoints.timerClutter.label": "Histórico desarrumado",
+        "painPoints.timerClutter.problem": "O iOS 17 ou posterior guarda todos os temporizadores que já usou. A lista depressa se torna impossível de gerir.",
+        "painPoints.timerClutter.solution": "Um sistema de modelos arrumado, com favoritos. Fique só com o que usa de facto.",
+        "painPoints.noOvertime.label": "Para no zero",
+        "painPoints.noOvertime.problem": "Quando o tempo acaba, acabou. Não há forma de saber quanto tempo excedeu.",
+        "painPoints.noOvertime.solution": "O contador de tempo extra continua depois das 00:00 — mostra +01:23 para saber exatamente.",
+        "features.title": "Não é só um temporizador.<br>É um temporizador mais inteligente.",
+        "features.subtitle": "Cada funcionalidade foi pensada para estar sempre à frente do tempo.",
+        "features.preAlerts.title": "Pré-avisos",
+        "features.preAlerts.desc": "Receba um aviso 10 min, 5 min e 1 min antes do fim. Decide quando.",
+        "features.overtime.title": "Tempo extra",
+        "features.overtime.desc": "O temporizador não para no zero. Veja exatamente quanto excedeu com o contador +MM:SS.",
+        "features.liveActivity.title": "Atividade em direto",
+        "features.liveActivity.desc": "Veja o temporizador na Dynamic Island e no ecrã bloqueado. Sempre visível, nunca intrusivo.",
+        "features.watch.desc": "Controle o temporizador a partir do pulso. Inicie, pause e receba avisos — tudo sincronizado.",
+        "features.templates.title": "Modelos",
+        "features.templates.desc": "Guarde as suas configurações preferidas. Um toque para começar a sessão de concentração de 25 min ou a reunião de 1 hora.",
+        "features.themes.title": "Temas",
+        "features.themes.desc": "Escolha a cor de destaque. 10 opções bonitas a condizer com o seu estilo.",
+        "howItWorks.title": "Três toques e fica descansado",
+        "howItWorks.step1.title": "Defina o tempo",
+        "howItWorks.step1.desc": "Arraste o círculo ou toque numa predefinição rápida. 5 min, 10 min ou à medida.",
+        "howItWorks.step2.title": "Escolha os pré-avisos",
+        "howItWorks.step2.desc": "Toque nos avisos que quer. \"5 min antes\", \"1 min antes\" — a escolha é sua.",
+        "howItWorks.step3.title": "Comece e descontraia",
+        "howItWorks.step3.desc": "Concentre-se no que importa. O Rereminder dá-lhe um toque no ombro quando for altura.",
+        "useCases.title": "Feito para momentos reais",
+        "useCases.presentations.title": "Apresentações",
+        "useCases.presentations.desc": "\"Faltam 5 min — comece a concluir\" para nunca ser interrompido.",
+        "useCases.mentoring.title": "Mentoria",
+        "useCases.mentoring.desc": "Saiba quando a sessão está a terminar sem ter de olhar para o relógio.",
+        "useCases.workouts.title": "Treino",
+        "useCases.workouts.desc": "Pré-avisos para os intervalos de descanso. \"10 segundos — prepare-se para a próxima série.\"",
+        "useCases.cooking.title": "Cozinha",
+        "useCases.cooking.desc": "\"Faltam 2 min — está na hora de juntar o molho.\" Nunca mais queime o jantar.",
+        "useCases.study.title": "Sessões de estudo",
+        "useCases.study.desc": "Pomodoro com pré-avisos. Saiba quando vem aí a pausa.",
+        "useCases.meetings.title": "Reuniões",
+        "useCases.meetings.desc": "\"Faltam 10 min\" — feche as próximas tarefas antes de o tempo acabar.",
+        "pro.subtitle": "Paga uma vez, usa para sempre. Sem subscrições.",
+        "pro.feature1": "A app lembra-se da última configuração",
+        "pro.feature2": "Guarde configurações como modelos",
+        "pro.feature3": "Modo Sessão — nomes das secções e guião",
+        "pro.feature4": "Contagem do tempo extra",
+        "pro.feature5": "Histórico e estatísticas",
+        "pro.feature6": "Os pré-avisos continuam grátis, sem limite",
+        "pro.badge": "Compra única",
+        "footer.contact": "Contacto",
+        "footer.support": "Suporte",
+        "footer.terms": "Termos",
+        "footer.privacy": "Privacidade",
+        "footer.tryClip": "Experimentar sem instalar",
+        "footer.copy": "© 2026 Rereminder (두번알림). Todos os direitos reservados."
+    },
     "it": {
         "nav.whySwitch": "Perché cambiare",
         "nav.features": "Funzioni",
@@ -1832,6 +1934,7 @@ function setLang(lang, persist) {
         "fr": "Rereminder – Minuteur malin avec pré-alertes",
         "es": "Rereminder: temporizador inteligente con avisos previos",
         "pt-BR": "Rereminder – Timer inteligente com pré-alertas",
+        "pt-PT": "Rereminder – Temporizador inteligente com pré-avisos",
         "it": "Rereminder – Timer smart con preavvisi"
     };
     document.title = titleMap[lang];
@@ -1846,6 +1949,7 @@ function setLang(lang, persist) {
         "fr": "Soyez prévenu avant la fin de votre minuteur. Rereminder (두번알림) est un minuteur malin pour iOS et Apple Watch, avec des pré-alertes personnalisables.",
         "es": "Recibe avisos antes de que termine tu temporizador. Rereminder (두번알림) es una app de temporizador inteligente para iOS y Apple Watch con avisos previos personalizables.",
         "pt-BR": "Seja avisado antes de o timer terminar. Rereminder (두번알림) é um app de timer inteligente para iOS e Apple Watch com pré-alertas personalizáveis.",
+        "pt-PT": "Receba um aviso antes de o temporizador terminar. O Rereminder (두번알림) é uma app de temporizador inteligente para iOS e Apple Watch, com pré-avisos personalizáveis.",
         "it": "Ricevi un avviso prima che il timer finisca. Rereminder (두번알림) è un’app timer smart per iOS e Apple Watch con preavvisi personalizzabili."
     };
     var descEl = document.querySelector('meta[name="description"]');
@@ -1870,7 +1974,7 @@ function detectLang() {
         var tag = String(tags[i]).toLowerCase();
         // 번체는 대만·홍콩·마카오. 그 밖의 zh 는 간체로 본다.
         if (tag.indexOf('zh') === 0) return /hant|-tw|-hk|-mo/.test(tag) ? 'zh-Hant' : 'zh-Hans';
-        if (tag.indexOf('pt') === 0) return 'pt-BR';
+        if (tag.indexOf('pt') === 0) return /-pt$/.test(tag) ? 'pt-PT' : 'pt-BR';
         var base = tag.split('-')[0];
         if (i18n[base]) return base;
     }
@@ -1878,7 +1982,7 @@ function detectLang() {
 }
 
 document.getElementById('lang-toggle').addEventListener('change', function(e) {
-    setLang(e.target.value, true);
+    location.href = e.target.value + '/';
 });
 
 // Hamburger menu
@@ -1900,7 +2004,7 @@ mobileMenu.querySelectorAll('a').forEach(function(link) {
 
 // Mobile language toggle
 document.getElementById('mobile-lang-toggle').addEventListener('change', function(e) {
-    setLang(e.target.value, true);
+    location.href = e.target.value + '/';
     hamburger.classList.remove('active');
     mobileMenu.classList.remove('active');
 });
@@ -2086,6 +2190,24 @@ setLang(detectLang(), false);
             endTitle: "Tempo esgotado",
             endSub: "O relógio continua contando para você saber quanto passou do tempo.",
             sectionOf: "Etapa"
+        },
+        "pt-PT": {
+            title: "Experimente já aqui",
+            subtitle: "Arraste a pega branca para definir a duração, arraste os sinos cor de laranja para colocar os avisos e toque em iniciar. Sem instalar nem criar conta — funciona no navegador.",
+            lengthLabel: "Duração",
+            alertsLabel: "Avisos antes do fim",
+            speedLabel: "Velocidade",
+            speedFast: "Pré-visualização 60×",
+            speedReal: "Tempo real",
+            sound: "Som",
+            hint: "Arraste um sino para fora do anel para o remover.",
+            note: "Nada disto fica guardado — ao recarregar a página, desaparece. Na app, guarda uma configuração como modelo e volta a iniciá-la com um toque. <a href=\"https://apps.apple.com/us/app/rereminder/id6752551268\" target=\"_blank\" rel=\"noopener\">Obter o Rereminder</a>",
+            fastNote: "A correr a 60× para ver os avisos — um temporizador de 10 minutos termina em 10 segundos.",
+            alertTitle: function (t) { return 'Faltam ' + t; },
+            alertSub: "É este o aviso que receberia no iPhone, no Apple Watch e no ecrã bloqueado.",
+            endTitle: "O tempo acabou",
+            endSub: "O relógio continua a contar para saber quanto tempo excedeu.",
+            sectionOf: "Secção"
         },
         "it": {
             title: "Provalo qui",
