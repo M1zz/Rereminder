@@ -62,15 +62,15 @@ Pro ist ein Einmalkauf, kein Abo. Vorwarnungen sind unbegrenzt, die Apple Watch 
 
 ### 지원 URL
 
-https://m1zz.github.io/Rereminder/support.html
+https://m1zz.github.io/Rereminder/de/support.html
 
 ### 개인정보처리방침 URL
 
-https://m1zz.github.io/Rereminder/privacy.html
+https://m1zz.github.io/Rereminder/de/privacy.html
 
 ### 마케팅 URL
 
-https://m1zz.github.io/Rereminder/
+https://m1zz.github.io/Rereminder/de/
 
 ## fr
 
@@ -127,15 +127,15 @@ Pro est un achat unique, pas un abonnement. Les pré-alertes sont illimitées, e
 
 ### 지원 URL
 
-https://m1zz.github.io/Rereminder/support.html
+https://m1zz.github.io/Rereminder/fr/support.html
 
 ### 개인정보처리방침 URL
 
-https://m1zz.github.io/Rereminder/privacy.html
+https://m1zz.github.io/Rereminder/fr/privacy.html
 
 ### 마케팅 URL
 
-https://m1zz.github.io/Rereminder/
+https://m1zz.github.io/Rereminder/fr/
 
 ## es
 
@@ -192,15 +192,15 @@ Pro es una compra única, no una suscripción. Los avisos previos no tienen lím
 
 ### 지원 URL
 
-https://m1zz.github.io/Rereminder/support.html
+https://m1zz.github.io/Rereminder/es/support.html
 
 ### 개인정보처리방침 URL
 
-https://m1zz.github.io/Rereminder/privacy.html
+https://m1zz.github.io/Rereminder/es/privacy.html
 
 ### 마케팅 URL
 
-https://m1zz.github.io/Rereminder/
+https://m1zz.github.io/Rereminder/es/
 
 ## pt-BR
 
@@ -257,15 +257,15 @@ O Pro é uma compra única, não uma assinatura. Os pré-alertas são ilimitados
 
 ### 지원 URL
 
-https://m1zz.github.io/Rereminder/support.html
+https://m1zz.github.io/Rereminder/pt-BR/support.html
 
 ### 개인정보처리방침 URL
 
-https://m1zz.github.io/Rereminder/privacy.html
+https://m1zz.github.io/Rereminder/pt-BR/privacy.html
 
 ### 마케팅 URL
 
-https://m1zz.github.io/Rereminder/
+https://m1zz.github.io/Rereminder/pt-BR/
 
 ## pt-PT
 
@@ -322,15 +322,15 @@ O Pro é uma compra única, não uma subscrição. Os pré-alertas são ilimitad
 
 ### 지원 URL
 
-https://m1zz.github.io/Rereminder/support.html
+https://m1zz.github.io/Rereminder/pt-PT/support.html
 
 ### 개인정보처리방침 URL
 
-https://m1zz.github.io/Rereminder/privacy.html
+https://m1zz.github.io/Rereminder/pt-PT/privacy.html
 
 ### 마케팅 URL
 
-https://m1zz.github.io/Rereminder/
+https://m1zz.github.io/Rereminder/pt-PT/
 
 ## it
 
@@ -387,15 +387,15 @@ Pro è un acquisto una tantum, non un abbonamento. I preavvisi sono illimitati p
 
 ### 지원 URL
 
-https://m1zz.github.io/Rereminder/support.html
+https://m1zz.github.io/Rereminder/it/support.html
 
 ### 개인정보처리방침 URL
 
-https://m1zz.github.io/Rereminder/privacy.html
+https://m1zz.github.io/Rereminder/it/privacy.html
 
 ### 마케팅 URL
 
-https://m1zz.github.io/Rereminder/
+https://m1zz.github.io/Rereminder/it/
 
 ## ko
 
@@ -471,12 +471,15 @@ re + reminder = 한 번 더 알려주다
 
 ### 지원 URL
 
-https://m1zz.github.io/Rereminder/support.html
+https://m1zz.github.io/Rereminder/ko/support.html
 
 ### 개인정보처리방침 URL
 
-https://m1zz.github.io/Rereminder/privacy.html
+https://m1zz.github.io/Rereminder/ko/privacy.html
 
+### 마케팅 URL
+
+https://m1zz.github.io/Rereminder/ko/
 
 ## en
 
@@ -554,12 +557,15 @@ No ads · No forced subscriptions · No internet required
 
 ### 지원 URL
 
-https://m1zz.github.io/Rereminder/support.html
+https://m1zz.github.io/Rereminder/en/support.html
 
 ### 개인정보처리방침 URL
 
-https://leeo75.notion.site/Privacy-Policy-2efe264a0fdc80ab8303c36da4d194f9
+https://m1zz.github.io/Rereminder/en/privacy.html
 
+### 마케팅 URL
+
+https://m1zz.github.io/Rereminder/en/
 
 ## ja
 
@@ -631,12 +637,15 @@ re + reminder = もう一度知らせる
 
 ### 지원 URL
 
-https://m1zz.github.io/Rereminder/support.html
+https://m1zz.github.io/Rereminder/ja/support.html
 
 ### 개인정보처리방침 URL
 
-https://m1zz.github.io/Rereminder/privacy.html
+https://m1zz.github.io/Rereminder/ja/privacy.html
 
+### 마케팅 URL
+
+https://m1zz.github.io/Rereminder/ja/
 
 ## zh-Hans
 
@@ -691,12 +700,15 @@ Pro 是一次性买断，不是订阅。提前提醒不限个数，Apple Watch A
 
 ### 지원 URL
 
-https://m1zz.github.io/Rereminder/support.html
+https://m1zz.github.io/Rereminder/zh-Hans/support.html
 
 ### 개인정보처리방침 URL
 
-https://m1zz.github.io/Rereminder/privacy.html
+https://m1zz.github.io/Rereminder/zh-Hans/privacy.html
 
+### 마케팅 URL
+
+https://m1zz.github.io/Rereminder/zh-Hans/
 
 ## zh-Hant
 
@@ -751,10 +763,12 @@ Pro 是一次買斷，不是訂閱。提前提醒不限個數，Apple Watch App 
 
 ### 지원 URL
 
-https://m1zz.github.io/Rereminder/support.html
+https://m1zz.github.io/Rereminder/zh-Hant/support.html
 
 ### 개인정보처리방침 URL
 
-https://m1zz.github.io/Rereminder/privacy.html
+https://m1zz.github.io/Rereminder/zh-Hant/privacy.html
 
+### 마케팅 URL
 
+https://m1zz.github.io/Rereminder/zh-Hant/
