@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <title>Suporte – Rereminder</title>
+    <meta name="description" content="O Rereminder é feito por uma só pessoa. Quando escreve, fala diretamente com o programador — não com uma fila de pedidos.">
+    <link rel="icon" href="../app-icon.jpeg">
+    <meta property="og:title" content="Suporte – Rereminder">
+    <meta property="og:description" content="O Rereminder é feito por uma só pessoa. Quando escreve, fala diretamente com o programador — não com uma fila de pedidos.">
+    <meta property="og:type" content="website">
+    <style>
+        /* 라이트가 기본. 다크는 기기 설정을 따른다 — 토글을 두지 않는 이유는
+           이 두 페이지가 "읽고 나가는" 문서라 설정을 기억시킬 자리가 아니기 때문이다. */
+        :root {
+            color-scheme: light dark;
+            --accent: #0066CC;
+            --bg: #ffffff;
+            --surface: #f7f7f9;
+            --surface2: #eeeef1;
+            --text: #1d1d1f;
+            --text2: #55555c;
+            --text3: #6e6e73;
+            --border: #dcdce1;
+            --nav-bg: rgba(255, 255, 255, 0.82);
+            --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --accent: #0A84FF;
+                --bg: #000000;
+                --surface: #111111;
+                --surface2: #1a1a1a;
+                --text: #f5f5f7;
+                --text2: #98989d;
+                --text3: #86868b;
+                --border: #2a2a2a;
+                --nav-bg: rgba(0, 0, 0, 0.72);
+                --card-shadow: none;
+            }
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+        nav {
+            position: sticky; top: 0; z-index: 100;
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            background: var(--nav-bg);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-inner {
+            max-width: 760px; margin: 0 auto; padding: 14px 24px;
+            display: flex; align-items: center; justify-content: space-between; gap: 16px;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); font-weight: 600; letter-spacing: -0.3px; }
+        .nav-brand img { width: 28px; height: 28px; border-radius: 7px; }
+        .nav-links { display: flex; align-items: center; gap: 18px; font-size: 14px; }
+        .nav-links a { color: var(--text2); text-decoration: none; }
+        .nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--text); }
+        /* 언어가 10개라 버튼을 늘어놓으면 휴대폰 폭을 넘는다 — 선택 메뉴 하나로 둔다 */
+        .lang {
+            appearance: none; border: 0; background: var(--surface2); color: var(--text2);
+            font: inherit; font-size: 12px; font-weight: 600; padding: 5px 12px;
+            border-radius: 999px; cursor: pointer; line-height: 1.4; max-width: 120px;
+        }
+
+        .container { max-width: 760px; margin: 0 auto; padding: 56px 24px 96px; }
+        h1 { font-size: 38px; font-weight: 700; letter-spacing: -1px; margin-bottom: 8px; line-height: 1.2; }
+        .lede { color: var(--text2); font-size: 17px; margin-bottom: 12px; }
+        .updated { color: var(--text3); font-size: 13px; margin-bottom: 44px; }
+        h2 { font-size: 23px; font-weight: 600; letter-spacing: -0.3px; margin: 52px 0 14px; }
+        h3 { font-size: 16px; font-weight: 600; margin: 26px 0 6px; }
+        p, li { color: var(--text2); font-size: 15px; }
+        p { margin-bottom: 12px; }
+        ul, ol { padding-left: 22px; margin-bottom: 12px; }
+        li { margin-bottom: 7px; }
+        strong { color: var(--text); font-weight: 600; }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        code, .ui {
+            background: var(--surface2); border: 1px solid var(--border); border-radius: 5px;
+            padding: 1px 6px; font-size: 13.5px; color: var(--text);
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: nowrap;
+        }
+        .ui { font-family: inherit; font-size: 14px; }
+
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; margin-bottom: 14px; box-shadow: var(--card-shadow); }
+        .card h3 { margin-top: 0; }
+        .card p:last-child { margin-bottom: 0; }
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 8px; }
+        .contact-grid .card { margin-bottom: 0; }
+        .big-link { font-size: 17px; font-weight: 600; }
+
+        details {
+            border: 1px solid var(--border); border-radius: 12px;
+            background: var(--surface); margin-bottom: 10px; overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+        details summary {
+            cursor: pointer; list-style: none; padding: 16px 20px;
+            font-size: 15.5px; font-weight: 600; color: var(--text);
+            display: flex; align-items: center; justify-content: space-between; gap: 12px;
+        }
+        details summary::-webkit-details-marker { display: none; }
+        details summary::after { content: "+"; color: var(--text3); font-weight: 400; font-size: 20px; line-height: 1; }
+        details[open] summary::after { content: "\2212"; }
+        details .body { padding: 0 20px 18px; border-top: 1px solid var(--border); padding-top: 14px; }
+        details .body > :last-child { margin-bottom: 0; }
+
+        table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 14.5px; }
+        th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text2); }
+        th { color: var(--text); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.4px; }
+        td:first-child { color: var(--text); white-space: nowrap; }
+
+        .note { border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 10px 10px 0; padding: 14px 18px; margin-bottom: 16px; }
+        .note p:last-child { margin-bottom: 0; }
+
+        footer { border-top: 1px solid var(--border); padding: 32px 24px 56px; text-align: center; }
+        footer p { color: var(--text3); font-size: 13px; margin-bottom: 8px; }
+        footer a { color: var(--text2); margin: 0 8px; font-size: 13px; }
+
+        [data-lang] { display: none; }
+        body.lang-en [data-lang="en"], body.lang-ko [data-lang="ko"], body.lang-ja [data-lang="ja"], body.lang-zh-Hans [data-lang="zh-Hans"], body.lang-zh-Hant [data-lang="zh-Hant"], body.lang-de [data-lang="de"], body.lang-fr [data-lang="fr"], body.lang-es [data-lang="es"], body.lang-pt-BR [data-lang="pt-BR"], body.lang-pt-PT [data-lang="pt-PT"], body.lang-it [data-lang="it"] { display: block; }
+        li[data-lang], td[data-lang], span[data-lang] { display: none; }
+        body.lang-en li[data-lang="en"], body.lang-ko li[data-lang="ko"], body.lang-ja li[data-lang="ja"], body.lang-zh-Hans li[data-lang="zh-Hans"], body.lang-zh-Hant li[data-lang="zh-Hant"], body.lang-de li[data-lang="de"], body.lang-fr li[data-lang="fr"], body.lang-es li[data-lang="es"], body.lang-pt-BR li[data-lang="pt-BR"], body.lang-pt-PT li[data-lang="pt-PT"], body.lang-it li[data-lang="it"] { display: list-item; }
+        body.lang-en span[data-lang="en"], body.lang-ko span[data-lang="ko"], body.lang-ja span[data-lang="ja"], body.lang-zh-Hans span[data-lang="zh-Hans"], body.lang-zh-Hant span[data-lang="zh-Hant"], body.lang-de span[data-lang="de"], body.lang-fr span[data-lang="fr"], body.lang-es span[data-lang="es"], body.lang-pt-BR span[data-lang="pt-BR"], body.lang-pt-PT span[data-lang="pt-PT"], body.lang-it span[data-lang="it"] { display: inline; }
+
+        @media (max-width: 560px) {
+            h1 { font-size: 30px; }
+            .container { padding: 40px 20px 72px; }
+            .nav-links { gap: 12px; font-size: 13px; }
+            .nav-brand span { display: none; }
+        }
+
+        /* No-JS / pre-hydration fallback: show English */
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it) div[data-lang="en"] { display: block; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it) li[data-lang="en"] { display: list-item; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it) span[data-lang="en"] { display: inline; }
+
+        /* 언어별 페이지 링크 — 같은 글의 다른 언어 주소. scripts/build-lang-pages.py 가 언어 폴더마다 같은 줄을 만든다. */
+        .lang-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; margin: 14px auto 0; padding: 0 16px; font-size: 13px; }
+        .lang-links a { color: inherit; opacity: .75; text-decoration: none; }
+        .lang-links a:hover { opacity: 1; text-decoration: underline; }
+        .lang-links a[aria-current] { opacity: 1; font-weight: 600; }
+    </style>
+    <link rel="canonical" href="https://m1zz.github.io/Rereminder/pt-PT/support.html">
+    <link rel="alternate" hreflang="ko" href="https://m1zz.github.io/Rereminder/ko/support.html">
+    <link rel="alternate" hreflang="en" href="https://m1zz.github.io/Rereminder/en/support.html">
+    <link rel="alternate" hreflang="ja" href="https://m1zz.github.io/Rereminder/ja/support.html">
+    <link rel="alternate" hreflang="zh-Hans" href="https://m1zz.github.io/Rereminder/zh-Hans/support.html">
+    <link rel="alternate" hreflang="zh-Hant" href="https://m1zz.github.io/Rereminder/zh-Hant/support.html">
+    <link rel="alternate" hreflang="de" href="https://m1zz.github.io/Rereminder/de/support.html">
+    <link rel="alternate" hreflang="fr" href="https://m1zz.github.io/Rereminder/fr/support.html">
+    <link rel="alternate" hreflang="es" href="https://m1zz.github.io/Rereminder/es/support.html">
+    <link rel="alternate" hreflang="pt-BR" href="https://m1zz.github.io/Rereminder/pt-BR/support.html">
+    <link rel="alternate" hreflang="pt-PT" href="https://m1zz.github.io/Rereminder/pt-PT/support.html">
+    <link rel="alternate" hreflang="it" href="https://m1zz.github.io/Rereminder/it/support.html">
+    <link rel="alternate" hreflang="x-default" href="https://m1zz.github.io/Rereminder/support.html">
+</head>
+<body>
+<nav>
+    <div class="nav-inner">
+        <a class="nav-brand" href="./"><img src="../app-icon.jpeg" alt="Rereminder"><span>Rereminder</span></a>
+        <div class="nav-links">
+            <a href="./">Início</a>
+            <a href="support.html" aria-current="page">Suporte</a>
+            <a href="privacy.html">Privacidade</a>
+            <select class="lang" id="lang-select" aria-label="Language"><option value="en">English</option><option value="ko">한국어</option><option value="ja">日本語</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="pt-BR">Português (Brasil)</option><option value="pt-PT" selected>Português (Portugal)</option><option value="it">Italiano</option></select>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+
+<div>
+    <h1>Suporte</h1>
+    <p class="lede">O Rereminder é feito por uma só pessoa. Quando escreve, fala diretamente com o programador — não com uma fila de pedidos.</p>
+    <p class="updated">Última atualização: 9 de setembro de 2026 &middot; Versão da app 2.2.5</p>
+
+    <h2>Fale comigo</h2>
+    <div class="contact-grid">
+        <div class="card">
+            <h3>E-mail</h3>
+            <p class="big-link"><a href="mailto:leeo@kakao.com">leeo@kakao.com</a></p>
+            <p>O melhor para erros, reembolsos e tudo o que precise de uma captura de ecrã.</p>
+        </div>
+        <div class="card">
+            <h3>A partir da app</h3>
+            <p><span class="ui">Ajustes &rsaquo; Feedback &rsaquo; Enviar feedback</span></p>
+            <p>Chega diretamente à minha caixa de entrada. Não precisa de app de e-mail &mdash; basta ter sessão iniciada no iCloud.</p>
+        </div>
+        <div class="card">
+            <h3>Instagram</h3>
+            <p class="big-link"><a href="https://instagram.com/lee25_ios" target="_blank" rel="noopener">@lee25_ios</a></p>
+            <p>As mensagens diretas estão abertas. Ideal para perguntas rápidas.</p>
+        </div>
+        <div class="card">
+            <h3>Erros e sugestões</h3>
+            <p class="big-link"><a href="https://github.com/M1zz/Rereminder/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+            <p>É público, por isso outras pessoas também podem encontrar a resposta.</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>Normalmente respondo em 2&ndash;3 dias.</strong> Se passar mais de uma semana, assuma que a mensagem se perdeu e volte a enviá-la &mdash; prefiro lê-la duas vezes do que nenhuma.</p>
+    </div>
+
+    <h3>O que incluir ao comunicar um erro</h3>
+    <ul>
+        <li><strong>Versão da app</strong> &mdash; aparece no fundo de <span class="ui">Ajustes &rsaquo; Informações</span>.</li>
+        <li><strong>Dispositivo e sistema</strong> &mdash; por exemplo, iPhone 15 Pro, iOS 26.1. Indique o modelo do Apple Watch se o problema for no relógio.</li>
+        <li><strong>O que esperava e o que aconteceu em vez disso.</strong> "O aviso dos 5 minutos nunca tocou" diz-me muito mais do que "as notificações não funcionam".</li>
+        <li><strong>Se acontece sempre</strong> ou se aconteceu só uma vez.</li>
+    </ul>
+
+    <h2>Perguntas frequentes</h2>
+
+    <details>
+        <summary>Os meus avisos não tocaram</summary>
+        <div class="body">
+            <p>O Rereminder usa <strong>notificações locais</strong>, por isso quase sempre é uma questão de permissões ou de foco. Verifique por esta ordem:</p>
+            <ol>
+                <li><strong>Permissão de notificações.</strong> Abra <span class="ui">Ajustes &rsaquo; Método de notificação</span> na app &mdash; mostra o estado atual e permite pedir a permissão ou abrir as Definições do iOS.</li>
+                <li><strong>Foco / Não incomodar.</strong> Se tiver algum modo de foco ativo, adicione o Rereminder às apps permitidas em <span class="ui">Definições &rsaquo; Foco</span> do iOS.</li>
+                <li><strong>Interruptor de som/silêncio e volume.</strong> O modo silencioso corta o som; a vibração continua a chegar.</li>
+                <li><strong>Resumo agendado.</strong> Em <span class="ui">Definições &rsaquo; Notificações &rsaquo; Resumo agendado</span> do iOS, as notificações podem ficar retidas até uma hora definida. O Rereminder não deve constar dessa lista.</li>
+            </ol>
+            <p>Se as quatro coisas estiverem bem e continuar a acontecer, diga-me a duração do temporizador e onde estavam os avisos &mdash; é dessa combinação que preciso para reproduzir o problema.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>O meu Apple Watch não sincroniza</summary>
+        <div class="body">
+            <p>Abra <span class="ui">Ajustes &rsaquo; Meus dispositivos</span> na app. O estado junto ao Apple Watch indica o passo que falta, e tocar nele abre instruções para essa situação concreta.</p>
+            <ol>
+                <li>O relógio está <strong>emparelhado</strong> com este iPhone.</li>
+                <li><strong>O Rereminder está instalado no relógio.</strong> Abra a app Watch no iPhone, desloque-se até ao Rereminder e instale-o, se não estiver lá.</li>
+                <li><strong>Abra o Rereminder no relógio uma vez.</strong> Uma app de relógio acabada de instalar nunca foi executada, e a primeira sincronização exige que tenha sido aberta.</li>
+            </ol>
+            <p>O estado do temporizador é transmitido mesmo com a app do relógio em segundo plano, por isso não precisa de a manter aberta.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>O meu Mac aparece como "não ligado", mesmo com a app aberta</summary>
+        <div class="body">
+            <p>"Ligado" significa aqui que <strong>a app esteve aberta nesse Mac mais ou menos nos últimos 10 minutos</strong> &mdash; não é uma ligação em tempo real. Os dispositivos deixam um registo no seu próprio iCloud de cinco em cinco minutos, e o iCloud não consegue acordar uma app suspensa, por isso um Mac que acabou de sair do repouso pode demorar alguns minutos a aparecer.</p>
+            <p>Se nunca aparecer: os dois dispositivos têm de ter sessão iniciada na <strong>mesma conta iCloud</strong>, com o <strong>iCloud Drive ativado</strong>. Em <span class="ui">Ajustes &rsaquo; Meus dispositivos</span> há um botão "Verificar novamente" que volta a ler de imediato.</p>
+            <p>A versão para Mac exige <strong>macOS 26 ou posterior</strong>.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Comprei o Pro, mas não aparece</summary>
+        <div class="body">
+            <p>Abra o ecrã do Pro e toque em <strong>Restaurar compras</strong>. As compras ficam associadas à conta Apple que as fez, por isso confirme que tem sessão iniciada nessa mesma conta &mdash; não na de um familiar, nem numa conta de outro país.</p>
+            <p>O Pro é uma <strong>compra única</strong>. Não é uma subscrição e não expira, por isso continua válido depois de reinstalar a app ou de mudar de dispositivo.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>O que inclui exatamente o Pro?</summary>
+        <div class="body">
+            <p>O Pro é uma <strong>compra única</strong>. O que oferece cabe numa frase: <strong>a app lembra-se das suas configurações.</strong></p>
+            <p><strong>Grátis</strong></p>
+            <ul>
+                <li><strong>Pré-avisos ilimitados.</strong> Coloque quantos quiser num temporizador &mdash; a razão de ser desta app não é racionada.</li>
+                <li>Todas as cores de tema, mensagens de aviso personalizadas, Atividade em direto, avisos que se repetem até responder e o final com alarme.</li>
+                <li>A <strong>app completa para Apple Watch e a app para Mac</strong>. Nenhuma delas é paga.</li>
+            </ul>
+            <p><strong>Pro</strong></p>
+            <ul>
+                <li><strong>Modelos</strong> &mdash; guarde uma configuração e volte a usá-la com um toque, quantas quiser.</li>
+                <li><strong>A última configuração regressa</strong> quando volta a abrir a app.</li>
+                <li><strong>Modo Sessão</strong> &mdash; dê nome a cada secção ("abertura / demonstração / perguntas") e tenha um guião por secção, que se abre quando essa secção começa.</li>
+                <li><strong>Tempo extra</strong> &mdash; o relógio continua a contar depois das 00:00, para saber quanto tempo excedeu.</li>
+                <li><strong>Histórico e estatísticas</strong> &mdash; um registo das sessões que fez.</li>
+            </ul>
+            <p>Os modelos que já guardou nunca são apagados. Sem o Pro, continuam no ecrã, bloqueados, e voltam a funcionar no momento em que comprar.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Quero um reembolso</summary>
+        <div class="body">
+            <p>Os reembolsos são tratados pela Apple, não por mim &mdash; não tenho acesso aos seus dados de pagamento e não consigo emiti-los. Peça-o em <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a> com a conta Apple que fez a compra.</p>
+            <p>Se o motivo for algo que não funciona, diga-me também, por favor. O reembolso resolve o seu caso; não corrige o erro para a próxima pessoa.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Posso experimentar sem instalar?</summary>
+        <div class="body">
+            <p>Pode. Abra <a href="https://m1zz.github.io/rereminder/" target="_blank" rel="noopener">m1zz.github.io/rereminder</a> num iPhone e o App Clip põe o temporizador a funcionar de imediato &mdash; sem passar pela App Store. Tem o mostrador e os avisos; os modelos, o Modo Sessão e a app para o relógio estão na app completa.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Que idiomas e dispositivos são compatíveis?</summary>
+        <div class="body">
+            <table>
+                <tr><td>Idiomas</td><td>Português (do Brasil), English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Italiano</td></tr>
+                <tr><td>iPhone</td><td>iOS 26.0 ou posterior</td></tr>
+                <tr><td>Apple Watch</td><td>watchOS 11.6 ou posterior</td></tr>
+                <tr><td>Mac</td><td>macOS 26.0 ou posterior</td></tr>
+                <tr><td>iPad</td><td>Ainda não é compatível</td></tr>
+            </table>
+        </div>
+    </details>
+
+    <details>
+        <summary>Como apago os meus dados?</summary>
+        <div class="body">
+            <p>Tudo o que cria &mdash; temporizadores, modelos, nomes de secções, guiões, histórico &mdash; fica no seu dispositivo. <strong>Apagar a app remove tudo.</strong></p>
+            <p>As contagens de utilização anónimas que a app envia estão descritas por completo na <a href="privacy.html">página de privacidade</a>, incluindo o que deixa de ser enviado quando apaga a app.</p>
+        </div>
+    </details>
+
+    <h2>Continua com problemas?</h2>
+    <p>Escreva para <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Conte-me o que estava a tentar fazer &mdash; não só o que correu mal &mdash; e eu respondo.</p>
+</div>
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Rereminder (두번알림)</p>
+    <p>
+        <a href="./">Início</a>
+        <a href="support.html">Suporte</a>
+        <a href="privacy.html">Privacidade</a>
+        <a href="https://apps.apple.com/us/app/rereminder/id6752551268" target="_blank" rel="noopener">App Store</a>
+    </p>
+        <nav class="lang-links" aria-label="Language"><a href="../ko/support.html" hreflang="ko" lang="ko">한국어</a><a href="../en/support.html" hreflang="en" lang="en">English</a><a href="../ja/support.html" hreflang="ja" lang="ja">日本語</a><a href="../zh-Hans/support.html" hreflang="zh-Hans" lang="zh-Hans">简体中文</a><a href="../zh-Hant/support.html" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a><a href="../de/support.html" hreflang="de" lang="de">Deutsch</a><a href="../fr/support.html" hreflang="fr" lang="fr">Français</a><a href="../es/support.html" hreflang="es" lang="es">Español</a><a href="../pt-BR/support.html" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a><a href="../pt-PT/support.html" hreflang="pt-PT" lang="pt-PT" aria-current="true">Português (Portugal)</a><a href="../it/support.html" hreflang="it" lang="it">Italiano</a></nav>
+</footer>
+
+<script>
+document.getElementById('lang-select').addEventListener('change', function (e) {
+    location.href = '../' + e.target.value + '/support.html';
+});
+</script>
+</body>
+</html>

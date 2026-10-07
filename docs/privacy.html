@@ -64,13 +64,12 @@
         .nav-links { display: flex; align-items: center; gap: 18px; font-size: 14px; }
         .nav-links a { color: var(--text2); text-decoration: none; }
         .nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--text); }
-        .lang { display: flex; gap: 2px; background: var(--surface2); border-radius: 999px; padding: 3px; }
-        .lang button {
-            appearance: none; border: 0; background: transparent; color: var(--text2);
-            font: inherit; font-size: 12px; font-weight: 600; padding: 4px 10px;
-            border-radius: 999px; cursor: pointer; line-height: 1.4;
+        /* 언어가 10개라 버튼을 늘어놓으면 휴대폰 폭을 넘는다 — 선택 메뉴 하나로 둔다 */
+        .lang {
+            appearance: none; border: 0; background: var(--surface2); color: var(--text2);
+            font: inherit; font-size: 12px; font-weight: 600; padding: 5px 12px;
+            border-radius: 999px; cursor: pointer; line-height: 1.4; max-width: 120px;
         }
-        .lang button[aria-pressed="true"] { background: var(--accent); color: #fff; }
 
         .container { max-width: 760px; margin: 0 auto; padding: 56px 24px 96px; }
         h1 { font-size: 38px; font-weight: 700; letter-spacing: -1px; margin-bottom: 8px; line-height: 1.2; }
@@ -128,13 +127,10 @@
         footer a { color: var(--text2); margin: 0 8px; font-size: 13px; }
 
         [data-lang] { display: none; }
-        body.lang-en [data-lang="en"], body.lang-ko [data-lang="ko"],
-        body.lang-zh-Hans [data-lang="zh-Hans"], body.lang-zh-Hant [data-lang="zh-Hant"] { display: block; }
+        body.lang-en [data-lang="en"], body.lang-ko [data-lang="ko"], body.lang-ja [data-lang="ja"], body.lang-zh-Hans [data-lang="zh-Hans"], body.lang-zh-Hant [data-lang="zh-Hant"], body.lang-de [data-lang="de"], body.lang-fr [data-lang="fr"], body.lang-es [data-lang="es"], body.lang-pt-BR [data-lang="pt-BR"], body.lang-pt-PT [data-lang="pt-PT"], body.lang-it [data-lang="it"] { display: block; }
         li[data-lang], td[data-lang], span[data-lang] { display: none; }
-        body.lang-en li[data-lang="en"], body.lang-ko li[data-lang="ko"],
-        body.lang-zh-Hans li[data-lang="zh-Hans"], body.lang-zh-Hant li[data-lang="zh-Hant"] { display: list-item; }
-        body.lang-en span[data-lang="en"], body.lang-ko span[data-lang="ko"],
-        body.lang-zh-Hans span[data-lang="zh-Hans"], body.lang-zh-Hant span[data-lang="zh-Hant"] { display: inline; }
+        body.lang-en li[data-lang="en"], body.lang-ko li[data-lang="ko"], body.lang-ja li[data-lang="ja"], body.lang-zh-Hans li[data-lang="zh-Hans"], body.lang-zh-Hant li[data-lang="zh-Hant"], body.lang-de li[data-lang="de"], body.lang-fr li[data-lang="fr"], body.lang-es li[data-lang="es"], body.lang-pt-BR li[data-lang="pt-BR"], body.lang-pt-PT li[data-lang="pt-PT"], body.lang-it li[data-lang="it"] { display: list-item; }
+        body.lang-en span[data-lang="en"], body.lang-ko span[data-lang="ko"], body.lang-ja span[data-lang="ja"], body.lang-zh-Hans span[data-lang="zh-Hans"], body.lang-zh-Hant span[data-lang="zh-Hant"], body.lang-de span[data-lang="de"], body.lang-fr span[data-lang="fr"], body.lang-es span[data-lang="es"], body.lang-pt-BR span[data-lang="pt-BR"], body.lang-pt-PT span[data-lang="pt-PT"], body.lang-it span[data-lang="it"] { display: inline; }
 
         @media (max-width: 560px) {
             h1 { font-size: 30px; }
@@ -144,10 +140,29 @@
         }
 
         /* No-JS / pre-hydration fallback: show English */
-        body:not(.lang-en):not(.lang-ko):not(.lang-zh-Hans):not(.lang-zh-Hant) div[data-lang="en"] { display: block; }
-        body:not(.lang-en):not(.lang-ko):not(.lang-zh-Hans):not(.lang-zh-Hant) li[data-lang="en"] { display: list-item; }
-        body:not(.lang-en):not(.lang-ko):not(.lang-zh-Hans):not(.lang-zh-Hant) span[data-lang="en"] { display: inline; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it) div[data-lang="en"] { display: block; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it) li[data-lang="en"] { display: list-item; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it) span[data-lang="en"] { display: inline; }
+
+        /* 언어별 페이지 링크 — 같은 글의 다른 언어 주소. scripts/build-lang-pages.py 가 언어 폴더마다 같은 줄을 만든다. */
+        .lang-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; margin: 14px auto 0; padding: 0 16px; font-size: 13px; }
+        .lang-links a { color: inherit; opacity: .75; text-decoration: none; }
+        .lang-links a:hover { opacity: 1; text-decoration: underline; }
+        .lang-links a[aria-current] { opacity: 1; font-weight: 600; }
     </style>
+    <link rel="canonical" href="https://m1zz.github.io/Rereminder/privacy.html">
+    <link rel="alternate" hreflang="ko" href="https://m1zz.github.io/Rereminder/ko/privacy.html">
+    <link rel="alternate" hreflang="en" href="https://m1zz.github.io/Rereminder/en/privacy.html">
+    <link rel="alternate" hreflang="ja" href="https://m1zz.github.io/Rereminder/ja/privacy.html">
+    <link rel="alternate" hreflang="zh-Hans" href="https://m1zz.github.io/Rereminder/zh-Hans/privacy.html">
+    <link rel="alternate" hreflang="zh-Hant" href="https://m1zz.github.io/Rereminder/zh-Hant/privacy.html">
+    <link rel="alternate" hreflang="de" href="https://m1zz.github.io/Rereminder/de/privacy.html">
+    <link rel="alternate" hreflang="fr" href="https://m1zz.github.io/Rereminder/fr/privacy.html">
+    <link rel="alternate" hreflang="es" href="https://m1zz.github.io/Rereminder/es/privacy.html">
+    <link rel="alternate" hreflang="pt-BR" href="https://m1zz.github.io/Rereminder/pt-BR/privacy.html">
+    <link rel="alternate" hreflang="pt-PT" href="https://m1zz.github.io/Rereminder/pt-PT/privacy.html">
+    <link rel="alternate" hreflang="it" href="https://m1zz.github.io/Rereminder/it/privacy.html">
+    <link rel="alternate" hreflang="x-default" href="https://m1zz.github.io/Rereminder/privacy.html">
 </head>
 <body>
 <nav>
@@ -157,12 +172,7 @@
             <a href="./">Home</a>
             <a href="support.html">Support</a>
             <a href="privacy.html" aria-current="page">Privacy</a>
-            <div class="lang" role="group" aria-label="Language">
-                <button type="button" data-set-lang="en" aria-pressed="true">EN</button>
-                <button type="button" data-set-lang="ko" aria-pressed="false">한국어</button>
-                <button type="button" data-set-lang="zh-Hans" aria-pressed="false">简体</button>
-                <button type="button" data-set-lang="zh-Hant" aria-pressed="false">繁體</button>
-            </div>
+            <select class="lang" id="lang-select" aria-label="Language"><option value="en">English</option><option value="ko">한국어</option><option value="ja">日本語</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="pt-BR">Português (Brasil)</option><option value="pt-PT">Português (Portugal)</option><option value="it">Italiano</option></select>
         </div>
     </div>
 </nav>
@@ -545,6 +555,657 @@
     <p>關於以上任何一點的疑問 &mdash; 包括「你為什麼需要那個？」 &mdash; 請寄到 <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>。也可以參考<a href="support.html">支援頁面</a>。</p>
 </div>
 
+<div data-lang="ja">
+    <h1>プライバシーポリシー</h1>
+    <p class="lede">Rereminder は Hyunho Lee が開発しています。このページでは、何があなたの iPhone の外に出て、何が出ないのかを正確に説明します。</p>
+    <p class="updated">最終更新日：2026年9月9日 &middot; 対象アプリバージョン 2.2.6</p>
+
+    <h2>要約</h2>
+    <div class="note">
+        <p><strong>あなたが書いたものはすべて iPhone の中に残ります。</strong>タイマー名、アラートメッセージ、区間のタイトル、プレゼンテーションの原稿、履歴 &mdash; どれもどこにも送信されることはありません。</p>
+        <p><strong>アプリは匿名の数値を私に送信します。</strong>「開始したタイマーの数」「最後まで動いたタイマーの数」といった回数で、あなたとは無関係なランダムな ID に紐づいています。何を直すかはこれをもとに決めています。詳しくは以下に記載しています。</p>
+        <p><strong>広告も、トラッカーも、サードパーティの分析 SDK もありません。</strong>何かを販売したり、誰かと共有したりすることはありません。</p>
+    </div>
+
+    <h2>デバイスに残るもの</h2>
+    <p>以下はデバイス内に保存され、<strong>私に送信されることはありません</strong>。</p>
+    <ul>
+        <li><strong>タイマーの設定</strong> &mdash; 長さ、各アラートを置いた位置、カスタマイズしたアラートメッセージ。</li>
+        <li><strong>テンプレート</strong> &mdash; 保存した設定とその名前。</li>
+        <li><strong>セッションの内容</strong> &mdash; 区間名と、区間ごとに書いた原稿やメモ。</li>
+        <li><strong>履歴</strong> &mdash; 実行したセッションの記録。</li>
+        <li><strong>環境設定</strong> &mdash; テーマカラー、サウンドと振動のモード、持っているとアプリに伝えたデバイス。</li>
+        <li><strong>購入状況</strong> &mdash; Rereminder Pro を所有しているかどうか。iOS のキーチェーンに保存されます。</li>
+    </ul>
+    <p>アプリを削除すると、これらはすべて削除されます。</p>
+
+    <h2>アプリが私に送信するもの</h2>
+    <p>すべて<strong>私が所有する CloudKit データベース</strong>（コンテナ <code>iCloud.com.Ysoup.FeedbackHub</code>）に送られます。ほかのサーバーはなく、ほかの企業がこれを受け取ることもありません。</p>
+
+    <h3>1. 匿名の利用回数</h3>
+    <p>インストールごとに1件の記録で、更新は多くても1日2回です。内容は次のとおりです。</p>
+    <ul>
+        <li>初回起動時に<strong>アプリが自分で生成するランダムな ID</strong>。これはあなたの Apple アカウントでもデバイスの識別子でもなく、あなたに関する何とも結びついていません。アプリを削除すると ID も消え、再インストールすると、以前とつながりのない新しい ID が作られます。</li>
+        <li>アプリのバージョン、プラットフォーム（iPhone / Watch / Mac）、OS のバージョン、言語設定。</li>
+        <li><strong>回数、そして回数だけ</strong> &mdash; 開始・完了・キャンセルしたタイマーの数、管理した合計時間（分）、一般的なタイマーのアラート数、保存・使用したテンプレートの数、セッションモードを使ったことがあるか、ウォッチを使ったことがあるか、インストールからの日数、アプリが最後に使われた時期。</li>
+        <li>はい/いいえのフラグ2つ：Pro を購入したかどうか、通知の許可があるかどうか。</li>
+    </ul>
+
+    <h3>2. 匿名のイベント</h3>
+    <p>アプリが開かれた、タイマーが開始された、購入画面が表示された &mdash; といった注目すべきことが起きると、アプリは<strong>そのイベントの名前</strong>を、アプリのバージョン、プラットフォーム、同じランダムな ID、タイムスタンプとともに記録します。各イベント名は<strong>多くても6時間に1回</strong>しか記録されないため、これが示すのは何かが起きる<em>かどうか</em>であり、その頻度ではありません。</p>
+
+    <h3>3. あなたが送ることを選んだフィードバック</h3>
+    <p><span class="ui">フィードバックを送信</span>を開いて送信ボタンを押したときだけです。その記録には次のものが含まれます。</p>
+    <ul>
+        <li><strong>あなたのメッセージ</strong>と、選んだカテゴリ。</li>
+        <li><strong>名前と返信先メールアドレス &mdash; どちらも任意で、初期状態では空欄です。</strong>返事がほしい場合にだけ入力してください。あなたへの返信にのみ使い、それ以外には使いません。</li>
+        <li><strong>デバイス情報1行</strong> &mdash; アプリのバージョン、デバイスの種類、OS のバージョン。例：<code>App 2.2.6 | iPhone | iOS 26.1</code>。これはデバイスの<em>種類</em>であり、<em>どの</em>デバイスかではありません。あなた固有の情報は含まれていません。送信前に、フォームでこの1行がそのまま表示されます。</li>
+        <li>言語設定（例：<code>ko_KR</code>）とプラットフォーム。</li>
+    </ul>
+    <p>送信を押さない限り、その画面から何も出ていきません。「アプリを楽しんでいますか？」の表示で 👍 をタップすると App Store のレビュー画面が開くだけで、私には何も送られません。👎 はこの同じフィードバックフォームを開くだけです。</p>
+
+    <h3>4. クラッシュとフリーズのレポート</h3>
+    <p><strong>Apple の MetricKit</strong> を通じて収集されます。MetricKit は OS レベルでクラッシュとパフォーマンスのデータを集計します。これにはスタックトレースとタイミングが含まれますが、タイマーの内容が含まれることはありません。</p>
+
+    <div class="note">
+        <p><strong>ひとつ明記しておくこと：</strong>デバイスが上記のいずれかを CloudKit に書き込むとき、Apple はその記録に、アプリごとの不透明な iCloud 識別子を付けます。これは Apple が生成するもので、アプリごとに異なり、あなたのメールアドレスではありません。私はこれを使ってあなたに連絡したり、ほかの場所であなたを調べたりすることはできません。これは CloudKit の仕組み上生じるもので、アプリが意図的に収集しているものではありません。</p>
+    </div>
+
+    <h2>どんな場合でも送信されないもの</h2>
+    <ul>
+        <li>タイマー名、アラートメッセージ、区間のタイトル、プレゼンテーションの原稿 &mdash; <strong>あなたが入力したあらゆるテキスト。</strong></li>
+        <li>あなたの名前やメールアドレス &mdash; ただし、上記のフィードバックフォームにある任意の2項目は除きます。これはあなた自身が入力するもので、空欄のままにできます。</li>
+        <li>広告識別子（IDFA）、デバイスのベンダー識別子（IDFV）、その他のデバイスフィンガープリント。</li>
+        <li>位置情報、連絡先、写真、カレンダー、ヘルスケアデータ、マイク。</li>
+    </ul>
+
+    <h2>あなた自身のデバイス間の同期</h2>
+    <p>iPhone、Apple Watch、Mac はタイマーの状態をそろえます。これは<strong>あなた自身の iCloud アカウントと Apple の WatchConnectivity</strong> で動作し、データは私を経由せず、あなたの iCloud を通じてデバイスからデバイスへ移動します。<strong>私はその内容を一切読めません。</strong>含まれるのは、動作中のタイマーの状態と名前、そしてアプリの接続状態に表示されるデバイス名です。</p>
+    <p>iCloud Drive をオフにするとこの同期は止まり、アプリは各デバイスで単独で動き続けます。</p>
+
+    <h2>第三者と支払い</h2>
+    <p>Rereminder は<strong>サードパーティの分析、広告、トラッキングサービスを一切組み込んでいません</strong>。データを販売、貸与、またはほかの企業と共有することはありません。</p>
+    <p>Rereminder Pro は<strong>すべて Apple が処理する買い切りの購入</strong>です。私があなたの支払い情報を見ることはなく、わかるのは購入があるかどうかだけです。</p>
+
+    <h2>通知</h2>
+    <p>すべてのアラートは、デバイス上でスケジュールされる<strong>ローカル通知</strong>です。プッシュサーバーはなく、通知の内容が私に届くことはありません。</p>
+
+    <h2>保存期間と停止方法</h2>
+    <ul>
+        <li><strong>アプリを削除すると、すべての収集がただちに止まり</strong>、デバイスに保存されたすべてのものとともにランダムな ID も削除されます。</li>
+        <li>匿名の利用記録は、何を作るかを決めるのに役立つ間は保持し、役立たなくなったら削除します。あなたにたどり着く識別子を含まないため、ご依頼を受けても「あなたの」記録を特定する方法がありません。これは、この記録であなたを特定できないのと同じ理由です。</li>
+        <li><strong>送信したフィードバックは別です</strong> &mdash; あなたが書いたものなので、私は見つけられます。メールをいただければ削除します。</li>
+        <li>利用回数の収集とクラッシュレポートは、全員分を遠隔で停止できます。価値がなくなったと判断すれば、そうします。</li>
+    </ul>
+
+    <h2>子どものプライバシー</h2>
+    <p>Rereminder は、子どもを含め、誰からも個人データを意図的に収集しません。アカウントは不要で、個人情報を求めることもなく、ソーシャル機能、チャット、ユーザー間のコンテンツもありません。</p>
+
+    <h2>このポリシーの変更</h2>
+    <p>アプリが収集するものが変われば、このページもそれに合わせて変わり、冒頭の日付が更新されます。重要な変更は、その変更を行うバージョンのリリースノートにも記載します。</p>
+
+    <h2>お問い合わせ</h2>
+    <p>ここに書いたことについてのご質問は &mdash;「なぜそれが必要なのか？」も含めて &mdash; <a href="mailto:leeo@kakao.com">leeo@kakao.com</a> までお寄せください。<a href="support.html">サポートページ</a>もあわせてご覧ください。</p>
+</div>
+
+<div data-lang="de">
+    <h1>Datenschutzerklärung</h1>
+    <p class="lede">Rereminder wird von Hyunho Lee entwickelt. Diese Seite sagt genau, was dein Telefon verlässt und was nicht.</p>
+    <p class="updated">Zuletzt aktualisiert: 9. September 2026 &middot; Gilt für App-Version 2.2.6</p>
+
+    <h2>Die Kurzfassung</h2>
+    <div class="note">
+        <p><strong>Alles, was du schreibst, bleibt auf deinem Telefon.</strong> Timer-Namen, Erinnerungstexte, Abschnittstitel, Präsentationsskripte, Verlauf &mdash; nichts davon wird jemals irgendwohin gesendet.</p>
+        <p><strong>Die App sendet mir anonyme Zahlen.</strong> Zählwerte wie „wie viele Timer gestartet wurden“ und „wie viele bis zum Ende liefen“, verknüpft mit einer zufälligen ID, die nicht du bist. So entscheide ich, was ich verbessere. Das ist unten vollständig beschrieben.</p>
+        <p><strong>Es gibt keine Werbung, keine Tracker und keine Analyse-SDKs von Drittanbietern.</strong> Nichts wird verkauft oder an irgendjemanden weitergegeben.</p>
+    </div>
+
+    <h2>Was auf deinem Gerät bleibt</h2>
+    <p>Folgendes wird lokal gespeichert und <strong>niemals an mich übertragen</strong>:</p>
+    <ul>
+        <li><strong>Timer-Einstellungen</strong> &mdash; Dauer, wo du jede Erinnerung platziert hast, eigene Erinnerungstexte.</li>
+        <li><strong>Vorlagen</strong> &mdash; gespeicherte Setups und ihre Namen.</li>
+        <li><strong>Session-Inhalte</strong> &mdash; Abschnittsnamen und die Skripte oder Notizen, die du für jeden Abschnitt schreibst.</li>
+        <li><strong>Verlauf</strong> &mdash; Aufzeichnungen der Sessions, die du durchgeführt hast.</li>
+        <li><strong>Einstellungen</strong> &mdash; Designfarbe, Ton- und Vibrationsmodus, welche Geräte du laut deiner Angabe in der App besitzt.</li>
+        <li><strong>Kaufstatus</strong> &mdash; ob du Rereminder Pro besitzt, gespeichert im iOS-Schlüsselbund.</li>
+    </ul>
+    <p>Wenn du die App löschst, wird all das gelöscht.</p>
+
+    <h2>Was die App mir sendet</h2>
+    <p>All das geht an eine <strong>CloudKit-Datenbank, die mir gehört</strong> (Container <code>iCloud.com.Ysoup.FeedbackHub</code>). Es gibt keinen anderen Server, und kein anderes Unternehmen erhält irgendetwas davon.</p>
+
+    <h3>1. Anonyme Nutzungszahlen</h3>
+    <p>Ein Datensatz pro Installation, höchstens zweimal am Tag aktualisiert. Er enthält:</p>
+    <ul>
+        <li>Eine <strong>zufällige ID, die die App beim ersten Start selbst erzeugt</strong>. Sie ist nicht dein Apple Account, nicht die Kennung deines Geräts und mit nichts verknüpft, was dich betrifft. Löschst du die App, ist die ID weg; bei einer Neuinstallation entsteht eine neue, nicht verbundene ID.</li>
+        <li>App-Version, Plattform (iPhone / Watch / Mac), Betriebssystemversion und Spracheinstellung.</li>
+        <li><strong>Zählwerte und nichts als Zählwerte</strong> &mdash; gestartete, abgeschlossene und abgebrochene Timer; insgesamt verwaltete Minuten; wie viele Erinnerungen ein typischer Timer hatte; gespeicherte und verwendete Vorlagen; ob der Session-Modus verwendet wurde; ob die Watch verwendet wurde; Tage seit der Installation; wann die App zuletzt aktiv war.</li>
+        <li>Zwei Ja/Nein-Werte: ob Pro gekauft wurde und ob die Mitteilungsberechtigung erteilt ist.</li>
+    </ul>
+
+    <h3>2. Anonyme Ereignisse</h3>
+    <p>Wenn etwas Bemerkenswertes passiert &mdash; die App wurde geöffnet, ein Timer wurde gestartet, die Bezahlseite wurde angezeigt &mdash; speichert die App den <strong>Namen dieses Ereignisses</strong> zusammen mit App-Version, Plattform, derselben zufälligen ID und einem Zeitstempel. Jeder Ereignisname wird <strong>höchstens einmal alle sechs Stunden</strong> erfasst, diese Daten zeigen also, <em>ob</em> etwas passiert, niemals wie oft.</p>
+
+    <h3>3. Feedback, das du selbst sendest</h3>
+    <p>Nur wenn du <span class="ui">Feedback senden</span> öffnest und auf Senden tippst. Dieser Datensatz enthält:</p>
+    <ul>
+        <li><strong>Deine Nachricht</strong> und die gewählte Kategorie.</li>
+        <li><strong>Einen Namen und eine E-Mail-Adresse für die Antwort &mdash; beides optional und standardmäßig leer.</strong> Füll sie nur aus, wenn du eine Antwort möchtest. Sie werden ausschließlich verwendet, um dir zu antworten.</li>
+        <li><strong>Eine Gerätezeile</strong> &mdash; App-Version, Geräteart, Betriebssystemversion, etwa <code>App 2.2.6 | iPhone | iOS 26.1</code>. Das ist die <em>Art</em> des Geräts, nicht <em>welches</em> Gerät; nichts darin ist eindeutig dir zuzuordnen. Das Formular zeigt dir genau diese Zeile vor dem Senden.</li>
+        <li>Deine Spracheinstellung (zum Beispiel <code>ko_KR</code>) und die Plattform.</li>
+    </ul>
+    <p>Nichts verlässt diesen Bildschirm, solange du nicht auf Senden tippst. Ein Tipp auf 👍 bei der Frage „Gefällt dir die App?“ öffnet das App-Store-Bewertungsfenster und sendet mir nichts; 👎 öffnet einfach dasselbe Feedback-Formular.</p>
+
+    <h3>4. Absturz- und Hänger-Berichte</h3>
+    <p>Erfasst über <strong>Apples MetricKit</strong>, das Absturz- und Leistungsdaten auf Betriebssystemebene zusammenfasst. Diese enthalten Stacktraces und Zeitangaben, niemals den Inhalt deiner Timer.</p>
+
+    <div class="note">
+        <p><strong>Eine Sache sollte ausdrücklich erwähnt werden:</strong> Wenn dein Gerät etwas von dem oben Genannten in CloudKit schreibt, versieht Apple den Datensatz mit einer undurchsichtigen, app-spezifischen iCloud-Kennung. Sie wird von Apple erzeugt, ist für jede App anders, ist nicht deine E-Mail-Adresse, und ich kann sie weder nutzen, um dich zu kontaktieren, noch um dich anderswo ausfindig zu machen. Sie ist eine Nebenwirkung der Funktionsweise von CloudKit, nicht etwas, das die App absichtlich erfasst.</p>
+    </div>
+
+    <h2>Was unter keinen Umständen gesendet wird</h2>
+    <ul>
+        <li>Timer-Namen, Erinnerungstexte, Abschnittstitel, Präsentationsskripte &mdash; <strong>jeglicher Text, den du eingibst.</strong></li>
+        <li>Dein Name oder deine E-Mail-Adresse &mdash; mit Ausnahme der beiden optionalen Felder im oben genannten Feedback-Formular, die du selbst ausfüllst und leer lassen kannst.</li>
+        <li>Werbe-IDs (IDFA), die Anbieterkennung deines Geräts (IDFV) oder irgendein Geräte-Fingerabdruck.</li>
+        <li>Standort, Kontakte, Fotos, Kalender, Gesundheitsdaten oder Mikrofon.</li>
+    </ul>
+
+    <h2>Synchronisierung zwischen deinen eigenen Geräten</h2>
+    <p>Dein iPhone, deine Apple Watch und dein Mac halten Timer untereinander auf dem gleichen Stand. Das läuft über <strong>deinen eigenen iCloud-Account und Apples WatchConnectivity</strong> &mdash; die Daten gehen über deine iCloud von Gerät zu Gerät, nicht über mich. <strong>Ich kann nichts davon lesen.</strong> Dazu gehören der Status und Name des laufenden Timers sowie der Gerätename, der im Verbindungsstatus der App angezeigt wird.</p>
+    <p>Wenn du iCloud Drive ausschaltest, endet diese Synchronisierung; die App funktioniert auf jedem Gerät für sich weiter.</p>
+
+    <h2>Drittanbieter und Zahlungen</h2>
+    <p>Rereminder bindet <strong>keine Analyse-, Werbe- oder Tracking-Dienste von Drittanbietern</strong> ein. Keine Daten werden verkauft, vermietet oder an andere Unternehmen weitergegeben.</p>
+    <p>Rereminder Pro ist ein <strong>einmaliger Kauf, der vollständig von Apple abgewickelt wird</strong>. Ich sehe deine Zahlungsdaten nie &mdash; nur, ob ein Kauf existiert.</p>
+
+    <h2>Mitteilungen</h2>
+    <p>Alle Erinnerungen sind <strong>lokale Mitteilungen</strong>, die auf deinem Gerät geplant werden. Es gibt keinen Push-Server, und kein Mitteilungsinhalt erreicht jemals mich.</p>
+
+    <h2>Wie lange Daten gespeichert werden und wie du die Erfassung beendest</h2>
+    <ul>
+        <li><strong>Wenn du die App löschst, endet jede Erfassung sofort</strong>, und die zufällige ID wird zusammen mit allem, was auf dem Gerät gespeichert ist, entfernt.</li>
+        <li>Anonyme Nutzungsdatensätze werden aufbewahrt, solange sie hilfreich sind, um zu entscheiden, was entwickelt wird, und gelöscht, wenn sie es nicht mehr sind. Da sie keine Kennung enthalten, die zu dir zurückführt, habe ich keine Möglichkeit, auf Anfrage „deine“ Einträge herauszufinden &mdash; aus demselben Grund können sie auch nicht verwendet werden, um dich zu identifizieren.</li>
+        <li><strong>Feedback, das du gesendet hast, ist etwas anderes</strong> &mdash; du hast es geschrieben, also kann ich es finden. Schreib mir eine E-Mail, und ich lösche es.</li>
+        <li>Ich kann die Nutzungserfassung und die Absturzberichte für alle aus der Ferne abschalten und werde das tun, falls es sich irgendwann nicht mehr lohnt.</li>
+    </ul>
+
+    <h2>Datenschutz bei Kindern</h2>
+    <p>Rereminder erfasst wissentlich keine personenbezogenen Daten von irgendjemandem, auch nicht von Kindern. Die App benötigt kein Konto, fragt keine persönlichen Informationen ab und hat keine sozialen Funktionen, keinen Chat und keine Inhalte zwischen Nutzern.</p>
+
+    <h2>Änderungen dieser Erklärung</h2>
+    <p>Wenn sich ändert, was die App erfasst, ändert sich diese Seite mit, und das Datum oben wird aktualisiert. Wesentliche Änderungen werden außerdem in den Versionshinweisen der Version genannt, die sie einführt.</p>
+
+    <h2>Kontakt</h2>
+    <p>Fragen zu all dem &mdash; auch „Wozu brauchst du das?“ &mdash; richte an <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Siehe auch die <a href="support.html">Support-Seite</a>.</p>
+</div>
+
+<div data-lang="fr">
+    <h1>Politique de confidentialité</h1>
+    <p class="lede">Rereminder est développé par Hyunho Lee. Cette page indique précisément ce qui quitte votre téléphone et ce qui n’en sort pas.</p>
+    <p class="updated">Dernière mise à jour : 9 septembre 2026 &middot; S’applique à la version 2.2.6 de l’app</p>
+
+    <h2>En bref</h2>
+    <div class="note">
+        <p><strong>Tout ce que vous écrivez reste sur votre téléphone.</strong> Noms de minuteurs, messages d’alerte, titres de parties, notes de présentation, historique &mdash; rien de tout cela n’est jamais envoyé nulle part.</p>
+        <p><strong>L’app m’envoie en revanche des chiffres anonymes.</strong> Des compteurs comme « combien de minuteurs ont été lancés » et « combien sont allés jusqu’au bout », associés à un identifiant aléatoire qui n’est pas vous. C’est ainsi que je décide quoi corriger. Tout est décrit en détail ci-dessous.</p>
+        <p><strong>Il n’y a ni publicité, ni traceur, ni SDK d’analyse tiers.</strong> Rien n’est vendu ni partagé avec qui que ce soit.</p>
+    </div>
+
+    <h2>Ce qui reste sur votre appareil</h2>
+    <p>Les éléments suivants sont stockés localement et ne me sont <strong>jamais transmis</strong> :</p>
+    <ul>
+        <li><strong>Réglages des minuteurs</strong> &mdash; durées, emplacement de chaque alerte, messages d’alerte personnalisés.</li>
+        <li><strong>Modèles</strong> &mdash; réglages enregistrés et leurs noms.</li>
+        <li><strong>Contenu des séances</strong> &mdash; noms des parties et notes que vous rédigez pour chaque partie.</li>
+        <li><strong>Historique</strong> &mdash; relevé des séances que vous avez menées.</li>
+        <li><strong>Préférences</strong> &mdash; couleur du thème, mode son ou vibration, appareils que vous avez déclaré posséder dans l’app.</li>
+        <li><strong>État de l’achat</strong> &mdash; si vous possédez Rereminder Pro, stocké dans le trousseau iOS.</li>
+    </ul>
+    <p>Supprimer l’app efface tout cela.</p>
+
+    <h2>Ce que l’app m’envoie</h2>
+    <p>Tout est envoyé vers une <strong>base de données CloudKit qui m’appartient</strong> (conteneur <code>iCloud.com.Ysoup.FeedbackHub</code>). Il n’y a aucun autre serveur, et aucune autre entreprise n’en reçoit quoi que ce soit.</p>
+
+    <h3>1. Statistiques d’utilisation anonymes</h3>
+    <p>Un enregistrement par installation, mis à jour au plus deux fois par jour. Il contient :</p>
+    <ul>
+        <li>Un <strong>identifiant aléatoire que l’app génère elle-même</strong> au premier lancement. Ce n’est ni votre compte Apple, ni l’identifiant de votre appareil, et il n’est lié à rien qui vous concerne. Supprimez l’app et l’identifiant disparaît ; une réinstallation en crée un nouveau, sans lien avec l’ancien.</li>
+        <li>La version de l’app, la plateforme (iPhone / Watch / Mac), la version du système et le réglage de langue.</li>
+        <li><strong>Des compteurs, et rien que des compteurs</strong> &mdash; minuteurs lancés, terminés et annulés ; nombre total de minutes gérées ; nombre d’alertes d’un minuteur type ; modèles enregistrés et utilisés ; si le mode Séance a été utilisé ; si la montre a été utilisée ; jours depuis l’installation ; date de dernière activité de l’app.</li>
+        <li>Deux indicateurs oui/non : si Pro a été acheté, et si l’autorisation des notifications est accordée.</li>
+    </ul>
+
+    <h3>2. Événements anonymes</h3>
+    <p>Quand quelque chose de notable se produit &mdash; l’app a été ouverte, un minuteur a été lancé, l’écran d’achat a été affiché &mdash; l’app enregistre le <strong>nom de cet événement</strong> avec la version de l’app, la plateforme, le même identifiant aléatoire et un horodatage. Chaque nom d’événement est enregistré <strong>au plus une fois toutes les six heures</strong> : ces données montrent donc <em>si</em> quelque chose se produit, jamais à quelle fréquence.</p>
+
+    <h3>3. Les commentaires que vous choisissez d’envoyer</h3>
+    <p>Uniquement lorsque vous ouvrez <span class="ui">Envoyer un avis</span> et appuyez sur Envoyer. Cet enregistrement contient :</p>
+    <ul>
+        <li><strong>Votre message</strong> et la catégorie choisie.</li>
+        <li><strong>Un nom et un e-mail de réponse &mdash; tous deux facultatifs et vides par défaut.</strong> Ne les remplissez que si vous souhaitez une réponse. Ils servent à vous répondre et à rien d’autre.</li>
+        <li><strong>Une ligne sur l’appareil</strong> &mdash; version de l’app, type d’appareil, version du système, par exemple <code>App 2.2.6 | iPhone | iOS 26.1</code>. Il s’agit du <em>type</em> d’appareil, pas de <em>votre</em> appareil ; rien dans cette ligne ne vous est propre. Le formulaire vous montre cette ligne exacte avant l’envoi.</li>
+        <li>Votre réglage de langue (par exemple <code>ko_KR</code>) et la plateforme.</li>
+    </ul>
+    <p>Rien ne quitte cet écran tant que vous n’appuyez pas sur Envoyer. Toucher 👍 à la question « l’app vous plaît ? » ouvre la fenêtre d’avis de l’App Store et ne m’envoie rien ; 👎 ouvre simplement ce même formulaire de commentaire.</p>
+
+    <h3>4. Rapports de plantage et de blocage</h3>
+    <p>Collectés via <strong>MetricKit d’Apple</strong>, qui agrège les données de plantage et de performance au niveau du système. Ils contiennent des traces d’appels et des mesures de temps, jamais le contenu de vos minuteurs.</p>
+
+    <div class="note">
+        <p><strong>Un point mérite d’être mentionné :</strong> lorsque votre appareil écrit l’une des données ci-dessus dans CloudKit, Apple associe à l’enregistrement un identifiant iCloud opaque, propre à chaque app. Il est généré par Apple, diffère pour chaque app, n’est pas votre adresse e-mail, et je ne peux pas l’utiliser pour vous contacter ni pour vous retrouver ailleurs. C’est un effet du fonctionnement de CloudKit, pas une donnée que l’app collecte délibérément.</p>
+    </div>
+
+    <h2>Ce qui n’est jamais envoyé, en aucune circonstance</h2>
+    <ul>
+        <li>Noms de minuteurs, messages d’alerte, titres de parties, notes de présentation &mdash; <strong>tout texte que vous saisissez.</strong></li>
+        <li>Votre nom ou votre adresse e-mail &mdash; sauf les deux champs facultatifs du formulaire de commentaire ci-dessus, que vous remplissez vous-même et pouvez laisser vides.</li>
+        <li>Les identifiants publicitaires (IDFA), l’identifiant fournisseur de votre appareil (IDFV) ou toute empreinte de l’appareil.</li>
+        <li>La localisation, les contacts, les photos, le calendrier, les données de santé ou le micro.</li>
+    </ul>
+
+    <h2>Synchronisation entre vos propres appareils</h2>
+    <p>Votre iPhone, votre Apple Watch et votre Mac gardent leurs minuteurs synchronisés. Cela passe par <strong>votre propre compte iCloud et WatchConnectivity d’Apple</strong> &mdash; les données vont d’un appareil à l’autre via votre iCloud, pas par moi. <strong>Je ne peux rien en lire.</strong> Elles comprennent l’état et le nom du minuteur en cours ainsi que le nom de l’appareil affiché dans l’état de connexion de l’app.</p>
+    <p>Désactiver iCloud Drive arrête cette synchronisation ; l’app continue de fonctionner indépendamment sur chaque appareil.</p>
+
+    <h2>Tiers et paiements</h2>
+    <p>Rereminder n’intègre <strong>aucun service tiers d’analyse, de publicité ou de suivi</strong>. Aucune donnée n’est vendue, louée ni partagée avec une autre entreprise.</p>
+    <p>Rereminder Pro est un <strong>achat unique entièrement géré par Apple</strong>. Je ne vois jamais vos informations de paiement &mdash; seulement l’existence d’un achat.</p>
+
+    <h2>Notifications</h2>
+    <p>Toutes les alertes sont des <strong>notifications locales</strong> programmées sur votre appareil. Il n’y a pas de serveur de notifications push, et aucun contenu de notification ne me parvient jamais.</p>
+
+    <h2>Durée de conservation et comment tout arrêter</h2>
+    <ul>
+        <li><strong>Supprimer l’app arrête immédiatement toute collecte</strong> et efface l’identifiant aléatoire ainsi que tout ce qui est stocké sur l’appareil.</li>
+        <li>Les statistiques d’utilisation anonymes sont conservées tant qu’elles sont utiles pour décider quoi développer, puis supprimées lorsqu’elles ne le sont plus. Comme elles ne portent aucun identifiant permettant de remonter jusqu’à vous, je n’ai aucun moyen d’isoler « vos » lignes sur demande &mdash; et c’est pour la même raison qu’elles ne peuvent pas servir à vous identifier.</li>
+        <li><strong>Les commentaires que vous avez envoyés sont différents</strong> &mdash; vous les avez écrits, je peux donc les retrouver. Écrivez-moi et je les supprimerai.</li>
+        <li>Je peux désactiver à distance, pour tout le monde, la collecte des statistiques d’utilisation et les rapports de plantage, et je le ferai si cela cesse un jour d’en valoir la peine.</li>
+    </ul>
+
+    <h2>Confidentialité des enfants</h2>
+    <p>Rereminder ne collecte sciemment de données personnelles auprès de personne, enfants compris. L’app ne demande aucun compte ni aucune information personnelle, et n’a aucune fonction sociale, messagerie ou contenu échangé entre utilisateurs.</p>
+
+    <h2>Modifications de cette politique</h2>
+    <p>Si ce que l’app collecte change, cette page change aussi et la date en haut est mise à jour. Les changements importants figureront également dans les notes de version de la version qui les introduit.</p>
+
+    <h2>Contact</h2>
+    <p>Pour toute question à ce sujet &mdash; y compris « pourquoi avez-vous besoin de ça ? » &mdash; écrivez à <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Voir aussi la <a href="support.html">page d’assistance</a>.</p>
+</div>
+
+<div data-lang="es">
+    <h1>Política de privacidad</h1>
+    <p class="lede">Rereminder lo desarrolla Hyunho Lee. Esta página explica exactamente qué sale de tu teléfono y qué no.</p>
+    <p class="updated">Última actualización: 9 de septiembre de 2026 &middot; Se aplica a la versión 2.2.6 de la app</p>
+
+    <h2>La versión corta</h2>
+    <div class="note">
+        <p><strong>Todo lo que escribes se queda en tu teléfono.</strong> Nombres de temporizadores, mensajes de aviso, títulos de sección, guiones de presentación, historial &mdash; nada de eso se envía jamás a ningún sitio.</p>
+        <p><strong>La app sí me envía números anónimos.</strong> Recuentos como "cuántos temporizadores se iniciaron" y "cuántos llegaron al final", asociados a un ID aleatorio que no eres tú. Así decido qué arreglar. Se describe al completo más abajo.</p>
+        <p><strong>No hay anuncios, ni rastreadores, ni SDK de analítica de terceros.</strong> Nada se vende ni se comparte con nadie.</p>
+    </div>
+
+    <h2>Qué se queda en tu dispositivo</h2>
+    <p>Lo siguiente se guarda localmente y <strong>nunca se me transmite</strong>:</p>
+    <ul>
+        <li><strong>Ajustes del temporizador</strong> &mdash; duraciones, dónde colocaste cada aviso, mensajes de aviso personalizados.</li>
+        <li><strong>Plantillas</strong> &mdash; configuraciones guardadas y sus nombres.</li>
+        <li><strong>Contenido de sesión</strong> &mdash; nombres de sección y los guiones o notas que escribes para cada sección.</li>
+        <li><strong>Historial</strong> &mdash; registros de las sesiones que has hecho.</li>
+        <li><strong>Preferencias</strong> &mdash; color del tema, modo de sonido y vibración, qué dispositivos le dijiste a la app que tienes.</li>
+        <li><strong>Estado de compra</strong> &mdash; si tienes Rereminder Pro, guardado en el llavero (Keychain) de iOS.</li>
+    </ul>
+    <p>Al borrar la app se borra todo.</p>
+
+    <h2>Qué me envía la app</h2>
+    <p>Todo va a una <strong>base de datos de CloudKit de mi propiedad</strong> (contenedor <code>iCloud.com.Ysoup.FeedbackHub</code>). No hay ningún otro servidor, y ninguna otra empresa recibe nada de ello.</p>
+
+    <h3>1. Recuentos de uso anónimos</h3>
+    <p>Un registro por instalación, actualizado como máximo dos veces al día. Contiene:</p>
+    <ul>
+        <li>Un <strong>ID aleatorio que la app genera por sí misma</strong> en el primer inicio. No es tu cuenta de Apple, ni el identificador de tu dispositivo, y no está vinculado a nada sobre ti. Si borras la app, el ID desaparece; al reinstalarla se crea uno nuevo, sin relación con el anterior.</li>
+        <li>Versión de la app, plataforma (iPhone / Watch / Mac), versión del sistema y ajuste de idioma.</li>
+        <li><strong>Recuentos, y nada más que recuentos</strong> &mdash; temporizadores iniciados, completados y cancelados; minutos totales gestionados; cuántos avisos tenía un temporizador típico; plantillas guardadas y usadas; si se ha usado el Modo sesión; si se ha usado el reloj; días desde la instalación; cuándo estuvo activa la app por última vez.</li>
+        <li>Dos indicadores sí/no: si se compró Pro y si se ha concedido el permiso de notificaciones.</li>
+    </ul>
+
+    <h3>2. Eventos anónimos</h3>
+    <p>Cuando ocurre algo destacable &mdash; se abrió la app, se inició un temporizador, se mostró la pantalla de pago &mdash; la app registra el <strong>nombre de ese evento</strong> con la versión de la app, la plataforma, el mismo ID aleatorio y una marca de tiempo. Cada nombre de evento se registra <strong>como máximo una vez cada seis horas</strong>, así que muestran <em>si</em> algo ocurre, nunca con qué frecuencia.</p>
+
+    <h3>3. Comentarios que decides enviar</h3>
+    <p>Solo cuando abres <span class="ui">Enviar comentarios</span> y pulsas enviar. Ese registro contiene:</p>
+    <ul>
+        <li><strong>Tu mensaje</strong> y la categoría que elegiste.</li>
+        <li><strong>Un nombre y un correo de respuesta &mdash; ambos opcionales y ambos vacíos por defecto.</strong> Rellénalos solo si quieres recibir respuesta. Se usan para responderte y para nada más.</li>
+        <li><strong>Una línea sobre el dispositivo</strong> &mdash; versión de la app, tipo de dispositivo, versión del sistema, como <code>App 2.2.6 | iPhone | iOS 26.1</code>. Es el <em>tipo</em> de dispositivo, no <em>cuál</em> dispositivo; nada en ella es exclusivo tuyo. El formulario te muestra esta línea exacta antes de enviar.</li>
+        <li>Tu ajuste de idioma (por ejemplo <code>ko_KR</code>) y la plataforma.</li>
+    </ul>
+    <p>Nada sale de esa pantalla a menos que pulses enviar. Tocar 👍 en el mensaje "¿te gusta la app?" abre la hoja de reseñas del App Store y no me envía nada; 👎 solo abre este mismo formulario de comentarios.</p>
+
+    <h3>4. Informes de fallos y bloqueos</h3>
+    <p>Se recogen mediante <strong>MetricKit de Apple</strong>, que agrega los datos de fallos y rendimiento a nivel del sistema operativo. Contienen trazas de pila y tiempos, nunca el contenido de tus temporizadores.</p>
+
+    <div class="note">
+        <p><strong>Algo que conviene mencionar:</strong> cuando tu dispositivo escribe cualquiera de lo anterior en CloudKit, Apple marca el registro con un identificador de iCloud opaco y propio de cada app. Lo genera Apple, es distinto para cada app, no es tu dirección de correo, y no puedo usarlo para contactarte ni para buscarte en ningún otro sitio. Es un efecto secundario de cómo funciona CloudKit, no algo que la app recoja a propósito.</p>
+    </div>
+
+    <h2>Qué no se envía nunca, bajo ninguna circunstancia</h2>
+    <ul>
+        <li>Nombres de temporizadores, mensajes de aviso, títulos de sección, guiones de presentación &mdash; <strong>ningún texto que escribas.</strong></li>
+        <li>Tu nombre o dirección de correo &mdash; salvo los dos campos opcionales del formulario de comentarios descrito arriba, que rellenas tú y puedes dejar vacíos.</li>
+        <li>Identificadores de publicidad (IDFA), el identificador de proveedor de tu dispositivo (IDFV) ni ninguna huella digital del dispositivo.</li>
+        <li>Ubicación, contactos, fotos, calendario, datos de salud ni micrófono.</li>
+    </ul>
+
+    <h2>Sincronización entre tus propios dispositivos</h2>
+    <p>Tu iPhone, Apple Watch y Mac mantienen los temporizadores sincronizados entre sí. Esto funciona con <strong>tu propia cuenta de iCloud y WatchConnectivity de Apple</strong> &mdash; los datos van de dispositivo a dispositivo a través de tu iCloud, no a través de mí. <strong>No puedo leer nada de ello.</strong> Incluye el estado y el nombre del temporizador en curso y el nombre del dispositivo que se muestra en el estado de conexión de la app.</p>
+    <p>Si desactivas iCloud Drive, esta sincronización se detiene; la app sigue funcionando en cada dispositivo por separado.</p>
+
+    <h2>Terceros y pagos</h2>
+    <p>Rereminder no integra <strong>ningún servicio de analítica, publicidad ni rastreo de terceros</strong>. No se vende, alquila ni comparte ningún dato con ninguna otra empresa.</p>
+    <p>Rereminder Pro es una <strong>compra única gestionada íntegramente por Apple</strong>. Nunca veo tus datos de pago &mdash; solo si existe una compra.</p>
+
+    <h2>Notificaciones</h2>
+    <p>Todos los avisos son <strong>notificaciones locales</strong> programadas en tu dispositivo. No hay servidor de notificaciones push, y el contenido de ninguna notificación me llega nunca.</p>
+
+    <h2>Cuánto tiempo se conserva y cómo detenerlo</h2>
+    <ul>
+        <li><strong>Borrar la app detiene toda la recogida de datos de inmediato</strong> y elimina el ID aleatorio junto con todo lo guardado en el dispositivo.</li>
+        <li>Los registros de uso anónimos se conservan mientras sean útiles para decidir qué construir, y se eliminan cuando dejan de serlo. Como no llevan ningún identificador que conduzca hasta ti, no tengo forma de localizar "tus" filas si me lo pides &mdash; que es la misma razón por la que no pueden usarse para identificarte.</li>
+        <li><strong>Los comentarios que enviaste son distintos</strong> &mdash; los escribiste tú, así que puedo encontrarlos. Escríbeme por correo y los borraré.</li>
+        <li>Puedo desactivar a distancia la recogida de uso y los informes de fallos para todo el mundo, y lo haré si alguna vez deja de merecer la pena.</li>
+    </ul>
+
+    <h2>Privacidad de los menores</h2>
+    <p>Rereminder no recoge a sabiendas datos personales de nadie, incluidos los menores. No requiere cuenta, no pide información personal y no tiene funciones sociales, chat ni contenido entre usuarios.</p>
+
+    <h2>Cambios en esta política</h2>
+    <p>Si cambia lo que recoge la app, esta página cambia con ello, y la fecha de arriba se actualiza. Los cambios importantes también aparecerán en las notas de la versión que los introduzca.</p>
+
+    <h2>Contacto</h2>
+    <p>Las preguntas sobre cualquiera de estos puntos &mdash; incluido "¿para qué necesitas eso?" &mdash; van a <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Consulta también la <a href="support.html">página de soporte</a>.</p>
+</div>
+
+<div data-lang="pt-BR">
+    <h1>Política de Privacidade</h1>
+    <p class="lede">O Rereminder é desenvolvido por Hyunho Lee. Esta página diz exatamente o que sai do seu celular e o que não sai.</p>
+    <p class="updated">Última atualização: 9 de setembro de 2026 &middot; Válida para a versão 2.2.6 do app</p>
+
+    <h2>Em resumo</h2>
+    <div class="note">
+        <p><strong>Tudo o que você escreve fica no seu celular.</strong> Nomes de timers, mensagens de alerta, títulos de etapas, roteiros de apresentação, histórico &mdash; nada disso é enviado para lugar nenhum, nunca.</p>
+        <p><strong>O app me envia, sim, números anônimos.</strong> Contagens como "quantos timers foram iniciados" e "quantos chegaram ao fim", vinculadas a um ID aleatório que não identifica você. É assim que decido o que corrigir. Está tudo descrito abaixo.</p>
+        <p><strong>Não há anúncios, rastreadores nem SDKs de análise de terceiros.</strong> Nada é vendido nem compartilhado com ninguém.</p>
+    </div>
+
+    <h2>O que fica no seu dispositivo</h2>
+    <p>Os itens a seguir são armazenados localmente e <strong>nunca são transmitidos para mim</strong>:</p>
+    <ul>
+        <li><strong>Configurações de timer</strong> &mdash; durações, onde você colocou cada alerta, mensagens de alerta personalizadas.</li>
+        <li><strong>Modelos</strong> &mdash; configurações salvas e seus nomes.</li>
+        <li><strong>Conteúdo das sessões</strong> &mdash; nomes das etapas e os roteiros ou anotações que você escreve para cada etapa.</li>
+        <li><strong>Histórico</strong> &mdash; registros das sessões que você fez.</li>
+        <li><strong>Preferências</strong> &mdash; cor do tema, modo de som e vibração, quais dispositivos você disse ao app que tem.</li>
+        <li><strong>Status de compra</strong> &mdash; se você tem o Rereminder Pro, armazenado nas Chaves (Keychain) do iOS.</li>
+    </ul>
+    <p>Apagar o app apaga tudo isso.</p>
+
+    <h2>O que o app me envia</h2>
+    <p>Tudo vai para um <strong>banco de dados CloudKit que pertence a mim</strong> (contêiner <code>iCloud.com.Ysoup.FeedbackHub</code>). Não existe nenhum outro servidor, e nenhuma outra empresa recebe qualquer parte disso.</p>
+
+    <h3>1. Contagens de uso anônimas</h3>
+    <p>Um registro por instalação, atualizado no máximo duas vezes por dia. Ele contém:</p>
+    <ul>
+        <li>Um <strong>ID aleatório que o próprio app gera</strong> na primeira abertura. Não é a sua Conta Apple, não é o identificador do seu dispositivo e não está vinculado a nada sobre você. Apague o app e o ID desaparece; reinstalar cria um novo, sem nenhuma ligação com o anterior.</li>
+        <li>Versão do app, plataforma (iPhone / Watch / Mac), versão do sistema e configuração de idioma.</li>
+        <li><strong>Contagens, e nada além de contagens</strong> &mdash; timers iniciados, concluídos e cancelados; total de minutos gerenciados; quantos alertas um timer costuma ter; modelos salvos e usados; se o Modo Sessão já foi usado; se o relógio já foi usado; dias desde a instalação; quando o app esteve ativo pela última vez.</li>
+        <li>Dois indicadores de sim/não: se o Pro foi comprado e se a permissão de notificações foi concedida.</li>
+    </ul>
+
+    <h3>2. Eventos anônimos</h3>
+    <p>Quando algo relevante acontece &mdash; o app foi aberto, um timer foi iniciado, a tela de compra foi exibida &mdash; o app registra o <strong>nome desse evento</strong> com a versão do app, a plataforma, o mesmo ID aleatório e a data e hora. Cada nome de evento é registrado <strong>no máximo uma vez a cada seis horas</strong>, então esses registros mostram <em>se</em> algo acontece, nunca com que frequência.</p>
+
+    <h3>3. Feedback que você decide enviar</h3>
+    <p>Somente quando você abre <span class="ui">Enviar feedback</span> e toca em enviar. Esse registro inclui:</p>
+    <ul>
+        <li><strong>Sua mensagem</strong> e a categoria que você escolheu.</li>
+        <li><strong>Um nome e um e-mail para resposta &mdash; ambos opcionais e ambos em branco por padrão.</strong> Preencha só se quiser receber uma resposta. Eles são usados para responder a você e para nada mais.</li>
+        <li><strong>Uma linha sobre o dispositivo</strong> &mdash; versão do app, tipo de dispositivo, versão do sistema, como <code>App 2.2.6 | iPhone | iOS 26.1</code>. Isso indica o <em>tipo</em> de dispositivo, não <em>qual</em> dispositivo; nada nela é exclusivo seu. O formulário mostra exatamente essa linha antes do envio.</li>
+        <li>Sua configuração de idioma (por exemplo, <code>ko_KR</code>) e a plataforma.</li>
+    </ul>
+    <p>Nada sai dessa tela a menos que você toque em enviar. Tocar em 👍 na pergunta "está gostando do app?" abre a tela de avaliação da App Store e não me envia nada; 👎 apenas abre este mesmo formulário de feedback.</p>
+
+    <h3>4. Relatórios de falhas e travamentos</h3>
+    <p>Coletados pelo <strong>MetricKit da Apple</strong>, que agrega dados de falhas e desempenho no nível do sistema. Eles contêm rastreamentos de pilha (stack traces) e tempos de execução, nunca o conteúdo dos seus timers.</p>
+
+    <div class="note">
+        <p><strong>Uma coisa que vale mencionar:</strong> quando seu dispositivo grava qualquer um dos itens acima no CloudKit, a Apple marca o registro com um identificador opaco do iCloud, específico por app. Ele é gerado pela Apple, é diferente para cada app, não é o seu endereço de e-mail, e eu não consigo usá-lo para entrar em contato com você nem para encontrar você em nenhum outro lugar. É um efeito colateral de como o CloudKit funciona, não algo que o app coleta de propósito.</p>
+    </div>
+
+    <h2>O que nunca é enviado, em nenhuma circunstância</h2>
+    <ul>
+        <li>Nomes de timers, mensagens de alerta, títulos de etapas, roteiros de apresentação &mdash; <strong>qualquer texto que você digita.</strong></li>
+        <li>Seu nome ou endereço de e-mail &mdash; exceto os dois campos opcionais do formulário de feedback descrito acima, que você mesmo preenche e pode deixar em branco.</li>
+        <li>Identificadores de publicidade (IDFA), o identificador de fornecedor do seu dispositivo (IDFV) ou qualquer impressão digital do dispositivo (fingerprint).</li>
+        <li>Localização, contatos, fotos, calendário, dados de saúde ou microfone.</li>
+    </ul>
+
+    <h2>Sincronização entre os seus próprios dispositivos</h2>
+    <p>Seu iPhone, Apple Watch e Mac mantêm os timers sincronizados entre si. Isso funciona pela <strong>sua própria conta do iCloud e pelo WatchConnectivity da Apple</strong> &mdash; os dados vão de um dispositivo para outro pelo seu iCloud, não passam por mim. <strong>Eu não consigo ler nada disso.</strong> Inclui o estado e o nome do timer em execução e o nome do dispositivo exibido no status de conexão do app.</p>
+    <p>Desativar o iCloud Drive interrompe essa sincronização; o app continua funcionando em cada dispositivo de forma independente.</p>
+
+    <h2>Terceiros e pagamentos</h2>
+    <p>O Rereminder não integra <strong>nenhum serviço de análise, publicidade ou rastreamento de terceiros</strong>. Nenhum dado é vendido, alugado ou compartilhado com qualquer outra empresa.</p>
+    <p>O Rereminder Pro é uma <strong>compra única processada inteiramente pela Apple</strong>. Eu nunca vejo seus dados de pagamento &mdash; apenas se uma compra existe.</p>
+
+    <h2>Notificações</h2>
+    <p>Todos os alertas são <strong>notificações locais</strong> agendadas no seu dispositivo. Não existe servidor de push, e nenhum conteúdo de notificação chega até mim.</p>
+
+    <h2>Por quanto tempo os dados são mantidos e como interromper a coleta</h2>
+    <ul>
+        <li><strong>Apagar o app interrompe toda a coleta imediatamente</strong> e remove o ID aleatório junto com tudo o que está armazenado no dispositivo.</li>
+        <li>Os registros de uso anônimos são mantidos enquanto forem úteis para decidir o que desenvolver e são apagados quando deixam de ser. Como não carregam nenhum identificador que leve até você, não tenho como separar as "suas" linhas mediante solicitação &mdash; que é o mesmo motivo pelo qual eles não podem ser usados para identificar você.</li>
+        <li><strong>O feedback que você enviou é diferente</strong> &mdash; foi você quem escreveu, então consigo encontrá-lo. Mande um e-mail e eu o apago.</li>
+        <li>Posso desativar remotamente, para todos, a coleta de uso e os relatórios de falhas, e farei isso se um dia deixar de valer a pena.</li>
+    </ul>
+
+    <h2>Privacidade de crianças</h2>
+    <p>O Rereminder não coleta intencionalmente dados pessoais de ninguém, incluindo crianças. Ele não exige conta, não pede nenhuma informação pessoal e não tem recursos sociais, chat nem conteúdo trocado entre usuários.</p>
+
+    <h2>Alterações nesta política</h2>
+    <p>Se o que o app coleta mudar, esta página muda junto, e a data no topo é atualizada. Alterações relevantes também aparecerão nas notas de versão da versão que as introduzir.</p>
+
+    <h2>Contato</h2>
+    <p>Dúvidas sobre qualquer parte disto &mdash; inclusive "por que você precisa disso?" &mdash; podem ser enviadas para <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Veja também a <a href="support.html">página de suporte</a>.</p>
+</div>
+
+<div data-lang="pt-PT">
+    <h1>Política de Privacidade</h1>
+    <p class="lede">O Rereminder é desenvolvido por Hyunho Lee. Esta página explica exatamente o que sai do seu telemóvel e o que não sai.</p>
+    <p class="updated">Última atualização: 9 de setembro de 2026 &middot; Aplica-se à versão 2.2.6 da app</p>
+
+    <h2>Em resumo</h2>
+    <div class="note">
+        <p><strong>Tudo o que escreve fica no seu telemóvel.</strong> Nomes de temporizadores, mensagens de aviso, títulos de secções, guiões de apresentação, histórico &mdash; nada disto é alguma vez enviado para lado nenhum.</p>
+        <p><strong>A app envia-me, de facto, números anónimos.</strong> Contagens como "quantos temporizadores foram iniciados" e "quantos chegaram ao fim", associadas a um ID aleatório que não o identifica. É assim que decido o que corrigir. Está tudo descrito abaixo.</p>
+        <p><strong>Não há anúncios, rastreadores nem SDK de análise de terceiros.</strong> Nada é vendido nem partilhado com ninguém.</p>
+    </div>
+
+    <h2>O que fica no seu dispositivo</h2>
+    <p>Os seguintes dados são guardados localmente e <strong>nunca me são transmitidos</strong>:</p>
+    <ul>
+        <li><strong>Definições dos temporizadores</strong> &mdash; durações, onde colocou cada aviso, mensagens de aviso personalizadas.</li>
+        <li><strong>Modelos</strong> &mdash; configurações guardadas e respetivos nomes.</li>
+        <li><strong>Conteúdo das sessões</strong> &mdash; nomes das secções e os guiões ou notas que escreve para cada uma.</li>
+        <li><strong>Histórico</strong> &mdash; registos das sessões que fez.</li>
+        <li><strong>Preferências</strong> &mdash; cor do tema, modo de som e vibração, os dispositivos que indicou à app que tem.</li>
+        <li><strong>Estado da compra</strong> &mdash; se tem o Rereminder Pro, guardado no porta-chaves (Keychain) do iOS.</li>
+    </ul>
+    <p>Apagar a app apaga tudo isto.</p>
+
+    <h2>O que a app me envia</h2>
+    <p>Tudo vai para uma <strong>base de dados CloudKit que me pertence</strong> (contentor <code>iCloud.com.Ysoup.FeedbackHub</code>). Não existe mais nenhum servidor, e nenhuma outra empresa recebe qualquer parte destes dados.</p>
+
+    <h3>1. Contagens de utilização anónimas</h3>
+    <p>Um registo por instalação, atualizado no máximo duas vezes por dia. Contém:</p>
+    <ul>
+        <li>Um <strong>ID aleatório gerado pela própria app</strong> na primeira abertura. Não é a sua conta Apple, não é o identificador do seu dispositivo e não está associado a nada sobre si. Se apagar a app, o ID desaparece; ao reinstalar, é criado um novo, sem qualquer ligação ao anterior.</li>
+        <li>Versão da app, plataforma (iPhone / Watch / Mac), versão do sistema e definição de idioma.</li>
+        <li><strong>Contagens, e apenas contagens</strong> &mdash; temporizadores iniciados, concluídos e cancelados; total de minutos geridos; quantos avisos costuma ter um temporizador; modelos guardados e usados; se o Modo Sessão já foi usado; se o relógio já foi usado; dias desde a instalação; quando a app esteve ativa pela última vez.</li>
+        <li>Dois indicadores sim/não: se o Pro foi comprado e se a permissão de notificações foi concedida.</li>
+    </ul>
+
+    <h3>2. Eventos anónimos</h3>
+    <p>Quando acontece algo relevante &mdash; a app foi aberta, um temporizador foi iniciado, o ecrã de compra foi apresentado &mdash; a app regista o <strong>nome desse evento</strong> com a versão da app, a plataforma, o mesmo ID aleatório e a data e hora. Cada nome de evento é registado <strong>no máximo uma vez a cada seis horas</strong>, pelo que estes registos mostram <em>se</em> algo acontece, nunca com que frequência.</p>
+
+    <h3>3. Comentários que decide enviar</h3>
+    <p>Apenas quando abre <span class="ui">Enviar feedback</span> e toca em enviar. Esse registo inclui:</p>
+    <ul>
+        <li><strong>A sua mensagem</strong> e a categoria que escolheu.</li>
+        <li><strong>Um nome e um e-mail para resposta &mdash; ambos opcionais e ambos em branco por predefinição.</strong> Preencha-os só se quiser receber resposta. Servem apenas para lhe responder e para mais nada.</li>
+        <li><strong>Uma linha sobre o dispositivo</strong> &mdash; versão da app, tipo de dispositivo, versão do sistema, por exemplo <code>App 2.2.6 | iPhone | iOS 26.1</code>. Indica o <em>tipo</em> de dispositivo, não <em>qual</em> dispositivo; nada nela é exclusivo seu. O formulário mostra-lhe esta linha exata antes do envio.</li>
+        <li>A sua definição de idioma (por exemplo, <code>ko_KR</code>) e a plataforma.</li>
+    </ul>
+    <p>Nada sai desse ecrã a não ser que toque em enviar. Tocar em 👍 na pergunta "está a gostar da app?" abre a folha de avaliação da App Store e não me envia nada; 👎 abre apenas este mesmo formulário.</p>
+
+    <h3>4. Relatórios de falhas e bloqueios</h3>
+    <p>Recolhidos através do <strong>MetricKit da Apple</strong>, que agrega dados de falhas e de desempenho ao nível do sistema. Contêm rastreios de pilha (stack traces) e tempos de execução, nunca o conteúdo dos seus temporizadores.</p>
+
+    <div class="note">
+        <p><strong>Uma coisa que convém referir:</strong> quando o seu dispositivo grava algum dos dados acima no CloudKit, a Apple associa ao registo um identificador iCloud opaco, próprio de cada app. É gerado pela Apple, é diferente de app para app, não é o seu endereço de e-mail, e eu não o consigo usar para o contactar nem para o encontrar noutro lado. É uma consequência do funcionamento do CloudKit, não algo que a app recolha de propósito.</p>
+    </div>
+
+    <h2>O que nunca é enviado, em circunstância alguma</h2>
+    <ul>
+        <li>Nomes de temporizadores, mensagens de aviso, títulos de secções, guiões de apresentação &mdash; <strong>qualquer texto que escreva.</strong></li>
+        <li>O seu nome ou endereço de e-mail &mdash; exceto os dois campos opcionais do formulário de comentários acima, que é o próprio utilizador a preencher e que pode deixar em branco.</li>
+        <li>Identificadores de publicidade (IDFA), o identificador de fornecedor do dispositivo (IDFV) ou qualquer impressão digital do dispositivo (fingerprint).</li>
+        <li>Localização, contactos, fotografias, calendário, dados de saúde ou microfone.</li>
+    </ul>
+
+    <h2>Sincronização entre os seus dispositivos</h2>
+    <p>O seu iPhone, Apple Watch e Mac mantêm os temporizadores sincronizados entre si. Isto funciona através da <strong>sua própria conta iCloud e do WatchConnectivity da Apple</strong> &mdash; os dados passam de um dispositivo para outro pelo seu iCloud, não por mim. <strong>Não consigo ler nada disto.</strong> Inclui o estado e o nome do temporizador em curso e o nome do dispositivo apresentado no estado de ligação da app.</p>
+    <p>Desativar o iCloud Drive interrompe esta sincronização; a app continua a funcionar de forma independente em cada dispositivo.</p>
+
+    <h2>Terceiros e pagamentos</h2>
+    <p>O Rereminder não integra <strong>nenhum serviço de análise, publicidade ou rastreamento de terceiros</strong>. Nenhum dado é vendido, alugado ou partilhado com qualquer outra empresa.</p>
+    <p>O Rereminder Pro é uma <strong>compra única processada inteiramente pela Apple</strong>. Nunca vejo os seus dados de pagamento &mdash; apenas se existe uma compra.</p>
+
+    <h2>Notificações</h2>
+    <p>Todos os avisos são <strong>notificações locais</strong> agendadas no seu dispositivo. Não existe servidor de notificações push, e nenhum conteúdo das notificações chega até mim.</p>
+
+    <h2>Durante quanto tempo os dados são guardados e como parar a recolha</h2>
+    <ul>
+        <li><strong>Apagar a app interrompe imediatamente toda a recolha</strong> e remove o ID aleatório, juntamente com tudo o que está guardado no dispositivo.</li>
+        <li>Os registos de utilização anónimos são guardados enquanto forem úteis para decidir o que desenvolver e apagados quando deixarem de o ser. Como não têm nenhum identificador que leve até si, não tenho forma de isolar os "seus" registos a pedido &mdash; que é precisamente a razão pela qual não podem ser usados para o identificar.</li>
+        <li><strong>Os comentários que enviou são diferentes</strong> &mdash; foi o utilizador que os escreveu, por isso consigo encontrá-los. Envie-me um e-mail e eu apago-os.</li>
+        <li>Posso desativar remotamente, para todos, a recolha de utilização e os relatórios de falhas, e fá-lo-ei se um dia deixar de valer a pena.</li>
+    </ul>
+
+    <h2>Privacidade das crianças</h2>
+    <p>O Rereminder não recolhe intencionalmente dados pessoais de ninguém, incluindo crianças. Não exige conta, não pede qualquer informação pessoal e não tem funcionalidades sociais, chat nem conteúdos trocados entre utilizadores.</p>
+
+    <h2>Alterações a esta política</h2>
+    <p>Se aquilo que a app recolhe mudar, esta página muda também, e a data no topo é atualizada. As alterações relevantes aparecem ainda nas notas da versão que as introduzir.</p>
+
+    <h2>Contacto</h2>
+    <p>Dúvidas sobre qualquer parte disto &mdash; incluindo "porque é que precisa disso?" &mdash; podem ser enviadas para <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Consulte também a <a href="support.html">página de suporte</a>.</p>
+</div>
+
+<div data-lang="it">
+    <h1>Informativa sulla privacy</h1>
+    <p class="lede">Rereminder è sviluppato da Hyunho Lee. Questa pagina dice esattamente cosa esce dal tuo telefono e cosa no.</p>
+    <p class="updated">Ultimo aggiornamento: 9 settembre 2026 &middot; Si applica alla versione dell’app 2.2.6</p>
+
+    <h2>In breve</h2>
+    <div class="note">
+        <p><strong>Tutto ciò che scrivi resta sul tuo telefono.</strong> Nomi dei timer, messaggi di avviso, titoli delle sezioni, copioni delle presentazioni, cronologia &mdash; niente di tutto questo viene mai inviato da nessuna parte.</p>
+        <p><strong>L’app mi invia dei numeri anonimi.</strong> Conteggi come "quanti timer sono stati avviati" e "quanti sono arrivati alla fine", legati a un ID casuale che non sei tu. È così che decido cosa sistemare. È descritto per intero più sotto.</p>
+        <p><strong>Non ci sono pubblicità, né tracker, né SDK di analisi di terze parti.</strong> Nulla viene venduto o condiviso con nessuno.</p>
+    </div>
+
+    <h2>Cosa resta sul tuo dispositivo</h2>
+    <p>I seguenti dati sono memorizzati localmente e <strong>non mi vengono mai trasmessi</strong>:</p>
+    <ul>
+        <li><strong>Impostazioni dei timer</strong> &mdash; durate, dove hai posizionato ogni avviso, messaggi di avviso personalizzati.</li>
+        <li><strong>Modelli</strong> &mdash; impostazioni salvate e i loro nomi.</li>
+        <li><strong>Contenuti delle sessioni</strong> &mdash; nomi delle sezioni e i copioni o le note che scrivi per ogni sezione.</li>
+        <li><strong>Cronologia</strong> &mdash; registri delle sessioni che hai svolto.</li>
+        <li><strong>Preferenze</strong> &mdash; colore del tema, modalità suono e vibrazione, quali dispositivi hai detto all’app di possedere.</li>
+        <li><strong>Stato dell’acquisto</strong> &mdash; se possiedi Rereminder Pro, memorizzato nel Portachiavi di iOS.</li>
+    </ul>
+    <p>Eliminando l’app si elimina tutto.</p>
+
+    <h2>Cosa mi invia l’app</h2>
+    <p>Tutto va a un <strong>database CloudKit di mia proprietà</strong> (container <code>iCloud.com.Ysoup.FeedbackHub</code>). Non c’è nessun altro server e nessun’altra azienda riceve alcuno di questi dati.</p>
+
+    <h3>1. Conteggi anonimi di utilizzo</h3>
+    <p>Un record per installazione, aggiornato al massimo due volte al giorno. Contiene:</p>
+    <ul>
+        <li>Un <strong>ID casuale che l’app genera da sé</strong> al primo avvio. Non è il tuo Account Apple, non è l’identificativo del tuo dispositivo e non è collegato a nulla che ti riguardi. Se elimini l’app, l’ID sparisce; reinstallandola se ne crea uno nuovo, senza alcun collegamento con il precedente.</li>
+        <li>Versione dell’app, piattaforma (iPhone / Watch / Mac), versione del sistema operativo e impostazione della lingua.</li>
+        <li><strong>Conteggi, e nient’altro che conteggi</strong> &mdash; timer avviati, completati e annullati; minuti totali gestiti; quanti avvisi aveva in genere un timer; modelli salvati e usati; se è stata usata la Modalità Sessione; se è stato usato l’orologio; giorni dall’installazione; quando l’app è stata attiva l’ultima volta.</li>
+        <li>Due indicatori sì/no: se Pro è stato acquistato e se il permesso per le notifiche è concesso.</li>
+    </ul>
+
+    <h3>2. Eventi anonimi</h3>
+    <p>Quando accade qualcosa di rilevante &mdash; l’app è stata aperta, è stato avviato un timer, è stata mostrata la schermata di acquisto &mdash; l’app registra il <strong>nome di quell’evento</strong> insieme a versione dell’app, piattaforma, lo stesso ID casuale e un’indicazione di data e ora. Ogni nome di evento viene registrato <strong>al massimo una volta ogni sei ore</strong>, quindi questi dati mostrano <em>se</em> qualcosa accade, mai quanto spesso.</p>
+
+    <h3>3. Feedback che scegli di inviare</h3>
+    <p>Solo quando apri <span class="ui">Invia feedback</span> e premi invia. Quel record contiene:</p>
+    <ul>
+        <li><strong>Il tuo messaggio</strong> e la categoria che hai scelto.</li>
+        <li><strong>Un nome e un’email per la risposta &mdash; entrambi facoltativi ed entrambi vuoti per impostazione predefinita.</strong> Compilali solo se vuoi una risposta. Vengono usati per risponderti e per nient’altro.</li>
+        <li><strong>Una riga sul dispositivo</strong> &mdash; versione dell’app, tipo di dispositivo, versione del sistema operativo, ad esempio <code>App 2.2.6 | iPhone | iOS 26.1</code>. Indica il <em>tipo</em> di dispositivo, non <em>quale</em> dispositivo; nulla in essa è unico per te. Il modulo ti mostra esattamente questa riga prima dell’invio.</li>
+        <li>La tua impostazione della lingua (ad esempio <code>ko_KR</code>) e la piattaforma.</li>
+    </ul>
+    <p>Nulla esce da quella schermata finché non premi invia. Toccare 👍 alla domanda "ti piace l’app?" apre la scheda di recensione dell’App Store e non mi invia nulla; 👎 apre semplicemente questo stesso modulo di feedback.</p>
+
+    <h3>4. Segnalazioni di arresti anomali e blocchi</h3>
+    <p>Raccolte tramite <strong>MetricKit di Apple</strong>, che aggrega a livello di sistema operativo i dati su arresti anomali e prestazioni. Contengono stack trace e tempistiche, mai il contenuto dei tuoi timer.</p>
+
+    <div class="note">
+        <p><strong>Una cosa che vale la pena dire:</strong> quando il tuo dispositivo scrive uno qualsiasi dei dati sopra in CloudKit, Apple contrassegna il record con un identificativo iCloud opaco specifico per ogni app. È generato da Apple, è diverso per ogni app, non è il tuo indirizzo email e non posso usarlo per contattarti né per cercarti altrove. È un effetto collaterale del funzionamento di CloudKit, non qualcosa che l’app raccoglie intenzionalmente.</p>
+    </div>
+
+    <h2>Cosa non viene mai inviato, in nessun caso</h2>
+    <ul>
+        <li>Nomi dei timer, messaggi di avviso, titoli delle sezioni, copioni delle presentazioni &mdash; <strong>qualsiasi testo che digiti.</strong></li>
+        <li>Il tuo nome o indirizzo email &mdash; tranne i due campi facoltativi del modulo di feedback descritto sopra, che compili tu e che puoi lasciare vuoti.</li>
+        <li>Identificativi pubblicitari (IDFA), l’identificativo del fornitore del tuo dispositivo (IDFV) o qualsiasi impronta del dispositivo.</li>
+        <li>Posizione, contatti, foto, calendario, dati sulla salute o microfono.</li>
+    </ul>
+
+    <h2>Sincronizzazione tra i tuoi dispositivi</h2>
+    <p>iPhone, Apple Watch e Mac mantengono i timer allineati tra loro. Questo avviene tramite <strong>il tuo account iCloud e WatchConnectivity di Apple</strong> &mdash; i dati passano da dispositivo a dispositivo attraverso il tuo iCloud, non attraverso di me. <strong>Non posso leggerne nulla.</strong> Comprendono lo stato e il nome del timer in corso e il nome del dispositivo mostrato nello stato di connessione dell’app.</p>
+    <p>Disattivando iCloud Drive questa sincronizzazione si interrompe; l’app continua a funzionare in modo indipendente su ciascun dispositivo.</p>
+
+    <h2>Terze parti e pagamenti</h2>
+    <p>Rereminder non integra <strong>alcun servizio di analisi, pubblicità o tracciamento di terze parti</strong>. Nessun dato viene venduto, noleggiato o condiviso con altre aziende.</p>
+    <p>Rereminder Pro è un <strong>acquisto unico gestito interamente da Apple</strong>. Non vedo mai i tuoi dati di pagamento &mdash; solo se esiste un acquisto.</p>
+
+    <h2>Notifiche</h2>
+    <p>Tutti gli avvisi sono <strong>notifiche locali</strong> programmate sul tuo dispositivo. Non c’è alcun server push e nessun contenuto delle notifiche arriva mai a me.</p>
+
+    <h2>Per quanto tempo vengono conservati e come interrompere la raccolta</h2>
+    <ul>
+        <li><strong>Eliminando l’app interrompi immediatamente ogni raccolta</strong> e rimuovi l’ID casuale insieme a tutto ciò che è memorizzato sul dispositivo.</li>
+        <li>I record anonimi di utilizzo vengono conservati finché sono utili a decidere cosa sviluppare e vengono eliminati quando non lo sono più. Poiché non contengono alcun identificativo che riconduca a te, non ho modo di isolare le "tue" righe su richiesta &mdash; che è lo stesso motivo per cui non possono essere usati per identificarti.</li>
+        <li><strong>Il feedback che hai inviato è diverso</strong> &mdash; l’hai scritto tu, quindi posso trovarlo. Scrivimi un’email e lo eliminerò.</li>
+        <li>Posso disattivare da remoto per tutti la raccolta dei dati di utilizzo e le segnalazioni di arresti anomali, e lo farò se un giorno non ne varrà più la pena.</li>
+    </ul>
+
+    <h2>Privacy dei minori</h2>
+    <p>Rereminder non raccoglie consapevolmente dati personali da nessuno, minori compresi. Non richiede alcun account, non chiede informazioni personali e non ha funzioni social, chat o contenuti tra utenti.</p>
+
+    <h2>Modifiche a questa informativa</h2>
+    <p>Se cambia ciò che l’app raccoglie, cambia anche questa pagina e si aggiorna la data in alto. Le modifiche sostanziali compariranno anche nelle note di rilascio della versione che le introduce.</p>
+
+    <h2>Contatti</h2>
+    <p>Le domande su tutto questo &mdash; compreso "perché ti serve?" &mdash; vanno a <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Vedi anche la <a href="support.html">pagina di assistenza</a>.</p>
+</div>
+
 </div>
 
 <footer>
@@ -555,20 +1216,19 @@
         <a href="privacy.html">Privacy</a>
         <a href="https://apps.apple.com/us/app/rereminder/id6752551268" target="_blank" rel="noopener">App Store</a>
     </p>
+    <nav class="lang-links" aria-label="Language"><a href="ko/privacy.html" hreflang="ko" lang="ko">한국어</a><a href="en/privacy.html" hreflang="en" lang="en">English</a><a href="ja/privacy.html" hreflang="ja" lang="ja">日本語</a><a href="zh-Hans/privacy.html" hreflang="zh-Hans" lang="zh-Hans">简体中文</a><a href="zh-Hant/privacy.html" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a><a href="de/privacy.html" hreflang="de" lang="de">Deutsch</a><a href="fr/privacy.html" hreflang="fr" lang="fr">Français</a><a href="es/privacy.html" hreflang="es" lang="es">Español</a><a href="pt-BR/privacy.html" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a><a href="pt-PT/privacy.html" hreflang="pt-PT" lang="pt-PT">Português (Portugal)</a><a href="it/privacy.html" hreflang="it" lang="it">Italiano</a></nav>
 </footer>
 
 <script>
 (function () {
     var KEY = 'rereminder-lang';
-    var LANGS = ['en', 'ko', 'zh-Hans', 'zh-Hant'];
+    var LANGS = ['en', 'ko', 'ja', 'zh-Hans', 'zh-Hant', 'de', 'fr', 'es', 'pt-BR', 'pt-PT', 'it'];
     function apply(lang, persist) {
-        document.body.classList.remove('lang-en', 'lang-ko', 'lang-zh-Hans', 'lang-zh-Hant');
+        document.body.classList.remove('lang-en', 'lang-ko', 'lang-ja', 'lang-zh-Hans', 'lang-zh-Hant', 'lang-de', 'lang-fr', 'lang-es', 'lang-pt-BR', 'lang-pt-PT', 'lang-it');
         document.body.classList.add('lang-' + lang);
         document.documentElement.lang = lang;
-        var buttons = document.querySelectorAll('[data-set-lang]');
-        for (var i = 0; i < buttons.length; i++) {
-            buttons[i].setAttribute('aria-pressed', String(buttons[i].dataset.setLang === lang));
-        }
+        var select = document.getElementById('lang-select');
+        if (select) select.value = lang;
         // 자동 감지 결과는 저장하지 않는다 — 저장해 버리면 기기 언어를 바꿔도
         // 첫 방문에 감지한 언어가 계속 따라온다. 저장은 사용자가 눌렀을 때만.
         if (persist) { try { localStorage.setItem(KEY, lang); } catch (e) {} }
@@ -589,13 +1249,15 @@
             if (tag.indexOf('zh') === 0) {
                 return /hant|-tw|-hk|-mo/.test(tag) ? 'zh-Hant' : 'zh-Hans';
             }
+            if (tag.indexOf('pt') === 0) return /-pt$/.test(tag) ? 'pt-PT' : 'pt-BR';
+            var base = tag.split('-')[0];
+            if (LANGS.indexOf(base) >= 0) return base;
         }
         return 'en';
     }
     apply(detect(), false);
-    document.addEventListener('click', function (event) {
-        var button = event.target && event.target.closest ? event.target.closest('[data-set-lang]') : null;
-        if (button) { apply(button.dataset.setLang, true); }
+    document.getElementById('lang-select').addEventListener('change', function (event) {
+        location.href = event.target.value + '/privacy.html';
     });
 })();
 </script>
