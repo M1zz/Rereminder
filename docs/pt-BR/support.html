@@ -127,10 +127,10 @@
         footer a { color: var(--text2); margin: 0 8px; font-size: 13px; }
 
         [data-lang] { display: none; }
-        body.lang-en [data-lang="en"], body.lang-ko [data-lang="ko"], body.lang-ja [data-lang="ja"], body.lang-zh-Hans [data-lang="zh-Hans"], body.lang-zh-Hant [data-lang="zh-Hant"], body.lang-de [data-lang="de"], body.lang-fr [data-lang="fr"], body.lang-es [data-lang="es"], body.lang-pt-BR [data-lang="pt-BR"], body.lang-pt-PT [data-lang="pt-PT"], body.lang-it [data-lang="it"] { display: block; }
+        body.lang-en [data-lang="en"], body.lang-ko [data-lang="ko"], body.lang-ja [data-lang="ja"], body.lang-zh-Hans [data-lang="zh-Hans"], body.lang-zh-Hant [data-lang="zh-Hant"], body.lang-de [data-lang="de"], body.lang-fr [data-lang="fr"], body.lang-es [data-lang="es"], body.lang-pt-BR [data-lang="pt-BR"], body.lang-pt-PT [data-lang="pt-PT"], body.lang-it [data-lang="it"], body.lang-ru [data-lang="ru"], body.lang-cs [data-lang="cs"], body.lang-da [data-lang="da"], body.lang-el [data-lang="el"], body.lang-fi [data-lang="fi"], body.lang-id [data-lang="id"], body.lang-nb [data-lang="nb"], body.lang-nl [data-lang="nl"], body.lang-pl [data-lang="pl"], body.lang-sv [data-lang="sv"], body.lang-th [data-lang="th"], body.lang-tr [data-lang="tr"], body.lang-vi [data-lang="vi"] { display: block; }
         li[data-lang], td[data-lang], span[data-lang] { display: none; }
-        body.lang-en li[data-lang="en"], body.lang-ko li[data-lang="ko"], body.lang-ja li[data-lang="ja"], body.lang-zh-Hans li[data-lang="zh-Hans"], body.lang-zh-Hant li[data-lang="zh-Hant"], body.lang-de li[data-lang="de"], body.lang-fr li[data-lang="fr"], body.lang-es li[data-lang="es"], body.lang-pt-BR li[data-lang="pt-BR"], body.lang-pt-PT li[data-lang="pt-PT"], body.lang-it li[data-lang="it"] { display: list-item; }
-        body.lang-en span[data-lang="en"], body.lang-ko span[data-lang="ko"], body.lang-ja span[data-lang="ja"], body.lang-zh-Hans span[data-lang="zh-Hans"], body.lang-zh-Hant span[data-lang="zh-Hant"], body.lang-de span[data-lang="de"], body.lang-fr span[data-lang="fr"], body.lang-es span[data-lang="es"], body.lang-pt-BR span[data-lang="pt-BR"], body.lang-pt-PT span[data-lang="pt-PT"], body.lang-it span[data-lang="it"] { display: inline; }
+        body.lang-en li[data-lang="en"], body.lang-ko li[data-lang="ko"], body.lang-ja li[data-lang="ja"], body.lang-zh-Hans li[data-lang="zh-Hans"], body.lang-zh-Hant li[data-lang="zh-Hant"], body.lang-de li[data-lang="de"], body.lang-fr li[data-lang="fr"], body.lang-es li[data-lang="es"], body.lang-pt-BR li[data-lang="pt-BR"], body.lang-pt-PT li[data-lang="pt-PT"], body.lang-it li[data-lang="it"], body.lang-ru li[data-lang="ru"], body.lang-cs li[data-lang="cs"], body.lang-da li[data-lang="da"], body.lang-el li[data-lang="el"], body.lang-fi li[data-lang="fi"], body.lang-id li[data-lang="id"], body.lang-nb li[data-lang="nb"], body.lang-nl li[data-lang="nl"], body.lang-pl li[data-lang="pl"], body.lang-sv li[data-lang="sv"], body.lang-th li[data-lang="th"], body.lang-tr li[data-lang="tr"], body.lang-vi li[data-lang="vi"] { display: list-item; }
+        body.lang-en span[data-lang="en"], body.lang-ko span[data-lang="ko"], body.lang-ja span[data-lang="ja"], body.lang-zh-Hans span[data-lang="zh-Hans"], body.lang-zh-Hant span[data-lang="zh-Hant"], body.lang-de span[data-lang="de"], body.lang-fr span[data-lang="fr"], body.lang-es span[data-lang="es"], body.lang-pt-BR span[data-lang="pt-BR"], body.lang-pt-PT span[data-lang="pt-PT"], body.lang-it span[data-lang="it"], body.lang-ru span[data-lang="ru"], body.lang-cs span[data-lang="cs"], body.lang-da span[data-lang="da"], body.lang-el span[data-lang="el"], body.lang-fi span[data-lang="fi"], body.lang-id span[data-lang="id"], body.lang-nb span[data-lang="nb"], body.lang-nl span[data-lang="nl"], body.lang-pl span[data-lang="pl"], body.lang-sv span[data-lang="sv"], body.lang-th span[data-lang="th"], body.lang-tr span[data-lang="tr"], body.lang-vi span[data-lang="vi"] { display: inline; }
 
         @media (max-width: 560px) {
             h1 { font-size: 30px; }
@@ -140,9 +140,9 @@
         }
 
         /* No-JS / pre-hydration fallback: show English */
-        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it) div[data-lang="en"] { display: block; }
-        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it) li[data-lang="en"] { display: list-item; }
-        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it) span[data-lang="en"] { display: inline; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it):not(.lang-ru):not(.lang-cs):not(.lang-da):not(.lang-el):not(.lang-fi):not(.lang-id):not(.lang-nb):not(.lang-nl):not(.lang-pl):not(.lang-sv):not(.lang-th):not(.lang-tr):not(.lang-vi) div[data-lang="en"] { display: block; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it):not(.lang-ru):not(.lang-cs):not(.lang-da):not(.lang-el):not(.lang-fi):not(.lang-id):not(.lang-nb):not(.lang-nl):not(.lang-pl):not(.lang-sv):not(.lang-th):not(.lang-tr):not(.lang-vi) li[data-lang="en"] { display: list-item; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it):not(.lang-ru):not(.lang-cs):not(.lang-da):not(.lang-el):not(.lang-fi):not(.lang-id):not(.lang-nb):not(.lang-nl):not(.lang-pl):not(.lang-sv):not(.lang-th):not(.lang-tr):not(.lang-vi) span[data-lang="en"] { display: inline; }
 
         /* 언어별 페이지 링크 — 같은 글의 다른 언어 주소. scripts/build-lang-pages.py 가 언어 폴더마다 같은 줄을 만든다. */
         .lang-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; margin: 14px auto 0; padding: 0 16px; font-size: 13px; }
@@ -162,6 +162,19 @@
     <link rel="alternate" hreflang="pt-BR" href="https://m1zz.github.io/Rereminder/pt-BR/support.html">
     <link rel="alternate" hreflang="pt-PT" href="https://m1zz.github.io/Rereminder/pt-PT/support.html">
     <link rel="alternate" hreflang="it" href="https://m1zz.github.io/Rereminder/it/support.html">
+    <link rel="alternate" hreflang="ru" href="https://m1zz.github.io/Rereminder/ru/support.html">
+    <link rel="alternate" hreflang="cs" href="https://m1zz.github.io/Rereminder/cs/support.html">
+    <link rel="alternate" hreflang="da" href="https://m1zz.github.io/Rereminder/da/support.html">
+    <link rel="alternate" hreflang="el" href="https://m1zz.github.io/Rereminder/el/support.html">
+    <link rel="alternate" hreflang="fi" href="https://m1zz.github.io/Rereminder/fi/support.html">
+    <link rel="alternate" hreflang="id" href="https://m1zz.github.io/Rereminder/id/support.html">
+    <link rel="alternate" hreflang="nb" href="https://m1zz.github.io/Rereminder/nb/support.html">
+    <link rel="alternate" hreflang="nl" href="https://m1zz.github.io/Rereminder/nl/support.html">
+    <link rel="alternate" hreflang="pl" href="https://m1zz.github.io/Rereminder/pl/support.html">
+    <link rel="alternate" hreflang="sv" href="https://m1zz.github.io/Rereminder/sv/support.html">
+    <link rel="alternate" hreflang="th" href="https://m1zz.github.io/Rereminder/th/support.html">
+    <link rel="alternate" hreflang="tr" href="https://m1zz.github.io/Rereminder/tr/support.html">
+    <link rel="alternate" hreflang="vi" href="https://m1zz.github.io/Rereminder/vi/support.html">
     <link rel="alternate" hreflang="x-default" href="https://m1zz.github.io/Rereminder/support.html">
 </head>
 <body>
@@ -172,7 +185,7 @@
             <a href="./">Início</a>
             <a href="support.html" aria-current="page">Suporte</a>
             <a href="privacy.html">Privacidade</a>
-            <select class="lang" id="lang-select" aria-label="Language"><option value="en">English</option><option value="ko">한국어</option><option value="ja">日本語</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="pt-BR" selected>Português (Brasil)</option><option value="pt-PT">Português (Portugal)</option><option value="it">Italiano</option></select>
+            <select class="lang" id="lang-select" aria-label="Language"><option value="en">English</option><option value="ko">한국어</option><option value="ja">日本語</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="pt-BR" selected>Português (Brasil)</option><option value="pt-PT">Português (Portugal)</option><option value="it">Italiano</option><option value="ru">Русский</option><option value="cs">Čeština</option><option value="da">Dansk</option><option value="el">Ελληνικά</option><option value="fi">Suomi</option><option value="id">Bahasa Indonesia</option><option value="nb">Norsk bokmål</option><option value="nl">Nederlands</option><option value="pl">Polski</option><option value="sv">Svenska</option><option value="th">ไทย</option><option value="tr">Türkçe</option><option value="vi">Tiếng Việt</option></select>
         </div>
     </div>
 </nav>
@@ -307,7 +320,7 @@
         <summary>Quais idiomas e dispositivos são compatíveis?</summary>
         <div class="body">
             <table>
-                <tr><td>Idiomas</td><td>Português, English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Italiano</td></tr>
+                <tr><td>Idiomas</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 ou posterior</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 ou posterior</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 ou posterior</td></tr>
@@ -338,7 +351,7 @@
         <a href="privacy.html">Privacidade</a>
         <a href="https://apps.apple.com/us/app/rereminder/id6752551268" target="_blank" rel="noopener">App Store</a>
     </p>
-        <nav class="lang-links" aria-label="Language"><a href="../ko/support.html" hreflang="ko" lang="ko">한국어</a><a href="../en/support.html" hreflang="en" lang="en">English</a><a href="../ja/support.html" hreflang="ja" lang="ja">日本語</a><a href="../zh-Hans/support.html" hreflang="zh-Hans" lang="zh-Hans">简体中文</a><a href="../zh-Hant/support.html" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a><a href="../de/support.html" hreflang="de" lang="de">Deutsch</a><a href="../fr/support.html" hreflang="fr" lang="fr">Français</a><a href="../es/support.html" hreflang="es" lang="es">Español</a><a href="../pt-BR/support.html" hreflang="pt-BR" lang="pt-BR" aria-current="true">Português (Brasil)</a><a href="../pt-PT/support.html" hreflang="pt-PT" lang="pt-PT">Português (Portugal)</a><a href="../it/support.html" hreflang="it" lang="it">Italiano</a></nav>
+        <nav class="lang-links" aria-label="Language"><a href="../ko/support.html" hreflang="ko" lang="ko">한국어</a><a href="../en/support.html" hreflang="en" lang="en">English</a><a href="../ja/support.html" hreflang="ja" lang="ja">日本語</a><a href="../zh-Hans/support.html" hreflang="zh-Hans" lang="zh-Hans">简体中文</a><a href="../zh-Hant/support.html" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a><a href="../de/support.html" hreflang="de" lang="de">Deutsch</a><a href="../fr/support.html" hreflang="fr" lang="fr">Français</a><a href="../es/support.html" hreflang="es" lang="es">Español</a><a href="../pt-BR/support.html" hreflang="pt-BR" lang="pt-BR" aria-current="true">Português (Brasil)</a><a href="../pt-PT/support.html" hreflang="pt-PT" lang="pt-PT">Português (Portugal)</a><a href="../it/support.html" hreflang="it" lang="it">Italiano</a><a href="../ru/support.html" hreflang="ru" lang="ru">Русский</a><a href="../cs/support.html" hreflang="cs" lang="cs">Čeština</a><a href="../da/support.html" hreflang="da" lang="da">Dansk</a><a href="../el/support.html" hreflang="el" lang="el">Ελληνικά</a><a href="../fi/support.html" hreflang="fi" lang="fi">Suomi</a><a href="../id/support.html" hreflang="id" lang="id">Bahasa Indonesia</a><a href="../nb/support.html" hreflang="nb" lang="nb">Norsk bokmål</a><a href="../nl/support.html" hreflang="nl" lang="nl">Nederlands</a><a href="../pl/support.html" hreflang="pl" lang="pl">Polski</a><a href="../sv/support.html" hreflang="sv" lang="sv">Svenska</a><a href="../th/support.html" hreflang="th" lang="th">ไทย</a><a href="../tr/support.html" hreflang="tr" lang="tr">Türkçe</a><a href="../vi/support.html" hreflang="vi" lang="vi">Tiếng Việt</a></nav>
 </footer>
 
 <script>

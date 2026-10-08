@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <title>Hỗ trợ – Rereminder</title>
+    <meta name="description" content="Rereminder do một người làm ra. Khi viết cho tôi, bạn đang viết thẳng cho nhà phát triển — không phải cho một hàng đợi phiếu hỗ trợ.">
+    <link rel="icon" href="../app-icon.jpeg">
+    <meta property="og:title" content="Hỗ trợ – Rereminder">
+    <meta property="og:description" content="Rereminder do một người làm ra. Khi viết cho tôi, bạn đang viết thẳng cho nhà phát triển — không phải cho một hàng đợi phiếu hỗ trợ.">
+    <meta property="og:type" content="website">
+    <style>
+        /* 라이트가 기본. 다크는 기기 설정을 따른다 — 토글을 두지 않는 이유는
+           이 두 페이지가 "읽고 나가는" 문서라 설정을 기억시킬 자리가 아니기 때문이다. */
+        :root {
+            color-scheme: light dark;
+            --accent: #0066CC;
+            --bg: #ffffff;
+            --surface: #f7f7f9;
+            --surface2: #eeeef1;
+            --text: #1d1d1f;
+            --text2: #55555c;
+            --text3: #6e6e73;
+            --border: #dcdce1;
+            --nav-bg: rgba(255, 255, 255, 0.82);
+            --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --accent: #0A84FF;
+                --bg: #000000;
+                --surface: #111111;
+                --surface2: #1a1a1a;
+                --text: #f5f5f7;
+                --text2: #98989d;
+                --text3: #86868b;
+                --border: #2a2a2a;
+                --nav-bg: rgba(0, 0, 0, 0.72);
+                --card-shadow: none;
+            }
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+        nav {
+            position: sticky; top: 0; z-index: 100;
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            background: var(--nav-bg);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-inner {
+            max-width: 760px; margin: 0 auto; padding: 14px 24px;
+            display: flex; align-items: center; justify-content: space-between; gap: 16px;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); font-weight: 600; letter-spacing: -0.3px; }
+        .nav-brand img { width: 28px; height: 28px; border-radius: 7px; }
+        .nav-links { display: flex; align-items: center; gap: 18px; font-size: 14px; }
+        .nav-links a { color: var(--text2); text-decoration: none; }
+        .nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--text); }
+        /* 언어가 10개라 버튼을 늘어놓으면 휴대폰 폭을 넘는다 — 선택 메뉴 하나로 둔다 */
+        .lang {
+            appearance: none; border: 0; background: var(--surface2); color: var(--text2);
+            font: inherit; font-size: 12px; font-weight: 600; padding: 5px 12px;
+            border-radius: 999px; cursor: pointer; line-height: 1.4; max-width: 120px;
+        }
+
+        .container { max-width: 760px; margin: 0 auto; padding: 56px 24px 96px; }
+        h1 { font-size: 38px; font-weight: 700; letter-spacing: -1px; margin-bottom: 8px; line-height: 1.2; }
+        .lede { color: var(--text2); font-size: 17px; margin-bottom: 12px; }
+        .updated { color: var(--text3); font-size: 13px; margin-bottom: 44px; }
+        h2 { font-size: 23px; font-weight: 600; letter-spacing: -0.3px; margin: 52px 0 14px; }
+        h3 { font-size: 16px; font-weight: 600; margin: 26px 0 6px; }
+        p, li { color: var(--text2); font-size: 15px; }
+        p { margin-bottom: 12px; }
+        ul, ol { padding-left: 22px; margin-bottom: 12px; }
+        li { margin-bottom: 7px; }
+        strong { color: var(--text); font-weight: 600; }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        code, .ui {
+            background: var(--surface2); border: 1px solid var(--border); border-radius: 5px;
+            padding: 1px 6px; font-size: 13.5px; color: var(--text);
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: nowrap;
+        }
+        .ui { font-family: inherit; font-size: 14px; }
+
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; margin-bottom: 14px; box-shadow: var(--card-shadow); }
+        .card h3 { margin-top: 0; }
+        .card p:last-child { margin-bottom: 0; }
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 8px; }
+        .contact-grid .card { margin-bottom: 0; }
+        .big-link { font-size: 17px; font-weight: 600; }
+
+        details {
+            border: 1px solid var(--border); border-radius: 12px;
+            background: var(--surface); margin-bottom: 10px; overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+        details summary {
+            cursor: pointer; list-style: none; padding: 16px 20px;
+            font-size: 15.5px; font-weight: 600; color: var(--text);
+            display: flex; align-items: center; justify-content: space-between; gap: 12px;
+        }
+        details summary::-webkit-details-marker { display: none; }
+        details summary::after { content: "+"; color: var(--text3); font-weight: 400; font-size: 20px; line-height: 1; }
+        details[open] summary::after { content: "\2212"; }
+        details .body { padding: 0 20px 18px; border-top: 1px solid var(--border); padding-top: 14px; }
+        details .body > :last-child { margin-bottom: 0; }
+
+        table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 14.5px; }
+        th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text2); }
+        th { color: var(--text); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.4px; }
+        td:first-child { color: var(--text); white-space: nowrap; }
+
+        .note { border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 10px 10px 0; padding: 14px 18px; margin-bottom: 16px; }
+        .note p:last-child { margin-bottom: 0; }
+
+        footer { border-top: 1px solid var(--border); padding: 32px 24px 56px; text-align: center; }
+        footer p { color: var(--text3); font-size: 13px; margin-bottom: 8px; }
+        footer a { color: var(--text2); margin: 0 8px; font-size: 13px; }
+
+        [data-lang] { display: none; }
+        body.lang-en [data-lang="en"], body.lang-ko [data-lang="ko"], body.lang-ja [data-lang="ja"], body.lang-zh-Hans [data-lang="zh-Hans"], body.lang-zh-Hant [data-lang="zh-Hant"], body.lang-de [data-lang="de"], body.lang-fr [data-lang="fr"], body.lang-es [data-lang="es"], body.lang-pt-BR [data-lang="pt-BR"], body.lang-pt-PT [data-lang="pt-PT"], body.lang-it [data-lang="it"], body.lang-ru [data-lang="ru"], body.lang-cs [data-lang="cs"], body.lang-da [data-lang="da"], body.lang-el [data-lang="el"], body.lang-fi [data-lang="fi"], body.lang-id [data-lang="id"], body.lang-nb [data-lang="nb"], body.lang-nl [data-lang="nl"], body.lang-pl [data-lang="pl"], body.lang-sv [data-lang="sv"], body.lang-th [data-lang="th"], body.lang-tr [data-lang="tr"], body.lang-vi [data-lang="vi"] { display: block; }
+        li[data-lang], td[data-lang], span[data-lang] { display: none; }
+        body.lang-en li[data-lang="en"], body.lang-ko li[data-lang="ko"], body.lang-ja li[data-lang="ja"], body.lang-zh-Hans li[data-lang="zh-Hans"], body.lang-zh-Hant li[data-lang="zh-Hant"], body.lang-de li[data-lang="de"], body.lang-fr li[data-lang="fr"], body.lang-es li[data-lang="es"], body.lang-pt-BR li[data-lang="pt-BR"], body.lang-pt-PT li[data-lang="pt-PT"], body.lang-it li[data-lang="it"], body.lang-ru li[data-lang="ru"], body.lang-cs li[data-lang="cs"], body.lang-da li[data-lang="da"], body.lang-el li[data-lang="el"], body.lang-fi li[data-lang="fi"], body.lang-id li[data-lang="id"], body.lang-nb li[data-lang="nb"], body.lang-nl li[data-lang="nl"], body.lang-pl li[data-lang="pl"], body.lang-sv li[data-lang="sv"], body.lang-th li[data-lang="th"], body.lang-tr li[data-lang="tr"], body.lang-vi li[data-lang="vi"] { display: list-item; }
+        body.lang-en span[data-lang="en"], body.lang-ko span[data-lang="ko"], body.lang-ja span[data-lang="ja"], body.lang-zh-Hans span[data-lang="zh-Hans"], body.lang-zh-Hant span[data-lang="zh-Hant"], body.lang-de span[data-lang="de"], body.lang-fr span[data-lang="fr"], body.lang-es span[data-lang="es"], body.lang-pt-BR span[data-lang="pt-BR"], body.lang-pt-PT span[data-lang="pt-PT"], body.lang-it span[data-lang="it"], body.lang-ru span[data-lang="ru"], body.lang-cs span[data-lang="cs"], body.lang-da span[data-lang="da"], body.lang-el span[data-lang="el"], body.lang-fi span[data-lang="fi"], body.lang-id span[data-lang="id"], body.lang-nb span[data-lang="nb"], body.lang-nl span[data-lang="nl"], body.lang-pl span[data-lang="pl"], body.lang-sv span[data-lang="sv"], body.lang-th span[data-lang="th"], body.lang-tr span[data-lang="tr"], body.lang-vi span[data-lang="vi"] { display: inline; }
+
+        @media (max-width: 560px) {
+            h1 { font-size: 30px; }
+            .container { padding: 40px 20px 72px; }
+            .nav-links { gap: 12px; font-size: 13px; }
+            .nav-brand span { display: none; }
+        }
+
+        /* No-JS / pre-hydration fallback: show English */
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it):not(.lang-ru):not(.lang-cs):not(.lang-da):not(.lang-el):not(.lang-fi):not(.lang-id):not(.lang-nb):not(.lang-nl):not(.lang-pl):not(.lang-sv):not(.lang-th):not(.lang-tr):not(.lang-vi) div[data-lang="en"] { display: block; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it):not(.lang-ru):not(.lang-cs):not(.lang-da):not(.lang-el):not(.lang-fi):not(.lang-id):not(.lang-nb):not(.lang-nl):not(.lang-pl):not(.lang-sv):not(.lang-th):not(.lang-tr):not(.lang-vi) li[data-lang="en"] { display: list-item; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it):not(.lang-ru):not(.lang-cs):not(.lang-da):not(.lang-el):not(.lang-fi):not(.lang-id):not(.lang-nb):not(.lang-nl):not(.lang-pl):not(.lang-sv):not(.lang-th):not(.lang-tr):not(.lang-vi) span[data-lang="en"] { display: inline; }
+
+        /* 언어별 페이지 링크 — 같은 글의 다른 언어 주소. scripts/build-lang-pages.py 가 언어 폴더마다 같은 줄을 만든다. */
+        .lang-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; margin: 14px auto 0; padding: 0 16px; font-size: 13px; }
+        .lang-links a { color: inherit; opacity: .75; text-decoration: none; }
+        .lang-links a:hover { opacity: 1; text-decoration: underline; }
+        .lang-links a[aria-current] { opacity: 1; font-weight: 600; }
+    </style>
+    <link rel="canonical" href="https://m1zz.github.io/Rereminder/vi/support.html">
+    <link rel="alternate" hreflang="ko" href="https://m1zz.github.io/Rereminder/ko/support.html">
+    <link rel="alternate" hreflang="en" href="https://m1zz.github.io/Rereminder/en/support.html">
+    <link rel="alternate" hreflang="ja" href="https://m1zz.github.io/Rereminder/ja/support.html">
+    <link rel="alternate" hreflang="zh-Hans" href="https://m1zz.github.io/Rereminder/zh-Hans/support.html">
+    <link rel="alternate" hreflang="zh-Hant" href="https://m1zz.github.io/Rereminder/zh-Hant/support.html">
+    <link rel="alternate" hreflang="de" href="https://m1zz.github.io/Rereminder/de/support.html">
+    <link rel="alternate" hreflang="fr" href="https://m1zz.github.io/Rereminder/fr/support.html">
+    <link rel="alternate" hreflang="es" href="https://m1zz.github.io/Rereminder/es/support.html">
+    <link rel="alternate" hreflang="pt-BR" href="https://m1zz.github.io/Rereminder/pt-BR/support.html">
+    <link rel="alternate" hreflang="pt-PT" href="https://m1zz.github.io/Rereminder/pt-PT/support.html">
+    <link rel="alternate" hreflang="it" href="https://m1zz.github.io/Rereminder/it/support.html">
+    <link rel="alternate" hreflang="ru" href="https://m1zz.github.io/Rereminder/ru/support.html">
+    <link rel="alternate" hreflang="cs" href="https://m1zz.github.io/Rereminder/cs/support.html">
+    <link rel="alternate" hreflang="da" href="https://m1zz.github.io/Rereminder/da/support.html">
+    <link rel="alternate" hreflang="el" href="https://m1zz.github.io/Rereminder/el/support.html">
+    <link rel="alternate" hreflang="fi" href="https://m1zz.github.io/Rereminder/fi/support.html">
+    <link rel="alternate" hreflang="id" href="https://m1zz.github.io/Rereminder/id/support.html">
+    <link rel="alternate" hreflang="nb" href="https://m1zz.github.io/Rereminder/nb/support.html">
+    <link rel="alternate" hreflang="nl" href="https://m1zz.github.io/Rereminder/nl/support.html">
+    <link rel="alternate" hreflang="pl" href="https://m1zz.github.io/Rereminder/pl/support.html">
+    <link rel="alternate" hreflang="sv" href="https://m1zz.github.io/Rereminder/sv/support.html">
+    <link rel="alternate" hreflang="th" href="https://m1zz.github.io/Rereminder/th/support.html">
+    <link rel="alternate" hreflang="tr" href="https://m1zz.github.io/Rereminder/tr/support.html">
+    <link rel="alternate" hreflang="vi" href="https://m1zz.github.io/Rereminder/vi/support.html">
+    <link rel="alternate" hreflang="x-default" href="https://m1zz.github.io/Rereminder/support.html">
+</head>
+<body>
+<nav>
+    <div class="nav-inner">
+        <a class="nav-brand" href="./"><img src="../app-icon.jpeg" alt="Rereminder"><span>Rereminder</span></a>
+        <div class="nav-links">
+            <a href="./">Trang chủ</a>
+            <a href="support.html" aria-current="page">Hỗ trợ</a>
+            <a href="privacy.html">Quyền riêng tư</a>
+            <select class="lang" id="lang-select" aria-label="Language"><option value="en">English</option><option value="ko">한국어</option><option value="ja">日本語</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="pt-BR">Português (Brasil)</option><option value="pt-PT">Português (Portugal)</option><option value="it">Italiano</option><option value="ru">Русский</option><option value="cs">Čeština</option><option value="da">Dansk</option><option value="el">Ελληνικά</option><option value="fi">Suomi</option><option value="id">Bahasa Indonesia</option><option value="nb">Norsk bokmål</option><option value="nl">Nederlands</option><option value="pl">Polski</option><option value="sv">Svenska</option><option value="th">ไทย</option><option value="tr">Türkçe</option><option value="vi" selected>Tiếng Việt</option></select>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+
+<div>
+    <h1>Hỗ trợ</h1>
+    <p class="lede">Rereminder do một người làm ra. Khi viết cho tôi, bạn đang viết thẳng cho nhà phát triển — không phải cho một hàng đợi phiếu hỗ trợ.</p>
+    <p class="updated">Cập nhật lần cuối: ngày 9 tháng 9 năm 2026 &middot; Ứng dụng phiên bản 2.2.5</p>
+
+    <h2>Liên hệ</h2>
+    <div class="contact-grid">
+        <div class="card">
+            <h3>Email</h3>
+            <p class="big-link"><a href="mailto:leeo@kakao.com">leeo@kakao.com</a></p>
+            <p>Phù hợp nhất cho lỗi, hoàn tiền và mọi thứ cần ảnh chụp màn hình.</p>
+        </div>
+        <div class="card">
+            <h3>Ngay trong ứng dụng</h3>
+            <p><span class="ui">Cài đặt &rsaquo; Góp ý &rsaquo; Gửi góp ý</span></p>
+            <p>Đến thẳng hộp thư của tôi. Không cần ứng dụng email &mdash; chỉ cần đăng nhập iCloud.</p>
+        </div>
+        <div class="card">
+            <h3>Instagram</h3>
+            <p class="big-link"><a href="https://instagram.com/lee25_ios" target="_blank" rel="noopener">@lee25_ios</a></p>
+            <p>Tin nhắn riêng luôn mở. Hợp với những câu hỏi nhanh.</p>
+        </div>
+        <div class="card">
+            <h3>Báo lỗi &amp; đề xuất tính năng</h3>
+            <p class="big-link"><a href="https://github.com/M1zz/Rereminder/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+            <p>Công khai, để người khác cũng tìm được câu trả lời.</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>Tôi thường trả lời trong vòng 2&ndash;3 ngày.</strong> Nếu đã quá một tuần, có lẽ tin nhắn bị thất lạc &mdash; hãy gửi lại. Tôi thà đọc hai lần còn hơn không đọc được lần nào.</p>
+    </div>
+
+    <h3>Nên ghi gì trong báo cáo lỗi</h3>
+    <ul>
+        <li><strong>Phiên bản ứng dụng</strong> &mdash; hiện ở cuối mục <span class="ui">Cài đặt &rsaquo; Thông tin</span>.</li>
+        <li><strong>Thiết bị và hệ điều hành</strong> &mdash; ví dụ iPhone 15 Pro, iOS 26.1. Hãy ghi cả đời Apple Watch nếu lỗi xảy ra trên đồng hồ.</li>
+        <li><strong>Bạn mong đợi điều gì, và điều gì đã xảy ra thay vào đó.</strong> "Lần báo trước 5 phút không hề đến" cho tôi biết nhiều hơn hẳn so với "thông báo bị hỏng".</li>
+        <li><strong>Lỗi xảy ra lần nào cũng vậy</strong> hay chỉ một lần.</li>
+    </ul>
+
+    <h2>Câu hỏi thường gặp</h2>
+
+    <details>
+        <summary>Báo trước của tôi không đổ chuông</summary>
+        <div class="body">
+            <p>Rereminder dùng <strong>thông báo cục bộ</strong>, nên nguyên nhân gần như luôn là quyền truy cập hoặc cài đặt Tập trung. Hãy kiểm tra theo thứ tự sau:</p>
+            <ol>
+                <li><strong>Quyền thông báo.</strong> Mở <span class="ui">Cài đặt &rsaquo; Cách thông báo</span> trong ứng dụng &mdash; mục này cho thấy trạng thái hiện tại và đề nghị xin quyền hoặc đưa bạn tới Cài đặt của iOS.</li>
+                <li><strong>Tập trung / Không làm phiền.</strong> Nếu đang bật một chế độ Tập trung, hãy thêm Rereminder vào danh sách ứng dụng được cho phép trong <span class="ui">Cài đặt &rsaquo; Tập trung</span> của iOS.</li>
+                <li><strong>Nút chuông/im lặng và âm lượng.</strong> Chế độ im lặng tắt âm thanh; rung vẫn hoạt động.</li>
+                <li><strong>Tóm tắt theo lịch.</strong> Mục <span class="ui">Cài đặt &rsaquo; Thông báo &rsaquo; Tóm tắt theo lịch</span> của iOS có thể giữ thông báo lại đến một giờ nhất định. Rereminder không nên nằm trong đó.</li>
+            </ol>
+            <p>Nếu cả bốn mục đều ổn mà vẫn bị, hãy cho tôi biết độ dài hẹn giờ và vị trí các lần báo trước &mdash; tôi cần đúng tổ hợp đó để tái hiện lỗi.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Apple Watch của tôi không đồng bộ</summary>
+        <div class="body">
+            <p>Mở <span class="ui">Cài đặt &rsaquo; Thiết bị của tôi</span> trong ứng dụng. Trạng thái bên cạnh Apple Watch cho biết bước nào còn thiếu, và chạm vào đó sẽ mở hướng dẫn cho đúng trường hợp ấy.</p>
+            <ol>
+                <li>Đồng hồ đã được <strong>ghép đôi</strong> với iPhone này.</li>
+                <li><strong>Rereminder đã được cài trên đồng hồ.</strong> Mở ứng dụng Watch trên iPhone, cuộn tới Rereminder và cài đặt nếu chưa có.</li>
+                <li><strong>Mở Rereminder trên đồng hồ một lần.</strong> Ứng dụng đồng hồ vừa cài chưa từng chạy, và lần đồng bộ đầu tiên cần ứng dụng đã được mở.</li>
+            </ol>
+            <p>Trạng thái hẹn giờ vẫn được chuyển sang ngay cả khi ứng dụng đồng hồ chạy nền, nên bạn không cần để nó mở.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Máy Mac báo "chưa kết nối" dù ứng dụng đang mở</summary>
+        <div class="body">
+            <p>"Đã kết nối" ở đây nghĩa là <strong>ứng dụng đã chạy trên máy Mac đó trong khoảng 10 phút gần nhất</strong> &mdash; không phải kết nối trực tiếp liên tục. Các thiết bị để lại dấu trong iCloud của chính bạn mỗi năm phút, và iCloud không thể đánh thức một ứng dụng đang ngủ, nên một máy Mac vừa thức dậy có thể mất vài phút mới hiện ra.</p>
+            <p>Nếu mãi không hiện: cả hai thiết bị phải đăng nhập <strong>cùng một tài khoản iCloud</strong> và <strong>bật iCloud Drive</strong>. Trong <span class="ui">Cài đặt &rsaquo; Thiết bị của tôi</span> có nút "Kiểm tra lại" để đọc lại ngay lập tức.</p>
+            <p>Phiên bản Mac cần <strong>macOS 26 trở lên</strong>.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Tôi đã mua Pro nhưng không thấy</summary>
+        <div class="body">
+            <p>Mở màn hình Pro và chạm <strong>Khôi phục giao dịch mua</strong>. Giao dịch mua gắn với Tài khoản Apple đã dùng để mua, nên hãy chắc rằng bạn đang đăng nhập đúng tài khoản đó &mdash; không phải tài khoản của người trong gia đình, cũng không phải tài khoản ở quốc gia khác.</p>
+            <p>Pro là <strong>mua một lần</strong>. Đây không phải gói thuê bao và không hết hạn, nên vẫn còn khi bạn cài lại hay dùng thiết bị mới.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Pro thực sự gồm những gì?</summary>
+        <div class="body">
+            <p>Pro là <strong>mua một lần</strong>. Điều Pro mang lại gói gọn trong một câu: <strong>ứng dụng nhớ các cài đặt của bạn.</strong></p>
+            <p><strong>Miễn phí</strong></p>
+            <ul>
+                <li><strong>Báo trước không giới hạn.</strong> Đặt bao nhiêu tùy thích trên một hẹn giờ &mdash; điều làm nên ứng dụng này thì không bị tính theo lượt.</li>
+                <li>Mọi màu chủ đề, lời nhắn báo tùy chỉnh, Hoạt động trực tiếp, báo lặp lại đến khi bạn phản hồi, và kết thúc bằng báo thức.</li>
+                <li><strong>Ứng dụng Apple Watch và ứng dụng Mac đầy đủ</strong>. Không cái nào phải trả phí.</li>
+            </ul>
+            <p><strong>Pro</strong></p>
+            <ul>
+                <li><strong>Mẫu</strong> &mdash; lưu một cài đặt và gọi lại chỉ bằng một chạm, lưu bao nhiêu cũng được.</li>
+                <li><strong>Cài đặt gần nhất được khôi phục</strong> khi bạn mở lại ứng dụng.</li>
+                <li><strong>Chế độ Phiên</strong> &mdash; đặt tên cho từng phần ("mở đầu / demo / hỏi đáp") và giữ một kịch bản cho mỗi phần, tự mở ra khi phần đó bắt đầu.</li>
+                <li><strong>Quá giờ</strong> &mdash; đồng hồ tiếp tục đếm sau 00:00 để bạn biết mình đã quá giờ bao lâu.</li>
+                <li><strong>Lịch sử và thống kê</strong> &mdash; bản ghi các phiên bạn đã chạy.</li>
+            </ul>
+            <p>Các mẫu bạn đã lưu sẽ không bao giờ bị xóa. Nếu bạn không có Pro, chúng vẫn nằm trên màn hình ở trạng thái khóa và mở lại ngay khi bạn mua.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Tôi muốn hoàn tiền</summary>
+        <div class="body">
+            <p>Việc hoàn tiền do Apple xử lý, không phải tôi &mdash; tôi không xem được thông tin thanh toán của bạn và không thể tự hoàn tiền. Hãy yêu cầu tại <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a> bằng Tài khoản Apple đã thực hiện giao dịch mua.</p>
+            <p>Nếu lý do là có gì đó bị lỗi, xin hãy báo cả cho tôi. Hoàn tiền giải quyết chuyện của bạn, nhưng không sửa lỗi cho người dùng tiếp theo.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Tôi có thể dùng thử mà không cần cài đặt không?</summary>
+        <div class="body">
+            <p>Được. Mở <a href="https://m1zz.github.io/rereminder/" target="_blank" rel="noopener">m1zz.github.io/rereminder</a> trên iPhone và App Clip sẽ chạy hẹn giờ ngay &mdash; không cần vào App Store. App Clip có mặt số và các chuông báo; mẫu, Chế độ Phiên và ứng dụng đồng hồ có trong ứng dụng đầy đủ.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Hỗ trợ những ngôn ngữ và thiết bị nào?</summary>
+        <div class="body">
+            <table>
+                <tr><td>Ngôn ngữ</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>iPhone</td><td>iOS 26.0 trở lên</td></tr>
+                <tr><td>Apple Watch</td><td>watchOS 11.6 trở lên</td></tr>
+                <tr><td>Mac</td><td>macOS 26.0 trở lên</td></tr>
+                <tr><td>iPad</td><td>Chưa hỗ trợ</td></tr>
+            </table>
+        </div>
+    </details>
+
+    <details>
+        <summary>Làm sao để xóa dữ liệu của tôi?</summary>
+        <div class="body">
+            <p>Mọi thứ bạn tạo ra &mdash; hẹn giờ, mẫu, tên các phần, kịch bản, lịch sử &mdash; đều nằm trên thiết bị của bạn. <strong>Xóa ứng dụng là xóa hết.</strong></p>
+            <p>Những số liệu sử dụng ẩn danh mà ứng dụng gửi đi được mô tả đầy đủ trong <a href="privacy.html">trang quyền riêng tư</a>, kể cả những gì dừng lại khi bạn xóa ứng dụng.</p>
+        </div>
+    </details>
+
+    <h2>Vẫn chưa giải quyết được?</h2>
+    <p>Hãy viết cho <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Cho tôi biết bạn đang định làm gì &mdash; không chỉ điều gì bị sai &mdash; và tôi sẽ phản hồi bạn.</p>
+</div>
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Rereminder (두번알림)</p>
+    <p>
+        <a href="./">Trang chủ</a>
+        <a href="support.html">Hỗ trợ</a>
+        <a href="privacy.html">Quyền riêng tư</a>
+        <a href="https://apps.apple.com/us/app/rereminder/id6752551268" target="_blank" rel="noopener">App Store</a>
+    </p>
+        <nav class="lang-links" aria-label="Language"><a href="../ko/support.html" hreflang="ko" lang="ko">한국어</a><a href="../en/support.html" hreflang="en" lang="en">English</a><a href="../ja/support.html" hreflang="ja" lang="ja">日本語</a><a href="../zh-Hans/support.html" hreflang="zh-Hans" lang="zh-Hans">简体中文</a><a href="../zh-Hant/support.html" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a><a href="../de/support.html" hreflang="de" lang="de">Deutsch</a><a href="../fr/support.html" hreflang="fr" lang="fr">Français</a><a href="../es/support.html" hreflang="es" lang="es">Español</a><a href="../pt-BR/support.html" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a><a href="../pt-PT/support.html" hreflang="pt-PT" lang="pt-PT">Português (Portugal)</a><a href="../it/support.html" hreflang="it" lang="it">Italiano</a><a href="../ru/support.html" hreflang="ru" lang="ru">Русский</a><a href="../cs/support.html" hreflang="cs" lang="cs">Čeština</a><a href="../da/support.html" hreflang="da" lang="da">Dansk</a><a href="../el/support.html" hreflang="el" lang="el">Ελληνικά</a><a href="../fi/support.html" hreflang="fi" lang="fi">Suomi</a><a href="../id/support.html" hreflang="id" lang="id">Bahasa Indonesia</a><a href="../nb/support.html" hreflang="nb" lang="nb">Norsk bokmål</a><a href="../nl/support.html" hreflang="nl" lang="nl">Nederlands</a><a href="../pl/support.html" hreflang="pl" lang="pl">Polski</a><a href="../sv/support.html" hreflang="sv" lang="sv">Svenska</a><a href="../th/support.html" hreflang="th" lang="th">ไทย</a><a href="../tr/support.html" hreflang="tr" lang="tr">Türkçe</a><a href="../vi/support.html" hreflang="vi" lang="vi" aria-current="true">Tiếng Việt</a></nav>
+</footer>
+
+<script>
+document.getElementById('lang-select').addEventListener('change', function (e) {
+    location.href = '../' + e.target.value + '/support.html';
+});
+</script>
+</body>
+</html>

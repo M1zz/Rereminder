@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <title>Support – Rereminder</title>
+    <meta name="description" content="Rereminder görs av en enda person. När du skriver till mig skriver du direkt till utvecklaren — inte till en ärendekö.">
+    <link rel="icon" href="../app-icon.jpeg">
+    <meta property="og:title" content="Support – Rereminder">
+    <meta property="og:description" content="Rereminder görs av en enda person. När du skriver till mig skriver du direkt till utvecklaren — inte till en ärendekö.">
+    <meta property="og:type" content="website">
+    <style>
+        /* 라이트가 기본. 다크는 기기 설정을 따른다 — 토글을 두지 않는 이유는
+           이 두 페이지가 "읽고 나가는" 문서라 설정을 기억시킬 자리가 아니기 때문이다. */
+        :root {
+            color-scheme: light dark;
+            --accent: #0066CC;
+            --bg: #ffffff;
+            --surface: #f7f7f9;
+            --surface2: #eeeef1;
+            --text: #1d1d1f;
+            --text2: #55555c;
+            --text3: #6e6e73;
+            --border: #dcdce1;
+            --nav-bg: rgba(255, 255, 255, 0.82);
+            --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --accent: #0A84FF;
+                --bg: #000000;
+                --surface: #111111;
+                --surface2: #1a1a1a;
+                --text: #f5f5f7;
+                --text2: #98989d;
+                --text3: #86868b;
+                --border: #2a2a2a;
+                --nav-bg: rgba(0, 0, 0, 0.72);
+                --card-shadow: none;
+            }
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+        nav {
+            position: sticky; top: 0; z-index: 100;
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            background: var(--nav-bg);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-inner {
+            max-width: 760px; margin: 0 auto; padding: 14px 24px;
+            display: flex; align-items: center; justify-content: space-between; gap: 16px;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); font-weight: 600; letter-spacing: -0.3px; }
+        .nav-brand img { width: 28px; height: 28px; border-radius: 7px; }
+        .nav-links { display: flex; align-items: center; gap: 18px; font-size: 14px; }
+        .nav-links a { color: var(--text2); text-decoration: none; }
+        .nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--text); }
+        /* 언어가 10개라 버튼을 늘어놓으면 휴대폰 폭을 넘는다 — 선택 메뉴 하나로 둔다 */
+        .lang {
+            appearance: none; border: 0; background: var(--surface2); color: var(--text2);
+            font: inherit; font-size: 12px; font-weight: 600; padding: 5px 12px;
+            border-radius: 999px; cursor: pointer; line-height: 1.4; max-width: 120px;
+        }
+
+        .container { max-width: 760px; margin: 0 auto; padding: 56px 24px 96px; }
+        h1 { font-size: 38px; font-weight: 700; letter-spacing: -1px; margin-bottom: 8px; line-height: 1.2; }
+        .lede { color: var(--text2); font-size: 17px; margin-bottom: 12px; }
+        .updated { color: var(--text3); font-size: 13px; margin-bottom: 44px; }
+        h2 { font-size: 23px; font-weight: 600; letter-spacing: -0.3px; margin: 52px 0 14px; }
+        h3 { font-size: 16px; font-weight: 600; margin: 26px 0 6px; }
+        p, li { color: var(--text2); font-size: 15px; }
+        p { margin-bottom: 12px; }
+        ul, ol { padding-left: 22px; margin-bottom: 12px; }
+        li { margin-bottom: 7px; }
+        strong { color: var(--text); font-weight: 600; }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        code, .ui {
+            background: var(--surface2); border: 1px solid var(--border); border-radius: 5px;
+            padding: 1px 6px; font-size: 13.5px; color: var(--text);
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: nowrap;
+        }
+        .ui { font-family: inherit; font-size: 14px; }
+
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; margin-bottom: 14px; box-shadow: var(--card-shadow); }
+        .card h3 { margin-top: 0; }
+        .card p:last-child { margin-bottom: 0; }
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 8px; }
+        .contact-grid .card { margin-bottom: 0; }
+        .big-link { font-size: 17px; font-weight: 600; }
+
+        details {
+            border: 1px solid var(--border); border-radius: 12px;
+            background: var(--surface); margin-bottom: 10px; overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+        details summary {
+            cursor: pointer; list-style: none; padding: 16px 20px;
+            font-size: 15.5px; font-weight: 600; color: var(--text);
+            display: flex; align-items: center; justify-content: space-between; gap: 12px;
+        }
+        details summary::-webkit-details-marker { display: none; }
+        details summary::after { content: "+"; color: var(--text3); font-weight: 400; font-size: 20px; line-height: 1; }
+        details[open] summary::after { content: "\2212"; }
+        details .body { padding: 0 20px 18px; border-top: 1px solid var(--border); padding-top: 14px; }
+        details .body > :last-child { margin-bottom: 0; }
+
+        table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 14.5px; }
+        th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text2); }
+        th { color: var(--text); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.4px; }
+        td:first-child { color: var(--text); white-space: nowrap; }
+
+        .note { border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 10px 10px 0; padding: 14px 18px; margin-bottom: 16px; }
+        .note p:last-child { margin-bottom: 0; }
+
+        footer { border-top: 1px solid var(--border); padding: 32px 24px 56px; text-align: center; }
+        footer p { color: var(--text3); font-size: 13px; margin-bottom: 8px; }
+        footer a { color: var(--text2); margin: 0 8px; font-size: 13px; }
+
+        [data-lang] { display: none; }
+        body.lang-en [data-lang="en"], body.lang-ko [data-lang="ko"], body.lang-ja [data-lang="ja"], body.lang-zh-Hans [data-lang="zh-Hans"], body.lang-zh-Hant [data-lang="zh-Hant"], body.lang-de [data-lang="de"], body.lang-fr [data-lang="fr"], body.lang-es [data-lang="es"], body.lang-pt-BR [data-lang="pt-BR"], body.lang-pt-PT [data-lang="pt-PT"], body.lang-it [data-lang="it"], body.lang-ru [data-lang="ru"], body.lang-cs [data-lang="cs"], body.lang-da [data-lang="da"], body.lang-el [data-lang="el"], body.lang-fi [data-lang="fi"], body.lang-id [data-lang="id"], body.lang-nb [data-lang="nb"], body.lang-nl [data-lang="nl"], body.lang-pl [data-lang="pl"], body.lang-sv [data-lang="sv"], body.lang-th [data-lang="th"], body.lang-tr [data-lang="tr"], body.lang-vi [data-lang="vi"] { display: block; }
+        li[data-lang], td[data-lang], span[data-lang] { display: none; }
+        body.lang-en li[data-lang="en"], body.lang-ko li[data-lang="ko"], body.lang-ja li[data-lang="ja"], body.lang-zh-Hans li[data-lang="zh-Hans"], body.lang-zh-Hant li[data-lang="zh-Hant"], body.lang-de li[data-lang="de"], body.lang-fr li[data-lang="fr"], body.lang-es li[data-lang="es"], body.lang-pt-BR li[data-lang="pt-BR"], body.lang-pt-PT li[data-lang="pt-PT"], body.lang-it li[data-lang="it"], body.lang-ru li[data-lang="ru"], body.lang-cs li[data-lang="cs"], body.lang-da li[data-lang="da"], body.lang-el li[data-lang="el"], body.lang-fi li[data-lang="fi"], body.lang-id li[data-lang="id"], body.lang-nb li[data-lang="nb"], body.lang-nl li[data-lang="nl"], body.lang-pl li[data-lang="pl"], body.lang-sv li[data-lang="sv"], body.lang-th li[data-lang="th"], body.lang-tr li[data-lang="tr"], body.lang-vi li[data-lang="vi"] { display: list-item; }
+        body.lang-en span[data-lang="en"], body.lang-ko span[data-lang="ko"], body.lang-ja span[data-lang="ja"], body.lang-zh-Hans span[data-lang="zh-Hans"], body.lang-zh-Hant span[data-lang="zh-Hant"], body.lang-de span[data-lang="de"], body.lang-fr span[data-lang="fr"], body.lang-es span[data-lang="es"], body.lang-pt-BR span[data-lang="pt-BR"], body.lang-pt-PT span[data-lang="pt-PT"], body.lang-it span[data-lang="it"], body.lang-ru span[data-lang="ru"], body.lang-cs span[data-lang="cs"], body.lang-da span[data-lang="da"], body.lang-el span[data-lang="el"], body.lang-fi span[data-lang="fi"], body.lang-id span[data-lang="id"], body.lang-nb span[data-lang="nb"], body.lang-nl span[data-lang="nl"], body.lang-pl span[data-lang="pl"], body.lang-sv span[data-lang="sv"], body.lang-th span[data-lang="th"], body.lang-tr span[data-lang="tr"], body.lang-vi span[data-lang="vi"] { display: inline; }
+
+        @media (max-width: 560px) {
+            h1 { font-size: 30px; }
+            .container { padding: 40px 20px 72px; }
+            .nav-links { gap: 12px; font-size: 13px; }
+            .nav-brand span { display: none; }
+        }
+
+        /* No-JS / pre-hydration fallback: show English */
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it):not(.lang-ru):not(.lang-cs):not(.lang-da):not(.lang-el):not(.lang-fi):not(.lang-id):not(.lang-nb):not(.lang-nl):not(.lang-pl):not(.lang-sv):not(.lang-th):not(.lang-tr):not(.lang-vi) div[data-lang="en"] { display: block; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it):not(.lang-ru):not(.lang-cs):not(.lang-da):not(.lang-el):not(.lang-fi):not(.lang-id):not(.lang-nb):not(.lang-nl):not(.lang-pl):not(.lang-sv):not(.lang-th):not(.lang-tr):not(.lang-vi) li[data-lang="en"] { display: list-item; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it):not(.lang-ru):not(.lang-cs):not(.lang-da):not(.lang-el):not(.lang-fi):not(.lang-id):not(.lang-nb):not(.lang-nl):not(.lang-pl):not(.lang-sv):not(.lang-th):not(.lang-tr):not(.lang-vi) span[data-lang="en"] { display: inline; }
+
+        /* 언어별 페이지 링크 — 같은 글의 다른 언어 주소. scripts/build-lang-pages.py 가 언어 폴더마다 같은 줄을 만든다. */
+        .lang-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; margin: 14px auto 0; padding: 0 16px; font-size: 13px; }
+        .lang-links a { color: inherit; opacity: .75; text-decoration: none; }
+        .lang-links a:hover { opacity: 1; text-decoration: underline; }
+        .lang-links a[aria-current] { opacity: 1; font-weight: 600; }
+    </style>
+    <link rel="canonical" href="https://m1zz.github.io/Rereminder/sv/support.html">
+    <link rel="alternate" hreflang="ko" href="https://m1zz.github.io/Rereminder/ko/support.html">
+    <link rel="alternate" hreflang="en" href="https://m1zz.github.io/Rereminder/en/support.html">
+    <link rel="alternate" hreflang="ja" href="https://m1zz.github.io/Rereminder/ja/support.html">
+    <link rel="alternate" hreflang="zh-Hans" href="https://m1zz.github.io/Rereminder/zh-Hans/support.html">
+    <link rel="alternate" hreflang="zh-Hant" href="https://m1zz.github.io/Rereminder/zh-Hant/support.html">
+    <link rel="alternate" hreflang="de" href="https://m1zz.github.io/Rereminder/de/support.html">
+    <link rel="alternate" hreflang="fr" href="https://m1zz.github.io/Rereminder/fr/support.html">
+    <link rel="alternate" hreflang="es" href="https://m1zz.github.io/Rereminder/es/support.html">
+    <link rel="alternate" hreflang="pt-BR" href="https://m1zz.github.io/Rereminder/pt-BR/support.html">
+    <link rel="alternate" hreflang="pt-PT" href="https://m1zz.github.io/Rereminder/pt-PT/support.html">
+    <link rel="alternate" hreflang="it" href="https://m1zz.github.io/Rereminder/it/support.html">
+    <link rel="alternate" hreflang="ru" href="https://m1zz.github.io/Rereminder/ru/support.html">
+    <link rel="alternate" hreflang="cs" href="https://m1zz.github.io/Rereminder/cs/support.html">
+    <link rel="alternate" hreflang="da" href="https://m1zz.github.io/Rereminder/da/support.html">
+    <link rel="alternate" hreflang="el" href="https://m1zz.github.io/Rereminder/el/support.html">
+    <link rel="alternate" hreflang="fi" href="https://m1zz.github.io/Rereminder/fi/support.html">
+    <link rel="alternate" hreflang="id" href="https://m1zz.github.io/Rereminder/id/support.html">
+    <link rel="alternate" hreflang="nb" href="https://m1zz.github.io/Rereminder/nb/support.html">
+    <link rel="alternate" hreflang="nl" href="https://m1zz.github.io/Rereminder/nl/support.html">
+    <link rel="alternate" hreflang="pl" href="https://m1zz.github.io/Rereminder/pl/support.html">
+    <link rel="alternate" hreflang="sv" href="https://m1zz.github.io/Rereminder/sv/support.html">
+    <link rel="alternate" hreflang="th" href="https://m1zz.github.io/Rereminder/th/support.html">
+    <link rel="alternate" hreflang="tr" href="https://m1zz.github.io/Rereminder/tr/support.html">
+    <link rel="alternate" hreflang="vi" href="https://m1zz.github.io/Rereminder/vi/support.html">
+    <link rel="alternate" hreflang="x-default" href="https://m1zz.github.io/Rereminder/support.html">
+</head>
+<body>
+<nav>
+    <div class="nav-inner">
+        <a class="nav-brand" href="./"><img src="../app-icon.jpeg" alt="Rereminder"><span>Rereminder</span></a>
+        <div class="nav-links">
+            <a href="./">Start</a>
+            <a href="support.html" aria-current="page">Support</a>
+            <a href="privacy.html">Integritet</a>
+            <select class="lang" id="lang-select" aria-label="Language"><option value="en">English</option><option value="ko">한국어</option><option value="ja">日本語</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="pt-BR">Português (Brasil)</option><option value="pt-PT">Português (Portugal)</option><option value="it">Italiano</option><option value="ru">Русский</option><option value="cs">Čeština</option><option value="da">Dansk</option><option value="el">Ελληνικά</option><option value="fi">Suomi</option><option value="id">Bahasa Indonesia</option><option value="nb">Norsk bokmål</option><option value="nl">Nederlands</option><option value="pl">Polski</option><option value="sv" selected>Svenska</option><option value="th">ไทย</option><option value="tr">Türkçe</option><option value="vi">Tiếng Việt</option></select>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+
+<div>
+    <h1>Support</h1>
+    <p class="lede">Rereminder görs av en enda person. När du skriver till mig skriver du direkt till utvecklaren &mdash; inte till en ärendekö.</p>
+    <p class="updated">Senast uppdaterad: 9 september 2026 &middot; Appversion 2.2.5</p>
+
+    <h2>Kontakta mig</h2>
+    <div class="contact-grid">
+        <div class="card">
+            <h3>E-post</h3>
+            <p class="big-link"><a href="mailto:leeo@kakao.com">leeo@kakao.com</a></p>
+            <p>Bäst för buggar, återbetalningar och allt som behöver en skärmbild.</p>
+        </div>
+        <div class="card">
+            <h3>Inifrån appen</h3>
+            <p><span class="ui">Inställningar &rsaquo; Feedback &rsaquo; Skicka feedback</span></p>
+            <p>Hamnar direkt i min inkorg. Ingen e-postapp behövs &mdash; bara att du är inloggad i iCloud.</p>
+        </div>
+        <div class="card">
+            <h3>Instagram</h3>
+            <p class="big-link"><a href="https://instagram.com/lee25_ios" target="_blank" rel="noopener">@lee25_ios</a></p>
+            <p>DM är öppna. Passar bra för snabba frågor.</p>
+        </div>
+        <div class="card">
+            <h3>Buggar &amp; önskemål</h3>
+            <p class="big-link"><a href="https://github.com/M1zz/Rereminder/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+            <p>Offentligt, så att andra också kan hitta svaret.</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>Jag svarar oftast inom 2&ndash;3 dagar.</strong> Har det gått mer än en vecka kan du räkna med att meddelandet har kommit bort &mdash; skicka det igen. Jag läser hellre något två gånger än inte alls.</p>
+    </div>
+
+    <h3>Det här ska en felrapport innehålla</h3>
+    <ul>
+        <li><strong>Appversion</strong> &mdash; <span class="ui">Inställningar &rsaquo; Info</span> visar den längst ned.</li>
+        <li><strong>Enhet och OS</strong> &mdash; t.ex. iPhone 15 Pro, iOS 26.1. Ange Apple Watch-modellen om problemet gäller klockan.</li>
+        <li><strong>Vad du förväntade dig och vad som hände i stället.</strong> ”Påminnelsen 5 minuter innan kom aldrig” säger mig mycket mer än ”notiserna fungerar inte”.</li>
+        <li><strong>Om det händer varje gång</strong> eller bara en gång.</li>
+    </ul>
+
+    <h2>Vanliga frågor</h2>
+
+    <details>
+        <summary>Mina påminnelser kom inte</summary>
+        <div class="body">
+            <p>Rereminder använder <strong>lokala notiser</strong>, så det handlar nästan alltid om en behörighet eller en fokusinställning. Kontrollera i den här ordningen:</p>
+            <ol>
+                <li><strong>Notisbehörighet.</strong> Öppna <span class="ui">Inställningar &rsaquo; Notissätt</span> i appen &mdash; där ser du aktuell status och kan be om behörighet eller gå till iOS-inställningarna.</li>
+                <li><strong>Fokus / Stör ej.</strong> Om ett fokusläge är på lägger du till Rereminder bland de tillåtna apparna i iOS <span class="ui">Inställningar &rsaquo; Fokus</span>.</li>
+                <li><strong>Ring/ljudlös-reglaget och volymen.</strong> Ljudlöst läge stänger av ljudet; vibrationen kommer ändå fram.</li>
+                <li><strong>Schemalagd sammanfattning.</strong> iOS <span class="ui">Inställningar &rsaquo; Notiser &rsaquo; Schemalagd sammanfattning</span> kan hålla inne notiser till en viss tid. Rereminder ska inte finnas med där.</li>
+            </ol>
+            <p>Om alla fyra stämmer och det ändå händer, berätta hur lång timern var och var påminnelserna låg &mdash; den kombinationen behöver jag för att kunna återskapa felet.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Min Apple Watch synkar inte</summary>
+        <div class="body">
+            <p>Öppna <span class="ui">Inställningar &rsaquo; Mina enheter</span> i appen. Statusen bredvid Apple Watch visar vilket steg som saknas, och trycker du på den öppnas en guide för just det läget.</p>
+            <ol>
+                <li>Klockan är <strong>parkopplad</strong> med den här iPhonen.</li>
+                <li><strong>Rereminder är installerad på klockan.</strong> Öppna Apple Watch-appen på iPhone, scrolla till Rereminder och installera den om den inte finns där.</li>
+                <li><strong>Öppna Rereminder på klockan en gång.</strong> En nyinstallerad klockapp har aldrig körts, och den första synkroniseringen kräver att den har startats.</li>
+            </ol>
+            <p>Timerns status förs över även när klockappen är i bakgrunden, så du behöver inte hålla den öppen.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Min Mac visar ”Inte ansluten” fast appen är öppen</summary>
+        <div class="body">
+            <p>”Ansluten” betyder här att <strong>appen var igång på den Macen under ungefär de senaste 10 minuterna</strong> &mdash; inte en direktanslutning. Enheterna lämnar ett spår i ditt eget iCloud var femte minut, och iCloud kan inte väcka en app som sover, så en Mac som just vaknat kan behöva några minuter innan den syns.</p>
+            <p>Om den aldrig dyker upp: båda enheterna måste vara inloggade på <strong>samma iCloud-konto</strong> med <strong>iCloud Drive påslaget</strong>. <span class="ui">Inställningar &rsaquo; Mina enheter</span> har knappen ”Kontrollera igen” som läser in direkt.</p>
+            <p>Mac-versionen kräver <strong>macOS 26 eller senare</strong>.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Jag har köpt Pro men det syns inte</summary>
+        <div class="body">
+            <p>Öppna Pro-skärmen och tryck på <strong>Återskapa köp</strong>. Köp är kopplade till det Apple-konto som gjorde dem, så se till att du är inloggad på samma konto &mdash; inte en familjemedlems och inte ett konto för en annan region.</p>
+            <p>Pro är ett <strong>engångsköp</strong>. Det är ingen prenumeration och det går inte ut, så det finns kvar efter ominstallationer och på nya enheter.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Vad ingår egentligen i Pro?</summary>
+        <div class="body">
+            <p>Pro är ett <strong>engångsköp</strong>. Det Pro säljer ryms i en mening: <strong>appen kommer ihåg dina upplägg.</strong></p>
+            <p><strong>Gratis</strong></p>
+            <ul>
+                <li><strong>Obegränsat med förvarningar.</strong> Lägg så många du vill på en timer &mdash; det appen finns till för är inte begränsat.</li>
+                <li>Alla temafärger, egna påminnelsemeddelanden, Live-aktivitet, påminnelser som upprepas tills du svarar, och slut med alarm.</li>
+                <li>Den <strong>fullständiga Apple Watch-appen och Mac-appen</strong>. Ingen av dem är låst bakom betalning.</li>
+            </ul>
+            <p><strong>Pro</strong></p>
+            <ul>
+                <li><strong>Mallar</strong> &mdash; spara ett upplägg och ta fram det med ett tryck, så många du vill.</li>
+                <li><strong>Ditt senaste upplägg kommer tillbaka</strong> när du öppnar appen igen.</li>
+                <li><strong>Sessionsläge</strong> &mdash; namnge varje avsnitt (”intro / demo / frågor”) och ha ett manus per avsnitt som fälls ut när avsnittet börjar.</li>
+                <li><strong>Övertid</strong> &mdash; klockan fortsätter räkna efter 00:00 så att du vet hur mycket du drog över.</li>
+                <li><strong>Historik och statistik</strong> &mdash; en översikt över de sessioner du har kört.</li>
+            </ul>
+            <p>Mallar som du redan har sparat raderas aldrig. Utan Pro ligger de kvar på skärmen, låsta, och låses upp igen i samma stund som du köper.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Jag vill ha pengarna tillbaka</summary>
+        <div class="body">
+            <p>Återbetalningar går via Apple, inte via mig &mdash; jag har ingen tillgång till dina betalningsuppgifter och kan inte göra en återbetalning. Begär den på <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a> med det Apple-konto som gjorde köpet.</p>
+            <p>Om anledningen är att något är trasigt, berätta det gärna för mig också. En återbetalning avslutar ditt ärende; den lagar inte felet för nästa person.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Kan jag prova utan att installera?</summary>
+        <div class="body">
+            <p>Ja. Öppna <a href="https://m1zz.github.io/rereminder/" target="_blank" rel="noopener">m1zz.github.io/rereminder</a> på en iPhone så startar appklippet timern direkt &mdash; utan omväg via App Store. Den har urtavlan och påminnelserna; mallar, sessionsläge och klockappen finns i den fullständiga appen.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Vilka språk och enheter stöds?</summary>
+        <div class="body">
+            <table>
+                <tr><td>Språk</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>iPhone</td><td>iOS 26.0 eller senare</td></tr>
+                <tr><td>Apple Watch</td><td>watchOS 11.6 eller senare</td></tr>
+                <tr><td>Mac</td><td>macOS 26.0 eller senare</td></tr>
+                <tr><td>iPad</td><td>Stöds inte än</td></tr>
+            </table>
+        </div>
+    </details>
+
+    <details>
+        <summary>Hur raderar jag mina data?</summary>
+        <div class="body">
+            <p>Allt du skapar &mdash; timrar, mallar, avsnittsnamn, manus, historik &mdash; finns på din enhet. <strong>Raderar du appen försvinner allt.</strong></p>
+            <p>Den anonyma användningsstatistik som appen skickar beskrivs i detalj på <a href="privacy.html">integritetssidan</a>, inklusive vad som upphör när du raderar appen.</p>
+        </div>
+    </details>
+
+    <h2>Fortfarande fast?</h2>
+    <p>Skriv till <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Berätta vad du försökte göra &mdash; inte bara vad som gick fel &mdash; så hör jag av mig.</p>
+</div>
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Rereminder (두번알림)</p>
+    <p>
+        <a href="./">Start</a>
+        <a href="support.html">Support</a>
+        <a href="privacy.html">Integritet</a>
+        <a href="https://apps.apple.com/us/app/rereminder/id6752551268" target="_blank" rel="noopener">App Store</a>
+    </p>
+        <nav class="lang-links" aria-label="Language"><a href="../ko/support.html" hreflang="ko" lang="ko">한국어</a><a href="../en/support.html" hreflang="en" lang="en">English</a><a href="../ja/support.html" hreflang="ja" lang="ja">日本語</a><a href="../zh-Hans/support.html" hreflang="zh-Hans" lang="zh-Hans">简体中文</a><a href="../zh-Hant/support.html" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a><a href="../de/support.html" hreflang="de" lang="de">Deutsch</a><a href="../fr/support.html" hreflang="fr" lang="fr">Français</a><a href="../es/support.html" hreflang="es" lang="es">Español</a><a href="../pt-BR/support.html" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a><a href="../pt-PT/support.html" hreflang="pt-PT" lang="pt-PT">Português (Portugal)</a><a href="../it/support.html" hreflang="it" lang="it">Italiano</a><a href="../ru/support.html" hreflang="ru" lang="ru">Русский</a><a href="../cs/support.html" hreflang="cs" lang="cs">Čeština</a><a href="../da/support.html" hreflang="da" lang="da">Dansk</a><a href="../el/support.html" hreflang="el" lang="el">Ελληνικά</a><a href="../fi/support.html" hreflang="fi" lang="fi">Suomi</a><a href="../id/support.html" hreflang="id" lang="id">Bahasa Indonesia</a><a href="../nb/support.html" hreflang="nb" lang="nb">Norsk bokmål</a><a href="../nl/support.html" hreflang="nl" lang="nl">Nederlands</a><a href="../pl/support.html" hreflang="pl" lang="pl">Polski</a><a href="../sv/support.html" hreflang="sv" lang="sv" aria-current="true">Svenska</a><a href="../th/support.html" hreflang="th" lang="th">ไทย</a><a href="../tr/support.html" hreflang="tr" lang="tr">Türkçe</a><a href="../vi/support.html" hreflang="vi" lang="vi">Tiếng Việt</a></nav>
+</footer>
+
+<script>
+document.getElementById('lang-select').addEventListener('change', function (e) {
+    location.href = '../' + e.target.value + '/support.html';
+});
+</script>
+</body>
+</html>

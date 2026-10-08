@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <title>Политика конфиденциальности – Rereminder</title>
+    <meta name="description" content="Rereminder разрабатывает Хёнхо Ли (Hyunho Lee). Здесь точно написано, что покидает ваш телефон, а что нет.">
+    <link rel="icon" href="../app-icon.jpeg">
+    <meta property="og:title" content="Политика конфиденциальности – Rereminder">
+    <meta property="og:description" content="Rereminder разрабатывает Хёнхо Ли (Hyunho Lee). Здесь точно написано, что покидает ваш телефон, а что нет.">
+    <meta property="og:type" content="website">
+    <style>
+        /* 라이트가 기본. 다크는 기기 설정을 따른다 — 토글을 두지 않는 이유는
+           이 두 페이지가 "읽고 나가는" 문서라 설정을 기억시킬 자리가 아니기 때문이다. */
+        :root {
+            color-scheme: light dark;
+            --accent: #0066CC;
+            --bg: #ffffff;
+            --surface: #f7f7f9;
+            --surface2: #eeeef1;
+            --text: #1d1d1f;
+            --text2: #55555c;
+            --text3: #6e6e73;
+            --border: #dcdce1;
+            --nav-bg: rgba(255, 255, 255, 0.82);
+            --card-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --accent: #0A84FF;
+                --bg: #000000;
+                --surface: #111111;
+                --surface2: #1a1a1a;
+                --text: #f5f5f7;
+                --text2: #98989d;
+                --text3: #86868b;
+                --border: #2a2a2a;
+                --nav-bg: rgba(0, 0, 0, 0.72);
+                --card-shadow: none;
+            }
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+        nav {
+            position: sticky; top: 0; z-index: 100;
+            backdrop-filter: saturate(180%) blur(20px);
+            -webkit-backdrop-filter: saturate(180%) blur(20px);
+            background: var(--nav-bg);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav-inner {
+            max-width: 760px; margin: 0 auto; padding: 14px 24px;
+            display: flex; align-items: center; justify-content: space-between; gap: 16px;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); font-weight: 600; letter-spacing: -0.3px; }
+        .nav-brand img { width: 28px; height: 28px; border-radius: 7px; }
+        .nav-links { display: flex; align-items: center; gap: 18px; font-size: 14px; }
+        .nav-links a { color: var(--text2); text-decoration: none; }
+        .nav-links a:hover, .nav-links a[aria-current="page"] { color: var(--text); }
+        /* 언어가 10개라 버튼을 늘어놓으면 휴대폰 폭을 넘는다 — 선택 메뉴 하나로 둔다 */
+        .lang {
+            appearance: none; border: 0; background: var(--surface2); color: var(--text2);
+            font: inherit; font-size: 12px; font-weight: 600; padding: 5px 12px;
+            border-radius: 999px; cursor: pointer; line-height: 1.4; max-width: 120px;
+        }
+
+        .container { max-width: 760px; margin: 0 auto; padding: 56px 24px 96px; }
+        h1 { font-size: 38px; font-weight: 700; letter-spacing: -1px; margin-bottom: 8px; line-height: 1.2; }
+        .lede { color: var(--text2); font-size: 17px; margin-bottom: 12px; }
+        .updated { color: var(--text3); font-size: 13px; margin-bottom: 44px; }
+        h2 { font-size: 23px; font-weight: 600; letter-spacing: -0.3px; margin: 52px 0 14px; }
+        h3 { font-size: 16px; font-weight: 600; margin: 26px 0 6px; }
+        p, li { color: var(--text2); font-size: 15px; }
+        p { margin-bottom: 12px; }
+        ul, ol { padding-left: 22px; margin-bottom: 12px; }
+        li { margin-bottom: 7px; }
+        strong { color: var(--text); font-weight: 600; }
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        code, .ui {
+            background: var(--surface2); border: 1px solid var(--border); border-radius: 5px;
+            padding: 1px 6px; font-size: 13.5px; color: var(--text);
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace; white-space: nowrap;
+        }
+        .ui { font-family: inherit; font-size: 14px; }
+
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 22px 24px; margin-bottom: 14px; box-shadow: var(--card-shadow); }
+        .card h3 { margin-top: 0; }
+        .card p:last-child { margin-bottom: 0; }
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 8px; }
+        .contact-grid .card { margin-bottom: 0; }
+        .big-link { font-size: 17px; font-weight: 600; }
+
+        details {
+            border: 1px solid var(--border); border-radius: 12px;
+            background: var(--surface); margin-bottom: 10px; overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+        details summary {
+            cursor: pointer; list-style: none; padding: 16px 20px;
+            font-size: 15.5px; font-weight: 600; color: var(--text);
+            display: flex; align-items: center; justify-content: space-between; gap: 12px;
+        }
+        details summary::-webkit-details-marker { display: none; }
+        details summary::after { content: "+"; color: var(--text3); font-weight: 400; font-size: 20px; line-height: 1; }
+        details[open] summary::after { content: "\2212"; }
+        details .body { padding: 0 20px 18px; border-top: 1px solid var(--border); padding-top: 14px; }
+        details .body > :last-child { margin-bottom: 0; }
+
+        table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 14.5px; }
+        th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text2); }
+        th { color: var(--text); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.4px; }
+        td:first-child { color: var(--text); white-space: nowrap; }
+
+        .note { border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 10px 10px 0; padding: 14px 18px; margin-bottom: 16px; }
+        .note p:last-child { margin-bottom: 0; }
+
+        footer { border-top: 1px solid var(--border); padding: 32px 24px 56px; text-align: center; }
+        footer p { color: var(--text3); font-size: 13px; margin-bottom: 8px; }
+        footer a { color: var(--text2); margin: 0 8px; font-size: 13px; }
+
+        [data-lang] { display: none; }
+        body.lang-en [data-lang="en"], body.lang-ko [data-lang="ko"], body.lang-ja [data-lang="ja"], body.lang-zh-Hans [data-lang="zh-Hans"], body.lang-zh-Hant [data-lang="zh-Hant"], body.lang-de [data-lang="de"], body.lang-fr [data-lang="fr"], body.lang-es [data-lang="es"], body.lang-pt-BR [data-lang="pt-BR"], body.lang-pt-PT [data-lang="pt-PT"], body.lang-it [data-lang="it"], body.lang-ru [data-lang="ru"], body.lang-cs [data-lang="cs"], body.lang-da [data-lang="da"], body.lang-el [data-lang="el"], body.lang-fi [data-lang="fi"], body.lang-id [data-lang="id"], body.lang-nb [data-lang="nb"], body.lang-nl [data-lang="nl"], body.lang-pl [data-lang="pl"], body.lang-sv [data-lang="sv"], body.lang-th [data-lang="th"], body.lang-tr [data-lang="tr"], body.lang-vi [data-lang="vi"] { display: block; }
+        li[data-lang], td[data-lang], span[data-lang] { display: none; }
+        body.lang-en li[data-lang="en"], body.lang-ko li[data-lang="ko"], body.lang-ja li[data-lang="ja"], body.lang-zh-Hans li[data-lang="zh-Hans"], body.lang-zh-Hant li[data-lang="zh-Hant"], body.lang-de li[data-lang="de"], body.lang-fr li[data-lang="fr"], body.lang-es li[data-lang="es"], body.lang-pt-BR li[data-lang="pt-BR"], body.lang-pt-PT li[data-lang="pt-PT"], body.lang-it li[data-lang="it"], body.lang-ru li[data-lang="ru"], body.lang-cs li[data-lang="cs"], body.lang-da li[data-lang="da"], body.lang-el li[data-lang="el"], body.lang-fi li[data-lang="fi"], body.lang-id li[data-lang="id"], body.lang-nb li[data-lang="nb"], body.lang-nl li[data-lang="nl"], body.lang-pl li[data-lang="pl"], body.lang-sv li[data-lang="sv"], body.lang-th li[data-lang="th"], body.lang-tr li[data-lang="tr"], body.lang-vi li[data-lang="vi"] { display: list-item; }
+        body.lang-en span[data-lang="en"], body.lang-ko span[data-lang="ko"], body.lang-ja span[data-lang="ja"], body.lang-zh-Hans span[data-lang="zh-Hans"], body.lang-zh-Hant span[data-lang="zh-Hant"], body.lang-de span[data-lang="de"], body.lang-fr span[data-lang="fr"], body.lang-es span[data-lang="es"], body.lang-pt-BR span[data-lang="pt-BR"], body.lang-pt-PT span[data-lang="pt-PT"], body.lang-it span[data-lang="it"], body.lang-ru span[data-lang="ru"], body.lang-cs span[data-lang="cs"], body.lang-da span[data-lang="da"], body.lang-el span[data-lang="el"], body.lang-fi span[data-lang="fi"], body.lang-id span[data-lang="id"], body.lang-nb span[data-lang="nb"], body.lang-nl span[data-lang="nl"], body.lang-pl span[data-lang="pl"], body.lang-sv span[data-lang="sv"], body.lang-th span[data-lang="th"], body.lang-tr span[data-lang="tr"], body.lang-vi span[data-lang="vi"] { display: inline; }
+
+        @media (max-width: 560px) {
+            h1 { font-size: 30px; }
+            .container { padding: 40px 20px 72px; }
+            .nav-links { gap: 12px; font-size: 13px; }
+            .nav-brand span { display: none; }
+        }
+
+        /* No-JS / pre-hydration fallback: show English */
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it):not(.lang-ru):not(.lang-cs):not(.lang-da):not(.lang-el):not(.lang-fi):not(.lang-id):not(.lang-nb):not(.lang-nl):not(.lang-pl):not(.lang-sv):not(.lang-th):not(.lang-tr):not(.lang-vi) div[data-lang="en"] { display: block; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it):not(.lang-ru):not(.lang-cs):not(.lang-da):not(.lang-el):not(.lang-fi):not(.lang-id):not(.lang-nb):not(.lang-nl):not(.lang-pl):not(.lang-sv):not(.lang-th):not(.lang-tr):not(.lang-vi) li[data-lang="en"] { display: list-item; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it):not(.lang-ru):not(.lang-cs):not(.lang-da):not(.lang-el):not(.lang-fi):not(.lang-id):not(.lang-nb):not(.lang-nl):not(.lang-pl):not(.lang-sv):not(.lang-th):not(.lang-tr):not(.lang-vi) span[data-lang="en"] { display: inline; }
+
+        /* 언어별 페이지 링크 — 같은 글의 다른 언어 주소. scripts/build-lang-pages.py 가 언어 폴더마다 같은 줄을 만든다. */
+        .lang-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; margin: 14px auto 0; padding: 0 16px; font-size: 13px; }
+        .lang-links a { color: inherit; opacity: .75; text-decoration: none; }
+        .lang-links a:hover { opacity: 1; text-decoration: underline; }
+        .lang-links a[aria-current] { opacity: 1; font-weight: 600; }
+    </style>
+    <link rel="canonical" href="https://m1zz.github.io/Rereminder/ru/privacy.html">
+    <link rel="alternate" hreflang="ko" href="https://m1zz.github.io/Rereminder/ko/privacy.html">
+    <link rel="alternate" hreflang="en" href="https://m1zz.github.io/Rereminder/en/privacy.html">
+    <link rel="alternate" hreflang="ja" href="https://m1zz.github.io/Rereminder/ja/privacy.html">
+    <link rel="alternate" hreflang="zh-Hans" href="https://m1zz.github.io/Rereminder/zh-Hans/privacy.html">
+    <link rel="alternate" hreflang="zh-Hant" href="https://m1zz.github.io/Rereminder/zh-Hant/privacy.html">
+    <link rel="alternate" hreflang="de" href="https://m1zz.github.io/Rereminder/de/privacy.html">
+    <link rel="alternate" hreflang="fr" href="https://m1zz.github.io/Rereminder/fr/privacy.html">
+    <link rel="alternate" hreflang="es" href="https://m1zz.github.io/Rereminder/es/privacy.html">
+    <link rel="alternate" hreflang="pt-BR" href="https://m1zz.github.io/Rereminder/pt-BR/privacy.html">
+    <link rel="alternate" hreflang="pt-PT" href="https://m1zz.github.io/Rereminder/pt-PT/privacy.html">
+    <link rel="alternate" hreflang="it" href="https://m1zz.github.io/Rereminder/it/privacy.html">
+    <link rel="alternate" hreflang="ru" href="https://m1zz.github.io/Rereminder/ru/privacy.html">
+    <link rel="alternate" hreflang="cs" href="https://m1zz.github.io/Rereminder/cs/privacy.html">
+    <link rel="alternate" hreflang="da" href="https://m1zz.github.io/Rereminder/da/privacy.html">
+    <link rel="alternate" hreflang="el" href="https://m1zz.github.io/Rereminder/el/privacy.html">
+    <link rel="alternate" hreflang="fi" href="https://m1zz.github.io/Rereminder/fi/privacy.html">
+    <link rel="alternate" hreflang="id" href="https://m1zz.github.io/Rereminder/id/privacy.html">
+    <link rel="alternate" hreflang="nb" href="https://m1zz.github.io/Rereminder/nb/privacy.html">
+    <link rel="alternate" hreflang="nl" href="https://m1zz.github.io/Rereminder/nl/privacy.html">
+    <link rel="alternate" hreflang="pl" href="https://m1zz.github.io/Rereminder/pl/privacy.html">
+    <link rel="alternate" hreflang="sv" href="https://m1zz.github.io/Rereminder/sv/privacy.html">
+    <link rel="alternate" hreflang="th" href="https://m1zz.github.io/Rereminder/th/privacy.html">
+    <link rel="alternate" hreflang="tr" href="https://m1zz.github.io/Rereminder/tr/privacy.html">
+    <link rel="alternate" hreflang="vi" href="https://m1zz.github.io/Rereminder/vi/privacy.html">
+    <link rel="alternate" hreflang="x-default" href="https://m1zz.github.io/Rereminder/privacy.html">
+</head>
+<body>
+<nav>
+    <div class="nav-inner">
+        <a class="nav-brand" href="./"><img src="../app-icon.jpeg" alt="Rereminder"><span>Rereminder</span></a>
+        <div class="nav-links">
+            <a href="./">Главная</a>
+            <a href="support.html">Поддержка</a>
+            <a href="privacy.html" aria-current="page">Конфиденциальность</a>
+            <select class="lang" id="lang-select" aria-label="Language"><option value="en">English</option><option value="ko">한국어</option><option value="ja">日本語</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="pt-BR">Português (Brasil)</option><option value="pt-PT">Português (Portugal)</option><option value="it">Italiano</option><option value="ru" selected>Русский</option><option value="cs">Čeština</option><option value="da">Dansk</option><option value="el">Ελληνικά</option><option value="fi">Suomi</option><option value="id">Bahasa Indonesia</option><option value="nb">Norsk bokmål</option><option value="nl">Nederlands</option><option value="pl">Polski</option><option value="sv">Svenska</option><option value="th">ไทย</option><option value="tr">Türkçe</option><option value="vi">Tiếng Việt</option></select>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+
+<div>
+    <h1>Политика конфиденциальности</h1>
+    <p class="lede">Rereminder разрабатывает Хёнхо Ли (Hyunho Lee). Здесь точно написано, что покидает ваш телефон, а что нет.</p>
+    <p class="updated">Обновлено: 9 сентября 2026 г. &middot; Относится к версии приложения 2.2.6</p>
+
+    <h2>Коротко</h2>
+    <div class="note">
+        <p><strong>Всё, что вы пишете, остаётся на вашем телефоне.</strong> Названия таймеров, тексты сигналов, названия этапов, заметки к выступлениям, история &mdash; ничего из этого никуда не отправляется.</p>
+        <p><strong>Приложение отправляет мне анонимные цифры.</strong> Счётчики вроде «сколько таймеров запущено» и «сколько дошло до конца», привязанные к случайному ID, который не связан с вами. По ним я решаю, что исправлять. Подробно &mdash; ниже.</p>
+        <p><strong>Нет рекламы, трекеров и сторонних SDK аналитики.</strong> Ничего не продаётся и никому не передаётся.</p>
+    </div>
+
+    <h2>Что остаётся на устройстве</h2>
+    <p>Следующее хранится локально и <strong>никогда мне не передаётся</strong>:</p>
+    <ul>
+        <li><strong>Настройки таймеров</strong> &mdash; длительность, где стоит каждый сигнал, свои тексты сигналов.</li>
+        <li><strong>Шаблоны</strong> &mdash; сохранённые настройки и их названия.</li>
+        <li><strong>Содержимое этапов</strong> &mdash; названия этапов и заметки, которые вы пишете к каждому этапу.</li>
+        <li><strong>История</strong> &mdash; записи о проведённых занятиях.</li>
+        <li><strong>Предпочтения</strong> &mdash; цвет темы, режим звука и вибрации, какие устройства, по вашим словам, у вас есть.</li>
+        <li><strong>Статус покупки</strong> &mdash; есть ли у вас Rereminder Pro; хранится в связке ключей iOS.</li>
+    </ul>
+    <p>Удаление приложения удаляет всё это.</p>
+
+    <h2>Что приложение отправляет мне</h2>
+    <p>Всё это попадает в <strong>мою собственную базу данных CloudKit</strong> (контейнер <code>iCloud.com.Ysoup.FeedbackHub</code>). Другого сервера нет, и никакая другая компания ничего из этого не получает.</p>
+
+    <h3>1. Анонимные счётчики использования</h3>
+    <p>Одна запись на установку, обновляется не чаще двух раз в день. В ней:</p>
+    <ul>
+        <li><strong>Случайный ID, который приложение создаёт само</strong> при первом запуске. Это не ваш Аккаунт Apple, не идентификатор устройства, и он ни с чем о вас не связан. Удалите приложение &mdash; и ID исчезнет; при переустановке создаётся новый, никак не связанный с прежним.</li>
+        <li>Версия приложения, платформа (iPhone / Watch / Mac), версия ОС и язык.</li>
+        <li><strong>Счётчики и ничего, кроме счётчиков</strong> &mdash; запущенные, завершённые и отменённые таймеры; общее число минут; сколько сигналов обычно у таймера; сохранённые и использованные шаблоны; пользовались ли режимом этапов; пользовались ли часами; дней с установки; когда приложение было активно в последний раз.</li>
+        <li>Два флага «да/нет»: куплен ли Pro и выдан ли доступ к уведомлениям.</li>
+    </ul>
+
+    <h3>2. Анонимные события</h3>
+    <p>Когда происходит что-то заметное &mdash; приложение открыли, запустили таймер, показали экран покупки, &mdash; приложение записывает <strong>название этого события</strong> вместе с версией приложения, платформой, тем же случайным ID и временем. Каждое название события записывается <strong>не чаще раза в шесть часов</strong>, поэтому видно лишь, <em>происходит ли</em> что-то, но не как часто.</p>
+
+    <h3>3. Отзывы, которые вы решили отправить</h3>
+    <p>Только когда вы открываете <span class="ui">Отправить отзыв</span> и нажимаете «Отправить». Эта запись содержит:</p>
+    <ul>
+        <li><strong>Ваше сообщение</strong> и выбранную категорию.</li>
+        <li><strong>Имя и адрес для ответа &mdash; оба необязательны и по умолчанию пусты.</strong> Заполняйте их, только если хотите получить ответ. Они используются, чтобы ответить вам, и ни для чего больше.</li>
+        <li><strong>Одна строка об устройстве</strong> &mdash; версия приложения, тип устройства, версия ОС, например <code>App 2.2.6 | iPhone | iOS 26.1</code>. Это <em>тип</em> устройства, а не <em>какое именно</em> устройство; в ней нет ничего уникального для вас. Форма показывает вам эту строку перед отправкой.</li>
+        <li>Ваш язык (например, <code>ko_KR</code>) и платформа.</li>
+    </ul>
+    <p>Пока вы не нажмёте «Отправить», с этого экрана ничего не уходит. Касание 👍 в вопросе «Нравится приложение?» открывает окно отзыва в App Store и ничего мне не отправляет; 👎 просто открывает эту же форму отзыва.</p>
+
+    <h3>4. Отчёты о сбоях и зависаниях</h3>
+    <p>Собираются через <strong>Apple MetricKit</strong>, который обобщает данные о сбоях и производительности на уровне системы. В них есть трассировки стека и тайминги, но никогда &mdash; содержимое ваших таймеров.</p>
+
+    <div class="note">
+        <p><strong>Об одном стоит сказать отдельно:</strong> когда устройство записывает что-либо из перечисленного в CloudKit, Apple помечает запись непрозрачным идентификатором iCloud, своим для каждого приложения. Его создаёт Apple, он разный для разных приложений, это не ваш адрес эл. почты, и я не могу с его помощью связаться с вами или найти вас где-то ещё. Это побочный эффект работы CloudKit, а не то, что приложение собирает намеренно.</p>
+    </div>
+
+    <h2>Что не отправляется никогда и ни при каких условиях</h2>
+    <ul>
+        <li>Названия таймеров, тексты сигналов, названия этапов, заметки к выступлениям &mdash; <strong>любой текст, который вы вводите.</strong></li>
+        <li>Ваше имя или адрес эл. почты &mdash; кроме двух необязательных полей в форме отзыва выше, которые вы заполняете сами и можете оставить пустыми.</li>
+        <li>Рекламный идентификатор (IDFA), идентификатор поставщика (IDFV) или любой «отпечаток» устройства.</li>
+        <li>Геопозиция, контакты, фото, календарь, данные о здоровье или микрофон.</li>
+    </ul>
+
+    <h2>Синхронизация между вашими устройствами</h2>
+    <p>iPhone, Apple Watch и Mac держат таймеры в согласии друг с другом. Это работает через <strong>ваш собственный аккаунт iCloud и Apple WatchConnectivity</strong> &mdash; данные идут с устройства на устройство через ваш iCloud, а не через меня. <strong>Я не могу ничего из этого прочитать.</strong> Сюда входят состояние и название идущего таймера и имя устройства, которое показывается в статусе подключения.</p>
+    <p>Если выключить iCloud Drive, синхронизация прекратится; на каждом устройстве приложение продолжит работать само по себе.</p>
+
+    <h2>Третьи лица и платежи</h2>
+    <p>В Rereminder <strong>нет сторонних сервисов аналитики, рекламы или отслеживания</strong>. Никакие данные не продаются, не сдаются и не передаются другим компаниям.</p>
+    <p>Rereminder Pro &mdash; это <strong>разовая покупка, которую полностью обрабатывает Apple</strong>. Я никогда не вижу ваших платёжных данных &mdash; только сам факт покупки.</p>
+
+    <h2>Уведомления</h2>
+    <p>Все сигналы &mdash; это <strong>локальные уведомления</strong>, запланированные на вашем устройстве. Push-сервера нет, и содержимое уведомлений до меня никогда не доходит.</p>
+
+    <h2>Сколько хранится и как это остановить</h2>
+    <ul>
+        <li><strong>Удаление приложения сразу прекращает любой сбор</strong> и удаляет случайный ID вместе со всем, что хранится на устройстве.</li>
+        <li>Анонимные записи об использовании хранятся, пока помогают решать, что делать дальше, и удаляются, когда перестают помогать. В них нет идентификатора, ведущего к вам, поэтому я не могу по запросу выделить «ваши» строки &mdash; и по той же причине по ним нельзя вас опознать.</li>
+        <li><strong>С отзывами иначе</strong> &mdash; их написали вы, поэтому я могу их найти. Напишите мне, и я их удалю.</li>
+        <li>Я могу удалённо отключить сбор статистики и отчёты о сбоях для всех и сделаю это, если они перестанут себя оправдывать.</li>
+    </ul>
+
+    <h2>Конфиденциальность детей</h2>
+    <p>Rereminder сознательно не собирает персональные данные ни у кого, включая детей. Приложению не нужен аккаунт, оно не спрашивает личных данных, и в нём нет социальных функций, чата или общения между пользователями.</p>
+
+    <h2>Изменения политики</h2>
+    <p>Если изменится то, что собирает приложение, вместе с этим изменится и эта страница, а дата вверху обновится. О существенных изменениях также будет сказано в примечаниях к версии, которая их вносит.</p>
+
+    <h2>Контакты</h2>
+    <p>Любые вопросы об этом &mdash; включая «а зачем вам это?» &mdash; присылайте на <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. См. также <a href="support.html">страницу поддержки</a>.</p>
+</div>
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Rereminder (두번알림)</p>
+    <p>
+        <a href="./">Главная</a>
+        <a href="support.html">Поддержка</a>
+        <a href="privacy.html">Конфиденциальность</a>
+        <a href="https://apps.apple.com/us/app/rereminder/id6752551268" target="_blank" rel="noopener">App Store</a>
+    </p>
+        <nav class="lang-links" aria-label="Language"><a href="../ko/privacy.html" hreflang="ko" lang="ko">한국어</a><a href="../en/privacy.html" hreflang="en" lang="en">English</a><a href="../ja/privacy.html" hreflang="ja" lang="ja">日本語</a><a href="../zh-Hans/privacy.html" hreflang="zh-Hans" lang="zh-Hans">简体中文</a><a href="../zh-Hant/privacy.html" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a><a href="../de/privacy.html" hreflang="de" lang="de">Deutsch</a><a href="../fr/privacy.html" hreflang="fr" lang="fr">Français</a><a href="../es/privacy.html" hreflang="es" lang="es">Español</a><a href="../pt-BR/privacy.html" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a><a href="../pt-PT/privacy.html" hreflang="pt-PT" lang="pt-PT">Português (Portugal)</a><a href="../it/privacy.html" hreflang="it" lang="it">Italiano</a><a href="../ru/privacy.html" hreflang="ru" lang="ru" aria-current="true">Русский</a><a href="../cs/privacy.html" hreflang="cs" lang="cs">Čeština</a><a href="../da/privacy.html" hreflang="da" lang="da">Dansk</a><a href="../el/privacy.html" hreflang="el" lang="el">Ελληνικά</a><a href="../fi/privacy.html" hreflang="fi" lang="fi">Suomi</a><a href="../id/privacy.html" hreflang="id" lang="id">Bahasa Indonesia</a><a href="../nb/privacy.html" hreflang="nb" lang="nb">Norsk bokmål</a><a href="../nl/privacy.html" hreflang="nl" lang="nl">Nederlands</a><a href="../pl/privacy.html" hreflang="pl" lang="pl">Polski</a><a href="../sv/privacy.html" hreflang="sv" lang="sv">Svenska</a><a href="../th/privacy.html" hreflang="th" lang="th">ไทย</a><a href="../tr/privacy.html" hreflang="tr" lang="tr">Türkçe</a><a href="../vi/privacy.html" hreflang="vi" lang="vi">Tiếng Việt</a></nav>
+</footer>
+
+<script>
+document.getElementById('lang-select').addEventListener('change', function (e) {
+    location.href = '../' + e.target.value + '/privacy.html';
+});
+</script>
+</body>
+</html>
