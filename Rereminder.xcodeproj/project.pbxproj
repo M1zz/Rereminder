@@ -629,7 +629,21 @@
 				fr,
 				es,
 				"pt-BR",
+				"pt-PT",
 				it,
+				ru,
+				cs,
+				da,
+				el,
+				fi,
+				id,
+				nb,
+				nl,
+				pl,
+				sv,
+				th,
+				tr,
+				vi,
 			);
 			mainGroup = 260414C22E1B9FA200CBA29B;
 			minimizedProjectReferenceProxies = 1;

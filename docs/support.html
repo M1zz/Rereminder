@@ -127,10 +127,10 @@
         footer a { color: var(--text2); margin: 0 8px; font-size: 13px; }
 
         [data-lang] { display: none; }
-        body.lang-en [data-lang="en"], body.lang-ko [data-lang="ko"], body.lang-ja [data-lang="ja"], body.lang-zh-Hans [data-lang="zh-Hans"], body.lang-zh-Hant [data-lang="zh-Hant"], body.lang-de [data-lang="de"], body.lang-fr [data-lang="fr"], body.lang-es [data-lang="es"], body.lang-pt-BR [data-lang="pt-BR"], body.lang-pt-PT [data-lang="pt-PT"], body.lang-it [data-lang="it"] { display: block; }
+        body.lang-en [data-lang="en"], body.lang-ko [data-lang="ko"], body.lang-ja [data-lang="ja"], body.lang-zh-Hans [data-lang="zh-Hans"], body.lang-zh-Hant [data-lang="zh-Hant"], body.lang-de [data-lang="de"], body.lang-fr [data-lang="fr"], body.lang-es [data-lang="es"], body.lang-pt-BR [data-lang="pt-BR"], body.lang-pt-PT [data-lang="pt-PT"], body.lang-it [data-lang="it"], body.lang-ru [data-lang="ru"], body.lang-cs [data-lang="cs"], body.lang-da [data-lang="da"], body.lang-el [data-lang="el"], body.lang-fi [data-lang="fi"], body.lang-id [data-lang="id"], body.lang-nb [data-lang="nb"], body.lang-nl [data-lang="nl"], body.lang-pl [data-lang="pl"], body.lang-sv [data-lang="sv"], body.lang-th [data-lang="th"], body.lang-tr [data-lang="tr"], body.lang-vi [data-lang="vi"] { display: block; }
         li[data-lang], td[data-lang], span[data-lang] { display: none; }
-        body.lang-en li[data-lang="en"], body.lang-ko li[data-lang="ko"], body.lang-ja li[data-lang="ja"], body.lang-zh-Hans li[data-lang="zh-Hans"], body.lang-zh-Hant li[data-lang="zh-Hant"], body.lang-de li[data-lang="de"], body.lang-fr li[data-lang="fr"], body.lang-es li[data-lang="es"], body.lang-pt-BR li[data-lang="pt-BR"], body.lang-pt-PT li[data-lang="pt-PT"], body.lang-it li[data-lang="it"] { display: list-item; }
-        body.lang-en span[data-lang="en"], body.lang-ko span[data-lang="ko"], body.lang-ja span[data-lang="ja"], body.lang-zh-Hans span[data-lang="zh-Hans"], body.lang-zh-Hant span[data-lang="zh-Hant"], body.lang-de span[data-lang="de"], body.lang-fr span[data-lang="fr"], body.lang-es span[data-lang="es"], body.lang-pt-BR span[data-lang="pt-BR"], body.lang-pt-PT span[data-lang="pt-PT"], body.lang-it span[data-lang="it"] { display: inline; }
+        body.lang-en li[data-lang="en"], body.lang-ko li[data-lang="ko"], body.lang-ja li[data-lang="ja"], body.lang-zh-Hans li[data-lang="zh-Hans"], body.lang-zh-Hant li[data-lang="zh-Hant"], body.lang-de li[data-lang="de"], body.lang-fr li[data-lang="fr"], body.lang-es li[data-lang="es"], body.lang-pt-BR li[data-lang="pt-BR"], body.lang-pt-PT li[data-lang="pt-PT"], body.lang-it li[data-lang="it"], body.lang-ru li[data-lang="ru"], body.lang-cs li[data-lang="cs"], body.lang-da li[data-lang="da"], body.lang-el li[data-lang="el"], body.lang-fi li[data-lang="fi"], body.lang-id li[data-lang="id"], body.lang-nb li[data-lang="nb"], body.lang-nl li[data-lang="nl"], body.lang-pl li[data-lang="pl"], body.lang-sv li[data-lang="sv"], body.lang-th li[data-lang="th"], body.lang-tr li[data-lang="tr"], body.lang-vi li[data-lang="vi"] { display: list-item; }
+        body.lang-en span[data-lang="en"], body.lang-ko span[data-lang="ko"], body.lang-ja span[data-lang="ja"], body.lang-zh-Hans span[data-lang="zh-Hans"], body.lang-zh-Hant span[data-lang="zh-Hant"], body.lang-de span[data-lang="de"], body.lang-fr span[data-lang="fr"], body.lang-es span[data-lang="es"], body.lang-pt-BR span[data-lang="pt-BR"], body.lang-pt-PT span[data-lang="pt-PT"], body.lang-it span[data-lang="it"], body.lang-ru span[data-lang="ru"], body.lang-cs span[data-lang="cs"], body.lang-da span[data-lang="da"], body.lang-el span[data-lang="el"], body.lang-fi span[data-lang="fi"], body.lang-id span[data-lang="id"], body.lang-nb span[data-lang="nb"], body.lang-nl span[data-lang="nl"], body.lang-pl span[data-lang="pl"], body.lang-sv span[data-lang="sv"], body.lang-th span[data-lang="th"], body.lang-tr span[data-lang="tr"], body.lang-vi span[data-lang="vi"] { display: inline; }
 
         @media (max-width: 560px) {
             h1 { font-size: 30px; }
@@ -140,9 +140,9 @@
         }
 
         /* No-JS / pre-hydration fallback: show English */
-        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it) div[data-lang="en"] { display: block; }
-        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it) li[data-lang="en"] { display: list-item; }
-        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it) span[data-lang="en"] { display: inline; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it):not(.lang-ru):not(.lang-cs):not(.lang-da):not(.lang-el):not(.lang-fi):not(.lang-id):not(.lang-nb):not(.lang-nl):not(.lang-pl):not(.lang-sv):not(.lang-th):not(.lang-tr):not(.lang-vi) div[data-lang="en"] { display: block; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it):not(.lang-ru):not(.lang-cs):not(.lang-da):not(.lang-el):not(.lang-fi):not(.lang-id):not(.lang-nb):not(.lang-nl):not(.lang-pl):not(.lang-sv):not(.lang-th):not(.lang-tr):not(.lang-vi) li[data-lang="en"] { display: list-item; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it):not(.lang-ru):not(.lang-cs):not(.lang-da):not(.lang-el):not(.lang-fi):not(.lang-id):not(.lang-nb):not(.lang-nl):not(.lang-pl):not(.lang-sv):not(.lang-th):not(.lang-tr):not(.lang-vi) span[data-lang="en"] { display: inline; }
 
         /* 언어별 페이지 링크 — 같은 글의 다른 언어 주소. scripts/build-lang-pages.py 가 언어 폴더마다 같은 줄을 만든다. */
         .lang-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; margin: 14px auto 0; padding: 0 16px; font-size: 13px; }
@@ -162,6 +162,19 @@
     <link rel="alternate" hreflang="pt-BR" href="https://m1zz.github.io/Rereminder/pt-BR/support.html">
     <link rel="alternate" hreflang="pt-PT" href="https://m1zz.github.io/Rereminder/pt-PT/support.html">
     <link rel="alternate" hreflang="it" href="https://m1zz.github.io/Rereminder/it/support.html">
+    <link rel="alternate" hreflang="ru" href="https://m1zz.github.io/Rereminder/ru/support.html">
+    <link rel="alternate" hreflang="cs" href="https://m1zz.github.io/Rereminder/cs/support.html">
+    <link rel="alternate" hreflang="da" href="https://m1zz.github.io/Rereminder/da/support.html">
+    <link rel="alternate" hreflang="el" href="https://m1zz.github.io/Rereminder/el/support.html">
+    <link rel="alternate" hreflang="fi" href="https://m1zz.github.io/Rereminder/fi/support.html">
+    <link rel="alternate" hreflang="id" href="https://m1zz.github.io/Rereminder/id/support.html">
+    <link rel="alternate" hreflang="nb" href="https://m1zz.github.io/Rereminder/nb/support.html">
+    <link rel="alternate" hreflang="nl" href="https://m1zz.github.io/Rereminder/nl/support.html">
+    <link rel="alternate" hreflang="pl" href="https://m1zz.github.io/Rereminder/pl/support.html">
+    <link rel="alternate" hreflang="sv" href="https://m1zz.github.io/Rereminder/sv/support.html">
+    <link rel="alternate" hreflang="th" href="https://m1zz.github.io/Rereminder/th/support.html">
+    <link rel="alternate" hreflang="tr" href="https://m1zz.github.io/Rereminder/tr/support.html">
+    <link rel="alternate" hreflang="vi" href="https://m1zz.github.io/Rereminder/vi/support.html">
     <link rel="alternate" hreflang="x-default" href="https://m1zz.github.io/Rereminder/support.html">
 </head>
 <body>
@@ -172,7 +185,7 @@
             <a href="./">Home</a>
             <a href="support.html" aria-current="page">Support</a>
             <a href="privacy.html">Privacy</a>
-            <select class="lang" id="lang-select" aria-label="Language"><option value="en">English</option><option value="ko">한국어</option><option value="ja">日本語</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="pt-BR">Português (Brasil)</option><option value="pt-PT">Português (Portugal)</option><option value="it">Italiano</option></select>
+            <select class="lang" id="lang-select" aria-label="Language"><option value="en">English</option><option value="ko">한국어</option><option value="ja">日本語</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="pt-BR">Português (Brasil)</option><option value="pt-PT">Português (Portugal)</option><option value="it">Italiano</option><option value="ru">Русский</option><option value="cs">Čeština</option><option value="da">Dansk</option><option value="el">Ελληνικά</option><option value="fi">Suomi</option><option value="id">Bahasa Indonesia</option><option value="nb">Norsk bokmål</option><option value="nl">Nederlands</option><option value="pl">Polski</option><option value="sv">Svenska</option><option value="th">ไทย</option><option value="tr">Türkçe</option><option value="vi">Tiếng Việt</option></select>
         </div>
     </div>
 </nav>
@@ -308,7 +321,7 @@
         <summary>Which languages and devices are supported?</summary>
         <div class="body">
             <table>
-                <tr><td>Languages</td><td>English, Korean, Japanese, Simplified Chinese, Traditional Chinese, German, French, Spanish, Portuguese (Brazil), Italian</td></tr>
+                <tr><td>Languages</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 or later</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 or later</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 or later</td></tr>
@@ -458,7 +471,7 @@
         <summary>지원 언어와 기기가 어떻게 되나요?</summary>
         <div class="body">
             <table>
-                <tr><td>언어</td><td>한국어, English, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português, Italiano</td></tr>
+                <tr><td>언어</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 이상</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 이상</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 이상</td></tr>
@@ -608,7 +621,7 @@
         <summary>支持哪些语言和设备？</summary>
         <div class="body">
             <table>
-                <tr><td>语言</td><td>简体中文、繁體中文、English、한국어、日本語、Deutsch、Français、Español、Português、Italiano</td></tr>
+                <tr><td>语言</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 或更新版本</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 或更新版本</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 或更新版本</td></tr>
@@ -758,7 +771,7 @@
         <summary>支援哪些語言和裝置？</summary>
         <div class="body">
             <table>
-                <tr><td>語言</td><td>繁體中文、简体中文、English、한국어、日本語、Deutsch、Français、Español、Português、Italiano</td></tr>
+                <tr><td>語言</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 或更新版本</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 或更新版本</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 或更新版本</td></tr>
@@ -907,7 +920,7 @@
         <summary>対応している言語とデバイスは？</summary>
         <div class="body">
             <table>
-                <tr><td>言語</td><td>日本語, English, 한국어, 简体中文, 繁體中文, Deutsch, Français, Español, Português, Italiano</td></tr>
+                <tr><td>言語</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 以降</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 以降</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 以降</td></tr>
@@ -1056,7 +1069,7 @@
         <summary>Welche Sprachen und Geräte werden unterstützt?</summary>
         <div class="body">
             <table>
-                <tr><td>Sprachen</td><td>Deutsch, English, 한국어, 日本語, 简体中文, 繁體中文, Français, Español, Português, Italiano</td></tr>
+                <tr><td>Sprachen</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 oder neuer</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 oder neuer</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 oder neuer</td></tr>
@@ -1205,7 +1218,7 @@
         <summary>Quelles langues et quels appareils sont pris en charge ?</summary>
         <div class="body">
             <table>
-                <tr><td>Langues</td><td>Français, English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Español, Português, Italiano</td></tr>
+                <tr><td>Langues</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 ou version ultérieure</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 ou version ultérieure</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 ou version ultérieure</td></tr>
@@ -1354,7 +1367,7 @@
         <summary>¿Qué idiomas y dispositivos son compatibles?</summary>
         <div class="body">
             <table>
-                <tr><td>Idiomas</td><td>Español, English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Português, Italiano</td></tr>
+                <tr><td>Idiomas</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 o posterior</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 o posterior</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 o posterior</td></tr>
@@ -1503,7 +1516,7 @@
         <summary>Quais idiomas e dispositivos são compatíveis?</summary>
         <div class="body">
             <table>
-                <tr><td>Idiomas</td><td>Português, English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Italiano</td></tr>
+                <tr><td>Idiomas</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 ou posterior</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 ou posterior</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 ou posterior</td></tr>
@@ -1538,7 +1551,7 @@
         </div>
         <div class="card">
             <h3>A partir da app</h3>
-            <p><span class="ui">Ajustes &rsaquo; Feedback &rsaquo; Enviar feedback</span></p>
+            <p><span class="ui">Definições &rsaquo; Feedback &rsaquo; Enviar feedback</span></p>
             <p>Chega diretamente à minha caixa de entrada. Não precisa de app de e-mail &mdash; basta ter sessão iniciada no iCloud.</p>
         </div>
         <div class="card">
@@ -1559,7 +1572,7 @@
 
     <h3>O que incluir ao comunicar um erro</h3>
     <ul>
-        <li><strong>Versão da app</strong> &mdash; aparece no fundo de <span class="ui">Ajustes &rsaquo; Informações</span>.</li>
+        <li><strong>Versão da app</strong> &mdash; aparece no fundo de <span class="ui">Definições &rsaquo; Informações</span>.</li>
         <li><strong>Dispositivo e sistema</strong> &mdash; por exemplo, iPhone 15 Pro, iOS 26.1. Indique o modelo do Apple Watch se o problema for no relógio.</li>
         <li><strong>O que esperava e o que aconteceu em vez disso.</strong> "O aviso dos 5 minutos nunca tocou" diz-me muito mais do que "as notificações não funcionam".</li>
         <li><strong>Se acontece sempre</strong> ou se aconteceu só uma vez.</li>
@@ -1572,7 +1585,7 @@
         <div class="body">
             <p>O Rereminder usa <strong>notificações locais</strong>, por isso quase sempre é uma questão de permissões ou de foco. Verifique por esta ordem:</p>
             <ol>
-                <li><strong>Permissão de notificações.</strong> Abra <span class="ui">Ajustes &rsaquo; Método de notificação</span> na app &mdash; mostra o estado atual e permite pedir a permissão ou abrir as Definições do iOS.</li>
+                <li><strong>Permissão de notificações.</strong> Abra <span class="ui">Definições &rsaquo; Método de notificação</span> na app &mdash; mostra o estado atual e permite pedir a permissão ou abrir as Definições do iOS.</li>
                 <li><strong>Foco / Não incomodar.</strong> Se tiver algum modo de foco ativo, adicione o Rereminder às apps permitidas em <span class="ui">Definições &rsaquo; Foco</span> do iOS.</li>
                 <li><strong>Interruptor de som/silêncio e volume.</strong> O modo silencioso corta o som; a vibração continua a chegar.</li>
                 <li><strong>Resumo agendado.</strong> Em <span class="ui">Definições &rsaquo; Notificações &rsaquo; Resumo agendado</span> do iOS, as notificações podem ficar retidas até uma hora definida. O Rereminder não deve constar dessa lista.</li>
@@ -1584,7 +1597,7 @@
     <details>
         <summary>O meu Apple Watch não sincroniza</summary>
         <div class="body">
-            <p>Abra <span class="ui">Ajustes &rsaquo; Meus dispositivos</span> na app. O estado junto ao Apple Watch indica o passo que falta, e tocar nele abre instruções para essa situação concreta.</p>
+            <p>Abra <span class="ui">Definições &rsaquo; Os meus dispositivos</span> na app. O estado junto ao Apple Watch indica o passo que falta, e tocar nele abre instruções para essa situação concreta.</p>
             <ol>
                 <li>O relógio está <strong>emparelhado</strong> com este iPhone.</li>
                 <li><strong>O Rereminder está instalado no relógio.</strong> Abra a app Watch no iPhone, desloque-se até ao Rereminder e instale-o, se não estiver lá.</li>
@@ -1598,7 +1611,7 @@
         <summary>O meu Mac aparece como "não ligado", mesmo com a app aberta</summary>
         <div class="body">
             <p>"Ligado" significa aqui que <strong>a app esteve aberta nesse Mac mais ou menos nos últimos 10 minutos</strong> &mdash; não é uma ligação em tempo real. Os dispositivos deixam um registo no seu próprio iCloud de cinco em cinco minutos, e o iCloud não consegue acordar uma app suspensa, por isso um Mac que acabou de sair do repouso pode demorar alguns minutos a aparecer.</p>
-            <p>Se nunca aparecer: os dois dispositivos têm de ter sessão iniciada na <strong>mesma conta iCloud</strong>, com o <strong>iCloud Drive ativado</strong>. Em <span class="ui">Ajustes &rsaquo; Meus dispositivos</span> há um botão "Verificar novamente" que volta a ler de imediato.</p>
+            <p>Se nunca aparecer: os dois dispositivos têm de ter sessão iniciada na <strong>mesma conta iCloud</strong>, com o <strong>iCloud Drive ativado</strong>. Em <span class="ui">Definições &rsaquo; Os meus dispositivos</span> há um botão "Verificar novamente" que volta a ler de imediato.</p>
             <p>A versão para Mac exige <strong>macOS 26 ou posterior</strong>.</p>
         </div>
     </details>
@@ -1652,7 +1665,7 @@
         <summary>Que idiomas e dispositivos são compatíveis?</summary>
         <div class="body">
             <table>
-                <tr><td>Idiomas</td><td>Português (do Brasil), English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Italiano</td></tr>
+                <tr><td>Idiomas</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 ou posterior</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 ou posterior</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 ou posterior</td></tr>
@@ -1801,7 +1814,7 @@
         <summary>Quali lingue e dispositivi sono supportati?</summary>
         <div class="body">
             <table>
-                <tr><td>Lingue</td><td>Italiano, English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português</td></tr>
+                <tr><td>Lingue</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 o successivo</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 o successivo</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 o successivo</td></tr>
@@ -1822,6 +1835,1969 @@
     <p>Scrivi a <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Dimmi cosa stavi cercando di fare &mdash; non solo cosa è andato storto &mdash; e ti risponderò.</p>
 </div>
 
+
+<!-- ============================= Русский ============================= -->
+
+<div data-lang="ru">
+    <h1>Поддержка</h1>
+    <p class="lede">Rereminder делает один человек. Когда вы пишете мне, вы пишете самому разработчику, а не в очередь заявок.</p>
+    <p class="updated">Обновлено: 9 сентября 2026 г. &middot; Версия приложения 2.2.5</p>
+
+    <h2>Как связаться</h2>
+    <div class="contact-grid">
+        <div class="card">
+            <h3>Эл. почта</h3>
+            <p class="big-link"><a href="mailto:leeo@kakao.com">leeo@kakao.com</a></p>
+            <p>Лучше всего для ошибок, возвратов и всего, где нужен снимок экрана.</p>
+        </div>
+        <div class="card">
+            <h3>Из приложения</h3>
+            <p><span class="ui">Настройки &rsaquo; Обратная связь &rsaquo; Отправить отзыв</span></p>
+            <p>Сообщение приходит прямо ко мне. Почтовое приложение не нужно &mdash; достаточно входа в iCloud.</p>
+        </div>
+        <div class="card">
+            <h3>Instagram</h3>
+            <p class="big-link"><a href="https://instagram.com/lee25_ios" target="_blank" rel="noopener">@lee25_ios</a></p>
+            <p>Директ открыт. Подходит для коротких вопросов.</p>
+        </div>
+        <div class="card">
+            <h3>Ошибки и пожелания</h3>
+            <p class="big-link"><a href="https://github.com/M1zz/Rereminder/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+            <p>Всё публично, так что ответ смогут найти и другие.</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>Обычно я отвечаю за 2&ndash;3 дня.</strong> Если прошло больше недели, считайте, что сообщение потерялось, и отправьте его ещё раз &mdash; лучше я прочитаю его дважды, чем ни разу.</p>
+    </div>
+
+    <h3>Что указать в сообщении об ошибке</h3>
+    <ul>
+        <li><strong>Версию приложения</strong> &mdash; она внизу экрана <span class="ui">Настройки &rsaquo; Информация</span>.</li>
+        <li><strong>Устройство и систему</strong> &mdash; например, iPhone 15 Pro, iOS 26.1. Если проблема на часах, укажите и модель Apple Watch.</li>
+        <li><strong>Чего вы ожидали и что произошло на самом деле.</strong> «Предупреждение за 5 минут так и не пришло» скажет мне гораздо больше, чем «уведомления сломались».</li>
+        <li><strong>Повторяется ли это каждый раз</strong> или случилось однажды.</li>
+    </ul>
+
+    <h2>Частые вопросы</h2>
+
+    <details>
+        <summary>Сигналы не сработали</summary>
+        <div class="body">
+            <p>Rereminder использует <strong>локальные уведомления</strong>, поэтому почти всегда дело в разрешении или настройке фокусирования. Проверьте по порядку:</p>
+            <ol>
+                <li><strong>Доступ к уведомлениям.</strong> Откройте в приложении <span class="ui">Настройки &rsaquo; Способ оповещения</span> &mdash; там видно текущее состояние, можно запросить доступ или перейти в Настройки iOS.</li>
+                <li><strong>Фокусирование / «Не беспокоить».</strong> Если включён режим фокусирования, добавьте Rereminder в разрешённые приложения в iOS: <span class="ui">Настройки &rsaquo; Фокусирование</span>.</li>
+                <li><strong>Переключатель «Звонок/Бесшумно» и громкость.</strong> В бесшумном режиме звука нет, но вибрация всё равно будет.</li>
+                <li><strong>Доставка по расписанию.</strong> В iOS <span class="ui">Настройки &rsaquo; Уведомления &rsaquo; Доставка по расписанию</span> может задерживать уведомления до определённого часа. Rereminder там быть не должно.</li>
+            </ol>
+            <p>Если все четыре пункта в порядке, а проблема остаётся, напишите мне длину таймера и где стояли сигналы &mdash; именно это сочетание нужно, чтобы её воспроизвести.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Apple Watch не синхронизируются</summary>
+        <div class="body">
+            <p>Откройте в приложении <span class="ui">Настройки &rsaquo; Мои устройства</span>. Статус рядом с Apple Watch покажет, какого шага не хватает, а касание откроет инструкцию именно для этого случая.</p>
+            <ol>
+                <li>Часы <strong>объединены в пару</strong> с этим iPhone.</li>
+                <li><strong>Rereminder установлен на часах.</strong> Откройте на iPhone приложение Watch, найдите Rereminder и установите его, если его там нет.</li>
+                <li><strong>Один раз откройте Rereminder на часах.</strong> Только что установленное приложение ещё ни разу не запускалось, а для первой синхронизации оно должно быть запущено.</li>
+            </ol>
+            <p>Состояние таймера передаётся, даже когда приложение на часах в фоне, так что держать его открытым не нужно.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Mac пишет «не подключено», хотя приложение открыто</summary>
+        <div class="body">
+            <p>«Подключено» здесь значит, что <strong>приложение работало на этом Mac примерно в последние 10 минут</strong> &mdash; это не постоянное соединение. Устройства оставляют отметку в вашем собственном iCloud каждые пять минут, а iCloud не умеет будить спящее приложение, поэтому только что проснувшийся Mac может появиться через несколько минут.</p>
+            <p>Если он не появляется вовсе: на обоих устройствах должен быть выполнен вход в <strong>один и тот же аккаунт iCloud</strong> и <strong>включён iCloud Drive</strong>. В <span class="ui">Настройки &rsaquo; Мои устройства</span> есть кнопка «Проверить снова», которая сразу перечитывает состояние.</p>
+            <p>Для версии для Mac нужна <strong>macOS 26 или новее</strong>.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Я купил Pro, но он не отображается</summary>
+        <div class="body">
+            <p>Откройте экран Pro и нажмите <strong>«Восстановить покупки»</strong>. Покупка привязана к Аккаунту Apple, с которого её сделали, поэтому убедитесь, что вошли именно в него &mdash; не в аккаунт члена семьи и не в аккаунт другого региона.</p>
+            <p>Pro &mdash; это <strong>разовая покупка</strong>. Это не подписка, срок у неё не истекает, поэтому она сохраняется при переустановке и на новых устройствах.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Что на самом деле входит в Pro?</summary>
+        <div class="body">
+            <p>Pro &mdash; это <strong>разовая покупка</strong>. Что даёт Pro, умещается в одну фразу: <strong>приложение запоминает ваши настройки.</strong></p>
+            <p><strong>Бесплатно</strong></p>
+            <ul>
+                <li><strong>Неограниченные предупреждения.</strong> Ставьте на таймер сколько угодно &mdash; то, ради чего существует приложение, не ограничено.</li>
+                <li>Все цвета темы, свои тексты сигналов, Live Activity, сигналы до ответа и завершение будильником.</li>
+                <li><strong>Полноценные приложения для Apple Watch и Mac</strong>. Ни одно из них не платное.</li>
+            </ul>
+            <p><strong>Pro</strong></p>
+            <ul>
+                <li><strong>Шаблоны</strong> &mdash; сохраните настройку и возвращайте её одним касанием, сколько угодно шаблонов.</li>
+                <li><strong>Последняя настройка возвращается</strong>, когда вы снова открываете приложение.</li>
+                <li><strong>Режим этапов</strong> &mdash; дайте каждому этапу название («вступление / демо / вопросы») и держите к каждому заметку, которая раскрывается, когда этап начинается.</li>
+                <li><strong>Овертайм</strong> &mdash; отсчёт продолжается после 00:00, и вы видите, на сколько вышли за время.</li>
+                <li><strong>История и статистика</strong> &mdash; записи о проведённых занятиях.</li>
+            </ul>
+            <p>Уже сохранённые шаблоны никогда не удаляются. Без Pro они остаются на экране заблокированными и открываются снова в момент покупки.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Я хочу вернуть деньги</summary>
+        <div class="body">
+            <p>Возвраты оформляет Apple, а не я &mdash; у меня нет доступа к вашим платёжным данным, и сделать возврат я не могу. Запросите его на <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a> с того Аккаунта Apple, с которого была покупка.</p>
+            <p>Если причина в том, что что-то сломано, пожалуйста, напишите и мне. Возврат закрывает ваш вопрос, но не исправляет ошибку для следующего человека.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Можно попробовать без установки?</summary>
+        <div class="body">
+            <p>Да. Откройте <a href="https://m1zz.github.io/rereminder/" target="_blank" rel="noopener">m1zz.github.io/rereminder</a> на iPhone, и App Clip сразу запустит таймер &mdash; без похода в App Store. В нём есть шкала и сигналы; шаблоны, режим этапов и приложение для часов &mdash; в полной версии.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Какие языки и устройства поддерживаются?</summary>
+        <div class="body">
+            <table>
+                <tr><td>Языки</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>iPhone</td><td>iOS 26.0 или новее</td></tr>
+                <tr><td>Apple Watch</td><td>watchOS 11.6 или новее</td></tr>
+                <tr><td>Mac</td><td>macOS 26.0 или новее</td></tr>
+                <tr><td>iPad</td><td>Пока не поддерживается</td></tr>
+            </table>
+        </div>
+    </details>
+
+    <details>
+        <summary>Как удалить мои данные?</summary>
+        <div class="body">
+            <p>Всё, что вы создаёте &mdash; таймеры, шаблоны, названия этапов, заметки, история, &mdash; хранится на вашем устройстве. <strong>Удаление приложения удаляет всё это.</strong></p>
+            <p>Анонимные счётчики использования, которые отправляет приложение, подробно описаны на <a href="privacy.html">странице конфиденциальности</a>, в том числе что прекращается после удаления приложения.</p>
+        </div>
+    </details>
+
+    <h2>Не получилось?</h2>
+    <p>Напишите на <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Расскажите, что вы пытались сделать, &mdash; а не только что пошло не так, &mdash; и я вам отвечу.</p>
+</div>
+
+<!-- ============================= Čeština ============================= -->
+
+<div data-lang="cs">
+    <h1>Podpora</h1>
+    <p class="lede">Rereminder dělá jeden člověk. Když mi napíšete, píšete přímo vývojáři &mdash; ne do fronty tiketů.</p>
+    <p class="updated">Poslední aktualizace: 9. září 2026 &middot; Verze aplikace 2.2.5</p>
+
+    <h2>Kontakt</h2>
+    <div class="contact-grid">
+        <div class="card">
+            <h3>E‑mail</h3>
+            <p class="big-link"><a href="mailto:leeo@kakao.com">leeo@kakao.com</a></p>
+            <p>Nejlepší pro chyby, vrácení peněz a cokoli, k čemu se hodí snímek obrazovky.</p>
+        </div>
+        <div class="card">
+            <h3>Přímo z aplikace</h3>
+            <p><span class="ui">Nastavení &rsaquo; Zpětná vazba &rsaquo; Odeslat zpětnou vazbu</span></p>
+            <p>Přijde rovnou do mé schránky. Nepotřebujete e‑mailovou aplikaci &mdash; stačí přihlášení k iCloudu.</p>
+        </div>
+        <div class="card">
+            <h3>Instagram</h3>
+            <p class="big-link"><a href="https://instagram.com/lee25_ios" target="_blank" rel="noopener">@lee25_ios</a></p>
+            <p>Zprávy jsou otevřené. Hodí se na rychlé dotazy.</p>
+        </div>
+        <div class="card">
+            <h3>Chyby a návrhy funkcí</h3>
+            <p class="big-link"><a href="https://github.com/M1zz/Rereminder/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+            <p>Veřejné, takže odpověď najdou i ostatní.</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>Obvykle odpovídám do 2&ndash;3 dnů.</strong> Pokud uběhl víc než týden, počítejte s tím, že se zpráva ztratila, a pošlete ji znovu &mdash; raději ji budu číst dvakrát než vůbec.</p>
+    </div>
+
+    <h3>Co uvést v hlášení chyby</h3>
+    <ul>
+        <li><strong>Verzi aplikace</strong> &mdash; najdete ji dole v <span class="ui">Nastavení &rsaquo; Info</span>.</li>
+        <li><strong>Zařízení a systém</strong> &mdash; např. iPhone 15 Pro, iOS 26.1. Pokud jde o problém na hodinkách, uveďte i model Apple Watch.</li>
+        <li><strong>Co jste čekali a co se stalo místo toho.</strong> „Upozornění 5 minut předem vůbec nepřišlo“ mi řekne mnohem víc než „nefungují oznámení“.</li>
+        <li><strong>Zda se to děje pokaždé</strong>, nebo jen jednou.</li>
+    </ul>
+
+    <h2>Časté dotazy</h2>
+
+    <details>
+        <summary>Upozornění nepřišla</summary>
+        <div class="body">
+            <p>Rereminder používá <strong>místní oznámení</strong>, takže skoro vždy jde o oprávnění nebo nastavení soustředění. Kontrolujte v tomto pořadí:</p>
+            <ol>
+                <li><strong>Oprávnění k oznámením.</strong> V aplikaci otevřete <span class="ui">Nastavení &rsaquo; Způsob upozornění</span> &mdash; uvidíte aktuální stav a můžete požádat o oprávnění nebo přejít do Nastavení iOS.</li>
+                <li><strong>Soustředění / Nerušit.</strong> Pokud je zapnuté soustředění, přidejte Rereminder mezi povolené aplikace v <span class="ui">Nastavení &rsaquo; Soustředění</span> v iOS.</li>
+                <li><strong>Přepínač Zvonění/Ticho a hlasitost.</strong> Tichý režim ztlumí zvuk; vibrace ale projdou.</li>
+                <li><strong>Plánovaný souhrn.</strong> <span class="ui">Nastavení &rsaquo; Oznámení &rsaquo; Plánovaný souhrn</span> v iOS může oznámení zadržet až do určené hodiny. Rereminder by v něm být neměl.</li>
+            </ol>
+            <p>Pokud je všechno v pořádku a stále se to děje, napište mi délku časovače a kam jste umístili upozornění &mdash; právě tuhle kombinaci potřebuji, abych problém zopakoval.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Apple Watch se nesynchronizují</summary>
+        <div class="body">
+            <p>V aplikaci otevřete <span class="ui">Nastavení &rsaquo; Moje zařízení</span>. Stav vedle Apple Watch ukáže, který krok chybí, a klepnutím otevřete návod přesně pro tuto situaci.</p>
+            <ol>
+                <li>Hodinky jsou <strong>spárované</strong> s tímto iPhonem.</li>
+                <li><strong>Rereminder je na hodinkách nainstalovaný.</strong> Na iPhonu otevřete aplikaci Watch, sjeďte k Rereminderu a nainstalujte ho, pokud tam není.</li>
+                <li><strong>Jednou Rereminder na hodinkách otevřete.</strong> Čerstvě nainstalovaná aplikace na hodinkách ještě nikdy neběžela a první synchronizace vyžaduje, aby se spustila.</li>
+            </ol>
+            <p>Stav časovače se přenáší, i když je aplikace na hodinkách na pozadí, takže ji nemusíte mít otevřenou.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Mac hlásí „Nepřipojeno“, přestože je aplikace otevřená</summary>
+        <div class="body">
+            <p>„Připojeno“ tu znamená, že <strong>aplikace na tom Macu běžela zhruba během posledních 10 minut</strong> &mdash; nejde o živé spojení. Zařízení zanechávají každých pět minut značku ve vašem vlastním iCloudu a iCloud nedokáže probudit uspanou aplikaci, takže Macu, který se právě probudil, může pár minut trvat, než se objeví.</p>
+            <p>Pokud se neobjeví vůbec: obě zařízení musí být přihlášená ke <strong>stejnému účtu iCloud</strong> se <strong>zapnutým iCloud Drive</strong>. V <span class="ui">Nastavení &rsaquo; Moje zařízení</span> je tlačítko „Zkontrolovat znovu“, které stav okamžitě načte znovu.</p>
+            <p>Verze pro Mac vyžaduje <strong>macOS 26 nebo novější</strong>.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Koupil(a) jsem Pro, ale nezobrazuje se</summary>
+        <div class="body">
+            <p>Otevřete obrazovku Pro a klepněte na <strong>Obnovit nákupy</strong>. Nákupy jsou vázané na Apple účet, kterým byly provedeny, takže se ujistěte, že jste přihlášeni ke stejnému účtu &mdash; ne k účtu člena rodiny ani k účtu z jiné země.</p>
+            <p>Pro je <strong>jednorázový nákup</strong>. Není to předplatné a nevyprší, takže vydrží přeinstalování i nová zařízení.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Co vlastně Pro obsahuje?</summary>
+        <div class="body">
+            <p>Pro je <strong>jednorázový nákup</strong>. Co Pro nabízí, se vejde do jedné věty: <strong>aplikace si pamatuje vaše nastavení.</strong></p>
+            <p><strong>Zdarma</strong></p>
+            <ul>
+                <li><strong>Neomezená upozornění předem.</strong> Dejte jich na časovač, kolik chcete &mdash; to, kvůli čemu tahle aplikace existuje, se nepočítá.</li>
+                <li>Všechny barvy motivu, vlastní texty upozornění, živá aktivita, upozornění opakovaná až do reakce a zakončení budíkem.</li>
+                <li><strong>Plnohodnotná aplikace pro Apple Watch i pro Mac</strong>. Ani jedna není za placenou bránou.</li>
+            </ul>
+            <p><strong>Pro</strong></p>
+            <ul>
+                <li><strong>Šablony</strong> &mdash; uložte si nastavení a vraťte ho jedním klepnutím, kolikrát chcete.</li>
+                <li><strong>Vaše poslední nastavení se vrátí</strong>, když aplikaci znovu otevřete.</li>
+                <li><strong>Režim sezení</strong> &mdash; pojmenujte každý úsek („úvod / ukázka / dotazy“) a ke každému si napište scénář, který se rozbalí, když úsek začne.</li>
+                <li><strong>Přesčas</strong> &mdash; čas běží i po 00:00, takže víte, o kolik jste přetáhli.</li>
+                <li><strong>Historie a statistiky</strong> &mdash; záznam sezení, která jste absolvovali.</li>
+            </ul>
+            <p>Šablony, které už máte uložené, se nikdy nemažou. Bez Pro zůstanou na obrazovce zamčené a ve chvíli nákupu se znovu odemknou.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Chci vrátit peníze</summary>
+        <div class="body">
+            <p>Vrácení peněz vyřizuje Apple, ne já &mdash; k vašim platebním údajům nemám přístup a vrácení provést nemohu. Požádejte o ně na <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a> s Apple účtem, kterým jste nákup provedli.</p>
+            <p>Pokud je důvodem něco rozbitého, dejte mi prosím vědět i tak. Vrácení peněz uzavře váš případ, ale chybu dalšímu člověku neopraví.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Můžu to vyzkoušet bez instalace?</summary>
+        <div class="body">
+            <p>Ano. Otevřete <a href="https://m1zz.github.io/rereminder/" target="_blank" rel="noopener">m1zz.github.io/rereminder</a> na iPhonu a App Clip časovač hned spustí &mdash; bez cesty do App Storu. Má ciferník i upozornění; šablony, režim sezení a aplikace pro hodinky jsou v plné aplikaci.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Které jazyky a zařízení jsou podporované?</summary>
+        <div class="body">
+            <table>
+                <tr><td>Jazyky</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>iPhone</td><td>iOS 26.0 nebo novější</td></tr>
+                <tr><td>Apple Watch</td><td>watchOS 11.6 nebo novější</td></tr>
+                <tr><td>Mac</td><td>macOS 26.0 nebo novější</td></tr>
+                <tr><td>iPad</td><td>Zatím nepodporováno</td></tr>
+            </table>
+        </div>
+    </details>
+
+    <details>
+        <summary>Jak smažu svá data?</summary>
+        <div class="body">
+            <p>Vše, co vytvoříte &mdash; časovače, šablony, názvy úseků, scénáře, historie &mdash; je uložené ve vašem zařízení. <strong>Smazáním aplikace se všechno odstraní.</strong></p>
+            <p>Anonymní počty používání, které aplikace odesílá, jsou podrobně popsané na <a href="privacy.html">stránce o ochraně soukromí</a>, včetně toho, co se po smazání aplikace zastaví.</p>
+        </div>
+    </details>
+
+    <h2>Pořád si nevíte rady?</h2>
+    <p>Napište na <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Popište, o co jste se snažili &mdash; nejen co se pokazilo &mdash; a ozvu se vám.</p>
+</div>
+
+<!-- ============================= Dansk ============================= -->
+
+<div data-lang="da">
+    <h1>Support</h1>
+    <p class="lede">Rereminder er lavet af én person. Skriver du til mig, skriver du til udvikleren &mdash; ikke til en sagskø.</p>
+    <p class="updated">Sidst opdateret: 9. september 2026 &middot; Appversion 2.2.5</p>
+
+    <h2>Kontakt mig</h2>
+    <div class="contact-grid">
+        <div class="card">
+            <h3>E-mail</h3>
+            <p class="big-link"><a href="mailto:leeo@kakao.com">leeo@kakao.com</a></p>
+            <p>Bedst til fejl, refusioner og alt, der kræver et skærmbillede.</p>
+        </div>
+        <div class="card">
+            <h3>Inde fra appen</h3>
+            <p><span class="ui">Indstillinger &rsaquo; Feedback &rsaquo; Send feedback</span></p>
+            <p>Går direkte til min indbakke. Ingen mailapp nødvendig &mdash; kun login på iCloud.</p>
+        </div>
+        <div class="card">
+            <h3>Instagram</h3>
+            <p class="big-link"><a href="https://instagram.com/lee25_ios" target="_blank" rel="noopener">@lee25_ios</a></p>
+            <p>Mine DM'er er åbne. Fint til hurtige spørgsmål.</p>
+        </div>
+        <div class="card">
+            <h3>Fejl &amp; ønsker til funktioner</h3>
+            <p class="big-link"><a href="https://github.com/M1zz/Rereminder/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+            <p>Offentligt, så andre også kan finde svaret.</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>Jeg svarer som regel inden for 2&ndash;3 dage.</strong> Er der gået mere end en uge, så gå ud fra, at beskeden er blevet væk, og send den igen &mdash; jeg vil hellere læse den to gange end slet ikke.</p>
+    </div>
+
+    <h3>Det skal en fejlrapport indeholde</h3>
+    <ul>
+        <li><strong>Appversion</strong> &mdash; <span class="ui">Indstillinger &rsaquo; Info</span> viser den nederst.</li>
+        <li><strong>Enhed og styresystem</strong> &mdash; f.eks. iPhone 15 Pro, iOS 26.1. Nævn Apple Watch-modellen, hvis problemet er på uret.</li>
+        <li><strong>Hvad du forventede, og hvad der skete i stedet.</strong> »5-minutters påmindelsen kom aldrig« fortæller mig langt mere end »notifikationer virker ikke«.</li>
+        <li><strong>Om det sker hver gang</strong> eller kun én gang.</li>
+    </ul>
+
+    <h2>Almindelige spørgsmål</h2>
+
+    <details>
+        <summary>Mine påmindelser kom ikke</summary>
+        <div class="body">
+            <p>Rereminder bruger <strong>lokale notifikationer</strong>, så det skyldes næsten altid en tilladelse eller en Fokus-indstilling. Tjek i denne rækkefølge:</p>
+            <ol>
+                <li><strong>Tilladelse til notifikationer.</strong> Åbn <span class="ui">Indstillinger &rsaquo; Notifikationsmetode</span> i appen &mdash; der ser du den aktuelle status og kan anmode om tilladelse eller gå til iOS-indstillingerne.</li>
+                <li><strong>Fokus / Forstyr ikke.</strong> Hvis et Fokus er slået til, så føj Rereminder til de tilladte apps under <span class="ui">Indstillinger &rsaquo; Fokus</span> i iOS.</li>
+                <li><strong>Ringe/lydløs-knap og lydstyrke.</strong> Lydløs tilstand slår lyden fra; vibrationen kommer stadig igennem.</li>
+                <li><strong>Planlagt oversigt.</strong> <span class="ui">Indstillinger &rsaquo; Notifikationer &rsaquo; Planlagt oversigt</span> i iOS kan holde notifikationer tilbage til et bestemt tidspunkt. Rereminder bør ikke være med i den.</li>
+            </ol>
+            <p>Hvis alle fire er i orden, og det stadig sker, så fortæl mig timerens længde, og hvor påmindelserne var placeret &mdash; det er den kombination, jeg skal bruge for at genskabe fejlen.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Mit Apple Watch synkroniserer ikke</summary>
+        <div class="body">
+            <p>Åbn <span class="ui">Indstillinger &rsaquo; Mine enheder</span> i appen. Statussen ud for Apple Watch fortæller, hvilket trin der mangler, og trykker du på den, åbnes en vejledning til netop den situation.</p>
+            <ol>
+                <li>Uret er <strong>parret</strong> med denne iPhone.</li>
+                <li><strong>Rereminder er installeret på uret.</strong> Åbn Watch-appen på iPhone, rul ned til Rereminder, og installer den, hvis den ikke er der.</li>
+                <li><strong>Åbn Rereminder på uret én gang.</strong> En nyinstalleret ur-app har aldrig kørt, og den første synkronisering kræver, at den er blevet startet.</li>
+            </ol>
+            <p>Timerens tilstand kommer igennem, selv når ur-appen er i baggrunden, så du behøver ikke holde den åben.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Min Mac siger »Ikke forbundet«, selvom appen er åben</summary>
+        <div class="body">
+            <p>»Forbundet« betyder her, at <strong>appen har kørt på den Mac inden for cirka de sidste 10 minutter</strong> &mdash; ikke en direkte forbindelse. Enhederne sætter et mærke i din egen iCloud hvert femte minut, og iCloud kan ikke vække en app, der sover, så en Mac, der lige er vågnet, kan være et par minutter om at dukke op.</p>
+            <p>Hvis den aldrig dukker op: Begge enheder skal være logget ind på <strong>den samme iCloud-konto</strong> med <strong>iCloud Drive slået til</strong>. <span class="ui">Indstillinger &rsaquo; Mine enheder</span> har en knap, »Tjek igen«, som læser status igen med det samme.</p>
+            <p>Mac-versionen kræver <strong>macOS 26 eller nyere</strong>.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Jeg har købt Pro, men det vises ikke</summary>
+        <div class="body">
+            <p>Åbn Pro-skærmen, og tryk på <strong>Gendan køb</strong>. Køb er knyttet til den Apple-konto, der foretog dem, så sørg for, at du er logget ind på den samme konto &mdash; ikke et familiemedlems og ikke en konto fra et andet land.</p>
+            <p>Pro er et <strong>engangskøb</strong>. Det er ikke et abonnement og udløber ikke, så det overlever geninstallationer og nye enheder.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Hvad indeholder Pro egentlig?</summary>
+        <div class="body">
+            <p>Pro er et <strong>engangskøb</strong>. Det, Pro sælger, kan siges i én sætning: <strong>Appen husker dine opsætninger.</strong></p>
+            <p><strong>Gratis</strong></p>
+            <ul>
+                <li><strong>Ubegrænsede forvarsler.</strong> Sæt så mange, du vil, på en timer &mdash; det, appen findes for, er ikke begrænset.</li>
+                <li>Alle temafarver, egne påmindelsesbeskeder, Live-aktivitet, påmindelser der gentages, til du reagerer, og afslutning med alarm.</li>
+                <li>Den <strong>fulde Apple Watch-app og Mac-app</strong>. Ingen af dem er låst bag betaling.</li>
+            </ul>
+            <p><strong>Pro</strong></p>
+            <ul>
+                <li><strong>Skabeloner</strong> &mdash; gem en opsætning, og hent den frem med ét tryk, så mange du vil.</li>
+                <li><strong>Din seneste opsætning kommer tilbage</strong>, når du åbner appen igen.</li>
+                <li><strong>Sessionstilstand</strong> &mdash; giv hvert afsnit et navn (»intro / demo / spørgsmål«), og hav et manus til hvert afsnit, der folder sig ud, når afsnittet begynder.</li>
+                <li><strong>Overtid</strong> &mdash; uret bliver ved med at tælle efter 00:00, så du ved, hvor meget du gik over tiden.</li>
+                <li><strong>Historik og statistik</strong> &mdash; en oversigt over de sessioner, du har kørt.</li>
+            </ul>
+            <p>Skabeloner, du allerede har gemt, slettes aldrig. Har du ikke Pro, bliver de på skærmen, låst, og låses op igen, i samme øjeblik du køber.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Jeg vil have pengene tilbage</summary>
+        <div class="body">
+            <p>Refusioner går gennem Apple, ikke gennem mig &mdash; jeg har ingen adgang til dine betalingsoplysninger og kan ikke udstede en refusion. Anmod om den på <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a> med den Apple-konto, der foretog købet.</p>
+            <p>Hvis grunden er, at noget ikke virker, så fortæl mig det også. En refusion lukker din sag; den retter ikke fejlen for den næste.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Kan jeg prøve den uden at installere?</summary>
+        <div class="body">
+            <p>Ja. Åbn <a href="https://m1zz.github.io/rereminder/" target="_blank" rel="noopener">m1zz.github.io/rereminder</a> på en iPhone, så kører App Clip timeren med det samme &mdash; uden en tur i App Store. Den har urskiven og påmindelserne; skabeloner, Sessionstilstand og ur-appen findes i den fulde app.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Hvilke sprog og enheder understøttes?</summary>
+        <div class="body">
+            <table>
+                <tr><td>Sprog</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>iPhone</td><td>iOS 26.0 eller nyere</td></tr>
+                <tr><td>Apple Watch</td><td>watchOS 11.6 eller nyere</td></tr>
+                <tr><td>Mac</td><td>macOS 26.0 eller nyere</td></tr>
+                <tr><td>iPad</td><td>Understøttes endnu ikke</td></tr>
+            </table>
+        </div>
+    </details>
+
+    <details>
+        <summary>Hvordan sletter jeg mine data?</summary>
+        <div class="body">
+            <p>Alt, hvad du opretter &mdash; timere, skabeloner, afsnitsnavne, manus, historik &mdash; ligger på din enhed. <strong>Sletter du appen, fjernes det hele.</strong></p>
+            <p>De anonyme brugstal, appen sender, er beskrevet i detaljer på <a href="privacy.html">siden om privatliv</a>, herunder hvad der stopper, når du sletter appen.</p>
+        </div>
+    </details>
+
+    <h2>Sidder du stadig fast?</h2>
+    <p>Skriv til <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Fortæl mig, hvad du prøvede at gøre &mdash; ikke kun hvad der gik galt &mdash; så vender jeg tilbage til dig.</p>
+</div>
+
+<!-- ============================= Ελληνικά ============================= -->
+
+<div data-lang="el">
+    <h1>Υποστήριξη</h1>
+    <p class="lede">Το Rereminder το φτιάχνει ένας άνθρωπος. Όταν μου γράφετε, γράφετε στον ίδιο τον προγραμματιστή — όχι σε μια ουρά αιτημάτων.</p>
+    <p class="updated">Τελευταία ενημέρωση: 9 Σεπτεμβρίου 2026 &middot; Έκδοση εφαρμογής 2.2.5</p>
+
+    <h2>Επικοινωνία</h2>
+    <div class="contact-grid">
+        <div class="card">
+            <h3>Email</h3>
+            <p class="big-link"><a href="mailto:leeo@kakao.com">leeo@kakao.com</a></p>
+            <p>Ιδανικό για σφάλματα, επιστροφές χρημάτων και ό,τι χρειάζεται στιγμιότυπο οθόνης.</p>
+        </div>
+        <div class="card">
+            <h3>Μέσα από την εφαρμογή</h3>
+            <p><span class="ui">Ρυθμίσεις &rsaquo; Σχόλια &rsaquo; Αποστολή σχολίων</span></p>
+            <p>Φτάνει κατευθείαν στα εισερχόμενά μου. Δεν χρειάζεται εφαρμογή email &mdash; μόνο σύνδεση στο iCloud.</p>
+        </div>
+        <div class="card">
+            <h3>Instagram</h3>
+            <p class="big-link"><a href="https://instagram.com/lee25_ios" target="_blank" rel="noopener">@lee25_ios</a></p>
+            <p>Τα DM είναι ανοιχτά. Ιδανικά για γρήγορες ερωτήσεις.</p>
+        </div>
+        <div class="card">
+            <h3>Σφάλματα &amp; αιτήματα λειτουργιών</h3>
+            <p class="big-link"><a href="https://github.com/M1zz/Rereminder/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+            <p>Δημόσια, ώστε να βρίσκουν την απάντηση και άλλοι.</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>Συνήθως απαντώ μέσα σε 2&ndash;3 ημέρες.</strong> Αν έχει περάσει πάνω από μία εβδομάδα, θεωρήστε ότι το μήνυμα χάθηκε και στείλτε το ξανά &mdash; προτιμώ να το διαβάσω δύο φορές παρά καμία.</p>
+    </div>
+
+    <h3>Τι να περιλαμβάνει μια αναφορά σφάλματος</h3>
+    <ul>
+        <li><strong>Έκδοση εφαρμογής</strong> &mdash; φαίνεται στο κάτω μέρος της ενότητας <span class="ui">Ρυθμίσεις &rsaquo; Πληροφορίες</span>.</li>
+        <li><strong>Συσκευή και λειτουργικό</strong> &mdash; π.χ. iPhone 15 Pro, iOS 26.1. Αναφέρετε το μοντέλο του Apple Watch αν το πρόβλημα είναι στο ρολόι.</li>
+        <li><strong>Τι περιμένατε και τι έγινε τελικά.</strong> Το «Η προειδοποίηση των 5 λεπτών δεν ήρθε ποτέ» μου λέει πολύ περισσότερα από το «οι γνωστοποιήσεις δεν δουλεύουν».</li>
+        <li><strong>Αν συμβαίνει κάθε φορά</strong> ή μόνο μία φορά.</li>
+    </ul>
+
+    <h2>Συχνές ερωτήσεις</h2>
+
+    <details>
+        <summary>Οι ειδοποιήσεις μου δεν ήρθαν</summary>
+        <div class="body">
+            <p>Το Rereminder χρησιμοποιεί <strong>τοπικές γνωστοποιήσεις</strong>, οπότε σχεδόν πάντα φταίει μια άδεια ή μια ρύθμιση Εστίασης. Ελέγξτε με αυτή τη σειρά:</p>
+            <ol>
+                <li><strong>Άδεια γνωστοποιήσεων.</strong> Ανοίξτε <span class="ui">Ρυθμίσεις &rsaquo; Τρόπος ειδοποίησης</span> στην εφαρμογή &mdash; δείχνει την τρέχουσα κατάσταση και προσφέρεται να ζητήσει άδεια ή να σας στείλει στις Ρυθμίσεις του iOS.</li>
+                <li><strong>Εστίαση / Μην ενοχλείτε.</strong> Αν είναι ενεργή κάποια λειτουργία Εστίασης, προσθέστε το Rereminder στις επιτρεπόμενες εφαρμογές της, στις <span class="ui">Ρυθμίσεις &rsaquo; Εστίαση</span> του iOS.</li>
+                <li><strong>Διακόπτης κουδουνίσματος/αθόρυβης λειτουργίας και ένταση.</strong> Η Αθόρυβη λειτουργία κόβει τον ήχο· η δόνηση εξακολουθεί να έρχεται.</li>
+                <li><strong>Προγραμματισμένη σύνοψη.</strong> Η επιλογή <span class="ui">Ρυθμίσεις &rsaquo; Γνωστοποιήσεις &rsaquo; Προγραμματισμένη σύνοψη</span> του iOS μπορεί να κρατά πίσω τις γνωστοποιήσεις μέχρι μια ορισμένη ώρα. Το Rereminder δεν πρέπει να είναι εκεί.</li>
+            </ol>
+            <p>Αν και τα τέσσερα είναι εντάξει και το πρόβλημα συνεχίζεται, πείτε μου τη διάρκεια του χρονομετρητή και πού ήταν τοποθετημένες οι ειδοποιήσεις &mdash; αυτόν τον συνδυασμό χρειάζομαι για να το αναπαραγάγω.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Το Apple Watch μου δεν συγχρονίζεται</summary>
+        <div class="body">
+            <p>Ανοίξτε <span class="ui">Ρυθμίσεις &rsaquo; Οι συσκευές μου</span> στην εφαρμογή. Η κατάσταση δίπλα στο Apple Watch σάς λέει ποιο βήμα λείπει, και αν την πατήσετε ανοίγει οδηγός ακριβώς για εκείνη την περίπτωση.</p>
+            <ol>
+                <li>Το ρολόι είναι <strong>συζευγμένο</strong> με αυτό το iPhone.</li>
+                <li><strong>Το Rereminder είναι εγκατεστημένο στο ρολόι.</strong> Ανοίξτε την εφαρμογή Watch στο iPhone, κάντε κύλιση ως το Rereminder και εγκαταστήστε το αν δεν υπάρχει.</li>
+                <li><strong>Ανοίξτε μία φορά το Rereminder στο ρολόι.</strong> Μια εφαρμογή ρολογιού που μόλις εγκαταστάθηκε δεν έχει τρέξει ποτέ, και ο πρώτος συγχρονισμός χρειάζεται να έχει ανοίξει.</li>
+            </ol>
+            <p>Η κατάσταση του χρονομετρητή περνά στο ρολόι ακόμα κι όταν η εφαρμογή του είναι στο παρασκήνιο, οπότε δεν χρειάζεται να την κρατάτε ανοιχτή.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Ο Mac μου γράφει «δεν είναι συνδεδεμένο», αν και η εφαρμογή είναι ανοιχτή</summary>
+        <div class="body">
+            <p>Το «Συνδεδεμένο» εδώ σημαίνει ότι <strong>η εφαρμογή έτρεχε σε εκείνον τον Mac περίπου τα τελευταία 10 λεπτά</strong> &mdash; όχι ζωντανή σύνδεση. Οι συσκευές αφήνουν ένα σημάδι στο δικό σας iCloud κάθε πέντε λεπτά, και το iCloud δεν μπορεί να ξυπνήσει μια εφαρμογή σε αναστολή, οπότε ένας Mac που μόλις ξύπνησε μπορεί να χρειαστεί λίγα λεπτά για να εμφανιστεί.</p>
+            <p>Αν δεν εμφανίζεται ποτέ: και οι δύο συσκευές πρέπει να είναι συνδεδεμένες στον <strong>ίδιο λογαριασμό iCloud</strong> με <strong>ενεργό το iCloud Drive</strong>. Στις <span class="ui">Ρυθμίσεις &rsaquo; Οι συσκευές μου</span> υπάρχει το κουμπί «Νέος έλεγχος», που ξαναδιαβάζει αμέσως.</p>
+            <p>Η έκδοση για Mac χρειάζεται <strong>macOS 26 ή νεότερο</strong>.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Αγόρασα το Pro, αλλά δεν εμφανίζεται</summary>
+        <div class="body">
+            <p>Ανοίξτε την οθόνη Pro και πατήστε <strong>Επαναφορά αγορών</strong>. Οι αγορές συνδέονται με τον Λογαριασμό Apple που τις έκανε, οπότε βεβαιωθείτε ότι είστε συνδεδεμένοι στον ίδιο λογαριασμό &mdash; όχι σε κάποιου μέλους της οικογένειας και όχι σε λογαριασμό άλλης χώρας.</p>
+            <p>Το Pro είναι <strong>εφάπαξ αγορά</strong>. Δεν είναι συνδρομή και δεν λήγει, οπότε παραμένει μετά από επανεγκατάσταση και σε νέες συσκευές.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Τι ακριβώς περιλαμβάνει το Pro;</summary>
+        <div class="body">
+            <p>Το Pro είναι <strong>εφάπαξ αγορά</strong>. Αυτό που προσφέρει χωρά σε μία πρόταση: <strong>η εφαρμογή θυμάται τις ρυθμίσεις σας.</strong></p>
+            <p><strong>Δωρεάν</strong></p>
+            <ul>
+                <li><strong>Απεριόριστες προειδοποιήσεις.</strong> Βάλτε όσες θέλετε σε έναν χρονομετρητή &mdash; αυτό για το οποίο υπάρχει η εφαρμογή δεν έχει όριο.</li>
+                <li>Όλα τα χρώματα θέματος, προσαρμοσμένα μηνύματα ειδοποιήσεων, Ζωντανή δραστηριότητα, ειδοποιήσεις που επαναλαμβάνονται μέχρι να απαντήσετε και λήξη με ξυπνητήρι.</li>
+                <li>Η <strong>πλήρης εφαρμογή για Apple Watch και η εφαρμογή για Mac</strong>. Καμία από τις δύο δεν είναι επί πληρωμή.</li>
+            </ul>
+            <p><strong>Pro</strong></p>
+            <ul>
+                <li><strong>Πρότυπα</strong> &mdash; αποθηκεύστε μια ρύθμιση και επαναφέρετέ τη με ένα πάτημα, όσες φορές θέλετε.</li>
+                <li><strong>Η τελευταία σας ρύθμιση επιστρέφει</strong> όταν ξανανοίγετε την εφαρμογή.</li>
+                <li><strong>Λειτουργία συνεδρίας</strong> &mdash; δώστε όνομα σε κάθε ενότητα («εισαγωγή / επίδειξη / ερωτήσεις») και κρατήστε ένα κείμενο για κάθε ενότητα που ανοίγει μόλις αρχίσει.</li>
+                <li><strong>Υπέρβαση χρόνου</strong> &mdash; το ρολόι συνεχίζει να μετρά μετά το 00:00, ώστε να ξέρετε πόσο ξεπεράσατε τον χρόνο.</li>
+                <li><strong>Ιστορικό και στατιστικά</strong> &mdash; καταγραφή των συνεδριών που έχετε κάνει.</li>
+            </ul>
+            <p>Τα πρότυπα που έχετε ήδη αποθηκεύσει δεν διαγράφονται ποτέ. Αν δεν έχετε Pro, μένουν στην οθόνη κλειδωμένα και ξεκλειδώνουν ξανά τη στιγμή που θα το αγοράσετε.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Θέλω επιστροφή χρημάτων</summary>
+        <div class="body">
+            <p>Οι επιστροφές χρημάτων γίνονται μέσω της Apple, όχι μέσω εμένα &mdash; δεν έχω πρόσβαση στα στοιχεία πληρωμής σας και δεν μπορώ να εκδώσω επιστροφή. Ζητήστε την στο <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a> με τον Λογαριασμό Apple που έκανε την αγορά.</p>
+            <p>Αν ο λόγος είναι κάτι που δεν λειτουργεί, πείτε το και σε εμένα. Η επιστροφή κλείνει τη δική σας υπόθεση· δεν διορθώνει το σφάλμα για τον επόμενο.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Μπορώ να το δοκιμάσω χωρίς εγκατάσταση;</summary>
+        <div class="body">
+            <p>Ναι. Ανοίξτε το <a href="https://m1zz.github.io/rereminder/" target="_blank" rel="noopener">m1zz.github.io/rereminder</a> σε ένα iPhone και το App Clip ξεκινά αμέσως τον χρονομετρητή &mdash; χωρίς να περάσετε από το App Store. Έχει τον κύκλο και τις ειδοποιήσεις· τα πρότυπα, η λειτουργία συνεδρίας και η εφαρμογή ρολογιού βρίσκονται στην πλήρη εφαρμογή.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Ποιες γλώσσες και συσκευές υποστηρίζονται;</summary>
+        <div class="body">
+            <table>
+                <tr><td>Γλώσσες</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>iPhone</td><td>iOS 26.0 ή νεότερο</td></tr>
+                <tr><td>Apple Watch</td><td>watchOS 11.6 ή νεότερο</td></tr>
+                <tr><td>Mac</td><td>macOS 26.0 ή νεότερο</td></tr>
+                <tr><td>iPad</td><td>Δεν υποστηρίζεται ακόμα</td></tr>
+            </table>
+        </div>
+    </details>
+
+    <details>
+        <summary>Πώς διαγράφω τα δεδομένα μου;</summary>
+        <div class="body">
+            <p>Ό,τι δημιουργείτε &mdash; χρονομετρητές, πρότυπα, ονόματα ενοτήτων, κείμενα, ιστορικό &mdash; βρίσκεται στη συσκευή σας. <strong>Η διαγραφή της εφαρμογής τα αφαιρεί όλα.</strong></p>
+            <p>Οι ανώνυμες μετρήσεις χρήσης που στέλνει η εφαρμογή περιγράφονται αναλυτικά στη <a href="privacy.html">σελίδα απορρήτου</a>, μαζί με το τι σταματά όταν διαγράψετε την εφαρμογή.</p>
+        </div>
+    </details>
+
+    <h2>Ακόμα έχετε πρόβλημα;</h2>
+    <p>Γράψτε στο <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Πείτε μου τι προσπαθούσατε να κάνετε &mdash; όχι μόνο τι πήγε στραβά &mdash; και θα σας απαντήσω.</p>
+</div>
+
+<!-- ============================= Suomi ============================= -->
+
+<div data-lang="fi">
+    <h1>Tuki</h1>
+    <p class="lede">Rereminderin tekee yksi ihminen. Kun kirjoitat minulle, kirjoitat suoraan kehittäjälle — et tukipyyntöjonoon.</p>
+    <p class="updated">Päivitetty viimeksi: 9. syyskuuta 2026 &middot; Apin versio 2.2.5</p>
+
+    <h2>Ota yhteyttä</h2>
+    <div class="contact-grid">
+        <div class="card">
+            <h3>Sähköposti</h3>
+            <p class="big-link"><a href="mailto:leeo@kakao.com">leeo@kakao.com</a></p>
+            <p>Paras virheille, hyvityksille ja kaikelle, mihin tarvitaan kuvakaappaus.</p>
+        </div>
+        <div class="card">
+            <h3>Apin kautta</h3>
+            <p><span class="ui">Asetukset &rsaquo; Palaute &rsaquo; Lähetä palautetta</span></p>
+            <p>Menee suoraan postilaatikkooni. Sähköpostiappia ei tarvita &mdash; riittää, että olet kirjautunut iCloudiin.</p>
+        </div>
+        <div class="card">
+            <h3>Instagram</h3>
+            <p class="big-link"><a href="https://instagram.com/lee25_ios" target="_blank" rel="noopener">@lee25_ios</a></p>
+            <p>Yksityisviestit ovat auki. Sopii pikakysymyksiin.</p>
+        </div>
+        <div class="card">
+            <h3>Virheet &amp; toiveet</h3>
+            <p class="big-link"><a href="https://github.com/M1zz/Rereminder/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+            <p>Julkinen, joten muutkin löytävät vastauksen.</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>Vastaan yleensä 2&ndash;3 päivässä.</strong> Jos on kulunut yli viikko, viesti on luultavasti kadonnut &mdash; lähetä se uudelleen. Luen sen mieluummin kahdesti kuin en ollenkaan.</p>
+    </div>
+
+    <h3>Mitä virheraporttiin kannattaa laittaa</h3>
+    <ul>
+        <li><strong>Apin versio</strong> &mdash; näkyy kohdan <span class="ui">Asetukset &rsaquo; Tietoja</span> alareunassa.</li>
+        <li><strong>Laite ja käyttöjärjestelmä</strong> &mdash; esim. iPhone 15 Pro, iOS 26.1. Kerro Apple Watchin malli, jos ongelma on kellossa.</li>
+        <li><strong>Mitä odotit ja mitä tapahtui sen sijaan.</strong> ”5 minuutin muistutus ei tullut koskaan” kertoo minulle paljon enemmän kuin ”ilmoitukset eivät toimi”.</li>
+        <li><strong>Tapahtuuko se joka kerta</strong> vai vain kerran.</li>
+    </ul>
+
+    <h2>Usein kysyttyä</h2>
+
+    <details>
+        <summary>Muistutukseni eivät tulleet</summary>
+        <div class="body">
+            <p>Rereminder käyttää <strong>paikallisia ilmoituksia</strong>, joten syy on lähes aina lupa tai Keskittyminen-asetus. Tarkista tässä järjestyksessä:</p>
+            <ol>
+                <li><strong>Ilmoituslupa.</strong> Avaa apissa <span class="ui">Asetukset &rsaquo; Ilmoitustapa</span> &mdash; se näyttää nykyisen tilan ja tarjoutuu pyytämään luvan tai viemään sinut iOS:n Asetuksiin.</li>
+                <li><strong>Keskittyminen / Älä häiritse.</strong> Jos jokin Keskittyminen-tila on päällä, lisää Rereminder sen sallittuihin appeihin iOS:n kohdassa <span class="ui">Asetukset &rsaquo; Keskittyminen</span>.</li>
+                <li><strong>Soitto/äänetön-kytkin ja äänenvoimakkuus.</strong> Äänetön tila vaimentaa äänen; värinä tulee silti.</li>
+                <li><strong>Ajoitettu yhteenveto.</strong> iOS:n <span class="ui">Asetukset &rsaquo; Ilmoitukset &rsaquo; Ajoitettu yhteenveto</span> voi pidättää ilmoituksia tiettyyn kellonaikaan asti. Rereminderin ei pitäisi olla siinä.</li>
+            </ol>
+            <p>Jos kaikki neljä ovat kunnossa ja ongelma jatkuu, kerro minulle ajastimen pituus ja muistutusten paikat &mdash; juuri sitä yhdistelmää tarvitsen ongelman toistamiseen.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Apple Watch ei synkronoidu</summary>
+        <div class="body">
+            <p>Avaa apissa <span class="ui">Asetukset &rsaquo; Omat laitteet</span>. Apple Watchin vieressä oleva tila kertoo, mikä vaihe puuttuu, ja sitä napauttamalla avautuu ohje juuri siihen tilanteeseen.</p>
+            <ol>
+                <li>Kello on <strong>laitettu pariksi</strong> tämän iPhonen kanssa.</li>
+                <li><strong>Rereminder on asennettu kelloon.</strong> Avaa iPhonessa Watch-appi, vieritä Rereminderin kohdalle ja asenna se, jos sitä ei ole.</li>
+                <li><strong>Avaa Rereminder kellossa kerran.</strong> Juuri asennettua kelloappia ei ole koskaan käynnistetty, ja ensimmäinen synkronointi vaatii, että se on käynnistetty.</li>
+            </ol>
+            <p>Ajastimen tila siirtyy kelloon, vaikka kelloappi olisi taustalla, joten sitä ei tarvitse pitää auki.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Mac näyttää ”ei yhteyttä”, vaikka appi on auki</summary>
+        <div class="body">
+            <p>”Yhdistetty” tarkoittaa tässä, että <strong>appi on ollut käynnissä kyseisessä Macissa noin viimeisten 10 minuutin aikana</strong> &mdash; ei reaaliaikaista yhteyttä. Laitteet jättävät merkin omaan iCloudiisi viiden minuutin välein, eikä iCloud voi herättää nukkuvaa appia, joten juuri heränneen Macin näkyminen voi kestää muutaman minuutin.</p>
+            <p>Jos se ei näy koskaan: molempien laitteiden on oltava kirjautuneina <strong>samalle iCloud-tilille</strong> ja <strong>iCloud Driven on oltava päällä</strong>. Kohdassa <span class="ui">Asetukset &rsaquo; Omat laitteet</span> on ”Tarkista uudelleen” -painike, joka lukee tilan heti uudelleen.</p>
+            <p>Mac-versio vaatii <strong>macOS 26:n tai uudemman</strong>.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Ostin Pron, mutta se ei näy</summary>
+        <div class="body">
+            <p>Avaa Pro-näkymä ja napauta <strong>Palauta ostot</strong>. Ostot on sidottu Apple-tiliin, jolla ne tehtiin, joten varmista, että olet kirjautunut samalle tilille &mdash; et perheenjäsenen tilille etkä toisen maan tilille.</p>
+            <p>Pro on <strong>kertaosto</strong>. Se ei ole tilaus eikä vanhene, joten se säilyy uudelleenasennuksissa ja uusissa laitteissa.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Mitä Prohon oikeastaan kuuluu?</summary>
+        <div class="body">
+            <p>Pro on <strong>kertaosto</strong>. Sen sisältö mahtuu yhteen lauseeseen: <strong>appi muistaa asetuksesi.</strong></p>
+            <p><strong>Ilmainen</strong></p>
+            <ul>
+                <li><strong>Rajattomasti ennakkomuistutuksia.</strong> Laita ajastimeen niin monta kuin haluat &mdash; sitä, minkä takia appi on olemassa, ei rajoiteta.</li>
+                <li>Kaikki teemavärit, omat muistutustekstit, Live Activity, kuittaukseen asti toistuvat muistutukset ja herätyksenä soiva loppu.</li>
+                <li><strong>Täysi Apple Watch -appi ja Mac-appi</strong>. Kumpikaan ei ole maksumuurin takana.</li>
+            </ul>
+            <p><strong>Pro</strong></p>
+            <ul>
+                <li><strong>Mallit</strong> &mdash; tallenna asetukset ja ota ne käyttöön yhdellä napautuksella, niin monta kuin haluat.</li>
+                <li><strong>Viimeisimmät asetuksesi palaavat</strong>, kun avaat apin uudelleen.</li>
+                <li><strong>Sessiotila</strong> &mdash; nimeä jokainen osio (”alku / demo / kysymykset”) ja kirjoita jokaiselle osiolle käsikirjoitus, joka avautuu osion alkaessa.</li>
+                <li><strong>Yliaika</strong> &mdash; kello jatkaa laskemista 00:00:n jälkeen, joten tiedät, paljonko aika ylittyi.</li>
+                <li><strong>Historia ja tilastot</strong> &mdash; tiedot käyttämistäsi sessioista.</li>
+            </ul>
+            <p>Jo tallentamiasi malleja ei koskaan poisteta. Jos sinulla ei ole Prota, ne pysyvät näkyvissä lukittuina ja avautuvat taas heti, kun ostat sen.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Haluan hyvityksen</summary>
+        <div class="body">
+            <p>Hyvitykset hoidetaan Applen kautta, ei minun kauttani &mdash; en näe maksutietojasi enkä voi myöntää hyvitystä. Pyydä sitä osoitteessa <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a> sillä Apple-tilillä, jolla osto tehtiin.</p>
+            <p>Jos syynä on jokin rikki oleva asia, kerro siitä myös minulle. Hyvitys ratkaisee sinun tapauksesi, mutta ei korjaa virhettä seuraavalle.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Voinko kokeilla ilman asennusta?</summary>
+        <div class="body">
+            <p>Kyllä. Avaa <a href="https://m1zz.github.io/rereminder/" target="_blank" rel="noopener">m1zz.github.io/rereminder</a> iPhonella, niin App Clip käynnistää ajastimen heti &mdash; ilman käyntiä App Storessa. Siinä on kellotaulu ja muistutukset; mallit, sessiotila ja kelloappi ovat täysversiossa.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Mitä kieliä ja laitteita tuetaan?</summary>
+        <div class="body">
+            <table>
+                <tr><td>Kielet</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>iPhone</td><td>iOS 26.0 tai uudempi</td></tr>
+                <tr><td>Apple Watch</td><td>watchOS 11.6 tai uudempi</td></tr>
+                <tr><td>Mac</td><td>macOS 26.0 tai uudempi</td></tr>
+                <tr><td>iPad</td><td>Ei vielä tuettu</td></tr>
+            </table>
+        </div>
+    </details>
+
+    <details>
+        <summary>Miten poistan tietoni?</summary>
+        <div class="body">
+            <p>Kaikki luomasi &mdash; ajastimet, mallit, osioiden nimet, käsikirjoitukset, historia &mdash; on tallessa laitteellasi. <strong>Apin poistaminen poistaa ne kaikki.</strong></p>
+            <p>Apin lähettämät nimettömät käyttömäärät kuvataan kokonaisuudessaan <a href="privacy.html">tietosuojasivulla</a>, samoin se, mikä loppuu, kun poistat apin.</p>
+        </div>
+    </details>
+
+    <h2>Vieläkin jumissa?</h2>
+    <p>Kirjoita osoitteeseen <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Kerro, mitä yritit tehdä &mdash; älä vain sitä, mikä meni vikaan &mdash; niin palaan asiaan.</p>
+</div>
+
+<!-- ============================= Bahasa Indonesia ============================= -->
+
+<div data-lang="id">
+    <h1>Dukungan</h1>
+    <p class="lede">Rereminder dibuat oleh satu orang. Saat Anda menulis kepada saya, Anda menulis langsung kepada developernya — bukan ke antrean tiket.</p>
+    <p class="updated">Terakhir diperbarui: 9 September 2026 &middot; Versi app 2.2.5</p>
+
+    <h2>Hubungi saya</h2>
+    <div class="contact-grid">
+        <div class="card">
+            <h3>Email</h3>
+            <p class="big-link"><a href="mailto:leeo@kakao.com">leeo@kakao.com</a></p>
+            <p>Paling cocok untuk bug, pengembalian dana, dan apa pun yang perlu tangkapan layar.</p>
+        </div>
+        <div class="card">
+            <h3>Dari dalam app</h3>
+            <p><span class="ui">Pengaturan &rsaquo; Masukan &rsaquo; Kirim Masukan</span></p>
+            <p>Langsung masuk ke kotak masuk saya. Tidak perlu app email &mdash; cukup masuk ke iCloud.</p>
+        </div>
+        <div class="card">
+            <h3>Instagram</h3>
+            <p class="big-link"><a href="https://instagram.com/lee25_ios" target="_blank" rel="noopener">@lee25_ios</a></p>
+            <p>DM terbuka. Cocok untuk pertanyaan singkat.</p>
+        </div>
+        <div class="card">
+            <h3>Bug &amp; permintaan fitur</h3>
+            <p class="big-link"><a href="https://github.com/M1zz/Rereminder/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+            <p>Terbuka untuk umum, jadi orang lain juga bisa menemukan jawabannya.</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>Biasanya saya membalas dalam 2&ndash;3 hari.</strong> Jika sudah lebih dari seminggu, anggap saja pesannya hilang dan kirim lagi &mdash; saya lebih suka membacanya dua kali daripada tidak sama sekali.</p>
+    </div>
+
+    <h3>Yang perlu dicantumkan dalam laporan bug</h3>
+    <ul>
+        <li><strong>Versi app</strong> &mdash; ditampilkan di bagian bawah <span class="ui">Pengaturan &rsaquo; Info</span>.</li>
+        <li><strong>Perangkat dan OS</strong> &mdash; mis. iPhone 15 Pro, iOS 26.1. Sebutkan model Apple Watch jika masalahnya ada di jam tangan.</li>
+        <li><strong>Apa yang Anda harapkan, dan apa yang terjadi.</strong> "Peringatan 5 menit tidak pernah berbunyi" jauh lebih membantu daripada "notifikasinya rusak".</li>
+        <li><strong>Apakah terjadi setiap kali</strong> atau hanya sekali.</li>
+    </ul>
+
+    <h2>Pertanyaan umum</h2>
+
+    <details>
+        <summary>Peringatan saya tidak berbunyi</summary>
+        <div class="body">
+            <p>Rereminder memakai <strong>notifikasi lokal</strong>, jadi penyebabnya hampir selalu izin atau pengaturan Fokus. Periksa dengan urutan ini:</p>
+            <ol>
+                <li><strong>Izin notifikasi.</strong> Buka <span class="ui">Pengaturan &rsaquo; Metode Notifikasi</span> di app &mdash; di sana terlihat status saat ini, dengan pilihan untuk meminta izin atau membuka Pengaturan iOS.</li>
+                <li><strong>Fokus / Jangan Ganggu.</strong> Jika Fokus aktif, tambahkan Rereminder ke app yang diizinkan di <span class="ui">Pengaturan &rsaquo; Fokus</span> iOS.</li>
+                <li><strong>Tombol Dering/Senyap dan volume.</strong> Mode Senyap meredam suara; getaran tetap terasa.</li>
+                <li><strong>Ringkasan Terjadwal.</strong> <span class="ui">Pengaturan &rsaquo; Notifikasi &rsaquo; Ringkasan Terjadwal</span> di iOS bisa menahan notifikasi sampai jam tertentu. Rereminder sebaiknya tidak ada di dalamnya.</li>
+            </ol>
+            <p>Jika keempatnya sudah benar tetapi masalah masih terjadi, beri tahu saya durasi timer dan posisi peringatannya &mdash; kombinasi itulah yang saya perlukan untuk mereproduksinya.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Apple Watch saya tidak sinkron</summary>
+        <div class="body">
+            <p>Buka <span class="ui">Pengaturan &rsaquo; Perangkat Saya</span> di app. Status di samping Apple Watch menunjukkan langkah mana yang belum, dan mengetuknya akan membuka panduan untuk kondisi tersebut.</p>
+            <ol>
+                <li>Jam tangan sudah <strong>dipasangkan</strong> dengan iPhone ini.</li>
+                <li><strong>Rereminder sudah terinstal di jam tangan.</strong> Buka app Watch di iPhone, gulir ke Rereminder, lalu instal jika belum ada.</li>
+                <li><strong>Buka Rereminder di jam tangan satu kali.</strong> App jam tangan yang baru diinstal belum pernah berjalan, dan sinkronisasi pertama memerlukannya sudah dibuka.</li>
+            </ol>
+            <p>Status timer tetap tersinkron meski app jam tangan berada di latar belakang, jadi Anda tidak perlu terus membukanya.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Mac saya menampilkan "tidak terhubung" padahal app terbuka</summary>
+        <div class="body">
+            <p>"Terhubung" di sini berarti <strong>app berjalan di Mac itu dalam kira-kira 10 menit terakhir</strong> &mdash; bukan koneksi langsung. Perangkat meninggalkan jejak di iCloud Anda sendiri setiap lima menit, dan iCloud tidak bisa membangunkan app yang sedang tidur, jadi Mac yang baru bangun bisa butuh beberapa menit untuk muncul.</p>
+            <p>Jika tidak pernah muncul: kedua perangkat harus masuk ke <strong>akun iCloud yang sama</strong> dengan <strong>iCloud Drive aktif</strong>. <span class="ui">Pengaturan &rsaquo; Perangkat Saya</span> punya tombol "Periksa lagi" yang langsung membaca ulang.</p>
+            <p>Versi Mac memerlukan <strong>macOS 26 atau lebih baru</strong>.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Saya sudah membeli Pro tetapi tidak muncul</summary>
+        <div class="body">
+            <p>Buka layar Pro lalu ketuk <strong>Pulihkan Pembelian</strong>. Pembelian terikat pada Akun Apple yang melakukannya, jadi pastikan Anda masuk dengan akun yang sama &mdash; bukan akun anggota keluarga, dan bukan akun wilayah lain.</p>
+            <p>Pro adalah <strong>pembelian satu kali</strong>. Bukan langganan dan tidak kedaluwarsa, jadi tetap berlaku setelah instal ulang dan di perangkat baru.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Apa saja isi Pro sebenarnya?</summary>
+        <div class="body">
+            <p>Pro adalah <strong>pembelian satu kali</strong>. Yang dijual Pro cukup satu kalimat: <strong>app mengingat pengaturan Anda.</strong></p>
+            <p><strong>Gratis</strong></p>
+            <ul>
+                <li><strong>Peringatan awal tanpa batas.</strong> Pasang sebanyak yang Anda mau di satu timer &mdash; alasan app ini ada tidak dibatasi.</li>
+                <li>Semua warna tema, pesan peringatan khusus, Aktivitas Langsung, peringatan yang berulang sampai Anda merespons, dan akhir dengan alarm.</li>
+                <li><strong>App Apple Watch dan app Mac versi lengkap</strong>. Keduanya tidak berbayar.</li>
+            </ul>
+            <p><strong>Pro</strong></p>
+            <ul>
+                <li><strong>Templat</strong> &mdash; simpan pengaturan dan buka lagi dengan sekali ketuk, sebanyak yang Anda mau.</li>
+                <li><strong>Pengaturan terakhir Anda kembali</strong> saat Anda membuka app lagi.</li>
+                <li><strong>Mode Sesi</strong> &mdash; beri nama setiap bagian ("pembuka / demo / tanya jawab") dan simpan naskah per bagian yang terbuka saat bagian itu dimulai.</li>
+                <li><strong>Lewat waktu</strong> &mdash; jam terus menghitung melewati 00:00 sehingga Anda tahu seberapa jauh Anda melebihi waktu.</li>
+                <li><strong>Riwayat dan statistik</strong> &mdash; catatan sesi yang sudah Anda jalankan.</li>
+            </ul>
+            <p>Templat yang sudah Anda simpan tidak pernah dihapus. Jika Anda tidak punya Pro, templat tetap tampil di layar dalam keadaan terkunci, dan terbuka lagi begitu Anda membeli.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Saya ingin pengembalian dana</summary>
+        <div class="body">
+            <p>Pengembalian dana diproses oleh Apple, bukan oleh saya &mdash; saya tidak punya akses ke detail pembayaran Anda dan tidak bisa memberikannya. Ajukan di <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a> dengan Akun Apple yang dipakai untuk membeli.</p>
+            <p>Jika alasannya ada yang rusak, tolong beri tahu saya juga. Pengembalian dana menutup kasus Anda; tetapi tidak memperbaiki bug untuk pengguna berikutnya.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Bisakah saya mencobanya tanpa menginstal?</summary>
+        <div class="body">
+            <p>Bisa. Buka <a href="https://m1zz.github.io/rereminder/" target="_blank" rel="noopener">m1zz.github.io/rereminder</a> di iPhone dan App Clip langsung menjalankan timer &mdash; tanpa perlu ke App Store. App Clip berisi dial dan peringatan; templat, Mode Sesi, dan app jam tangan ada di app lengkap.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Bahasa dan perangkat apa saja yang didukung?</summary>
+        <div class="body">
+            <table>
+                <tr><td>Bahasa</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>iPhone</td><td>iOS 26.0 atau lebih baru</td></tr>
+                <tr><td>Apple Watch</td><td>watchOS 11.6 atau lebih baru</td></tr>
+                <tr><td>Mac</td><td>macOS 26.0 atau lebih baru</td></tr>
+                <tr><td>iPad</td><td>Belum didukung</td></tr>
+            </table>
+        </div>
+    </details>
+
+    <details>
+        <summary>Bagaimana cara menghapus data saya?</summary>
+        <div class="body">
+            <p>Semua yang Anda buat &mdash; timer, templat, nama bagian, naskah, riwayat &mdash; ada di perangkat Anda. <strong>Menghapus app akan menghapus semuanya.</strong></p>
+            <p>Hitungan penggunaan anonim yang dikirim app dijelaskan lengkap di <a href="privacy.html">halaman privasi</a>, termasuk apa yang berhenti saat Anda menghapus app.</p>
+        </div>
+    </details>
+
+    <h2>Masih ada kendala?</h2>
+    <p>Tulis ke <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Ceritakan apa yang sedang Anda coba lakukan &mdash; bukan hanya apa yang salah &mdash; dan saya akan membalas Anda.</p>
+</div>
+
+<!-- ============================= Norsk bokmål ============================= -->
+
+<div data-lang="nb">
+    <h1>Brukerstøtte</h1>
+    <p class="lede">Rereminder lages av én person. Skriver du til meg, skriver du til utvikleren &mdash; ikke til en saksbehandlingskø.</p>
+    <p class="updated">Sist oppdatert: 9. september 2026 &middot; Appversjon 2.2.5</p>
+
+    <h2>Ta kontakt</h2>
+    <div class="contact-grid">
+        <div class="card">
+            <h3>E-post</h3>
+            <p class="big-link"><a href="mailto:leeo@kakao.com">leeo@kakao.com</a></p>
+            <p>Best for feil, refusjoner og alt som trenger et skjermbilde.</p>
+        </div>
+        <div class="card">
+            <h3>Fra appen</h3>
+            <p><span class="ui">Innstillinger &rsaquo; Tilbakemelding &rsaquo; Send tilbakemelding</span></p>
+            <p>Går rett til innboksen min. Du trenger ingen e-postapp &mdash; bare at du er logget på iCloud.</p>
+        </div>
+        <div class="card">
+            <h3>Instagram</h3>
+            <p class="big-link"><a href="https://instagram.com/lee25_ios" target="_blank" rel="noopener">@lee25_ios</a></p>
+            <p>DM-er er åpne. Fint for raske spørsmål.</p>
+        </div>
+        <div class="card">
+            <h3>Feil og ønsker om funksjoner</h3>
+            <p class="big-link"><a href="https://github.com/M1zz/Rereminder/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+            <p>Offentlig, så andre også kan finne svaret.</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>Jeg svarer vanligvis innen 2&ndash;3 dager.</strong> Har det gått mer enn en uke, kan du gå ut fra at meldingen har kommet bort, og sende den på nytt &mdash; jeg leser den heller to ganger enn ikke i det hele tatt.</p>
+    </div>
+
+    <h3>Dette bør en feilrapport inneholde</h3>
+    <ul>
+        <li><strong>Appversjon</strong> &mdash; vises nederst i <span class="ui">Innstillinger &rsaquo; Info</span>.</li>
+        <li><strong>Enhet og OS</strong> &mdash; f.eks. iPhone 15 Pro, iOS 26.1. Oppgi modellen på Apple Watch hvis problemet er på klokken.</li>
+        <li><strong>Hva du forventet, og hva som skjedde i stedet.</strong> «Varselet 5 minutter før kom aldri» forteller meg mye mer enn «varslingene virker ikke».</li>
+        <li><strong>Om det skjer hver gang</strong> eller bare én gang.</li>
+    </ul>
+
+    <h2>Vanlige spørsmål</h2>
+
+    <details>
+        <summary>Varslene mine kom ikke</summary>
+        <div class="body">
+            <p>Rereminder bruker <strong>lokale varslinger</strong>, så dette skyldes nesten alltid en tillatelse eller en Fokus-innstilling. Sjekk i denne rekkefølgen:</p>
+            <ol>
+                <li><strong>Tillatelse til varslinger.</strong> Åpne <span class="ui">Innstillinger &rsaquo; Varslingsmåte</span> i appen &mdash; der ser du gjeldende status, og du kan be om tillatelse eller bli sendt til Innstillinger i iOS.</li>
+                <li><strong>Fokus / Ikke forstyrr.</strong> Hvis et Fokus er på, legger du til Rereminder blant de tillatte appene i iOS under <span class="ui">Innstillinger &rsaquo; Fokus</span>.</li>
+                <li><strong>Ring/lydløs-bryteren og volum.</strong> Lydløs modus demper lyden; vibrasjonen kommer likevel.</li>
+                <li><strong>Planlagt sammendrag.</strong> I iOS kan <span class="ui">Innstillinger &rsaquo; Varslinger &rsaquo; Planlagt sammendrag</span> holde igjen varslinger til et bestemt klokkeslett. Rereminder bør ikke være med der.</li>
+            </ol>
+            <p>Er alle fire i orden og det fortsatt skjer, fortell meg lengden på tidtakeren og hvor varslene var plassert &mdash; det er den kombinasjonen jeg trenger for å gjenskape feilen.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Apple Watch synkroniserer ikke</summary>
+        <div class="body">
+            <p>Åpne <span class="ui">Innstillinger &rsaquo; Mine enheter</span> i appen. Statusen ved siden av Apple Watch viser hvilket steg som mangler, og trykker du på den, åpnes en veiledning for akkurat den situasjonen.</p>
+            <ol>
+                <li>Klokken er <strong>paret</strong> med denne iPhonen.</li>
+                <li><strong>Rereminder er installert på klokken.</strong> Åpne Watch-appen på iPhone, bla ned til Rereminder, og installer den hvis den ikke er der.</li>
+                <li><strong>Åpne Rereminder på klokken én gang.</strong> En nyinstallert klokkeapp har aldri kjørt, og den første synkroniseringen krever at den har vært startet.</li>
+            </ol>
+            <p>Tilstanden til tidtakeren overføres selv når klokkeappen er i bakgrunnen, så du trenger ikke ha den åpen.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Mac-en sier «ikke tilkoblet» selv om appen er åpen</summary>
+        <div class="body">
+            <p>«Tilkoblet» betyr her at <strong>appen kjørte på den Mac-en i løpet av omtrent de siste 10 minuttene</strong> &mdash; ikke at det er en direkte forbindelse. Enhetene legger igjen et spor i din egen iCloud hvert femte minutt, og iCloud kan ikke vekke en app som sover, så en Mac som nettopp har våknet, kan bruke noen minutter på å dukke opp.</p>
+            <p>Dukker den aldri opp: Begge enhetene må være logget på <strong>samme iCloud-konto</strong> med <strong>iCloud Drive slått på</strong>. I <span class="ui">Innstillinger &rsaquo; Mine enheter</span> finnes knappen «Sjekk på nytt», som leser inn på nytt med en gang.</p>
+            <p>Mac-versjonen krever <strong>macOS 26 eller nyere</strong>.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Jeg har kjøpt Pro, men det vises ikke</summary>
+        <div class="body">
+            <p>Åpne Pro-skjermen og trykk på <strong>Gjenopprett kjøp</strong>. Kjøp er knyttet til Apple-kontoen som gjorde dem, så sørg for at du er logget på den samme kontoen &mdash; ikke et familiemedlems konto, og ikke en konto for et annet land.</p>
+            <p>Pro er et <strong>engangskjøp</strong>. Det er ikke et abonnement, og det utløper ikke, så det overlever nye installasjoner og nye enheter.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Hva inneholder Pro egentlig?</summary>
+        <div class="body">
+            <p>Pro er et <strong>engangskjøp</strong>. Det Pro selger, kan sies i én setning: <strong>Appen husker oppsettene dine.</strong></p>
+            <p><strong>Gratis</strong></p>
+            <ul>
+                <li><strong>Ubegrenset med forvarsler.</strong> Legg så mange du vil på en tidtaker &mdash; det appen finnes for, er ikke begrenset.</li>
+                <li>Alle temafarger, egne varselmeldinger, Live-aktivitet, varsler som gjentas til du svarer, og ekte alarm på slutten.</li>
+                <li>Den <strong>fullstendige appen for Apple Watch og Mac</strong>. Ingen av dem krever betaling.</li>
+            </ul>
+            <p><strong>Pro</strong></p>
+            <ul>
+                <li><strong>Maler</strong> &mdash; lagre et oppsett og hent det frem med ett trykk, så mange du vil.</li>
+                <li><strong>Det siste oppsettet ditt kommer tilbake</strong> når du åpner appen igjen.</li>
+                <li><strong>Øktmodus</strong> &mdash; gi hver del et navn («intro / demo / spørsmål») og ha et manus for hver del som folder seg ut når delen starter.</li>
+                <li><strong>Overtid</strong> &mdash; klokken fortsetter å telle forbi 00:00, så du vet hvor mye du gikk over.</li>
+                <li><strong>Historikk og statistikk</strong> &mdash; en oversikt over øktene du har gjennomført.</li>
+            </ul>
+            <p>Maler du allerede har lagret, slettes aldri. Har du ikke Pro, blir de stående på skjermen, låst, og låses opp igjen i det øyeblikket du kjøper.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Jeg vil ha pengene tilbake</summary>
+        <div class="body">
+            <p>Refusjoner går gjennom Apple, ikke gjennom meg &mdash; jeg har ikke tilgang til betalingsopplysningene dine og kan ikke gi refusjon. Be om det på <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a> med Apple-kontoen som gjorde kjøpet.</p>
+            <p>Hvis grunnen er at noe ikke virker, si gjerne fra til meg også. En refusjon løser saken din, men den fikser ikke feilen for neste person.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Kan jeg prøve uten å installere?</summary>
+        <div class="body">
+            <p>Ja. Åpne <a href="https://m1zz.github.io/rereminder/" target="_blank" rel="noopener">m1zz.github.io/rereminder</a> på en iPhone, så starter App Clip tidtakeren med en gang &mdash; uten en tur innom App Store. Den har skiven og varslene; maler, øktmodus og klokkeappen finnes i den fulle appen.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Hvilke språk og enheter støttes?</summary>
+        <div class="body">
+            <table>
+                <tr><td>Språk</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>iPhone</td><td>iOS 26.0 eller nyere</td></tr>
+                <tr><td>Apple Watch</td><td>watchOS 11.6 eller nyere</td></tr>
+                <tr><td>Mac</td><td>macOS 26.0 eller nyere</td></tr>
+                <tr><td>iPad</td><td>Støttes ikke ennå</td></tr>
+            </table>
+        </div>
+    </details>
+
+    <details>
+        <summary>Hvordan sletter jeg dataene mine?</summary>
+        <div class="body">
+            <p>Alt du lager &mdash; tidtakere, maler, navn på deler, manus, historikk &mdash; ligger på enheten din. <strong>Sletter du appen, forsvinner alt.</strong></p>
+            <p>De anonyme brukstallene appen sender, er beskrevet i sin helhet på <a href="privacy.html">personvernsiden</a>, også hva som stopper når du sletter appen.</p>
+        </div>
+    </details>
+
+    <h2>Står du fortsatt fast?</h2>
+    <p>Skriv til <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Fortell meg hva du prøvde å gjøre &mdash; ikke bare hva som gikk galt &mdash; så svarer jeg deg.</p>
+</div>
+
+<!-- ============================= Nederlands ============================= -->
+
+<div data-lang="nl">
+    <h1>Support</h1>
+    <p class="lede">Rereminder wordt gemaakt door één persoon. Schrijf je mij, dan schrijf je de ontwikkelaar &mdash; geen ticketsysteem.</p>
+    <p class="updated">Laatst bijgewerkt: 9 september 2026 &middot; Appversie 2.2.5</p>
+
+    <h2>Neem contact op</h2>
+    <div class="contact-grid">
+        <div class="card">
+            <h3>E-mail</h3>
+            <p class="big-link"><a href="mailto:leeo@kakao.com">leeo@kakao.com</a></p>
+            <p>Het handigst voor bugs, terugbetalingen en alles waarbij een screenshot helpt.</p>
+        </div>
+        <div class="card">
+            <h3>Vanuit de app</h3>
+            <p><span class="ui">Instellingen &rsaquo; Feedback &rsaquo; Stuur feedback</span></p>
+            <p>Komt direct in mijn inbox. Geen e-mailapp nodig &mdash; alleen een iCloud-login.</p>
+        </div>
+        <div class="card">
+            <h3>Instagram</h3>
+            <p class="big-link"><a href="https://instagram.com/lee25_ios" target="_blank" rel="noopener">@lee25_ios</a></p>
+            <p>DM’s staan open. Prima voor snelle vragen.</p>
+        </div>
+        <div class="card">
+            <h3>Bugs &amp; functieverzoeken</h3>
+            <p class="big-link"><a href="https://github.com/M1zz/Rereminder/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+            <p>Openbaar, zodat anderen het antwoord ook kunnen vinden.</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>Meestal antwoord ik binnen 2&ndash;3 dagen.</strong> Is het langer dan een week geleden, ga er dan van uit dat je bericht kwijt is en stuur het opnieuw &mdash; ik lees het liever twee keer dan helemaal niet.</p>
+    </div>
+
+    <h3>Wat je in een bugmelding zet</h3>
+    <ul>
+        <li><strong>Appversie</strong> &mdash; die staat onderaan in <span class="ui">Instellingen &rsaquo; Info</span>.</li>
+        <li><strong>Apparaat en besturingssysteem</strong> &mdash; bv. iPhone 15 Pro, iOS 26.1. Noem ook het model van je Apple Watch als het probleem op de watch zit.</li>
+        <li><strong>Wat je verwachtte, en wat er in plaats daarvan gebeurde.</strong> ‘De melding op 5 minuten ging nooit af’ zegt me veel meer dan ‘meldingen werken niet’.</li>
+        <li><strong>Of het elke keer gebeurt</strong> of maar één keer.</li>
+    </ul>
+
+    <h2>Veelgestelde vragen</h2>
+
+    <details>
+        <summary>Mijn meldingen gingen niet af</summary>
+        <div class="body">
+            <p>Rereminder gebruikt <strong>lokale meldingen</strong>, dus het ligt bijna altijd aan een toestemming of een Focus-instelling. Controleer in deze volgorde:</p>
+            <ol>
+                <li><strong>Toestemming voor berichtgeving.</strong> Open <span class="ui">Instellingen &rsaquo; Meldingsmethode</span> in de app &mdash; daar zie je de huidige status en kun je toestemming vragen of naar de iOS-instellingen gaan.</li>
+                <li><strong>Focus / Niet storen.</strong> Staat er een Focus aan, voeg Rereminder dan toe aan de toegestane apps in iOS <span class="ui">Instellingen &rsaquo; Focus</span>.</li>
+                <li><strong>Belsignaal/stil-schakelaar en volume.</strong> In de stille modus is er geen geluid; de trilling komt wel door.</li>
+                <li><strong>Gepland overzicht.</strong> iOS <span class="ui">Instellingen &rsaquo; Berichtgeving &rsaquo; Gepland overzicht</span> kan meldingen tot een vast tijdstip tegenhouden. Rereminder hoort daar niet in te staan.</li>
+            </ol>
+            <p>Is alles in orde en gebeurt het nog steeds, vertel me dan hoe lang de timer was en waar de meldingen stonden &mdash; met die combinatie kan ik het nabootsen.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Mijn Apple Watch synchroniseert niet</summary>
+        <div class="body">
+            <p>Open <span class="ui">Instellingen &rsaquo; Mijn apparaten</span> in de app. De status naast Apple Watch vertelt je welke stap ontbreekt, en als je erop tikt, krijg je uitleg voor precies die situatie.</p>
+            <ol>
+                <li>De watch is <strong>gekoppeld</strong> aan deze iPhone.</li>
+                <li><strong>Rereminder is op de watch geïnstalleerd.</strong> Open de Watch-app op je iPhone, scrol naar Rereminder en installeer het als het er nog niet op staat.</li>
+                <li><strong>Open Rereminder één keer op de watch.</strong> Een net geïnstalleerde watch-app is nog nooit gestart, en voor de eerste synchronisatie moet hij één keer geopend zijn.</li>
+            </ol>
+            <p>De timerstatus komt ook door als de watch-app op de achtergrond staat, dus je hoeft hem niet open te houden.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Mijn Mac zegt ‘niet verbonden’, terwijl de app open is</summary>
+        <div class="body">
+            <p>‘Verbonden’ betekent hier <strong>dat de app in ongeveer de afgelopen 10 minuten op die Mac draaide</strong> &mdash; het is geen live verbinding. Apparaten laten elke vijf minuten een teken achter in je eigen iCloud, en iCloud kan een slapende app niet wekken, dus een Mac die net uit de sluimerstand komt, kan pas na een paar minuten verschijnen.</p>
+            <p>Verschijnt hij nooit? Dan moeten beide apparaten zijn ingelogd met <strong>hetzelfde iCloud-account</strong>, met <strong>iCloud Drive aan</strong>. In <span class="ui">Instellingen &rsaquo; Mijn apparaten</span> zit een knop ‘Controleer opnieuw’ die het meteen opnieuw nakijkt.</p>
+            <p>De Mac-versie heeft <strong>macOS 26 of nieuwer</strong> nodig.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Ik heb Pro gekocht, maar het verschijnt niet</summary>
+        <div class="body">
+            <p>Open het Pro-scherm en tik op <strong>Herstel aankopen</strong>. Aankopen horen bij het Apple Account waarmee ze zijn gedaan, dus zorg dat je met datzelfde account bent ingelogd &mdash; niet dat van een gezinslid, en niet een account uit een andere regio.</p>
+            <p>Pro is een <strong>eenmalige aankoop</strong>. Het is geen abonnement en verloopt niet, dus het blijft behouden als je opnieuw installeert of een nieuw apparaat neemt.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Wat zit er eigenlijk in Pro?</summary>
+        <div class="body">
+            <p>Pro is een <strong>eenmalige aankoop</strong>. Wat Pro verkoopt, past in één zin: <strong>de app onthoudt je setups.</strong></p>
+            <p><strong>Gratis</strong></p>
+            <ul>
+                <li><strong>Onbeperkt voorwaarschuwingen.</strong> Zet er zoveel op een timer als je wilt &mdash; waar deze app voor bestaat, wordt niet afgemeten.</li>
+                <li>Alle themakleuren, eigen meldingsteksten, live-activiteit, meldingen die herhalen tot je reageert, en het alarm aan het einde.</li>
+                <li>De <strong>volledige Apple Watch-app en Mac-app</strong>. Geen van beide zit achter een betaalmuur.</li>
+            </ul>
+            <p><strong>Pro</strong></p>
+            <ul>
+                <li><strong>Sjablonen</strong> &mdash; bewaar een setup en haal hem met één tik terug, zoveel als je wilt.</li>
+                <li><strong>Je laatste setup komt terug</strong> als je de app opnieuw opent.</li>
+                <li><strong>Sessiemodus</strong> &mdash; geef elk onderdeel een naam (‘intro / demo / vragen’) en houd per onderdeel een script bij dat openklapt zodra dat onderdeel begint.</li>
+                <li><strong>Overtijd</strong> &mdash; de klok telt door na 00:00, zodat je weet hoeveel je bent uitgelopen.</li>
+                <li><strong>Geschiedenis en statistieken</strong> &mdash; een overzicht van de sessies die je hebt gedaan.</li>
+            </ul>
+            <p>Sjablonen die je al hebt bewaard, worden nooit verwijderd. Heb je geen Pro, dan blijven ze vergrendeld op het scherm staan en worden ze weer ontgrendeld zodra je Pro koopt.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Ik wil mijn geld terug</summary>
+        <div class="body">
+            <p>Terugbetalingen lopen via Apple, niet via mij &mdash; ik heb geen toegang tot je betaalgegevens en kan zelf niets terugbetalen. Vraag het aan op <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a> met het Apple Account waarmee je de aankoop deed.</p>
+            <p>Is de reden dat er iets kapot is, laat het mij dan ook weten. Een terugbetaling sluit jouw kwestie af, maar lost de bug niet op voor de volgende gebruiker.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Kan ik het proberen zonder te installeren?</summary>
+        <div class="body">
+            <p>Ja. Open <a href="https://m1zz.github.io/rereminder/" target="_blank" rel="noopener">m1zz.github.io/rereminder</a> op een iPhone en de App Clip start de timer meteen &mdash; zonder omweg via de App Store. Je krijgt de wijzerplaat en de meldingen; sjablonen, Sessiemodus en de watch-app zitten in de volledige app.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Welke talen en apparaten worden ondersteund?</summary>
+        <div class="body">
+            <table>
+                <tr><td>Talen</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>iPhone</td><td>iOS 26.0 of nieuwer</td></tr>
+                <tr><td>Apple Watch</td><td>watchOS 11.6 of nieuwer</td></tr>
+                <tr><td>Mac</td><td>macOS 26.0 of nieuwer</td></tr>
+                <tr><td>iPad</td><td>Nog niet ondersteund</td></tr>
+            </table>
+        </div>
+    </details>
+
+    <details>
+        <summary>Hoe verwijder ik mijn gegevens?</summary>
+        <div class="body">
+            <p>Alles wat je maakt &mdash; timers, sjablonen, namen van onderdelen, scripts, geschiedenis &mdash; staat op je apparaat. <strong>Verwijder je de app, dan is het allemaal weg.</strong></p>
+            <p>De anonieme gebruikstellingen die de app verstuurt, staan volledig beschreven op de <a href="privacy.html">privacypagina</a>, inclusief wat er stopt als je de app verwijdert.</p>
+        </div>
+    </details>
+
+    <h2>Kom je er nog niet uit?</h2>
+    <p>Schrijf naar <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Vertel me wat je probeerde te doen &mdash; niet alleen wat er misging &mdash; en ik neem contact met je op.</p>
+</div>
+
+<!-- ============================= Polski ============================= -->
+
+<div data-lang="pl">
+    <h1>Pomoc</h1>
+    <p class="lede">Rereminder tworzy jedna osoba. Pisząc do mnie, piszesz bezpośrednio do dewelopera &mdash; nie do kolejki zgłoszeń.</p>
+    <p class="updated">Ostatnia aktualizacja: 9 września 2026 &middot; Wersja aplikacji 2.2.5</p>
+
+    <h2>Kontakt</h2>
+    <div class="contact-grid">
+        <div class="card">
+            <h3>E‑mail</h3>
+            <p class="big-link"><a href="mailto:leeo@kakao.com">leeo@kakao.com</a></p>
+            <p>Najlepszy przy błędach, zwrotach i wszystkim, co wymaga zrzutu ekranu.</p>
+        </div>
+        <div class="card">
+            <h3>Z poziomu aplikacji</h3>
+            <p><span class="ui">Ustawienia &rsaquo; Opinie &rsaquo; Wyślij opinię</span></p>
+            <p>Trafia prosto do mojej skrzynki. Nie potrzebujesz aplikacji pocztowej &mdash; wystarczy zalogowanie do iCloud.</p>
+        </div>
+        <div class="card">
+            <h3>Instagram</h3>
+            <p class="big-link"><a href="https://instagram.com/lee25_ios" target="_blank" rel="noopener">@lee25_ios</a></p>
+            <p>Wiadomości prywatne są otwarte. Dobre na szybkie pytania.</p>
+        </div>
+        <div class="card">
+            <h3>Błędy i prośby o funkcje</h3>
+            <p class="big-link"><a href="https://github.com/M1zz/Rereminder/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+            <p>Publicznie, więc inni też znajdą odpowiedź.</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>Zwykle odpowiadam w ciągu 2&ndash;3 dni.</strong> Jeśli minął ponad tydzień, załóż, że wiadomość zaginęła, i wyślij ją jeszcze raz &mdash; wolę przeczytać ją dwa razy niż wcale.</p>
+    </div>
+
+    <h3>Co podać w zgłoszeniu błędu</h3>
+    <ul>
+        <li><strong>Wersję aplikacji</strong> &mdash; znajdziesz ją na dole w <span class="ui">Ustawienia &rsaquo; Informacje</span>.</li>
+        <li><strong>Urządzenie i system</strong> &mdash; np. iPhone 15 Pro, iOS 26.1. Jeśli problem dotyczy zegarka, podaj model Apple Watch.</li>
+        <li><strong>Co miało się stać, a co stało się zamiast tego.</strong> „Alert 5 minut przed końcem w ogóle się nie pojawił” mówi mi o wiele więcej niż „powiadomienia nie działają”.</li>
+        <li><strong>Czy dzieje się to za każdym razem</strong>, czy tylko raz.</li>
+    </ul>
+
+    <h2>Częste pytania</h2>
+
+    <details>
+        <summary>Moje alerty się nie pojawiły</summary>
+        <div class="body">
+            <p>Rereminder używa <strong>powiadomień lokalnych</strong>, więc prawie zawsze chodzi o uprawnienia lub ustawienie Skupienia. Sprawdź w tej kolejności:</p>
+            <ol>
+                <li><strong>Zgoda na powiadomienia.</strong> Otwórz w aplikacji <span class="ui">Ustawienia &rsaquo; Sposób powiadamiania</span> &mdash; zobaczysz bieżący stan i możliwość poproszenia o zgodę lub przejścia do Ustawień iOS.</li>
+                <li><strong>Skupienie / Nie przeszkadzać.</strong> Jeśli Skupienie jest włączone, dodaj Rereminder do dozwolonych aplikacji w <span class="ui">Ustawienia &rsaquo; Skupienie</span> w iOS.</li>
+                <li><strong>Przełącznik dzwonka / trybu cichego i głośność.</strong> Tryb cichy wycisza dźwięk; wibracje nadal działają.</li>
+                <li><strong>Podsumowanie zaplanowane.</strong> <span class="ui">Ustawienia &rsaquo; Powiadomienia &rsaquo; Podsumowanie zaplanowane</span> w iOS może wstrzymywać powiadomienia do ustalonej godziny. Rereminder nie powinien się w nim znaleźć.</li>
+            </ol>
+            <p>Jeśli wszystkie cztery punkty są w porządku, a problem nadal występuje, podaj mi długość minutnika i miejsca alertów &mdash; właśnie tej kombinacji potrzebuję, by go odtworzyć.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Mój Apple Watch się nie synchronizuje</summary>
+        <div class="body">
+            <p>Otwórz w aplikacji <span class="ui">Ustawienia &rsaquo; Moje urządzenia</span>. Stan obok Apple Watch pokazuje, którego kroku brakuje, a stuknięcie go otwiera instrukcję dla dokładnie tej sytuacji.</p>
+            <ol>
+                <li>Zegarek jest <strong>sparowany</strong> z tym iPhone’em.</li>
+                <li><strong>Rereminder jest zainstalowany na zegarku.</strong> Otwórz aplikację Watch na iPhonie, przewiń do Rereminder i zainstaluj go, jeśli go nie ma.</li>
+                <li><strong>Otwórz Rereminder na zegarku raz.</strong> Świeżo zainstalowana aplikacja na zegarku nigdy jeszcze nie działała, a pierwsza synchronizacja wymaga, by została uruchomiona.</li>
+            </ol>
+            <p>Stan minutnika przechodzi nawet wtedy, gdy aplikacja na zegarku działa w tle, więc nie musisz trzymać jej otwartej.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Mój Mac pokazuje „Niepołączony”, choć aplikacja jest otwarta</summary>
+        <div class="body">
+            <p>„Połączony” oznacza tu, że <strong>aplikacja działała na tym Macu mniej więcej w ciągu ostatnich 10 minut</strong> &mdash; a nie połączenie na żywo. Urządzenia zostawiają znak w Twoim iCloud co pięć minut, a iCloud nie potrafi wybudzić uśpionej aplikacji, więc Mac, który dopiero się obudził, może pojawić się dopiero po kilku minutach.</p>
+            <p>Jeśli nie pojawia się wcale: oba urządzenia muszą być zalogowane na <strong>to samo konto iCloud</strong> z <strong>włączonym iCloud Drive</strong>. W <span class="ui">Ustawienia &rsaquo; Moje urządzenia</span> jest przycisk „Sprawdź ponownie”, który od razu odświeża stan.</p>
+            <p>Wersja na Maca wymaga <strong>macOS 26 lub nowszego</strong>.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Kupione Pro się nie pokazuje</summary>
+        <div class="body">
+            <p>Otwórz ekran Pro i stuknij <strong>Odtwórz zakupy</strong>. Zakupy są powiązane z Kontem Apple, z którego je zrobiono, więc upewnij się, że używasz tego samego konta &mdash; nie na konto członka rodziny ani na konto z innego regionu.</p>
+            <p>Pro to <strong>jednorazowy zakup</strong>. To nie subskrypcja i nie wygasa, więc przetrwa ponowną instalację i zmianę urządzenia.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Co właściwie zawiera Pro?</summary>
+        <div class="body">
+            <p>Pro to <strong>jednorazowy zakup</strong>. To, co oferuje Pro, mieści się w jednym zdaniu: <strong>aplikacja pamięta Twoje konfiguracje.</strong></p>
+            <p><strong>Za darmo</strong></p>
+            <ul>
+                <li><strong>Nielimitowane ostrzeżenia.</strong> Dodaj do minutnika, ile chcesz &mdash; to, dla czego ta aplikacja istnieje, nie jest limitowane.</li>
+                <li>Wszystkie kolory motywu, własne teksty alertów, Aktywność na żywo, alerty powtarzane aż do reakcji i zakończenie pełnym alarmem.</li>
+                <li><strong>Pełna aplikacja na Apple Watch i na Maca</strong>. Żadna z nich nie jest płatna.</li>
+            </ul>
+            <p><strong>Pro</strong></p>
+            <ul>
+                <li><strong>Szablony</strong> &mdash; zapisz konfigurację i przywróć ją jednym stuknięciem, ile tylko chcesz.</li>
+                <li><strong>Ostatnia konfiguracja wraca</strong>, gdy ponownie otworzysz aplikację.</li>
+                <li><strong>Tryb sesji</strong> &mdash; nazwij każdy etap („wstęp / demo / pytania”) i dodaj do każdego notatki, które rozwiną się, gdy ten etap się zacznie.</li>
+                <li><strong>Przekroczenie czasu</strong> &mdash; zegar liczy dalej po 00:00, więc wiesz, o ile przekroczono czas.</li>
+                <li><strong>Historia i statystyki</strong> &mdash; zapis przeprowadzonych sesji.</li>
+            </ul>
+            <p>Już zapisane szablony nigdy nie są usuwane. Bez Pro zostają na ekranie zablokowane i odblokowują się z chwilą zakupu.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Chcę zwrotu pieniędzy</summary>
+        <div class="body">
+            <p>Zwroty obsługuje Apple, nie ja &mdash; nie mam dostępu do Twoich danych płatniczych i nie mogę go zlecić. Poproś o zwrot na <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a>, korzystając z Konta Apple, z którego dokonano zakupu.</p>
+            <p>Jeśli powodem jest coś, co nie działa, napisz też do mnie. Zwrot zamyka Twoją sprawę, ale nie naprawia błędu dla następnej osoby.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Czy mogę wypróbować aplikację bez instalowania?</summary>
+        <div class="body">
+            <p>Tak. Otwórz <a href="https://m1zz.github.io/rereminder/" target="_blank" rel="noopener">m1zz.github.io/rereminder</a> na iPhonie, a wycinek aplikacji od razu uruchomi minutnik &mdash; bez wizyty w App Store. Ma tarczę i alerty; szablony, tryb sesji i aplikacja na zegarek są w pełnej aplikacji.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Jakie języki i urządzenia są obsługiwane?</summary>
+        <div class="body">
+            <table>
+                <tr><td>Języki</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>iPhone</td><td>iOS 26.0 lub nowszy</td></tr>
+                <tr><td>Apple Watch</td><td>watchOS 11.6 lub nowszy</td></tr>
+                <tr><td>Mac</td><td>macOS 26.0 lub nowszy</td></tr>
+                <tr><td>iPad</td><td>Jeszcze nieobsługiwany</td></tr>
+            </table>
+        </div>
+    </details>
+
+    <details>
+        <summary>Jak usunąć moje dane?</summary>
+        <div class="body">
+            <p>Wszystko, co tworzysz &mdash; minutniki, szablony, nazwy etapów, notatki, historia &mdash; jest przechowywane na Twoim urządzeniu. <strong>Usunięcie aplikacji usuwa to wszystko.</strong></p>
+            <p>Anonimowe liczniki użycia wysyłane przez aplikację są dokładnie opisane na <a href="privacy.html">stronie prywatności</a>, łącznie z tym, co przestaje działać po usunięciu aplikacji.</p>
+        </div>
+    </details>
+
+    <h2>Nadal masz problem?</h2>
+    <p>Napisz na <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Opisz, co próbujesz zrobić &mdash; a nie tylko, co poszło nie tak &mdash; a odezwę się do Ciebie.</p>
+</div>
+
+<!-- ============================= Svenska ============================= -->
+
+<div data-lang="sv">
+    <h1>Support</h1>
+    <p class="lede">Rereminder görs av en enda person. När du skriver till mig skriver du direkt till utvecklaren &mdash; inte till en ärendekö.</p>
+    <p class="updated">Senast uppdaterad: 9 september 2026 &middot; Appversion 2.2.5</p>
+
+    <h2>Kontakta mig</h2>
+    <div class="contact-grid">
+        <div class="card">
+            <h3>E-post</h3>
+            <p class="big-link"><a href="mailto:leeo@kakao.com">leeo@kakao.com</a></p>
+            <p>Bäst för buggar, återbetalningar och allt som behöver en skärmbild.</p>
+        </div>
+        <div class="card">
+            <h3>Inifrån appen</h3>
+            <p><span class="ui">Inställningar &rsaquo; Feedback &rsaquo; Skicka feedback</span></p>
+            <p>Hamnar direkt i min inkorg. Ingen e-postapp behövs &mdash; bara att du är inloggad i iCloud.</p>
+        </div>
+        <div class="card">
+            <h3>Instagram</h3>
+            <p class="big-link"><a href="https://instagram.com/lee25_ios" target="_blank" rel="noopener">@lee25_ios</a></p>
+            <p>DM är öppna. Passar bra för snabba frågor.</p>
+        </div>
+        <div class="card">
+            <h3>Buggar &amp; önskemål</h3>
+            <p class="big-link"><a href="https://github.com/M1zz/Rereminder/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+            <p>Offentligt, så att andra också kan hitta svaret.</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>Jag svarar oftast inom 2&ndash;3 dagar.</strong> Har det gått mer än en vecka kan du räkna med att meddelandet har kommit bort &mdash; skicka det igen. Jag läser hellre något två gånger än inte alls.</p>
+    </div>
+
+    <h3>Det här ska en felrapport innehålla</h3>
+    <ul>
+        <li><strong>Appversion</strong> &mdash; <span class="ui">Inställningar &rsaquo; Info</span> visar den längst ned.</li>
+        <li><strong>Enhet och OS</strong> &mdash; t.ex. iPhone 15 Pro, iOS 26.1. Ange Apple Watch-modellen om problemet gäller klockan.</li>
+        <li><strong>Vad du förväntade dig och vad som hände i stället.</strong> ”Påminnelsen 5 minuter innan kom aldrig” säger mig mycket mer än ”notiserna fungerar inte”.</li>
+        <li><strong>Om det händer varje gång</strong> eller bara en gång.</li>
+    </ul>
+
+    <h2>Vanliga frågor</h2>
+
+    <details>
+        <summary>Mina påminnelser kom inte</summary>
+        <div class="body">
+            <p>Rereminder använder <strong>lokala notiser</strong>, så det handlar nästan alltid om en behörighet eller en fokusinställning. Kontrollera i den här ordningen:</p>
+            <ol>
+                <li><strong>Notisbehörighet.</strong> Öppna <span class="ui">Inställningar &rsaquo; Notissätt</span> i appen &mdash; där ser du aktuell status och kan be om behörighet eller gå till iOS-inställningarna.</li>
+                <li><strong>Fokus / Stör ej.</strong> Om ett fokusläge är på lägger du till Rereminder bland de tillåtna apparna i iOS <span class="ui">Inställningar &rsaquo; Fokus</span>.</li>
+                <li><strong>Ring/ljudlös-reglaget och volymen.</strong> Ljudlöst läge stänger av ljudet; vibrationen kommer ändå fram.</li>
+                <li><strong>Schemalagd sammanfattning.</strong> iOS <span class="ui">Inställningar &rsaquo; Notiser &rsaquo; Schemalagd sammanfattning</span> kan hålla inne notiser till en viss tid. Rereminder ska inte finnas med där.</li>
+            </ol>
+            <p>Om alla fyra stämmer och det ändå händer, berätta hur lång timern var och var påminnelserna låg &mdash; den kombinationen behöver jag för att kunna återskapa felet.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Min Apple Watch synkar inte</summary>
+        <div class="body">
+            <p>Öppna <span class="ui">Inställningar &rsaquo; Mina enheter</span> i appen. Statusen bredvid Apple Watch visar vilket steg som saknas, och trycker du på den öppnas en guide för just det läget.</p>
+            <ol>
+                <li>Klockan är <strong>parkopplad</strong> med den här iPhonen.</li>
+                <li><strong>Rereminder är installerad på klockan.</strong> Öppna Apple Watch-appen på iPhone, scrolla till Rereminder och installera den om den inte finns där.</li>
+                <li><strong>Öppna Rereminder på klockan en gång.</strong> En nyinstallerad klockapp har aldrig körts, och den första synkroniseringen kräver att den har startats.</li>
+            </ol>
+            <p>Timerns status förs över även när klockappen är i bakgrunden, så du behöver inte hålla den öppen.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Min Mac visar ”Inte ansluten” fast appen är öppen</summary>
+        <div class="body">
+            <p>”Ansluten” betyder här att <strong>appen var igång på den Macen under ungefär de senaste 10 minuterna</strong> &mdash; inte en direktanslutning. Enheterna lämnar ett spår i ditt eget iCloud var femte minut, och iCloud kan inte väcka en app som sover, så en Mac som just vaknat kan behöva några minuter innan den syns.</p>
+            <p>Om den aldrig dyker upp: båda enheterna måste vara inloggade på <strong>samma iCloud-konto</strong> med <strong>iCloud Drive påslaget</strong>. <span class="ui">Inställningar &rsaquo; Mina enheter</span> har knappen ”Kontrollera igen” som läser in direkt.</p>
+            <p>Mac-versionen kräver <strong>macOS 26 eller senare</strong>.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Jag har köpt Pro men det syns inte</summary>
+        <div class="body">
+            <p>Öppna Pro-skärmen och tryck på <strong>Återskapa köp</strong>. Köp är kopplade till det Apple-konto som gjorde dem, så se till att du är inloggad på samma konto &mdash; inte en familjemedlems och inte ett konto för en annan region.</p>
+            <p>Pro är ett <strong>engångsköp</strong>. Det är ingen prenumeration och det går inte ut, så det finns kvar efter ominstallationer och på nya enheter.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Vad ingår egentligen i Pro?</summary>
+        <div class="body">
+            <p>Pro är ett <strong>engångsköp</strong>. Det Pro säljer ryms i en mening: <strong>appen kommer ihåg dina upplägg.</strong></p>
+            <p><strong>Gratis</strong></p>
+            <ul>
+                <li><strong>Obegränsat med förvarningar.</strong> Lägg så många du vill på en timer &mdash; det appen finns till för är inte begränsat.</li>
+                <li>Alla temafärger, egna påminnelsemeddelanden, Live-aktivitet, påminnelser som upprepas tills du svarar, och slut med alarm.</li>
+                <li>Den <strong>fullständiga Apple Watch-appen och Mac-appen</strong>. Ingen av dem är låst bakom betalning.</li>
+            </ul>
+            <p><strong>Pro</strong></p>
+            <ul>
+                <li><strong>Mallar</strong> &mdash; spara ett upplägg och ta fram det med ett tryck, så många du vill.</li>
+                <li><strong>Ditt senaste upplägg kommer tillbaka</strong> när du öppnar appen igen.</li>
+                <li><strong>Sessionsläge</strong> &mdash; namnge varje avsnitt (”intro / demo / frågor”) och ha ett manus per avsnitt som fälls ut när avsnittet börjar.</li>
+                <li><strong>Övertid</strong> &mdash; klockan fortsätter räkna efter 00:00 så att du vet hur mycket du drog över.</li>
+                <li><strong>Historik och statistik</strong> &mdash; en översikt över de sessioner du har kört.</li>
+            </ul>
+            <p>Mallar som du redan har sparat raderas aldrig. Utan Pro ligger de kvar på skärmen, låsta, och låses upp igen i samma stund som du köper.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Jag vill ha pengarna tillbaka</summary>
+        <div class="body">
+            <p>Återbetalningar går via Apple, inte via mig &mdash; jag har ingen tillgång till dina betalningsuppgifter och kan inte göra en återbetalning. Begär den på <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a> med det Apple-konto som gjorde köpet.</p>
+            <p>Om anledningen är att något är trasigt, berätta det gärna för mig också. En återbetalning avslutar ditt ärende; den lagar inte felet för nästa person.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Kan jag prova utan att installera?</summary>
+        <div class="body">
+            <p>Ja. Öppna <a href="https://m1zz.github.io/rereminder/" target="_blank" rel="noopener">m1zz.github.io/rereminder</a> på en iPhone så startar appklippet timern direkt &mdash; utan omväg via App Store. Den har urtavlan och påminnelserna; mallar, sessionsläge och klockappen finns i den fullständiga appen.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Vilka språk och enheter stöds?</summary>
+        <div class="body">
+            <table>
+                <tr><td>Språk</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>iPhone</td><td>iOS 26.0 eller senare</td></tr>
+                <tr><td>Apple Watch</td><td>watchOS 11.6 eller senare</td></tr>
+                <tr><td>Mac</td><td>macOS 26.0 eller senare</td></tr>
+                <tr><td>iPad</td><td>Stöds inte än</td></tr>
+            </table>
+        </div>
+    </details>
+
+    <details>
+        <summary>Hur raderar jag mina data?</summary>
+        <div class="body">
+            <p>Allt du skapar &mdash; timrar, mallar, avsnittsnamn, manus, historik &mdash; finns på din enhet. <strong>Raderar du appen försvinner allt.</strong></p>
+            <p>Den anonyma användningsstatistik som appen skickar beskrivs i detalj på <a href="privacy.html">integritetssidan</a>, inklusive vad som upphör när du raderar appen.</p>
+        </div>
+    </details>
+
+    <h2>Fortfarande fast?</h2>
+    <p>Skriv till <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Berätta vad du försökte göra &mdash; inte bara vad som gick fel &mdash; så hör jag av mig.</p>
+</div>
+
+<!-- ============================= ไทย ============================= -->
+
+<div data-lang="th">
+    <h1>การสนับสนุน</h1>
+    <p class="lede">Rereminder สร้างโดยคนคนเดียว เมื่อคุณเขียนมาหาผม คุณกำลังคุยกับนักพัฒนาโดยตรง ไม่ใช่คิวตั๋วงาน</p>
+    <p class="updated">อัปเดตล่าสุด: 9 กันยายน 2026 &middot; แอปเวอร์ชัน 2.2.5</p>
+
+    <h2>ติดต่อผม</h2>
+    <div class="contact-grid">
+        <div class="card">
+            <h3>อีเมล</h3>
+            <p class="big-link"><a href="mailto:leeo@kakao.com">leeo@kakao.com</a></p>
+            <p>เหมาะที่สุดสำหรับแจ้งบั๊ก ขอเงินคืน และเรื่องที่ต้องแนบภาพหน้าจอ</p>
+        </div>
+        <div class="card">
+            <h3>จากในแอป</h3>
+            <p><span class="ui">การตั้งค่า &rsaquo; ความคิดเห็น &rsaquo; ส่งความคิดเห็น</span></p>
+            <p>ส่งตรงถึงกล่องข้อความของผม ไม่ต้องใช้แอปอีเมล &mdash; แค่ลงชื่อเข้า iCloud</p>
+        </div>
+        <div class="card">
+            <h3>Instagram</h3>
+            <p class="big-link"><a href="https://instagram.com/lee25_ios" target="_blank" rel="noopener">@lee25_ios</a></p>
+            <p>ส่ง DM มาได้เลย เหมาะกับคำถามสั้นๆ</p>
+        </div>
+        <div class="card">
+            <h3>บั๊กและคำขอฟีเจอร์</h3>
+            <p class="big-link"><a href="https://github.com/M1zz/Rereminder/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+            <p>เป็นสาธารณะ คนอื่นจึงหาคำตอบเจอได้ด้วย</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>ปกติผมตอบกลับภายใน 2&ndash;3 วัน</strong> หากนานเกินหนึ่งสัปดาห์ ให้ถือว่าข้อความหายระหว่างทางและส่งมาใหม่ &mdash; ผมยอมอ่านสองรอบดีกว่าไม่ได้อ่านเลย</p>
+    </div>
+
+    <h3>สิ่งที่ควรใส่ในรายงานบั๊ก</h3>
+    <ul>
+        <li><strong>เวอร์ชันแอป</strong> &mdash; ดูได้ที่ด้านล่างของ <span class="ui">การตั้งค่า &rsaquo; ข้อมูล</span></li>
+        <li><strong>อุปกรณ์และระบบปฏิบัติการ</strong> &mdash; เช่น iPhone 15 Pro, iOS 26.1 หากปัญหาเกิดบนนาฬิกา โปรดระบุรุ่น Apple Watch ด้วย</li>
+        <li><strong>สิ่งที่คุณคาดไว้ และสิ่งที่เกิดขึ้นจริง</strong> “การแจ้งเตือน 5 นาทีไม่ดังเลย” บอกผมได้มากกว่า “การแจ้งเตือนเสีย” หลายเท่า</li>
+        <li><strong>เกิดขึ้นทุกครั้ง</strong>หรือแค่ครั้งเดียว</li>
+    </ul>
+
+    <h2>คำถามที่พบบ่อย</h2>
+
+    <details>
+        <summary>การแจ้งเตือนไม่ดัง</summary>
+        <div class="body">
+            <p>Rereminder ใช้<strong>การแจ้งเตือนเฉพาะที่</strong> ปัญหานี้จึงมักเกิดจากสิทธิ์การแจ้งเตือนหรือการตั้งค่าโฟกัส ตรวจสอบตามลำดับนี้:</p>
+            <ol>
+                <li><strong>สิทธิ์การแจ้งเตือน</strong> เปิด <span class="ui">การตั้งค่า &rsaquo; วิธีแจ้งเตือน</span> ในแอป &mdash; จะแสดงสถานะปัจจุบัน และให้คุณขออนุญาตหรือไปที่การตั้งค่าของ iOS ได้</li>
+                <li><strong>โฟกัส / ห้ามรบกวน</strong> หากเปิดโฟกัสอยู่ ให้เพิ่ม Rereminder เป็นแอปที่อนุญาตใน <span class="ui">การตั้งค่า &rsaquo; โฟกัส</span> ของ iOS</li>
+                <li><strong>สวิตช์เสียง/เงียบ และระดับเสียง</strong> โหมดเงียบจะปิดเสียง แต่ยังสั่นอยู่</li>
+                <li><strong>สรุปตามกำหนดเวลา</strong> <span class="ui">การตั้งค่า &rsaquo; การแจ้งเตือน &rsaquo; สรุปตามกำหนดเวลา</span> ของ iOS อาจกักการแจ้งเตือนไว้จนถึงเวลาที่กำหนด Rereminder ไม่ควรอยู่ในรายการนี้</li>
+            </ol>
+            <p>หากทั้งสี่ข้อปกติดีแต่ยังเกิดปัญหา บอกผมถึงความยาวของตัวจับเวลาและตำแหน่งที่วางการแจ้งเตือน &mdash; ข้อมูลชุดนี้คือสิ่งที่ผมต้องใช้เพื่อทำให้ปัญหาเกิดซ้ำ</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Apple Watch ไม่ซิงค์</summary>
+        <div class="body">
+            <p>เปิด <span class="ui">การตั้งค่า &rsaquo; อุปกรณ์ของฉัน</span> ในแอป สถานะข้าง Apple Watch จะบอกว่าขาดขั้นตอนใด และเมื่อแตะจะเปิดคำแนะนำสำหรับสถานะนั้นโดยเฉพาะ</p>
+            <ol>
+                <li>นาฬิกา<strong>จับคู่</strong>กับ iPhone เครื่องนี้แล้ว</li>
+                <li><strong>ติดตั้ง Rereminder บนนาฬิกาแล้ว</strong> เปิดแอป Watch บน iPhone เลื่อนไปที่ Rereminder แล้วติดตั้งหากยังไม่มี</li>
+                <li><strong>เปิด Rereminder บนนาฬิกาหนึ่งครั้ง</strong> แอปนาฬิกาที่เพิ่งติดตั้งยังไม่เคยทำงาน และการซิงค์ครั้งแรกต้องให้แอปเปิดขึ้นมาก่อน</li>
+            </ol>
+            <p>สถานะตัวจับเวลาส่งข้ามไปได้แม้แอปนาฬิกาทำงานอยู่เบื้องหลัง คุณจึงไม่ต้องเปิดแอปค้างไว้</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Mac ขึ้นว่า “ไม่ได้เชื่อมต่อ” ทั้งที่เปิดแอปอยู่</summary>
+        <div class="body">
+            <p>“เชื่อมต่อแล้ว” ในที่นี้หมายถึง<strong>แอปทำงานอยู่บน Mac เครื่องนั้นภายในราว 10 นาทีที่ผ่านมา</strong> &mdash; ไม่ใช่การเชื่อมต่อแบบสด อุปกรณ์จะทิ้งร่องรอยไว้ใน iCloud ของคุณทุกห้านาที และ iCloud ปลุกแอปที่หลับอยู่ไม่ได้ Mac ที่เพิ่งตื่นจึงอาจใช้เวลาสองสามนาทีกว่าจะปรากฏ</p>
+            <p>หากไม่ปรากฏเลย: ทั้งสองอุปกรณ์ต้องลงชื่อเข้า<strong>บัญชี iCloud เดียวกัน</strong> และ<strong>เปิด iCloud Drive</strong> ใน <span class="ui">การตั้งค่า &rsaquo; อุปกรณ์ของฉัน</span> มีปุ่ม “ตรวจสอบอีกครั้ง” ที่อ่านสถานะใหม่ทันที</p>
+            <p>เวอร์ชัน Mac ต้องใช้ <strong>macOS 26 ขึ้นไป</strong></p>
+        </div>
+    </details>
+
+    <details>
+        <summary>ซื้อ Pro แล้วแต่ไม่แสดง</summary>
+        <div class="body">
+            <p>เปิดหน้าจอ Pro แล้วแตะ<strong>กู้คืนการซื้อ</strong> การซื้อผูกกับบัญชี Apple ที่ใช้ซื้อ จึงต้องแน่ใจว่าคุณลงชื่อเข้าบัญชีเดียวกันนั้น &mdash; ไม่ใช่บัญชีของสมาชิกครอบครัว และไม่ใช่บัญชีของภูมิภาคอื่น</p>
+            <p>Pro เป็น<strong>การซื้อครั้งเดียว</strong> ไม่ใช่การสมัครสมาชิกและไม่มีวันหมดอายุ จึงยังอยู่แม้ติดตั้งแอปใหม่หรือเปลี่ยนอุปกรณ์</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Pro มีอะไรบ้าง</summary>
+        <div class="body">
+            <p>Pro เป็น<strong>การซื้อครั้งเดียว</strong> สิ่งที่ Pro ขายสรุปได้ในประโยคเดียว: <strong>แอปจำชุดตั้งค่าของคุณ</strong></p>
+            <p><strong>ฟรี</strong></p>
+            <ul>
+                <li><strong>แจ้งเตือนล่วงหน้าได้ไม่จำกัด</strong> ใส่ในตัวจับเวลาได้มากเท่าที่ต้องการ &mdash; สิ่งที่เป็นเหตุผลของแอปนี้ไม่มีการจำกัด</li>
+                <li>สีธีมทุกสี ข้อความแจ้งเตือนที่กำหนดเอง กิจกรรมสด การเตือนต่อจนกว่าคุณจะตอบ และการจบด้วยเสียงปลุก</li>
+                <li><strong>แอป Apple Watch และแอป Mac ฉบับเต็ม</strong> ไม่มีส่วนใดต้องจ่ายเงิน</li>
+            </ul>
+            <p><strong>Pro</strong></p>
+            <ul>
+                <li><strong>เทมเพลต</strong> &mdash; บันทึกชุดตั้งค่าแล้วเรียกกลับมาได้ในแตะเดียว กี่ชุดก็ได้</li>
+                <li><strong>ชุดตั้งค่าล่าสุดกลับมา</strong>เมื่อคุณเปิดแอปอีกครั้ง</li>
+                <li><strong>โหมดเซสชัน</strong> &mdash; ตั้งชื่อแต่ละช่วง (“เกริ่นนำ / สาธิต / ถาม&amp;ตอบ”) และเก็บบทพูดของแต่ละช่วงที่จะเปิดขึ้นเองเมื่อช่วงนั้นเริ่ม</li>
+                <li><strong>เวลาเกิน</strong> &mdash; นาฬิกายังนับต่อหลัง 00:00 ให้คุณรู้ว่าเกินไปเท่าไร</li>
+                <li><strong>ประวัติและสถิติ</strong> &mdash; บันทึกของเซสชันที่คุณใช้งาน</li>
+            </ul>
+            <p>เทมเพลตที่คุณบันทึกไว้แล้วจะไม่ถูกลบ หากคุณไม่มี Pro เทมเพลตจะยังแสดงบนหน้าจอแบบล็อกไว้ และปลดล็อกทันทีเมื่อคุณซื้อ</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>ต้องการขอเงินคืน</summary>
+        <div class="body">
+            <p>การขอเงินคืนดำเนินการผ่าน Apple ไม่ใช่ผ่านผม &mdash; ผมเข้าถึงรายละเอียดการชำระเงินของคุณไม่ได้และคืนเงินเองไม่ได้ ส่งคำขอได้ที่ <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a> ด้วยบัญชี Apple ที่ใช้ซื้อ</p>
+            <p>หากเหตุผลคือมีบางอย่างเสีย โปรดบอกผมด้วย การคืนเงินปิดเรื่องของคุณได้ แต่ไม่ได้แก้บั๊กให้คนถัดไป</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>ลองใช้โดยไม่ต้องติดตั้งได้ไหม</summary>
+        <div class="body">
+            <p>ได้ เปิด <a href="https://m1zz.github.io/rereminder/" target="_blank" rel="noopener">m1zz.github.io/rereminder</a> บน iPhone แล้ว App Clip จะเริ่มตัวจับเวลาได้ทันที &mdash; ไม่ต้องไป App Store มีหน้าปัดและการแจ้งเตือน ส่วนเทมเพลต โหมดเซสชัน และแอปนาฬิกามีในแอปฉบับเต็ม</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>รองรับภาษาและอุปกรณ์ใดบ้าง</summary>
+        <div class="body">
+            <table>
+                <tr><td>ภาษา</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>iPhone</td><td>iOS 26.0 ขึ้นไป</td></tr>
+                <tr><td>Apple Watch</td><td>watchOS 11.6 ขึ้นไป</td></tr>
+                <tr><td>Mac</td><td>macOS 26.0 ขึ้นไป</td></tr>
+                <tr><td>iPad</td><td>ยังไม่รองรับ</td></tr>
+            </table>
+        </div>
+    </details>
+
+    <details>
+        <summary>ลบข้อมูลของฉันได้อย่างไร</summary>
+        <div class="body">
+            <p>ทุกอย่างที่คุณสร้าง &mdash; ตัวจับเวลา เทมเพลต ชื่อช่วง บทพูด และประวัติ &mdash; อยู่ในอุปกรณ์ของคุณ <strong>การลบแอปจะลบทั้งหมด</strong></p>
+            <p>จำนวนการใช้งานแบบนิรนามที่แอปส่งมามีอธิบายไว้ครบถ้วนใน<a href="privacy.html">หน้านโยบายความเป็นส่วนตัว</a> รวมถึงสิ่งที่หยุดเมื่อคุณลบแอป</p>
+        </div>
+    </details>
+
+    <h2>ยังแก้ไม่ได้ใช่ไหม</h2>
+    <p>เขียนมาที่ <a href="mailto:leeo@kakao.com">leeo@kakao.com</a> บอกผมว่าคุณกำลังพยายามทำอะไร &mdash; ไม่ใช่แค่อะไรที่ผิดพลาด &mdash; แล้วผมจะติดต่อกลับไป</p>
+</div>
+
+<!-- ============================= Türkçe ============================= -->
+
+<div data-lang="tr">
+    <h1>Destek</h1>
+    <p class="lede">Rereminder'ı tek bir kişi yapıyor. Bana yazdığında bir destek kuyruğuna değil, doğrudan geliştiriciye yazmış olursun.</p>
+    <p class="updated">Son güncelleme: 9 Eylül 2026 &middot; Uygulama sürümü 2.2.5</p>
+
+    <h2>İletişime geç</h2>
+    <div class="contact-grid">
+        <div class="card">
+            <h3>E-posta</h3>
+            <p class="big-link"><a href="mailto:leeo@kakao.com">leeo@kakao.com</a></p>
+            <p>Hatalar, iadeler ve ekran görüntüsü gerektiren her şey için en iyisi.</p>
+        </div>
+        <div class="card">
+            <h3>Uygulamanın içinden</h3>
+            <p><span class="ui">Ayarlar &rsaquo; Geri Bildirim &rsaquo; Geri Bildirim Gönder</span></p>
+            <p>Doğrudan gelen kutuma düşer. E-posta uygulaması gerekmez &mdash; iCloud'da oturum açık olması yeter.</p>
+        </div>
+        <div class="card">
+            <h3>Instagram</h3>
+            <p class="big-link"><a href="https://instagram.com/lee25_ios" target="_blank" rel="noopener">@lee25_ios</a></p>
+            <p>DM'ler açık. Kısa sorular için ideal.</p>
+        </div>
+        <div class="card">
+            <h3>Hatalar ve özellik istekleri</h3>
+            <p class="big-link"><a href="https://github.com/M1zz/Rereminder/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+            <p>Herkese açık; böylece başkaları da yanıtı bulabilir.</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>Genellikle 2&ndash;3 gün içinde yanıt veririm.</strong> Bir haftadan uzun sürdüyse mesajın kaybolduğunu varsay ve yeniden gönder &mdash; hiç okumamaktansa iki kez okumayı tercih ederim.</p>
+    </div>
+
+    <h3>Hata bildirimine neler eklenmeli</h3>
+    <ul>
+        <li><strong>Uygulama sürümü</strong> &mdash; <span class="ui">Ayarlar &rsaquo; Bilgi</span> ekranının en altında görünür.</li>
+        <li><strong>Aygıt ve işletim sistemi</strong> &mdash; örneğin iPhone 15 Pro, iOS 26.1. Sorun saatteyse Apple Watch modelini de belirt.</li>
+        <li><strong>Ne beklediğin ve bunun yerine ne olduğu.</strong> "5 dakika uyarısı hiç çalmadı" bana "bildirimler bozuk"tan çok daha fazlasını anlatır.</li>
+        <li><strong>Her seferinde mi oluyor</strong>, yoksa yalnızca bir kez mi oldu.</li>
+    </ul>
+
+    <h2>Sık sorulan sorular</h2>
+
+    <details>
+        <summary>Uyarılarım çalmadı</summary>
+        <div class="body">
+            <p>Rereminder <strong>yerel bildirimler</strong> kullanır; bu yüzden sorun neredeyse her zaman bir izin ya da Odak ayarıdır. Şu sırayla kontrol et:</p>
+            <ol>
+                <li><strong>Bildirim izni.</strong> Uygulamada <span class="ui">Ayarlar &rsaquo; Bildirim Yöntemi</span> ekranını aç &mdash; mevcut durumu gösterir, izin istemeyi ya da seni iOS Ayarlar'a götürmeyi önerir.</li>
+                <li><strong>Odak / Rahatsız Etme.</strong> Bir Odak açıksa iOS'te <span class="ui">Ayarlar &rsaquo; Odak</span> bölümünden Rereminder'ı izin verilen uygulamalara ekle.</li>
+                <li><strong>Zil/Sessiz anahtarı ve ses düzeyi.</strong> Sessiz mod sesi bastırır; titreşim yine de gelir.</li>
+                <li><strong>Zamanlanmış Özet.</strong> iOS'te <span class="ui">Ayarlar &rsaquo; Bildirimler &rsaquo; Zamanlanmış Özet</span>, bildirimleri belirli bir saate kadar bekletebilir. Rereminder bunun içinde olmamalı.</li>
+            </ol>
+            <p>Dördü de yolundaysa ve sorun hâlâ oluyorsa bana zamanlayıcının süresini ve uyarıların nereye konduğunu yaz &mdash; sorunu yeniden üretmek için tam olarak bu bileşime ihtiyacım var.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Apple Watch'um eşzamanlanmıyor</summary>
+        <div class="body">
+            <p>Uygulamada <span class="ui">Ayarlar &rsaquo; Aygıtlarım</span> ekranını aç. Apple Watch'un yanındaki durum hangi adımın eksik olduğunu söyler; ona dokunmak tam o duruma göre bir yol gösterici açar.</p>
+            <ol>
+                <li>Saat bu iPhone ile <strong>eşlenmiş</strong> olmalı.</li>
+                <li><strong>Rereminder saatte yüklü olmalı.</strong> iPhone'da Watch uygulamasını aç, Rereminder'a kadar kaydır ve yüklü değilse yükle.</li>
+                <li><strong>Rereminder'ı saatte bir kez aç.</strong> Yeni yüklenen bir saat uygulaması hiç çalışmamıştır ve ilk eşzamanlama için en az bir kez açılmış olması gerekir.</li>
+            </ol>
+            <p>Saat uygulaması arka plandayken bile zamanlayıcı durumu aktarılır; bu yüzden onu açık tutman gerekmez.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Uygulama açık olduğu halde Mac'im "bağlı değil" diyor</summary>
+        <div class="body">
+            <p>Buradaki "Bağlı", <strong>uygulamanın o Mac'te yaklaşık son 10 dakika içinde çalışmış olduğu</strong> anlamına gelir &mdash; canlı bir bağlantı değildir. Aygıtlar beş dakikada bir kendi iCloud'una bir iz bırakır ve iCloud uyuyan bir uygulamayı uyandıramaz; bu yüzden yeni uyanmış bir Mac'in görünmesi birkaç dakika sürebilir.</p>
+            <p>Hiç görünmüyorsa: iki aygıtta da <strong>aynı iCloud hesabıyla</strong> oturum açılmış ve <strong>iCloud Drive açık</strong> olmalı. <span class="ui">Ayarlar &rsaquo; Aygıtlarım</span> ekranında durumu hemen yeniden okuyan bir "Tekrar kontrol et" düğmesi var.</p>
+            <p>Mac sürümü <strong>macOS 26 veya daha yenisini</strong> gerektirir.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Pro'yu satın aldım ama görünmüyor</summary>
+        <div class="body">
+            <p>Pro ekranını aç ve <strong>Satın Alınanları Geri Yükle</strong>'ye dokun. Satın almalar onları yapan Apple Hesabı'na bağlıdır; bu yüzden aynı hesapla oturum açtığından emin ol &mdash; bir aile üyesinin hesabıyla ya da başka bir bölgedeki hesapla değil.</p>
+            <p>Pro <strong>tek seferlik bir satın almadır</strong>. Abonelik değildir ve süresi dolmaz; yeniden yüklemelerde ve yeni aygıtlarda da geçerliliğini korur.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Pro tam olarak neleri içeriyor?</summary>
+        <div class="body">
+            <p>Pro <strong>tek seferlik bir satın almadır</strong>. Pro'nun sattığı şey tek bir cümle: <strong>uygulama ayarlarını hatırlar.</strong></p>
+            <p><strong>Ücretsiz</strong></p>
+            <ul>
+                <li><strong>Sınırsız ön uyarı.</strong> Bir zamanlayıcıya istediğin kadar ekle &mdash; bu uygulamanın var olma nedeni sınırlandırılmaz.</li>
+                <li>Tüm tema renkleri, özel uyarı mesajları, Canlı Etkinlik, yanıt verene kadar tekrarlanan uyarılar ve alarmla bitiş.</li>
+                <li><strong>Apple Watch uygulamasının ve Mac uygulamasının tamamı</strong>. Hiçbiri ücretli değil.</li>
+            </ul>
+            <p><strong>Pro</strong></p>
+            <ul>
+                <li><strong>Şablonlar</strong> &mdash; bir ayarı kaydet ve tek dokunuşla geri getir; istediğin kadar.</li>
+                <li>Uygulamayı yeniden açtığında <strong>son ayarın geri gelir</strong>.</li>
+                <li><strong>Oturum Modu</strong> &mdash; her bölüme bir ad ver ("giriş / demo / Soru-Cevap") ve her bölüm için, o bölüm başladığında açılan bir metin tut.</li>
+                <li><strong>Ek süre</strong> &mdash; saat 00:00'dan sonra da saymaya devam eder; böylece ne kadar aştığını bilirsin.</li>
+                <li><strong>Geçmiş ve istatistikler</strong> &mdash; çalıştırdığın oturumların kaydı.</li>
+            </ul>
+            <p>Daha önce kaydettiğin şablonlar asla silinmez. Pro'n yoksa ekranda kilitli olarak kalırlar ve satın aldığın anda yeniden açılırlar.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Para iadesi istiyorum</summary>
+        <div class="body">
+            <p>İadeler benim üzerimden değil, Apple üzerinden yapılır &mdash; ödeme bilgilerine erişimim yok ve iade yapamam. Satın almayı yapan Apple Hesabı ile <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a> adresinden talep et.</p>
+            <p>Sebep bozuk bir şeyse lütfen bana da haber ver. İade senin sorununu kapatır; ama bir sonraki kişi için hatayı düzeltmez.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Yüklemeden deneyebilir miyim?</summary>
+        <div class="body">
+            <p>Evet. Bir iPhone'da <a href="https://m1zz.github.io/rereminder/" target="_blank" rel="noopener">m1zz.github.io/rereminder</a> adresini aç; App Clip zamanlayıcıyı hemen çalıştırır &mdash; App Store'a gitmene gerek yok. Kadran ve uyarılar onda var; şablonlar, Oturum Modu ve saat uygulaması tam uygulamada.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Hangi diller ve aygıtlar destekleniyor?</summary>
+        <div class="body">
+            <table>
+                <tr><td>Diller</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>iPhone</td><td>iOS 26.0 veya daha yenisi</td></tr>
+                <tr><td>Apple Watch</td><td>watchOS 11.6 veya daha yenisi</td></tr>
+                <tr><td>Mac</td><td>macOS 26.0 veya daha yenisi</td></tr>
+                <tr><td>iPad</td><td>Henüz desteklenmiyor</td></tr>
+            </table>
+        </div>
+    </details>
+
+    <details>
+        <summary>Verilerimi nasıl silerim?</summary>
+        <div class="body">
+            <p>Oluşturduğun her şey &mdash; zamanlayıcılar, şablonlar, bölüm adları, metinler, geçmiş &mdash; aygıtında durur. <strong>Uygulamayı silmek hepsini kaldırır.</strong></p>
+            <p>Uygulamanın gönderdiği anonim kullanım sayıları, uygulamayı sildiğinde nelerin durduğu dahil, <a href="privacy.html">gizlilik sayfasında</a> eksiksiz anlatılıyor.</p>
+        </div>
+    </details>
+
+    <h2>Hâlâ takıldın mı?</h2>
+    <p><a href="mailto:leeo@kakao.com">leeo@kakao.com</a> adresine yaz. Neyin ters gittiğini değil, ne yapmaya çalıştığını da anlat &mdash; sana geri döneceğim.</p>
+</div>
+
+<!-- ============================= Tiếng Việt ============================= -->
+
+<div data-lang="vi">
+    <h1>Hỗ trợ</h1>
+    <p class="lede">Rereminder do một người làm ra. Khi viết cho tôi, bạn đang viết thẳng cho nhà phát triển — không phải cho một hàng đợi phiếu hỗ trợ.</p>
+    <p class="updated">Cập nhật lần cuối: ngày 9 tháng 9 năm 2026 &middot; Ứng dụng phiên bản 2.2.5</p>
+
+    <h2>Liên hệ</h2>
+    <div class="contact-grid">
+        <div class="card">
+            <h3>Email</h3>
+            <p class="big-link"><a href="mailto:leeo@kakao.com">leeo@kakao.com</a></p>
+            <p>Phù hợp nhất cho lỗi, hoàn tiền và mọi thứ cần ảnh chụp màn hình.</p>
+        </div>
+        <div class="card">
+            <h3>Ngay trong ứng dụng</h3>
+            <p><span class="ui">Cài đặt &rsaquo; Góp ý &rsaquo; Gửi góp ý</span></p>
+            <p>Đến thẳng hộp thư của tôi. Không cần ứng dụng email &mdash; chỉ cần đăng nhập iCloud.</p>
+        </div>
+        <div class="card">
+            <h3>Instagram</h3>
+            <p class="big-link"><a href="https://instagram.com/lee25_ios" target="_blank" rel="noopener">@lee25_ios</a></p>
+            <p>Tin nhắn riêng luôn mở. Hợp với những câu hỏi nhanh.</p>
+        </div>
+        <div class="card">
+            <h3>Báo lỗi &amp; đề xuất tính năng</h3>
+            <p class="big-link"><a href="https://github.com/M1zz/Rereminder/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+            <p>Công khai, để người khác cũng tìm được câu trả lời.</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>Tôi thường trả lời trong vòng 2&ndash;3 ngày.</strong> Nếu đã quá một tuần, có lẽ tin nhắn bị thất lạc &mdash; hãy gửi lại. Tôi thà đọc hai lần còn hơn không đọc được lần nào.</p>
+    </div>
+
+    <h3>Nên ghi gì trong báo cáo lỗi</h3>
+    <ul>
+        <li><strong>Phiên bản ứng dụng</strong> &mdash; hiện ở cuối mục <span class="ui">Cài đặt &rsaquo; Thông tin</span>.</li>
+        <li><strong>Thiết bị và hệ điều hành</strong> &mdash; ví dụ iPhone 15 Pro, iOS 26.1. Hãy ghi cả đời Apple Watch nếu lỗi xảy ra trên đồng hồ.</li>
+        <li><strong>Bạn mong đợi điều gì, và điều gì đã xảy ra thay vào đó.</strong> "Lần báo trước 5 phút không hề đến" cho tôi biết nhiều hơn hẳn so với "thông báo bị hỏng".</li>
+        <li><strong>Lỗi xảy ra lần nào cũng vậy</strong> hay chỉ một lần.</li>
+    </ul>
+
+    <h2>Câu hỏi thường gặp</h2>
+
+    <details>
+        <summary>Báo trước của tôi không đổ chuông</summary>
+        <div class="body">
+            <p>Rereminder dùng <strong>thông báo cục bộ</strong>, nên nguyên nhân gần như luôn là quyền truy cập hoặc cài đặt Tập trung. Hãy kiểm tra theo thứ tự sau:</p>
+            <ol>
+                <li><strong>Quyền thông báo.</strong> Mở <span class="ui">Cài đặt &rsaquo; Cách thông báo</span> trong ứng dụng &mdash; mục này cho thấy trạng thái hiện tại và đề nghị xin quyền hoặc đưa bạn tới Cài đặt của iOS.</li>
+                <li><strong>Tập trung / Không làm phiền.</strong> Nếu đang bật một chế độ Tập trung, hãy thêm Rereminder vào danh sách ứng dụng được cho phép trong <span class="ui">Cài đặt &rsaquo; Tập trung</span> của iOS.</li>
+                <li><strong>Nút chuông/im lặng và âm lượng.</strong> Chế độ im lặng tắt âm thanh; rung vẫn hoạt động.</li>
+                <li><strong>Tóm tắt theo lịch.</strong> Mục <span class="ui">Cài đặt &rsaquo; Thông báo &rsaquo; Tóm tắt theo lịch</span> của iOS có thể giữ thông báo lại đến một giờ nhất định. Rereminder không nên nằm trong đó.</li>
+            </ol>
+            <p>Nếu cả bốn mục đều ổn mà vẫn bị, hãy cho tôi biết độ dài hẹn giờ và vị trí các lần báo trước &mdash; tôi cần đúng tổ hợp đó để tái hiện lỗi.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Apple Watch của tôi không đồng bộ</summary>
+        <div class="body">
+            <p>Mở <span class="ui">Cài đặt &rsaquo; Thiết bị của tôi</span> trong ứng dụng. Trạng thái bên cạnh Apple Watch cho biết bước nào còn thiếu, và chạm vào đó sẽ mở hướng dẫn cho đúng trường hợp ấy.</p>
+            <ol>
+                <li>Đồng hồ đã được <strong>ghép đôi</strong> với iPhone này.</li>
+                <li><strong>Rereminder đã được cài trên đồng hồ.</strong> Mở ứng dụng Watch trên iPhone, cuộn tới Rereminder và cài đặt nếu chưa có.</li>
+                <li><strong>Mở Rereminder trên đồng hồ một lần.</strong> Ứng dụng đồng hồ vừa cài chưa từng chạy, và lần đồng bộ đầu tiên cần ứng dụng đã được mở.</li>
+            </ol>
+            <p>Trạng thái hẹn giờ vẫn được chuyển sang ngay cả khi ứng dụng đồng hồ chạy nền, nên bạn không cần để nó mở.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Máy Mac báo "chưa kết nối" dù ứng dụng đang mở</summary>
+        <div class="body">
+            <p>"Đã kết nối" ở đây nghĩa là <strong>ứng dụng đã chạy trên máy Mac đó trong khoảng 10 phút gần nhất</strong> &mdash; không phải kết nối trực tiếp liên tục. Các thiết bị để lại dấu trong iCloud của chính bạn mỗi năm phút, và iCloud không thể đánh thức một ứng dụng đang ngủ, nên một máy Mac vừa thức dậy có thể mất vài phút mới hiện ra.</p>
+            <p>Nếu mãi không hiện: cả hai thiết bị phải đăng nhập <strong>cùng một tài khoản iCloud</strong> và <strong>bật iCloud Drive</strong>. Trong <span class="ui">Cài đặt &rsaquo; Thiết bị của tôi</span> có nút "Kiểm tra lại" để đọc lại ngay lập tức.</p>
+            <p>Phiên bản Mac cần <strong>macOS 26 trở lên</strong>.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Tôi đã mua Pro nhưng không thấy</summary>
+        <div class="body">
+            <p>Mở màn hình Pro và chạm <strong>Khôi phục giao dịch mua</strong>. Giao dịch mua gắn với Tài khoản Apple đã dùng để mua, nên hãy chắc rằng bạn đang đăng nhập đúng tài khoản đó &mdash; không phải tài khoản của người trong gia đình, cũng không phải tài khoản ở quốc gia khác.</p>
+            <p>Pro là <strong>mua một lần</strong>. Đây không phải gói thuê bao và không hết hạn, nên vẫn còn khi bạn cài lại hay dùng thiết bị mới.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Pro thực sự gồm những gì?</summary>
+        <div class="body">
+            <p>Pro là <strong>mua một lần</strong>. Điều Pro mang lại gói gọn trong một câu: <strong>ứng dụng nhớ các cài đặt của bạn.</strong></p>
+            <p><strong>Miễn phí</strong></p>
+            <ul>
+                <li><strong>Báo trước không giới hạn.</strong> Đặt bao nhiêu tùy thích trên một hẹn giờ &mdash; điều làm nên ứng dụng này thì không bị tính theo lượt.</li>
+                <li>Mọi màu chủ đề, lời nhắn báo tùy chỉnh, Hoạt động trực tiếp, báo lặp lại đến khi bạn phản hồi, và kết thúc bằng báo thức.</li>
+                <li><strong>Ứng dụng Apple Watch và ứng dụng Mac đầy đủ</strong>. Không cái nào phải trả phí.</li>
+            </ul>
+            <p><strong>Pro</strong></p>
+            <ul>
+                <li><strong>Mẫu</strong> &mdash; lưu một cài đặt và gọi lại chỉ bằng một chạm, lưu bao nhiêu cũng được.</li>
+                <li><strong>Cài đặt gần nhất được khôi phục</strong> khi bạn mở lại ứng dụng.</li>
+                <li><strong>Chế độ Phiên</strong> &mdash; đặt tên cho từng phần ("mở đầu / demo / hỏi đáp") và giữ một kịch bản cho mỗi phần, tự mở ra khi phần đó bắt đầu.</li>
+                <li><strong>Quá giờ</strong> &mdash; đồng hồ tiếp tục đếm sau 00:00 để bạn biết mình đã quá giờ bao lâu.</li>
+                <li><strong>Lịch sử và thống kê</strong> &mdash; bản ghi các phiên bạn đã chạy.</li>
+            </ul>
+            <p>Các mẫu bạn đã lưu sẽ không bao giờ bị xóa. Nếu bạn không có Pro, chúng vẫn nằm trên màn hình ở trạng thái khóa và mở lại ngay khi bạn mua.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Tôi muốn hoàn tiền</summary>
+        <div class="body">
+            <p>Việc hoàn tiền do Apple xử lý, không phải tôi &mdash; tôi không xem được thông tin thanh toán của bạn và không thể tự hoàn tiền. Hãy yêu cầu tại <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a> bằng Tài khoản Apple đã thực hiện giao dịch mua.</p>
+            <p>Nếu lý do là có gì đó bị lỗi, xin hãy báo cả cho tôi. Hoàn tiền giải quyết chuyện của bạn, nhưng không sửa lỗi cho người dùng tiếp theo.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Tôi có thể dùng thử mà không cần cài đặt không?</summary>
+        <div class="body">
+            <p>Được. Mở <a href="https://m1zz.github.io/rereminder/" target="_blank" rel="noopener">m1zz.github.io/rereminder</a> trên iPhone và App Clip sẽ chạy hẹn giờ ngay &mdash; không cần vào App Store. App Clip có mặt số và các chuông báo; mẫu, Chế độ Phiên và ứng dụng đồng hồ có trong ứng dụng đầy đủ.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Hỗ trợ những ngôn ngữ và thiết bị nào?</summary>
+        <div class="body">
+            <table>
+                <tr><td>Ngôn ngữ</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>iPhone</td><td>iOS 26.0 trở lên</td></tr>
+                <tr><td>Apple Watch</td><td>watchOS 11.6 trở lên</td></tr>
+                <tr><td>Mac</td><td>macOS 26.0 trở lên</td></tr>
+                <tr><td>iPad</td><td>Chưa hỗ trợ</td></tr>
+            </table>
+        </div>
+    </details>
+
+    <details>
+        <summary>Làm sao để xóa dữ liệu của tôi?</summary>
+        <div class="body">
+            <p>Mọi thứ bạn tạo ra &mdash; hẹn giờ, mẫu, tên các phần, kịch bản, lịch sử &mdash; đều nằm trên thiết bị của bạn. <strong>Xóa ứng dụng là xóa hết.</strong></p>
+            <p>Những số liệu sử dụng ẩn danh mà ứng dụng gửi đi được mô tả đầy đủ trong <a href="privacy.html">trang quyền riêng tư</a>, kể cả những gì dừng lại khi bạn xóa ứng dụng.</p>
+        </div>
+    </details>
+
+    <h2>Vẫn chưa giải quyết được?</h2>
+    <p>Hãy viết cho <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Cho tôi biết bạn đang định làm gì &mdash; không chỉ điều gì bị sai &mdash; và tôi sẽ phản hồi bạn.</p>
+</div>
 </div>
 
 <footer>
@@ -1832,15 +3808,15 @@
         <a href="privacy.html">Privacy</a>
         <a href="https://apps.apple.com/us/app/rereminder/id6752551268" target="_blank" rel="noopener">App Store</a>
     </p>
-    <nav class="lang-links" aria-label="Language"><a href="ko/support.html" hreflang="ko" lang="ko">한국어</a><a href="en/support.html" hreflang="en" lang="en">English</a><a href="ja/support.html" hreflang="ja" lang="ja">日本語</a><a href="zh-Hans/support.html" hreflang="zh-Hans" lang="zh-Hans">简体中文</a><a href="zh-Hant/support.html" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a><a href="de/support.html" hreflang="de" lang="de">Deutsch</a><a href="fr/support.html" hreflang="fr" lang="fr">Français</a><a href="es/support.html" hreflang="es" lang="es">Español</a><a href="pt-BR/support.html" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a><a href="pt-PT/support.html" hreflang="pt-PT" lang="pt-PT">Português (Portugal)</a><a href="it/support.html" hreflang="it" lang="it">Italiano</a></nav>
+    <nav class="lang-links" aria-label="Language"><a href="ko/support.html" hreflang="ko" lang="ko">한국어</a><a href="en/support.html" hreflang="en" lang="en">English</a><a href="ja/support.html" hreflang="ja" lang="ja">日本語</a><a href="zh-Hans/support.html" hreflang="zh-Hans" lang="zh-Hans">简体中文</a><a href="zh-Hant/support.html" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a><a href="de/support.html" hreflang="de" lang="de">Deutsch</a><a href="fr/support.html" hreflang="fr" lang="fr">Français</a><a href="es/support.html" hreflang="es" lang="es">Español</a><a href="pt-BR/support.html" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a><a href="pt-PT/support.html" hreflang="pt-PT" lang="pt-PT">Português (Portugal)</a><a href="it/support.html" hreflang="it" lang="it">Italiano</a><a href="ru/support.html" hreflang="ru" lang="ru">Русский</a><a href="cs/support.html" hreflang="cs" lang="cs">Čeština</a><a href="da/support.html" hreflang="da" lang="da">Dansk</a><a href="el/support.html" hreflang="el" lang="el">Ελληνικά</a><a href="fi/support.html" hreflang="fi" lang="fi">Suomi</a><a href="id/support.html" hreflang="id" lang="id">Bahasa Indonesia</a><a href="nb/support.html" hreflang="nb" lang="nb">Norsk bokmål</a><a href="nl/support.html" hreflang="nl" lang="nl">Nederlands</a><a href="pl/support.html" hreflang="pl" lang="pl">Polski</a><a href="sv/support.html" hreflang="sv" lang="sv">Svenska</a><a href="th/support.html" hreflang="th" lang="th">ไทย</a><a href="tr/support.html" hreflang="tr" lang="tr">Türkçe</a><a href="vi/support.html" hreflang="vi" lang="vi">Tiếng Việt</a></nav>
 </footer>
 
 <script>
 (function () {
     var KEY = 'rereminder-lang';
-    var LANGS = ['en', 'ko', 'ja', 'zh-Hans', 'zh-Hant', 'de', 'fr', 'es', 'pt-BR', 'pt-PT', 'it'];
+    var LANGS = ['en', 'ko', 'ja', 'zh-Hans', 'zh-Hant', 'de', 'fr', 'es', 'pt-BR', 'pt-PT', 'it', 'ru', 'cs', 'da', 'el', 'fi', 'id', 'nb', 'nl', 'pl', 'sv', 'th', 'tr', 'vi'];
     function apply(lang, persist) {
-        document.body.classList.remove('lang-en', 'lang-ko', 'lang-ja', 'lang-zh-Hans', 'lang-zh-Hant', 'lang-de', 'lang-fr', 'lang-es', 'lang-pt-BR', 'lang-pt-PT', 'lang-it');
+        document.body.classList.remove('lang-en', 'lang-ko', 'lang-ja', 'lang-zh-Hans', 'lang-zh-Hant', 'lang-de', 'lang-fr', 'lang-es', 'lang-pt-BR', 'lang-pt-PT', 'lang-it', 'lang-ru', 'lang-cs', 'lang-da', 'lang-el', 'lang-fi', 'lang-id', 'lang-nb', 'lang-nl', 'lang-pl', 'lang-sv', 'lang-th', 'lang-tr', 'lang-vi');
         document.body.classList.add('lang-' + lang);
         document.documentElement.lang = lang;
         var select = document.getElementById('lang-select');
@@ -1865,6 +3841,8 @@
             if (tag.indexOf('zh') === 0) {
                 return /hant|-tw|-hk|-mo/.test(tag) ? 'zh-Hant' : 'zh-Hans';
             }
+            // 노르웨이어는 기기에 따라 no·nn 으로도 온다. 이 사이트는 보크몰(nb) 한 벌이다.
+            if (/^(nb|no|nn)\b/.test(tag)) return 'nb';
             if (tag.indexOf('pt') === 0) return /-pt$/.test(tag) ? 'pt-PT' : 'pt-BR';
             var base = tag.split('-')[0];
             if (LANGS.indexOf(base) >= 0) return base;

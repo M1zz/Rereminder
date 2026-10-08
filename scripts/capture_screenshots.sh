@@ -2,7 +2,8 @@
 # 앱스토어 스크린샷 원본을 언어별로 찍는다 — 다음 릴리즈에도 똑같이 다시 찍을 수 있게.
 #
 # 사용법:
-#   scripts/capture_screenshots.sh                 # 10개 언어 전부
+#   scripts/capture_screenshots.sh                 # 24개 언어 전부
+#   UDID=<기기> scripts/capture_screenshots.sh ru  # 기기를 정해서
 #   scripts/capture_screenshots.sh de fr           # 일부 언어만
 #
 # 결과: docs/screenshots/raw/<언어>/<번호>-<장면>.png  (1320×2868, 6.9" 원본)
@@ -29,14 +30,20 @@ locale_for() {
     ko) echo ko_KR ;; en) echo en_US ;; ja) echo ja_JP ;;
     zh-Hans) echo zh_CN ;; zh-Hant) echo zh_TW ;;
     de) echo de_DE ;; fr) echo fr_FR ;; es) echo es_ES ;;
-    pt-BR) echo pt_BR ;; it) echo it_IT ;;
+    pt-BR) echo pt_BR ;; pt-PT) echo pt_PT ;; it) echo it_IT ;;
+    ru) echo ru_RU ;; cs) echo cs_CZ ;; da) echo da_DK ;; el) echo el_GR ;;
+    fi) echo fi_FI ;; id) echo id_ID ;; nb) echo nb_NO ;; nl) echo nl_NL ;;
+    pl) echo pl_PL ;; sv) echo sv_SE ;; th) echo th_TH ;; tr) echo tr_TR ;;
+    vi) echo vi_VN ;;
   esac
 }
 
 LANGS=("$@")
-[[ ${#LANGS[@]} -eq 0 ]] && LANGS=(ko en ja zh-Hans zh-Hant de fr es pt-BR it)
+[[ ${#LANGS[@]} -eq 0 ]] && LANGS=(ko en ja zh-Hans zh-Hant de fr es pt-BR pt-PT it ru cs da el fi id nb nl pl sv th tr vi)
 
-UDID="$(xcrun simctl list devices available -j | python3 -c "
+# UDID 를 주면 그 기기를 쓴다 — 다른 작업이 같은 이름의 시뮬레이터를 쓰고 있을 때
+UDID="${UDID:-}"
+[[ -z "$UDID" ]] && UDID="$(xcrun simctl list devices available -j | python3 -c "
 import json, sys
 name = sys.argv[1]
 for runtime, devices in json.load(sys.stdin)['devices'].items():

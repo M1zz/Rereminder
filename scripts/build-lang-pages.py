@@ -14,10 +14,10 @@ import html, json, pathlib, re, subprocess
 
 DOCS = pathlib.Path(__file__).resolve().parent.parent / 'docs'
 BASE = 'https://m1zz.github.io/Rereminder/'
-LANGS = ['ko', 'en', 'ja', 'zh-Hans', 'zh-Hant', 'de', 'fr', 'es', 'pt-BR', 'pt-PT', 'it']
+LANGS = ['ko', 'en', 'ja', 'zh-Hans', 'zh-Hant', 'de', 'fr', 'es', 'pt-BR', 'pt-PT', 'it', 'ru', 'cs', 'da', 'el', 'fi', 'id', 'nb', 'nl', 'pl', 'sv', 'th', 'tr', 'vi']
 NAMES = {'ko': '한국어', 'en': 'English', 'ja': '日本語', 'zh-Hans': '简体中文', 'zh-Hant': '繁體中文',
          'de': 'Deutsch', 'fr': 'Français', 'es': 'Español', 'pt-BR': 'Português (Brasil)',
-         'pt-PT': 'Português (Portugal)', 'it': 'Italiano'}
+         'pt-PT': 'Português (Portugal)', 'it': 'Italiano', 'ru': "Русский", 'cs': "Čeština", 'da': "Dansk", 'el': "Ελληνικά", 'fi': "Suomi", 'id': "Bahasa Indonesia", 'nb': "Norsk bokmål", 'nl': "Nederlands", 'pl': "Polski", 'sv': "Svenska", 'th': "ไทย", 'tr': "Türkçe", 'vi': "Tiếng Việt"}
 # privacy·support 머리·꼬리의 메뉴 이름
 NAV = {
     'en': ('Home', 'Support', 'Privacy'),
@@ -31,6 +31,19 @@ NAV = {
     'pt-BR': ('Início', 'Suporte', 'Privacidade'),
     'pt-PT': ('Início', 'Suporte', 'Privacidade'),
     'it': ('Home', 'Assistenza', 'Privacy'),
+    'ru': ("Главная", "Поддержка", "Конфиденциальность"),
+    'cs': ("Domů", "Podpora", "Soukromí"),
+    'da': ("Forside", "Support", "Privatliv"),
+    'el': ("Αρχική", "Υποστήριξη", "Απόρρητο"),
+    'fi': ("Etusivu", "Tuki", "Tietosuoja"),
+    'id': ("Beranda", "Dukungan", "Privasi"),
+    'nb': ("Hjem", "Brukerstøtte", "Personvern"),
+    'nl': ("Home", "Support", "Privacy"),
+    'pl': ("Start", "Pomoc", "Prywatność"),
+    'sv': ("Start", "Support", "Integritet"),
+    'th': ("หน้าแรก", "การสนับสนุน", "ความเป็นส่วนตัว"),
+    'tr': ("Ana Sayfa", "Destek", "Gizlilik"),
+    'vi': ("Trang chủ", "Hỗ trợ", "Quyền riêng tư"),
 }
 APP_NAME = {'ko': '두번알림'}
 

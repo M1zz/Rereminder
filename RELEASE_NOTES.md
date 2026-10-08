@@ -9,6 +9,152 @@ DeployBar 가 배포할 때 아래 버전 절의 언어별 문구를 읽어 스�
 사용자에게 무엇이 좋아졌는지만 쓴다. 내부 구조나 빌드 설정 이야기는 쓰지 않는다.
 언어마다 다시 쓴다. 기계번역하지 말고 항목 수와 순서만 맞춘다.
 
+## 2.3.2
+
+### 앱스토어 (한국어)
+
+러시아어와 태국어 등 13개 언어를 새로 지원합니다.
+도움말과 개인정보 안내를 언어별로 볼 수 있어요.
+자잘한 오류를 고쳤습니다.
+
+### App Store (English)
+
+Now available in 13 more languages.
+Help and privacy pages in your language.
+Small fixes and improvements.
+
+### App Store (日本語)
+
+ロシア語やタイ語など13の言語に対応しました。
+ヘルプとプライバシーの案内も各言語で読めます。
+細かな不具合を修正しました。
+
+### 앱스토어 (중국어 간체)
+
+新增俄语、泰语等 13 种语言。
+帮助与隐私说明也能用你的语言阅读。
+修复了一些小问题。
+
+### 앱스토어 (중국어 번체)
+
+新增俄語、泰語等 13 種語言。
+說明與隱私權資訊也能用你的語言閱讀。
+修正了一些小問題。
+
+### App Store (Deutsch)
+
+Jetzt in 13 weiteren Sprachen.
+Hilfe und Datenschutz in deiner Sprache.
+Kleine Fehler wurden behoben.
+
+### App Store (Français)
+
+Disponible dans 13 nouvelles langues.
+Aide et confidentialité en français.
+Petites corrections et améliorations.
+
+### App Store (Español)
+
+Ahora en 13 idiomas más.
+Ayuda y privacidad en tu idioma.
+Pequeñas correcciones y mejoras.
+
+### App Store (Português do Brasil)
+
+Agora em mais 13 idiomas.
+Ajuda e privacidade no seu idioma.
+Pequenas correções e melhorias.
+
+### 앱스토어 (포르투갈어(포르투갈))
+
+Agora disponível em mais 13 línguas.
+Ajuda e privacidade na sua língua.
+Pequenas correções e melhorias.
+
+### App Store (Italiano)
+
+Ora disponibile in altre 13 lingue.
+Aiuto e privacy nella tua lingua.
+Piccole correzioni e miglioramenti.
+
+### 앱스토어 (러시아어)
+
+Теперь на русском и ещё 12 языках
+Справка и политика теперь на русском
+Мелкие исправления и улучшения
+
+### 앱스토어 (체코어)
+
+Nově v češtině a dalších 12 jazycích
+Nápověda a soukromí nyní i česky
+Drobné opravy a vylepšení
+
+### 앱스토어 (덴마크어)
+
+Nu på dansk og 12 andre sprog
+Hjælp og privatlivspolitik nu på dansk
+Små rettelser og forbedringer
+
+### 앱스토어 (그리스어)
+
+Τώρα στα ελληνικά και 12 ακόμα γλώσσες
+Βοήθεια και απόρρητο τώρα στα ελληνικά
+Μικρές διορθώσεις και βελτιώσεις
+
+### 앱스토어 (핀란드어)
+
+Nyt suomeksi ja 12 muulla kielellä
+Ohjeet ja tietosuoja nyt myös suomeksi
+Pieniä korjauksia ja parannuksia
+
+### 앱스토어 (인도네시아어)
+
+Rereminder kini berbahasa Indonesia.
+Bantuan dan privasi dalam bahasa Anda.
+Perbaikan dan penyempurnaan kecil.
+
+### 앱스토어 (Norsk bokmål)
+
+Nå på norsk og 12 språk til
+Hjelp og personvern nå også på norsk
+Små feilrettinger og forbedringer
+
+### 앱스토어 (네덜란드어)
+
+Nu in het Nederlands en 12 andere talen
+Hulp en privacy nu in het Nederlands
+Kleine verbeteringen en oplossingen
+
+### 앱스토어 (폴란드어)
+
+Teraz po polsku i w 12 innych językach
+Pomoc i polityka prywatności po polsku
+Drobne poprawki i ulepszenia
+
+### 앱스토어 (스웨덴어)
+
+Nu på svenska och 12 andra språk
+Hjälp och integritetspolicy på svenska
+Mindre buggfixar och förbättringar
+
+### 앱스토어 (태국어)
+
+รองรับภาษาไทยและภาษาอื่นอีก 12 ภาษา
+หน้าวิธีใช้และความเป็นส่วนตัวเป็นภาษาไทย
+แก้ไขข้อผิดพลาดเล็กน้อย
+
+### 앱스토어 (튀르키예어)
+
+Artık Türkçe ve 12 dilde daha
+Yardım ve gizlilik sayfaları Türkçe
+Küçük düzeltmeler ve iyileştirmeler
+
+### 앱스토어 (베트남어)
+
+Đã có tiếng Việt và 12 ngôn ngữ khác
+Trợ giúp và bảo mật nay có tiếng Việt
+Sửa lỗi nhỏ và cải thiện
+
 ## 2.3.1
 
 ### 앱스토어 (한국어)

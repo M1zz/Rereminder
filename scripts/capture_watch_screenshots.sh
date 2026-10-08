@@ -2,7 +2,8 @@
 # 워치 앱스토어 스크린샷을 언어별로 찍는다 (416×496, Apple Watch Series 11 46mm).
 #
 # 사용법:
-#   scripts/capture_watch_screenshots.sh              # 10개 언어 전부
+#   scripts/capture_watch_screenshots.sh              # 24개 언어 전부
+#   UDID=<워치> PHONE=<짝 아이폰> scripts/capture_watch_screenshots.sh ru   # 기기를 정해서
 #   scripts/capture_watch_screenshots.sh de fr        # 일부 언어만
 #
 # 결과: docs/screenshots/watch/<언어>/01-duration.png … 04-finished.png
@@ -24,10 +25,11 @@ OUT="$ROOT/docs/screenshots/watch"
 SCENES=("01:duration:4" "02:prealerts:5" "03:running:8" "04:finished:10")
 
 LANGS=("$@")
-[[ ${#LANGS[@]} -eq 0 ]] && LANGS=(ko en ja zh-Hans zh-Hant de fr es pt-BR it)
+[[ ${#LANGS[@]} -eq 0 ]] && LANGS=(ko en ja zh-Hans zh-Hant de fr es pt-BR pt-PT it ru cs da el fi id nb nl pl sv th tr vi)
 
 # 페어링된(active) 워치 중 이름이 맞는 것 + 그 짝 아이폰
-read -r UDID PHONE < <(xcrun simctl list pairs -j | python3 -c "
+UDID="${UDID:-}"; PHONE="${PHONE:-}"
+[[ -z "$UDID" ]] && read -r UDID PHONE < <(xcrun simctl list pairs -j | python3 -c "
 import json, sys
 name = sys.argv[1]
 pairs = [p for p in json.load(sys.stdin)['pairs'].values()

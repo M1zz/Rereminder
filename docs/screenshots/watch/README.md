@@ -6,7 +6,7 @@ App Store Connect 의 watchOS 스크린샷 슬롯에 올리는 원본. 언어별
   다른 크기로 자동 축소된다.
   ⚠️ Ultra 3(49mm) 시뮬레이터는 **422 × 514** 를 뱉는데 이건 ASC 규격 표에 없다. 쓰지 말 것.
 - **기기**: Apple Watch Series 11 (46mm), watchOS 26.2 시뮬레이터
-- **언어**: 10개 — `ko` `en` `ja` `zh-Hans` `zh-Hant` `de` `fr` `es` `pt-BR` `it`.
+- **언어**: 24개 — `ko` `en` `ja` `zh-Hans` `zh-Hant` `de` `fr` `es` `pt-BR` `pt-PT` `it` `ru` `cs` `da` `el` `fi` `id` `nb` `nl` `pl` `sv` `th` `tr` `vi`.
   같은 화면 같은 순서. 새 언어를 늘리면 폴더도 는다(`deploy.env` 의 `LOCALES` 참고).
 
 | 파일 | 화면 | 파는 것 |
@@ -19,7 +19,7 @@ App Store Connect 의 watchOS 스크린샷 슬롯에 올리는 원본. 언어별
 ## 다시 찍는 법
 
 ```bash
-scripts/capture_watch_screenshots.sh            # 10개 언어 전부
+scripts/capture_watch_screenshots.sh            # 24개 언어 전부
 scripts/capture_watch_screenshots.sh de fr      # 일부만
 ```
 
