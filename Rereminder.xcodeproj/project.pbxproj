@@ -616,7 +616,7 @@
 				};
 			};
 			buildConfigurationList = 260414C62E1B9FA200CBA29B /* Build configuration list for PBXProject "Rereminder" */;
-			developmentRegion = ko;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
