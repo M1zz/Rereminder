@@ -4,7 +4,7 @@
 //
 //  앱스토어 스크린샷용 장면 — **DEBUG 빌드에서만** 존재한다.
 //
-//  언어 10개 × 화면 여러 장을 손으로 맞춰 찍으면 다음 릴리즈에 똑같이 다시 찍을 수 없다.
+//  언어 24개 × 화면 여러 장을 손으로 맞춰 찍으면 다음 릴리즈에 똑같이 다시 찍을 수 없다.
 //  그래서 실행 인자 하나로 화면 상태를 세운다(`scripts/capture_screenshots.sh` 가 부른다):
 //
 //      xcrun simctl launch <기기> com.xa.toki -screenshotScene session \
@@ -128,6 +128,76 @@ enum ScreenshotScene: String {
             scripts: ["Presenta i tre punti di oggi.",
                       "Mostra l'idea chiave con due esempi. I numeri in una sola slide.",
                       "Rispondi alle domande e chiudi con una frase."]),
+        "pt-PT": SessionCopy(
+            names: ["Introdução", "Tema principal", "Perguntas"],
+            scripts: ["Apresente os três pontos de que vamos falar hoje.",
+                      "Mostre a ideia principal com dois exemplos. Os números num só diapositivo.",
+                      "Responda às perguntas e termine com uma frase."]),
+        "ru": SessionCopy(
+            names: ["Вступление", "Основная часть", "Вопросы"],
+            scripts: ["Назвать три темы, о которых поговорим сегодня.",
+                      "Показать главную идею на двух примерах. Все цифры на одном слайде.",
+                      "Ответить на вопросы и закончить одной фразой."]),
+        "cs": SessionCopy(
+            names: ["Úvod", "Hlavní část", "Dotazy"],
+            scripts: ["Představte tři věci, kterými dnes projdeme.",
+                      "Ukažte hlavní myšlenku na dvou příkladech. Čísla mějte na jednom snímku.",
+                      "Odpovězte na dotazy a zakončete jednou větou."]),
+        "da": SessionCopy(
+            names: ["Intro", "Hoveddel", "Spørgsmål"],
+            scripts: ["Præsenter de tre ting, vi kommer omkring i dag.",
+                      "Vis hovedpointen med to eksempler. Hold tallene på ét dias.",
+                      "Tag imod spørgsmål, og slut af med én sætning."]),
+        "el": SessionCopy(
+            names: ["Εισαγωγή", "Κυρίως θέμα", "Ερωτήσεις"],
+            scripts: ["Παρουσιάστε τα τρία θέματα που θα δούμε σήμερα.",
+                      "Δείξτε την κεντρική ιδέα με δύο παραδείγματα. Όλα τα νούμερα σε μία διαφάνεια.",
+                      "Απαντήστε σε ερωτήσεις και κλείστε με μία πρόταση."]),
+        "fi": SessionCopy(
+            names: ["Alku", "Pääosa", "Kysymykset"],
+            scripts: ["Esittele kolme asiaa, jotka käymme tänään läpi.",
+                      "Näytä pääajatus kahdella esimerkillä. Pidä luvut yhdellä dialla.",
+                      "Vastaa kysymyksiin ja päätä yhteen lauseeseen."]),
+        "id": SessionCopy(
+            names: ["Pembuka", "Materi inti", "Tanya jawab"],
+            scripts: ["Perkenalkan tiga hal yang akan kita bahas hari ini.",
+                      "Tunjukkan ide utama dengan dua contoh. Taruh angkanya di satu slide.",
+                      "Jawab pertanyaan, lalu tutup dengan satu kalimat."]),
+        "nb": SessionCopy(
+            names: ["Intro", "Hoveddel", "Spørsmål"],
+            scripts: ["Presenter de tre tingene vi skal gå gjennom i dag.",
+                      "Vis hovedideen med to eksempler. Hold tallene på ett lysbilde.",
+                      "Ta imot spørsmål, og avslutt med én setning."]),
+        "nl": SessionCopy(
+            names: ["Intro", "Kern", "Vragen"],
+            scripts: ["Noem de drie dingen die we vandaag bespreken.",
+                      "Laat het kernidee zien met twee voorbeelden. Houd de cijfers op één dia.",
+                      "Beantwoord vragen en sluit af met één zin."]),
+        "pl": SessionCopy(
+            names: ["Wstęp", "Główna część", "Pytania"],
+            scripts: ["Przedstaw trzy tematy, które dziś omówimy.",
+                      "Pokaż główną myśl na dwóch przykładach. Liczby zmieść na jednym slajdzie.",
+                      "Odpowiedz na pytania i zakończ jednym zdaniem."]),
+        "sv": SessionCopy(
+            names: ["Intro", "Huvuddel", "Frågor"],
+            scripts: ["Presentera de tre saker vi går igenom i dag.",
+                      "Visa huvudidén med två exempel. Håll siffrorna på en bild.",
+                      "Ta emot frågor och avsluta med en mening."]),
+        "th": SessionCopy(
+            names: ["เกริ่นนำ", "เนื้อหาหลัก", "ถามตอบ"],
+            scripts: ["บอกสามเรื่องที่เราจะคุยกันวันนี้",
+                      "อธิบายแนวคิดหลักด้วยสองตัวอย่าง ใส่ตัวเลขไว้ในสไลด์เดียว",
+                      "ตอบคำถาม แล้วปิดท้ายด้วยประโยคเดียว"]),
+        "tr": SessionCopy(
+            names: ["Giriş", "Ana konu", "Sorular"],
+            scripts: ["Bugün konuşacağımız üç konuyu tanıt.",
+                      "Ana fikri iki örnekle göster. Rakamları tek slaytta tut.",
+                      "Soruları al, tek cümleyle kapat."]),
+        "vi": SessionCopy(
+            names: ["Mở đầu", "Nội dung chính", "Hỏi đáp"],
+            scripts: ["Giới thiệu ba điều chúng ta sẽ nói hôm nay.",
+                      "Nêu ý chính bằng hai ví dụ. Gom số liệu vào một trang chiếu.",
+                      "Trả lời câu hỏi, rồi khép lại bằng một câu."]),
     ]
 }
 #endif

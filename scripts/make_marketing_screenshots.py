@@ -91,10 +91,94 @@ COPY = {
         ("Dividi il discorso<br>in sezioni", "Dai un nome a ognuna e aggiungi il copione"),
         ("Il tuo copione<br>al momento giusto", "La modalità Sessione ti tiene in tempo"),
     ],
+    "pt-PT": [
+        ("Vários avisos<br>antes do fim", "10, 5 e 1 minuto antes. À sua escolha."),
+        ("Veja o próximo<br>alerta de relance", "Cada etapa tem a sua contagem"),
+        ("Divida a palestra<br>em etapas", "Dê nome a cada parte e junte as suas notas"),
+        ("As suas notas,<br>no momento certo", "O Modo Sessão mantém-no no rumo certo"),
+    ],
+    "ru": [
+        ("Сигнал до того,<br>как время выйдет", "За 10, 5 и 1 минуту. Как вам удобно."),
+        ("Следующий сигнал<br>сразу на виду", "У каждого этапа свой отсчёт"),
+        ("Разбейте речь<br>на этапы", "Назовите части и добавьте заметки"),
+        ("Ваши заметки —<br>точно вовремя", "Режим этапов держит вас в графике"),
+    ],
+    "cs": [
+        ("Upozornění dřív,<br>než čas vyprší", "10, 5 a 1 minutu předem. Kdykoli chcete."),
+        ("Další upozornění<br>na první pohled", "Každý úsek odpočítává zvlášť"),
+        ("Rozdělte prezentaci<br>na úseky", "Pojmenujte části a přidejte poznámky"),
+        ("Vaše poznámky<br>přesně včas", "Režim sezení vás udrží v tempu"),
+    ],
+    "da": [
+        ("Få besked, før<br>tiden løber ud", "10, 5 og 1 minut før. Når du vil."),
+        ("Se næste påmindelse<br>med et blik", "Hvert afsnit tæller ned for sig"),
+        ("Del dit oplæg<br>op i afsnit", "Navngiv hver del, og tilføj noter"),
+        ("Dine noter,<br>lige til tiden", "Sessionstilstand holder dig på sporet"),
+    ],
+    "el": [
+        ("Ειδοποίηση πριν<br>τελειώσει ο χρόνος", "10, 5 και 1 λεπτό πριν. Όποτε θέλετε."),
+        ("Η επόμενη ειδοποίηση<br>με μια ματιά", "Κάθε ενότητα μετρά αντίστροφα μόνη της"),
+        ("Χωρίστε την ομιλία<br>σε ενότητες", "Ονομάστε κάθε μέρος, κρατήστε σημειώσεις"),
+        ("Οι σημειώσεις σας,<br>την ώρα που πρέπει", "Η Λειτουργία συνεδρίας σάς κρατά σε ρυθμό"),
+    ],
+    "fi": [
+        ("Muistutus ennen<br>kuin aika loppuu", "10, 5 ja 1 minuutti ennen. Milloin haluat."),
+        ("Seuraava muistutus<br>yhdellä silmäyksellä", "Jokainen osio laskee omaa aikaansa"),
+        ("Jaa esityksesi<br>osioihin", "Nimeä osat ja lisää muistiinpanot"),
+        ("Muistiinpanosi<br>oikealla hetkellä", "Sessiotila pitää sinut aikataulussa"),
+    ],
+    "id": [
+        ("Diingatkan sebelum<br>waktu habis", "10, 5, dan 1 menit sebelumnya. Kapan pun Anda mau."),
+        ("Lihat peringatan<br>berikutnya sekilas", "Setiap bagian menghitung mundur sendiri"),
+        ("Bagi presentasi<br>jadi beberapa bagian", "Beri nama tiap bagian dan tambahkan catatan"),
+        ("Catatan Anda,<br>tepat pada waktunya", "Mode Sesi menjaga Anda tetap di jalur"),
+    ],
+    "nb": [
+        ("Bli varslet før<br>tiden er ute", "10, 5 og 1 minutt før. Når du vil."),
+        ("Se neste varsel<br>med et blikk", "Hver del teller ned for seg"),
+        ("Del foredraget<br>inn i deler", "Gi hver del et navn og legg til notater"),
+        ("Notatene dine,<br>akkurat i tide", "Øktmodus holder deg på sporet"),
+    ],
+    "nl": [
+        ("Gewaarschuwd vóór<br>de tijd om is", "10, 5 en 1 minuut van tevoren. Wanneer jij wilt."),
+        ("Zie de volgende<br>melding meteen", "Elk onderdeel telt apart af"),
+        ("Verdeel je verhaal<br>in onderdelen", "Geef elk deel een naam en notities"),
+        ("Je notities,<br>precies op tijd", "Sessiemodus houdt je op koers"),
+    ],
+    "pl": [
+        ("Ostrzeżenie, zanim<br>czas się skończy", "10, 5 i 1 minuta przed końcem. Kiedy chcesz."),
+        ("Następny alert<br>na pierwszy rzut oka", "Każdy etap odlicza osobno"),
+        ("Podziel wystąpienie<br>na etapy", "Nazwij każdą część i dodaj notatki"),
+        ("Twoje notatki<br>w samą porę", "Tryb sesji trzyma Cię w planie"),
+    ],
+    "sv": [
+        ("Förvarnad innan<br>tiden är ute", "10, 5 och 1 minut före. När du vill."),
+        ("Se nästa påminnelse<br>med en blick", "Varje avsnitt räknar ner för sig"),
+        ("Dela upp ditt tal<br>i avsnitt", "Namnge varje del och lägg till anteckningar"),
+        ("Ditt manus,<br>precis i tid", "Sessionsläge håller dig på banan"),
+    ],
+    "th": [
+        ("รู้ตัวก่อน<br>ที่เวลาจะหมด", "ก่อนจบ 10, 5 และ 1 นาที ตั้งได้ตามใจ"),
+        ("เห็นการเตือนถัดไป<br>ได้ในแวบเดียว", "แต่ละช่วงนับถอยหลังแยกกัน"),
+        ("แบ่งการพูด<br>ออกเป็นช่วงๆ", "ตั้งชื่อแต่ละช่วงและจดโน้ตไว้"),
+        ("บทพูดของคุณ<br>มาตรงเวลา", "โหมดเซสชันช่วยให้พูดตามแผน"),
+    ],
+    "tr": [
+        ("Süre dolmadan<br>önce haber al", "10, 5 ve 1 dakika kala. İstediğin zaman."),
+        ("Sıradaki uyarıyı<br>bir bakışta gör", "Her bölüm kendi süresini sayar"),
+        ("Konuşmanı<br>bölümlere ayır", "Her kısma ad ver, notlarını ekle"),
+        ("Notların<br>tam zamanında", "Oturum Modu seni rotada tutar"),
+    ],
+    "vi": [
+        ("Được báo trước<br>khi hết giờ", "Trước 10, 5 và 1 phút. Tùy bạn chọn."),
+        ("Lần báo tiếp theo<br>chỉ trong nháy mắt", "Mỗi phần tự đếm ngược riêng"),
+        ("Chia bài nói<br>thành từng phần", "Đặt tên từng phần và thêm ghi chú"),
+        ("Ghi chú của bạn,<br>hiện đúng lúc", "Chế độ Phiên giúp bạn đi đúng nhịp"),
+    ],
 }
 
 # 한자권은 글자가 빽빽해 같은 크기면 더 커 보이고, 라틴 문자는 단어가 길어 줄이 넘친다.
-HEADLINE_PX = {"ko": 100, "ja": 92, "zh-Hans": 96, "zh-Hant": 96}
+HEADLINE_PX = {"ko": 100, "ja": 92, "zh-Hans": 96, "zh-Hant": 96, "th": 92}
 LATIN_HEADLINE_PX = 84
 
 BASE_CSS = f"""
@@ -158,6 +242,7 @@ HTML = """<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><style>
 :lang(zh-Hant) body {{ font-family:-apple-system, "PingFang TC", sans-serif; }}
 :lang(zh-Hans) body {{ font-family:-apple-system, "PingFang SC", sans-serif; }}
 :lang(ja) body {{ font-family:-apple-system, "Hiragino Sans", sans-serif; }}
+:lang(th) body {{ font-family:-apple-system, "Thonburi", sans-serif; }}
 </style></head><body>{body}</body></html>"""
 
 
@@ -176,10 +261,15 @@ def render(lang):
             lang=lang, base=BASE_CSS, layout=LAYOUTS[layout], body=body,
             headline_px=HEADLINE_PX.get(lang, LATIN_HEADLINE_PX)), encoding="utf-8")
         out_png = out_dir / fname
+        out_png.unlink(missing_ok=True)
+        # ⚠️ 기계가 바쁘면 Chrome 이 그림을 다 쓴 뒤 정리 단계에서 죽어(Teardown watchdog) 0 이 아닌 값을 낸다.
+        #    끝 코드가 아니라 그림이 실제로 써졌는지로 판정한다.
         subprocess.run([CHROME, "--headless=new", f"--screenshot={out_png}",
                         f"--window-size={W},{H}", "--force-device-scale-factor=1",
                         "--hide-scrollbars", "--disable-gpu", html_path.as_uri()],
-                       check=True, capture_output=True)
+                       capture_output=True)
+        if not out_png.exists() or out_png.stat().st_size == 0:
+            sys.exit(f"Chrome 이 그리지 못했다: {out_png}")
         print(f"rendered {out_png.relative_to(ROOT)}")
 
 

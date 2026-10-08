@@ -786,7 +786,7 @@ Rereminder: таймер выступлений
 
 ### 키워드
 
-обратный отсчет,доклад,презентация,лекция,урок,учитель,тренировка,интервал,помодоро,йога,совещание
+обратный,отсчет,доклад,презентация,лекция,урок,учитель,тренировка,интервал,помодоро,йога,совещание
 
 ### 프로모션 텍스트
 
@@ -1310,7 +1310,7 @@ prezentacja,przemówienie,odliczanie,wykład,nauczyciel,spotkanie,trening,joga,i
 
 ### 프로모션 텍스트
 
-Kilka ostrzeżeń przed końcem, żebyś skończył na czas. Na wystąpienia, lekcje, trening i skupioną pracę. Apple Watch i Mac bez dodatkowych opłat.
+Kilka ostrzeżeń przed końcem, żeby zawsze zmieścić się w czasie. Na wystąpienia, lekcje, trening i skupioną pracę. Apple Watch i Mac bez dodatkowych opłat.
 
 ### 설명
 
@@ -1501,7 +1501,7 @@ Süre dolmadan önce uyarır
 
 ### 키워드
 
-konuşma,geri sayım,ders,öğretmen,toplantı,egzersiz,pilates,yoga,interval,pomodoro,alarm,odaklanma
+konuşma,geri,sayım,ders,öğretmen,toplantı,egzersiz,pilates,yoga,interval,pomodoro,alarm,odaklanma
 
 ### 프로모션 텍스트
 
@@ -1566,7 +1566,7 @@ Nhắc trước khi hết thời gian
 
 ### 키워드
 
-đếm ngược,thuyết trình,bài giảng,giáo viên,tập luyện,pomodoro,cuộc họp,yoga,pilates,báo thức,học tập
+đếm,ngược,thuyết,trình,bài,giảng,giáo,viên,tập,luyện,pomodoro,cuộc,họp,yoga,pilates,báo,thức,học
 
 ### 프로모션 텍스트
 

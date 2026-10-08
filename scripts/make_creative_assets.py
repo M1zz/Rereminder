@@ -14,7 +14,7 @@
 ⚠️ 가격 · 할인 · 주소(URL) · 수상 · 다른 플랫폼 이름은 넣지 않는다(Apple 가이드).
 
 기기 화면은 scripts/capture_screenshots.sh 가 찍은 docs/screenshots/raw/<언어>/ 원본을 쓴다.
-pt-PT 는 앱 번역이 pt-BR 하나라 그 화면을 쓰고, 문구만 유럽 포르투갈어로 따로 쓴다.
+pt-PT 도 앱 번역이 따로 있어(2.3.2~) 그 언어 화면을 쓴다.
 """
 import shutil, subprocess, sys, pathlib, tempfile
 
@@ -28,7 +28,7 @@ PROFILE = pathlib.Path(tempfile.gettempdir()) / "rereminder-creative-chrome"
 # 문구 키 → App Store Connect 로케일들 (스토어에 es-ES · es-MX 가 둘 다 있다)
 STORE = {"en": ["en-US"], "de": ["de-DE"], "fr": ["fr-FR"], "es": ["es-ES", "es-MX"]}
 # 문구 키 → 기기 화면 원본 폴더(앱 언어)
-SCREEN = {"pt-PT": "pt-BR"}
+SCREEN: dict[str, str] = {}
 
 # (가로, 세로, 안전 영역 left, top, right, bottom)
 SPEC = {
@@ -50,6 +50,19 @@ SEARCH = {
     "pt-BR":   ("Timer de apresentação", "Vários avisos<br>antes do fim", "10, 5 e 1 minuto antes.<br>Você escolhe."),
     "pt-PT":   ("Temporizador com avisos", "Vários avisos<br>antes do fim", "10, 5 e 1 minuto antes.<br>À sua escolha."),
     "it":      ("Timer presentazioni", "Più avvisi<br>prima della fine", "10, 5 e 1 minuto prima.<br>Scegli tu."),
+    "ru": ("Таймер для выступлений", "Сигнал до того,<br>как время выйдет", "За 10, 5 и 1 минуту.<br>Решаете вы."),
+    "cs": ("Časovač prezentací", "Upozornění dřív,<br>než čas vyprší", "10, 5 a 1 minutu předem.<br>Vy rozhodnete."),
+    "da": ("Præsentationstimer", "Besked, før<br>tiden løber ud", "10, 5 og 1 minut før.<br>Du bestemmer."),
+    "el": ("Χρονόμετρο ομιλίας", "Ειδοποίηση πριν<br>λήξει ο χρόνος", "10, 5 και 1 λεπτό πριν.<br>Εσείς επιλέγετε."),
+    "fi": ("Esitysajastin", "Muistutus ennen<br>kuin aika loppuu", "10, 5 ja 1 minuutti ennen.<br>Sinä päätät."),
+    "id": ("Timer presentasi", "Diingatkan sebelum<br>waktu habis", "10, 5, dan 1 menit sebelumnya.<br>Anda yang pilih."),
+    "nb": ("Tidtaker for foredrag", "Varsler før<br>tiden er ute", "10, 5 og 1 minutt før.<br>Du bestemmer."),
+    "nl": ("Presentatietimer", "Seintje voordat<br>de tijd om is", "10, 5 en 1 minuut van tevoren.<br>Jij kiest."),
+    "pl": ("Minutnik prezentacji", "Ostrzeżenie, zanim<br>czas minie", "10, 5 i 1 minuta przed końcem.<br>Ty wybierasz."),
+    "sv": ("Presentationstimer", "Påminnelser innan<br>tiden är ute", "10, 5 och 1 minut före.<br>Du väljer."),
+    "th": ("ตัวจับเวลานำเสนอ", "เตือนก่อน<br>ที่เวลาจะหมด", "ก่อนจบ 10, 5 และ 1 นาที<br>คุณเลือกเอง"),
+    "tr": ("Sunum zamanlayıcısı", "Süre dolmadan<br>önce uyarı", "10, 5 ve 1 dakika kala.<br>Sen seç."),
+    "vi": ("Hẹn giờ thuyết trình", "Báo trước<br>khi hết giờ", "Trước 10, 5 và 1 phút.<br>Tùy bạn chọn."),
 }
 
 # 헤더는 한 가지 약속만: 끝나고 나서가 아니라, 끝나기 전에 알려 준다.
@@ -66,6 +79,19 @@ HEADER = {
     "pt-BR":   ("Timer para apresentações", "Avisa antes,<br>não depois"),
     "pt-PT":   ("Temporizador para apresentações", "Avisa antes,<br>não depois"),
     "it":      ("Timer per presentazioni", "Ti avvisa prima,<br>non dopo"),
+    "ru": ("Таймер для выступлений", "Узнайте заранее,<br>что время на исходе"),
+    "cs": ("Časovač prezentací", "Vězte to dřív,<br>než čas vyprší"),
+    "da": ("Præsentationstimer", "Vid det, før<br>tiden løber ud"),
+    "el": ("Χρονόμετρο ομιλίας", "Μάθετέ το πριν<br>λήξει ο χρόνος"),
+    "fi": ("Esitysajastin", "Tiedä ennen kuin<br>aika loppuu"),
+    "id": ("Timer presentasi", "Tahu sebelum<br>waktu habis"),
+    "nb": ("Tidtaker for foredrag", "Vit det før<br>tiden er ute"),
+    "nl": ("Presentatietimer", "Weet het voordat<br>de tijd om is"),
+    "pl": ("Minutnik prezentacji", "Wiedz, zanim<br>czas minie"),
+    "sv": ("Presentationstimer", "Vet det innan<br>tiden tar slut"),
+    "th": ("ตัวจับเวลานำเสนอ", "รู้ตัวก่อน<br>ที่เวลาจะหมด"),
+    "tr": ("Sunum zamanlayıcısı", "Süre dolmadan<br>önce bil"),
+    "vi": ("Hẹn giờ thuyết trình", "Biết trước<br>khi hết giờ"),
 }
 
 # ⚠️ 바탕 · 글자색은 마케팅 스크린샷(make_marketing_screenshots.py)과 같다: 밝은 회색 바탕, 검은 헤드라인,
@@ -77,12 +103,13 @@ body { background:#f4f4f5; position:relative;
   font-family:-apple-system, "SF Pro Display", "Apple SD Gothic Neo", "Hiragino Sans", "PingFang SC", sans-serif; }
 :lang(zh-Hant) body { font-family:-apple-system, "PingFang TC", sans-serif; }
 :lang(ja) body { font-family:-apple-system, "Hiragino Sans", sans-serif; }
+:lang(th) body { font-family:-apple-system, "Thonburi", sans-serif; }
 .glow { position:absolute; border-radius:50%%; filter:blur(170px); pointer-events:none; }
 .text { position:absolute; display:flex; flex-direction:column; justify-content:center; }
 .eyebrow { font-weight:700; color:#E8850C; letter-spacing:-0.01em; line-height:1.15; }
 .headline { font-weight:800; color:#141416; letter-spacing:-0.03em; line-height:1.15; text-wrap:balance; }
 .sub { font-weight:500; color:#8e8e94; letter-spacing:-0.01em; line-height:1.35; text-wrap:balance; }
-:lang(ja) .headline, :lang(zh) .headline { letter-spacing:0; }
+:lang(ja) .headline, :lang(zh) .headline, :lang(th) .headline { letter-spacing:0; }
 :lang(ko) .headline, :lang(ko) .sub, :lang(ko) .eyebrow { word-break:keep-all; }
 .phone { position:absolute; background:#17171a; border:6px solid #3a3a3e; padding:40px; border-radius:190px;
   box-shadow: 60px 90px 160px rgba(0,0,0,.26), 20px 30px 60px rgba(0,0,0,.16); }

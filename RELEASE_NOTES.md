@@ -79,63 +79,63 @@ Piccole correzioni e miglioramenti.
 
 ### 앱스토어 (러시아어)
 
-Теперь на русском и ещё 12 языках
-Справка и политика теперь на русском
-Мелкие исправления и улучшения
+Теперь на русском и ещё 12 языках.
+Справка и конфиденциальность по-русски.
+Мелкие исправления и улучшения.
 
 ### 앱스토어 (체코어)
 
-Nově v češtině a dalších 12 jazycích
-Nápověda a soukromí nyní i česky
-Drobné opravy a vylepšení
+Nově v češtině a dalších 12 jazycích.
+Nápověda a ochrana soukromí česky.
+Drobné opravy a vylepšení.
 
 ### 앱스토어 (덴마크어)
 
-Nu på dansk og 12 andre sprog
-Hjælp og privatlivspolitik nu på dansk
-Små rettelser og forbedringer
+Nu på dansk og 12 andre sprog.
+Hjælp og privatlivspolitik på dansk.
+Små rettelser og forbedringer.
 
 ### 앱스토어 (그리스어)
 
-Τώρα στα ελληνικά και 12 ακόμα γλώσσες
-Βοήθεια και απόρρητο τώρα στα ελληνικά
-Μικρές διορθώσεις και βελτιώσεις
+Τώρα στα ελληνικά και 12 ακόμη γλώσσες.
+Βοήθεια και απόρρητο στα ελληνικά.
+Μικρές διορθώσεις και βελτιώσεις.
 
 ### 앱스토어 (핀란드어)
 
-Nyt suomeksi ja 12 muulla kielellä
-Ohjeet ja tietosuoja nyt myös suomeksi
-Pieniä korjauksia ja parannuksia
+Nyt suomeksi ja 12 muulla kielellä.
+Ohjeet ja tietosuoja myös suomeksi.
+Pieniä korjauksia ja parannuksia.
 
 ### 앱스토어 (인도네시아어)
 
-Rereminder kini berbahasa Indonesia.
+Kini tersedia dalam bahasa Indonesia.
 Bantuan dan privasi dalam bahasa Anda.
-Perbaikan dan penyempurnaan kecil.
+Perbaikan kecil dan penyempurnaan.
 
 ### 앱스토어 (Norsk bokmål)
 
-Nå på norsk og 12 språk til
-Hjelp og personvern nå også på norsk
-Små feilrettinger og forbedringer
+Nå på norsk og 12 andre språk.
+Hjelp og personvern også på norsk.
+Små feilrettinger og forbedringer.
 
 ### 앱스토어 (네덜란드어)
 
-Nu in het Nederlands en 12 andere talen
-Hulp en privacy nu in het Nederlands
-Kleine verbeteringen en oplossingen
+Nu in het Nederlands en 12 andere talen.
+Hulp en privacy in het Nederlands.
+Kleine verbeteringen en oplossingen.
 
 ### 앱스토어 (폴란드어)
 
-Teraz po polsku i w 12 innych językach
-Pomoc i polityka prywatności po polsku
-Drobne poprawki i ulepszenia
+Teraz po polsku i w 12 innych językach.
+Pomoc i prywatność także po polsku.
+Drobne poprawki i ulepszenia.
 
 ### 앱스토어 (스웨덴어)
 
-Nu på svenska och 12 andra språk
-Hjälp och integritetspolicy på svenska
-Mindre buggfixar och förbättringar
+Nu på svenska och 12 andra språk.
+Hjälp och integritet på svenska.
+Mindre buggfixar och förbättringar.
 
 ### 앱스토어 (태국어)
 
@@ -145,15 +145,15 @@ Mindre buggfixar och förbättringar
 
 ### 앱스토어 (튀르키예어)
 
-Artık Türkçe ve 12 dilde daha
-Yardım ve gizlilik sayfaları Türkçe
-Küçük düzeltmeler ve iyileştirmeler
+Artık Türkçe ve 12 dilde daha.
+Yardım ve gizlilik sayfaları da Türkçe.
+Küçük düzeltmeler ve iyileştirmeler.
 
 ### 앱스토어 (베트남어)
 
-Đã có tiếng Việt và 12 ngôn ngữ khác
-Trợ giúp và bảo mật nay có tiếng Việt
-Sửa lỗi nhỏ và cải thiện
+Đã có tiếng Việt và 12 ngôn ngữ khác.
+Trợ giúp và bảo mật nay có tiếng Việt.
+Sửa lỗi nhỏ và cải thiện trải nghiệm.
 
 ## 2.3.1
 
