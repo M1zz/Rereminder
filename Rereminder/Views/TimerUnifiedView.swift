@@ -100,6 +100,8 @@ struct TimerUnifiedView: View {
 
     // 무료 사용자가 "기억하려면 Pro" 를 누른 자리 — 템플릿 페이월로 연다.
     @State private var showRememberPaywall = false
+    /// 기억 페이월에서 앞에 세울 트림. 전날 안내만 `.session` 이다 — 그 사람은 세션을 운영하러 온다.
+    @State private var rememberPaywallFocus: ProTier?
     /// 안내 시트에서 "Pro 알아보기"를 눌렀다 — 시트가 다 닫힌 뒤에 페이월을 연다(겹치면 안 뜬다).
     @State private var showRememberPaywallAfterNotice = false
     // 다음 자리 전날, 무료 사용자에게 "이게 Pro 가 매번 하는 일"이라고 알려 준다(`RememberPitch` ③).
@@ -111,7 +113,7 @@ struct TimerUnifiedView: View {
     /// Pro 상태를 관찰한다 — `ProGate` 는 static 이라 구매 직후 알림 문구가 갈라지지 않게 함께 본다.
     @ObservedObject private var store = StoreManager.shared
 
-    private var canRememberSetup: Bool { store.isPro || ProGate.canRememberSetup }
+    private var canRememberSetup: Bool { store.canRemember || ProGate.canRememberSetup }
 
     /// 지금 다이얼에 올라온 설정과 같은 템플릿을 이미 갖고 있는가.
     /// (저장돼 있으면 제안할 이유가 없다 — 이미 앱이 기억하고 있다.)
@@ -178,7 +180,8 @@ struct TimerUnifiedView: View {
                 onAcceptExtension: enterPresentationAfterExtension
             )
             // "기억하려면 Pro" — 반복 감지·다시 연 순간의 한 줄·전날 안내가 모두 여기로 온다.
-            .paywallGate(isPresented: $showRememberPaywall, feature: .unlimitedTemplates)
+            .paywallGate(isPresented: $showRememberPaywall, feature: .unlimitedTemplates,
+                         focus: rememberPaywallFocus)
             .toast(toast)
             .alert(String(localized: "Thank you for being an early user 💙"), isPresented: $showGrandfatherThanks) {
                 Button(String(localized: "OK"), role: .cancel) {}
@@ -194,6 +197,7 @@ struct TimerUnifiedView: View {
             .sheet(isPresented: $showLegacyFreeNotice, onDismiss: {
                 guard showRememberPaywallAfterNotice else { return }
                 showRememberPaywallAfterNotice = false
+                rememberPaywallFocus = nil
                 showRememberPaywall = true
             }) {
                 LegacyFreeNoticeView(onSeePro: { showRememberPaywallAfterNotice = true })
@@ -254,6 +258,7 @@ struct TimerUnifiedView: View {
                         reentryTarget = nil
                         screenVM.applyRepeatConfig(mainSec: config.mainSec, offsets: config.offsets, toast: false)
                         screenVM.rememberRecall = nil
+                        rememberPaywallFocus = nil
                         showRememberPaywall = true
                     }
                     Button(String(localized: "Not now"), role: .cancel) {
@@ -276,6 +281,8 @@ struct TimerUnifiedView: View {
                 Button(String(localized: "See Pro")) {
                     AnalyticsManager.log(.rememberPitchTapped(kind: "eve"))
                     ProMention.markTapped()
+                    // 예약은 세션 모드로 완주한 사람만 한다 — 기억($2.99)보다 Pro 가 맞는 사람이다.
+                    rememberPaywallFocus = .session
                     showRememberPaywall = true
                 }
                 Button(String(localized: "OK"), role: .cancel) {}
@@ -319,8 +326,32 @@ struct TimerUnifiedView: View {
 
     // MARK: - Sub Views
 
-    /// 하단 바: 왼쪽 = 모드 세그먼트(타이머·발표), 오른쪽 = 도구(템플릿·설정)
+    /// 아이폰 듀오를 폈는가 — 펴면 다이얼 화면이 고르는 쪽 판에, 계획·남은 시간이 결과 쪽 판에 선다.
+    @Environment(\.foldLayout) private var fold
+
+    /// 펼친 듀오면 **다이얼 | 계획**, 아니면 지금 화면 그대로.
+    ///
+    /// 하단 막대(모드·템플릿·설정)는 다이얼 화면의 `NavigationStack` 안에 있으므로 함께 고르는 쪽 판에
+    /// 갇힌다 — 창 전체 폭으로 깔리면 가로로 편 화면에서 막대가 접힌 선을 가로지른다.
+    /// ⚠️ 펴고 접는 순간 다이얼 화면을 다시 만든다(들어가 있던 설정 화면은 처음으로). 타이머 상태는
+    ///    `screenVM` 에 있어 그대로 이어진다.
+    @ViewBuilder
     private var mainContent: some View {
+        if fold.isUnfolded {
+            FoldSplitView {
+                dialScreen
+            } result: {
+                FoldTimerCompanion()
+                    .environmentObject(screenVM)
+            }
+            .background(Color(.systemBackground).ignoresSafeArea())
+        } else {
+            dialScreen
+        }
+    }
+
+    /// 하단 바: 왼쪽 = 모드 세그먼트(타이머·발표), 오른쪽 = 도구(템플릿·설정)
+    private var dialScreen: some View {
         NavigationStack {
             // 두 모드 모두 다이얼 화면 사용 — 발표 모드는 구간 링·구간 편집 모달이 추가됨
             TimerMainView()
@@ -341,6 +372,7 @@ struct TimerUnifiedView: View {
         .fullScreenCover(isPresented: $showOnboarding) {
             OnboardingFlowView(isPresented: $showOnboarding)
                 .environmentObject(screenVM)
+                .foldConfined()
         }
         .sheet(isPresented: $showHistory) {
             TimerTemplateView { selected in
@@ -445,7 +477,7 @@ struct TimerUnifiedView: View {
         //    새로 설치한 사람의 시드가 "창보다 먼저 만든 템플릿"이 되어 신규 사용자 전원이 이 안내를 본다.
         LegacyFreeNotice.refresh(context: context, windowJustClosed: windowWasOpen)
         if !showFounderWelcome,
-           LegacyFreeNotice.shouldAnnounce(isPro: StoreManager.isProUser, isFounder: FoundingSupporter.isFounder) {
+           LegacyFreeNotice.shouldAnnounce(isPro: StoreManager.canRememberSetup, isFounder: FoundingSupporter.isFounder) {
             showLegacyFreeNotice = true
             AnalyticsManager.log(.rememberPitchShown(kind: "legacy"))
             ProMention.markMentioned(.legacy)

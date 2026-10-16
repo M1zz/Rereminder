@@ -69,6 +69,9 @@ struct RereminderApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                // 아이폰 듀오: 창 크기·접힌 선을 재서 아래로 흘린다. 접혀 있으면 아무것도 바뀌지 않는다.
+                // 맨 바깥에 건다 — 루트에서 띄우는 시트·알림창도 접힘을 알아야 선을 비켜 선다.
+                .foldAware()
                 .preferredColorScheme(themeManager.colorScheme)
                 .tint(themeManager.accentColor)
                 .environmentObject(storeManager)

@@ -535,7 +535,8 @@ extension TimerScreenViewModel {
             // 마지막 섹션은 타이머 종료와 동일하므로 pre-alert 불필요
             if remainingAtEnd > 0 && section.alertAtEnd {
                 offsets.append(remainingAtEnd)
-                messages[remainingAtEnd] = "\(section.name) complete"
+                // ⚠️ 번역해서 만든다 — 예전에는 "도입 complete" 처럼 영어가 그대로 알림에 나갔다.
+                messages[remainingAtEnd] = String(localized: "\(section.name) complete")
             }
         }
 
@@ -543,7 +544,7 @@ extension TimerScreenViewModel {
         mainSeconds = totalSeconds % 60
         selectedOffsets = Set(offsets)
         prealertMessages = messages
-        finishMessage = "Presentation complete"
+        finishMessage = String(localized: "Session complete")
         configuredMainSeconds = totalSeconds
     }
 

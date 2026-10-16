@@ -65,6 +65,8 @@ struct TimerMainView: View {
     @State var showNotificationOffBanner = false
     @State private var macLinkStatus: DevicePresence.Status = .away(lastSeen: nil)
     @State private var markerLingerTask: Task<Void, Never>?
+    /// 펼친 듀오면 구간 칩·카운트다운은 옆 판(`FoldTimerCompanion`)이 크게 그린다 — 여기서는 뺀다.
+    @Environment(\.foldLayout) private var fold
 
     /// 손을 놓고 이만큼 지나면 배지·링 강조·흐려진 종이 한꺼번에 원래대로 돌아온다
     private static let tooltipLingerSeconds: Double = 3
@@ -241,7 +243,7 @@ struct TimerMainView: View {
                     // **걸기 전에도 구간이 몇 분짜리인지 보인다.** 종을 옮기는 조작은 각도라
                     // "그래서 첫 구간이 몇 분이지?"를 머리로 계산하게 되는데, 그 답을 바로 아래 둔다.
                     // 실행 중에는 세우지 않는다 — 그 자리는 줄어드는 숫자(SectionCountdownList) 몫이다.
-                    if !isProgressMode, !isPresentationMode, derivedSegments.count > 1 {
+                    if !isProgressMode, !isPresentationMode, derivedSegments.count > 1, !fold.isUnfolded {
                         SectionLengthBar(segments: derivedSegments)
                             .transition(.opacity)
                     }
@@ -276,7 +278,7 @@ struct TimerMainView: View {
                             isEditable: isTimeEditable
                         )
                             .transition(.move(edge: .bottom).combined(with: .opacity))
-                    } else if isProgressMode && derivedSegments.count > 1 {
+                    } else if isProgressMode && derivedSegments.count > 1 && !fold.isUnfolded {
                         // 구간별 카운트다운 (원 밖 아래쪽) — 링이 "전체가 얼마나 남았나"라면
                         // 이건 "지금 이 구간이 얼마 남았나"다. 다음 알림까지의 시간이 곧 지금 구간의
                         // 남은 시간이라 `nextAlertInfo` 자리를 대신한다(둘 다 두면 같은 말이 두 번).
@@ -286,7 +288,8 @@ struct TimerMainView: View {
                             maxHeight: availableHeight * 0.22
                         )
                             .transition(.opacity)
-                    } else if isProgressMode && !screenVM.nextAlertText.isEmpty {
+                    } else if isProgressMode && !screenVM.nextAlertText.isEmpty
+                                && !(fold.isUnfolded && derivedSegments.count > 1) {
                         // Next 알림 Info (원 밖 아래쪽) — 알림이 하나뿐이라 구간 리스트가 무의미할 때
                         nextAlertInfo
                     } else if screenVM.state == .idle || screenVM.state == .finished {
@@ -341,6 +344,7 @@ struct TimerMainView: View {
             TimerAlertView {
                 screenVM.showTimerAlert = false
             }
+            .foldConfined()
         }
         .alert("Notification permission is required", isPresented: $screenVM.showPermissionWarning) {
             Button("Go to Settings", role: .none) {

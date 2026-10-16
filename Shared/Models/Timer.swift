@@ -103,7 +103,18 @@ extension Timer {
 
     /// Pre-alert Message 가져오기 (커스텀 메시지가 없으면 기본 메시지 반환)
     func getPrealertMessage(for offsetSec: Int) -> String {
-        if let customMessage = prealertMessages[offsetSec], !customMessage.isEmpty {
+        Self.prealertMessage(for: offsetSec, custom: prealertMessages)
+    }
+
+    /// End Alert Message 가져오기 (커스텀 메시지가 없으면 기본 메시지 반환)
+    func getFinishMessage() -> String {
+        Self.finishMessage(custom: finishMessage)
+    }
+
+    /// 예비 알림 문구 — 저장된 템플릿이 아니어도(다이얼에 올라온 설정) 같은 문구를 내도록 한 곳에 둔다.
+    /// 듀오의 계획 판(`FoldTimerCompanion`)이 "그 순간 나갈 문구"를 미리 보여 줄 때도 이걸 쓴다.
+    static func prealertMessage(for offsetSec: Int, custom: [Int: String]) -> String {
+        if let customMessage = custom[offsetSec], !customMessage.isEmpty {
             return customMessage
         }
         // 기본 메시지
@@ -114,11 +125,8 @@ extension Timer {
         return String(localized: "\(minutes) min remaining")
     }
 
-    /// End Alert Message 가져오기 (커스텀 메시지가 없으면 기본 메시지 반환)
-    func getFinishMessage() -> String {
-        if let customMessage = finishMessage, !customMessage.isEmpty {
-            return customMessage
-        }
+    static func finishMessage(custom: String?) -> String {
+        if let custom, !custom.isEmpty { return custom }
         return String(localized: "Timer finished")
     }
 
