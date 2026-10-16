@@ -107,6 +107,34 @@ struct NoticeSettingView: View {
                             }
                         }
                     }
+                } else if store.canRemember {
+                    // 기억 트림만 가진 사람 — 산 것을 먼저 확인시키고, 올리는 길은 그 아래 한 줄로만 둔다.
+                    HStack(spacing: 12) {
+                        Image(systemName: "bookmark.fill")
+                            .font(.title2)
+                            .foregroundStyle(.orange)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Remember")
+                                .font(.headline)
+                            Text("Your setups are remembered")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "checkmark.seal.fill")
+                            .foregroundStyle(.green)
+                    }
+                    Button {
+                        showPaywall = true
+                    } label: {
+                        HStack {
+                            Text("Upgrade to Pro")
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
                 } else {
                     Button {
                         showPaywall = true
@@ -130,6 +158,26 @@ struct NoticeSettingView: View {
                         }
                     }
 
+                    // 개편 전부터 무료로 쓰던 사람 — 안내는 한 번 뜨므로, 다시 읽을 자리를 여기 둔다.
+                    if LegacyFreeNotice.isEligible {
+                        Button {
+                            showLegacyFreeNotice = true
+                        } label: {
+                            HStack {
+                                Text("What changed for you")
+                                    .foregroundStyle(.primary)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                }
+
+                // ⚠️ 기억 트림만 산 사람에게도 보인다 — 그랜드파더링·창단 후원자가 기억을 산 뒤 재설치하면
+                //    Pro 가 사라진 채 기억만 남는데, 이 줄이 무료 칸 안에만 있으면 되살릴 길이 없었다.
+                if !store.isPro {
                     // "예전에 Pro 였는데 사라졌어요" — 앱을 지웠다 깐 그랜드파더링 사용자의 자격이
                     // UserDefaults 에만 있어 통째로 사라지던 시절이 있었다(2.2.8 에서 Keychain 에도
                     // 남기게 고쳤다). 남은 기록으로 되살릴 수 있으면 여기서 되살린다.
@@ -147,21 +195,6 @@ struct NoticeSettingView: View {
                         }
                     }
 
-                    // 개편 전부터 무료로 쓰던 사람 — 안내는 한 번 뜨므로, 다시 읽을 자리를 여기 둔다.
-                    if LegacyFreeNotice.isEligible {
-                        Button {
-                            showLegacyFreeNotice = true
-                        } label: {
-                            HStack {
-                                Text("What changed for you")
-                                    .foregroundStyle(.primary)
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                    }
                 }
             }
 

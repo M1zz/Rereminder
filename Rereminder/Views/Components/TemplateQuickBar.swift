@@ -33,8 +33,8 @@ struct TemplateQuickBar: View {
 
     @State private var showPaywall = false
 
-    /// 저장·불러오기 가능 여부. `store.isPro` 를 함께 읽어야 위 관찰이 실제로 걸린다.
-    private var canRememberSetup: Bool { store.isPro || ProGate.canRememberSetup }
+    /// 저장·불러오기 가능 여부. `store.canRemember`(기억 트림 이상)를 함께 읽어야 위 관찰이 실제로 걸린다.
+    private var canRememberSetup: Bool { store.canRemember || ProGate.canRememberSetup }
 
     @Query(sort: [SortDescriptor(\Timer.createdAt, order: .reverse)])
     private var allTemplates: [Timer]

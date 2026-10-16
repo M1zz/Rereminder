@@ -27,6 +27,12 @@
 //     것이라고 생각하지 않는데, 실제로는 그가 이 기능의 주 사용자다("세션"은 강사·트레이너가
 //     쓰는 말이고 학회 발표자에게도 통한다). 코드 식별자(`presentationMode`)는 계약이라 그대로다.
 //
+//  트림(`ProTier`, 2.3.3):
+//  - 기억(remember, $2.99) — 템플릿 저장·불러오기 + 마지막 설정 복원(`canRememberSetup`)
+//  - Pro 전체(session, $9.99) — 기억 + 세션 모드·대본·오버타임·기록
+//    기억을 산 사람은 차액(proUpgrade, $6.99)으로 올린다.
+//  ⚠️ 트림은 **기능으로** 나눈다. 개수(템플릿 몇 개)로 나누지 말 것 — 아래 Free Limits 참고.
+//
 //  5+5 trial:
 //  - presentationMode, overtimeTracking, timerHistory 에 적용
 //  - unlimitedTemplates 는 체험 없이 hard gate — 무료 몫이 아예 없다(아래 Free Limits 참고)
@@ -66,6 +72,11 @@ enum ProGate {
             case .unlimitedTemplates:     return "bookmark.fill"
             case .timerHistory:           return "chart.bar.fill"
             }
+        }
+
+        /// 이 기능을 여는 가장 낮은 트림. 페이월은 이걸 보고 어느 트림을 앞에 세울지 정한다.
+        var tier: ProTier {
+            self == .unlimitedTemplates ? .remember : .session
         }
 
         /// 5+5 trial 적용 대상인지 (slot 기반 templates 는 제외)
@@ -116,6 +127,8 @@ enum ProGate {
 
     static func evaluate(_ feature: Feature) -> GateResult {
         if StoreManager.isProUser { return .allowed }
+        // 기억 트림은 기억 기능만 연다 — 세션 모드·오버타임·기록은 여전히 Pro 전체다.
+        if StoreManager.tier >= feature.tier { return .allowed }
 
         // Trial 미지원 기능은 무조건 blocked
         guard feature.supportsTrial else {
@@ -166,7 +179,9 @@ enum ProGate {
     ///
     /// 체험(5+5)이 없는 hard gate 다. "몇 번 더 써 보세요"가 성립하지 않는 종류의 기능이라
     /// (기억은 쌓여야 값이 나오는데 체험이 끝나면 쌓인 것이 사라진다) 처음부터 명확히 가른다.
-    static var canRememberSetup: Bool { StoreManager.isProUser }
+    ///
+    /// 기억 트림(`ProTier.remember`) 이상이면 열린다 — Pro 전체를 살 필요는 없다.
+    static var canRememberSetup: Bool { StoreManager.canRememberSetup }
 
     /// 템플릿 저장 가능 여부. ⚠️ 개수는 보지 않는다 — 저장 자체가 Pro 다.
     static func canSaveTemplate(currentCount: Int = 0) -> Bool { canRememberSetup }

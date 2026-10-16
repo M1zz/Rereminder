@@ -49,7 +49,7 @@ extension TimerMainView {
         // 무료 사용자가 다시 열었을 때 "지난번엔 이랬어요" 한 줄(`RememberPitch` ①).
         // 다이얼을 바꾸는 순간 물러난다 — 그때는 이미 할 말이 늦었다.
         if let recall = screenVM.rememberRecall,
-           screenVM.isAtDefaultSetup, !store.isPro {
+           screenVM.isAtDefaultSetup, !store.canRemember {
             RememberRecallLine(config: recall) {
                 withAnimation(.easeInOut(duration: 0.2)) { screenVM.rememberRecall = nil }
             }
@@ -57,7 +57,7 @@ extension TimerMainView {
             .transition(.opacity)
         }
         // 손으로 지난번 설정에 다시 맞춘 직후의 한 줄 — 그 설정에서 벗어나면 물러난다.
-        if let reentry = screenVM.rememberReentry, !store.isPro,
+        if let reentry = screenVM.rememberReentry, !store.canRemember,
            reentry.mainSec == screenVM.normalizedCurrentConfig.mainSec,
            reentry.offsets == screenVM.normalizedCurrentConfig.offsets {
             RememberRecallLine(config: reentry, kind: .reentry) {

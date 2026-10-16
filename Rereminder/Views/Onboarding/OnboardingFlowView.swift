@@ -273,7 +273,7 @@ struct OnboardingFlowView: View {
             // ⚠️ 저장은 Pro 다(`ProGate.canRememberSetup`). 무료 사용자에게 저장 버튼을 보여 주고
             //    눌렀을 때 막거나 조용히 실패하면, 온보딩이 첫 화면부터 거짓말을 하는 셈이 된다.
             //    대신 **그런 것이 있다는 사실만** 알리고 넘어간다 — 페이월은 온보딩에 세우지 않는다.
-            if store.isPro || ProGate.canRememberSetup {
+            if store.canRemember || ProGate.canRememberSetup {
                 Button {
                     screenVM.saveCurrentAsTemplate()
                     didSaveTemplate = true

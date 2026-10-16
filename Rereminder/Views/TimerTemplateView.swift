@@ -45,7 +45,7 @@ struct TimerTemplateView: View {
     /// ⚠️ 관찰이 목적 — `ProGate` 는 static 이라 Pro 상태 변화로 다시 그려지지 않는다.
     @ObservedObject private var store = StoreManager.shared
 
-    private var canRememberSetup: Bool { store.isPro || ProGate.canRememberSetup }
+    private var canRememberSetup: Bool { store.canRemember || ProGate.canRememberSetup }
 
     let onSelect: (Timer) -> Void
 

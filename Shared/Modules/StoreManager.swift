@@ -7,7 +7,12 @@
 //  StoreKit 2 엔진(상품 로드·구매·복원·권한 추적·트랜잭션 리스너·오프라인 캐시)은
 //  이제 LeeoKit 의 LeeoStore 가 공용으로 담당한다. 이 파일은 그 위에 앱 고유의
 //  로직만 얹은 얇은 파사드로, 기존 호출부·ProGate·PaywallView 는 그대로 동작한다.
-//  - 일회성 구매 (Non-consumable, com.xa.toki.pro)
+//  - 일회성 구매 (Non-consumable) 세 개 — **트림**(`ProTier`):
+//      com.xa.toki.pro          Pro 전체(세션 모드·대본·오버타임·기록 + 기억)
+//      com.xa.toki.remember     기억(템플릿 저장·불러오기 + 마지막 설정 복원)만
+//      com.xa.toki.pro.upgrade  기억 → Pro 차액. 기억을 산 사람에게만 보인다. 권한은 pro 와 같다.
+//    ⚠️ `isProUser` 는 예전 그대로 **Pro 전체**를 뜻한다. 기억 트림은 `canRememberSetup` 만 연다.
+//       기존 구매자·그랜드파더링·창단 후원자는 전부 Pro 전체다 — 기억으로 떨어지면 신뢰 사고다.
 //  - 구매 상태 영구 저장 (UserDefaults + Keychain, key "rereminder.pro.purchased")
 //    → 논isolated 정적 isProUser 가 항상 올바른 값을 읽도록 store.hasPro 를 미러링한다.
 //  - 개발/샌드박스/맥앱 자동 Pro → unlockOverride 로 LeeoStore 에 주입
@@ -35,12 +40,22 @@ final class StoreManager: ObservableObject {
 
     enum ProductID: String, CaseIterable {
         case pro = "com.xa.toki.pro"
+        case remember = "com.xa.toki.remember"
+        case proUpgrade = "com.xa.toki.pro.upgrade"
+
+        /// 이 상품이 여는 트림.
+        var tier: ProTier { self == .remember ? .remember : .session }
     }
+
+    /// Pro 전체 권한을 주는 상품. ⚠️ `RereminderSpec.paywallConfig.entitlementIDs` 와 같아야 한다.
+    nonisolated static let fullProductIDs: Set<String> = [ProductID.pro.rawValue, ProductID.proUpgrade.rawValue]
 
     // MARK: - Published State
 
     @Published private(set) var products: [Product] = []
     @Published private(set) var isPro: Bool = false
+    /// 설정을 기억해도 되는가 — 기억 트림 또는 Pro 전체. 화면은 이 값을 관찰해 자물쇠를 푼다.
+    @Published private(set) var canRemember: Bool = false
     @Published private(set) var purchaseState: PurchaseState = .idle
     @Published private(set) var errorMessage: String?
 
@@ -62,9 +77,11 @@ final class StoreManager: ObservableObject {
     private var cancellable: AnyCancellable?
     private let keychainKey = "rereminder.pro.purchased"
     private let defaultsKey = "rereminder.pro.purchased"
+    nonisolated private static let rememberKey = "rereminder.remember.purchased"
     /// 회수 확인이 이미 돌고 있는지. `syncFromStore` 는 상품 로드·복원 등으로도 자주 불리는데,
     /// 그때마다 `Transaction.all` 을 훑으면 낭비다.
     private var isCheckingRevocation = false
+    private var isCheckingRememberRevocation = false
 
     // MARK: - TestFlight / Sandbox
 
@@ -242,9 +259,35 @@ final class StoreManager: ObservableObject {
             }
         }
 
+        // 기억 트림 — Pro 와 같은 래치 규칙. 올리는 건 바로, 내리는 건 환불을 확인했을 때만.
+        let rememberLive = store.purchasedProductIDs.contains(ProductID.remember.rawValue)
+        if !Self.isAutoProEnvironment {
+            if rememberLive {
+                if !Self.storedRememberFlag {
+                    Self.saveRememberState(true)
+                    Task { [weak self] in await self?.reportNewPurchaseIfNeeded() }
+                }
+            } else if Self.storedRememberFlag {
+                Task { [weak self] in await self?.clearStoredRememberIfRevoked() }
+            }
+        }
+
         // 화면에 보이는 값(@Published)은 최종 판정과 언제나 같아야 한다 — 여기가 갈라지면
         // 페이월은 "구매하세요"라고 하는데 기능은 열려 있는(또는 그 반대의) 상태가 된다.
         isPro = Self.isProUser || live
+        canRemember = isPro || Self.canRememberSetup || rememberLive
+    }
+
+    /// 기억 트림의 회수 확인 — `clearStoredPurchaseIfRevoked` 와 같은 근거(`Transaction.all`)로만 내린다.
+    private func clearStoredRememberIfRevoked() async {
+        guard !isCheckingRememberRevocation else { return }
+        isCheckingRememberRevocation = true
+        defer { isCheckingRememberRevocation = false }
+
+        let revocations = await Self.revocationDates(for: [ProductID.remember.rawValue])
+        guard Self.isRevoked(proTransactionRevocationDates: revocations) else { return }
+        Self.saveRememberState(false)
+        canRemember = isPro || Self.canRememberSetup
     }
 
     /// 회수(환불)가 확인된 경우에만 저장된 구매 기록을 내린다.
@@ -257,18 +300,20 @@ final class StoreManager: ObservableObject {
         isCheckingRevocation = true
         defer { isCheckingRevocation = false }
 
-        let revocations = await Self.proTransactionRevocationDates()
+        // Pro 전체는 pro·업그레이드 어느 쪽으로든 얻는다 — 둘을 함께 봐야 "살아 있는 것이 하나라도"가 맞다.
+        let revocations = await Self.revocationDates(for: Self.fullProductIDs)
         guard Self.isRevoked(proTransactionRevocationDates: revocations) else { return }
         savePurchaseState(false)
         isPro = Self.isProUser || store.hasPro
+        canRemember = isPro || Self.canRememberSetup
     }
 
-    /// pro 상품 트랜잭션의 회수 시각 목록 (살아 있으면 nil). StoreKit 접촉은 여기까지다.
-    nonisolated private static func proTransactionRevocationDates() async -> [Date?] {
+    /// 주어진 상품들의 트랜잭션 회수 시각 목록 (살아 있으면 nil). StoreKit 접촉은 여기까지다.
+    nonisolated private static func revocationDates(for productIDs: Set<String>) async -> [Date?] {
         var dates: [Date?] = []
         for await result in Transaction.all {
             guard case .verified(let transaction) = result,
-                  transaction.productID == ProductID.pro.rawValue else { continue }
+                  productIDs.contains(transaction.productID) else { continue }
             dates.append(transaction.revocationDate)
         }
         return dates
@@ -300,7 +345,7 @@ final class StoreManager: ObservableObject {
         isReportingPurchase = true
         defer { isReportingPurchase = false }
 
-        for transaction in await Self.proPurchases() {
+        for transaction in await Self.ownedPurchases() {
             let key = Self.reportedPurchaseKeyPrefix + String(transaction.originalID)
             guard Self.shouldReportPurchase(
                 purchaseDate: transaction.purchaseDate,
@@ -309,7 +354,8 @@ final class StoreManager: ObservableObject {
             ) else { continue }
             // Keychain 이라 재설치해도 같은 결제를 다시 세지 않는다.
             KeychainHelper.save(key: key, value: true)
-            AnalyticsManager.log(.purchaseCompleted(productId: ProductID.pro.rawValue))
+            // 어느 트림을 샀는지가 이벤트에 그대로 실린다(`purchase_completed:<상품 ID>`).
+            AnalyticsManager.log(.purchaseCompleted(productId: transaction.productID))
         }
     }
 
@@ -332,15 +378,16 @@ final class StoreManager: ObservableObject {
         return now.timeIntervalSince(purchaseDate) < newPurchaseWindow
     }
 
-    /// 살아 있는 pro 트랜잭션들. StoreKit 접촉은 여기까지다.
-    nonisolated private static func proPurchases() async
-        -> [(originalID: UInt64, purchaseDate: Date, isOwnPurchase: Bool)] {
-        var found: [(originalID: UInt64, purchaseDate: Date, isOwnPurchase: Bool)] = []
+    /// 살아 있는 이 앱 상품(트림 셋)의 트랜잭션들. StoreKit 접촉은 여기까지다.
+    nonisolated private static func ownedPurchases() async
+        -> [(productID: String, originalID: UInt64, purchaseDate: Date, isOwnPurchase: Bool)] {
+        let ids = Set(ProductID.allCases.map(\.rawValue))
+        var found: [(productID: String, originalID: UInt64, purchaseDate: Date, isOwnPurchase: Bool)] = []
         for await result in Transaction.currentEntitlements {
             guard case .verified(let transaction) = result,
-                  transaction.productID == ProductID.pro.rawValue,
+                  ids.contains(transaction.productID),
                   transaction.revocationDate == nil else { continue }
-            found.append((transaction.originalID, transaction.purchaseDate,
+            found.append((transaction.productID, transaction.originalID, transaction.purchaseDate,
                           transaction.ownershipType == .purchased))
         }
         return found
@@ -374,11 +421,19 @@ final class StoreManager: ObservableObject {
 
         AnalyticsManager.log(.purchaseStarted(productId: productID.rawValue))
 
+        if store.products.first(where: { $0.id == productID.rawValue }) == nil {
+            await store.loadProducts()
+        }
         let success: Bool
         if let product = store.products.first(where: { $0.id == productID.rawValue }) {
             success = await store.purchase(product)
         } else {
-            success = await store.purchasePrimary()
+            // ⚠️ 상품을 못 찾으면 **다른 상품을 대신 사게 하지 않는다.** `purchasePrimary()` 는 로드된
+            //    첫 상품을 사는데, 상품이 셋이 된 뒤로는 Pro 만 빠진 경우 그게 기억($2.99)일 수 있고,
+            //    반대로 기억을 누른 사람에게 $9.99 결제창이 뜰 수도 있다.
+            purchaseState = .failed
+            errorMessage = String(localized: "Couldn't load this purchase. Please try again.")
+            return
         }
 
         if success {
@@ -416,7 +471,7 @@ final class StoreManager: ObservableObject {
         Self.recoverLostEntitlementIfPossible()
         syncFromStore()
 
-        if isPro {
+        if isPro || canRemember {
             purchaseState = .restored
             AnalyticsManager.log(.purchaseRestored)
         } else {
@@ -435,6 +490,30 @@ final class StoreManager: ObservableObject {
         // Keychain (앱 삭제 후 재설치에도 유지)
         KeychainHelper.save(key: keychainKey, value: purchased)
     }
+
+    nonisolated private static func saveRememberState(_ purchased: Bool) {
+        UserDefaults.standard.set(purchased, forKey: rememberKey)
+        KeychainHelper.save(key: rememberKey, value: purchased)
+    }
+}
+
+// MARK: - 트림
+
+/// 이 설치가 어디까지 열려 있나. **값이 커질수록 위다** — 위 트림은 아래 트림을 전부 포함한다.
+enum ProTier: Int, Comparable, CaseIterable {
+    case free = 0
+    /// 기억 — 템플릿 저장·불러오기 + 마지막 설정 복원.
+    case remember = 1
+    /// Pro 전체 — 기억 + 세션 모드·대본·오버타임·기록. 기존 구매자·평생 무료·창단 후원자가 여기다.
+    case session = 2
+
+    static func < (lhs: ProTier, rhs: ProTier) -> Bool { lhs.rawValue < rhs.rawValue }
+
+    /// 판정 (순수 함수 — 테스트 대상). Pro 전체 근거가 하나라도 있으면 기억 구매 여부와 무관하게 위다.
+    static func resolve(isFullPro: Bool, ownsRemember: Bool) -> ProTier {
+        if isFullPro { return .session }
+        return ownsRemember ? .remember : .free
+    }
 }
 
 // MARK: - Convenience
@@ -445,6 +524,20 @@ extension StoreManager {
         products
             .first { $0.id == ProductID.pro.rawValue }?
             .displayPrice ?? ""
+    }
+
+    /// 상품 가격 문자열. 상품이 아직 안 왔으면(또는 App Store Connect 에 없으면) nil.
+    func price(of id: ProductID) -> String? {
+        products.first { $0.id == id.rawValue }?.displayPrice
+    }
+
+    /// 기억 트림을 팔 수 있는가 — 상품이 실제로 로드됐을 때만. ⚠️ App Store Connect 에 상품을
+    /// 만들기 전에 이 빌드가 나가도 페이월은 예전처럼 Pro 한 장만 보여 준다.
+    var offersRememberTier: Bool { price(of: .remember) != nil }
+
+    /// Pro 를 살 때 실제로 결제할 상품 — 기억을 이미 가졌고 업그레이드 상품이 있으면 차액 상품.
+    var proOffer: ProductID {
+        (canRemember && !isPro && price(of: .proUpgrade) != nil) ? .proUpgrade : .pro
     }
 
     /// Pro 제품 이름
@@ -478,6 +571,19 @@ extension StoreManager {
     /// 빠른 Pro 체크 (저장된 값, 네트워크 불필요)
     /// nonisolated — Keychain/UserDefaults만 읽으므로 어디서든 호출 가능
     /// TestFlight/Sandbox 환경과 기존 사용자(그랜드파더링)는 항상 true 를 반환
+    /// 기억 트림 구매 기록(래치). Pro 전체와 따로 센다.
+    nonisolated static var storedRememberFlag: Bool {
+        KeychainHelper.load(key: rememberKey) ?? UserDefaults.standard.bool(forKey: rememberKey)
+    }
+
+    /// 이 설치의 트림.
+    nonisolated static var tier: ProTier {
+        ProTier.resolve(isFullPro: isProUser, ownsRemember: storedRememberFlag)
+    }
+
+    /// **설정을 기억해도 되는가** — 기억 트림 이상. `ProGate.canRememberSetup` 의 근거.
+    nonisolated static var canRememberSetup: Bool { tier >= .remember }
+
     nonisolated static var isProUser: Bool {
         if isAutoProEnvironment || isGrandfathered { return true }
         // 창단 후원자 표식은 결제·그랜드파더링에만 주어진다 — 앱을 지워도 남으므로 마지막 근거가 된다.

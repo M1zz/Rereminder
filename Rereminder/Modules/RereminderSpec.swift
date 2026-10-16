@@ -24,13 +24,17 @@ enum RereminderSpec: LeeoAppSpec {
         appIdentifier: "com.xa.toki"
     )
 
-    /// 인앱 결제(페이월) — 단일 비소비성 상품(com.xa.toki.pro).
+    /// 인앱 결제(페이월) — 비소비성 상품 셋, 트림으로 나뉜다(`ProTier`, `StoreManager.ProductID`).
+    /// ⚠️ **`entitlementIDs` 는 Pro 전체를 주는 상품만이다** — 여기에 기억(remember)을 넣으면
+    ///    LeeoStore 의 `hasPro` 가 기억 구매자를 Pro 전체로 본다. 기억은 `StoreManager` 가 따로 센다.
+    ///    배열 순서가 대표 상품 순서다 — `purchasePrimary` 가 첫 상품(pro)을 산다.
     /// cacheSuiteName: 앱 그룹(group.leeo.toki)에 권한을 캐시해 위젯/확장·오프라인에서도
     /// 마지막으로 확인된 Pro 상태로 즉시 잠금 해제한다.
     /// ⚠️ 상품 ID 는 App Store Connect 계약이다 — 변경 금지.
     /// 앱 내부에서는 언래핑이 필요 없는 이 비옵셔널 원본을 쓸 것 (StoreManager 등).
     static let paywallConfig = LeeoPaywallConfig(
-        productIDs: ["com.xa.toki.pro"],
+        productIDs: ["com.xa.toki.pro", "com.xa.toki.remember", "com.xa.toki.pro.upgrade"],
+        entitlementIDs: ["com.xa.toki.pro", "com.xa.toki.pro.upgrade"],
         termsURL: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"),
         privacyURL: URL(string: "https://m1zz.github.io/Rereminder/privacy.html"),
         cacheSuiteName: "group.leeo.toki"
@@ -50,6 +54,7 @@ enum RereminderSpec: LeeoAppSpec {
     /// 무엇을 막는지는 이 앱의 `ProGate` 가 정하므로 LeeoKit 의 게이트 정책은 비워 둔다.
     static let monetization = LeeoMonetization.freemium(
         LeeoPurchaseConfig(productIDs: paywallConfig.productIDs,
+                           entitlementIDs: paywallConfig.entitlementIDs,
                            cacheSuiteName: "group.leeo.toki")
     )
 }
