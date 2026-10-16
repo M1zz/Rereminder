@@ -9,6 +9,176 @@ DeployBar 가 배포할 때 아래 버전 절의 언어별 문구를 읽어 스�
 사용자에게 무엇이 좋아졌는지만 쓴다. 내부 구조나 빌드 설정 이야기는 쓰지 않는다.
 언어마다 다시 쓴다. 기계번역하지 말고 항목 수와 순서만 맞춘다.
 
+## 2.3.3
+
+### 앱스토어 (한국어)
+
+설정만 기억해 주는 기억 요금제가 생겼습니다.
+기억을 쓰던 분은 차액만 내고 Pro로 올릴 수 있어요.
+세션 모드 알림이 이제 한국어로 나옵니다.
+결제 화면을 알아보기 쉽게 다듬었습니다.
+
+### App Store (English)
+
+New Remember plan keeps your setups.
+With Remember, Pro costs the difference.
+Session alerts read more naturally.
+A clearer, simpler upgrade screen.
+
+### App Store (日本語)
+
+設定だけを覚える記憶プランが登場しました。
+記憶をお持ちの方は差額だけでProにできます。
+セッションの通知が日本語で届くようになりました。
+購入画面をわかりやすくしました。
+
+### 앱스토어 (중국어 간체)
+
+新增只记住设置的记忆方案。
+已拥有记忆的用户补差价即可升级 Pro。
+分段模式的提醒现在以中文显示。
+购买页面更清楚易懂。
+
+### 앱스토어 (중국어 번체)
+
+新增只記住設定的記憶方案。
+已擁有記憶的用戶補差價即可升級 Pro。
+分段模式的提醒現在以中文顯示。
+購買頁面更清楚易懂。
+
+### App Store (Deutsch)
+
+Neuer Plan Merken sichert deine Setups.
+Mit Merken kostet Pro nur die Differenz.
+Session-Hinweise jetzt auf Deutsch.
+Der Kaufbildschirm ist klarer.
+
+### App Store (Français)
+
+Nouveau forfait Mémoire pour vos timers.
+Avec Mémoire, Pro coûte la différence.
+Les alertes de séance sont en français.
+Un écran d’achat plus clair.
+
+### App Store (Español)
+
+Nuevo plan Memoria guarda tus ajustes.
+Con Memoria, Pro cuesta la diferencia.
+Avisos de sesión ya en español.
+Una pantalla de compra más clara.
+
+### App Store (Português do Brasil)
+
+Novo plano Memória lembra seus ajustes.
+Com o Memória, o Pro sai pela diferença.
+Alertas de sessão agora em português.
+Tela de compra mais clara.
+
+### 앱스토어 (포르투갈어(포르투갈))
+
+Novo plano Memória guarda as definições.
+Com o Memória, o Pro custa a diferença.
+Alertas de sessão agora em português.
+Ecrã de compra mais claro.
+
+### App Store (Italiano)
+
+Nuovo piano Memoria per i tuoi timer.
+Da Memoria a Pro paghi la differenza.
+Avvisi di sessione ora in italiano.
+Schermata di acquisto più chiara.
+
+### 앱스토어 (러시아어)
+
+Новый план Память сохраняет настройки.
+С Памятью Pro стоит только разницу.
+Уведомления этапов теперь на русском.
+Экран покупки стал понятнее.
+
+### 앱스토어 (체코어)
+
+Nový plán Paměť si pamatuje nastavení.
+S Pamětí doplatíte za Pro jen rozdíl.
+Upozornění sezení jsou nyní česky.
+Přehlednější obrazovka nákupu.
+
+### 앱스토어 (덴마크어)
+
+Ny Husk-plan gemmer dine opsætninger.
+Med Husk koster Pro kun forskellen.
+Sessionsbeskeder vises nu på dansk.
+En tydeligere købsskærm.
+
+### 앱스토어 (그리스어)
+
+Νέο πλάνο Μνήμη για τις ρυθμίσεις σας.
+Με τη Μνήμη πληρώνετε μόνο τη διαφορά.
+Ειδοποιήσεις συνεδρίας στα ελληνικά.
+Πιο καθαρή οθόνη αγοράς.
+
+### 앱스토어 (핀란드어)
+
+Uusi Muisti-taso tallentaa asetuksesi.
+Muistilla Pro maksaa vain erotuksen.
+Session ilmoitukset nyt suomeksi.
+Selkeämpi ostonäkymä.
+
+### 앱스토어 (인도네시아어)
+
+Paket baru Ingat menyimpan pengaturan.
+Punya Ingat? Pro cukup bayar selisih.
+Notifikasi sesi kini dalam Indonesia.
+Layar pembelian lebih jelas.
+
+### 앱스토어 (Norsk bokmål)
+
+Ny Husk-plan lagrer oppsettene dine.
+Med Husk koster Pro bare mellomlegget.
+Øktvarsler vises nå på norsk.
+En tydeligere kjøpsskjerm.
+
+### 앱스토어 (네덜란드어)
+
+Nieuw pakket Onthouden bewaart setups.
+Met Onthouden kost Pro het verschil.
+Sessiemeldingen nu in het Nederlands.
+Een duidelijker aankoopscherm.
+
+### 앱스토어 (폴란드어)
+
+Nowy pakiet Pamięć zapisze ustawienia.
+Z Pamięcią Pro kosztuje tylko różnicę.
+Powiadomienia sesji są teraz po polsku.
+Czytelniejszy ekran zakupu.
+
+### 앱스토어 (스웨덴어)
+
+Nya planen Minne sparar dina upplägg.
+Med Minne betalar du mellanskillnaden.
+Sessionsaviseringar nu på svenska.
+En tydligare köpskärm.
+
+### 앱스토어 (태국어)
+
+แผนจดจำใหม่ ช่วยจำชุดตั้งค่าของคุณ
+มีจดจำแล้ว อัปเกรด Pro จ่ายแค่ส่วนต่าง
+การแจ้งเตือนเซสชันเป็นภาษาไทยแล้ว
+หน้าซื้อดูง่ายขึ้น
+
+### 앱스토어 (튀르키예어)
+
+Yeni Hafıza planı ayarlarını saklar.
+Hafıza varsa Pro için farkı ödersin.
+Oturum bildirimleri artık Türkçe.
+Daha anlaşılır satın alma ekranı.
+
+### 앱스토어 (베트남어)
+
+Gói Ghi nhớ mới lưu lại cài đặt của bạn.
+Có Ghi nhớ, lên Pro chỉ trả chênh lệch.
+Thông báo phiên nay bằng tiếng Việt.
+Màn hình mua rõ ràng hơn.
+
 ## 2.3.2
 
 ### 앱스토어 (한국어)

@@ -358,6 +358,38 @@ Pro 가 파는 한 문장이 "앱이 설정을 기억한다"인데 무료 사용
   합산돼 지표가 조용히 틀어진다. `UsageMetrics` 의 `alertLimitHits`·`graceGrants` 도 같은 이유로
   **늘지 않지만 남겨 둔** 키다.
 
+### 가격 트림 — 요구하는 금액은 방금 겪은 불편의 크기를 따라간다 (ProTier)
+`Shared/Modules/StoreManager.swift`(`ProTier`·`ProductID`) + `ProGate.Feature.tier` + `PaywallView`.
+
+예전에는 $9.99 평생 Pro 한 장뿐이라 "지난번 설정이 사라졌다"는 작은 불편에도 세션 모드까지 든
+전체 패키지를 내밀었다. 그래서 **기능으로** 두 트림을 나눴다(2026-10-16):
+
+| 트림 | 상품 | 가격 | 여는 것 |
+|---|---|---|---|
+| 기억 `.remember` | `com.xa.toki.remember` | $2.99 | 템플릿 저장·불러오기 + 마지막 설정 복원 |
+| Pro `.session` | `com.xa.toki.pro` | $9.99 | 기억 + 세션 모드·대본·오버타임·기록 |
+| (업그레이드) | `com.xa.toki.pro.upgrade` | $6.99 | 기억 구매자만 보는 차액 상품. 권한은 Pro 와 같다 |
+
+- ⚠️ **`StoreManager.isProUser` 는 예전 그대로 Pro 전체다.** 기억은 `canRememberSetup`·`tier` 로만 본다.
+  기존 구매자·그랜드파더링·창단 후원자는 전부 `.session` 이다 — 기억으로 떨어지면 신뢰 사고다.
+- ⚠️ **`RereminderSpec.paywallConfig.entitlementIDs` 에 기억을 넣지 말 것.** LeeoStore 의 `hasPro` 가
+  기억 구매자를 Pro 전체로 본다(`ProTierTests.test_rememberIsNotAFullEntitlement`).
+- 기억 구매도 Pro 와 **같은 래치**다(Keychain `rereminder.remember.purchased`, 환불을 확인했을 때만 내린다).
+- 게이트를 읽는 뷰는 `store.canRemember || ProGate.canRememberSetup` 로 읽는다(기억 자리) —
+  `store.isPro` 로 읽으면 기억을 산 사람에게 자물쇠가 남는다.
+- **페이월은 들어온 자리의 트림을 앞에 세운다** — 기능이 여는 트림(`Feature.tier`), 또는 부르는 쪽이
+  넘긴 `focus`. 기억 자리(다시 연 순간·반복 감지·잠긴 템플릿)는 기억이, 세션 자리(세션 모드·기록·
+  **전날 안내**)는 Pro 가 먼저다. 전날 안내는 기능은 기억이지만 사람은 세션 운영자라 `focus: .session`.
+- 맨 위 한 줄(`PaywallReceipt`)은 기능 목록보다 먼저 **이 사람이 해 온 것**을 말한다
+  (완주 3회·세션 2회 미만이면 띄우지 않는다 — 작은 숫자는 영수증이 아니라 놀림이다).
+- ⚠️ 기억 상품이 로드되지 않으면(App Store Connect 에 없으면) 페이월은 예전처럼 Pro 한 장이다.
+  기억·업그레이드 상품이 없다고 **대표 상품(Pro)을 대신 사게 하지 않는다**(`purchase(_:)`).
+- 지표: `purchase_completed:<상품 ID>` 가 어느 트림인지 말한다. 스냅샷 `flag.isPaid` 는 **어느 쪽이든
+  돈을 냈다**, `flag.paidRemember` 는 기억만 산 설치(= Pro 로 올릴 후보).
+- ⚠️ **구독을 넣지 말 것**(지금은). 페이월이 "한 번 결제, 평생 사용"을 약속하고 창단 후원자 약속도 그 위에
+  서 있다. 구독은 스튜디오·기관용 트림이 생길 때 그쪽에서만 검토한다.
+- 사람이 할 일(상품 생성·현지화): `docs/OPERATIONS_CHECKLIST.md` 8번. 테스트: `ProTierTests` (14개)
+
 ### 평생 무료(그랜드파더링)도 래치다 — 재설치로 사라지면 안 된다
 ⚠️ **2.2.8 이전에는 그랜드파더링 자격이 `UserDefaults` 에만 있었다.** 앱을 지웠다 깔면 자격이
 사라지고, 재판정에 쓰는 흔적(`selectedThemeID`·`pushEnabled`·`timerCompletionCount`)도 같은 곳에
@@ -1367,6 +1399,30 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - [ ] 전체 앱 유도 `SKOverlay` 표시 확인
 - [ ] 호출 URL `?minutes=N` 으로 시작 시간이 반영되는지
 
+## 아이폰 듀오 (접히는 아이폰)
+
+`Rereminder/Views/Fold/` — 접힘 셈(`FoldLayout`)·시트와 알림창 비키기(`FoldPresentationGuard`)는
+**클립키보드에서 옮겨 온 것**이다(2026-10-17). 두 앱이 같은 규칙을 따라야 하므로 고칠 때는 양쪽을 함께 보고,
+언젠가 LeeoKit 으로 합친다. 규칙의 근거는 클립키보드 `DesignSystem/FoldLayout.swift` 머리 주석.
+
+- **접으면 지금 화면 그대로다.** 바깥 화면(466×678pt)·보통 아이폰·맥은 `FoldLayout.single` 이라 아무것도 바뀌지 않는다.
+- 펴면(안쪽 화면 669×951pt) **다이얼 | 계획**: 다이얼 화면(`NavigationStack` + 하단 막대 통째로)이 고르는 쪽
+  판(가로면 왼쪽, 세로면 아래)에, `FoldTimerCompanion` 이 결과 쪽 판(오른쪽, 위)에 선다(`TimerUnifiedView.mainContent`).
+  - 대기 중: 구간마다 시작 → 끝 · 길이 · 종마다 **실제로 나갈 문구**(`Timer.prealertMessage`). 세션 모드면 구간을 눌러 그 자리에서 대본을 쓴다.
+  - 실행 중: 판 폭을 다 쓰는 남은 시간 + 지금 구간 + 구간별 카운트다운. 반쯤 접어 발표대에 세우면 이 판이 선다.
+    구간이 바뀌면 바탕이 그 구간 색으로 물든다.
+  - ⚠️ 그 판이 서 있는 동안 다이얼 쪽은 구간 칩(`SectionLengthBar`)·카운트다운을 그리지 않는다(같은 것을 두 번 그리지 않는다).
+- ⚠️ **접힌 선 앞뒤 24pt 에는 아무것도 두지 않는다.** 다이얼·배지는 `TimerMainView` 의 `GeometryReader` 가 판 크기로
+  재므로 저절로 판 안에 들고, 하단 막대는 `NavigationStack` 째 판에 갇힌다. 시트·알림창은 `FoldSheetGuard`·`FoldAlertRouter`
+  가 띄우는 길에서 붙잡는다. 창 가득 덮는 화면(온보딩·타이머 종료)은 `.foldConfined()`.
+- ⚠️ 펴고 접는 순간 다이얼 화면을 다시 만든다(들어가 있던 설정은 처음으로). 타이머 상태는 `screenVM` 에 있어 이어진다.
+- ⚠️ **Xcode 27.1 로 빌드해야 듀오 배치가 켜진다.** 27.0 빌드는 듀오에서 호환 틀(아이폰 크기)로 뜬다.
+- 확인(개발용, DEBUG): `-FoldPretend` = 아이폰 시뮬레이터 창을 세로로 편 화면으로 본다.
+  가로는 아이패드 시뮬레이터에서 `xcodebuild … TARGETED_DEVICE_FAMILY=1,2` 로 빌드하고 `-FoldPreview -FoldPreviewLandscape`
+  (⚠️ 그 설정을 pbxproj 에 넣지 말 것 — 아이패드 스크린샷 요구가 생긴다. 위 "Mac" 절). 27.x 에는 시뮬레이터 창 앱이 없어 회전·펼치기를 명령줄로 못 한다.
+- 테스트: `FoldLayoutTests`(7, 같은 파일에 `FoldPlanMessageTests` 1)·`FoldPresentationGuardTests`(3)
+- 아직 안 한 것: 실기기 확인, 설정 목록 | 자세히, 펼친 채 바깥 화면을 발표자 쪽 타이머로(API 확인 필요)
+
 ## Mac (Mac Catalyst)
 
 메인 앱은 **Mac Catalyst 로 함께 빌드된다**(`SUPPORTS_MACCATALYST = YES`,
@@ -1570,6 +1626,18 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
 ```
 
 ## 버전 히스토리
+
+### v2.3.3 (2026-10-17)
+**가격 트림** — 기억($2.99) · Pro($9.99) · 기억→Pro 차액($6.99). 위 "가격 트림" 절.
+- 페이월이 들어온 자리의 트림을 앞에 세우고, 맨 위에 "지금까지 한 것" 한 줄. 기억을 산 직후에는 닫힌다
+  (안 닫으면 같은 화면이 곧바로 $6.99 업그레이드를 권한다)
+- 상품을 못 찾으면 다른 상품을 대신 사지 않는다(`purchasePrimary` 를 쓰지 않는다)
+- **아이폰 듀오** 대응(위 "아이폰 듀오" 절). ⚠️ 이 버전은 Xcode 27.0 빌드라 듀오에서 펼친 배치가 **아직 켜지지 않는다**
+- 세션 모드 알림 문구(`"도입 complete"`·`"Presentation complete"`)가 번역 없이 영어로 나가던 것 수정
+- 페이월 비교표 기능 이름이 번역되지 않던 것 수정(`Text(String)` 은 번역하지 않는다)
+- ⚠️ 상품 ID 가 늘어 LeeoStore 의 권한 캐시 키(상품 ID 해시)가 바뀌었다 — 업데이트 직후 `store.hasPro` 는
+  그랜드파더링 사용자에게 false 다. 앱 판정(`isProUser`)은 Keychain 을 보므로 영향 없음
+- 릴리즈 노트: `docs/release-notes-2.3.3-<24개 언어>.md`
 
 ### v2.3.1 (2026-10-05)
 **"화면을 끄면 잠금 화면이 울리지 않는다" 제보** — 알림 권한이 꺼진 사람이 그걸 알 길이 없었다.
