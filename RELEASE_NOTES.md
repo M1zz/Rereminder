@@ -9,6 +9,176 @@ DeployBar 가 배포할 때 아래 버전 절의 언어별 문구를 읽어 스�
 사용자에게 무엇이 좋아졌는지만 쓴다. 내부 구조나 빌드 설정 이야기는 쓰지 않는다.
 언어마다 다시 쓴다. 기계번역하지 말고 항목 수와 순서만 맞춘다.
 
+## 2.3.4
+
+### 앱스토어 (한국어)
+
+기억이나 Pro로 열린 혜택을 한눈에 볼 수 있어요.
+받은 코드를 앱 안에서 바로 쓸 수 있습니다.
+설정에서 앞으로 만들 기능을 볼 수 있어요.
+음성 제어로 모든 버튼을 부를 수 있어요.
+
+### App Store (English)
+
+See what Remember or Pro unlocks.
+Redeem codes right inside the app.
+See what is coming next in Settings.
+Voice Control now knows every button.
+
+### App Store (日本語)
+
+記憶やProで使える特典をひと目で確認できます。
+受け取ったコードをアプリ内で使えます。
+今後追加する機能を設定で見られます。
+音声コントロールですべてのボタンを操作できます。
+
+### 앱스토어 (중국어 간체)
+
+一眼看清记忆或 Pro 为你解锁的功能。
+可在 App 内直接兑换代码。
+在设置中查看即将推出的功能。
+语音控制可以操作每个按钮。
+
+### 앱스토어 (중국어 번체)
+
+一眼看清記憶或 Pro 為你解鎖的功能。
+可在 App 內直接兌換代碼。
+在設定中查看即將推出的功能。
+語音控制可以操作每個按鈕。
+
+### App Store (Deutsch)
+
+Sieh, was Merken oder Pro freischaltet.
+Codes direkt in der App einlösen.
+Was kommt, zeigen die Einstellungen.
+Die Sprachsteuerung kennt jede Taste.
+
+### App Store (Français)
+
+Voyez ce que Mémoire ou Pro débloque.
+Utilisez vos codes dans l’app.
+Ce qui arrive bientôt, dans Réglages.
+Le Contrôle vocal connaît chaque bouton.
+
+### App Store (Español)
+
+Mira lo que desbloquean Memoria o Pro.
+Canjea códigos dentro de la app.
+Descubre lo que viene en Ajustes.
+Control por voz reconoce cada botón.
+
+### App Store (Português do Brasil)
+
+Veja o que o Memória ou o Pro libera.
+Resgate códigos dentro do app.
+Veja o que vem por aí em Ajustes.
+Controle por Voz reconhece cada botão.
+
+### 앱스토어 (포르투갈어(포르투갈))
+
+Veja os benefícios do Memória e do Pro.
+Resgate códigos dentro da app.
+Veja o que aí vem em Definições.
+O Controlo por voz reconhece cada botão.
+
+### App Store (Italiano)
+
+Scopri cosa sbloccano Memoria o Pro.
+Riscatta i codici nell’app.
+Le novità in arrivo in Impostazioni.
+Controllo vocale conosce ogni tasto.
+
+### 앱스토어 (러시아어)
+
+Смотрите, что открывают Память и Pro.
+Коды можно активировать в приложении.
+Планы на будущее теперь в настройках.
+Управление голосом знает все кнопки.
+
+### 앱스토어 (체코어)
+
+Podívejte se, co odemyká Paměť a Pro.
+Kódy uplatníte přímo v aplikaci.
+Co chystáme, najdete v Nastavení.
+Ovládání hlasem zná každé tlačítko.
+
+### 앱스토어 (덴마크어)
+
+Se, hvad Husk eller Pro låser op.
+Indløs koder direkte i appen.
+Se kommende funktioner i Indstillinger.
+Stemmestyring kender alle knapper.
+
+### 앱스토어 (그리스어)
+
+Δείτε τι ξεκλειδώνει η Μνήμη ή το Pro.
+Εξαργυρώστε κωδικούς στην εφαρμογή.
+Τα σχέδιά μας τώρα στις Ρυθμίσεις.
+Ο Φωνητικός έλεγχος ξέρει κάθε κουμπί.
+
+### 앱스토어 (핀란드어)
+
+Näe, mitä Muisti tai Pro avaa.
+Lunasta koodit suoraan sovelluksessa.
+Tulevat ominaisuudet ovat asetuksissa.
+Puheohjaus tuntee jokaisen painikkeen.
+
+### 앱스토어 (인도네시아어)
+
+Lihat apa yang dibuka Ingat atau Pro.
+Tukar kode langsung di dalam app.
+Lihat fitur mendatang di Pengaturan.
+Kontrol Suara mengenali semua tombol.
+
+### 앱스토어 (Norsk bokmål)
+
+Se hva Husk eller Pro låser opp.
+Løs inn koder rett i appen.
+Se hva som kommer i Innstillinger.
+Stemmestyring kjenner alle knappene.
+
+### 앱스토어 (네덜란드어)
+
+Zie wat Onthouden of Pro ontgrendelt.
+Wissel codes in binnen de app.
+Bekijk wat er komt in Instellingen.
+Stembediening kent elke knop.
+
+### 앱스토어 (폴란드어)
+
+Zobacz, co odblokowuje Pamięć lub Pro.
+Realizuj kody prosto w aplikacji.
+Plany na przyszłość w Ustawieniach.
+Sterowanie głosem zna każdy przycisk.
+
+### 앱스토어 (스웨덴어)
+
+Se vad Minne eller Pro låser upp.
+Lös in koder direkt i appen.
+Se vad som är på väg i Inställningar.
+Röststyrning känner alla knappar.
+
+### 앱스토어 (태국어)
+
+ดูได้ว่าจดจำหรือ Pro ปลดล็อกอะไรให้คุณ
+ใช้โค้ดได้ในแอปเลย
+ดูฟีเจอร์ที่กำลังจะมาได้ในการตั้งค่า
+การควบคุมด้วยเสียงรู้จักทุกปุ่ม
+
+### 앱스토어 (튀르키예어)
+
+Hafıza veya Pro ile açılanları gör.
+Kodları doğrudan uygulamada kullan.
+Sıradaki özellikleri Ayarlar'da gör.
+Sesle Denetim her düğmeyi tanıyor.
+
+### 앱스토어 (베트남어)
+
+Xem Ghi nhớ hay Pro mở khóa những gì.
+Đổi mã ngay trong ứng dụng.
+Xem tính năng sắp ra mắt trong Cài đặt.
+Khẩu lệnh nhận biết mọi nút.
+
 ## 2.3.3
 
 ### 앱스토어 (한국어)

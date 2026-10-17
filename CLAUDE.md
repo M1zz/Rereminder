@@ -390,6 +390,23 @@ Pro 가 파는 한 문장이 "앱이 설정을 기억한다"인데 무료 사용
   서 있다. 구독은 스튜디오·기관용 트림이 생길 때 그쪽에서만 검토한다.
 - 사람이 할 일(상품 생성·현지화): `docs/OPERATIONS_CHECKLIST.md` 8번. 테스트: `ProTierTests` (14개)
 
+### 내 혜택 — 산 사람에게 산 값이 보이게 (ProBenefitsView)
+`Rereminder/Views/ProBenefitsView.swift`. 설정 ▸ Pro 칸의 **Pro / 기억 행**을 누르면 열린다(무료 행은 그대로).
+- ① 한 줄 요약(무료 한도를 넘어 쓰는 만큼) ② **무료와 비교** — 저장한 설정(무료 `ProGate.freeSavedSetups` = 0,
+  시드 제외), Pro 면 세션 모드 실행 수(무료 체험 `TrialCounter.secondStageLimit`) ③ 열린 기능과 그 쓰임새
+  (마지막 설정 복원·구간 대본 수·오버타임·기록 수) ④ **기능 전체 보기** = 페이월 비교표를 그대로 연다.
+- ⚠️ 한도는 게이트와 **같은 상수**를 읽는다. 목록을 여기 따로 적지 않는다 — 기억 트림의 "Pro 에서 더"도
+  `ProGate.Feature` 에서 뽑는다. 업그레이드는 기존 페이월(`focus: .session`, 차액 상품)로 간다.
+- 페이월은 이미 Pro 인 사람에게 파는 말을 하지 않는다(부제 "모든 Pro 기능이 열려 있어요", 약속 캡슐 숨김).
+- **코드 사용**(`.offerCodeRedemption`)은 설정 ▸ Pro 칸(무료·기억)과 페이월에 있다. 시트가 닫히면 바로 권한을 다시 읽는다.
+- 테스트: `ReleaseReadinessTests`
+
+### 크래시 루프 · 새로 생긴 것
+- `RereminderApp.launchGuard`(LeeoCrashLoopGuard): 두 번 연속 끝나지 못하면 **세이프 모드** — 기기 간 동기화를 쉬고
+  돌던 타이머·마지막 설정을 되살리지 않는다(토스트로 알림). 첫 화면이 3초 살면 성공.
+- `WhatsNewView`: 업데이트한 사람에게 한 번(처음 온 사람은 본 것으로만 표시). 혜택 변경 안내가 뜨는 차례면 양보.
+  **내용을 바꾸면 `WhatsNewContent.version` 도 올릴 것.** 설정 ▸ Help ▸ What's New 에서 다시 연다.
+
 ### 평생 무료(그랜드파더링)도 래치다 — 재설치로 사라지면 안 된다
 ⚠️ **2.2.8 이전에는 그랜드파더링 자격이 `UserDefaults` 에만 있었다.** 앱을 지웠다 깔면 자격이
 사라지고, 재판정에 쓰는 흔적(`selectedThemeID`·`pushEnabled`·`timerCompletionCount`)도 같은 곳에
