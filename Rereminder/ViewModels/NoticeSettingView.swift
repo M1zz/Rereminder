@@ -8,6 +8,7 @@
 import SwiftUI
 import UserNotifications
 import LeeoKit
+import StoreKit
 
 struct NoticeSettingView: View {
     /// 설정 행에 지금 고른 모양 이름·실루엣을 같이 보여주려고 읽는다.
@@ -39,6 +40,10 @@ struct NoticeSettingView: View {
     /// 달라진 점 안내에서 "Pro 알아보기"를 눌렀다 — 시트가 닫힌 뒤 페이월을 연다.
     @State private var showPaywallAfterLegacyNotice = false
     @State private var showFeedback = false
+    /// App Store 코드 사용 시트(오퍼 코드·인앱결제 프로모션 코드).
+    @State private var showRedeemCode = false
+    /// 이번 버전에 새로 생긴 것 — 업데이트 뒤 한 번 뜬 안내를 여기서 다시 연다.
+    @State private var showWhatsNew = false
 
     // 내 기기 — 타이머 중에 물어본 답이 여기에 저장된다.
     // ⚠️ 키 문자열은 DeviceOwnership.answerKey 와 같아야 한다(@AppStorage 는 리터럴만 받는다).
@@ -67,6 +72,11 @@ struct NoticeSettingView: View {
             // Pro 상태 섹션
             Section {
                 if store.isPro {
+                    // 누르면 **지금 누리는 혜택과 그 양**을 본다(`ProBenefitsView`).
+                    // 산 사람에게 "활성화됨" 한 줄은 영수증일 뿐이다 — 무엇을 얼마나 쓰고 있는지가 보여야 산 값이 보인다.
+                    NavigationLink {
+                        ProBenefitsView()
+                    } label: {
                     HStack(spacing: 12) {
                         Image(systemName: "crown.fill")
                             .font(.title2)
@@ -91,7 +101,11 @@ struct NoticeSettingView: View {
                         Spacer()
                         Image(systemName: "checkmark.seal.fill")
                             .foregroundStyle(.green)
+                            .accessibilityHidden(true)
                     }
+                    .accessibilityElement(children: .combine)
+                    }
+                    .accessibilityHint(String(localized: "Shows what Pro unlocks and how much you use it"))
 
                     // 약속의 상설 위치. 안내 화면은 한 번만 뜨므로, 다시 읽고 싶은 사람은 여기로 온다.
                     if FoundingSupporter.isFounder {
@@ -110,6 +124,10 @@ struct NoticeSettingView: View {
                     }
                 } else if store.canRemember {
                     // 기억 트림만 가진 사람 — 산 것을 먼저 확인시키고, 올리는 길은 그 아래 한 줄로만 둔다.
+                    // 누르면 기억으로 열린 것과 그 양, Pro 에서 더 열리는 것을 본다(`ProBenefitsView`).
+                    NavigationLink {
+                        ProBenefitsView()
+                    } label: {
                     HStack(spacing: 12) {
                         Image(systemName: "bookmark.fill")
                             .font(.title2)
@@ -124,7 +142,11 @@ struct NoticeSettingView: View {
                         Spacer()
                         Image(systemName: "checkmark.seal.fill")
                             .foregroundStyle(.green)
+                            .accessibilityHidden(true)
                     }
+                    .accessibilityElement(children: .combine)
+                    }
+                    .accessibilityHint(String(localized: "Shows what Remember unlocks and how much you use it"))
                     Button {
                         showPaywall = true
                     } label: {
@@ -193,6 +215,21 @@ struct NoticeSettingView: View {
                             Image(systemName: "chevron.right")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
+                        }
+                    }
+
+                    // 할인·선물로 받은 코드를 여기서 바로 쓴다 — App Store 앱으로 나갔다 오지 않아도 된다.
+                    Button {
+                        showRedeemCode = true
+                    } label: {
+                        HStack {
+                            Label("Redeem Code", systemImage: "giftcard")
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .accessibilityHidden(true)
                         }
                     }
 
@@ -586,6 +623,21 @@ struct NoticeSettingView: View {
                 }
                 .foregroundStyle(.primary)
 
+                // 메일 앱으로 바로 — 스크린샷을 붙이거나 긴 이야기를 쓰고 싶은 사람은 이쪽이 편하다.
+                if let mailURL = Self.developerMailURL {
+                    Link(destination: mailURL) {
+                        HStack {
+                            Label("Email the Developer", systemImage: "at")
+                            Spacer()
+                            Image(systemName: "arrow.up.right")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .accessibilityHidden(true)
+                        }
+                    }
+                    .foregroundStyle(.primary)
+                }
+
                 // 앞으로 만들 기능 — 원본은 RereminderRoadmap.swift
                 NavigationLink(LeeoRoadmapText.entry) { RoadmapScreen() }
 
@@ -621,12 +673,30 @@ struct NoticeSettingView: View {
                     Label("Things you might not know", systemImage: "sparkles")
                 }
 
+                // 업데이트 뒤 한 번만 뜨는 안내를 다시 본다.
+                Button {
+                    showWhatsNew = true
+                } label: {
+                    HStack {
+                        Label("What's New", systemImage: "gift")
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .accessibilityHidden(true)
+                    }
+                }
+                .foregroundStyle(.primary)
+
                 NavigationLink {
                     MultiDeviceGuideView()
                 } label: {
                     Label("Use on All Your Devices", systemImage: "square.stack.3d.up.fill")
                 }
                 .foregroundStyle(.primary)
+
+                // 같은 개발자가 만든 다른 앱 — 이 앱과 함께 쓰는 순간을 앱마다 한 줄로.
+                LeeoFamilySettingsRow<RereminderSpec>()
 
                 Button {
                     shareApp()
@@ -752,6 +822,13 @@ struct NoticeSettingView: View {
         .sheet(isPresented: $showFeedback) {
             FeedbackView()
         }
+        .sheet(isPresented: $showWhatsNew) {
+            WhatsNewView(onClose: { showWhatsNew = false })
+        }
+        .offerCodeRedemption(isPresented: $showRedeemCode) { _ in
+            // 시트가 닫히는 즉시 권한을 다시 읽는다 — 그래야 자물쇠가 그 자리에서 풀린다.
+            Task { await store.verifyCurrentEntitlements() }
+        }
         .paywallGate(isPresented: $showPaywall)
         .alert(lostProRecovered
                ? String(localized: "Your Pro access is back")
@@ -775,7 +852,11 @@ struct NoticeSettingView: View {
             FounderWelcomeView(isFirstShowing: false)
         }
     }
+}
 
+// MARK: - 화면 조각·도움 함수
+
+extension NoticeSettingView {
     /// 개발자(마스터 모드) 전용 진입점 — 본문 타입체크 부담을 줄이려 별도 프로퍼티로 분리
     @ViewBuilder
     private var developerLinks: some View {
@@ -789,6 +870,12 @@ struct NoticeSettingView: View {
             UsageStatsView()
         } label: {
             Label(String(localized: "Usage Stats (Developer)"), systemImage: "chart.bar.fill")
+        }
+
+        NavigationLink {
+            PreflightReportView()
+        } label: {
+            Label { Text(verbatim: "출시 점검 (개발자)") } icon: { Image(systemName: "checklist") }
         }
     }
 
@@ -926,6 +1013,16 @@ struct NoticeSettingView: View {
         formatter.unitsStyle = .full
         let relative = formatter.localizedString(for: date, relativeTo: Date())
         return String(format: String(localized: "Last active %@"), relative)
+    }
+
+    /// 개발자에게 보내는 메일 주소(mailto). 제목에 앱 이름·버전을 미리 넣어 두면 받는 쪽이 어느 앱인지 바로 안다.
+    static var developerMailURL: URL? {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+        var components = URLComponents()
+        components.scheme = "mailto"
+        components.path = RereminderSpec.developerEmail
+        components.queryItems = [URLQueryItem(name: "subject", value: "\(AppName.display) \(version)")]
+        return components.url
     }
 
     private func shareApp() {

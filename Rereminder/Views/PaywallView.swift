@@ -17,6 +17,7 @@
 //
 
 import SwiftUI
+import StoreKit
 
 struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
@@ -40,6 +41,8 @@ struct PaywallView: View {
     @State private var selectedTier: ProTier?
     /// 이 화면에서 마지막으로 결제를 시작한 상품. 기억을 산 직후를 알아보는 데 쓴다.
     @State private var lastPurchase: StoreManager.ProductID?
+    /// App Store 의 코드 사용 시트(오퍼 코드·인앱결제 프로모션 코드).
+    @State private var showRedeemCode = false
 
     var body: some View {
         NavigationStack {
@@ -137,11 +140,25 @@ struct PaywallView: View {
             Text(AppName.pro)
                 .dsScaledFont(32, weight: .bold, design: .rounded, relativeTo: .title, maxSize: 44)
 
-            Text("The app remembers your setups")
+            Text(headerSubtitle)
                 .font(.title3)
                 .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
 
-            // 핵심 메시지
+            // 핵심 메시지 — 이미 Pro 인 사람에게는 파는 말을 하지 않는다(`ProBenefitsView` 의 "전체 보기"로 온다).
+            if !store.isPro {
+                purchasePromise
+            }
+        }
+    }
+
+    /// 이미 산 사람도 "무엇이 열려 있는지" 보러 온다(설정 ▸ 내 혜택 ▸ 전체 보기). 그 사람에게는 파는 말 대신
+    /// 지금 자리를 말한다. 기억만 가진 사람에게는 여전히 Pro 를 고르는 화면이라 원래 문장을 둔다.
+    private var headerSubtitle: LocalizedStringKey {
+        store.isPro ? "All Pro features are unlocked" : "The app remembers your setups"
+    }
+
+    private var purchasePromise: some View {
             HStack(spacing: 8) {
                 Image(systemName: "infinity")
                     .font(.headline)
@@ -155,7 +172,6 @@ struct PaywallView: View {
                 Capsule()
                     .fill(Color.accentColor.opacity(0.1))
             )
-        }
     }
 
     // MARK: - 트림
@@ -536,12 +552,28 @@ struct PaywallView: View {
     // MARK: - Restore
 
     private var restoreSection: some View {
-        Button {
-            Task { await store.restorePurchases() }
-        } label: {
-            Text("Restore Purchases")
-                .font(.subheadline)
-                .foregroundStyle(Color.accentColor)
+        HStack(spacing: 24) {
+            Button {
+                Task { await store.restorePurchases() }
+            } label: {
+                Text("Restore Purchases")
+                    .font(.subheadline)
+                    .foregroundStyle(Color.accentColor)
+            }
+            // 할인·선물로 받은 코드를 앱 안에서 바로 쓴다. App Store 앱을 거쳐 돌아오는 길은
+            // 돌아온 뒤 권한을 다시 읽어야 풀리는데(CLAUDE.md "전경 복귀마다"), 여기서는 시트가 닫히는 즉시 읽는다.
+            if !store.isPro {
+                Button {
+                    showRedeemCode = true
+                } label: {
+                    Text("Redeem Code")
+                        .font(.subheadline)
+                        .foregroundStyle(Color.accentColor)
+                }
+            }
+        }
+        .offerCodeRedemption(isPresented: $showRedeemCode) { _ in
+            Task { await store.verifyCurrentEntitlements() }
         }
     }
 

@@ -98,6 +98,10 @@ enum ProGate {
     // ⚠️ 템플릿에도 **무료 몫이 없다**(예전의 `freeTemplateLimit = 3` 은 삭제). 저장·불러오기
     //    자체가 Pro 다 — 그게 이제 이 앱이 파는 한 문장이기 때문이다. 개수로 다시 나누지 말 것.
 
+    /// 무료로 저장할 수 있는 설정 수 — **0 이다**(위 주석). 판정은 개수를 보지 않고 `canRememberSetup` 하나로
+    /// 하지만, "무료였다면 어디까지였나"를 말하는 화면(`ProBenefitsView`)이 같은 숫자를 읽도록 여기 둔다.
+    static let freeSavedSetups = 0
+
     // MARK: - Gate Result
 
     enum PaywallStage: String {
