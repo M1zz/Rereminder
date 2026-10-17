@@ -17,6 +17,10 @@ enum RereminderSpec: LeeoAppSpec {
     static let appName = "두번알림"
     static let developerEmail = "leeo@kakao.com"
 
+    /// 함께 쓰는 앱(`LeeoFamilyCatalog`)에서 이 앱의 자리. 설정 ▸ Help 의 `LeeoFamilySettingsRow` 가
+    /// 이 값으로 자기 자신을 목록에서 뺀다.
+    static let familyID: String? = "rereminder"
+
     /// Rereminder.entitlements에 iCloud.com.Ysoup.FeedbackHub 컨테이너가 있어야 한다.
     /// 공용 피드백 허브(FeedbackHub)로 수집 — appIdentifier로 앱을 구분한다.
     static let feedback = LeeoFeedbackConfig(

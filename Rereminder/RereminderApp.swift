@@ -5,6 +5,7 @@
 //  Created by POS on 7/7/25.
 //
 
+import OSLog
 import SwiftData
 import SwiftUI
 import TipKit
@@ -15,9 +16,32 @@ struct RereminderApp: App {
     @StateObject private var storeManager = StoreManager.shared
     @StateObject private var themeManager = ThemeManager.shared
 
+    /// 켤 때마다 같은 자리에서 죽는 일(크래시 루프)을 알아챈다. 두 번 연속 끝나지 못했으면 이번 실행은
+    /// **세이프 모드** — 기기 간 동기화를 쉬고, 돌던 타이머·마지막 설정을 되살리지 않고 빈 다이얼로 연다
+    /// (되살리는 저장 상태가 원인일 때 그걸 또 읽으면 영영 못 연다). 첫 화면이 3초 살아 있으면 성공으로 친다
+    /// (`TimerUnifiedView.finishSetupOnAppear`). 다음 실행은 평소대로 연다.
+    static let launchGuard = LeeoCrashLoopGuard(name: "app", defaults: .standard)
+    /// 이번 실행이 세이프 모드인가 — `init` 에서 한 번 정해진다.
+    static var isSafeLaunch: Bool { launchGuard.isInSafeMode }
+
+    static let log = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.xa.toki", category: "app")
+    /// 시작에서 무거운 구간(저장소 열기)을 Instruments 의 os_signpost 로 본다.
+    static let signposter = OSSignposter(subsystem: Bundle.main.bundleIdentifier ?? "com.xa.toki",
+                                         category: "launch")
+
     init() {
         // 분석 이벤트 → 익명 사용 허브 전송 훅 — 다른 어떤 로그보다 먼저 꽂아야 유실이 없다
         AnalyticsManager.eventSink = { ActivityReporter.log($0) }
+
+        // 크래시 루프 판정은 무엇보다 먼저 — 아래 시작 작업 중 하나가 원인일 수 있다.
+        let safeLaunch = Self.launchGuard.beginLaunch()
+        if safeLaunch {
+            Self.log.error("직전 실행이 연달아 끝나지 못했다 — 세이프 모드로 연다")
+        }
+        if LeeoRemoteFlags.isEnabled(RereminderFlag.usageReportingEnabled) {
+            // 끝나지 못한 실행 수를 허브로 보낸다(설치당 소수, 보내면 0 으로 돌아간다).
+            Task { await Self.launchGuard.reportIncompleteLaunches(to: LeeoUsageReporter(spec: RereminderSpec.self)) }
+        }
 
         // 원격 킬스위치 갱신 — 이번 실행은 캐시로 동작, 다음 실행부터 반영 (6시간 쓰로틀)
         LeeoRemoteFlags(spec: RereminderSpec.self, appGroupSuiteName: "group.leeo.toki")
@@ -39,7 +63,8 @@ struct RereminderApp: App {
         _ = WatchConnectivityManager.shared
 
         // iCloud KVS 동기화 초기화 (iPhone ↔ Mac 타이머 동기화) — 킬스위치로 차단 가능
-        if LeeoRemoteFlags.isEnabled(RereminderFlag.cloudSyncEnabled) {
+        // 세이프 모드에서는 쉰다 — 다른 기기의 상태를 받아 덮는 길이 시작에서 가장 많은 것을 건드린다.
+        if LeeoRemoteFlags.isEnabled(RereminderFlag.cloudSyncEnabled), !safeLaunch {
             _ = CloudTimerSyncManager.shared
         }
 
@@ -104,10 +129,12 @@ struct RereminderApp: App {
             groupContainer: .identifier("group.leeo.toki"),
             cloudKitDatabase: .none
         )
+        let state = RereminderApp.signposter.beginInterval("ModelContainer")
+        defer { RereminderApp.signposter.endInterval("ModelContainer", state) }
         do {
             return try ModelContainer(for: schema, configurations: configuration)
         } catch {
-            print("❌ SwiftData 컨테이너 로드 실패 — 이번 실행은 저장되지 않는다: \(error)")
+            RereminderApp.log.fault("SwiftData 컨테이너 로드 실패 — 이번 실행은 저장되지 않는다: \(String(describing: error), privacy: .public)")
             // 앱을 죽이지는 않는다. 타이머 자체는 SwiftData 없이도 돌아간다.
             // 메모리 스토어는 파일·CloudKit 규칙을 타지 않아 실패할 길이 없다 — 여기서 실패하면 되돌아갈 곳도 없다.
             // swiftlint:disable:next force_try

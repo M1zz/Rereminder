@@ -83,6 +83,9 @@ struct TimerUnifiedView: View {
     @State private var showFeedbackNudge = false
     @State private var showFeedbackSheet = false
 
+    /// 업데이트 뒤 처음 열 때 한 번 뜨는 "새로 생긴 것" (`WhatsNewView`).
+    @State private var showWhatsNew = false
+
     // 타이머를 실제로 걸었을 때 한 번 물어보는 기기 보유 질문(워치 → 맥).
     // 물어볼지 말지는 DeviceOwnership이 정한다 — "없다"고 한 기기는 다시 꺼내지 않는다.
     @State private var deviceQuestion: DeviceOwnership.Device?
@@ -226,6 +229,9 @@ struct TimerUnifiedView: View {
             }
             .sheet(isPresented: $showFeedbackSheet) {
                 FeedbackView()
+            }
+            .sheet(isPresented: $showWhatsNew) {
+                WhatsNewView(onClose: { showWhatsNew = false })
             }
             // 타이머가 돌기 시작한 순간에 묻는다 — "지금 손목에서도 볼 수 있어요"가 바로 확인되는 때다.
             // 답은 설정(내 기기)에 저장되고, 없다고 하면 그 기기 이야기는 두 번 다시 꺼내지 않는다.
@@ -412,6 +418,7 @@ struct TimerUnifiedView: View {
                 Image(systemName: "list.bullet")
             }
             .accessibilityLabel(String(localized: "Saved timers"))
+            .accessibilityInputLabels([Text("Saved timers"), Text("Templates")])
 
             NavigationLink {
                 NoticeSettingView()
@@ -422,6 +429,7 @@ struct TimerUnifiedView: View {
                     .modifier(MultiDeviceTipAnchor())
             }
             .accessibilityLabel(String(localized: "Settings"))
+            .accessibilityInputLabels([Text("Settings")])
         }
     }
 
@@ -483,17 +491,24 @@ struct TimerUnifiedView: View {
             ProMention.markMentioned(.legacy)
         }
 
+        // 새로 생긴 것 — 혜택 변경 안내가 뜨는 차례면 양보하고 다음 실행에 온다(그건 그날이 아니면 뜻이 준다).
+        // 처음 온 사람은 온보딩이 맞이하므로 본 것으로 표시만 한다. 띄우는 실행에서는 아래 의견 요청·
+        // 평생 무료 안내도 쉰다 — 앱을 열자마자 두 개가 겹쳐 뜨면 둘 다 안 읽힌다.
+        if !isShowingPlanChangeNotice {
+            presentWhatsNewIfNeeded()
+        }
+
         // 실행 횟수를 올린 뒤에 판정한다 — 순서가 뒤바뀌면 10회째가 아니라 11회째에 뜬다.
         // ⚠️ 혜택 변경 안내보다 **뒤에서** 판정하고 양보한다. 알림창이 먼저 뜨면 그 시트가 가려져
         //    뜨지 못한다(시뮬레이터에서 실제로 그랬다). 의견 요청은 다음 차례에 와도 되지만
         //    혜택 변경 안내는 그날이 아니면 의미가 줄어든다.
-        if !isShowingPlanChangeNotice, FeedbackNudge.isDue(policy: Self.satisfactionPolicy) {
+        if !isShowingPlanChangeNotice, !showWhatsNew, FeedbackNudge.isDue(policy: Self.satisfactionPolicy) {
             FeedbackNudge.markShown()
             showFeedbackNudge = true
         }
 
         // 그랜드파더링된 기존 사용자에게 무료 Pro 안내 (최초 1회)
-        if !isShowingPlanChangeNotice,
+        if !isShowingPlanChangeNotice, !showWhatsNew,
            StoreManager.isGrandfathered,
            !UserDefaults.standard.bool(forKey: Self.grandfatherThankedKey) {
             UserDefaults.standard.set(true, forKey: Self.grandfatherThankedKey)
@@ -510,6 +525,12 @@ struct TimerUnifiedView: View {
         appStateManager.checkNotificationPermission()
         screenVM.timerVM.modelContext = context
         screenVM.initialConfiguration()
+        // 세이프 모드(직전 실행이 연달아 죽었다): 저장된 상태를 되살리지 않고 빈 다이얼로 연다.
+        // 원인이 그 상태일 수 있다 — 또 읽으면 영영 못 연다. 무슨 일인지는 한 줄로 알린다.
+        if RereminderApp.isSafeLaunch {
+            toast.show(Toast(String(localized: "The app closed unexpectedly last time, so it opened with a fresh dial.")))
+            return finishSetupOnAppear()
+        }
         screenVM.restoreTimerIfNeeded()
         // 다이나믹 아일랜드에서 눌러 둔 명령을 먼저 적용하고, 남은 활동이 있으면 치운다
         screenVM.applyPendingLiveActivityCommand()
@@ -528,8 +549,27 @@ struct TimerUnifiedView: View {
         finishSetupOnAppear()
     }
 
+    /// 업데이트한 사람에게 "새로 생긴 것"을 한 번 보여 준다. 판정은 `WhatsNewAudience` 한 곳.
+    private func presentWhatsNewIfNeeded() {
+        let defaults = UserDefaults.standard
+        let audience = WhatsNewAudience.resolve(
+            hasSeenOnboarding: defaults.bool(forKey: "hasSeenOnboarding"),
+            lastSeenVersion: defaults.string(forKey: WhatsNewContent.lastSeenKey))
+        switch audience {
+        case .newcomer:
+            defaults.set(WhatsNewContent.version, forKey: WhatsNewContent.lastSeenKey)
+        case .returningNeedsWhatsNew:
+            defaults.set(WhatsNewContent.version, forKey: WhatsNewContent.lastSeenKey)
+            showWhatsNew = true
+        case .returning:
+            break
+        }
+    }
+
     /// 화면이 뜰 때 마지막에 하는 플랫폼 설정 — 안내 판정이 어디서 끝나든 반드시 돈다.
     private func finishSetupOnAppear() {
+        // 첫 화면이 떴다 — 3초 더 살아 있으면 이번 실행은 무사히 연 것으로 친다(크래시 루프 판정).
+        RereminderApp.launchGuard.markLaunchSucceededAfterSurvivalDelay()
 
         #if targetEnvironment(macCatalyst)
         // 지금 맥에서 돌고 있으니 "맥 있으세요?"를 물어볼 이유가 없다 — 아는 건 묻지 않는다.

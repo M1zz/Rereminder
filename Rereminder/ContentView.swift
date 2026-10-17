@@ -5,6 +5,7 @@
 //  Created by POS on 7/7/25.
 //
 
+import OSLog
 import SwiftData
 import SwiftUI
 import UserNotifications
@@ -24,7 +25,7 @@ struct ContentView: View {
                 UNUserNotificationCenter.current().requestAuthorization(
                     options: [.alert, .sound, .badge]) { _, error in
                         if let error = error {
-                            print("알림 Request Permission 오류: \(error)")
+                            RereminderApp.log.error("알림 권한 요청 오류: \(String(describing: error), privacy: .public)")
                         }
                     }
             }

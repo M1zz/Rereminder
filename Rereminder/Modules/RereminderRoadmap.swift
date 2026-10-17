@@ -29,9 +29,6 @@ extension RereminderSpec {
         .init(id: "a11y.keyboard", status: .planned,
               title: String(localized: "Keyboard controls", comment: "Roadmap item: keyboard control"),
               detail: String(localized: "Start, pause, and stop timers with just the keyboard on iPad and Mac.", comment: "Roadmap item detail: keyboard control")),
-        .init(id: "whatsnew", status: .planned,
-              title: String(localized: "What's new after updates", comment: "Roadmap item: what's new"),
-              detail: String(localized: "The first time you open the app after an update, see what's new.", comment: "Roadmap item detail: what's new")),
         .init(id: "gift", status: .planned,
               title: String(localized: "Gift Pro", comment: "Roadmap item: gift Pro"),
               detail: String(localized: "You pay, and the person you choose gets to use Pro.", comment: "Roadmap item detail: gift Pro")),
@@ -44,6 +41,10 @@ extension RereminderSpec {
         .init(id: "data.delete", status: .planned,
               title: String(localized: "Delete all my data", comment: "Roadmap item: delete all data"),
               detail: String(localized: "Erase all your timers and history from inside the app whenever you want.", comment: "Roadmap item detail: delete all data")),
+        // MARK: 만들었어요
+        .init(id: "whatsnew", status: .shipped("2.3.4"),
+              title: String(localized: "What's new after updates", comment: "Roadmap item: what's new"),
+              detail: String(localized: "The first time you open the app after an update, see what's new.", comment: "Roadmap item detail: what's new")),
     ]}
 }
 

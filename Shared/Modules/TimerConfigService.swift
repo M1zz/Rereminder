@@ -7,12 +7,19 @@
 //
 
 import Foundation
+import OSLog
 import SwiftData
 
 @MainActor
 final class TimerConfigService {
 
     private var context: ModelContext?
+
+    /// 저장 실패는 화면에 오류가 뜨지 않는다(2.2.3 의 "저장이 안 된다" 제보가 그랬다) — 기록으로 남긴다.
+    private static let log = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.xa.toki", category: "templates")
+    /// 템플릿 저장(중복 비교 + 저장 + 정리)이 얼마나 걸리는지 Instruments 에서 본다.
+    private static let signposter = OSSignposter(subsystem: Bundle.main.bundleIdentifier ?? "com.xa.toki",
+                                                 category: "templates")
 
     /// 저장해 둘 수 있는 템플릿의 최대 개수. **결제 여부로 갈리지 않는다.**
     ///
@@ -78,7 +85,7 @@ final class TimerConfigService {
             try ctx.save()
             UserDefaults.standard.set(true, forKey: key)
         } catch {
-            print("❌ 시드 템플릿 저장 실패: \(error)")
+            Self.log.error("시드 템플릿 저장 실패: \(String(describing: error), privacy: .public)")
         }
     }
 
@@ -115,6 +122,8 @@ final class TimerConfigService {
     ) -> Bool {
         guard ProGate.canSaveTemplate() else { return false }
         guard let ctx = context else { return false }
+        let interval = Self.signposter.beginInterval("saveTemplate")
+        defer { Self.signposter.endInterval("saveTemplate", interval) }
 
         let normalizedFinish = (finishMessage?.isEmpty ?? true) ? nil : finishMessage
 
@@ -144,7 +153,7 @@ final class TimerConfigService {
             try ctx.save()
             AnalyticsManager.log(.presetSaved(name: entry.name, durationSeconds: mainSec))
         } catch {
-            print("❌ 타이머 템플릿 저장 실패: \(error)")
+            Self.log.error("타이머 템플릿 저장 실패: \(String(describing: error), privacy: .public)")
             ctx.delete(entry)
             return false
         }
@@ -158,7 +167,7 @@ final class TimerConfigService {
             do {
                 try ctx.save()
             } catch {
-                print("❌ 오래된 템플릿 삭제 실패: \(error)")
+                Self.log.error("오래된 템플릿 삭제 실패: \(String(describing: error), privacy: .public)")
             }
         }
         return true
