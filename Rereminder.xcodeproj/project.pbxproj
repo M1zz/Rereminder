@@ -14,11 +14,26 @@
 		58AA3EB02ECF5509007D4BBD /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AA3EAF2ECF5509007D4BBD /* WidgetKit.framework */; };
 		58AA3EB22ECF5509007D4BBD /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 58AA3EB12ECF5509007D4BBD /* SwiftUI.framework */; };
 		58AA3EC32ECF550B007D4BBD /* RereminderAlarmExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 58AA3EAD2ECF5509007D4BBD /* RereminderAlarmExtension.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8ED173613F9FC1F71B0DB8AC /* RereminderUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7653E5DFA75539A050DB2789 /* RereminderUITests.swift */; };
 		9D00000E2F4000000000000E /* RereminderWatchWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 9D0000012F40000000000001 /* RereminderWatchWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		AA10AB0D2F20C0000000000D /* RereminderMenuBar.bundle in Embed PlugIns */ = {isa = PBXBuildFile; fileRef = AA10AB012F20C00000000001 /* RereminderMenuBar.bundle */; platformFilter = maccatalyst; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		99710589F5E66A7D0F32C3B8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 260414C32E1B9FA200CBA29B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6ED914668010A8B195B84C58;
+			remoteInfo = RereminderClip;
+		};
+		1B3C36D9E795C141B7C19198 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 260414C32E1B9FA200CBA29B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 260414CA2E1B9FA200CBA29B;
+			remoteInfo = Rereminder;
+		};
 		2B302B122E4375170089A14A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 260414C32E1B9FA200CBA29B /* Project object */;
@@ -39,13 +54,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 260414CA2E1B9FA200CBA29B;
 			remoteInfo = Rereminder;
-		};
-		99710589F5E66A7D0F32C3B8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 260414C32E1B9FA200CBA29B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 6ED914668010A8B195B84C58;
-			remoteInfo = RereminderClip;
 		};
 		9D00000F2F4000000000000F /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -128,10 +136,12 @@
 		58AA3EAF2ECF5509007D4BBD /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		58AA3EB12ECF5509007D4BBD /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		58AA3ECA2ECF5541007D4BBD /* RereminderAlarmExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RereminderAlarmExtension.entitlements; sourceTree = "<group>"; };
+		7653E5DFA75539A050DB2789 /* RereminderUITests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RereminderUITests.swift; sourceTree = "<group>"; };
 		7E57AB012F30000000000001 /* RereminderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RereminderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D0000012F40000000000001 /* RereminderWatchWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = RereminderWatchWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A78942BCAED1D1FFB2FDB397 /* RereminderClip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RereminderClip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA10AB012F20C00000000001 /* RereminderMenuBar.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RereminderMenuBar.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		C1B0C324AB73E67F2E8B16FC /* RereminderUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RereminderUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB6620CC6445D6B84083B6BC /* Version.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Version.xcconfig; path = Config/Version.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -327,6 +337,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		1DFFE9C95A7C032F96E45666 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		260414C82E1B9FA200CBA29B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -405,6 +422,7 @@
 				EB6620CC6445D6B84083B6BC /* Version.xcconfig */,
 				717C82F4F68208C4105E4595 /* RereminderClip */,
 				9D0000022F40000000000002 /* RereminderWatchWidget */,
+				A476E161B6F6BE638C3A56C7 /* RereminderUITests */,
 			);
 			sourceTree = "<group>";
 		};
@@ -418,6 +436,7 @@
 				7E57AB012F30000000000001 /* RereminderTests.xctest */,
 				A78942BCAED1D1FFB2FDB397 /* RereminderClip.app */,
 				9D0000012F40000000000001 /* RereminderWatchWidgetExtension.appex */,
+				C1B0C324AB73E67F2E8B16FC /* RereminderUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -431,6 +450,15 @@
 				12AEEF9E969663E2C9F593A5 /* iOS */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A476E161B6F6BE638C3A56C7 /* RereminderUITests */ = {
+			isa = PBXGroup;
+			children = (
+				7653E5DFA75539A050DB2789 /* RereminderUITests.swift */,
+			);
+			name = RereminderUITests;
+			path = RereminderUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -528,6 +556,24 @@
 			productName = RereminderClip;
 			productReference = A78942BCAED1D1FFB2FDB397 /* RereminderClip.app */;
 			productType = "com.apple.product-type.application.on-demand-install-capable";
+		};
+		6F76C6BBE6D2B1CDD7B61B1D /* RereminderUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 644036199F6D3187630D46E3 /* Build configuration list for PBXNativeTarget "RereminderUITests" */;
+			buildPhases = (
+				6AEA59489A028E99E49065B7 /* Sources */,
+				1DFFE9C95A7C032F96E45666 /* Frameworks */,
+				2CDBE091F21DDAA3A8E807DE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3B4F54F92B14B5DCD256AE19 /* PBXTargetDependency */,
+			);
+			name = RereminderUITests;
+			productName = RereminderUITests;
+			productReference = C1B0C324AB73E67F2E8B16FC /* RereminderUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 		7E57AB032F30000000000003 /* RereminderTests */ = {
 			isa = PBXNativeTarget;
@@ -662,6 +708,7 @@
 				7E57AB032F30000000000003 /* RereminderTests */,
 				6ED914668010A8B195B84C58 /* RereminderClip */,
 				9D0000062F40000000000006 /* RereminderWatchWidgetExtension */,
+				6F76C6BBE6D2B1CDD7B61B1D /* RereminderUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -675,6 +722,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		2B302B082E4375150089A14A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2CDBE091F21DDAA3A8E807DE /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -747,6 +801,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		6AEA59489A028E99E49065B7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8ED173613F9FC1F71B0DB8AC /* RereminderUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		7E57AB092F30000000000009 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -771,17 +833,23 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		454D3869CE4B00C1FF7146B1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RereminderClip;
+			target = 6ED914668010A8B195B84C58 /* RereminderClip */;
+			targetProxy = 99710589F5E66A7D0F32C3B8 /* PBXContainerItemProxy */;
+		};
 		2B302B132E4375170089A14A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			platformFilter = ios;
 			target = 2B302B092E4375150089A14A /* RereminderWatch */;
 			targetProxy = 2B302B122E4375170089A14A /* PBXContainerItemProxy */;
 		};
-		454D3869CE4B00C1FF7146B1 /* PBXTargetDependency */ = {
+		3B4F54F92B14B5DCD256AE19 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = RereminderClip;
-			target = 6ED914668010A8B195B84C58 /* RereminderClip */;
-			targetProxy = 99710589F5E66A7D0F32C3B8 /* PBXContainerItemProxy */;
+			name = Rereminder;
+			target = 260414CA2E1B9FA200CBA29B /* Rereminder */;
+			targetProxy = 1B3C36D9E795C141B7C19198 /* PBXContainerItemProxy */;
 		};
 		58AA3EC22ECF550B007D4BBD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1162,6 +1230,23 @@
 			};
 			name = Release;
 		};
+		5F8E3BBB051F63DE1A91024C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = QGAQ3AY3R3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = Rereminder;
+			};
+			name = Debug;
+		};
 		7E57AB0C2F3000000000000C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1322,6 +1407,24 @@
 			};
 			name = Release;
 		};
+		E28F01BFFA6B439709172BF0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = QGAQ3AY3R3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xa.toki.uitests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = Rereminder;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1366,6 +1469,15 @@
 			buildConfigurations = (
 				58AA3EC52ECF550B007D4BBD /* Debug */,
 				58AA3EC62ECF550B007D4BBD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		644036199F6D3187630D46E3 /* Build configuration list for PBXNativeTarget "RereminderUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E28F01BFFA6B439709172BF0 /* Release */,
+				5F8E3BBB051F63DE1A91024C /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

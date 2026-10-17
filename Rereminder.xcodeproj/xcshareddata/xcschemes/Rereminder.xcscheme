@@ -40,6 +40,16 @@
                ReferencedContainer = "container:Rereminder.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "6F76C6BBE6D2B1CDD7B61B1D"
+               BuildableName = "RereminderUITests.xctest"
+               BlueprintName = "RereminderUITests"
+               ReferencedContainer = "container:Rereminder.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
