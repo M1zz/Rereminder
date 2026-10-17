@@ -3,14 +3,17 @@
 **이 파일이 정본이다.** ASC 에 넣는 값을 고칠 때는 여기를 먼저 고치고 그대로 복사한다.
 갈라지면 스토어에 무엇이 올라가 있는지 저장소만 봐서는 알 수 없게 된다.
 
-- 대상: `zh-Hans`(간체) · `zh-Hant`(번체)는 ASC 에 넣은 값 그대로다.
-  ko·en·ja 는 **검색 노출 개편안**(아래 첫 절)이고 아직 ASC 에 반영되지 않았다.
+- ⚠️ **2026-10-01 부터 스토어 문구의 정본은 레포 최상단 `APPSTORE.md` 다** (11개 언어 전부, pt-PT 포함).
+  DeployBar 가 배포할 때 그 파일로 ASC 를 맞춘다. 이 문서는 근거·검색 전략·바꾸기 전 값을 남기는 곳이다.
 - 넣는 곳: App Store Connect ▸ 앱 ▸ (버전) ▸ 언어 선택 ▸ 각 칸
 - ⚠️ **글자 수는 Apple 이 세는 기준(문자 개수)이다.** 한자는 1자로 센다.
 - ⚠️ **키워드는 쉼표 뒤에 공백을 넣지 않는다** — 공백도 100자에 포함된다.
 - ⚠️ **이름·부제에 이미 든 말은 키워드에 넣지 않는다.** Apple 은 이름·부제·키워드를 합쳐
   색인하므로 같은 말을 두 번 적으면 글자만 버린다. 지금 셋은 서로 겹치지 않게 짜 두었다
   (검증: 이 문서를 만든 스크립트가 중복을 막는다).
+
+> **독일어·프랑스어·스페인어·포르투갈어(브라질)·이탈리아어**(2.3.0)는 레포 최상단 `APPSTORE.md` 에 있다.
+> DeployBar 가 그 파일을 읽어 [스토어 올리기] 로 ASC 에 그대로 넣는다 — 그쪽이 정본이다.
 
 ## 모든 언어 공통 URL
 
@@ -20,15 +23,15 @@
 | 지원 URL | `https://m1zz.github.io/Rereminder/support.html` |
 | 마케팅 URL (선택) | `https://m1zz.github.io/Rereminder/` |
 
-두 페이지는 브라우저 언어를 보고 **한국어·영어·간체·번체** 중 하나를 그린다
+두 페이지는 브라우저 언어를 보고 **10개 언어**(앱과 같은 목록) 중 하나를 그린다
 (`docs/support.html`·`docs/privacy.html`). 그래서 언어마다 다른 주소를 넣을 필요가 없다.
 
 ---
 
-## 한국어·영어·일본어 — 검색 노출 개편안 (2026-09-28, 아직 ASC 미반영)
+## 한국어·영어·일본어 — 검색 노출 개편안 (2026-09-28 제안 · 2026-10-01 APPSTORE.md 반영, 다음 배포에서 ASC 에 올라감)
 
-⚠️ **아래는 제안이다.** 지금 ASC 에 들어가 있는 ko·en·ja 값은 저장소에 없다. 바꾸기 전에
-지금 값을 이 절 끝의 "바꾸기 전 값" 칸에 옮겨 적어 둘 것 — 효과를 비교하려면 전 값이 있어야 한다.
+✅ **2026-10-01 레포 최상단 `APPSTORE.md` 에 반영했다** — 이제 그쪽이 정본이고, DeployBar 가 다음 배포 때 ASC 에 올린다.
+바꾸기 전 값은 각 언어 아래에 옮겨 적었다(2026-10-01 ASC 조회). 효과는 2~4주 뒤 "적용·측정 순서" 대로 비교한다.
 
 **왜 바꾸나** — 검색 가중치는 이름 > 부제 > 키워드 순인데, 지금 이름("두번알림"·"Rereminder")에는
 사람들이 치는 말이 하나도 없다. 이름 칸이 통째로 검색에 쓰이지 않고 있다.
@@ -55,11 +58,11 @@
 스톱워치,알람,카운트다운,뽀모도로,스피치,강의,강사,필라테스,요가,운동,인터벌,회의,워크숍,리허설,집중,공부,시간관리,진동,애플워치,설교,스터디,PT
 ```
 
-바꾸기 전 값 (ASC 에서 옮겨 적을 것):
+바꾸기 전 값 (2026-10-01 ASC):
 ```
-이름:
-부제:
-키워드:
+이름: 두번알림
+부제: 끝나기 전에 미리 알려주는 타이머
+키워드: 발표 타이머,회의 타이머,예비 알림,멘토링 타이머,스피치,강의,수업,면접,발표연습,남은시간,프레젠테이션,강연,설교,토론,미리알림,진동
 ```
 
 ### en-US — English (U.S.)
@@ -74,11 +77,11 @@
 speech,speaker,class,teacher,workshop,meeting,pilates,yoga,hiit,interval,pomodoro,rehearsal,reminder
 ```
 
-바꾸기 전 값 (ASC 에서 옮겨 적을 것):
+바꾸기 전 값 (2026-10-01 ASC):
 ```
-이름:
-부제:
-키워드:
+이름: Rereminder - Smart alarm
+부제: Speech & Presentation Timer
+키워드: talk,presenter,speaker,lecture,meeting,countdown,pre-alert,vibration,class,sermon,debate,warning
 ```
 
 ### ja — 日本語 (Japanese)
@@ -93,11 +96,11 @@ speech,speaker,class,teacher,workshop,meeting,pilates,yoga,hiit,interval,pomodor
 ストップウォッチ,アラーム,カウントダウン,ポモドーロ,スピーチ,講義,講師,ピラティス,ヨガ,筋トレ,インターバル,会議,ワークショップ,リハーサル,集中,勉強,時間管理,バイブ,アップルウォッチ
 ```
 
-바꾸기 전 값 (ASC 에서 옮겨 적을 것):
+바꾸기 전 값 (2026-10-01 ASC):
 ```
-이름:
-부제:
-키워드:
+이름: Rereminder - Smart alarm (영어 페이지가 복사돼 있었다)
+부제: Speech & Presentation Timer
+키워드: talk,presenter,speaker,lecture,meeting,countdown,pre-alert,vibration,class,sermon,debate,warning
 ```
 
 ### 메타데이터 밖에서 할 것
@@ -233,6 +236,28 @@ Rereminder 讓你在結束之前就被提醒 —— 想放幾次就放幾次。
 Pro 是一次買斷，不是訂閱。提前提醒不限個數，Apple Watch App 和 Mac App 都免費。Pro 賣的是一句話：App 會記住你的設定 —— 範本、上次的設定、分段模式、超時和歷史統計。
 ```
 ---
+
+## 인앱결제 `com.xa.toki.pro` 표시 이름·설명
+
+넣는 곳: App Store Connect ▸ 앱 ▸ 수익화 ▸ 인앱 구입 ▸ `com.xa.toki.pro` ▸ App Store 현지화.
+⚠️ **지금은 한국어("두번알림 pro") 하나뿐이라 모든 나라의 결제 확인 창·스토어 목록에 한국어가 나간다.**
+앱 안의 페이월은 지역화된 `AppName.pro` 를 쓰므로 이 값과 무관하다. 한도: 이름 30자, 설명 45자.
+
+| 로케일 | 언어 | 표시 이름 | 설명 | 설명 글자 수 |
+|---|---|---|---|---|
+| `ko` | 한국어 | 두번알림 Pro | 앱이 설정을 기억합니다. 한 번만 구매 | 21 |
+| `en-US` | English (U.S.) | Rereminder Pro | The app remembers your setups. Pay once. | 40 |
+| `ja` | 日本語 | Rereminder Pro | 設定を覚える買い切り。テンプレート・前回の設定・セッションモード・履歴 | 35 |
+| `zh-Hans` | 简体中文 | Rereminder Pro | 一次购买，记住你的设置：模板、上次设置、分段模式、记录 | 27 |
+| `zh-Hant` | 繁體中文 | Rereminder Pro | 一次購買，記住你的設定：範本、上次設定、分段模式、紀錄 | 27 |
+| `de` | Deutsch | Rereminder Pro | Merkt sich deine Setups – einmal kaufen | 39 |
+| `fr` | Français | Rereminder Pro | L’app retient vos réglages. Achat unique. | 41 |
+| `es` | Español (es-ES, es-MX) | Rereminder Pro | Recuerda tus plantillas, sesiones e historial | 45 |
+| `pt-BR` | Português (Brasil) | Rereminder Pro | O app lembra seus timers, modelos e sessões | 43 |
+| `it` | Italiano | Rereminder Pro | Ricorda timer, modelli e Modalità Sessione | 42 |
+
+- 이름은 앱 안 페이월의 `app_name_pro` 와 같게 둔다 — 한국어만 "두번알림 Pro", 나머지는 "Rereminder Pro".
+  결제 창과 페이월이 다른 이름을 말하면 사용자는 다른 상품으로 읽는다.
 
 ## 아직 사람이 해야 하는 것
 

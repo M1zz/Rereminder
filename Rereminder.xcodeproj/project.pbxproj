@@ -616,7 +616,7 @@
 				};
 			};
 			buildConfigurationList = 260414C62E1B9FA200CBA29B /* Build configuration list for PBXProject "Rereminder" */;
-			developmentRegion = ko;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
@@ -625,6 +625,25 @@
 				ja,
 				"zh-Hans",
 				"zh-Hant",
+				de,
+				fr,
+				es,
+				"pt-BR",
+				"pt-PT",
+				it,
+				ru,
+				cs,
+				da,
+				el,
+				fi,
+				id,
+				nb,
+				nl,
+				pl,
+				sv,
+				th,
+				tr,
+				vi,
 			);
 			mainGroup = 260414C22E1B9FA200CBA29B;
 			minimizedProjectReferenceProxies = 1;
@@ -1386,7 +1405,7 @@
 			repositoryURL = "https://github.com/M1zz/LeeoKit.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 2.9.0;
+				minimumVersion = 3.16.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

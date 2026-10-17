@@ -15,6 +15,11 @@ struct ContentView: View {
     var body: some View {
         TimerUnifiedView()
             .onAppear {
+                configureMacWindowIfNeeded()
+                #if DEBUG
+                // 스크린샷 장면에서는 권한 창이 화면을 가린다.
+                if ScreenshotScene.isActive { return }
+                #endif
                 // Sound/Vibration 알림 Request Permission
                 UNUserNotificationCenter.current().requestAuthorization(
                     options: [.alert, .sound, .badge]) { _, error in
@@ -22,7 +27,6 @@ struct ContentView: View {
                             print("알림 Request Permission 오류: \(error)")
                         }
                     }
-                configureMacWindowIfNeeded()
             }
             #if targetEnvironment(macCatalyst)
             // macOS: 큰 화면에 맞춰 글자를 한 단계 키운다

@@ -224,12 +224,19 @@ final class StoreManager: ObservableObject {
         products = store.products
 
         let live = store.hasPro
+        // ⚠️ `hasPro` 는 그랜드파더링까지 참으로 본다. 구매 기록은 **실제 결제 트랜잭션**이 보일 때만
+        //    적는다 — 예전에는 `live` 로 적어서 평생 무료 사용자도 결제한 사람(`flag.isPaid`)으로 셌다.
+        let purchased = !store.purchasedProductIDs.isDisjoint(with: store.config.entitlementIDs)
 
         if !Self.isAutoProEnvironment {
-            if live {
-                // 권한이 보인다 — 근거가 확실하므로 바로 기록한다.
-                if !Self.storedPurchaseFlag { savePurchaseState(true) }
-            } else if Self.storedPurchaseFlag {
+            if purchased {
+                // 결제가 보인다 — 근거가 확실하므로 바로 기록한다.
+                if !Self.storedPurchaseFlag {
+                    savePurchaseState(true)
+                    // 결제는 페이월 밖에서도 일어난다 — 권한이 처음 보이는 순간 새 결제인지 확인한다.
+                    Task { [weak self] in await self?.reportNewPurchaseIfNeeded() }
+                }
+            } else if !live, Self.storedPurchaseFlag {
                 // 갖고 있던 기록이 조회에서 사라졌다. 환불인지 조회 실패인지 따로 확인한다.
                 Task { [weak self] in await self?.clearStoredPurchaseIfRevoked() }
             }
@@ -278,6 +285,67 @@ final class StoreManager: ObservableObject {
         return dates.allSatisfy { $0 != nil }
     }
 
+    // MARK: - 결제 완료 이벤트
+
+    /// 새 결제를 **트랜잭션 하나당 한 번** `purchase_completed` 로 남긴다.
+    ///
+    /// ⚠️ 예전에는 페이월의 `purchase()` 가 true 를 돌려줄 때만 남겼다. 그런데 결제는 그 밖에서도
+    ///    일어난다 — 자녀 구매 승인(Ask to Buy, `.pending` 뒤 `Transaction.updates` 로 도착)·
+    ///    인앱결제 프로모션 코드·App Store 페이지의 인앱 구매. 그 결제는 이벤트 없이 권한만 생겨
+    ///    허브의 결제 퍼널 마지막 칸이 비어 있었다. 그래서 **권한이 보이는 순간** 트랜잭션을 보고 판정한다.
+    /// - 페이월 안의 결제도 이 길로 온다 — 두 경로가 같은 트랜잭션을 두 번 세지 않게 하려는 것이다.
+    ///   페이월에서 샀는지는 `paywall_converted:*` 가 따로 말한다.
+    private func reportNewPurchaseIfNeeded() async {
+        guard !Self.isAutoProEnvironment, !isReportingPurchase else { return }
+        isReportingPurchase = true
+        defer { isReportingPurchase = false }
+
+        for transaction in await Self.proPurchases() {
+            let key = Self.reportedPurchaseKeyPrefix + String(transaction.originalID)
+            guard Self.shouldReportPurchase(
+                purchaseDate: transaction.purchaseDate,
+                isOwnPurchase: transaction.isOwnPurchase,
+                alreadyReported: KeychainHelper.load(key: key) == true
+            ) else { continue }
+            // Keychain 이라 재설치해도 같은 결제를 다시 세지 않는다.
+            KeychainHelper.save(key: key, value: true)
+            AnalyticsManager.log(.purchaseCompleted(productId: ProductID.pro.rawValue))
+        }
+    }
+
+    private var isReportingPurchase = false
+    nonisolated private static let reportedPurchaseKeyPrefix = "rereminder.purchase.reported."
+
+    /// 결제 시각이 이만큼 지난 트랜잭션은 새 결제로 보지 않는다 — 옛 구매자가 재설치·새 기기로
+    /// 복원한 것을 결제로 세면 퍼널이 부풀려진다. 승인 대기가 며칠 걸릴 수 있어 넉넉히 둔다.
+    nonisolated static let newPurchaseWindow: TimeInterval = 7 * 24 * 3600
+
+    /// 결제 완료로 셀지 판정 (순수 함수 — 테스트 대상).
+    /// 가족 공유로 받은 권한은 이 사람이 결제한 것이 아니므로 세지 않는다.
+    nonisolated static func shouldReportPurchase(
+        purchaseDate: Date,
+        isOwnPurchase: Bool,
+        alreadyReported: Bool,
+        now: Date = Date()
+    ) -> Bool {
+        guard isOwnPurchase, !alreadyReported else { return false }
+        return now.timeIntervalSince(purchaseDate) < newPurchaseWindow
+    }
+
+    /// 살아 있는 pro 트랜잭션들. StoreKit 접촉은 여기까지다.
+    nonisolated private static func proPurchases() async
+        -> [(originalID: UInt64, purchaseDate: Date, isOwnPurchase: Bool)] {
+        var found: [(originalID: UInt64, purchaseDate: Date, isOwnPurchase: Bool)] = []
+        for await result in Transaction.currentEntitlements {
+            guard case .verified(let transaction) = result,
+                  transaction.productID == ProductID.pro.rawValue,
+                  transaction.revocationDate == nil else { continue }
+            found.append((transaction.originalID, transaction.purchaseDate,
+                          transaction.ownershipType == .purchased))
+        }
+        return found
+    }
+
     // MARK: - Load Products / Entitlements (LeeoStore 로 위임)
 
     /// 상품 로드 — 네트워크 불안정 대비 지수 백오프 재시도 (1s → 2s → 4s)
@@ -316,7 +384,7 @@ final class StoreManager: ObservableObject {
         if success {
             purchaseState = .purchased
             errorMessage = nil
-            AnalyticsManager.log(.purchaseCompleted(productId: productID.rawValue))
+            await reportNewPurchaseIfNeeded()
         } else if let message = store.lastError {
             // 오류/보류 — LeeoStore 가 사용자 노출 메시지를 남긴 경우
             errorMessage = message
@@ -388,6 +456,20 @@ extension StoreManager {
 
     /// 저장된 구매 기록(래치). Keychain 우선, 없으면 UserDefaults.
     /// ⚠️ 이 값은 회수를 확인했을 때만 내려간다 — `clearStoredPurchaseIfRevoked` 참고.
+    /// 이 설치가 **돈을 내고** Pro 를 얻었는가 — 허브의 `flag.isPaid`.
+    ///
+    /// ⚠️ 2.2.9 까지는 그랜드파더링(`hasPro` 에 포함)으로 열린 사람에게도 구매 기록이 적혔다.
+    ///    그 기록은 래치라 지우지 않고(환불 확인 없이 내리지 않는다는 원칙), 셀 때 그랜드파더링을 뺀다.
+    ///    평생 무료 사용자에게는 페이월이 뜨지 않아 따로 결제할 길이 없으므로 빼도 결제를 놓치지 않는다.
+    nonisolated static var isPaidPurchase: Bool {
+        isPaid(storedPurchase: storedPurchaseFlag, grandfathered: isGrandfathered)
+    }
+
+    /// `isPaidPurchase` 의 판정 (순수 함수 — 테스트 대상).
+    nonisolated static func isPaid(storedPurchase: Bool, grandfathered: Bool) -> Bool {
+        storedPurchase && !grandfathered
+    }
+
     nonisolated static var storedPurchaseFlag: Bool {
         KeychainHelper.load(key: "rereminder.pro.purchased")
             ?? UserDefaults.standard.bool(forKey: "rereminder.pro.purchased")

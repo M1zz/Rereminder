@@ -17,6 +17,10 @@ struct NotificationService {
             return
         }
 
+        #if DEBUG
+        // 스크린샷 장면 — 권한 창이 화면을 가린다(`WatchScreenshotScene`).
+        if WatchScreenshotScene.isActive { return }
+        #endif
         // 기존 알림 제거
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
 
@@ -41,6 +45,10 @@ struct NotificationService {
 
     /// 새로 추가된 Date 기반 예약 함수
     func scheduleNotification(at date: Date, title: String, body: String, identifier: String) {
+        #if DEBUG
+        // 스크린샷 장면 — 권한 창이 화면을 가린다(`WatchScreenshotScene`).
+        if WatchScreenshotScene.isActive { return }
+        #endif
         // 기존 알림 제거
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
 

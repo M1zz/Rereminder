@@ -46,6 +46,10 @@ struct RereminderApp: App {
         // TipKit (iOS 17+)
         if #available(iOS 17.0, *) {
             try? Tips.configure()
+            #if DEBUG
+            // 스크린샷 장면에 팁 풍선이 끼지 않게.
+            if ScreenshotScene.isActive { Tips.hideAllTipsForTesting() }
+            #endif
         }
 
         #if targetEnvironment(macCatalyst)

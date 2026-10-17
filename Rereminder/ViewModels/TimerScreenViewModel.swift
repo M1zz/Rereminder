@@ -12,6 +12,7 @@ import Combine
 import Foundation
 import SwiftData
 import SwiftUI
+import UserNotifications
 
 enum AppMode: String, CaseIterable {
     case timer, presentation
@@ -56,6 +57,9 @@ final class TimerScreenViewModel: ObservableObject {
     var showToast: ((String) -> Void)?
 
     private var bag = Set<AnyCancellable>()
+    /// 알림 권한 경고를 이번 실행에 이미 띄웠나 (`holdForPermissionWarning`).
+    private var didWarnAboutPermission = false
+    private var startAfterPermissionWarning: (() -> Void)?
 
     // MARK: - Init
 
@@ -257,15 +261,12 @@ final class TimerScreenViewModel: ObservableObject {
         finishMessage = t.finishMessage ?? ""
         persistLastUsedConfig(mainSec: t.mainSeconds, offsets: t.prealertOffsetsSec)
         showTemplateApplyToast(for: t)
+        if holdForPermissionWarning(then: { [weak self] in self?.timerVM.start() }) { return }
         timerVM.start()
     }
 
     func start() {
-        if timerVM.appStateManager?.notificationAuthStatus == .denied,
-           UserDefaults.standard.bool(forKey: "useAlarmKit") {
-            showPermissionWarning = true
-            return
-        }
+        if holdForPermissionWarning(then: { [weak self] in self?.start() }) { return }
         showToast?("Start")
         timerVM.start()
         ActivityReporter.log("timer_start")
@@ -588,14 +589,41 @@ extension TimerScreenViewModel {
         timerVM.configure(from: template)
         configuredMainSeconds = totalSeconds
 
-        if timerVM.appStateManager?.notificationAuthStatus == .denied,
-           UserDefaults.standard.bool(forKey: "useAlarmKit") {
-            showPermissionWarning = true
-            return
-        }
+        if holdForPermissionWarning(then: { [weak self] in self?.startPresentation() }) { return }
 
         timerVM.start()
         ActivityReporter.log("presentation_start")
+    }
+
+    // MARK: - 알림 권한 경고
+
+    /// 알림 권한 없이 걸면 **화면을 끄는 순간부터 아무것도 울리지 않는다** — 앱이 앞에 있는
+    /// 동안은 토스트·소리가 나서 사용자는 잘 되는 줄 안다. 그래서 시작하기 전에 한 번 막아 세운다.
+    ///
+    /// ⚠️ 예전에는 이 경고가 `useAlarmKit` 이 켜져 있을 때만 떴다. 그 토글의 기본값이 꺼짐이라
+    ///    (2.2.4) 사실상 **아무에게도 뜨지 않았고**, "화면을 끄면 잠금 화면이 안 울린다"는 제보의
+    ///    정체가 이것이었다. 오히려 AlarmKit 이 꺼져 있을 때가 더 위험하다(종료 알람마저 없다).
+    /// ⚠️ 한 번 실행에 한 번만 — 일부러 알림을 끈 사람에게 시작할 때마다 묻는 건 잔소리다.
+    static func shouldWarnBeforeStart(authStatus: UNAuthorizationStatus?, alreadyWarned: Bool) -> Bool {
+        authStatus == .denied && !alreadyWarned
+    }
+
+    /// 경고를 띄워야 하면 띄우고 `true` — 부르는 쪽은 그대로 돌아간다.
+    /// "나중에"를 누르면 `then` 이 다시 불려 하던 시작을 마저 한다(이번엔 경고 없이).
+    private func holdForPermissionWarning(then resume: @escaping () -> Void) -> Bool {
+        guard Self.shouldWarnBeforeStart(authStatus: timerVM.appStateManager?.notificationAuthStatus,
+                                         alreadyWarned: didWarnAboutPermission) else { return false }
+        didWarnAboutPermission = true
+        startAfterPermissionWarning = resume
+        showPermissionWarning = true
+        return true
+    }
+
+    /// 경고에서 "나중에"를 고른 경우 — 권한 없이 하던 시작을 마저 한다.
+    func continueStartWithoutPermission() {
+        let resume = startAfterPermissionWarning
+        startAfterPermissionWarning = nil
+        resume?()
     }
 
     /// 발표 이름 자동 생성

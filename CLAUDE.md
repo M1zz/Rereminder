@@ -394,6 +394,14 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - 판정은 순수 함수 `StoreManager.isRevoked(proTransactionRevocationDates:)` 에 있다 —
   **목록이 비어 있으면 false**(근거 없음), 살아 있는 트랜잭션이 하나라도 있으면 false
   (환불 후 재구매), 전부 회수됐을 때만 true.
+- **결제 완료 이벤트(`purchase_completed`)는 트랜잭션으로 센다**(`reportNewPurchaseIfNeeded`).
+  ⚠️ 2.2.9 까지는 페이월의 `purchase()` 가 true 일 때만 남겨, 자녀 구매 승인·인앱결제 프로모션 코드처럼
+  **페이월 밖에서 생긴 결제는 이벤트가 없었다.** 지금은 권한이 처음 보이는 순간 7일 안의 본인 결제를
+  원거래 ID 당 한 번(Keychain 기록) 남긴다. 옛 구매 복원·가족 공유는 세지 않는다.
+  테스트: `PurchaseCompletedReportTests`
+- ⚠️ **구매 기록(`storedPurchaseFlag`)은 실제 결제 트랜잭션이 보일 때만 적는다.** LeeoKit 의
+  `hasPro` 는 그랜드파더링까지 참이라, 그걸로 적던 시절에는 평생 무료 사용자도 `flag.isPaid=1` 로
+  나갔다. 이미 적힌 기록은 래치라 지우지 않고, 셀 때 `StoreManager.isPaidPurchase` 가 그랜드파더링을 뺀다.
 - `isPro`(@Published)와 `isProUser`(static)는 **언제나 같은 답**을 내야 한다. 갈라지면
   페이월은 "구매하세요"라고 하는데 기능은 열려 있는(또는 그 반대의) 상태가 된다.
 
@@ -820,6 +828,23 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - 테스트: `RereminderTests/EscalatingAlertTests.swift` (15개),
   `RereminderTests/RoundedRectRingTests.swift` (9개)
 
+### 알림 권한이 꺼져 있으면 — 앱을 보는 동안엔 멀쩡해 보인다
+제보(2026-10-05): *"화면을 끄면 잠금 화면이 울리지 않는다."* 권한이 거부돼 있으면 앱이 앞에 있는
+동안은 토스트·소리가 나서 잘 되는 줄 알고, **화면을 끄는 순간 아무것도 울리지 않는다.**
+
+- ⚠️ 시작 전 경고(`TimerScreenViewModel.holdForPermissionWarning`)가 예전엔 `useAlarmKit` 이
+  켜져 있을 때만 떴다 — 기본값이 꺼짐이라 **아무에게도 뜨지 않았다.** 지금은 권한만 본다.
+  일반·세션·템플릿 칩 시작 세 경로 모두 거치고, **한 번 실행에 한 번**만 묻는다.
+- ⚠️ 권한 상태는 `scenePhase` 에서만 읽혀 콜드 런치엔 `.notDetermined` 로 남았다 —
+  `setupOnAppear` 에서도 `checkNotificationPermission()` 을 부른다.
+- **원 아래 한 줄**(`NotificationOffBanner` + 판정 `NotificationOffNotice`): 권한이 꺼져 있으면
+  **어느 상태에서든**(도는 중에도) 묶음 맨 위에 선다. 누르면 **알림 설정 화면**으로 바로 간다.
+  닫으면 **3일 쉬고 다시 나온다**(영영 닫히면 고장 난 채로 쓴다), 권한을 켜면 쉬는 기록을 지운다.
+  ⚠️ Pro 권유가 아니라 `ProMention` 예산을 쓰지 않는다. 대신 이 줄이 서 있으면
+  `RememberRecallLine` 이 물러난다 — 핵심 기능이 안 되는 사람에게 결제를 권하는 건 순서가 틀렸다.
+- 지표: `notification_off_banner_shown` → `notification_off_banner_tapped`
+- 테스트: `NotificationOffNoticeTests` (4개), `NotificationPermissionWarningTests` (5개)
+
 ### 진동 모드 — `sound = nil` 은 "조용히"가 아니라 "아무것도 없음"이다
 설정 > 알림의 **소리 / 진동**(`RingMode`). 진동을 고르면 예전에는
 `UNNotificationContent.sound` 에 `nil` 을 넣었는데, **그건 진동으로 바꾸라는 뜻이 아니라
@@ -1243,9 +1268,9 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
     두 페이지는 배포처가 달라(이 저장소 `docs/` vs 블로그 저장소) 경로 대소문자도 다릅니다.
     자세한 건 `web/README.md` 참고.
   - **도메인을 바꾸면 엔타이틀먼트·AASA·App Store Connect 세 곳을 모두 고쳐야 합니다.**
-  - **웹 페이지 넷은 기기 언어를 보고 한국어·영어를 고른다**(`web/index.html`,
-    `docs/index.html`·`support.html`·`privacy.html`). `navigator.languages` 를 훑어
-    `ko` 로 시작하는 태그가 있으면 한국어이고, 오른쪽 위 버튼으로 바꿀 수 있다.
+  - **웹 페이지는 기기 언어를 보고 언어를 고른다**(`web/index.html` 은 한국어·영어, 나머지 셋은 10개 언어 —
+    `docs/index.html`·`support.html`·`privacy.html`). `navigator.languages` 를 앞에서부터 훑어
+    지원하는 언어가 나오면 그것이고, 오른쪽 위 선택 메뉴로 바꿀 수 있다.
     ⚠️ **저장 키는 네 페이지가 모두 `rereminder-lang` 이어야 한다** — 다르면 소개 페이지에서
     고른 언어가 지원·개인정보 페이지로 이어지지 않는다(예전에 `docs/index.html` 만 `lang` 을
     써서 실제로 끊겨 있었다). ⚠️ **자동 감지 결과는 저장하지 않는다** — 저장하면 기기 언어를
@@ -1398,6 +1423,58 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
   앱 안에서는 안 샌다 — 페이월은 지역화된 `AppName.pro` 를 쓰고, ASC 이름을 읽는
   `StoreManager.proDisplayName` 은 어느 화면에서도 쓰이지 않는다.
 
+### 지원 언어는 10개다 (2.3.0)
+`ko`·`en`·`ja`·`zh-Hans`·`zh-Hant` 에 **`de`·`fr`·`es`·`pt-BR`·`it`** 를 더했다(2026-09-30).
+유럽·남미를 고른 이유는 결제율 — 이 앱은 Pro 를 파는 앱이라 설치 수보다 결제로 이어지는 시장이 먼저다.
+언어 목록이 들어가는 곳은 **네 곳이고 늘 같아야 한다**: `knownRegions`(pbxproj) ·
+`Localizable.xcstrings`(+ 세 타겟의 `InfoPlist.xcstrings`) · `deploy.env` 의 `LOCALES` ·
+`scripts/check_localization.py` 의 `LANGS`.
+
+- **용어 고정** (새 문구도 같은 말을 쓸 것 — 갈라지면 같은 기능이 두 이름을 갖는다):
+  | | de | fr | es | pt-BR | it |
+  |---|---|---|---|---|---|
+  | 세션 모드 | Session-Modus | mode Séance | Modo sesión | Modo Sessão | Modalità Sessione |
+  | 구간 | Abschnitt | partie | sección | etapa | sezione |
+  | 예비 알림 | Vorwarnung | pré-alerte | aviso previo | pré-alerta | preavviso |
+  | 템플릿 | Vorlage | modèle | plantilla | modelo | modello |
+  | 대본 | Skript | notes | guion | roteiro | copione |
+  | 호칭 | du | vous | tú | você | tu |
+- 스페인어는 **한 벌로 스페인·중남미를 함께** 쓴다(중립 스페인어). ASC 의 es-ES·es-MX 에 같은 글이 들어간다.
+- 독일어 단위는 `Min.`·`Sek.` 다 — `m` 하나만 쓰면 "미터"로 읽힌다.
+- ⚠️ **스토어 페이지에 언어를 추가하는 건 사람이 한다**(ASC ▸ 앱 정보 ▸ 현지화). 없으면 릴리즈노트·문구·
+  스크린샷이 올라갈 자리가 없다. 인앱결제 표시 이름의 현지화도 따로다(위 "앱 이름" 절).
+- 웹 페이지(소개·지원·개인정보)도 **10개 언어**다. 지원·개인정보는 언어마다 본문 블록 한 벌
+  (`<div data-lang="…">`), 소개 페이지는 `i18n` 사전 + 데모 `STR` 사전이다. 언어 고르기는 셋 다
+  **선택 메뉴**다 — 버튼 10개는 휴대폰 폭을 넘는다. 기기 언어 감지는 `zh-*` → 간체/번체, `pt-*` → `pt-BR`,
+  나머지는 언어 코드 앞부분으로 맞춘다. ⚠️ `web/index.html`(App Clip 초대)은 한국어·영어뿐이다 — 클립이 꺼져 있어 미뤘다.
+- 지원·개인정보 페이지의 **앱 메뉴 경로(`<span class="ui">`)와 버튼 이름은 `Localizable.xcstrings` 의 값을 그대로** 쓴다
+  (설정 › 의견 보내기 › 피드백 보내기 · 설정 › 정보 · 알림 방식 · 내 기기 · 구매 복원 · 다시 확인).
+  ⚠️ 설정 화면의 섹션 이름을 바꾸면 이 경로도 10개 언어 모두 고칠 것 — 2.3.0 전까지 피드백이 Help 밖으로
+  옮겨졌는데 페이지는 계속 "설정 › 도움말 › 피드백 보내기"라고 적고 있었다.
+  "iOS 설정 › 집중 모드" 처럼 **iPhone 설정 앱**의 경로는 앱 문구가 아니라 Apple 공식 용어를 따른다.
+- 소개 페이지의 **Pro 목록은 `ProGate.Feature` 와 같아야 한다.** 2.3.0 전까지 "예비 알림 무제한·알림 문구·테마 색"을
+  Pro 로 적고 있었다(개편 전 결제 구조). 결제 구조를 바꾸면 이 목록도 10개 언어 모두 고칠 것.
+- 공용 모듈 화면(피드백·페이월 등)은 **LeeoKit** 번역을 쓴다. 2.3.0 에 LeeoKit 을 2.9 → **3.14** 로 올렸고
+  (3.x 는 `RereminderSpec` 에 `legal`·`monetization` 을 요구한다), 새 5개 언어 번역은 LeeoKit 쪽에 들어갔다.
+- 2.3.0 을 준비하며 **한국어 오역 다섯 개**를 잡았다 — 알림의 정지 버튼이 "타이머 정지됨",
+  권한 상태 "알 수 없음"이 "Pro로 업그레이드", "시간 직접 입력"이 "두번알림 앱을 엽니다" 등.
+  키와 값이 한 칸씩 밀려 들어간 흔적으로 보인다. 새 언어를 번역할 때 영어와 대조하다 드러났다.
+
+### 앱스토어 스크린샷 — 스크립트로 찍고 스크립트로 꾸민다
+언어 10개 × 4장을 손으로 맞추면 다음 릴리즈에 똑같이 다시 찍을 수 없다. 그래서 두 단계 모두 스크립트다:
+
+```bash
+scripts/capture_screenshots.sh [언어 ...]          # → docs/screenshots/raw/<언어>/ (원본, 1320×2868)
+python3 scripts/make_marketing_screenshots.py [언어 ...]  # → docs/screenshots/marketing/<언어>/ (1242×2688)
+```
+- 화면 상태는 **DEBUG 빌드에만 있는** `ScreenshotScene`(`Rereminder/Modules/ScreenshotScene.swift`)이
+  실행 인자 `-screenshotScene <dial|running|session|sessionRunning>` 로 세운다. 장면이 걸리면 안내·팁·
+  기기 질문·알림 권한 창을 전부 건너뛴다. 구간 이름·대본 예시는 사용자 글이라 카탈로그가 아니라 그 파일에 언어별로 있다.
+- DeployBar 는 `docs/screenshots/marketing/<언어>/` 를 그 언어 칸에 올린다(제출본 폴더가 원본 폴더를 이긴다).
+  ⚠️ `marketing/` 바로 아래나 `appstore-65/` 처럼 **언어 없는 제출본 폴더를 다시 만들지 말 것** — 옛 한국어
+  한 벌(2.3.0 에 지웠다, "발표 모드" 시절 화면)이 그런 폴더였다.
+- 헤드라인은 `make_marketing_screenshots.py` 의 `COPY` 에 언어별로 있다. 세션 모드 이름은 앱 안 번역과 같은 말을 쓴다.
+
 ### 중국어(간체·번체) 지원 — 두 언어이지 한 언어가 아니다
 `zh-Hans`(중국 간체)와 `zh-Hant`(대만·홍콩 번체) 를 2026-09-08 에 넣었다. 언어 목록은 네 곳이
 같아야 한다 — `knownRegions`(pbxproj) · `Localizable.xcstrings` · `deploy.env` 의 `LOCALES` ·
@@ -1434,7 +1511,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - **Swift Version**: Swift 5.9+
 
 ## 의존성
-- **LeeoKit** (SPM, 2.9.0+): 공용 StoreKit 2 엔진(LeeoStore)·사용 리포터·원격 킬스위치(LeeoRemoteFlags)·MetricKit 크래시 진단(LeeoDiagnostics) 등 자체 공용 모듈. 킬스위치 플래그는 `Rereminder/Modules/RereminderFlags.swift`, Dashboard 수동 작업은 `docs/OPERATIONS_CHECKLIST.md` 참고
+- **LeeoKit** (SPM, 3.14.0+ — 3.x 는 `legal`·`monetization` 선언이 필수. 3.14.0 에 새 5개 언어 번역): 공용 StoreKit 2 엔진(LeeoStore)·사용 리포터·원격 킬스위치(LeeoRemoteFlags)·MetricKit 크래시 진단(LeeoDiagnostics) 등 자체 공용 모듈. 킬스위치 플래그는 `Rereminder/Modules/RereminderFlags.swift`, Dashboard 수동 작업은 `docs/OPERATIONS_CHECKLIST.md` 참고
 - **외부 분석 SDK 없음**: Firebase(2026-07)에 이어 TelemetryDeck(2026-08)도 제거했다.
   App ID 가 비어 있어 실제로 아무것도 보내지 않았고, 사용 통계는 CloudKit 허브가 이미 담당한다.
   이벤트는 `AnalyticsManager` → `ActivityReporter` 한 경로로만 나간다.
@@ -1461,7 +1538,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 (예: `release-notes-2.2.5-ko.md` · `-en.md` · `-ja.md` · `-zh-Hans.md` · `-zh-Hant.md`).
 ⚠️ 두 곳의 문구는 **같아야 한다** — 갈라지면 어느 쪽이 스토어에 나갔는지 나중에 알 수 없다.
 
-- ⚠️ **지원하는 언어를 전부 쓴다.** 지금은 `ko`·`en`·`ja`·`zh-Hans`·`zh-Hant` 다섯이다
+- ⚠️ **지원하는 언어를 전부 쓴다.** 지금은 `ko`·`en`·`ja`·`zh-Hans`·`zh-Hant`·`de`·`fr`·`es`·`pt-BR`·`it` 열이다
   (`knownRegions` 와 `Localizable.xcstrings` 의 언어와 같다). 언어가 늘면 파일도 는다.
   한 언어라도 빠지면 그 지역 사용자는 App Store 에서 영어 원문을 보게 된다.
 - ⚠️ **특수기호를 넣지 않는다.** App Store Connect 의 릴리즈 노트 칸은 **평문**이라
@@ -1493,6 +1570,20 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
 ```
 
 ## 버전 히스토리
+
+### v2.3.1 (2026-10-05)
+**"화면을 끄면 잠금 화면이 울리지 않는다" 제보** — 알림 권한이 꺼진 사람이 그걸 알 길이 없었다.
+- 시작 전 권한 경고가 `useAlarmKit` 에 묶여 사실상 아무에게도 뜨지 않던 것 수정 + 콜드 런치 권한 상태 읽기
+- 원 아래 알림 꺼짐 한 줄(`NotificationOffBanner`, 3일 주기) — 위 "알림 권한이 꺼져 있으면" 절
+- 릴리즈 노트: `docs/release-notes-2.3.1-{ko,en,ja,zh-Hans,zh-Hant,de,fr,es,pt-BR,pt-PT,it}.md`
+
+### v2.3.0 (2026-09-30)
+**10개 언어** — 독일어·프랑스어·스페인어·포르투갈어(브라질)·이탈리아어 추가(위 "지원 언어는 10개다" 절).
+- 앱 문구 551개 × 5개 언어, 앱 이름 카탈로그 세 타겟, 스토어 문구 `APPSTORE.md`, 릴리즈 노트 10벌
+- 스크린샷을 스크립트로(`capture_screenshots.sh` + `ScreenshotScene` + `make_marketing_screenshots.py`), 언어별 40장
+- 한국어 오역 다섯 개 수정(정지 버튼 등)
+- 결제 완료 이벤트를 페이월 밖 결제까지 트랜잭션 단위로 세고, `flag.isPaid` 에서 평생 무료를 뺐다
+- 릴리즈 노트: `docs/release-notes-2.3.0-{ko,en,ja,zh-Hans,zh-Hant,de,fr,es,pt-BR,it}.md`
 
 ### v2.2.9 (2026-09-28)
 **한국어 앱에 "min" 이 그대로 나가던 자리를 걷었다.**

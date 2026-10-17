@@ -335,6 +335,7 @@ struct TimerUnifiedView: View {
                 })
         }
         .environmentObject(screenVM)
+        .environmentObject(appStateManager)
         // 온보딩은 **여기서** 띄운다 — 고른 상황을 다이얼에 올리고 템플릿까지 저장하므로
         // `screenVM` 이 있는 자리여야 한다(예전엔 ContentView 에 있어서 손이 닿지 않았다).
         .fullScreenCover(isPresented: $showOnboarding) {
@@ -403,6 +404,18 @@ struct TimerUnifiedView: View {
     )
 
     private func setupOnAppear() {
+        #if DEBUG
+        // 앱스토어 스크린샷 장면 — 안내는 하나도 띄우지 않는다(`ScreenshotScene`).
+        // 안내 판정보다 **앞에** 있어야 한다. 뒤에 두면 혜택 변경 안내 시트가 화면을 덮는다.
+        if let scene = ScreenshotScene.current {
+            screenVM.attachContext(context)
+            screenVM.seedTemplatesIfNeeded()
+            screenVM.timerVM.modelContext = context
+            screenVM.timerVM.appStateManager = appStateManager
+            scene.apply(to: screenVM)
+            return finishSetupOnAppear()
+        }
+        #endif
         // 콜드 런치에서는 scenePhase onChange 가 오지 않는다 — 여기서도 표시를 남긴다.
         DevicePresence.beginHeartbeat()
 
@@ -460,6 +473,9 @@ struct TimerUnifiedView: View {
         screenVM.timerVM.showToast = { toast.show(Toast($0)) }
         screenVM.showToast = { toast.show(Toast($0)) }
         screenVM.timerVM.appStateManager = appStateManager
+        // ⚠️ 콜드 런치에서는 scenePhase onChange 가 오지 않아 권한 상태가 `.notDetermined` 로
+        //    남는다 — 그러면 시작 전 알림 권한 경고가 영영 뜨지 않는다. 여기서도 읽어 둔다.
+        appStateManager.checkNotificationPermission()
         screenVM.timerVM.modelContext = context
         screenVM.initialConfiguration()
         screenVM.restoreTimerIfNeeded()
@@ -769,6 +785,9 @@ struct TimerUnifiedView: View {
     private func askOrRemindAboutDevices() {
         // 혜택 변경 안내가 떠 있으면 양보한다 — 그 화면 뒤에서 질문이 쌓이면 둘 다 안 읽힌다.
         guard !isShowingPlanChangeNotice else { return }
+        #if DEBUG
+        if ScreenshotScene.isActive { return }
+        #endif
         let starts = Int(UsageMetrics.value(.timerStarts))
 
         if let device = DeviceOwnership.pendingQuestion(timerStarts: starts) {
