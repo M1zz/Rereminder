@@ -18,6 +18,8 @@ struct TimerMainView: View {
 
     /// 글자 크기 설정. 접근성 크기에서는 원이 자리를 양보한다(`clockHeightRatio`).
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    /// 동작 줄이기 — 켜 두었으면 가운데 숫자가 굴러가지 않고 그냥 바뀐다.
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     /// 구간 이름 입력 포커스 (키보드 내리기 제어용)
     @FocusState private var focusedSectionIndex: Int?
@@ -890,11 +892,16 @@ struct TimerMainView: View {
     /// ⚠️ 버튼은 원 밖에 있다(`body`). 안에 두면 이 두 줄이 들어갈 자리가 없다.
     private func centerTimeDisplay(fontSize: CGFloat) -> some View {
         let isTicking = screenVM.state == .running || screenVM.state == .overtime
-        return Text(isTicking
-                    ? screenVM.timeString(from: screenVM.timerVM.remaining)
-                    : mmss(sec: screenVM.mainSeconds, min: screenVM.mainMinutes))
+        let shown = isTicking
+            ? screenVM.timeString(from: screenVM.timerVM.remaining)
+            : mmss(sec: screenVM.mainSeconds, min: screenVM.mainMinutes)
+        return Text(shown)
             .font(.system(size: fontSize, weight: .bold, design: .rounded))
             .monospacedDigit()
+            // 바뀐 자리의 숫자만 굴러간다 — 1초마다 통째로 깜빡이면 눈이 숫자 전체를 다시 읽는다.
+            // 돌아가는 동안은 줄어드는 방향으로, 다이얼을 돌릴 때는 바뀐 방향 그대로.
+            .contentTransition(reduceMotion ? .identity : .numericText(countsDown: isTicking))
+            .animation(reduceMotion ? nil : .snappy(duration: 0.25), value: shown)
             .minimumScaleFactor(0.5)
             .lineLimit(1)
             .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
@@ -925,6 +932,11 @@ struct TimerMainView: View {
             }
     }
 
+}
+
+// MARK: - 동작 버튼 · 접근성 값 · 구간 목록 (본문 길이를 나눠 둔다)
+
+extension TimerMainView {
     // MARK: - 동작 버튼 (원 안)
     //
     // ⚠️ 2.2.0 에서 원 밖 캡슐 한 줄로 뺐다가 되돌렸다.
@@ -948,6 +960,8 @@ struct TimerMainView: View {
             }
             .buttonStyle(TimerButtonStyle(tint: DSColor.plain, size: buttonSize))
             .accessibilityLabel(String(localized: "Cancel Timer"))
+            // 음성 제어로 "정지 누르기"처럼 짧게 부를 수 있게 — 화면에는 아이콘뿐이라 부를 이름이 없다.
+            .accessibilityInputLabels([Text("Cancel Timer"), Text("Stop"), Text("Cancel")])
         }
     }
 
@@ -965,6 +979,8 @@ struct TimerMainView: View {
             .accessibilityLabel(isPresentationMode
                                 ? String(localized: "Start Session")
                                 : String(localized: "Start Timer"))
+            .accessibilityInputLabels([isPresentationMode ? Text("Start Session") : Text("Start Timer"),
+                                       Text("Start"), Text("Play")])
 
         case .running, .overtime:
             Button(action: {
@@ -976,6 +992,7 @@ struct TimerMainView: View {
             }
             .buttonStyle(TimerButtonStyle(tint: DSColor.negativeSoft, size: buttonSize))
             .accessibilityLabel(String(localized: "Pause Timer"))
+            .accessibilityInputLabels([Text("Pause Timer"), Text("Pause")])
 
         case .paused:
             Button(action: {
@@ -987,6 +1004,7 @@ struct TimerMainView: View {
             }
             .buttonStyle(TimerButtonStyle(tint: DSColor.positive, size: buttonSize))
             .accessibilityLabel(String(localized: "Resume Timer"))
+            .accessibilityInputLabels([Text("Resume Timer"), Text("Resume"), Text("Start")])
         }
     }
 

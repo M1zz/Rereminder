@@ -53,6 +53,9 @@ struct AlertPresetButtons: View {
     @ObservedObject var screenVM: TimerScreenViewModel
 
     @AppStorage(AlertPresets.storageKey) private var presetsRaw = AlertPresets.defaultRaw
+    /// 색 없이 구분하기 — 켜진 칩은 주황, 꺼진 칩은 회색으로만 갈린다. 색을 구분하기 어려운 사람에게는
+    /// 켜진 칩 앞에 체크를 붙여 **모양으로도** 갈리게 한다.
+    @Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
 
     /// 프리셋 + 현재 선택된 시점 — 켜진 알림이 앞, 나머지가 뒤(규칙은 `AlertPresets.displayOrder`).
     private var displayOffsets: [Int] {
@@ -109,10 +112,17 @@ struct AlertPresetButtons: View {
                                 // 2.2.2 에서 알림 개수 잠금(자물쇠)이 사라졌다 —
                                 // 파는 축이 "알림 개수"에서 "세션 운영"으로 옮겨졌기 때문.
                                 // 글자 상한은 유지한다(큰 글씨에서 이 줄이 링 위로 올라탔다).
-                                Text(offsetLabel(offset))
-                                    .dsScaledFont(16, weight: .medium,
-                                                  relativeTo: .callout, maxSize: 24)
-                                    .lineLimit(1)
+                                HStack(spacing: 4) {
+                                    if selected && differentiateWithoutColor {
+                                        Image(systemName: "checkmark")
+                                            .font(.caption.weight(.bold))
+                                            .accessibilityHidden(true)
+                                    }
+                                    Text(offsetLabel(offset))
+                                        .dsScaledFont(16, weight: .medium,
+                                                      relativeTo: .callout, maxSize: 24)
+                                        .lineLimit(1)
+                                }
                                     .padding(.horizontal, DSSpacing.xs)
                                     .frame(minWidth: 48, minHeight: 34)
                             }

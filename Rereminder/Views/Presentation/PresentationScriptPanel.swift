@@ -34,20 +34,29 @@ struct PresentationScriptPanel: View {
                 Circle()
                     .fill(color)
                     .frame(width: 8, height: 8)
+                // 구간 이름은 사용자가 쓴 글이라 얼마든지 길어진다 — 한 줄에서 끝을 줄이고,
+                // 조금 넘치는 정도는 글자 간격을 좁혀 다 보이게 한다.
                 Text(sectionName)
                     .font(DSFont.callout.weight(.semibold))
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                    .allowsTightening(true)
                 Spacer(minLength: DSSpacing.sm)
                 if let nextName {
                     Text("Next: \(nextName)")
                         .font(DSFont.caption)
                         .foregroundStyle(.secondary)
                         .lineLimit(1)
+                        .truncationMode(.tail)
+                        .allowsTightening(true)
                 }
             }
 
             ScrollView {
                 Text(script)
                     .font(DSFont.body)
+                    // 대본 속 링크·숫자·한 문장을 길게 눌러 복사해 채팅에 붙일 수 있게.
+                    .textSelection(.enabled)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .frame(maxHeight: maxHeight)

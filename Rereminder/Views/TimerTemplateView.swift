@@ -12,6 +12,8 @@ import SwiftUI
 struct TimerTemplateView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
+    /// 투명도 줄이기 — 아래 안내 줄의 반투명 바탕을 불투명하게 바꾼다(뒤 목록 글자가 비치지 않게).
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
 
     @Query(sort: [SortDescriptor(\Timer.createdAt, order: .reverse)])
     private var allTemplates: [Timer]
@@ -85,7 +87,13 @@ struct TimerTemplateView: View {
                                 .font(.caption)
                         }
                         .padding(14)
-                        .background(.ultraThinMaterial)
+                        .background {
+                            if reduceTransparency {
+                                Color(uiColor: .secondarySystemBackground)
+                            } else {
+                                Rectangle().fill(.ultraThinMaterial)
+                            }
+                        }
                         .cornerRadius(14)
                     }
                     .padding(.horizontal, 16)
@@ -127,6 +135,9 @@ struct TimerTemplateView: View {
                             .font(DSFont.body.weight(.semibold))
                             .foregroundStyle(.primary)
                             .lineLimit(1)
+                            // 직접 붙인 긴 이름은 끝을 줄이고, 살짝 넘치면 간격을 좁혀 끝까지 보인다.
+                            .truncationMode(.tail)
+                            .allowsTightening(true)
 
                         if !timer.label.isEmpty {
                             Text(timer.displayLabel)

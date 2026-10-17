@@ -29,6 +29,7 @@ struct SectionCountdownList: View {
     /// 시작 후 경과 시간(초).
     let elapsedSec: Int
     var maxHeight: CGFloat = 160
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     /// 가장 긴 구간의 막대 폭. 나머지는 길이에 비례해 짧아진다.
     /// ⚠️ `GeometryReader` 로 화면 폭에서 재지 않는다 — 스크롤뷰 안에서 높이가 함께 늘어나
@@ -73,6 +74,9 @@ struct SectionCountdownList: View {
                 .lineLimit(1)
                 .fixedSize(horizontal: true, vertical: false)
                 .foregroundStyle(color)
+                // 지금 구간의 숫자는 바뀐 자리만 줄어들며 굴러간다(가운데 큰 시간과 같은 문법).
+                .contentTransition(reduceMotion ? .identity : .numericText(countsDown: true))
+                .animation(reduceMotion ? nil : .snappy(duration: 0.25), value: remaining)
 
             Spacer(minLength: 8)
 

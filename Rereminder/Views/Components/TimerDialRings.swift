@@ -156,7 +156,13 @@ struct TimerDialRings: View {
         return Text(verbatim: "\(number)")
             .font(.system(size: plan.lineWidth * 0.6, weight: .bold, design: .rounded))
             .foregroundStyle(.white)
-            .shadow(color: .black.opacity(0.25), radius: 1, y: 0.5)
+            // 밝은 구간 색(보라·초록·청록) 위에서는 흰 글자의 대비가 모자랐다(접근성 감사 "Contrast nearly passed").
+            // 숫자 뒤에 살짝 어두운 원을 깔아 어느 구간 색 위에서도 4.5:1 을 넘게 한다.
+            .background(
+                Circle()
+                    .fill(Color.black.opacity(0.45))
+                    .frame(width: plan.lineWidth * 0.85, height: plan.lineWidth * 0.85)
+            )
             // 링을 따라 돌아도 숫자는 똑바로 서 있어야 읽힌다
             .rotationEffect(.degrees(90 - angle))
             .offset(x: size / 2)
