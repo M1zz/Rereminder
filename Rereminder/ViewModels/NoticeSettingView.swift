@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UserNotifications
+import LeeoKit
 
 struct NoticeSettingView: View {
     /// 설정 행에 지금 고른 모양 이름·실루엣을 같이 보여주려고 읽는다.
@@ -584,6 +585,9 @@ struct NoticeSettingView: View {
                     }
                 }
                 .foregroundStyle(.primary)
+
+                // 앞으로 만들 기능 — 원본은 RereminderRoadmap.swift
+                NavigationLink(LeeoRoadmapText.entry) { RoadmapScreen() }
 
                 // 핸들(@lee25_ios)만 고유명사이고 문장은 언어별로 번역돼 있다.
                 Link(destination: URL(string: "https://instagram.com/lee25_ios")!) {
