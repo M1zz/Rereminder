@@ -408,7 +408,7 @@ https://m1zz.github.io/Rereminder/it/
 
 ### 키워드
 
-스톱워치,알람,카운트다운,뽀모도로,스피치,강의,강사,필라테스,요가,운동,인터벌,회의,워크숍,리허설,집중,공부,시간관리,진동,애플워치,설교,스터디,PT
+수업타이머,강의타이머,발표타이머,워크숍,리허설,카운트다운,스톱워치,애플워치,뽀모도로,남은시간,시간알림,타임키퍼,스피치,강사,진동타이머,무음타이머,인터벌타이머,필라테스,요가
 
 ### 프로모션 텍스트
 
@@ -492,7 +492,7 @@ Countdown with multiple alerts
 
 ### 키워드
 
-speech,speaker,class,teacher,workshop,meeting,pilates,yoga,hiit,interval,pomodoro,rehearsal,reminder
+timekeeper,debate,emcee,workshop,rehearsal,vibration,speech,speaker,teacher,class,sermon,interval
 
 ### 프로모션 텍스트
 
