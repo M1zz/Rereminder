@@ -28,7 +28,7 @@ enum RereminderSpec: LeeoAppSpec {
         appIdentifier: "com.xa.toki"
     )
 
-    /// 인앱 결제(페이월) — 비소비성 상품 셋, 트림으로 나뉜다(`ProTier`, `StoreManager.ProductID`).
+    /// 인앱 결제(페이월) — 비소비성 상품 셋, 트림(무료·플러스·프로)으로 나뉜다(`ProTier`, `StoreManager.ProductID`).
     /// ⚠️ **`entitlementIDs` 는 Pro 전체를 주는 상품만이다** — 여기에 기억(remember)을 넣으면
     ///    LeeoStore 의 `hasPro` 가 기억 구매자를 Pro 전체로 본다. 기억은 `StoreManager` 가 따로 센다.
     ///    배열 순서가 대표 상품 순서다 — `purchasePrimary` 가 첫 상품(pro)을 산다.
@@ -41,8 +41,25 @@ enum RereminderSpec: LeeoAppSpec {
         entitlementIDs: ["com.xa.toki.pro", "com.xa.toki.pro.upgrade"],
         termsURL: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"),
         privacyURL: URL(string: "https://m1zz.github.io/Rereminder/privacy.html"),
-        cacheSuiteName: "group.leeo.toki"
+        cacheSuiteName: "group.leeo.toki",
+        gate: ProGate.gatePolicy,
+        gift: giftConfig,
+        tipJar: tipJarConfig
     )
+
+    /// Pro 선물하기. 보내는 사람은 소모성 선물 상품을 사고, 받는 사람은 `com.xa.toki.pro` 를 산 것과 같아진다
+    /// (LeeoStore 가 받은 선물을 `purchasedProductIDs` 에 합치므로 `StoreManager` 의 래치가 그대로 Pro 로 기록한다).
+    /// 선물 기록은 피드백과 같은 허브 컨테이너의 공개 DB 에 둔다 — `Rereminder.entitlements` 에 이미 있다.
+    /// ⚠️ 선물 상품은 `productIDs` · `entitlementIDs` 에 넣지 않는다. 넣으면 선물을 산 사람이 Pro 가 된다.
+    static let giftConfig = LeeoGiftConfig(
+        productID: StoreManager.giftProductID,
+        grantsProductID: StoreManager.ProductID.pro.rawValue,
+        containerIdentifier: "iCloud.com.Ysoup.FeedbackHub"
+    )
+
+    /// 팁(응원). 이미 다 가진 사람이 더 내고 싶을 때. 아무것도 열지 않는 소모성 상품이다.
+    /// ⚠️ 이것도 `productIDs` · `entitlementIDs` 에 넣지 않는다(사전 점검 `tip.sellsPro`).
+    static let tipJarConfig = LeeoTipJarConfig(productIDs: StoreManager.tipProductIDs)
 
     /// LeeoAppSpec witness — 타입을 옵셔널로 명시해야 프로토콜 기본값(nil)에 가려지지 않는다.
     static let paywall: LeeoPaywallConfig? = paywallConfig
@@ -54,11 +71,16 @@ enum RereminderSpec: LeeoAppSpec {
         marketingURL: URL(string: "https://m1zz.github.io/Rereminder/")
     )
 
-    /// 수익모델 선언 (LeeoKit 3.x 부터 필수) — 무료로 쓰다가 1회 구매로 Pro 해제.
-    /// 무엇을 막는지는 이 앱의 `ProGate` 가 정하므로 LeeoKit 의 게이트 정책은 비워 둔다.
+    /// 수익모델 선언 (LeeoKit 3.x 부터 필수) — 무료로 쓰다가 1회 구매로 플러스(기억) 또는 Pro 해제.
+    /// 무료 한도는 `ProGate.gatePolicy` 하나에 있다 — 페이월 판정(`ProGate.evaluate`)과 한도 미리 알림
+    /// (`ProGate.nearLimitRemaining`)이 모두 그것을 읽는다. 선물·팁도 `paywallConfig` 와 같은 값을 싣는다
+    /// (둘이 어긋나면 `LeeoStore` 와 계약이 서로 다른 상품을 본다).
     static let monetization = LeeoMonetization.freemium(
         LeeoPurchaseConfig(productIDs: paywallConfig.productIDs,
                            entitlementIDs: paywallConfig.entitlementIDs,
-                           cacheSuiteName: "group.leeo.toki")
+                           gate: paywallConfig.gate,
+                           cacheSuiteName: "group.leeo.toki",
+                           gift: paywallConfig.gift,
+                           tipJar: paywallConfig.tipJar)
     )
 }

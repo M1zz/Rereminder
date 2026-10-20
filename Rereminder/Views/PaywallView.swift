@@ -191,7 +191,7 @@ struct PaywallView: View {
 
     /// 들어온 순간의 트림이 먼저다.
     private var orderedTiers: [ProTier] {
-        focusTier == .remember ? [.remember, .session] : [.session, .remember]
+        focusTier == .plus ? [.plus, .session] : [.session, .plus]
     }
 
     private var planCards: some View {
@@ -204,9 +204,9 @@ struct PaywallView: View {
 
     @ViewBuilder
     private func planCard(_ tier: ProTier) -> some View {
-        let owned = tier == .remember && store.canRemember
+        let owned = tier == .plus && store.canRemember
         let isSelected = !owned && selection == tier
-        let price: String? = tier == .remember
+        let price: String? = tier == .plus
             ? store.price(of: .remember)
             : store.price(of: store.proOffer)
 
@@ -222,7 +222,7 @@ struct PaywallView: View {
                     .accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: 4) {
                     HStack(spacing: 6) {
-                        Text(tier == .remember ? String(localized: "Remember") : AppName.pro)
+                        Text(tier == .plus ? String(localized: "Remember") : AppName.pro)
                             .font(.headline)
                             .foregroundStyle(.primary)
                         if owned {
@@ -234,7 +234,7 @@ struct PaywallView: View {
                                 .background(Capsule().fill(Color.green.opacity(0.15)))
                         }
                     }
-                    Text(tier == .remember
+                    Text(tier == .plus
                          ? String(localized: "Saved setups and your last timer")
                          : String(localized: "Everything in Remember, plus Session Mode, scripts, overtime and history"))
                         .font(.caption)
@@ -301,7 +301,7 @@ struct PaywallView: View {
             VStack(alignment: .leading, spacing: 4) {
                 // 기억 자리에서 "Pro 가 필요합니다"라고 하면 $2.99 카드와 말이 어긋난다.
                 // 기능이 아니라 **앞에 세운 트림**으로 말한다 — 전날 안내는 기능은 기억이지만 Pro 를 앞에 세운다.
-                Text(focusTier == .remember && showsTiers
+                Text(focusTier == .plus && showsTiers
                      ? String(localized: "Included in Remember")
                      : String(localized: "This feature requires Pro"))
                     .font(.subheadline.weight(.semibold))
@@ -459,7 +459,7 @@ struct PaywallView: View {
 
             } else {
                 Button {
-                    let product: StoreManager.ProductID = selection == .remember ? .remember : store.proOffer
+                    let product: StoreManager.ProductID = selection == .plus ? .remember : store.proOffer
                     lastPurchase = product
                     Task { await store.purchase(product) }
                 } label: {
@@ -468,7 +468,7 @@ struct PaywallView: View {
                             ProgressView()
                                 .tint(.white)
                         } else {
-                            Text(selection == .remember
+                            Text(selection == .plus
                                  ? String(localized: "Get Remember")
                                  : String(localized: "Upgrade to Pro"))
                                 .font(.headline)
@@ -493,7 +493,7 @@ struct PaywallView: View {
                     .shadow(color: Color.accentColor.opacity(0.3), radius: 8, y: 4)
                 }
                 .disabled(store.purchaseState == .purchasing)
-                .accessibilityLabel(selection == .remember
+                .accessibilityLabel(selection == .plus
                                     ? String(localized: "Get Remember")
                                     : String(localized: "Upgrade to Pro"))
                 .accessibilityValue(selectedPrice)
@@ -545,7 +545,7 @@ struct PaywallView: View {
 
     /// 버튼에 적을 가격 — 지금 고른 트림의 실제 결제 상품 가격.
     private var selectedPrice: String {
-        if selection == .remember { return store.price(of: .remember) ?? "" }
+        if selection == .plus { return store.price(of: .remember) ?? "" }
         return store.price(of: store.proOffer) ?? store.proPrice
     }
 

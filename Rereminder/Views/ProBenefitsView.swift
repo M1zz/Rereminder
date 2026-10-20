@@ -31,14 +31,14 @@ struct ProBenefitsView: View {
     /// 기억 → Pro 차액 업그레이드. 기존 페이월 흐름을 그대로 탄다.
     @State private var showUpgrade = false
 
-    private var tier: ProTier { store.isPro ? .session : (store.canRemember ? .remember : .free) }
+    private var tier: ProTier { store.isPro ? .session : (store.canRemember ? .plus : .free) }
 
     var body: some View {
         List {
             heroSection
             limitsSection
             unlockedSection
-            if tier == .remember {
+            if tier == .plus {
                 moreWithProSection
             }
             allFeaturesSection
@@ -99,7 +99,7 @@ struct ProBenefitsView: View {
     /// 이 트림으로 열린 한도들. 기억은 저장한 설정만, Pro 는 세션 모드까지.
     static func limitRows(tier: ProTier, usage: Usage) -> [LimitRow] {
         var rows: [LimitRow] = []
-        if tier >= .remember {
+        if tier >= .plus {
             rows.append(LimitRow(id: "setups", title: "Saved setups", symbol: "bookmark.fill",
                                  freeLimit: ProGate.freeSavedSetups, used: usage.savedSetups))
         }

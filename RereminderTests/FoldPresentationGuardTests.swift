@@ -12,6 +12,7 @@
 import XCTest
 import UIKit
 @testable import Rereminder
+@testable import LeeoKit
 
 @MainActor
 final class FoldPresentationGuardTests: XCTestCase {

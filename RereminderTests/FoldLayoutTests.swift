@@ -12,6 +12,7 @@
 
 import XCTest
 @testable import Rereminder
+import LeeoKit
 
 final class FoldLayoutTests: XCTestCase {
 

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import LeeoKit
 
 struct TimerMainView: View {
     @EnvironmentObject var screenVM: TimerScreenViewModel
@@ -62,6 +63,7 @@ struct TimerMainView: View {
     @ObservedObject private var watchLink = WatchConnectivityManager.shared
     /// 결제하는 순간 "Pro 는 이걸 기억해 둡니다" 한 줄이 물러나게 관찰한다(`ProGate` 는 static).
     @ObservedObject var store = StoreManager.shared
+    @ObservedObject private var tipAsk = TipAskCenter.shared
     /// 알림 권한 — 꺼져 있으면 원 아래에 "화면을 끄면 안 울린다" 한 줄이 선다(`NotificationOffNotice`).
     @EnvironmentObject var appStateManager: AppStateManager
     @State var showNotificationOffBanner = false
@@ -296,6 +298,12 @@ struct TimerMainView: View {
                         nextAlertInfo
                     } else if screenVM.state == .idle || screenVM.state == .finished {
                         rememberLines
+                        // 끝까지 마친 직후, 이미 Pro 를 가진 사람에게 드물게 — 팁 부탁(`TipAskLine`).
+                        if screenVM.state == .finished, let moment = tipAsk.moment, let tipJar = store.tipJar {
+                            TipAskLine(moment: moment, tipJar: tipJar)
+                                .padding(.horizontal)
+                                .transition(.opacity)
+                        }
                         // 대기 상태: 최근 템플릿 칩 + 수정 시 저장 버튼 (원 밖 아래쪽)
                         TemplateQuickBar(screenVM: screenVM)
                             .padding(.horizontal)
@@ -316,6 +324,9 @@ struct TimerMainView: View {
             // 타이머를 거는 순간 다시 확인한다 — 그 사이 워치가 꺼졌을 수도 있다.
             .onChange(of: screenVM.state) { _, newState in
                 if newState == .running { refreshDeviceLinks() }
+                // 방금 끝까지 마쳤다 — 숫자가 막 하나 늘어난 순간이라 팁을 물을 거리가 있는지 본다.
+                // 끝난 화면을 떠나면 카드도 물러난다(다음에 끝냈을 때 같은 규칙으로 다시 고른다).
+                if newState == .finished { tipAsk.evaluate() } else { tipAsk.close() }
             }
             // 다른 기기가 iCloud에 표시를 남기면 그때 따라간다.
             .onReceive(NotificationCenter.default.publisher(

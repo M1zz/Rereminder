@@ -236,6 +236,9 @@ struct NoticeSettingView: View {
                 }
             }
 
+            // 선물·응원 — 상품이 App Store 에서 와야 선다(`GiftAndTipSection`).
+            GiftAndTipSection()
+
             Section {
                 HStack(spacing: 16){
                     Text("Notification Style")

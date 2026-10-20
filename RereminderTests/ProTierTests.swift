@@ -2,7 +2,7 @@
 //  ProTierTests.swift
 //  RereminderTests
 //
-//  **트림(무료 · 기억 · Pro)은 기능으로 나뉘고, 위 트림은 아래를 전부 포함한다.**
+//  **트림(무료 · 플러스(기억) · Pro)은 기능으로 나뉘고, 위 트림은 아래를 전부 포함한다.**
 //
 //  지키는 것:
 //  - 기억($2.99)을 산 사람은 설정을 기억하지만 세션 모드는 여전히 Pro 다.
@@ -65,24 +65,24 @@ final class ProTierTests: XCTestCase {
     func test_resolve_fullProWinsOverRemember() {
         XCTAssertEqual(ProTier.resolve(isFullPro: true, ownsRemember: false), .session)
         XCTAssertEqual(ProTier.resolve(isFullPro: true, ownsRemember: true), .session)
-        XCTAssertEqual(ProTier.resolve(isFullPro: false, ownsRemember: true), .remember)
+        XCTAssertEqual(ProTier.resolve(isFullPro: false, ownsRemember: true), .plus)
         XCTAssertEqual(ProTier.resolve(isFullPro: false, ownsRemember: false), .free)
     }
 
     func test_tierOrder() {
-        XCTAssertLessThan(ProTier.free, .remember)
-        XCTAssertLessThan(ProTier.remember, .session)
+        XCTAssertLessThan(ProTier.free, .plus)
+        XCTAssertLessThan(ProTier.plus, .session)
     }
 
     func test_featureTiers() {
-        XCTAssertEqual(ProGate.Feature.unlimitedTemplates.tier, .remember)
+        XCTAssertEqual(ProGate.Feature.unlimitedTemplates.tier, .plus)
         XCTAssertEqual(ProGate.Feature.presentationMode.tier, .session)
         XCTAssertEqual(ProGate.Feature.overtimeTracking.tier, .session)
         XCTAssertEqual(ProGate.Feature.timerHistory.tier, .session)
     }
 
     func test_productTiers() {
-        XCTAssertEqual(StoreManager.ProductID.remember.tier, .remember)
+        XCTAssertEqual(StoreManager.ProductID.remember.tier, .plus)
         XCTAssertEqual(StoreManager.ProductID.pro.tier, .session)
         XCTAssertEqual(StoreManager.ProductID.proUpgrade.tier, .session)
     }
@@ -113,7 +113,7 @@ final class ProTierTests: XCTestCase {
     func test_rememberRecord_opensRememberOnly() {
         UserDefaults.standard.set(true, forKey: Self.rememberKey)
 
-        XCTAssertEqual(StoreManager.tier, .remember)
+        XCTAssertEqual(StoreManager.tier, .plus)
         XCTAssertFalse(StoreManager.isProUser)
         XCTAssertTrue(ProGate.canRememberSetup)
         XCTAssertTrue(ProGate.canSaveTemplate())
@@ -149,7 +149,7 @@ final class ProTierTests: XCTestCase {
 
     func test_receipt_hiddenWhenNumbersAreSmall() {
         XCTAssertNil(PaywallReceipt.pick(completions: 2, sessions: 1, focus: .session))
-        XCTAssertNil(PaywallReceipt.pick(completions: 0, sessions: 0, focus: .remember))
+        XCTAssertNil(PaywallReceipt.pick(completions: 0, sessions: 0, focus: .plus))
     }
 
     func test_receipt_sessionFocusPrefersSessions() {
@@ -160,6 +160,6 @@ final class ProTierTests: XCTestCase {
 
     /// 기억 자리에서는 세션 이야기를 꺼내지 않는다.
     func test_receipt_rememberFocusUsesTimers() {
-        XCTAssertEqual(PaywallReceipt.pick(completions: 5, sessions: 9, focus: .remember), .timers(5))
+        XCTAssertEqual(PaywallReceipt.pick(completions: 5, sessions: 9, focus: .plus), .timers(5))
     }
 }

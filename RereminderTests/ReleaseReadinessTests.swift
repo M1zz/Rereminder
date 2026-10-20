@@ -56,7 +56,7 @@ final class ReleaseReadinessTests: XCTestCase {
         usage.savedSetups = 4
         usage.sessions = 13
 
-        let remember = ProBenefitsView.limitRows(tier: .remember, usage: usage)
+        let remember = ProBenefitsView.limitRows(tier: .plus, usage: usage)
         XCTAssertEqual(remember.map(\.id), ["setups"])
         XCTAssertEqual(remember.first?.freeLimit, ProGate.freeSavedSetups)
         XCTAssertEqual(remember.first?.extra, 4)

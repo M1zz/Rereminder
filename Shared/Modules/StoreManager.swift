@@ -44,11 +44,19 @@ final class StoreManager: ObservableObject {
         case proUpgrade = "com.xa.toki.pro.upgrade"
 
         /// 이 상품이 여는 트림.
-        var tier: ProTier { self == .remember ? .remember : .session }
+        var tier: ProTier { self == .remember ? .plus : .session }
     }
 
     /// Pro 전체 권한을 주는 상품. ⚠️ `RereminderSpec.paywallConfig.entitlementIDs` 와 같아야 한다.
     nonisolated static let fullProductIDs: Set<String> = [ProductID.pro.rawValue, ProductID.proUpgrade.rawValue]
+
+    /// 팁(응원) 상품 — **소모성**, 작은 것부터 큰 것 순(화면도 이 순서다). 아무 권한도 열지 않는다.
+    /// ⚠️ `ProductID`·`productIDs`·`entitlementIDs` 어디에도 넣지 않는다 — 넣으면 팁을 낸 사람이 Pro 가 된다.
+    nonisolated static let tipProductIDs = ["com.xa.toki.tip.small", "com.xa.toki.tip.medium", "com.xa.toki.tip.large"]
+
+    /// Pro 선물 상품 — **소모성**(몇 번이고 보낼 수 있어야 한다). 받은 사람이 `ProductID.pro` 를 산 것과 같아진다.
+    /// ⚠️ 이것도 `productIDs`·`entitlementIDs` 에 넣지 않는다 — 넣으면 선물을 산 사람 자신이 Pro 가 된다.
+    nonisolated static let giftProductID = "com.xa.toki.gift.pro"
 
     // MARK: - Published State
 
@@ -393,6 +401,14 @@ final class StoreManager: ObservableObject {
         return found
     }
 
+    // MARK: - 팁 · 선물 (LeeoStore 가 엔진을 가진다)
+
+    /// 팁(응원) 엔진. 상품이 App Store 에서 와야 `isAvailable` 이 참이 되고, 그때만 설정에 줄이 선다.
+    var tipJar: LeeoTipJar? { store.tipJar }
+
+    /// Pro 선물 엔진. 받은 선물은 LeeoStore 가 `purchasedProductIDs` 에 합쳐 Pro 로 연다.
+    var gift: LeeoGiftStore? { store.gift }
+
     // MARK: - Load Products / Entitlements (LeeoStore 로 위임)
 
     /// 상품 로드 — 네트워크 불안정 대비 지수 백오프 재시도 (1s → 2s → 4s)
@@ -500,10 +516,13 @@ final class StoreManager: ObservableObject {
 // MARK: - 트림
 
 /// 이 설치가 어디까지 열려 있나. **값이 커질수록 위다** — 위 트림은 아래 트림을 전부 포함한다.
+/// 무료 · 플러스 · 프로 세 칸이다. 사람에게 보이는 플러스의 이름은 **"기억(Remember)"** 이다.
+/// ⚠️ 플러스는 Pro 가 아니다 — `com.xa.toki.remember` 는 `entitlementIDs` 에 넣지 않는다(`RereminderSpec`).
+///    `rawValue` 는 순서 비교에만 쓰고 어디에도 저장하지 않는다.
 enum ProTier: Int, Comparable, CaseIterable {
     case free = 0
-    /// 기억 — 템플릿 저장·불러오기 + 마지막 설정 복원.
-    case remember = 1
+    /// 플러스(기억) — 템플릿 저장·불러오기 + 마지막 설정 복원. 상품은 `com.xa.toki.remember`.
+    case plus = 1
     /// Pro 전체 — 기억 + 세션 모드·대본·오버타임·기록. 기존 구매자·평생 무료·창단 후원자가 여기다.
     case session = 2
 
@@ -512,7 +531,7 @@ enum ProTier: Int, Comparable, CaseIterable {
     /// 판정 (순수 함수 — 테스트 대상). Pro 전체 근거가 하나라도 있으면 기억 구매 여부와 무관하게 위다.
     static func resolve(isFullPro: Bool, ownsRemember: Bool) -> ProTier {
         if isFullPro { return .session }
-        return ownsRemember ? .remember : .free
+        return ownsRemember ? .plus : .free
     }
 }
 
@@ -582,7 +601,7 @@ extension StoreManager {
     }
 
     /// **설정을 기억해도 되는가** — 기억 트림 이상. `ProGate.canRememberSetup` 의 근거.
-    nonisolated static var canRememberSetup: Bool { tier >= .remember }
+    nonisolated static var canRememberSetup: Bool { tier >= .plus }
 
     nonisolated static var isProUser: Bool {
         if isAutoProEnvironment || isGrandfathered { return true }

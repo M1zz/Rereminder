@@ -149,10 +149,13 @@ struct TimerUnifiedView: View {
 
                 switch ProGate.evaluate(.presentationMode) {
                 case .allowed, .allowedWithTrial:
+                    // 쓰기 **전에** 센다 — 이번 한 번을 쓰고 나면 몇 번 남는지가 답이다.
+                    let left = ProGate.nearLimitRemaining(.presentationMode)
                     withAnimation(.easeInOut(duration: 0.3)) {
                         screenVM.currentMode = .presentation
                     }
                     ProGate.recordUsage(.presentationMode)
+                    if let left { warnFreeSessionsLeft(left) }
                     AnalyticsManager.log(.presentationModeStarted)
                     FeatureTips.markPresentationModeUsed()
                 case .blocked(let stage):
@@ -165,6 +168,17 @@ struct TimerUnifiedView: View {
                 }
             }
         )
+    }
+
+    /// 무료 세션 모드가 얼마 안 남았다는 한 줄(`ProGate.gatePolicy.warnWhenRemaining`).
+    /// 벽(페이월)에서 처음 듣지 않게, 닿기 전에 토스트로만 알린다 — 막지도, 결제를 권하지도 않는다.
+    /// ⚠️ "마지막"은 둘째 바퀴에서만 말한다 — 첫 바퀴 끝의 페이월은 "5번 더"를 내밀므로 그때는 마지막이 아니다.
+    private func warnFreeSessionsLeft(_ left: Int) {
+        if left == 0, !TrialCounter.extensionAccepted(for: .presentationMode) { return }
+        let message = left == 0
+            ? String(localized: "That was your last free Session Mode run")
+            : String(localized: "Free Session Mode runs left: \(left)")
+        toast.show(Toast(message, duration: 3.0))
     }
 
     private func enterPresentationAfterExtension() {

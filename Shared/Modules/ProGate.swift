@@ -28,7 +28,7 @@
 //     쓰는 말이고 학회 발표자에게도 통한다). 코드 식별자(`presentationMode`)는 계약이라 그대로다.
 //
 //  트림(`ProTier`, 2.3.3):
-//  - 기억(remember, $2.99) — 템플릿 저장·불러오기 + 마지막 설정 복원(`canRememberSetup`)
+//  - 플러스 = 기억(`ProTier.plus`, com.xa.toki.remember, $2.99) — 템플릿 저장·불러오기 + 마지막 설정 복원(`canRememberSetup`)
 //  - Pro 전체(session, $9.99) — 기억 + 세션 모드·대본·오버타임·기록
 //    기억을 산 사람은 차액(proUpgrade, $6.99)으로 올린다.
 //  ⚠️ 트림은 **기능으로** 나눈다. 개수(템플릿 몇 개)로 나누지 말 것 — 아래 Free Limits 참고.
@@ -39,6 +39,7 @@
 //
 
 import Foundation
+import LeeoKit
 
 enum ProGate {
 
@@ -76,7 +77,7 @@ enum ProGate {
 
         /// 이 기능을 여는 가장 낮은 트림. 페이월은 이걸 보고 어느 트림을 앞에 세울지 정한다.
         var tier: ProTier {
-            self == .unlimitedTemplates ? .remember : .session
+            self == .unlimitedTemplates ? .plus : .session
         }
 
         /// 5+5 trial 적용 대상인지 (slot 기반 templates 는 제외)
@@ -101,6 +102,47 @@ enum ProGate {
     /// 무료로 저장할 수 있는 설정 수 — **0 이다**(위 주석). 판정은 개수를 보지 않고 `canRememberSetup` 하나로
     /// 하지만, "무료였다면 어디까지였나"를 말하는 화면(`ProBenefitsView`)이 같은 숫자를 읽도록 여기 둔다.
     static let freeSavedSetups = 0
+
+    // MARK: - 무료 한도 선언 (LeeoGatePolicy)
+
+    /// **무료로 어디까지 쓰나**의 단일 선언 — `RereminderSpec` 의 수익모델이 이 값을 싣는다.
+    ///
+    /// - 체험이 도는 세 기능은 **체험 한 바퀴 = `TrialCounter.firstStageLimit` 번**이다. 1차 페이월에서
+    ///   "5번 더"를 받으면 같은 크기의 둘째 바퀴가 열린다(5+5). 둘째 바퀴의 판정도 같은 한도로 센다.
+    /// - 기억(`unlimitedTemplates`)은 무료 몫이 없는 hard gate 라 `proOnly` 다(플러스 이상이 연다).
+    /// - `warnWhenRemaining`: 한 바퀴에 이만큼 남으면 **벽에 닿기 전에** 미리 알린다(`nearLimitRemaining`).
+    ///   벽에서 처음 듣는 것보다 전환·체감이 모두 낫다.
+    /// ⚠️ 키는 `Feature.rawValue` 다 — 분석 슬라이스와 같은 문자열이라 바꾸지 말 것.
+    static let gatePolicy = LeeoGatePolicy(
+        freeLimits: Dictionary(uniqueKeysWithValues: Feature.allCases
+            .filter(\.supportsTrial)
+            .map { ($0.rawValue, TrialCounter.firstStageLimit) }),
+        proOnly: [Feature.unlimitedTemplates.rawValue],
+        warnWhenRemaining: 2
+    )
+
+    /// 이번에 쓰고 나면 **지금 바퀴에 몇 번 남는지** — 미리 알릴 때만 값이 있다(그 외에는 nil).
+    ///
+    /// 판정은 `LeeoGate` 가 `gatePolicy` 로 한다. 이 앱의 체험은 바퀴가 둘이라, 둘째 바퀴에서는
+    /// 첫 바퀴만큼을 빼고 센다. 이미 막혔으면 nil 이다 — 그때는 페이월이 말한다.
+    /// - Parameter isUnlocked: 이 기능이 이미 열려 있는가(Pro·트림). 테스트에서 주입한다.
+    static func nearLimitRemaining(_ feature: Feature,
+                                   used: Int? = nil,
+                                   extended: Bool? = nil,
+                                   isUnlocked: Bool? = nil) -> Int? {
+        let unlocked = isUnlocked ?? (StoreManager.isProUser || StoreManager.tier >= feature.tier)
+        guard feature.supportsTrial, !unlocked else { return nil }
+        let used = used ?? TrialCounter.count(for: feature)
+        let extended = extended ?? TrialCounter.extensionAccepted(for: feature)
+        // 첫 바퀴를 다 쓴 뒤 둘째 바퀴를 받지 않았다면 이미 벽이다.
+        if used >= TrialCounter.firstStageLimit && !extended { return nil }
+        let inRound = used >= TrialCounter.firstStageLimit ? used - TrialCounter.firstStageLimit : used
+        let gate = LeeoGate(policy: gatePolicy, hasPro: false, isTrialActive: false)
+        if case .allowedNearLimit(let remaining) = gate.evaluate(feature.rawValue, current: inRound) {
+            return remaining
+        }
+        return nil
+    }
 
     // MARK: - Gate Result
 
@@ -184,7 +226,7 @@ enum ProGate {
     /// 체험(5+5)이 없는 hard gate 다. "몇 번 더 써 보세요"가 성립하지 않는 종류의 기능이라
     /// (기억은 쌓여야 값이 나오는데 체험이 끝나면 쌓인 것이 사라진다) 처음부터 명확히 가른다.
     ///
-    /// 기억 트림(`ProTier.remember`) 이상이면 열린다 — Pro 전체를 살 필요는 없다.
+    /// 기억 트림(`ProTier.plus`) 이상이면 열린다 — Pro 전체를 살 필요는 없다.
     static var canRememberSetup: Bool { StoreManager.canRememberSetup }
 
     /// 템플릿 저장 가능 여부. ⚠️ 개수는 보지 않는다 — 저장 자체가 Pro 다.
