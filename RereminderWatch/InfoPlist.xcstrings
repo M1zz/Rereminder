@@ -34,6 +34,12 @@
             "value" : "Rereminder"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",

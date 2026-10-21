@@ -26,7 +26,7 @@ CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 PROFILE = pathlib.Path(tempfile.gettempdir()) / "rereminder-creative-chrome"
 
 # 문구 키 → App Store Connect 로케일들 (스토어에 es-ES · es-MX 가 둘 다 있다)
-STORE = {"en": ["en-US"], "de": ["de-DE"], "fr": ["fr-FR"], "es": ["es-ES", "es-MX"]}
+STORE = {"en": ["en-US"], "en-GB": ["en-GB"], "de": ["de-DE"], "fr": ["fr-FR"], "es": ["es-ES", "es-MX"]}
 # 문구 키 → 기기 화면 원본 폴더(앱 언어)
 SCREEN: dict[str, str] = {}
 
@@ -41,6 +41,7 @@ SPEC = {
 SEARCH = {
     "ko":      ("발표 타이머", "끝나기 전에<br>여러 번 알려 줘요", "10분 전, 5분 전, 1분 전<br>원하는 때마다"),
     "en":      ("Presentation timer", "Alerts before<br>time runs out", "10, 5 and 1 minute before.<br>You choose."),
+    "en-GB":   ("Presentation timer", "Alerts before<br>time runs out", "10, 5 and 1 minute before.<br>You choose."),
     "ja":      ("プレゼンタイマー", "終わる前に<br>何度でもお知らせ", "10分前、5分前、1分前。<br>タイミングは自由に"),
     "zh-Hans": ("演讲计时器", "结束之前<br>多次提醒你", "提前 10、5、1 分钟<br>随你设定"),
     "zh-Hant": ("簡報計時器", "結束之前<br>多次提醒你", "提前 10、5、1 分鐘<br>隨你設定"),
@@ -70,6 +71,7 @@ SEARCH = {
 HEADER = {
     "ko":      ("발표·수업 타이머", "끝나고 나서가 아니라<br>끝나기 전에"),
     "en":      ("Presentation timer", "Know before<br>time runs out"),
+    "en-GB":   ("Presentation timer", "Know before<br>time runs out"),
     "ja":      ("プレゼンタイマー", "終わってからじゃなく、<br>終わる前に"),
     "zh-Hans": ("演讲计时器", "不是结束才响，<br>而是提前提醒"),
     "zh-Hant": ("簡報計時器", "不是結束才響，<br>而是提前提醒"),

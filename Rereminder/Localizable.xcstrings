@@ -27,6 +27,12 @@
             "value" : ":"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ":"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -167,6 +173,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Οι γνωστοποιήσεις είναι απενεργοποιημένες, οπότε τίποτα δεν θα ηχήσει όταν σβήσει η οθόνη."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifications are off, so nothing rings once the screen is off."
           }
         },
         "es" : {
@@ -311,6 +323,12 @@
             "value" : "Ανοίγει τις ρυθμίσεις γνωστοποιήσεων"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens notification settings"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -451,6 +469,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ενεργοποίηση"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn On"
           }
         },
         "es" : {
@@ -595,6 +619,12 @@
             "value" : "· %lld ειδοποιήσεις"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "· %lld alerts"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -735,6 +765,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Το «Συνδεδεμένο» εδώ σημαίνει ότι το Rereminder ήταν ανοιχτό σε αυτόν τον Mac τα τελευταία 10 λεπτά — δεν είναι ζωντανή σύνδεση."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "\"Connected\" here means Rereminder was open on that Mac within the last 10 minutes — it isn't a live link."
           }
         },
         "es" : {
@@ -885,6 +921,12 @@
             "value" : "%1$@ – %2$@"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ – %2$@"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1025,6 +1067,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@ · Εφάπαξ αγορά"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ · One-time purchase"
           }
         },
         "es" : {
@@ -1175,6 +1223,12 @@
             "value" : "%1$@ %2$@"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1317,6 +1371,12 @@
             "value" : "Χρώμα %@"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ colour"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1457,6 +1517,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Απομένουν %@"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ left"
           }
         },
         "es" : {
@@ -1607,6 +1673,12 @@
             "value" : "%1$@: %2$@ %3$@, %4$@ %5$@"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@: %2$@ %3$@, %4$@ %5$@"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1744,6 +1816,12 @@
           }
         },
         "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld"
@@ -1891,6 +1969,12 @@
             "value" : "%lld %@"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld %@"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2033,6 +2117,12 @@
             "value" : "%lld λεπ."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2173,6 +2263,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld λεπ. · ειδοποιήσεις %@ λεπ. πριν από το τέλος"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min · alerts %@ min before the end"
           }
         },
         "es" : {
@@ -2323,6 +2419,12 @@
             "value" : "%1$lld min %2$lld sec"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld min %2$lld sec"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2463,6 +2565,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld λεπ. πριν"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min before"
           }
         },
         "es" : {
@@ -2607,6 +2715,12 @@
             "value" : "Απομένουν %lld λεπ."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min left"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -2747,6 +2861,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Απομένουν %lld λεπτά"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld min remaining"
           }
         },
         "es" : {
@@ -2891,6 +3011,12 @@
             "value" : "Προειδοποίηση %lld λεπτών"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld minute pre-alert"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3031,6 +3157,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld λεπτά"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld minutes"
           }
         },
         "es" : {
@@ -3181,6 +3313,12 @@
             "value" : "%1$lld minutes %2$lld seconds"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld minutes %2$lld seconds"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3321,6 +3459,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld λεπτά σε %lld δευτερόλεπτα"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld minutes in %lld seconds"
           }
         },
         "es" : {
@@ -3465,6 +3609,12 @@
             "value" : "%lld δευτ."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld sec"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3605,6 +3755,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld δευτ. πριν"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld sec before"
           }
         },
         "es" : {
@@ -3749,6 +3905,12 @@
             "value" : "Απομένουν %lld δευτ."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld sec remaining"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -3891,6 +4053,12 @@
             "value" : "%lld δευτερόλεπτα"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld seconds"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4031,6 +4199,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld λ."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldm"
           }
         },
         "es" : {
@@ -4181,6 +4355,12 @@
             "value" : "%1$lldm %2$llds"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lldm %2$llds"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4321,6 +4501,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld λεπ."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldmin"
           }
         },
         "es" : {
@@ -4465,6 +4651,12 @@
             "value" : "%lld λεπ. %lld δευτ."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lldmin %lldsec"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4602,6 +4794,12 @@
           }
         },
         "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "•"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "•"
@@ -4749,6 +4947,12 @@
             "value" : "☁️ Σε παύση από %@"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "☁️ Paused from %@"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -4889,6 +5093,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "☁️ Διακόπηκε από %@"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "☁️ Stopped from %@"
           }
         },
         "es" : {
@@ -5033,6 +5243,12 @@
             "value" : "☁️ Ο χρονομετρητής συγχρονίστηκε από %@"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "☁️ Timer synced from %@"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5170,6 +5386,12 @@
           }
         },
         "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "00:00"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "00:00"
@@ -5317,6 +5539,12 @@
             "value" : "Χρονομετρητής 1 λεπτού → λήγει σε ~%lld δευτ."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 min timer → ends in ~%lld sec"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5457,6 +5685,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ταχύτητα 1x (πραγματικός χρόνος)"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1x Speed (Real-time)"
           }
         },
         "es" : {
@@ -5601,6 +5835,12 @@
             "value" : "Χρονομετρητής 10 λεπτών → λήγει σε ~%lld δευτ."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "10 min timer → ends in ~%lld sec"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -5741,6 +5981,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ταχύτητα 10x"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "10x Speed"
           }
         },
         "es" : {
@@ -5885,6 +6131,12 @@
             "value" : "Ταχύτητα 30x"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "30x Speed"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6027,6 +6279,12 @@
             "value" : "Ταχύτητα 60x"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "60x Speed"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6164,6 +6422,12 @@
           }
         },
         "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "70%"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "70%"
@@ -6311,6 +6575,12 @@
             "value" : "Ένα παράδειγμα στοιχείου ελέγχου που εκκινεί χρονομετρητή."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A an example control that runs a timer."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6451,6 +6721,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Λειτουργία για να ελέγξετε γρήγορα ότι ο χρονομετρητής δουλεύει σωστά.\n\n• 10x: ένας χρονομετρητής 10 λεπτών τελειώνει σε 1 λεπτό\n• 30x: ένας χρονομετρητής 10 λεπτών τελειώνει σε 20 δευτερόλεπτα\n• 60x: ένας χρονομετρητής 10 λεπτών τελειώνει σε 10 δευτερόλεπτα\n\nΜπορείτε να δοκιμάσετε γρήγορα όλες τις λειτουργίες, όπως ειδοποιήσεις, προειδοποιήσεις και υπέρβαση χρόνου.\n\n⚠️ Μην ξεχάσετε να απενεργοποιήσετε τη λειτουργία δοκιμής για κανονική χρήση!"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A mode to quickly verify that the timer works correctly.\n\n• 10x: 10-minute timer finishes in 1 minute\n• 30x: 10-minute timer finishes in 20 seconds\n• 60x: 10-minute timer finishes in 10 seconds\n\nYou can quickly test all features including alerts, pre-alerts, and overtime.\n\n⚠️ Make sure to turn off test mode for actual use!"
           }
         },
         "es" : {
@@ -6595,6 +6871,12 @@
             "value" : "Ένα απαλό κλικ κάθε φορά που το καντράν περνά ένα βήμα, ώστε να ρυθμίζετε τον χρόνο χωρίς να κοιτάτε το δάχτυλό σας."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A small tick every time the dial passes a step, so you can set the time without watching your finger."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -6735,6 +7017,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Προσθήκη"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add"
           }
         },
         "es" : {
@@ -6879,6 +7167,12 @@
             "value" : "Προσθήκη προσαρμοσμένης προειδοποίησης"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a custom pre-alert"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7019,6 +7313,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Προσθήκη χρόνου ειδοποίησης"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add alert time"
           }
         },
         "es" : {
@@ -7163,6 +7463,12 @@
             "value" : "Εισαγωγή λεπτών"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add custom minutes"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7303,6 +7609,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Προσθήκη προειδοποίησης"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Pre-alert"
           }
         },
         "es" : {
@@ -7447,6 +7759,12 @@
             "value" : "Προσθήκη προεπιλογής"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Preset"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7587,6 +7905,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Προσθήκη κειμένου"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add script"
           }
         },
         "es" : {
@@ -7731,6 +8055,12 @@
             "value" : "Προσθήκη στα αγαπημένα"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add to favourites"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -7871,6 +8201,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Προσθέτει μια ειδοποίηση στη μέση, ανάμεσα στην τελευταία ειδοποίηση και στο τέλος."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adds an alert halfway between the last alert and the end."
           }
         },
         "es" : {
@@ -8015,6 +8351,12 @@
             "value" : "Απαιτείται άδεια για ξυπνητήρια"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alarm permission needed"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8152,6 +8494,12 @@
           }
         },
         "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "alarmID"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "alarmID"
@@ -8299,6 +8647,12 @@
             "value" : "Ειδοποίηση %lld λεπτά πριν από το τέλος"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alert %lld minutes before end"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8439,6 +8793,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ειδοποίηση μία φορά"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alert once"
           }
         },
         "es" : {
@@ -8583,6 +8943,12 @@
             "value" : "Προεπιλογές ειδοποιήσεων"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alert Presets"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -8723,6 +9089,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Όλες οι λειτουργίες ξεκλειδώθηκαν"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All features unlocked"
           }
         },
         "es" : {
@@ -8867,6 +9239,12 @@
             "value" : "Όλες οι λειτουργίες Pro — Λειτουργία συνεδρίας, κείμενα ενοτήτων, απεριόριστα πρότυπα, καταγραφή υπέρβασης χρόνου και ιστορικό — είναι δικές σας, δωρεάν για πάντα. Δεν χάσατε τίποτα από όσα είχατε."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All Pro features — Session Mode, section scripts, unlimited templates, overtime tracking and history — are yours free forever. Nothing you had has been taken away."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9007,6 +9385,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Επιτρέψτε τα ξυπνητήρια για το Rereminder στις Ρυθμίσεις, ώστε η λήξη να χτυπά σαν ξυπνητήρι."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allow alarms for Rereminder in Settings to use the full alarm."
           }
         },
         "es" : {
@@ -9151,6 +9535,12 @@
             "value" : "Επιτρέπεται"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allowed"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9291,6 +9681,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ειδοποίηση και στις άλλες συσκευές μου"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Also alert my other devices"
           }
         },
         "es" : {
@@ -9436,6 +9832,12 @@
             "value" : "Σας ενοχλεί κάτι;"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anything bothering you?"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9579,6 +9981,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Rereminder"
@@ -9732,6 +10140,12 @@
             "value" : "Rereminder Timer"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder Timer"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -9880,6 +10294,12 @@
             "value" : "Rereminder Pro"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder Pro"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10022,6 +10442,12 @@
             "value" : "Εμφάνιση"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appearance"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10159,6 +10585,12 @@
           }
         },
         "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Apple Watch"
@@ -10306,6 +10738,12 @@
             "value" : "Εφαρμόζει αυτό το πρότυπο στον χρονομετρητή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Applies this template to the timer"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10446,6 +10884,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Εφαρμογή"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apply"
           }
         },
         "es" : {
@@ -10590,6 +11034,12 @@
             "value" : "διαθέσιμο"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "available"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -10730,6 +11180,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Μέση διάρκεια"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Average Duration"
           }
         },
         "es" : {
@@ -10874,6 +11330,12 @@
             "value" : "Πίσω"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Back"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11014,6 +11476,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ειδοποίηση πριν"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "before alert"
           }
         },
         "es" : {
@@ -11159,6 +11627,12 @@
             "value" : "Δεν γίνεται πιο σύντομο από τις ειδοποιήσεις σας"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Can't go shorter than your alerts"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11299,6 +11773,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ακύρωση"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
           }
         },
         "es" : {
@@ -11443,6 +11923,12 @@
             "value" : "Ακύρωση χρονομετρητή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel Timer"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11583,6 +12069,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Νέος έλεγχος"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check again"
           }
         },
         "es" : {
@@ -11727,6 +12219,12 @@
             "value" : "Επιλέξτε το χρώμα έμφασης για όλη την εφαρμογή."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose your accent colour for the entire app."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -11867,6 +12365,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Μάθημα"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Class"
           }
         },
         "es" : {
@@ -12011,6 +12515,12 @@
             "value" : "Κλείσιμο"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12151,6 +12661,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Επίλογος"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Closing"
           }
         },
         "es" : {
@@ -12295,6 +12811,12 @@
             "value" : "Σύγκριση πακέτων"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compare Plans"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12435,6 +12957,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "ολοκληρώθηκε"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "completed"
           }
         },
         "es" : {
@@ -12579,6 +13107,12 @@
             "value" : "Ολοκληρώθηκε"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Completed"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -12719,6 +13253,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ποσοστό ολοκλήρωσης"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Completion Rate"
           }
         },
         "es" : {
@@ -12863,6 +13403,12 @@
             "value" : "Συνδέστε το Apple Watch σας"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connect your Apple Watch"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13003,6 +13549,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Συνδέστε τον Mac σας"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connect your Mac"
           }
         },
         "es" : {
@@ -13147,6 +13699,12 @@
             "value" : "Συνδεδεμένο"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connected"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13287,6 +13845,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αποθεραπεία"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cool-down"
           }
         },
         "es" : {
@@ -13432,6 +13996,12 @@
             "value" : "Ορισμός λεπτών"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Custom Minutes"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13572,6 +14142,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Προσαρμογή προεπιλογών ειδοποιήσεων"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Customise alert presets"
           }
         },
         "es" : {
@@ -13716,6 +14292,12 @@
             "value" : "Σκούρο"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dark"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -13856,6 +14438,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Δεδομένα"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data"
           }
         },
         "es" : {
@@ -14000,6 +14588,12 @@
             "value" : "Ημερομηνία"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14140,6 +14734,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Πληροφορίες αποσφαλμάτωσης"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Debug Info"
           }
         },
         "es" : {
@@ -14284,6 +14884,12 @@
             "value" : "Διαγραφή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14424,6 +15030,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Απορρίφθηκε - Μετάβαση στις Ρυθμίσεις"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Denied - Go to Settings"
           }
         },
         "es" : {
@@ -14568,6 +15180,12 @@
             "value" : "Παράβλεψη ειδοποίησης χρονομετρητή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dismiss timer alert"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14710,6 +15328,12 @@
             "value" : "Έχετε Mac;"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do you have a Mac?"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -14850,6 +15474,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Έχετε Apple Watch;"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Do you have an Apple Watch?"
           }
         },
         "es" : {
@@ -14995,6 +15625,12 @@
             "value" : "Να μην εμφανιστεί ξανά"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Don't Show Again"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15135,6 +15771,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Τέλος"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
           }
         },
         "es" : {
@@ -15279,6 +15921,12 @@
             "value" : "Πατήστε δύο φορές για ενεργοποίηση ή απενεργοποίηση αυτής της ειδοποίησης."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Double tap to toggle this alert."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15421,6 +16069,12 @@
             "value" : "Σύρετε τα καμπανάκια για να ειδοποιηθείτε πριν τελειώσει η ομιλία σας"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drag the bells to get reminders before your talk ends"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15561,6 +16215,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "π.χ. Παρουσίαση, Καθοδήγηση, Σύσκεψη"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "e.g., Presentation, Mentoring, Meeting"
           }
         },
         "es" : {
@@ -15706,6 +16366,12 @@
             "value" : "Κάθε ειδοποίηση μπορεί να έχει το δικό της μήνυμα. Όταν έρθει η στιγμή, αυτό το κείμενο βλέπετε στη γνωστοποίηση και στην οθόνη."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Each alert can carry its own message. When that moment arrives, this is the text you see in the notification and on screen."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -15846,6 +16512,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Βγείτε ομαλά από τη βαθιά συγκέντρωση αντί να διακοπείτε απότομα."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ease out of deep work instead of being cut off."
           }
         },
         "es" : {
@@ -15990,6 +16662,12 @@
             "value" : "Επεξεργασία"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16130,6 +16808,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Επεξεργασία προεπιλογής"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit Alert Preset"
           }
         },
         "es" : {
@@ -16274,6 +16958,12 @@
             "value" : "Επεξεργασία προτύπου"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit Template"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16414,6 +17104,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ενεργοποιήστε τις γνωστοποιήσεις στις Ρυθμίσεις"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enable notifications in Settings"
           }
         },
         "es" : {
@@ -16558,6 +17254,12 @@
             "value" : "Λήξη"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "End"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16698,6 +17400,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Μήνυμα ειδοποίησης λήξης"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "End Alert Message"
           }
         },
         "es" : {
@@ -16842,6 +17550,12 @@
             "value" : "Λήξη με ξυπνητήρι"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "End with a full alarm"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -16982,6 +17696,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Χειροκίνητη εισαγωγή χρόνου"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter Time Manually"
           }
         },
         "es" : {
@@ -17126,6 +17846,12 @@
             "value" : "Κάθε 15 δευτερόλεπτα"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every 15 seconds"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17266,6 +17992,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Κάθε 30 δευτερόλεπτα"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every 30 seconds"
           }
         },
         "es" : {
@@ -17410,6 +18142,12 @@
             "value" : "Κάθε μελλοντική λειτουργία Pro περιλαμβάνεται για εσάς."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every future Pro feature is included for you."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17552,6 +18290,12 @@
             "value" : "Όλες οι μελλοντικές λειτουργίες Pro, μαζί"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every future Pro feature, included"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17692,6 +18436,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Κάθε λεπτό"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every minute"
           }
         },
         "es" : {
@@ -17837,6 +18587,12 @@
             "value" : "Όλα όσα είδατε στην αρχική περιήγηση βρίσκονται εδώ — μαζί με το πώς χρησιμοποιείτε το Rereminder σε Apple Watch, Mac, γραφικά στοιχεία και Siri."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Everything from the first-run walkthrough is here — including how to use Rereminder on Apple Watch, Mac, widgets, and Siri."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -17977,6 +18733,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Λειτουργία"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feature"
           }
         },
         "es" : {
@@ -18121,6 +18883,12 @@
             "value" : "Σχόλια"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18261,6 +19029,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Εισερχόμενα σχόλια (Προγραμματιστής)"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback Inbox (Developer)"
           }
         },
         "es" : {
@@ -18405,6 +19179,12 @@
             "value" : "Νιώστε το καντράν"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feel the dial"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18545,6 +19325,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Συγκέντρωση"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Focus"
           }
         },
         "es" : {
@@ -18689,6 +19475,12 @@
             "value" : "Ακολουθήστε αυτά τα βήματα για να ενεργοποιήσετε τις γνωστοποιήσεις:\n\n1. Πατήστε το κουμπί «Μετάβαση στις Ρυθμίσεις»\n2. Βρείτε την εφαρμογή «%@» στις Ρυθμίσεις\n3. Επιλέξτε «Γνωστοποιήσεις»\n4. Ενεργοποιήστε την επιλογή «Επιτρέπονται οι γνωστοποιήσεις»\n\n💡 Προτεινόμενες ρυθμίσεις:\n• Εμφάνιση στην Οθόνη κλειδώματος\n• Εμφάνιση στο Κέντρο γνωστοποιήσεων\n• Εμφάνιση ως πλαίσια\n\nΈτσι δεν θα χάσετε ποτέ ειδοποίηση του χρονομετρητή!"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Follow these steps to enable notifications:\n\n1. Tap 'Go to Settings' button\n2. Find '%@' app in Settings\n3. Select 'Notifications' menu\n4. Turn on 'Allow Notifications'\n\n💡 Recommended settings:\n• Show on Lock Screen\n• Show in Notification Centre\n• Show as Banners\n\nThis ensures you never miss timer alerts!"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -18829,6 +19621,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Για 1 λεπτό"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For 1 minute"
           }
         },
         "es" : {
@@ -18973,6 +19771,12 @@
             "value" : "Για 2 λεπτά"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For 2 minutes"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19113,6 +19917,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Για 5 λεπτά"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For 5 minutes"
           }
         },
         "es" : {
@@ -19257,6 +20067,12 @@
             "value" : "Για τα διαλείμματα που συνεχώς αναβάλλετε. Το iPhone σας χτυπά στην ένταση του ξυπνητηριού - παρά την Αθόρυβη λειτουργία και την Εστίαση - και δεν σταματά μέχρι να σηκωθείτε και να πατήσετε Διακοπή."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For breaks you keep skipping. Your iPhone rings at alarm volume - through Silent Mode and Focus - and does not stop until you get up and press Stop."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19397,6 +20213,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ιδρυτικός υποστηρικτής"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Founding Supporter"
           }
         },
         "es" : {
@@ -19541,6 +20363,12 @@
             "value" : "Δωρεάν"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Free"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19681,6 +20509,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Δωρεάν για πάντα ως πρώιμος υποστηρικτής 🎉"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Free forever as an early supporter 🎉"
           }
         },
         "es" : {
@@ -19825,6 +20659,12 @@
             "value" : "Ειδοποιηθείτε πριν τελειώσει ο χρονομετρητής."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get a heads-up before the timer ends."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -19965,6 +20805,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ας ξεκινήσουμε"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get Started"
           }
         },
         "es" : {
@@ -20109,6 +20955,12 @@
             "value" : "Μετάβαση στις Ρυθμίσεις"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Go to Settings"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20249,6 +21101,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Εντάξει"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Got it"
           }
         },
         "es" : {
@@ -20394,6 +21252,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Everything stays in sync through iCloud, so your timers follow you from device to device."
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Everything stays in sync through iCloud, so your timers follow you from device to device."
@@ -20547,6 +21411,12 @@
             "value" : "Rereminder works across iPhone, Apple Watch, widgets, Siri, and Mac. Here's how to get the most out of each one."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder works across iPhone, Apple Watch, widgets, Siri, and Mac. Here's how to get the most out of each one."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20690,6 +21560,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One timer,\nevery device"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "One timer,\nevery device"
@@ -20844,6 +21720,12 @@
             "value" : "Set the time on the dial, then tap the alert chips to be reminded 1, 3, 5, or 10 minutes before the end — as many as you like."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set the time on the dial, then tap the alert chips to be reminded 1, 3, 5, or 10 minutes before the end — as many as you like."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -20988,6 +21870,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Multiple pre-alerts"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Multiple pre-alerts"
@@ -21142,6 +22030,12 @@
             "value" : "Check progress from Home and Lock Screen widgets, or start and stop with a single tap from Control Center."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check progress from Home and Lock Screen widgets, or start and stop with a single tap from Control Centre."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21291,6 +22185,12 @@
             "value" : "Widgets & Control Center"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Widgets & Control Centre"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21435,6 +22335,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause, resume, or stop the timer right from the Dynamic Island or Lock Screen — no need to open the app."
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pause, resume, or stop the timer right from the Dynamic Island or Lock Screen — no need to open the app."
@@ -21589,6 +22495,12 @@
             "value" : "Dynamic Island & Live Activity"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dynamic Island & Live Activity"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -21733,6 +22645,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your main timer with multiple pre-alerts"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Your main timer with multiple pre-alerts"
@@ -21887,6 +22805,12 @@
             "value" : "iPhone"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22031,6 +22955,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Watch the countdown in the menu bar and pause, resume, or stop without leaving your work."
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Watch the countdown in the menu bar and pause, resume, or stop without leaving your work."
@@ -22185,6 +23115,12 @@
             "value" : "Menu bar timer"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menu bar timer"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22329,6 +23265,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timers stay in sync between your Mac and iPhone through iCloud."
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Timers stay in sync between your Mac and iPhone through iCloud."
@@ -22483,6 +23425,12 @@
             "value" : "Syncs with iPhone"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Syncs with iPhone"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22627,6 +23575,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Download Rereminder from the Mac App Store to run it natively on your Mac."
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Download Rereminder from the Mac App Store to run it natively on your Mac."
@@ -22781,6 +23735,12 @@
             "value" : "Get it on Mac"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get it on Mac"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -22925,6 +23885,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep a timer running while you work"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Keep a timer running while you work"
@@ -23079,6 +24045,12 @@
             "value" : "Mac"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23222,6 +24194,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Multi-Device Guide"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Multi-Device Guide"
@@ -23376,6 +24354,12 @@
             "value" : "Say “Start a Rereminder timer” — or pause, resume, and stop — hands-free."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Say “Start a Rereminder timer” — or pause, resume, and stop — hands-free."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23520,6 +24504,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Voice commands"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Voice commands"
@@ -23674,6 +24664,12 @@
             "value" : "Ask for a specific length, like “Start a 5 minute timer,” and it begins right away."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ask for a specific length, like “Start a 5 minute timer,” and it begins right away."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -23818,6 +24814,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set any duration"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Set any duration"
@@ -23972,6 +24974,12 @@
             "value" : "Drop Rereminder actions into the Shortcuts app to build your own routines and automations."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drop Rereminder actions into the Shortcuts app to build your own routines and automations."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24116,6 +25124,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shortcuts automation"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Shortcuts automation"
@@ -24270,6 +25284,12 @@
             "value" : "Start and control timers with your voice"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start and control timers with your voice"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24414,6 +25434,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siri & Shortcuts"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Siri & Shortcuts"
@@ -24568,6 +25594,12 @@
             "value" : "Set the duration with the Digital Crown and start a timer without your iPhone nearby."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set the duration with the Digital Crown and start a timer without your iPhone nearby."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -24712,6 +25744,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Works on its own"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Works on its own"
@@ -24866,6 +25904,12 @@
             "value" : "Start, pause, or stop on one device and it updates on the other — even in the background."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start, pause, or stop on one device and it updates on the other — even in the background."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -25010,6 +26054,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Syncs with iPhone"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Syncs with iPhone"
@@ -25164,6 +26214,12 @@
             "value" : "Feel a gentle tap on your wrist at each pre-alert time and when the timer ends."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feel a gentle tap on your wrist at each pre-alert time and when the timer ends."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -25308,6 +26364,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pre-alert haptics"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pre-alert haptics"
@@ -25462,6 +26524,12 @@
             "value" : "Run timers right from your wrist"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Run timers right from your wrist"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -25606,6 +26674,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Apple Watch"
@@ -25760,6 +26834,12 @@
             "value" : "Touch and hold the Home Screen, tap +, and add a Rereminder widget. The large one even shows your remaining pre-alert schedule."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touch and hold the Home Screen, tap +, and add a Rereminder widget. The large one even shows your remaining pre-alert schedule."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -25904,6 +26984,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Home Screen widgets"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Home Screen widgets"
@@ -26058,6 +27144,12 @@
             "value" : "Circular, rectangular, and inline widgets keep the countdown visible at a glance."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Circular, rectangular, and inline widgets keep the countdown visible at a glance."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -26202,6 +27294,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lock Screen widgets"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Lock Screen widgets"
@@ -26356,6 +27454,12 @@
             "value" : "The live countdown on your Lock Screen and Dynamic Island has Pause, Resume, and Stop buttons built in."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The live countdown on your Lock Screen and Dynamic Island has Pause, Resume, and Stop buttons built in."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -26500,6 +27604,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Live Activity controls"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Live Activity controls"
@@ -26654,6 +27764,12 @@
             "value" : "Glance and control without opening the app"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glance and control without opening the app"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -26803,6 +27919,12 @@
             "value" : "Widgets & Live Activity"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Widgets & Live Activity"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -26945,6 +28067,12 @@
             "value" : "Δόνηση κατά τη ρύθμιση"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Haptics while adjusting"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -27085,6 +28213,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Βοήθεια"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Help"
           }
         },
         "es" : {
@@ -27230,6 +28364,12 @@
             "value" : "Το ιστορικό θα εμφανιστεί όταν χρησιμοποιήσετε χρονομετρητές"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "History will appear after you use timers"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -27372,6 +28512,12 @@
             "value" : "Πώς να ενεργοποιήσετε τις γνωστοποιήσεις"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How to Enable Notifications"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -27512,6 +28658,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Πώς να δώσετε τις άδειες"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How to enable permissions"
           }
         },
         "es" : {
@@ -27657,6 +28809,12 @@
             "value" : "Πώς να χρησιμοποιήσετε την εφαρμογή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How to Use This App"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -27797,6 +28955,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Δεν έχω"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I don't have one"
           }
         },
         "es" : {
@@ -27941,6 +29105,12 @@
             "value" : "Έχω"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I have one"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -28081,6 +29251,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αν εξακολουθεί να μη συνδέεται, ελέγξτε ότι το Bluetooth και το Wi-Fi είναι ενεργά και στις δύο συσκευές."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If it still doesn't connect, check that Bluetooth and Wi-Fi are on for both devices."
           }
         },
         "es" : {
@@ -28225,6 +29401,12 @@
             "value" : "Αν έχετε, το Rereminder μπορεί να δείχνει τον χρόνο που απομένει στη γραμμή μενού του Mac."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If you do, Rereminder can show the remaining time in your Mac menu bar."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -28365,6 +29547,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αν έχετε, μπορείτε να βλέπετε τον χρόνο που απομένει στον καρπό σας όσο τρέχει ο χρονομετρητής."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If you do, you can check the remaining time right on your wrist while the timer runs."
           }
         },
         "es" : {
@@ -28509,6 +29697,12 @@
             "value" : "Αν το Apple Watch ειδοποιήσει πρώτο και δεν αντιδράσετε, αυτό το iPhone ειδοποιεί κι αυτό μετά από 30 δευτερόλεπτα. Η διακοπή σε οποιαδήποτε συσκευή σταματά και τις δύο."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If your Apple Watch alerts first and you don't respond, this iPhone joins in after 30 seconds. Stopping on either device stops both."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -28649,6 +29843,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αδύνατον να το αγνοήσετε"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible to ignore"
           }
         },
         "es" : {
@@ -28793,6 +29993,12 @@
             "value" : "Σε εξέλιξη"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Progress"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -28935,6 +30141,12 @@
             "value" : "Στη Λειτουργία συνεδρίας αυτά τα μηνύματα γράφονται αυτόματα από τα ονόματα των ενοτήτων, οπότε ό,τι πληκτρολογήσετε εδώ αντικαθίσταται."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Session mode these messages are written for you from the section names, so what you type here is replaced."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -29075,6 +30287,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Πληροφορίες"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Info"
           }
         },
         "es" : {
@@ -29220,6 +30438,12 @@
             "value" : "Μήνυμα στο Instagram (@lee25_ios)"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instagram DM (@lee25_ios)"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -29360,6 +30584,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Εγκαταστήστε το Rereminder στον Mac σας από το App Store."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Install Rereminder on your Mac from the App Store."
           }
         },
         "es" : {
@@ -29504,6 +30734,12 @@
             "value" : "Εισαγωγή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intro"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -29644,6 +30880,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ειδοποίηση μέχρι να απαντήσω"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep alerting until I answer"
           }
         },
         "es" : {
@@ -29788,6 +31030,12 @@
             "value" : "Διάρκεια επανάληψης"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep repeating"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -29928,6 +31176,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Η αποθεραπεία να μη στριμώχνεται."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep the cool-down from getting squeezed."
           }
         },
         "es" : {
@@ -30072,6 +31326,12 @@
             "value" : "Να κρατηθεί αυτή η ρύθμιση;"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep this setup?"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -30212,6 +31472,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Συνεχίζει να ειδοποιεί μέχρι να πατήσετε Διακοπή ή Αναβολή στη γνωστοποίηση."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keeps alerting until you tap Stop or Snooze on the notification."
           }
         },
         "es" : {
@@ -30356,6 +31622,12 @@
             "value" : "Χτυπά μέχρι να πατήσετε Διακοπή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keeps ringing until you press Stop"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -30496,6 +31768,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ξέρετε πότε να κλείσετε χωρίς να κοιτάτε το ρολόι."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Know when to wrap up without looking at a clock."
           }
         },
         "es" : {
@@ -30640,6 +31918,12 @@
             "value" : "Ετικέτα"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Label"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -30780,6 +32064,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Χρώμα ετικέτας"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Label Colour"
           }
         },
         "es" : {
@@ -30924,6 +32214,12 @@
             "value" : "Οι ετικέτες σάς βοηθούν να ξεχωρίζετε εύκολα τους χρονομετρητές"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Labels help you easily distinguish timers"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -31064,6 +32360,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ολοκληρώστε την ατζέντα στην ώρα της — 10, 5 και 1 λεπτό πριν."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Land the agenda on time — 10, 5, and 1 minute out."
           }
         },
         "es" : {
@@ -31208,6 +32510,12 @@
             "value" : "Τελευταία δραστηριότητα %@"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last active %@"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -31348,6 +32656,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αργότερα"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Later"
           }
         },
         "es" : {
@@ -31492,6 +32806,12 @@
             "value" : "Αφήστε το κενό για το προεπιλεγμένο μήνυμα: «%@»"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leave empty to use default message: \"%@\""
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -31632,6 +32952,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αφήστε το κενό για το προεπιλεγμένο μήνυμα: «Ο χρονομετρητής τελείωσε»"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leave empty to use default message: \"Timer finished\""
           }
         },
         "es" : {
@@ -31777,6 +33103,12 @@
             "value" : "Αφήστε σχόλια"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leave Feedback"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -31917,6 +33249,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αφήστε το κενό για το προεπιλεγμένο."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leave it empty to use the default."
           }
         },
         "es" : {
@@ -32061,6 +33399,12 @@
             "value" : "Κρατήστε το απενεργοποιημένο σε ήσυχους χώρους - αγνοεί σκόπιμα την Αθόρυβη λειτουργία."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Leave this off in quiet places - it ignores Silent Mode on purpose."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -32201,6 +33545,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Η εφαρμογή να θυμάται τις ρυθμίσεις σας"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Let the app remember your setups"
           }
         },
         "es" : {
@@ -32345,6 +33695,12 @@
             "value" : "Ανοιχτό"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Light"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -32485,6 +33841,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Περιορισμένο στο δωρεάν πακέτο"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limited on the free plan"
           }
         },
         "es" : {
@@ -32630,6 +33992,12 @@
             "value" : "Με τη σειρά που θα ηχήσουν. Όσες ειδοποιήσεις ξεπερνούν τη διάρκεια του χρονομετρητή δεν ηχούν ποτέ, γι' αυτό δεν εμφανίζονται εδώ."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Listed in the order they will ring. Alerts longer than the timer itself never ring, so they aren't shown here."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -32770,6 +34138,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ζωντανή δραστηριότητα (Dynamic Island)"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Live Activity (Dynamic Island)"
           }
         },
         "es" : {
@@ -32914,6 +34288,12 @@
             "value" : "λ."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "m"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -33051,6 +34431,12 @@
           }
         },
         "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mac"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Mac"
@@ -33198,6 +34584,12 @@
             "value" : "Κύριο μέρος"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Main"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -33338,6 +34730,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Κύρια άσκηση"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Main work"
           }
         },
         "es" : {
@@ -33482,6 +34880,12 @@
             "value" : "Σύσκεψη"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meeting"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -33624,6 +35028,12 @@
             "value" : "Μηνύματα"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Messages"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -33764,6 +35174,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Έγινε επαναφορά των μηνυμάτων"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Messages have been reset"
           }
         },
         "es" : {
@@ -33909,6 +35325,12 @@
             "value" : "λεπ."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "min"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -34051,6 +35473,12 @@
             "value" : "λεπ. πριν"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "min before alert"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -34191,6 +35619,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Λεπτά"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minutes"
           }
         },
         "es" : {
@@ -34336,6 +35770,12 @@
             "value" : "Λειτουργία"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mode"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -34476,6 +35916,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Περισσότερες προειδοποιήσεις"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "More pre-alerts"
           }
         },
         "es" : {
@@ -34620,6 +36066,12 @@
             "value" : "Οι περισσότεροι χρονομετρητές χτυπούν μόνο στο τέλος. Αυτός σας χτυπά φιλικά στον ώμο νωρίτερα — για να τελειώσετε στην ώρα σας αντί να σας κόψουν."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Most timers only ring at the end. This one taps you on the shoulder before that — so you can land on time instead of being cut off."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -34760,6 +36212,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Οι συσκευές μου"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My Devices"
           }
         },
         "es" : {
@@ -34904,6 +36362,12 @@
             "value" : "Όνομα"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -35046,6 +36510,12 @@
             "value" : "Επόμενο"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -35186,6 +36656,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Επόμενη: %@"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next: %@"
           }
         },
         "es" : {
@@ -35331,6 +36807,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next: %1$@ alert (%2$lld min %3$lld sec left)"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Next: %1$@ alert (%2$lld min %3$lld sec left)"
@@ -35484,6 +36966,12 @@
             "value" : "Next: %1$@ alert (%2$lld sec left)"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next: %1$@ alert (%2$lld sec left)"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -35632,6 +37120,12 @@
             "value" : "Next: End alert (%1$lld min %2$lld sec left)"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next: End alert (%1$lld min %2$lld sec left)"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -35772,6 +37266,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Επόμενη: ειδοποίηση λήξης (απομένουν %lld δευτ.)"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Next: End alert (%lld sec left)"
           }
         },
         "es" : {
@@ -35916,6 +37416,12 @@
             "value" : "Κανένας ενεργός χρονομετρητής"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No active timer"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -36056,6 +37562,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Κανένα Apple Watch δεν είναι συζευγμένο με αυτό το iPhone"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Apple Watch is paired with this iPhone"
           }
         },
         "es" : {
@@ -36200,6 +37712,12 @@
             "value" : "Δεν έχει προγραμματιστεί επόμενη"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No next one planned"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -36340,6 +37858,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Δεν έχουν οριστεί προειδοποιήσεις"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No pre-alerts set"
           }
         },
         "es" : {
@@ -36484,6 +38008,12 @@
             "value" : "Δεν υπάρχουν αγορές για επαναφορά"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No purchases to restore"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -36624,6 +38154,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Δεν υπάρχουν αποθηκευμένα πρότυπα"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No saved templates"
           }
         },
         "es" : {
@@ -36768,6 +38304,12 @@
             "value" : "Δεν υπάρχει ιστορικό χρονομετρητών"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No timer history"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -36908,6 +38450,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Όχι, δεν έχω"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No, I don't"
           }
         },
         "es" : {
@@ -37052,6 +38600,12 @@
             "value" : "Δεν έχει απαντηθεί ακόμα"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not answered yet"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -37192,6 +38746,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "μη διαθέσιμο"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "not available"
           }
         },
         "es" : {
@@ -37336,6 +38896,12 @@
             "value" : "Μη συνδεδεμένο"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not connected"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -37476,6 +39042,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Όχι τώρα"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not now"
           }
         },
         "es" : {
@@ -37620,6 +39192,12 @@
             "value" : "Δεν ξέρω ακόμα"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not sure yet"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -37760,6 +39338,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Τίποτα από όσα έχετε ήδη δεν χάνεται."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing you already have is going away."
           }
         },
         "es" : {
@@ -37904,6 +39488,12 @@
             "value" : "ενημέρωση"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "notice"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -38044,6 +39634,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ρυθμίσεις μηνυμάτων ειδοποίησης"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notification Message Settings"
           }
         },
         "es" : {
@@ -38188,6 +39784,12 @@
             "value" : "Τρόπος ειδοποίησης"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notification Method"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -38328,6 +39930,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Άδεια γνωστοποιήσεων"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notification Permission"
           }
         },
         "es" : {
@@ -38472,6 +40080,12 @@
             "value" : "Η άδεια γνωστοποιήσεων απορρίφθηκε"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notification permission denied"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -38612,6 +40226,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Απαιτείται άδεια γνωστοποιήσεων"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notification permission is required"
           }
         },
         "es" : {
@@ -38756,6 +40376,12 @@
             "value" : "Η άδεια γνωστοποιήσεων είναι απαραίτητη για τις ειδοποιήσεις του χρονομετρητή.\n\nΧωρίς άδεια:\n• Δεν θα λαμβάνετε προειδοποιήσεις\n• Δεν θα λαμβάνετε ειδοποιήσεις λήξης\n• Οι γνωστοποιήσεις δεν θα λειτουργούν στο παρασκήνιο\n\nΕνεργοποιήστε τις γνωστοποιήσεις στις Ρυθμίσεις."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notification permission is required for timer alerts.\n\nWithout permission:\n• You won't receive pre-alerts\n• You won't receive end alerts\n• Notifications won't work in background\n\nPlease enable notifications in Settings."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -38896,6 +40522,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Στιλ γνωστοποιήσεων"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notification Style"
           }
         },
         "es" : {
@@ -39040,6 +40672,12 @@
             "value" : "Δείτε τώρα τον χρόνο που απομένει και στη γραμμή μενού του Mac"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Now check the remaining time in your Mac menu bar too"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -39180,6 +40818,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Δείτε τώρα τον χρόνο που απομένει και στο Apple Watch σας"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Now check the remaining time on your Apple Watch too"
           }
         },
         "es" : {
@@ -39324,6 +40968,12 @@
             "value" : "Ανενεργό"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -39462,6 +41112,12 @@
           }
         },
         "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "OK"
@@ -39609,6 +41265,12 @@
             "value" : "Ενεργό"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -39749,6 +41411,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Στο iPhone, ανοίξτε την εφαρμογή Watch → Το ρολόι μου και εγκαταστήστε το Rereminder αν δεν υπάρχει."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On iPhone, open the Watch app → My Watch, and install Rereminder if it isn't there."
           }
         },
         "es" : {
@@ -39896,6 +41564,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start on iPhone and keep going on Apple Watch or Mac — pause on one, and the others follow. Widgets and the Dynamic Island let you check and control without opening the app."
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Start on iPhone and keep going on Apple Watch or Mac — pause on one, and the others follow. Widgets and the Dynamic Island let you check and control without opening the app."
@@ -40051,6 +41725,12 @@
             "value" : "Presenting from your Mac while your wrist taps the 5-minute warning"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Presenting from your Mac while your wrist taps the 5-minute warning"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -40201,6 +41881,12 @@
             "value" : "One timer,\nall your devices"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One timer,\nall your devices"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -40341,6 +42027,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Μία δόνηση ξεφεύγει εύκολα. Το Rereminder επαναλαμβάνει την ειδοποίηση λήξης μέχρι να πατήσετε Διακοπή ή Αναβολή."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One buzz is easy to miss. Rereminder repeats the end alert until you tap Stop or Snooze."
           }
         },
         "es" : {
@@ -40485,6 +42177,12 @@
             "value" : "Ένα σετ ακόμα και μετά αποθεραπεία — χωρίς να μετράτε."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One more set, then cool down — without counting."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -40627,6 +42325,12 @@
             "value" : "Ένας χρονομετρητής, πολλές προειδοποιήσεις"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One timer, several heads-ups"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -40767,6 +42471,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Εφάπαξ αγορά. Χωρίς συνδρομή."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "One-time purchase. No subscription fees."
           }
         },
         "es" : {
@@ -40912,6 +42622,12 @@
             "value" : "Στο macOS υποστηρίζονται μόνο βασικές γνωστοποιήσεις"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only basic notifications are supported on macOS"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -41052,6 +42768,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Άνοιγμα εφαρμογής"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open App"
           }
         },
         "es" : {
@@ -41196,6 +42918,12 @@
             "value" : "Ανοίγει την εφαρμογή Rereminder"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Rereminder app"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -41336,6 +43064,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ανοίξτε το Rereminder στο Apple Watch — ο χρόνος που απομένει εμφανίζεται όσο τρέχει ο χρονομετρητής."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Rereminder on your Apple Watch — the remaining time appears while a timer runs."
           }
         },
         "es" : {
@@ -41480,6 +43214,12 @@
             "value" : "Ανοίξτε το Rereminder στο Apple Watch για να το παρακολουθείτε"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Rereminder on your Apple Watch to follow along"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -41620,6 +43360,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ανοίξτε το Rereminder στον Mac — ο χρόνος που απομένει εμφανίζεται στη γραμμή μενού."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Rereminder on your Mac — the remaining time appears in the menu bar."
           }
         },
         "es" : {
@@ -41764,6 +43510,12 @@
             "value" : "Ανοίξτε το Rereminder στον Mac για να το παρακολουθείτε"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Rereminder on your Mac to follow along"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -41904,6 +43656,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Άνοιγμα Ρυθμίσεων"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Settings"
           }
         },
         "es" : {
@@ -42048,6 +43806,12 @@
             "value" : "Πρόλογος"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opening"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -42188,6 +43952,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Υπέρβαση χρόνου"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overtime"
           }
         },
         "es" : {
@@ -42333,6 +44103,12 @@
             "value" : "Επισκόπηση"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overview"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -42473,6 +44249,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Παύση"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause"
           }
         },
         "es" : {
@@ -42617,6 +44399,12 @@
             "value" : "Παύση τρέχοντος χρονομετρητή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause the current timer"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -42757,6 +44545,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Θέτει τον χρονομετρητή σε παύση"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause the timer"
           }
         },
         "es" : {
@@ -42901,6 +44695,12 @@
             "value" : "Παύση χρονομετρητή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause timer"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -43041,6 +44841,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Παύση χρονομετρητή"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pause Timer"
           }
         },
         "es" : {
@@ -43185,6 +44991,12 @@
             "value" : "Σε παύση"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paused"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -43325,6 +45137,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Πληρώνετε μία φορά, το έχετε για πάντα"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pay once, use forever"
           }
         },
         "es" : {
@@ -43469,6 +45287,12 @@
             "value" : "Διαλέξτε ένα και θα ρυθμίσουμε τον χρονομετρητή για εσάς. Μπορείτε να αλλάξετε τα πάντα αργότερα."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pick one and we'll set the timer up for you. You can change everything later."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -43611,6 +45435,12 @@
             "value" : "Προειδοποίηση"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pre-alert"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -43751,6 +45581,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Μήνυμα προειδοποίησης"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pre-alert Message"
           }
         },
         "es" : {
@@ -43896,6 +45732,12 @@
             "value" : "Προειδοποιήσεις"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pre-alerts"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -44036,6 +45878,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Προειδοποιήσεις (1 λεπ., 3 λεπ., 5 λεπ. κ.λπ.)"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pre-alerts (1 min, 3 min, 5 min, etc.)"
           }
         },
         "es" : {
@@ -44180,6 +46028,12 @@
             "value" : "Παρουσίαση"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Presentation"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -44320,6 +46174,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Προεπισκόπηση"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preview"
           }
         },
         "es" : {
@@ -44464,6 +46324,12 @@
             "value" : "Πολιτική απορρήτου"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy Policy"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -44601,6 +46467,12 @@
           }
         },
         "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pro"
@@ -44748,6 +46620,12 @@
             "value" : "PRO"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PRO"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -44888,6 +46766,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Το Pro αλλάζει μορφή. Δείτε τι σημαίνει αυτό για εσάς — και τι δεν σημαίνει."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro is changing shape. Here's what that means for you — and what it doesn't."
           }
         },
         "es" : {
@@ -45032,6 +46916,12 @@
             "value" : "Η αγορά ολοκληρώθηκε!"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Purchase successful!"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -45172,6 +47062,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Γρήγορη δοκιμή"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quick Test Mode"
           }
         },
         "es" : {
@@ -45316,6 +47212,12 @@
             "value" : "Βαθμολογήστε την εφαρμογή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rate App"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -45458,6 +47360,12 @@
             "value" : "Έτοιμο"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ready"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -45598,6 +47506,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Λήψη γνωστοποιήσεων στο παρασκήνιο"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Receive notifications in background"
           }
         },
         "es" : {
@@ -45743,6 +47657,12 @@
             "value" : "Πρόσφατες καταγραφές"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recent Records"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -45883,6 +47803,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Χρόνος που απομένει: %@"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remaining time: %@"
           }
         },
         "es" : {
@@ -46027,6 +47953,12 @@
             "value" : "Θυμάται τον τελευταίο σας χρονομετρητή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remembers your last timer"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -46167,6 +48099,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Υπενθύμιση"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remind me"
           }
         },
         "es" : {
@@ -46311,6 +48249,12 @@
             "value" : "Αφαίρεση"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -46451,6 +48395,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αφαίρεση από τα αγαπημένα"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove from favourites"
           }
         },
         "es" : {
@@ -46595,6 +48545,12 @@
             "value" : "Επανάληψη ειδοποίησης λήξης"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Repeat the end alert"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -46735,6 +48691,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ξανά από την αρχή"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Replay"
           }
         },
         "es" : {
@@ -46879,6 +48841,12 @@
             "value" : "Αίτημα άδειας"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Request Permission"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -47019,6 +48987,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Το Rereminder κάνει μερικά πράγματα που οι περισσότεροι δεν ανακαλύπτουν ποτέ. Ενεργοποιήστε ό,τι χρειάζεστε — εφαρμόζεται αμέσως, εδώ."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder can do a few things most people never find. Turn on what you need — it all takes effect right here."
           }
         },
         "es" : {
@@ -47163,6 +49137,12 @@
             "value" : "Το Rereminder σάς καθοδηγεί για τις συσκευές που έχετε και δεν αναφέρει όσες δεν έχετε. Αν ορίσετε μια συσκευή σε «Όχι», δεν θα την ξαναδείτε."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder points you to the devices you have, and stays quiet about the ones you don't. Set a device to No and it won't be mentioned again."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -47303,6 +49283,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Επαναφορά"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset"
           }
         },
         "es" : {
@@ -47447,6 +49433,12 @@
             "value" : "Επαναφορά όλων των μηνυμάτων"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset All Messages"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -47587,6 +49579,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Μηδενισμός μετρητή ολοκληρώσεων"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset Completion Count"
           }
         },
         "es" : {
@@ -47731,6 +49729,12 @@
             "value" : "Επαναφέρει τον χρονομετρητή στην προεπιλεγμένη ρύθμιση"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset the timer to the default setup"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -47871,6 +49875,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Έγινε επαναφορά στον προεπιλεγμένο χρονομετρητή"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset to the default timer"
           }
         },
         "es" : {
@@ -48015,6 +50025,12 @@
             "value" : "Επαναφορά αγορών"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restore Purchases"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -48155,6 +50171,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Η επαναφορά ολοκληρώθηκε!"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restored successfully!"
           }
         },
         "es" : {
@@ -48299,6 +50321,12 @@
             "value" : "Συνέχιση"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resume"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -48439,6 +50467,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Συνέχιση του χρονομετρητή από την παύση"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resume the paused timer"
           }
         },
         "es" : {
@@ -48583,6 +50617,12 @@
             "value" : "Συνεχίζει τον χρονομετρητή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resume the timer"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -48723,6 +50763,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Συνέχιση χρονομετρητή"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resume timer"
           }
         },
         "es" : {
@@ -48867,6 +50913,12 @@
             "value" : "Συνέχιση χρονομετρητή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resume Timer"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -49007,6 +51059,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Χτυπά στην ένταση ξυπνητηριού, παρά την Αθόρυβη λειτουργία και την Εστίαση"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rings at alarm volume, through Silent Mode and Focus"
           }
         },
         "es" : {
@@ -49151,6 +51209,12 @@
             "value" : "Σε λειτουργία"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Running"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -49291,6 +51355,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Την ίδια ώρα, όπως πάντα"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Same time as usual"
           }
         },
         "es" : {
@@ -49435,6 +51505,12 @@
             "value" : "Αποθήκευση"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -49575,6 +51651,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αποθήκευση ως πρότυπο"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save as template"
           }
         },
         "es" : {
@@ -49719,6 +51801,12 @@
             "value" : "Αποθηκεύει τις τρέχουσες ρυθμίσεις ως πρότυπο"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save the current settings as a template"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -49859,6 +51947,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αποθηκεύτηκε"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saved"
           }
         },
         "es" : {
@@ -50003,6 +52097,12 @@
             "value" : "Αποθηκευμένες ρυθμίσεις"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saved setups"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -50143,6 +52243,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αποθηκευμένοι χρονομετρητές"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saved timers"
           }
         },
         "es" : {
@@ -50287,6 +52393,12 @@
             "value" : "Οι αποθηκευμένοι χρονομετρητές είναι ένα άγγιγμα μακριά στην κύρια οθόνη, ώστε να μη φτιάχνετε ποτέ τον ίδιο δύο φορές."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saved timers sit one tap away on the main screen, so you never build the same one twice."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -50427,6 +52539,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αν το αποθηκεύσετε, την επόμενη φορά ξεκινά με ένα άγγιγμα."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saving it means one tap to start next time."
           }
         },
         "es" : {
@@ -50571,6 +52689,12 @@
             "value" : "Κείμενο"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Script"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -50711,6 +52835,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "δευτ."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sec"
           }
         },
         "es" : {
@@ -50855,6 +52985,12 @@
             "value" : "δευτ. πριν"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sec before alert"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -50995,6 +53131,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Δευτερόλεπτα"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seconds"
           }
         },
         "es" : {
@@ -51139,6 +53281,12 @@
             "value" : "Ενότητα %lld"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Section %lld"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -51279,6 +53427,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Διάρκεια ενοτήτων"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Section lengths"
           }
         },
         "es" : {
@@ -51423,6 +53577,12 @@
             "value" : "Όνομα ενότητας"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Section name"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -51563,6 +53723,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Κείμενα ενοτήτων"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Section Scripts"
           }
         },
         "es" : {
@@ -51707,6 +53873,12 @@
             "value" : "Χρόνος που απομένει στην ενότητα"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Section time remaining"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -51847,6 +54019,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Δείτε τι αλλάζει"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See what's changing"
           }
         },
         "es" : {
@@ -51991,6 +54169,12 @@
             "value" : "Επιλογή πολλαπλασιαστή χρόνου"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select Time Multiplier"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -52131,6 +54315,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Επιλεγμένο χρώμα:"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selected Colour:"
           }
         },
         "es" : {
@@ -52275,6 +54465,12 @@
             "value" : "Αποστολή σχολίων"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send Feedback"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -52415,6 +54611,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αποστολή push γνωστοποίησης"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send Push Notification"
           }
         },
         "es" : {
@@ -52559,6 +54761,12 @@
             "value" : "Αποστολή δοκιμαστικής γνωστοποίησης"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send Test Notification"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -52699,6 +54907,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Συνεδρία 1"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Session 1"
           }
         },
         "es" : {
@@ -52843,6 +55057,12 @@
             "value" : "Συνεδρία 2"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Session 2"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -52983,6 +55203,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Λειτουργία συνεδρίας"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Session Mode"
           }
         },
         "es" : {
@@ -53127,6 +55353,12 @@
             "value" : "Λειτουργία συνεδρίας, πρότυπα και ιστορικό στην πλήρη εφαρμογή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Session mode, templates, and history in the full app"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -53267,6 +55499,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "συνεδρίες"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sessions"
           }
         },
         "es" : {
@@ -53411,6 +55649,12 @@
             "value" : "Ρύθμιση"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set it up"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -53551,6 +55795,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ρυθμίσαμε τον συνηθισμένο σας χρονομετρητή"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Set up your usual timer"
           }
         },
         "es" : {
@@ -53695,6 +55945,12 @@
             "value" : "Ρυθμίσεις"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -53835,6 +56091,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Κοινοποίηση εφαρμογής"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share App"
           }
         },
         "es" : {
@@ -53985,6 +56247,12 @@
             "value" : "Check out Rereminder - a timer app for mentoring and presentations!"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check out Rereminder - a timer app for mentoring and presentations!"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -54125,6 +56393,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Εμφάνιση περισσότερων (απομένουν %lld)"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show more (%lld remaining)"
           }
         },
         "es" : {
@@ -54269,6 +56543,12 @@
             "value" : "Εμφάνιση σύντομων μηνυμάτων"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Toast Messages"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -54409,6 +56689,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Εμφανίζει την τρέχουσα κατάσταση του χρονομετρητή"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shows current timer status"
           }
         },
         "es" : {
@@ -54553,6 +56839,12 @@
             "value" : "Δείχνει πώς να συνδέσετε αυτή τη συσκευή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shows how to connect this device"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -54693,6 +56985,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Συνδεθείτε στον ίδιο Λογαριασμό Apple και στις δύο συσκευές και ενεργοποιήστε το iCloud Drive."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sign in to the same Apple Account on both devices and turn on iCloud Drive."
           }
         },
         "es" : {
@@ -54837,6 +57135,12 @@
             "value" : "Έξι συνεδρίες, και η τελευταία παίρνει κι αυτή τον χρόνο της."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Six sessions, and the last one still gets its time."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -54977,6 +57281,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Παράλειψη"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skip"
           }
         },
         "es" : {
@@ -55121,6 +57431,12 @@
             "value" : "Αναβολή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Snooze"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -55261,6 +57577,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ήχος"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sound"
           }
         },
         "es" : {
@@ -55405,6 +57727,12 @@
             "value" : "Επιτάχυνση %lld×. Δείτε τα καμπανάκια να χτυπούν πριν από το τέλος."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sped up %lld×. Watch the bells ring before the end."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -55545,6 +57873,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Έναρξη"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start"
           }
         },
         "es" : {
@@ -55689,6 +58023,12 @@
             "value" : "Έναρξη χρονομετρητή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start a timer"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -55831,6 +58171,12 @@
             "value" : "Έναρξη χρονομετρητή στο Rereminder"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start a timer in Rereminder"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -55971,6 +58317,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Έναρξη συνεδρίας"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start Session"
           }
         },
         "es" : {
@@ -56116,6 +58468,12 @@
             "value" : "Έναρξη"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start Timer"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -56256,6 +58614,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ξεκινήστε με τη δική μας προεπιλογή και αλλάξτε τη αργότερα."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start with our default and change it later."
           }
         },
         "es" : {
@@ -56400,6 +58764,12 @@
             "value" : "Έναρξη χρονομετρητή %lld λεπτών"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starting %lld minute timer"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -56540,6 +58910,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Έναρξη χρονομετρητή"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starting timer"
           }
         },
         "es" : {
@@ -56684,6 +59060,12 @@
             "value" : "Κατάσταση"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -56824,6 +59206,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Διακοπή"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop"
           }
         },
         "es" : {
@@ -56968,6 +59356,12 @@
             "value" : "Διακοπή τρέχοντος χρονομετρητή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop the current timer"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -57108,6 +59502,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Διακόπτει τον χρονομετρητή"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop the timer"
           }
         },
         "es" : {
@@ -57252,6 +59652,12 @@
             "value" : "Διακόψτε τον χρονομετρητή για αλλαγή λειτουργίας"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop the timer to switch modes"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -57392,6 +59798,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Διακοπή χρονομετρητή"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop timer"
           }
         },
         "es" : {
@@ -57536,6 +59948,12 @@
             "value" : "Διακοπή χρονομετρητή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stop Timer"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -57676,6 +60094,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "διακόπηκε"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "stopped"
           }
         },
         "es" : {
@@ -57820,6 +60244,12 @@
             "value" : "Σαρώστε πάνω ή κάτω για να ρυθμίσετε τον χρόνο. Πατήστε δύο φορές για να εισαγάγετε ακριβή χρόνο."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Swipe up or down to adjust the time. Double tap to enter an exact time."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -57962,6 +60392,12 @@
             "value" : "Σύστημα"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -58102,6 +60538,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αγγίξτε για επιλογή θέματος"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap to select theme"
           }
         },
         "es" : {
@@ -58247,6 +60689,12 @@
             "value" : "Πατήστε για έναρξη"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap to start"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -58388,6 +60836,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Πείτε μας τι χρειάζεστε ή τι δεν σας άρεσε — ο προγραμματιστής διαβάζει κάθε μήνυμα."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tell us what you need or what felt off — the developer reads every message."
           }
         },
         "es" : {
@@ -58532,6 +60986,12 @@
             "value" : "Όνομα προτύπου"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Template Name"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -58672,6 +61132,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Το πρότυπο αποθηκεύτηκε"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Template saved"
           }
         },
         "es" : {
@@ -58816,6 +61282,12 @@
             "value" : "Πρότυπα"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Templates"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -58956,6 +61428,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Τα πρότυπα αποθηκεύονται αυτόματα όταν ξεκινάτε χρονομετρητή"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Templates are automatically saved when you start a timer"
           }
         },
         "es" : {
@@ -59100,6 +61578,12 @@
             "value" : "Όροι χρήσης"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Terms of Use"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -59240,6 +61724,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Λειτουργία δοκιμής"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Test Mode"
           }
         },
         "es" : {
@@ -59384,6 +61874,12 @@
             "value" : "Η δοκιμαστική γνωστοποίηση θα σταλεί 1 δευτερόλεπτο αφού πατήσετε το κουμπί"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Test notification will be sent 1 second after pressing the button"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -59524,6 +62020,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Σας ευχαριστούμε που μας στηρίξατε από νωρίς"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thank you for backing this early"
           }
         },
         "es" : {
@@ -59668,6 +62170,12 @@
             "value" : "Σας ευχαριστούμε που είστε από τους πρώτους χρήστες 💙"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thank you for being an early user 💙"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -59808,6 +62316,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Η εφαρμογή δεν είναι εγκατεστημένη στο Apple Watch σας"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The app isn't installed on your Apple Watch"
           }
         },
         "es" : {
@@ -59952,6 +62466,12 @@
             "value" : "Η εφαρμογή θυμάται τις ρυθμίσεις σας"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The app remembers your setups"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -60092,6 +62612,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Η εφαρμογή θυμάται τις ρυθμίσεις σας — αποθηκευμένες ρυθμίσεις, τελευταίο χρονομετρητή, εργαλεία συνεδρίας"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The app remembers your setups — saved setups, last timer, session tools"
           }
         },
         "es" : {
@@ -60236,6 +62762,12 @@
             "value" : "Ο προγραμματιστής διαβάζει κάθε μήνυμα. Πείτε μας τι χρειάζεστε ή τι δεν σας άρεσε."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The developer reads every message. Tell us what you need or what felt off."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -60376,6 +62908,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Θέμα"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Theme"
           }
         },
         "es" : {
@@ -60520,6 +63058,12 @@
             "value" : "Ίσως δεν το ξέρατε"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Things you might not know"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -60660,6 +63204,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αυτή η λειτουργία απαιτεί Pro"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This feature requires Pro"
           }
         },
         "es" : {
@@ -60804,6 +63354,12 @@
             "value" : "Εμφανίζεται στην οθόνη κατά τη συνεδρία, όταν έρθει η σειρά αυτής της ενότητας."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This shows on screen while you run the session, when this section's turn comes."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -60944,6 +63500,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αυτή την εβδομάδα"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This Week"
           }
         },
         "es" : {
@@ -61089,6 +63651,12 @@
             "value" : "Ο χρόνος τελείωσε"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time is up"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -61229,6 +63797,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Πολλαπλασιαστής χρόνου"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time Multiplier"
           }
         },
         "es" : {
@@ -61373,6 +63947,12 @@
             "value" : "Τέλος χρόνου"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Time's up"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -61513,6 +64093,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Χρονομετρητής"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer"
           }
         },
         "es" : {
@@ -61657,6 +64243,12 @@
             "value" : "Εφαρμόστηκε χρονομετρητής: %@"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer applied: %@"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -61797,6 +64389,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Εφαρμόστηκε χρονομετρητής: %@ / Προειδοποίηση %@"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer applied: %@ / Pre-alert %@"
           }
         },
         "es" : {
@@ -61941,6 +64539,12 @@
             "value" : "Ολοκληρωμένοι χρονομετρητές: %lld"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer completions: %lld"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -62083,6 +64687,12 @@
             "value" : "Καντράν χρονομετρητή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer dial"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -62223,6 +64833,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Διάρκεια χρονομετρητή"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer duration"
           }
         },
         "es" : {
@@ -62368,6 +64984,12 @@
             "value" : "Διάρκεια"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer Duration"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -62510,6 +65132,12 @@
             "value" : "Ειδοποίηση λήξης χρονομετρητή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer End Alert"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -62650,6 +65278,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ο χρονομετρητής τελείωσε"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer finished"
           }
         },
         "es" : {
@@ -62795,6 +65429,12 @@
             "value" : "Τέλος χρονομετρητή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer Finished"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -62935,6 +65575,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ο χρονομετρητής τελείωσε, μετράει η υπέρβαση χρόνου"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer finished, overtime counting"
           }
         },
         "es" : {
@@ -63079,6 +65725,12 @@
             "value" : "Ο χρονομετρητής έληξε. Ο χρόνος τελείωσε."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer finished. Time is up."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -63219,6 +65871,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ιστορικό χρονομετρητών"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer History"
           }
         },
         "es" : {
@@ -63364,6 +66022,12 @@
             "value" : "Ιστορικό & στατιστικά"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer History & Stats"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -63504,6 +66168,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ο χρονομετρητής τρέχει"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer is running"
           }
         },
         "es" : {
@@ -63648,6 +66318,12 @@
             "value" : "Όνομα χρονομετρητή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer Name"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -63788,6 +66464,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ρύθμιση ονόματος χρονομετρητή"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer Name Configuration"
           }
         },
         "es" : {
@@ -63932,6 +66614,12 @@
             "value" : "Ο χρονομετρητής σε παύση"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer paused"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -64074,6 +66762,12 @@
             "value" : "Ο χρονομετρητής είναι έτοιμος"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer ready"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -64214,6 +66908,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ο χρονομετρητής συνεχίζει"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer resumed"
           }
         },
         "es" : {
@@ -64359,6 +67059,12 @@
             "value" : "Ρυθμίσεις"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer Settings"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -64499,6 +67205,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ο χρονομετρητής ξεκίνησε"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer started"
           }
         },
         "es" : {
@@ -64643,6 +67355,12 @@
             "value" : "Ο χρονομετρητής σταμάτησε"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer stopped"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -64785,6 +67503,12 @@
             "value" : "Πρότυπα χρονομετρητή"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer Templates"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -64925,6 +67649,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Χρονομετρητής, %@"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer, %@"
           }
         },
         "es" : {
@@ -65075,6 +67805,12 @@
             "value" : "Rereminder also works on Apple Watch, widgets, Siri, and Mac. Tap here to see how."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder also works on Apple Watch, widgets, Siri, and Mac. Tap here to see how."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -65218,6 +67954,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use it everywhere"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Use it everywhere"
@@ -65373,6 +68115,12 @@
             "value" : "In Session mode, split the time into parts — you'll be told at every change."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Session mode, split the time into parts — you'll be told at every change."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -65518,6 +68266,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Split a long session into sections"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Split a long session into sections"
@@ -65673,6 +68427,12 @@
             "value" : "Save the time and alerts you just set, and start the same timer with one tap next time."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save the time and alerts you just set, and start the same timer with one tap next time."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -65823,6 +68583,12 @@
             "value" : "Save this setup"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save this setup"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -65963,6 +68729,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αύριο είναι η μέρα. Θέλετε μια πρόβα;"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tomorrow's the day. Want to run through it once?"
           }
         },
         "es" : {
@@ -66107,6 +68879,12 @@
             "value" : "Σύνολο συνεδριών"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total Sessions"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -66247,6 +69025,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Συνολικός χρόνος"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total Time"
           }
         },
         "es" : {
@@ -66391,6 +69175,12 @@
             "value" : "Συνολικός χρόνος που απομένει"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total time remaining"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -66533,6 +69323,12 @@
             "value" : "Σύνολο: %@"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total: %@"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -66673,6 +69469,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αγγίξτε παρατεταμένα μια προειδοποίηση για να την αφαιρέσετε."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touch and hold a pre-alert to remove it."
           }
         },
         "es" : {
@@ -66818,6 +69620,12 @@
             "value" : "Δείτε πώς χρησιμοποιείτε τον χρονομετρητή\nκαι διαχειριστείτε καλύτερα τον χρόνο σας"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Track your timer usage patterns\nand improve your time management"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -66958,6 +69766,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Δοκιμή: απομένουν %lld προβολές"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trial: %lld views remaining"
           }
         },
         "es" : {
@@ -67102,6 +69916,12 @@
             "value" : "Δοκιμάστε 5 φορές ακόμα"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try 5 more times"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -67242,6 +70062,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Δοκιμάστε το"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try it"
           }
         },
         "es" : {
@@ -67386,6 +70212,12 @@
             "value" : "Δοκιμάστε αυτό"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Try this"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -67526,6 +70358,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ενεργοποιήστε τις γνωστοποιήσεις για να λαμβάνετε ειδοποιήσεις όταν η εφαρμογή είναι στο παρασκήνιο."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turn on notifications to get alerts while the app is in the background."
           }
         },
         "es" : {
@@ -67670,6 +70508,12 @@
             "value" : "Άγνωστο"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -67812,6 +70656,12 @@
             "value" : "Απεριόριστα για όλους"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unlimited for everyone"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -67952,6 +70802,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ξεκλείδωμα όλων των λειτουργιών · Εφάπαξ αγορά"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unlock all features · One-time purchase"
           }
         },
         "es" : {
@@ -68097,6 +70953,12 @@
             "value" : "Ξεκλείδωμα με Pro"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unlock with Pro"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -68237,6 +71099,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αναβάθμιση σε %@"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upgrade to %@"
           }
         },
         "es" : {
@@ -68381,6 +71249,12 @@
             "value" : "Αναβάθμιση σε Pro"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Upgrade to Pro"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -68521,6 +71395,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Παράδειγμα χρήσης"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usage Example"
           }
         },
         "es" : {
@@ -68666,6 +71546,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usage Stats (Developer)"
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Usage Stats (Developer)"
@@ -68819,6 +71705,12 @@
             "value" : "Use on All Your Devices"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use on All Your Devices"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -68959,6 +71851,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Έκδοση"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version"
           }
         },
         "es" : {
@@ -69103,6 +72001,12 @@
             "value" : "Δόνηση"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vibration"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -69243,6 +72147,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Προθέρμανση"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Warm-up"
           }
         },
         "es" : {
@@ -69387,6 +72297,12 @@
             "value" : "Θα σας το θυμίσουμε το προηγούμενο βράδυ, με αυτή τη ρύθμιση έτοιμη."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We'll remind you the evening before, with this setup ready to go."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -69527,6 +72443,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Φορέστε το Apple Watch σας και κρατήστε το κοντά σε αυτό το iPhone."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wear your Apple Watch and keep it near this iPhone."
           }
         },
         "es" : {
@@ -69671,6 +72593,12 @@
             "value" : "Τι είναι η λήξη με ξυπνητήρι;"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What is a full alarm?"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -69811,6 +72739,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Τι είναι η Γρήγορη δοκιμή;"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What is Quick Test Mode?"
           }
         },
         "es" : {
@@ -69955,6 +72889,12 @@
             "value" : "Τι λέει όταν χτυπά"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What it says when it rings"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -70095,6 +73035,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Τι ξεκλειδώνει το Pro"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What Pro unlocks"
           }
         },
         "es" : {
@@ -70239,6 +73185,12 @@
             "value" : "Τι θα πείτε σε αυτή την ενότητα;"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What will you say in this section?"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -70379,6 +73331,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Για τι θα το χρησιμοποιήσετε;"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What will you use it for?"
           }
         },
         "es" : {
@@ -70523,6 +73481,12 @@
             "value" : "Τι αλλάζει"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What's changing"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -70663,6 +73627,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Όταν λήξει ο χρονομετρητής"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When the timer ends"
           }
         },
         "es" : {
@@ -70807,6 +73777,12 @@
             "value" : "Όταν λήξει ο χρονομετρητής, το iPhone σας χτυπά σαν ξυπνητήρι αντί να εμφανίσει γνωστοποίηση.\n\nΗχεί στην ένταση ξυπνητηριού ακόμα και σε Αθόρυβη λειτουργία ή Εστίαση, καταλαμβάνει όλη την οθόνη και χτυπά μέχρι να πατήσετε Διακοπή. Η Αναβολή σάς δίνει πέντε λεπτά ακόμα.\n\nΧρησιμοποιήστε το όταν δεν πρέπει να χάσετε το τέλος - ένα σετ προπόνησης, ένα διάλειμμα που συνεχώς αναβάλλετε. Κρατήστε το απενεργοποιημένο σε ήσυχους χώρους."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When the timer ends, your iPhone rings like an alarm clock instead of showing a notification.\n\nIt plays at alarm volume even in Silent Mode or a Focus, takes over the whole screen, and keeps ringing until you press Stop. Snooze gives you five more minutes.\n\nUse it when you must not miss the end - a workout set, a break you keep skipping. Leave it off for quiet places."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -70947,6 +73923,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Πότε είναι η επόμενη;"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When's the next one?"
           }
         },
         "es" : {
@@ -71091,6 +74073,12 @@
             "value" : "Με το Pro, η εφαρμογή κρατά τέτοιες ρυθμίσεις και τις επαναφέρει με ένα άγγιγμα."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "With Pro, the app keeps setups like this and brings them back in one tap."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -71231,6 +74219,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Χωρίς άδεια γνωστοποιήσεων, οι παρακάτω λειτουργίες δεν θα δουλεύουν σωστά:"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Without notification permission, the following features won't work properly:"
           }
         },
         "es" : {
@@ -71375,6 +74369,12 @@
             "value" : "Προπόνηση"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Workout"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -71515,6 +74515,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Λειτουργεί σε πραγματικό χρόνο"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Works in real-time"
           }
         },
         "es" : {
@@ -71659,6 +74665,12 @@
             "value" : "Εργαστήριο"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Workshop"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -71799,6 +74811,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ολοκλήρωση"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wrap-up"
           }
         },
         "es" : {
@@ -71943,6 +74961,12 @@
             "value" : "Γράψτε κριτική στο App Store"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Write a Review on App Store"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -72083,6 +75107,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Ναι, έχω"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yes, I have one"
           }
         },
         "es" : {
@@ -72227,6 +75257,12 @@
             "value" : "Στηρίξατε την εφαρμογή από νωρίς. Ό,τι προστεθεί στο Pro από εδώ και πέρα ξεκλειδώνεται αυτόματα για εσάς — χωρίς καμία επιπλέον αγορά, ποτέ."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You backed this app early. Anything we add to Pro from now on unlocks for you automatically — no extra purchase, ever."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -72369,6 +75405,12 @@
             "value" : "Μπορείτε να ορίσετε τους δικούς σας χρόνους ειδοποίησης στις Ρυθμίσεις."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can set your own alert times in Settings."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -72509,6 +75551,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Χρησιμοποιείτε συχνά αυτή τη ρύθμιση"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You use this setup a lot"
           }
         },
         "es" : {
@@ -72659,6 +75707,12 @@
             "value" : "You usually run %1$@ with %2$lld alerts around now."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You usually run %1$@ with %2$lld alerts around now."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -72799,6 +75853,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Είστε ήδη μέλος Pro!"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You're already a Pro member!"
           }
         },
         "es" : {
@@ -72949,6 +76009,12 @@
             "value" : "Last time: %1$@ with %2$lld alerts. Pro remembers it for you."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last time: %1$@ with %2$lld alerts. Pro remembers it for you."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -73089,6 +76155,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Να το θυμάται το Pro"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remember it with Pro"
           }
         },
         "es" : {
@@ -73233,6 +76305,12 @@
             "value" : "Δείτε το Pro"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See Pro"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -73373,6 +76451,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Δείχνει τι περιλαμβάνει το Pro"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shows what Pro includes"
           }
         },
         "es" : {
@@ -73517,6 +76601,12 @@
             "value" : "Η ρύθμιση για αύριο είναι ξανά στο καντράν"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tomorrow's setup is back on the dial"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -73657,6 +76747,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Η ρύθμιση για αύριο είναι έτοιμη"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tomorrow's setup is ready"
           }
         },
         "es" : {
@@ -73802,6 +76898,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You've run %1$@ with %2$lld alerts on different days. Pro remembers it, so next time it's already on the dial."
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "You've run %1$@ with %2$lld alerts on different days. Pro remembers it, so next time it's already on the dial."
@@ -73955,6 +77057,12 @@
             "value" : "Your %1$@ setup with %2$lld alerts is back on the dial. This is what Pro does every time you open the app."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your %1$@ setup with %2$lld alerts is back on the dial. This is what Pro does every time you open the app."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -74095,6 +77203,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Τώρα δωρεάν για όλους"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Now free for everyone"
           }
         },
         "es" : {
@@ -74239,6 +77353,12 @@
             "value" : "Πέρασε στο Pro"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moved to Pro"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -74379,6 +77499,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αποθηκευμένα πρότυπα"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saved templates"
           }
         },
         "es" : {
@@ -74523,6 +77649,12 @@
             "value" : "Έως 3 στο δωρεάν πακέτο"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Up to 3 on the free plan"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -74663,6 +77795,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Όταν ανοίγατε ξανά την εφαρμογή"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reopening the app"
           }
         },
         "es" : {
@@ -74807,6 +77945,12 @@
             "value" : "Επανερχόταν η τελευταία σας ρύθμιση"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your last setup came back"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -74947,6 +78091,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Δωρεάν: ξεκινά από την προεπιλογή"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starts from the default on the free plan"
           }
         },
         "es" : {
@@ -75091,6 +78241,12 @@
             "value" : "Τι άλλαξε για εσάς"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What changed for you"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -75231,6 +78387,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Χρησιμοποιείτε την εφαρμογή από πριν αλλάξει το Pro. Δείτε ακριβώς τι είναι διαφορετικό τώρα."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You've been using this app since before Pro changed. Here is exactly what is different now."
           }
         },
         "es" : {
@@ -75375,6 +78537,12 @@
             "value" : "Η τελευταία σας ρύθμιση παραμένει αποθηκευμένη"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your last setup is still saved"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -75517,6 +78685,12 @@
             "value" : "Τίποτα δεν διαγράφηκε. Αν αναβαθμίσετε, όλα επιστρέφουν ακριβώς όπως τα αφήσατε."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing was deleted. If you upgrade, everything comes back exactly as you left it."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -75657,6 +78831,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Οι πολλαπλές ειδοποιήσεις πριν τελειώσει ο χρόνος είναι ο λόγος ύπαρξης αυτής της εφαρμογής, γι' αυτό είναι πλέον δωρεάν για όλους. Το Pro κάνει πλέον ένα μόνο πράγμα: θυμάται τις ρυθμίσεις σας."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Getting several alerts before time runs out is why this app exists, so it is now free for everyone. Pro does one thing instead: it remembers your setups."
           }
         },
         "es" : {
@@ -75807,6 +78987,12 @@
             "value" : "You set %1$@ with %2$lld alerts again by hand. Pro keeps it on the dial for you."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You set %1$@ with %2$lld alerts again by hand. Pro keeps it on the dial for you."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -75947,6 +79133,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Η αποθήκευση νέων είναι Pro"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saving new ones is Pro"
           }
         },
         "es" : {
@@ -76091,6 +79283,12 @@
             "value" : "Τα %lld αποθηκευμένα πρότυπά σας λειτουργούν ακόμα"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your %lld saved templates still work"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -76231,6 +79429,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Τα πρότυπα που αποθηκεύσατε πριν από την αλλαγή φορτώνουν κανονικά στο δωρεάν πακέτο. Μόνο η αποθήκευση νέων είναι Pro."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Templates you saved before the change keep loading on the free plan. Only saving new ones is Pro."
           }
         },
         "es" : {
@@ -76376,6 +79580,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You set %1$@ with %2$lld alerts again by hand. Pro saves it with your section names and scripts."
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "You set %1$@ with %2$lld alerts again by hand. Pro saves it with your section names and scripts."
@@ -76529,6 +79739,12 @@
             "value" : "Last time: %1$@ with %2$lld alerts. Pro saves it with your section names and scripts."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last time: %1$@ with %2$lld alerts. Pro saves it with your section names and scripts."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -76672,6 +79888,12 @@
           }
         },
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You've run %1$@ with %2$lld alerts on different days. Pro saves it with your section names and scripts, ready for the next session."
+          }
+        },
+        "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "You've run %1$@ with %2$lld alerts on different days. Pro saves it with your section names and scripts, ready for the next session."
@@ -76825,6 +80047,12 @@
             "value" : "Your %1$@ setup with %2$lld alerts is back on the dial. Pro saves setups like this with your section names and scripts."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your %1$@ setup with %2$lld alerts is back on the dial. Pro saves setups like this with your section names and scripts."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -76965,6 +80193,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Είχατε Pro αλλά χάθηκε;"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Had Pro before but it is gone?"
           }
         },
         "es" : {
@@ -77109,6 +80343,12 @@
             "value" : "Η πρόσβαση στο Pro επέστρεψε"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your Pro access is back"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -77249,6 +80489,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Δεν βρέθηκε καταγραφή σε αυτή τη συσκευή"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We could not find a record on this device"
           }
         },
         "es" : {
@@ -77393,6 +80639,12 @@
             "value" : "Όλα ξεκλειδώθηκαν ξανά. Συγγνώμη για την ταλαιπωρία."
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Everything is unlocked again. Sorry for the trouble."
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -77533,6 +80785,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Αν αγοράσατε το Pro, ανοίξτε την οθόνη Pro παραπάνω και πατήστε Επαναφορά αγορών. Αν το είχατε δωρεάν ως πρώιμος χρήστης, στείλτε μας μήνυμα από τα Σχόλια παρακάτω και θα σας το επαναφέρουμε."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If you bought Pro, open the Pro screen above and tap Restore Purchases. If you had it for free as an early user, send us a message from Feedback below and we will bring it back for you."
           }
         },
         "es" : {
@@ -77683,6 +80941,12 @@
             "value" : "%1$@ · alerts %2$@ before end"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · alerts %2$@ before end"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -77823,6 +81087,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Καθοδήγηση"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mentoring"
           }
         },
         "es" : {
@@ -77967,6 +81237,12 @@
             "value" : "Μελέτη"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Study"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -78107,6 +81383,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Άσκηση"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exercise"
           }
         },
         "es" : {
@@ -78251,6 +81533,12 @@
             "value" : "Διάλειμμα"
           }
         },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Break"
+          }
+        },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
@@ -78391,6 +81679,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Διάβασμα"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reading"
           }
         },
         "es" : {

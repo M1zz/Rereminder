@@ -3,7 +3,7 @@
 DeployBar 가 이 파일을 읽어 App Store Connect 의 언어별 칸에 올린다([스토어 올리기]).
 적힌 언어·칸만 건드리고, 적지 않은 칸은 그대로 둔다.
 
-언어는 `deploy.env` 의 LOCALES 24개 전부다(2.3.2 에서 ru·cs·da·el·fi·id·nb·nl·pl·sv·th·tr·vi 를 더했다).
+언어는 `deploy.env` 의 LOCALES 전부다(en-GB 는 영국 철자로 새로 썼다. 2.3.2 에서 ru·cs·da·el·fi·id·nb·nl·pl·sv·th·tr·vi 를 더했다).
 글자 수 한도: 이름·부제 30, 키워드 100(쉼표 뒤 공백 없음), 프로모션 텍스트 170, 설명 4000.
 
 ## de
@@ -545,6 +545,94 @@ PERFECT FOR
 - Meeting hosts who respect everyone's time
 - Athletes managing rest intervals between sets
 - Students using Pomodoro with staged alerts
+- Coaches and mentors running timed sessions
+
+WHY "Rereminder"?
+
+re + reminder = remind you again
+We remind you before it's too late — again and again.
+
+No ads · No forced subscriptions · No internet required
+
+### 지원 URL
+
+https://m1zz.github.io/Rereminder/en/support.html
+
+### 개인정보처리방침 URL
+
+https://m1zz.github.io/Rereminder/en/privacy.html
+
+### 마케팅 URL
+
+https://m1zz.github.io/Rereminder/en/
+
+## en-GB
+
+<!-- English (UK) — 영국 철자·표현(colours, customise, organise, revision). 지원·방침·마케팅 페이지는 en 과 같은 영어 페이지를 쓴다 -->
+
+### 이름
+
+Rereminder: Presentation Timer
+
+### 부제
+
+Countdown with multiple alerts
+
+### 키워드
+
+speech,speaker,lesson,teacher,workshop,meeting,pilates,yoga,hiit,interval,pomodoro,rehearsal,revise
+
+### 프로모션 텍스트
+
+Get a heads-up 5 min before your talk ends or 3 before a meeting wraps—not after. Add custom messages and see time left on Dynamic Island and Apple Watch.
+
+### 설명
+
+Get warned before time runs out.
+
+5 minutes before your presentation ends.
+3 minutes before the meeting wraps up.
+1 minute before your workout is over.
+
+Rereminder sends step-by-step alerts before your timer hits zero, so you're always prepared and never caught off guard.
+
+
+PRE-ALERTS — The Feature Other Timers Don't Have
+
+Most timers only alert you when time is up.
+Rereminder alerts you before it's up.
+
+- Set alerts at 1, 3, 5, 10, 15, or 30 minutes before end
+- Customise the timing to fit your needs
+- Add custom messages to each alert
+  e.g., "Wrap up your slides", "Start cooldown"
+
+KEY FEATURES
+
+- Dynamic Island & Live Activity
+  See your timer in real-time without unlocking your phone
+
+- Apple Watch
+  Start, pause, and track timers from your wrist
+
+- Timer Templates
+  Save your favorite setups and launch them instantly
+
+- Labels & Colours
+  Organise timers by purpose — Presentation, Meeting, Exercise, Study
+
+- Sound & Vibration
+  Choose the right alert style for any situation
+
+- Overtime Tracking
+  Keep counting after the timer ends so you know how far over you went
+
+PERFECT FOR
+
+- Speakers who need to pace their presentations
+- Meeting hosts who respect everyone's time
+- Athletes managing rest intervals between sets
+- Students revising with Pomodoro and staged alerts
 - Coaches and mentors running timed sessions
 
 WHY "Rereminder"?

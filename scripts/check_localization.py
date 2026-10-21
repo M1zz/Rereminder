@@ -16,7 +16,7 @@ import sys
 CATALOGS = [
     "Rereminder/Localizable.xcstrings",
 ]
-LANGS = ("ko", "ja", "zh-Hans", "zh-Hant", "de", "fr", "es", "pt-BR", "pt-PT", "it",
+LANGS = ("ko", "ja", "zh-Hans", "zh-Hant", "de", "fr", "es", "pt-BR", "pt-PT", "it", "en-GB",
          "ru", "cs", "da", "el", "fi", "id", "nb", "nl", "pl", "sv", "th", "tr", "vi")
 
 # 번역 없이 두는 게 맞는 키 (고유명사·포맷 전용 등)

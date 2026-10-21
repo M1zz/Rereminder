@@ -43,6 +43,12 @@ COPY = {
         ("Split your talk<br>into sections", "Name each part and add your notes"),
         ("Your notes,<br>right on time", "Session Mode keeps you on track"),
     ],
+    "en-GB": [
+        ("Get warned<br>before time runs out", "10, 5 and 1 minute before. Whenever you like."),
+        ("See the next<br>alert at a glance", "Each section counts down on its own"),
+        ("Split your talk<br>into sections", "Name each part and add your notes"),
+        ("Your notes,<br>right on time", "Session Mode keeps you on track"),
+    ],
     "ja": [
         ("終わる前に<br>何度でもお知らせ", "10分前、5分前、1分前。好きなタイミングで"),
         ("次のアラートまで<br>ひと目でわかる", "区間ごとに残り時間をカウント"),
