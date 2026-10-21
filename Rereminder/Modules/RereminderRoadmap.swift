@@ -29,7 +29,7 @@ extension RereminderSpec {
         .init(id: "a11y.keyboard", status: .planned,
               title: String(localized: "Keyboard controls", comment: "Roadmap item: keyboard control"),
               detail: String(localized: "Start, pause, and stop timers with just the keyboard on iPad and Mac.", comment: "Roadmap item detail: keyboard control")),
-        .init(id: "gift", status: .planned,
+        .init(id: "gift", status: .building,
               title: String(localized: "Gift Pro", comment: "Roadmap item: gift Pro"),
               detail: String(localized: "You pay, and the person you choose gets to use Pro.", comment: "Roadmap item detail: gift Pro")),
         .init(id: "backup", status: .planned,
