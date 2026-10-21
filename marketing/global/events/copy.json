@@ -1,0 +1,368 @@
+{
+  "gift-update": {
+    "ko": [
+      "Pro 선물하기 업데이트",
+      "Pro를 선물하고, 내 혜택을 한눈에 확인하세요",
+      "동료에게 코드로 Pro를 선물하고, 받은 코드는 설정에서 바로 쓰세요. 내가 연 혜택도 한눈에 보여요."
+    ],
+    "en": [
+      "Gift Pro Update",
+      "Give Pro as a gift and see what your plan unlocks",
+      "Send Pro to a colleague with a code, redeem codes right in Settings, and see everything your plan unlocks at a glance."
+    ],
+    "ja": [
+      "Proプレゼント アップデート",
+      "Proを贈って、使える特典もひと目で確認",
+      "同僚にコードでProを贈れます。受け取ったコードは設定ですぐ使え、今の特典もひと目でわかります。"
+    ],
+    "zh-Hans": [
+      "赠送 Pro 功能上线",
+      "把 Pro 送给朋友，权益一眼看清",
+      "用兑换码把 Pro 送给同事；收到的代码可在设置中直接兑换，已解锁的功能也一目了然。"
+    ],
+    "zh-Hant": [
+      "贈送 Pro 功能上線",
+      "把 Pro 送給朋友，權益一眼看清",
+      "用兌換碼把 Pro 送給同事；收到的代碼可在設定中直接兌換，已解鎖的功能也一目瞭然。"
+    ],
+    "de": [
+      "Update: Pro verschenken",
+      "Pro verschenken und Vorteile auf einen Blick",
+      "Verschenke Pro per Code an dein Team. Erhaltene Codes löst du direkt in den Einstellungen ein und siehst, was frei ist."
+    ],
+    "fr": [
+      "Mise à jour Offrir Pro",
+      "Offrez Pro et voyez vos avantages d’un coup d’œil",
+      "Offrez Pro à un collègue grâce à un code. Les codes reçus s’utilisent dans Réglages, avec vos avantages en vue."
+    ],
+    "es": [
+      "Actualización: regalar Pro",
+      "Regala Pro y mira tus ventajas de un vistazo",
+      "Regala Pro a un compañero con un código. Los códigos recibidos se canjean en Ajustes y ves lo que tienes."
+    ],
+    "pt-BR": [
+      "Atualização: presentear o Pro",
+      "Presenteie o Pro e veja seus benefícios",
+      "Presenteie um colega com o Pro usando um código. Códigos recebidos são resgatados em Ajustes, com seus benefícios."
+    ],
+    "pt-PT": [
+      "Atualização: oferecer o Pro",
+      "Ofereça o Pro e veja as suas vantagens",
+      "Ofereça o Pro a um colega com um código. Os códigos recebidos resgatam-se nas Definições, com as suas vantagens à vista."
+    ],
+    "it": [
+      "Aggiornamento: regala Pro",
+      "Regala Pro e scopri i tuoi vantaggi",
+      "Regala Pro a un collega con un codice. I codici ricevuti si riscattano in Impostazioni, dove vedi i tuoi vantaggi."
+    ],
+    "ru": [
+      "Обновление: Pro в подарок",
+      "Дарите Pro и смотрите свои преимущества",
+      "Подарите Pro коллеге с помощью кода. Полученные коды активируются прямо в Настройках, там же видно, что вам доступно."
+    ],
+    "cs": [
+      "Aktualizace: darujte Pro",
+      "Darujte Pro a mějte přehled o výhodách",
+      "Darujte Pro kolegovi pomocí kódu. Přijaté kódy uplatníte přímo v Nastavení, kde hned uvidíte i své výhody."
+    ],
+    "da": [
+      "Opdatering: Giv Pro i gave",
+      "Giv Pro i gave, og se dine fordele med det samme",
+      "Giv Pro til en kollega med en kode. Koder, du modtager, indløser du under Indstillinger, hvor du også ser dine fordele."
+    ],
+    "el": [
+      "Ενημέρωση: Δώρο Pro",
+      "Χάρισε το Pro και δες τα οφέλη σου",
+      "Χάρισε το Pro σε συνάδελφο με έναν κωδικό. Τους κωδικούς που λαμβάνεις τους εξαργυρώνεις στις Ρυθμίσεις."
+    ],
+    "fi": [
+      "Päivitys: Anna Pro lahjaksi",
+      "Anna Pro lahjaksi ja näe etusi heti",
+      "Anna Pro kollegalle lahjaksi koodilla. Saamasi koodit lunastat suoraan Asetuksista, ja näet samalla omat etusi."
+    ],
+    "id": [
+      "Pembaruan: Hadiahkan Pro",
+      "Hadiahkan Pro dan lihat manfaatmu sekilas",
+      "Hadiahkan Pro kepada rekan kerja lewat kode. Kode yang kamu terima bisa langsung ditukar di Pengaturan."
+    ],
+    "nb": [
+      "Oppdatering: Gi Pro i gave",
+      "Gi Pro i gave og se fordelene dine med én gang",
+      "Gi Pro til en kollega med en kode. Koder du får, løser du inn rett i Innstillinger, der du også ser fordelene dine."
+    ],
+    "nl": [
+      "Update: Pro cadeau doen",
+      "Doe Pro cadeau en zie meteen je voordelen",
+      "Geef een collega Pro cadeau met een code. Ontvangen codes wissel je in via Instellingen, waar je ook je voordelen ziet."
+    ],
+    "pl": [
+      "Aktualizacja: podaruj Pro",
+      "Podaruj Pro i zobacz swoje korzyści",
+      "Podaruj Pro współpracownikowi za pomocą kodu. Otrzymane kody zrealizujesz od razu w Ustawieniach."
+    ],
+    "sv": [
+      "Uppdatering: Ge bort Pro",
+      "Ge bort Pro och se dina förmåner direkt",
+      "Ge en kollega Pro i present med en kod. Koder du får löser du in direkt i Inställningar, där du också ser dina förmåner."
+    ],
+    "th": [
+      "อัปเดต: มอบ Pro เป็นของขวัญ",
+      "มอบ Pro ให้คนอื่น และดูสิทธิ์ของคุณได้ทันที",
+      "มอบ Pro ให้เพื่อนร่วมงานด้วยโค้ด ส่วนโค้ดที่ได้รับก็ใช้ได้ทันทีในการตั้งค่า พร้อมดูสิทธิ์ที่ปลดล็อกแล้ว"
+    ],
+    "tr": [
+      "Güncelleme: Pro hediye et",
+      "Pro'yu hediye edin, avantajlarınızı görün",
+      "Pro'yu bir iş arkadaşınıza kodla hediye edin. Aldığınız kodları doğrudan Ayarlar'dan kullanabilirsiniz."
+    ],
+    "vi": [
+      "Cập nhật: Tặng Pro",
+      "Tặng Pro và xem quyền lợi của bạn trong nháy mắt",
+      "Tặng Pro cho đồng nghiệp bằng mã. Mã bạn nhận được có thể đổi ngay trong Cài đặt, nơi bạn cũng thấy quyền lợi của mình."
+    ]
+  },
+  "holiday-gift": {
+    "ko": [
+      "연말 선물 시즌",
+      "함께 발표하는 동료에게 Pro를 선물하세요",
+      "연말 동안 Pro를 선물해 보세요. 받는 분은 설정에서 코드를 입력하면 Pro를 계속 쓸 수 있어요."
+    ],
+    "en": [
+      "Holiday Gift Season",
+      "Give Pro to someone who speaks or teaches often",
+      "Over the holidays, send Pro as a gift. Your recipient enters the code in Settings and keeps Pro for good."
+    ],
+    "ja": [
+      "年末のプレゼントシーズン",
+      "一緒に登壇する仲間にProを贈りましょう",
+      "年末年始はProを贈ってみませんか。受け取った人は設定でコードを入力するだけで、Proをずっと使えます。"
+    ],
+    "zh-Hans": [
+      "年末礼物季",
+      "把 Pro 送给一起上台的伙伴",
+      "年末假期，不妨把 Pro 当作礼物。对方在设置中输入兑换码，即可一直使用 Pro。"
+    ],
+    "zh-Hant": [
+      "年末送禮季",
+      "把 Pro 送給一起上台的夥伴",
+      "年末假期，不妨把 Pro 當作禮物。對方在設定中輸入兌換碼，就能一直使用 Pro。"
+    ],
+    "de": [
+      "Geschenkzeit zum Jahresende",
+      "Schenk Pro an Menschen, die oft vortragen",
+      "Über die Feiertage kannst du Pro verschenken. Wer den Code in den Einstellungen einlöst, behält Pro dauerhaft."
+    ],
+    "fr": [
+      "La saison des cadeaux",
+      "Offrez Pro à ceux qui prennent souvent la parole",
+      "Pendant les fêtes, offrez Pro. La personne saisit le code dans Réglages et garde Pro pour de bon."
+    ],
+    "es": [
+      "Temporada de regalos",
+      "Regala Pro a quien habla en público a menudo",
+      "Durante las fiestas, puedes regalar Pro. Quien lo recibe canjea el código en Ajustes y conserva Pro para siempre."
+    ],
+    "pt-BR": [
+      "Temporada de presentes",
+      "Dê o Pro a quem vive falando em público",
+      "Nas festas de fim de ano, presenteie com o Pro. Quem recebe resgata o código em Ajustes e fica com o Pro para sempre."
+    ],
+    "pt-PT": [
+      "Época de presentes",
+      "Ofereça o Pro a quem fala muito em público",
+      "Nas festas, ofereça o Pro. Quem o recebe introduz o código nas Definições e fica com o Pro para sempre."
+    ],
+    "it": [
+      "La stagione dei regali",
+      "Regala Pro a chi parla spesso in pubblico",
+      "Durante le feste puoi regalare Pro. Chi lo riceve inserisce il codice in Impostazioni e tiene Pro per sempre."
+    ],
+    "ru": [
+      "Сезон подарков",
+      "Подарите Pro тем, кто часто выступает",
+      "В праздники можно подарить Pro. Получатель вводит код в Настройках, и Pro остаётся у него навсегда."
+    ],
+    "cs": [
+      "Čas dárků",
+      "Darujte Pro těm, kdo často mluví před lidmi",
+      "Během svátků můžete darovat Pro. Obdarovaný zadá kód v Nastavení a Pro mu zůstane natrvalo."
+    ],
+    "da": [
+      "Gavesæson",
+      "Giv Pro til dem, der ofte taler foran andre",
+      "Hen over højtiden kan du give Pro i gave. Modtageren indløser koden under Indstillinger og beholder Pro for altid."
+    ],
+    "el": [
+      "Εποχή δώρων",
+      "Χάρισε το Pro σε όσους μιλούν συχνά σε κοινό",
+      "Στις γιορτές μπορείς να χαρίσεις το Pro. Ο παραλήπτης βάζει τον κωδικό στις Ρυθμίσεις και κρατά το Pro για πάντα."
+    ],
+    "fi": [
+      "Lahjojen aika",
+      "Anna Pro niille, jotka puhuvat usein yleisölle",
+      "Juhlakaudella voit antaa Pron lahjaksi. Saaja lunastaa koodin Asetuksissa, ja Pro jää hänelle pysyvästi."
+    ],
+    "id": [
+      "Musim Hadiah Akhir Tahun",
+      "Hadiahkan Pro untuk rekan yang sering presentasi",
+      "Selama liburan akhir tahun, kamu bisa menghadiahkan Pro. Penerima menukar kode di Pengaturan dan memakai Pro selamanya."
+    ],
+    "nb": [
+      "Gavesesong",
+      "Gi Pro til dem som ofte snakker foran andre",
+      "I høytiden kan du gi Pro i gave. Mottakeren løser inn koden i Innstillinger og beholder Pro for godt."
+    ],
+    "nl": [
+      "Cadeauseizoen",
+      "Geef Pro aan wie vaak voor een groep spreekt",
+      "Tijdens de feestdagen kun je Pro cadeau doen. De ontvanger wisselt de code in via Instellingen en houdt Pro voorgoed."
+    ],
+    "pl": [
+      "Sezon prezentów",
+      "Podaruj Pro osobom, które często przemawiają",
+      "W święta możesz podarować Pro. Obdarowana osoba wpisuje kod w Ustawieniach i zachowuje Pro na zawsze."
+    ],
+    "sv": [
+      "Julklappssäsong",
+      "Ge Pro till dem som ofta talar inför andra",
+      "Under helgerna kan du ge bort Pro. Mottagaren löser in koden i Inställningar och behåller Pro för alltid."
+    ],
+    "th": [
+      "เทศกาลของขวัญปลายปี",
+      "มอบ Pro ให้คนที่ต้องพูดต่อหน้าผู้คนบ่อยๆ",
+      "ช่วงเทศกาลนี้ คุณมอบ Pro เป็นของขวัญได้ ผู้รับแค่ใส่โค้ดในการตั้งค่า ก็ใช้ Pro ได้ตลอดไป"
+    ],
+    "tr": [
+      "Hediye Sezonu",
+      "Sık konuşma yapanlara Pro hediye edin",
+      "Yılbaşı döneminde Pro'yu hediye edebilirsiniz. Alan kişi kodu Ayarlar'a girer ve Pro'yu kalıcı olarak kullanır."
+    ],
+    "vi": [
+      "Mùa quà tặng cuối năm",
+      "Tặng Pro cho người thường xuyên thuyết trình",
+      "Dịp lễ cuối năm, bạn có thể tặng Pro. Người nhận chỉ cần nhập mã trong Cài đặt là dùng Pro mãi mãi."
+    ]
+  },
+  "talk-season": {
+    "ko": [
+      "발표 시즌 준비",
+      "발표를 구간으로 나누고 끝나기 전에 미리 알림",
+      "구간마다 이름과 메모를 적어 두면 차례가 올 때 펼쳐지고, 끝나기 전에 iPhone과 Apple Watch로 알려 줘요."
+    ],
+    "en": [
+      "Conference Season Prep",
+      "Split your talk into parts and get warned in time",
+      "Name each part, add notes that open on cue, and get alerts before time runs out on iPhone and Apple Watch."
+    ],
+    "ja": [
+      "発表シーズンの準備",
+      "発表をパートに分けて、終わる前に通知",
+      "パートごとに名前とメモを付けておけば順番が来ると表示され、終わる前にiPhoneとApple Watchで知らせます。"
+    ],
+    "zh-Hans": [
+      "演讲季准备",
+      "把演讲分成几段，结束前提前提醒",
+      "为每段写好名称和备注，轮到时自动展开；时间结束前，iPhone 和 Apple Watch 会提前提醒你。"
+    ],
+    "zh-Hant": [
+      "演講季準備",
+      "把演講分成幾段，結束前先提醒",
+      "為每段寫好名稱和備註，輪到時自動展開；時間結束前，iPhone 和 Apple Watch 會提前提醒你。"
+    ],
+    "de": [
+      "Bereit für die Vortragssaison",
+      "Teil deinen Vortrag ein und werde früh erinnert",
+      "Benenne jeden Abschnitt, notiere Stichpunkte, die zur rechten Zeit aufklappen, und lass dich vorher erinnern."
+    ],
+    "fr": [
+      "Saison des conférences",
+      "Découpez votre exposé et soyez prévenu à temps",
+      "Nommez chaque partie, ajoutez des notes qui s’ouvrent au bon moment et soyez prévenu avant la fin."
+    ],
+    "es": [
+      "Temporada de conferencias",
+      "Divide tu charla y recibe avisos a tiempo",
+      "Pon nombre a cada parte, añade notas que se abren en su momento y recibe avisos antes del final en iPhone y Apple Watch."
+    ],
+    "pt-BR": [
+      "Temporada de palestras",
+      "Divida sua palestra em partes e seja avisado",
+      "Dê nome a cada parte, anote o que dizer e veja as notas na hora certa. Receba avisos antes do fim."
+    ],
+    "pt-PT": [
+      "Época de conferências",
+      "Divida a apresentação em partes e seja avisado",
+      "Dê nome a cada parte, junte notas que abrem na altura certa e receba alertas antes do fim no iPhone e no Apple Watch."
+    ],
+    "it": [
+      "Stagione delle conferenze",
+      "Dividi il talk in parti e ricevi avvisi in tempo",
+      "Dai un nome a ogni parte, aggiungi note che si aprono al momento giusto e ricevi avvisi prima della fine."
+    ],
+    "ru": [
+      "Сезон конференций",
+      "Разделите доклад на этапы и получайте сигналы",
+      "Назовите каждый этап, добавьте заметки, которые откроются вовремя, и получайте сигналы до конца на iPhone и Apple Watch."
+    ],
+    "cs": [
+      "Sezóna konferencí",
+      "Rozdělte přednášku a dostaňte upozornění včas",
+      "Pojmenujte každou část, přidejte poznámky, které se včas otevřou, a před koncem vás upozorní iPhone i Apple Watch."
+    ],
+    "da": [
+      "Konferencesæson",
+      "Del dit oplæg op, og få besked i god tid",
+      "Giv hver del et navn, tilføj noter, der åbner på rette tid, og få besked, før tiden er gået, på iPhone og Apple Watch."
+    ],
+    "el": [
+      "Εποχή συνεδρίων",
+      "Χώρισε την ομιλία σου και ειδοποιήσου νωρίς",
+      "Δώσε όνομα σε κάθε μέρος, πρόσθεσε σημειώσεις που ανοίγουν την ώρα τους και λάβε ειδοποιήσεις πριν τη λήξη."
+    ],
+    "fi": [
+      "Konferenssikausi",
+      "Jaa esitys osiin ja saa muistutus ajoissa",
+      "Nimeä jokainen osa, lisää muistiinpanot, jotka avautuvat oikealla hetkellä, ja saa muistutus ennen loppua."
+    ],
+    "id": [
+      "Musim Konferensi",
+      "Bagi presentasi per bagian, dapat pengingat",
+      "Beri nama tiap bagian, tambahkan catatan yang muncul tepat waktu, dan dapatkan pengingat sebelum waktu habis."
+    ],
+    "nb": [
+      "Konferansesesong",
+      "Del opp foredraget og få varsel i god tid",
+      "Gi hver del et navn, legg til notater som åpnes til rett tid, og få varsel før tiden er ute på iPhone og Apple Watch."
+    ],
+    "nl": [
+      "Congresseizoen",
+      "Deel je talk op en krijg op tijd een seintje",
+      "Geef elk deel een naam, voeg notities toe die op het juiste moment openen en krijg vóór het einde een seintje."
+    ],
+    "pl": [
+      "Sezon konferencji",
+      "Podziel wystąpienie i dostawaj przypomnienia",
+      "Nazwij każdą część, dodaj notatki, które otworzą się we właściwej chwili, i dostań przypomnienie przed końcem."
+    ],
+    "sv": [
+      "Konferenssäsong",
+      "Dela upp föredraget och få påminnelser i tid",
+      "Namnge varje del, lägg till anteckningar som öppnas i rätt stund och få påminnelser före slutet."
+    ],
+    "th": [
+      "เตรียมพร้อมฤดูงานสัมมนา",
+      "แบ่งการบรรยายเป็นช่วง และรับการเตือนก่อนหมดเวลา",
+      "ตั้งชื่อแต่ละช่วง ใส่โน้ตที่จะเปิดขึ้นเมื่อถึงคิว และรับการแจ้งเตือนก่อนหมดเวลาบน iPhone และ Apple Watch"
+    ],
+    "tr": [
+      "Konferans Sezonu",
+      "Konuşmanızı bölümlere ayırın, zamanında uyarı alın",
+      "Her bölüme ad verin, sırası gelince açılan notlar ekleyin ve süre bitmeden iPhone ile Apple Watch'ta uyarı alın."
+    ],
+    "vi": [
+      "Mùa hội thảo",
+      "Chia bài nói thành từng phần, được nhắc đúng lúc",
+      "Đặt tên từng phần, thêm ghi chú tự mở khi đến lượt và nhận nhắc nhở trước khi hết giờ trên iPhone và Apple Watch."
+    ]
+  }
+}
