@@ -27,7 +27,7 @@ SCENES=("01:dial" "02:running" "03:session" "04:sessionRunning")
 # 언어 코드 → 로케일 (시간·숫자 표기가 그 나라 것으로 나오게)
 locale_for() {
   case "$1" in
-    ko) echo ko_KR ;; en) echo en_US ;; ja) echo ja_JP ;;
+    ko) echo ko_KR ;; en) echo en_US ;; en-GB) echo en_GB ;; ja) echo ja_JP ;;
     zh-Hans) echo zh_CN ;; zh-Hant) echo zh_TW ;;
     de) echo de_DE ;; fr) echo fr_FR ;; es) echo es_ES ;;
     pt-BR) echo pt_BR ;; pt-PT) echo pt_PT ;; it) echo it_IT ;;
@@ -39,7 +39,7 @@ locale_for() {
 }
 
 LANGS=("$@")
-[[ ${#LANGS[@]} -eq 0 ]] && LANGS=(ko en ja zh-Hans zh-Hant de fr es pt-BR pt-PT it ru cs da el fi id nb nl pl sv th tr vi)
+[[ ${#LANGS[@]} -eq 0 ]] && LANGS=(ko en en-GB ja zh-Hans zh-Hant de fr es pt-BR pt-PT it ru cs da el fi id nb nl pl sv th tr vi)
 
 # UDID 를 주면 그 기기를 쓴다 — 다른 작업이 같은 이름의 시뮬레이터를 쓰고 있을 때
 UDID="${UDID:-}"

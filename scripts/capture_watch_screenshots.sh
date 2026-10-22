@@ -25,7 +25,7 @@ OUT="$ROOT/docs/screenshots/watch"
 SCENES=("01:duration:4" "02:prealerts:5" "03:running:8" "04:finished:10")
 
 LANGS=("$@")
-[[ ${#LANGS[@]} -eq 0 ]] && LANGS=(ko en ja zh-Hans zh-Hant de fr es pt-BR pt-PT it ru cs da el fi id nb nl pl sv th tr vi)
+[[ ${#LANGS[@]} -eq 0 ]] && LANGS=(ko en en-GB ja zh-Hans zh-Hant de fr es pt-BR pt-PT it ru cs da el fi id nb nl pl sv th tr vi)
 
 # 페어링된(active) 워치 중 이름이 맞는 것 + 그 짝 아이폰
 UDID="${UDID:-}"; PHONE="${PHONE:-}"
