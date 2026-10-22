@@ -163,11 +163,14 @@ struct TimerDialRings: View {
                     .fill(Color.black.opacity(0.45))
                     .frame(width: plan.lineWidth * 0.85, height: plan.lineWidth * 0.85)
             )
-            // 링을 따라 돌아도 숫자는 똑바로 서 있어야 읽힌다
-            .rotationEffect(.degrees(90 - angle))
-            .offset(x: size / 2)
-            .rotationEffect(.degrees(angle))
-            .rotationEffect(.degrees(-90))
+            // 링 위 자리로 옮긴다 — 12시에서 시계 방향으로 angle 만큼.
+            // ⚠️ rotationEffect 를 겹쳐 돌려 놓으면 숫자는 똑바로 보여도 접근성 프레임이 "돌린 상자의 외곽"으로
+            //    부풀어, 45° 근처 번호(대개 2)의 프레임에 어두운 원 밖의 밝은 링 색이 섞여 대비 감사가 실패했다.
+            //    회전 없이 offset 으로만 옮겨 프레임이 숫자 크기 그대로 원 안에 머물게 한다.
+            .offset(
+                x: size / 2 * CGFloat(cos((angle - 90) * .pi / 180)),
+                y: size / 2 * CGFloat(sin((angle - 90) * .pi / 180))
+            )
             .accessibilityHidden(true)
     }
 }
