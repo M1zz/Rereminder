@@ -27,6 +27,14 @@ Redeem codes right inside the app.
 See what is coming next in Settings.
 Voice Control now knows every button.
 
+### App Store (en-GB)
+
+Gift Pro to a friend, or leave a tip.
+See what Remember or Pro unlocks.
+Redeem codes right inside the app.
+See what's coming next in Settings.
+Voice Control now recognises every button.
+
 ### App Store (日本語)
 
 Proを贈ったり、アプリを応援したりできます。
