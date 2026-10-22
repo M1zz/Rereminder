@@ -141,6 +141,12 @@
             "state" : "translated",
             "value" : "已有 %lld 次計時在結束前收到提醒並順利完成"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld timers finished with a heads-up before the end"
+          }
         }
       }
     },
@@ -432,6 +438,12 @@
             "state" : "translated",
             "value" : "備份與匯出"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Backup and export"
+          }
         }
       }
     },
@@ -574,6 +586,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "更好用的 VoiceOver"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Better VoiceOver support"
           }
         }
       }
@@ -718,6 +736,12 @@
             "state" : "translated",
             "value" : "一鍵刪除我的資料"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete all my data"
+          }
         }
       }
     },
@@ -860,6 +884,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "更易辨識的顏色與對比"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Easier-to-see colours"
           }
         }
       }
@@ -1004,6 +1034,12 @@
             "state" : "translated",
             "value" : "隨時可以在 App 內刪除所有計時器和記錄。"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erase all your timers and history from inside the app whenever you want."
+          }
         }
       }
     },
@@ -1146,6 +1182,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Face ID 鎖定"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Face ID lock"
           }
         }
       }
@@ -1290,6 +1332,12 @@
             "state" : "translated",
             "value" : "分段模式剩餘免費次數：%lld"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Free Session Mode runs left: %lld"
+          }
         }
       }
     },
@@ -1432,6 +1480,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "贈送 Pro"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gift Pro"
           }
         }
       }
@@ -1576,6 +1630,12 @@
             "state" : "translated",
             "value" : "用鍵盤操作"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keyboard controls"
+          }
         }
       }
     },
@@ -1718,6 +1778,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "用 Face ID 或 Touch ID 鎖定 App，保護你的講稿和記錄。"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lock the app with Face ID or Touch ID to keep your scripts and history private."
           }
         }
       }
@@ -2158,6 +2224,12 @@
             "state" : "translated",
             "value" : "支援大字體"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ready for larger text"
+          }
         }
       }
     },
@@ -2300,6 +2372,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "把計時器和記錄存成檔案，隨時都能再匯入。"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save your timers and history to a file and bring them back anytime."
           }
         }
       }
@@ -2444,6 +2522,12 @@
             "state" : "translated",
             "value" : "調大字體後，畫面會重新排列，內容不會被截斷。"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Screens rearrange neatly when you make text bigger, with nothing cut off."
+          }
         }
       }
     },
@@ -2586,6 +2670,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "在 iPad 和 Mac 上，只用鍵盤就能開始、暫停和停止計時器。"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start, pause, and stop timers with just the keyboard on iPad and Mac."
           }
         }
       }
@@ -2730,6 +2820,12 @@
             "state" : "translated",
             "value" : "這是最後一次免費使用分段模式"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "That was your last free Session Mode run"
+          }
         }
       }
     },
@@ -2873,6 +2969,12 @@
             "state" : "translated",
             "value" : "更新後第一次打開時，告訴你新增了哪些內容。"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The first time you open the app after an update, see what's new."
+          }
         }
       }
     },
@@ -3015,6 +3117,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "開啟「增加對比」或難以分辨顏色時，也能看清計時器。"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timers stay readable with Increase Contrast on or when colours are hard to tell apart."
           }
         }
       }
@@ -3307,6 +3415,12 @@
             "state" : "translated",
             "value" : "VoiceOver 會依正確順序完整朗讀每個計時器和按鈕。"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "VoiceOver reads every timer and button, in the right order."
+          }
         }
       }
     },
@@ -3449,6 +3563,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "更新內容一覽"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What's new after updates"
           }
         }
       }
@@ -3593,6 +3713,12 @@
             "state" : "translated",
             "value" : "由你付款，收到的人就能使用 Pro。"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You pay, and the person you choose gets to use Pro."
+          }
         }
       }
     },
@@ -3735,6 +3861,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "到目前為止，你已準時掌握了 %lld 小時"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You've kept %lld hours on track so far"
           }
         }
       }
@@ -85088,6 +85220,12 @@
             "state" : "translated",
             "value" : "記憶"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remember"
+          }
         }
       }
     },
@@ -85229,6 +85367,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "已擁有"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Owned"
           }
         }
       }
@@ -85372,6 +85516,12 @@
             "state" : "translated",
             "value" : "購買記憶"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Get Remember"
+          }
         }
       }
     },
@@ -85513,6 +85663,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "儲存的設定和上次的計時器"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saved setups and your last timer"
           }
         }
       }
@@ -85656,6 +85812,12 @@
             "state" : "translated",
             "value" : "包含記憶的全部，另有分段模式、講稿、超時與記錄"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Everything in Remember, plus Session Mode, scripts, overtime and history"
+          }
         }
       }
     },
@@ -85797,6 +85959,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "你已擁有記憶，只需支付差價。"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You already have Remember — pay only the difference."
           }
         }
       }
@@ -85940,6 +86108,12 @@
             "state" : "translated",
             "value" : "你已經進行了 %lld 次分段。"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You've run %lld sessions so far."
+          }
         }
       }
     },
@@ -86081,6 +86255,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "你已經完成了 %lld 次計時。"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You've finished %lld timers so far."
           }
         }
       }
@@ -86224,6 +86404,12 @@
             "state" : "translated",
             "value" : "包含在記憶中"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Included in Remember"
+          }
         }
       }
     },
@@ -86365,6 +86551,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "無法載入此購買項目，請再試一次。"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couldn't load this purchase. Please try again."
           }
         }
       }
@@ -86508,6 +86700,12 @@
             "state" : "translated",
             "value" : "你的設定已被記住"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your setups are remembered"
+          }
         }
       }
     },
@@ -86649,6 +86847,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "即時動態"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Live Activity"
           }
         }
       }
@@ -86792,6 +86996,12 @@
             "state" : "translated",
             "value" : "手錶 / 小工具"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Watch / Widget"
+          }
         }
       }
     },
@@ -86933,6 +87143,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "自訂提醒文字"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Custom Messages"
           }
         }
       }
@@ -87076,6 +87292,12 @@
             "state" : "translated",
             "value" : "超時計時"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overtime Tracking"
+          }
         }
       }
     },
@@ -87217,6 +87439,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "計畫"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your plan"
           }
         }
       }
@@ -87360,6 +87588,12 @@
             "state" : "translated",
             "value" : "%@ 結束"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ complete"
+          }
         }
       }
     },
@@ -87501,6 +87735,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "全部結束"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Session complete"
           }
         }
       }
@@ -87644,6 +87884,12 @@
             "state" : "translated",
             "value" : "播放"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Play"
+          }
         }
       }
     },
@@ -87785,6 +88031,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "顯示 Pro 解鎖的功能以及你的使用量"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shows what Pro unlocks and how much you use it"
           }
         }
       }
@@ -87928,6 +88180,12 @@
             "state" : "translated",
             "value" : "顯示記憶解鎖的功能以及你的使用量"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shows what Remember unlocks and how much you use it"
+          }
         }
       }
     },
@@ -88069,6 +88327,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "兌換代碼"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Redeem Code"
           }
         }
       }
@@ -88212,6 +88476,12 @@
             "state" : "translated",
             "value" : "寄電子郵件給開發者"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Email the Developer"
+          }
         }
       }
     },
@@ -88353,6 +88623,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "新功能"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What's New"
           }
         }
       }
@@ -88496,6 +88772,12 @@
             "state" : "translated",
             "value" : "我的權益"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My Benefits"
+          }
         }
       }
     },
@@ -88637,6 +88919,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "比免費版多用了 %lld"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You're using %lld more than Free allows"
           }
         }
       }
@@ -88780,6 +89068,12 @@
             "state" : "translated",
             "value" : "所有 Pro 功能均已解鎖"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All Pro features are unlocked"
+          }
         }
       }
     },
@@ -88922,6 +89216,12 @@
             "state" : "translated",
             "value" : "與免費版比較"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compared with Free"
+          }
         }
       }
     },
@@ -89063,6 +89363,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "免費版沒有 · 你現在有 %lld"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not in Free · You have %lld"
           }
         }
       }
@@ -89212,6 +89518,12 @@
             "state" : "translated",
             "value" : "免費版最多 %1$lld · 你現在有 %2$lld"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Free up to %1$lld · You have %2$lld"
+          }
         }
       }
     },
@@ -89353,6 +89665,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pro 解鎖的功能"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unlocked with Pro"
           }
         }
       }
@@ -89496,6 +89814,12 @@
             "state" : "translated",
             "value" : "記憶解鎖的功能"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unlocked with Remember"
+          }
         }
       }
     },
@@ -89637,6 +89961,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Pro 還能解鎖"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "More with Pro"
           }
         }
       }
@@ -89780,6 +90110,12 @@
             "state" : "translated",
             "value" : "查看全部功能"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See all features"
+          }
         }
       }
     },
@@ -89921,6 +90257,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "一眼看清你的權益"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See your benefits"
           }
         }
       }
@@ -90064,6 +90406,12 @@
             "state" : "translated",
             "value" : "如果你有 Pro 或記憶，在設定中點一下它，就能看到解鎖了什麼以及用了多少。"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "With Pro or Remember, tap it in Settings to see what is unlocked and how much you use it."
+          }
         }
       }
     },
@@ -90205,6 +90553,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "在 App 內兌換代碼"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Redeem a code in the app"
           }
         }
       }
@@ -90348,6 +90702,12 @@
             "state" : "translated",
             "value" : "有代碼？在設定或升級畫面直接兌換。"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Got a code? Use it in Settings or on the upgrade screen."
+          }
         }
       }
     },
@@ -90489,6 +90849,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "即將推出"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See what's coming"
           }
         }
       }
@@ -90632,6 +90998,12 @@
             "state" : "translated",
             "value" : "現在可在設定中查看接下來要做的功能。告訴我們你想要什麼。"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Settings now shows what we plan to build next. Tell us what you want."
+          }
         }
       }
     },
@@ -90773,6 +91145,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "人人都更好用"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Easier for everyone"
           }
         }
       }
@@ -90916,6 +91294,12 @@
             "state" : "translated",
             "value" : "數字切換更順暢，語音控制可以操作每個計時器按鈕，不靠顏色也能看出已開啟的提醒。"
           }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Numbers roll smoothly, Voice Control knows every timer button, and alerts are clear without colour."
+          }
         }
       }
     },
@@ -91057,6 +91441,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "上次 App 意外關閉，所以這次以全新錶盤開啟。"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The app closed unexpectedly last time, so it opened with a fresh dial."
           }
         }
       }
