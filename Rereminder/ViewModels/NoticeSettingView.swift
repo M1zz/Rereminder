@@ -42,6 +42,10 @@ struct NoticeSettingView: View {
     @State private var showFeedback = false
     /// App Store 코드 사용 시트(오퍼 코드·인앱결제 프로모션 코드).
     @State private var showRedeemCode = false
+    /// App Store 의 구독 관리 시트.
+    @State private var showManageSubscription = false
+    /// 구독 졸업(평생으로 바꾸기) 시트.
+    @State private var showGraduation = false
     /// 이번 버전에 새로 생긴 것 — 업데이트 뒤 한 번 뜬 안내를 여기서 다시 연다.
     @State private var showWhatsNew = false
 
@@ -170,7 +174,7 @@ struct NoticeSettingView: View {
                                 Text("Upgrade to \(AppName.pro)")
                                     .font(.headline)
                                     .foregroundStyle(.primary)
-                                Text("Unlock all features · One-time purchase")
+                                Text("Unlock all features · Yearly or lifetime")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
@@ -193,6 +197,39 @@ struct NoticeSettingView: View {
                                 Image(systemName: "chevron.right")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                }
+
+                // 연 구독 중인 사람. 구독 관리와 '평생으로 바꾸기' 를 늘 여기 둔다(구독 중일 때만).
+                // 평생 Pro 를 이미 가졌으면(졸업 뒤 해지 전) 바꾸기 줄은 빼고 관리만 남긴다.
+                if store.subscriptionTier > .free {
+                    Button {
+                        showManageSubscription = true
+                    } label: {
+                        HStack {
+                            Text(LeeoLadderText.manageSubscription)
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .accessibilityHidden(true)
+                        }
+                    }
+                    if !StoreManager.storedPurchaseFlag {
+                        Button {
+                            showGraduation = true
+                        } label: {
+                            HStack {
+                                Label(LeeoLadderText.switchToLifetimeEntry, systemImage: "infinity")
+                                    .foregroundStyle(.primary)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                    .accessibilityHidden(true)
                             }
                         }
                     }
@@ -833,6 +870,10 @@ struct NoticeSettingView: View {
             Task { await store.verifyCurrentEntitlements() }
         }
         .paywallGate(isPresented: $showPaywall)
+        .manageSubscriptionsSheet(isPresented: $showManageSubscription)
+        .sheet(isPresented: $showGraduation) {
+            SubscriptionGraduationSheet()
+        }
         .alert(lostProRecovered
                ? String(localized: "Your Pro access is back")
                : String(localized: "We could not find a record on this device"),

@@ -1639,6 +1639,154 @@
         }
       }
     },
+    "Lifetime is a one-time purchase. Yearly plans renew automatically unless you cancel at least 24 hours before the renewal date. Manage them in your App Store account settings." : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doživotní licence je jednorázový nákup. Roční předplatné se automaticky obnovuje, pokud ho nezrušíte alespoň 24 hodin před datem obnovení. Spravovat ho můžete v nastavení účtu App Store."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Livstid er et engangskøb. Årlige abonnementer fornyes automatisk, medmindre du opsiger mindst 24 timer før fornyelsesdatoen. Administrer dem i indstillingerne for din App Store-konto."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lebenslang ist ein Einmalkauf. Jahresabos verlängern sich automatisch, wenn du nicht mindestens 24 Stunden vor dem Verlängerungsdatum kündigst. Verwalten kannst du sie in deinen App Store-Accounteinstellungen."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Η αγορά εφ’ όρου ζωής πληρώνεται μία φορά. Τα ετήσια πακέτα ανανεώνονται αυτόματα, εκτός αν τα ακυρώσετε τουλάχιστον 24 ώρες πριν από την ημερομηνία ανανέωσης. Διαχειριστείτε τα από τις ρυθμίσεις του λογαριασμού σας στο App Store."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lifetime is a one-time purchase. Yearly plans renew automatically unless you cancel at least 24 hours before the renewal date. Manage them in your App Store account settings."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De por vida es un pago único. Los planes anuales se renuevan automáticamente salvo que canceles al menos 24 horas antes de la fecha de renovación. Gestiónalos en los ajustes de tu cuenta del App Store."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elinikäinen on kertaosto. Vuositilaus uusiutuu automaattisesti, ellet peru sitä viimeistään 24 tuntia ennen uusimispäivää. Voit hallita tilauksia App Store -tilisi asetuksissa."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’achat à vie se règle une seule fois. Les abonnements annuels se renouvellent automatiquement, sauf résiliation au moins 24 heures avant la date de renouvellement. Gérez-les dans les réglages de votre compte App Store."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seumur hidup adalah pembelian sekali bayar. Paket tahunan diperpanjang otomatis kecuali dibatalkan paling lambat 24 jam sebelum tanggal perpanjangan. Kelola di pengaturan akun App Store Anda."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A vita è un acquisto una tantum. I piani annuali si rinnovano automaticamente se non annulli almeno 24 ore prima della data di rinnovo. Puoi gestirli nelle impostazioni del tuo account App Store."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "買い切りは1回のお支払いです。年額プランは、更新日の24時間前までに解約しない限り自動で更新されます。App Storeのアカウント設定で管理できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "평생은 한 번만 결제합니다. 연 구독은 갱신일 24시간 전까지 해지하지 않으면 자동으로 갱신됩니다. App Store 계정 설정에서 관리할 수 있습니다."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Livstid er et engangskjøp. Årsabonnementer fornyes automatisk med mindre du sier opp minst 24 timer før fornyelsesdatoen. Administrer dem i innstillingene for App Store-kontoen din."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Levenslang is een eenmalige aankoop. Jaarabonnementen worden automatisch verlengd, tenzij je ten minste 24 uur voor de verlengingsdatum opzegt. Beheer ze in de instellingen van je App Store-account."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opcja dożywotnia to jednorazowy zakup. Plany roczne odnawiają się automatycznie, chyba że anulujesz je co najmniej 24 godziny przed datą odnowienia. Możesz nimi zarządzać w ustawieniach konta App Store."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O vitalício é uma compra única. Os planos anuais são renovados automaticamente, a menos que você cancele pelo menos 24 horas antes da data de renovação. Gerencie nos ajustes da sua conta da App Store."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O vitalício é uma compra única. Os planos anuais renovam-se automaticamente, a menos que cancele pelo menos 24 horas antes da data de renovação. Faça a gestão nas definições da sua conta da App Store."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "«Навсегда» оплачивается один раз. Годовая подписка продлевается автоматически, если не отменить её не позднее чем за 24 часа до даты продления. Управлять подпиской можно в настройках учётной записи App Store."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Livstid är ett engångsköp. Årsabonnemang förnyas automatiskt om du inte säger upp dem minst 24 timmar före förnyelsedatumet. Hantera dem i inställningarna för ditt App Store-konto."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "แบบตลอดชีพจ่ายครั้งเดียว แผนรายปีจะต่ออายุอัตโนมัติ เว้นแต่จะยกเลิกอย่างน้อย 24 ชั่วโมงก่อนวันต่ออายุ จัดการได้ในการตั้งค่าบัญชี App Store"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ömür boyu tek seferlik bir satın almadır. Yıllık planlar, yenileme tarihinden en az 24 saat önce iptal etmezsen otomatik olarak yenilenir. App Store hesap ayarlarından yönetebilirsin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trọn đời là mua một lần. Gói theo năm tự động gia hạn trừ khi bạn hủy ít nhất 24 giờ trước ngày gia hạn. Quản lý trong cài đặt tài khoản App Store của bạn."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "永久为一次性购买。年订阅会自动续订，除非在续订日期前至少 24 小时取消。可在 App Store 账户设置中管理。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "永久為一次性購買。年訂閱會自動續訂，除非在續訂日期前至少 24 小時取消。可在 App Store 帳號設定中管理。"
+          }
+        }
+      }
+    },
     "Lock the app with Face ID or Touch ID to keep your scripts and history private." : {
       "comment" : "Roadmap item detail: Face ID lock",
       "localizations" : {
@@ -2978,6 +3126,154 @@
         }
       }
     },
+    "Timer, unlimited pre-alerts, Live Activity, Apple Watch and widgets" : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Časovač, neomezená upozornění, Živé aktivity, Apple Watch a widgety"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer, ubegrænsede forvarsler, Live-aktiviteter, Apple Watch og widgets"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer, unbegrenzte Vorwarnungen, Live-Aktivitäten, Apple Watch und Widgets"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Χρονομετρητής, απεριόριστες προειδοποιήσεις, Ζωντανές δραστηριότητες, Apple Watch και γραφικά στοιχεία"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer, unlimited pre-alerts, Live Activity, Apple Watch and widgets"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Temporizador, avisos previos ilimitados, Actividades en vivo, Apple Watch y widgets"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajastin, rajattomat muistutukset, Live-toiminnot, Apple Watch ja widgetit"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minuteur, pré-alertes illimitées, Activités en direct, Apple Watch et widgets"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer, peringatan awal tanpa batas, Aktivitas Langsung, Apple Watch, dan widget"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer, preavvisi illimitati, Attività Live, Apple Watch e widget"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマー、事前アラート無制限、ライブアクティビティ、Apple Watchとウィジェット"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머, 예비 알림 무제한, 실시간 현황, Apple Watch와 위젯"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tidtaker, ubegrensede forvarsler, Live-aktiviteter, Apple Watch og widgeter"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer, onbeperkte voorwaarschuwingen, Live Activities, Apple Watch en widgets"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minutnik, nielimitowane ostrzeżenia, Aktywności na żywo, Apple Watch i widżety"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer, pré-alertas ilimitados, Atividades ao Vivo, Apple Watch e widgets"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Temporizador, pré-alertas ilimitados, Atividades em direto, Apple Watch e widgets"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Таймер, сигналы без ограничений, Live Activities, Apple Watch и виджеты"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer, obegränsade förvarningar, Liveaktiviteter, Apple Watch och widgetar"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ตัวจับเวลา แจ้งเตือนล่วงหน้าไม่จำกัด กิจกรรมสด Apple Watch และวิดเจ็ต"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zamanlayıcı, sınırsız ön uyarı, Canlı Etkinlikler, Apple Watch ve widget'lar"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hẹn giờ, báo trước không giới hạn, Hoạt động trực tiếp, Apple Watch và tiện ích"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "计时器、无限提前提醒、实时活动、Apple Watch 和小组件"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "計時器、無限提前提醒、即時動態、Apple Watch 和小工具"
+          }
+        }
+      }
+    },
     "Timers stay readable with Increase Contrast on or when colors are hard to tell apart." : {
       "comment" : "Roadmap item detail: color and contrast",
       "localizations" : {
@@ -3271,6 +3567,154 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "開啟"
+          }
+        }
+      }
+    },
+    "Unlock all features · Yearly or lifetime" : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odemknout všechny funkce · Ročně, nebo doživotně"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lås alle funktioner op · Årligt eller livstid"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Funktionen freischalten · Jährlich oder lebenslang"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ξεκλείδωμα όλων των λειτουργιών · Ετήσια ή εφ’ όρου ζωής"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unlock all features · Yearly or lifetime"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desbloquea todo · Anual o de por vida"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avaa kaikki ominaisuudet · Vuosittain tai elinikäisesti"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout débloquer · Annuel ou à vie"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buka semua fitur · Tahunan atau seumur hidup"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sblocca tutte le funzioni · Annuale o a vita"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "すべての機能を解除・年額または買い切り"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모든 기능 잠금 해제 · 연 구독 또는 평생"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lås opp alle funksjoner · Årlig eller livstid"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ontgrendel alle functies · Jaarlijks of levenslang"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odblokuj wszystkie funkcje · Rocznie lub dożywotnio"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desbloqueie tudo · Anual ou vitalício"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Desbloqueie tudo · Anual ou vitalício"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Открыть все функции · На год или навсегда"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lås upp alla funktioner · Årsvis eller livstid"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ปลดล็อกทุกฟีเจอร์ · รายปีหรือตลอดชีพ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tüm özelliklerin kilidini aç · Yıllık ya da ömür boyu"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mở khóa mọi tính năng · Theo năm hoặc trọn đời"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "解锁全部功能 · 年订阅或永久"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "解鎖全部功能 · 年訂閱或永久"
           }
         }
       }
@@ -3569,6 +4013,302 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "What's new after updates"
+          }
+        }
+      }
+    },
+    "Yearly or lifetime, your choice" : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ročně, nebo doživotně, vyberte si"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Årligt eller livstid, du vælger"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jährlich oder lebenslang, du entscheidest"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ετήσια ή εφ’ όρου ζωής, εσείς διαλέγετε"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yearly or lifetime, your choice"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anual o de por vida, tú eliges"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vuosittain tai elinikäisesti, sinä valitset"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuel ou à vie, à vous de choisir"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tahunan atau seumur hidup, Anda yang pilih"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuale o a vita, scegli tu"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "年額でも買い切りでも選べます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "연 구독도, 평생도 고를 수 있어요"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Årlig eller livstid, du velger"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jaarlijks of levenslang, jij kiest"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rocznie lub dożywotnio, Ty wybierasz"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anual ou vitalício, você escolhe"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anual ou vitalício, à sua escolha"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "На год или навсегда, выбирайте сами"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Årsvis eller livstid, du väljer"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "เลือกได้ทั้งรายปีหรือตลอดชีพ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yıllık ya da ömür boyu, seçim senin"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Theo năm hoặc trọn đời, tùy bạn chọn"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "年订阅或永久，任你选"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "年訂閱或永久，由你選擇"
+          }
+        }
+      }
+    },
+    "You already have Remember, so you pay only the difference." : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paměť už máte, zaplatíte jen rozdíl."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du har allerede Husk, så du betaler kun forskellen."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du hast Merken schon, also zahlst du nur die Differenz."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Έχετε ήδη τη Μνήμη, πληρώνετε μόνο τη διαφορά."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You already have Remember, so you pay only the difference."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ya tienes Memoria: solo pagas la diferencia."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sinulla on jo Muisti, joten maksat vain erotuksen."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous avez déjà Mémoire : vous ne payez que la différence."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anda sudah punya Ingat, cukup bayar selisihnya."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hai già Memoria: paghi solo la differenza."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "記憶をお持ちなので、差額だけのお支払いです。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기억을 이미 갖고 계셔서 차액만 내시면 됩니다."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du har allerede Husk, så du betaler bare mellomlegget."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je hebt Onthouden al, dus je betaalt alleen het verschil."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masz już Pamięć, więc płacisz tylko różnicę."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Você já tem o Memória: pague só a diferença."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Já tem o Memória: pague só a diferença."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "«Память» у вас уже есть, доплатите только разницу."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du har redan Minne, så du betalar bara mellanskillnaden."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "คุณมีจดจำอยู่แล้ว จ่ายเฉพาะส่วนต่าง"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hafıza zaten sende, yalnızca farkı ödersin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bạn đã có Ghi nhớ, chỉ cần trả phần chênh lệch."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你已拥有记忆，只需支付差价。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "你已擁有記憶，只需支付差價。"
           }
         }
       }
@@ -4317,154 +5057,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%1$@ – %2$@"
-          }
-        }
-      }
-    },
-    "%@ · One-time purchase" : {
-      "localizations" : {
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Jednorázový nákup"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Engangskøb"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Einmalkauf"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Εφάπαξ αγορά"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · One-time purchase"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Compra única"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Kertaosto"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Achat unique"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Sekali beli"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Acquisto una tantum"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@・買い切り"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · 일회성 구매"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Engangskjøp"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Eenmalige aankoop"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Jednorazowy zakup"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Compra única"
-          }
-        },
-        "pt-PT" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Compra única"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Разовая покупка"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Engångsköp"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · ซื้อครั้งเดียว"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Tek seferlik satın alma"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · Mua một lần"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · 一次性买断"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ · 一次買斷"
           }
         }
       }
@@ -45725,154 +46317,6 @@
         }
       }
     },
-    "One-time purchase. No subscription fees." : {
-      "localizations" : {
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jednorázový nákup. Žádné předplatné."
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Engangskøb. Intet abonnement."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Einmalkauf. Kein Abo."
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Εφάπαξ αγορά. Χωρίς συνδρομή."
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "One-time purchase. No subscription fees."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Compra única. Sin suscripciones."
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kertaosto. Ei tilausmaksuja."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Achat unique. Aucun abonnement."
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sekali beli. Tanpa biaya langganan."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Acquisto una tantum. Nessun abbonamento."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "買い切り。サブスクリプション料金はありません。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "일회성 구매. 구독료 없음."
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Engangskjøp. Ikke noe abonnement."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eenmalige aankoop. Geen abonnement."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Jednorazowy zakup. Bez subskrypcji."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Compra única. Sem assinatura."
-          }
-        },
-        "pt-PT" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Compra única. Sem subscrição."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Разовая покупка. Без подписки."
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Engångsköp. Ingen prenumeration."
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ซื้อครั้งเดียว ไม่มีค่าสมาชิกรายเดือน"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tek seferlik satın alma. Abonelik ücreti yok."
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mua một lần. Không phí thuê bao."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "一次性买断，没有订阅费。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "一次買斷，沒有訂閱費。"
-          }
-        }
-      }
-    },
     "Only basic notifications are supported on macOS" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -48387,154 +48831,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "已暫停"
-          }
-        }
-      }
-    },
-    "Pay once, use forever" : {
-      "localizations" : {
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zaplaťte jednou, používejte navždy"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Betal én gang, brug for altid"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Einmal zahlen, für immer nutzen"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Πληρώνετε μία φορά, το έχετε για πάντα"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pay once, use forever"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Paga una vez, úsala siempre"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Maksa kerran, käytä aina"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Payez une fois, profitez pour toujours"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bayar sekali, pakai selamanya"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Paghi una volta, usi per sempre"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "一度の購入でずっと使える"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "한 번 결제로 평생 사용"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Betal én gang, bruk for alltid"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Eén keer betalen, altijd gebruiken"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Płacisz raz, używasz zawsze"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pague uma vez, use para sempre"
-          }
-        },
-        "pt-PT" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pague uma vez, use para sempre"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Платите один раз — пользуйтесь всегда"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Betala en gång, använd för alltid"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "จ่ายครั้งเดียว ใช้ได้ตลอดไป"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bir kez öde, hep kullan"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Trả một lần, dùng mãi mãi"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "一次付费，永久使用"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "一次付費，永久使用"
           }
         }
       }
@@ -74056,154 +74352,6 @@
         }
       }
     },
-    "Unlock all features · One-time purchase" : {
-      "localizations" : {
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Odemknout všechny funkce · Jednorázový nákup"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lås alle funktioner op · Engangskøb"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Alle Funktionen freischalten · Einmalkauf"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ξεκλείδωμα όλων των λειτουργιών · Εφάπαξ αγορά"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unlock all features · One-time purchase"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Desbloquea todo · Compra única"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Avaa kaikki ominaisuudet · Kertaosto"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tout débloquer · Achat unique"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Buka semua fitur · Sekali beli"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sblocca tutte le funzioni · Acquisto una tantum"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "すべての機能を解除・買い切り"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "모든 기능 잠금 해제 · 일회성 구매"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lås opp alle funksjoner · Engangskjøp"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ontgrendel alle functies · Eenmalige aankoop"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Odblokuj wszystkie funkcje · Jednorazowy zakup"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Desbloqueie tudo · Compra única"
-          }
-        },
-        "pt-PT" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Desbloqueie tudo · Compra única"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Открыть все функции · Разовая покупка"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lås upp alla funktioner · Engångsköp"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ปลดล็อกทุกฟีเจอร์ · ซื้อครั้งเดียว"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tüm özelliklerin kilidini aç · Tek seferlik satın alma"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mở khóa mọi tính năng · Mua một lần"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "解锁全部功能 · 一次性买断"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "解鎖全部功能 · 一次買斷"
-          }
-        }
-      }
-    },
     "Unlock with Pro" : {
       "comment" : "History unlock button",
       "localizations" : {
@@ -85817,154 +85965,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Everything in Remember, plus Session Mode, scripts, overtime and history"
-          }
-        }
-      }
-    },
-    "You already have Remember — pay only the difference." : {
-      "localizations" : {
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Paměť už máte, zaplatíte jen rozdíl."
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Du har allerede Husk, så du betaler kun forskellen."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Du hast Merken schon – du zahlst nur die Differenz."
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Έχετε ήδη τη Μνήμη, πληρώνετε μόνο τη διαφορά."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ya tienes Memoria: solo pagas la diferencia."
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sinulla on jo Muisti, joten maksat vain erotuksen."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vous avez déjà Mémoire : vous ne payez que la différence."
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Anda sudah punya Ingat, cukup bayar selisihnya."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hai già Memoria: paghi solo la differenza."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "記憶をお持ちなので、差額だけのお支払いです。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "기억을 이미 갖고 계셔서 차액만 내시면 됩니다."
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Du har allerede Husk, så du betaler bare mellomlegget."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Je hebt Onthouden al, dus je betaalt alleen het verschil."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Masz już Pamięć, więc płacisz tylko różnicę."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Você já tem o Memória: pague só a diferença."
-          }
-        },
-        "pt-PT" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Já tem o Memória: pague só a diferença."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "«Память» у вас уже есть — доплатите только разницу."
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Du har redan Minne, så du betalar bara mellanskillnaden."
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "คุณมีจดจำอยู่แล้ว จ่ายเฉพาะส่วนต่าง"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hafıza zaten sende, yalnızca farkı ödersin."
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bạn đã có Ghi nhớ, chỉ cần trả phần chênh lệch."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "你已拥有记忆，只需支付差价。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "你已擁有記憶，只需支付差價。"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You already have Remember — pay only the difference."
           }
         }
       }

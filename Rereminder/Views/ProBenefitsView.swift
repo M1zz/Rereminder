@@ -238,7 +238,10 @@ struct ProBenefitsView: View {
         } header: {
             Text("More with Pro")
         } footer: {
-            Text("You already have Remember — pay only the difference.")
+            // 차액(올리기)은 기억 **평생**을 산 사람만이다. 기억 연 구독자는 Pro 연 구독으로 올린다.
+            if store.ownsLifetimeRemember {
+                Text("You already have Remember, so you pay only the difference.")
+            }
         }
     }
 

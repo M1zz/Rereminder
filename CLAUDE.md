@@ -359,7 +359,39 @@ Pro 가 파는 한 문장이 "앱이 설정을 기억한다"인데 무료 사용
   **늘지 않지만 남겨 둔** 키다.
 
 ### 가격 트림 — 요구하는 금액은 방금 겪은 불편의 크기를 따라간다 (ProTier)
-`Shared/Modules/StoreManager.swift`(`ProTier`·`ProductID`) + `ProGate.Feature.tier` + `PaywallView`.
+`Shared/Modules/StoreManager.swift`(`ProTier`·`ProductID`·`SubscriptionMark`) + `ProGate.Feature.tier` + `PaywallView`.
+
+**2.3.5 (2026-10-27) 세 칸 사다리로 바꿨다.** 칸은 무료 · 기억(Plus) · Pro, 유료 칸마다 **연 구독과 평생**을 나란히 판다.
+아래 2.3.3 표의 가격은 옛 값이다. 지금 상품(가격은 App Store Connect 가 원본, 코드에 적지 않는다):
+
+| 상품 | 여는 칸 | 종류 |
+|---|---|---|
+| `com.xa.toki.remember` | 기억 평생 | 비소모성 |
+| `com.xa.toki.plus.yearly` | 기억 연 구독 | 자동 갱신(그룹 하나, 낮은 단계) |
+| `com.xa.toki.pro` | Pro 평생 | 비소모성 |
+| `com.xa.toki.pro.yearly` | Pro 연 구독 | 자동 갱신(같은 그룹, 높은 단계) |
+| `com.xa.toki.pro.upgrade` | 기억 평생에서 Pro 평생으로(차액) | 비소모성 |
+| `com.xa.toki.pro.graduate` | 구독 졸업가 Pro 평생(구독 중인 사람에게만) | 비소모성 |
+| `com.xa.toki.gift.pro` · `tip.*` | 그대로 | 소모성 |
+
+- 연 구독은 처음 보는 사람에게 첫 해 반값(App Store 첫 구독 할인, 같은 상품). 화면은 LeeoKit `LeeoTermPicker` 가 그린다.
+- ⚠️ **래치(Keychain `rereminder.pro.purchased`)에는 평생만 적는다**(`lifetimeProProductIDs`). 연 구독은 만료일이 있는
+  표식(`SubscriptionMark`, UserDefaults)이다. 구독까지 래치에 적으면 구독이 끝나도 Pro 가 남는다.
+  표식도 래치처럼 **조회가 비었다고 지우지 않는다**. 만료일이 지나면 저절로 닫히고, 환불을 `Transaction.all` 로 확인했을 때만 지운다.
+- `entitlementIDs`(= `StoreManager.fullProductIDs`) = Pro 평생 · 올리기 · 졸업 · Pro 연 구독. 기억 두 상품은 넣지 않는다.
+- **언제나 평생 패스**(LeeoKit `LeeoForeverPass`, 피드백 허브 iCloud): 열려 있으면 Pro. 패스 상품은 앱 상품 목록에 넣지 않는다.
+  `StoreManager.foreverPass` 가 들고 있고, 앱 시작과 구매 복원에서 `refresh()`. 정적 판정용으로 `rereminder.foreverPass.active` 에 옮겨 적는다.
+- **구독 졸업**(`Rereminder/Modules/SubscriptionGraduation.swift`): 구독 중이고 `LeeoGraduation.isDue`(6개월째 · 갱신 7일 전,
+  창마다 한 번)면 앱 시작 3초 뒤 시트를 한 번. 시트가 실제로 보였을 때만 `markOffered`. 설정 Pro 칸에 구독 중일 때만
+  '구독 관리 열기' · '평생으로 바꾸기' 줄. 평생 Pro 를 이미 가졌으면 바꾸기 줄은 빠진다.
+- 페이월: 무료 · 기억 · Pro 세 칸 카드(사다리 순서 고정, 들어온 자리의 칸은 테두리). 유료 칸마다 `LeeoTermPicker` + 그 칸의 구매 버튼.
+  기억 평생을 산 사람의 Pro 평생은 올리기 상품(`proLifetimeOffer`). 카드 아래 `LeeoLifetimePriceNotice`(Pro 평생이 오른다) ·
+  `LeeoForeverPassLine`. 맨 아래 문구는 "평생은 한 번 결제, 연 구독은 자동 갱신" 고지다(구독 심사 필수).
+- 지표: 스냅샷 `flag.subscribed`, `flag.isPaid` 는 구독도 결제로 센다. 테스트: `PricingLadderTests`.
+- `RereminderSpec.monetization` 은 `.freemiumSubscription` 이다(구독을 팔면 약관 URL 이 필수).
+- 사람이 할 일(상품 생성 · 가격 · 구독 그룹 · 첫 해 할인): `docs/OPERATIONS_CHECKLIST.md` 9번.
+
+2.3.3 의 기록(트림을 처음 나눈 이유):
 
 예전에는 $9.99 평생 Pro 한 장뿐이라 "지난번 설정이 사라졌다"는 작은 불편에도 세션 모드까지 든
 전체 패키지를 내밀었다. 그래서 **기능으로** 두 트림을 나눴다(2026-10-16):
@@ -382,12 +414,11 @@ Pro 가 파는 한 문장이 "앱이 설정을 기억한다"인데 무료 사용
   **전날 안내**)는 Pro 가 먼저다. 전날 안내는 기능은 기억이지만 사람은 세션 운영자라 `focus: .session`.
 - 맨 위 한 줄(`PaywallReceipt`)은 기능 목록보다 먼저 **이 사람이 해 온 것**을 말한다
   (완주 3회·세션 2회 미만이면 띄우지 않는다 — 작은 숫자는 영수증이 아니라 놀림이다).
-- ⚠️ 기억 상품이 로드되지 않으면(App Store Connect 에 없으면) 페이월은 예전처럼 Pro 한 장이다.
-  기억·업그레이드 상품이 없다고 **대표 상품(Pro)을 대신 사게 하지 않는다**(`purchase(_:)`).
+- ⚠️ 상품이 로드되지 않으면 그 길의 버튼이 눌리지 않는다(2.3.5 부터 칸은 늘 셋이다).
+  상품이 없다고 **대표 상품(Pro)을 대신 사게 하지 않는다**(`purchase(_:)`).
 - 지표: `purchase_completed:<상품 ID>` 가 어느 트림인지 말한다. 스냅샷 `flag.isPaid` 는 **어느 쪽이든
   돈을 냈다**, `flag.paidRemember` 는 기억만 산 설치(= Pro 로 올릴 후보).
-- ⚠️ **구독을 넣지 말 것**(지금은). 페이월이 "한 번 결제, 평생 사용"을 약속하고 창단 후원자 약속도 그 위에
-  서 있다. 구독은 스튜디오·기관용 트림이 생길 때 그쪽에서만 검토한다.
+- (2.3.3 의 "구독을 넣지 말 것"은 2.3.5 의 세 칸 개편으로 바뀌었다. 평생은 늘 함께 팔고, 창단 후원자 약속은 그대로다.)
 - 사람이 할 일(상품 생성·현지화): `docs/OPERATIONS_CHECKLIST.md` 8번. 테스트: `ProTierTests` (14개)
 
 ### 내 혜택 — 산 사람에게 산 값이 보이게 (ProBenefitsView)
@@ -1584,7 +1615,7 @@ python3 scripts/make_marketing_screenshots.py [언어 ...]  # → docs/screensho
 - **Swift Version**: Swift 5.9+
 
 ## 의존성
-- **LeeoKit** (SPM, 3.14.0+ — 3.x 는 `legal`·`monetization` 선언이 필수. 3.14.0 에 새 5개 언어 번역): 공용 StoreKit 2 엔진(LeeoStore)·사용 리포터·원격 킬스위치(LeeoRemoteFlags)·MetricKit 크래시 진단(LeeoDiagnostics) 등 자체 공용 모듈. 킬스위치 플래그는 `Rereminder/Modules/RereminderFlags.swift`, Dashboard 수동 작업은 `docs/OPERATIONS_CHECKLIST.md` 참고
+- **LeeoKit** (SPM, 3.23.0+, 세 칸 사다리 `Ladder/` 가 3.23.0 에 들어왔다. 그 전 3.14.0+, 3.x 는 `legal`·`monetization` 선언이 필수. 3.14.0 에 새 5개 언어 번역): 공용 StoreKit 2 엔진(LeeoStore)·사용 리포터·원격 킬스위치(LeeoRemoteFlags)·MetricKit 크래시 진단(LeeoDiagnostics) 등 자체 공용 모듈. 킬스위치 플래그는 `Rereminder/Modules/RereminderFlags.swift`, Dashboard 수동 작업은 `docs/OPERATIONS_CHECKLIST.md` 참고
 - **외부 분석 SDK 없음**: Firebase(2026-07)에 이어 TelemetryDeck(2026-08)도 제거했다.
   App ID 가 비어 있어 실제로 아무것도 보내지 않았고, 사용 통계는 CloudKit 허브가 이미 담당한다.
   이벤트는 `AnalyticsManager` → `ActivityReporter` 한 경로로만 나간다.
@@ -1643,6 +1674,13 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
 ```
 
 ## 버전 히스토리
+
+### v2.3.5 (준비 중)
+**세 칸 요금제**: 무료 · 기억(Plus) · Pro, 유료 칸마다 연 구독과 평생. 위 "가격 트림" 절.
+- 새 상품: `plus.yearly` · `pro.yearly` · `pro.graduate`. 연 구독은 래치가 아니라 만료일 표식(`SubscriptionMark`)
+- 언제나 평생 패스(`LeeoForeverPass`)가 Pro 를 연다. 구독 졸업 시트와 설정의 '평생으로 바꾸기'
+- 페이월의 "한 번 구매, 평생 사용" · "구독료 없음" 문구를 고쳤다(이제 틀린 말)
+- LeeoKit 3.23.0 이상. 릴리즈 노트: `docs/release-notes-2.3.5-<25개 언어>.md`
 
 ### v2.3.3 (2026-10-17)
 **가격 트림** — 기억($2.99) · Pro($9.99) · 기억→Pro 차액($6.99). 위 "가격 트림" 절.

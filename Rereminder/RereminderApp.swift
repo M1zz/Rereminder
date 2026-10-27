@@ -101,6 +101,8 @@ struct RereminderApp: App {
                 .tint(themeManager.accentColor)
                 .environmentObject(storeManager)
                 .environmentObject(themeManager)
+                // 연 구독 중인 사람에게 때가 되면 평생으로 바꾸는 길을 한 번 보인다.
+                .subscriptionGraduationPrompt()
         }
         .modelContainer(Self.sharedModelContainer)
     }

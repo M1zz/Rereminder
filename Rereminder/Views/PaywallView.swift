@@ -2,22 +2,22 @@
 //  PaywallView.swift
 //  Rereminder
 //
-//  Pro 구매 Paywall UI
+//  요금제 Paywall UI (2026-10 개편: 무료 · 기억(Plus) · Pro 세 칸)
+//  - 칸마다 연 구독 / 평생 고르기(`LeeoTermPicker`)와 그 칸의 구매 버튼
+//  - 세 칸 아래 언제나 평생 패스 한 줄(`LeeoForeverPassLine`), 평생 가격 인상 안내(`LeeoLifetimePriceNotice`)
 //  - 기능 비교 테이블
-//  - "한번 구매, 평생 사용" 강조
 //  - 제한 도달 시 자연스럽게 노출
 //
-//  ⚠️ **들어온 순간에 맞는 트림을 앞에 세운다**(`ProTier`, 2.3.3).
-//     "지난번 설정이 사라졌다"는 작은 불편에 $9.99 전체 패키지를 내밀던 것이 투박했다 —
-//     요구하는 금액은 방금 겪은 불편의 크기를 따라가야 한다. 기억 자리(다시 연 순간·반복 감지·
-//     잠긴 템플릿)에서는 기억($2.99)이, 세션 자리(세션 모드·기록·전날 안내)에서는 Pro 가 먼저다.
-//     다른 트림은 지우지 않고 뒤에 둔다 — 고르는 건 사용자다.
-//  ⚠️ 기억 상품이 로드되지 않으면(App Store Connect 에 아직 없으면) 예전처럼 Pro 한 장만 보인다.
+//  ⚠️ **들어온 순간에 맞는 칸을 앞에 세운다**(`ProTier`, 2.3.3). 기억 자리(다시 연 순간·반복 감지·
+//     잠긴 템플릿)에서는 기억 칸이, 세션 자리(세션 모드·기록·전날 안내)에서는 Pro 칸이 테두리로 선다.
+//     칸 순서는 사다리 그대로(무료 · 기억 · Pro) 두고, 고르는 건 사용자다.
+//  ⚠️ 상품이 로드되지 않으면 그 길의 버튼은 눌리지 않는다. 다른 상품을 대신 사게 하지 않는다.
 //  ⚠️ 맨 위에는 기능 목록보다 **이 사람이 해 온 것**을 먼저 적는다(`PaywallReceipt`).
 //
 
 import SwiftUI
 import StoreKit
+import LeeoKit
 
 struct PaywallView: View {
     @Environment(\.dismiss) private var dismiss
@@ -37,8 +37,9 @@ struct PaywallView: View {
     var focus: ProTier?
 
     @State private var didPurchaseDuringSession = false
-    /// 사용자가 카드를 눌러 바꾼 선택. nil 이면 `defaultSelection`.
-    @State private var selectedTier: ProTier?
+    /// 칸마다 고른 길. 처음 보는 사람은 연 구독(첫 해 할인)이 먼저 보인다.
+    @State private var plusTerm: LeeoPlanTerm = .yearly
+    @State private var proTerm: LeeoPlanTerm = .yearly
     /// 이 화면에서 마지막으로 결제를 시작한 상품. 기억을 산 직후를 알아보는 데 쓴다.
     @State private var lastPurchase: StoreManager.ProductID?
     /// App Store 의 코드 사용 시트(오퍼 코드·인앱결제 프로모션 코드).
@@ -59,9 +60,11 @@ struct PaywallView: View {
                     if let feature = triggeredBy {
                         triggerBanner(feature: feature)
                     }
-                    if showsTiers {
+                    if !store.isPro {
                         planCards
                     }
+                    // 언제나 평생 패스. 이미 Pro 인 사람도 다른 앱까지 열고 싶을 수 있다.
+                    LeeoForeverPassLine(pass: store.foreverPass, ownsLifetimePro: StoreManager.storedPurchaseFlag)
                     featureComparisonSection
                     purchaseSection
                     restoreSection
@@ -90,6 +93,10 @@ struct PaywallView: View {
                 }
             }
         }
+        .onAppear {
+            // 기억 평생을 산 사람은 Pro 평생(차액)으로 올리는 길이 먼저다.
+            if store.ownsLifetimeRemember { proTerm = .lifetime }
+        }
         .task {
             // ⚠️ 호출부가 한 곳도 없어 상품이 로드되지 않았다 — 가격(`proPrice`)이 빈 문자열로
             //    뜨는 페이월은 "얼마인지 모르고 누르라"는 화면이다.
@@ -109,9 +116,9 @@ struct PaywallView: View {
         .onChange(of: store.purchaseState) { _, newValue in
             if newValue == .purchased {
                 didPurchaseDuringSession = true
-                // ⚠️ 기억을 산 직후에는 `canRemember` 가 참이 되어 같은 화면이 곧바로 "Pro 로 업그레이드 $6.99"
-                //    로 바뀐다 — 방금 돈을 낸 사람에게 또 권하는 화면이 된다. 완료 표시를 잠깐 보이고 닫는다.
-                if lastPurchase == .remember {
+                // ⚠️ 기억을 산 직후에는 `canRemember` 가 참이 되어 같은 화면이 곧바로 Pro 를 권하는 화면으로
+                //    바뀐다. 방금 돈을 낸 사람에게 또 권하는 화면이 된다. 완료 표시를 잠깐 보이고 닫는다.
+                if let lastPurchase, lastPurchase.tier == .plus {
                     Task {
                         try? await Task.sleep(for: .seconds(1.2))
                         dismiss()
@@ -162,7 +169,7 @@ struct PaywallView: View {
             HStack(spacing: 8) {
                 Image(systemName: "infinity")
                     .font(.headline)
-                Text("Pay once, use forever")
+                Text("Yearly or lifetime, your choice")
                     .font(.headline)
             }
             .foregroundStyle(Color.accentColor)
@@ -174,103 +181,145 @@ struct PaywallView: View {
             )
     }
 
-    // MARK: - 트림
+    // MARK: - 세 칸
 
     private var focusTier: ProTier { focus ?? triggeredBy?.tier ?? .session }
 
-    /// 두 트림을 나란히 보여 줄 때인가 — 기억 상품이 실제로 있고, 아직 Pro 가 아닐 때.
-    private var showsTiers: Bool {
-        !store.isPro && (store.offersRememberTier || store.canRemember)
-    }
-
-    /// 지금 사려는 트림. 기억을 이미 가졌으면 남은 건 Pro 뿐이다.
-    private var selection: ProTier {
-        if store.canRemember || !showsTiers { return .session }
-        return selectedTier ?? focusTier
-    }
-
-    /// 들어온 순간의 트림이 먼저다.
-    private var orderedTiers: [ProTier] {
-        focusTier == .plus ? [.plus, .session] : [.session, .plus]
-    }
-
+    /// 무료 · 기억(Plus) · Pro. 위 칸은 아래 칸을 전부 포함하므로 사다리 순서 그대로 둔다.
+    /// 들어온 자리의 칸은 테두리로 앞에 세운다(기억 자리는 기억, 세션 자리는 Pro).
     private var planCards: some View {
         VStack(spacing: 12) {
-            ForEach(orderedTiers, id: \.self) { tier in
+            ForEach(ProTier.allCases, id: \.self) { tier in
                 planCard(tier)
             }
+            LeeoLifetimePriceNotice()
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+
+    private func owns(_ tier: ProTier) -> Bool {
+        switch tier {
+        case .free: return false
+        case .plus: return store.canRemember
+        case .session: return store.isPro
+        }
+    }
+
+    private func termBinding(_ tier: ProTier) -> Binding<LeeoPlanTerm> {
+        tier == .plus ? $plusTerm : $proTerm
+    }
+
+    /// 이 칸에서 고른 길(연 구독 · 평생)에 실제로 결제할 상품.
+    /// 기억 평생을 이미 산 사람에게 Pro 평생은 올리기(차액) 상품이다.
+    private func offer(_ tier: ProTier, _ term: LeeoPlanTerm) -> StoreManager.ProductID {
+        switch (tier, term) {
+        case (.plus, .yearly): return .plusYearly
+        case (.plus, .lifetime): return .remember
+        case (_, .yearly): return .proYearly
+        case (_, .lifetime): return store.proLifetimeOffer
         }
     }
 
     @ViewBuilder
     private func planCard(_ tier: ProTier) -> some View {
-        let owned = tier == .plus && store.canRemember
-        let isSelected = !owned && selection == tier
-        let price: String? = tier == .plus
-            ? store.price(of: .remember)
-            : store.price(of: store.proOffer)
+        let owned = owns(tier)
+        let highlighted = tier == focusTier && !owned
 
-        Button {
-            guard !owned else { return }
-            withAnimation(.easeInOut(duration: 0.15)) { selectedTier = tier }
-        } label: {
-            HStack(alignment: .top, spacing: 12) {
-                Image(systemName: owned ? "checkmark.circle.fill"
-                                        : (isSelected ? "largecircle.fill.circle" : "circle"))
-                    .font(.title3)
-                    .foregroundStyle(owned ? Color.green : (isSelected ? Color.accentColor : Color.secondary))
-                    .accessibilityHidden(true)
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack(spacing: 6) {
-                        Text(tier == .plus ? String(localized: "Remember") : AppName.pro)
-                            .font(.headline)
-                            .foregroundStyle(.primary)
-                        if owned {
-                            Text("Owned")
-                                .font(.caption2.weight(.bold))
-                                .foregroundStyle(.green)
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 2)
-                                .background(Capsule().fill(Color.green.opacity(0.15)))
-                        }
-                    }
-                    Text(tier == .plus
-                         ? String(localized: "Saved setups and your last timer")
-                         : String(localized: "Everything in Remember, plus Session Mode, scripts, overtime and history"))
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.leading)
-                        .fixedSize(horizontal: false, vertical: true)
-                    if tier == .session, store.proOffer == .proUpgrade {
-                        Text("You already have Remember — pay only the difference.")
-                            .font(.caption)
-                            .foregroundStyle(Color.accentColor)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 6) {
+                Text(planName(tier))
+                    .font(.headline)
+                    .foregroundStyle(tier == .session ? Color.accentColor : .primary)
+                if owned {
+                    Text("Owned")
+                        .font(.caption2.weight(.bold))
+                        .foregroundStyle(.green)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(Capsule().fill(Color.green.opacity(0.15)))
                 }
-                Spacer(minLength: 8)
-                if !owned, let price {
-                    Text(price)
-                        .font(.headline.monospacedDigit())
-                        .foregroundStyle(.primary)
+                Spacer(minLength: 0)
+            }
+            Text(planSummary(tier))
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.leading)
+                .fixedSize(horizontal: false, vertical: true)
+
+            if tier != .free, !owned {
+                let term = termBinding(tier)
+                let lifetime = offer(tier, .lifetime)
+                LeeoTermPicker(term: term,
+                               yearly: store.product(offer(tier, .yearly)),
+                               lifetime: store.product(lifetime))
+                if tier == .session, term.wrappedValue == .lifetime, lifetime == .proUpgrade {
+                    Text("You already have Remember, so you pay only the difference.")
+                        .font(.caption)
+                        .foregroundStyle(Color.accentColor)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                buyButton(tier, product: offer(tier, term.wrappedValue))
+            }
+        }
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: 14)
+                .fill(highlighted ? Color.accentColor.opacity(0.08)
+                                  : Color(uiColor: .secondarySystemBackground).opacity(0.5))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 14)
+                .strokeBorder(highlighted ? Color.accentColor : Color(uiColor: .separator).opacity(0.3),
+                              lineWidth: highlighted ? 2 : 1)
+        )
+    }
+
+    private func planName(_ tier: ProTier) -> String {
+        switch tier {
+        case .free: return String(localized: "Free")
+        case .plus: return String(localized: "Remember")
+        case .session: return AppName.pro
+        }
+    }
+
+    private func planSummary(_ tier: ProTier) -> String {
+        switch tier {
+        case .free: return String(localized: "Timer, unlimited pre-alerts, Live Activity, Apple Watch and widgets")
+        case .plus: return String(localized: "Saved setups and your last timer")
+        case .session: return String(localized: "Everything in Remember, plus Session Mode, scripts, overtime and history")
+        }
+    }
+
+    private func buyButton(_ tier: ProTier, product: StoreManager.ProductID) -> some View {
+        let title = tier == .plus ? String(localized: "Get Remember") : String(localized: "Upgrade to Pro")
+        let buying = store.purchaseState == .purchasing && lastPurchase == product
+        return Button {
+            lastPurchase = product
+            Task { await store.purchase(product) }
+        } label: {
+            Group {
+                if buying {
+                    ProgressView().tint(.white)
+                } else {
+                    Text(title).font(.headline)
                 }
             }
-            .padding(16)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .foregroundStyle(.white)
+            .frame(maxWidth: .infinity, minHeight: 44)
+            .padding(.vertical, 6)
             .background(
-                RoundedRectangle(cornerRadius: 14)
-                    .fill(isSelected ? Color.accentColor.opacity(0.08)
-                                     : Color(uiColor: .secondarySystemBackground).opacity(0.5))
+                LinearGradient(
+                    colors: [Color.accentColor, Color.accentColor.opacity(0.8)],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                )
             )
-            .overlay(
-                RoundedRectangle(cornerRadius: 14)
-                    .strokeBorder(isSelected ? Color.accentColor : Color(uiColor: .separator).opacity(0.3),
-                                  lineWidth: isSelected ? 2 : 1)
-            )
+            .cornerRadius(12)
         }
-        .buttonStyle(.plain)
-        .disabled(owned)
-        .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .disabled(store.purchaseState == .purchasing || store.product(product) == nil)
+        .accessibilityLabel(title)
+        .accessibilityValue(store.price(of: product) ?? "")
     }
 
     // MARK: - 지금까지 한 것
@@ -301,7 +350,7 @@ struct PaywallView: View {
             VStack(alignment: .leading, spacing: 4) {
                 // 기억 자리에서 "Pro 가 필요합니다"라고 하면 $2.99 카드와 말이 어긋난다.
                 // 기능이 아니라 **앞에 세운 트림**으로 말한다 — 전날 안내는 기능은 기억이지만 Pro 를 앞에 세운다.
-                Text(focusTier == .plus && showsTiers
+                Text(focusTier == .plus
                      ? String(localized: "Included in Remember")
                      : String(localized: "This feature requires Pro"))
                     .font(.subheadline.weight(.semibold))
@@ -339,13 +388,11 @@ struct PaywallView: View {
                     Text("Free")
                         .font(.subheadline.weight(.semibold))
                         .frame(width: columnWidth)
-                    if showsTiers {
-                        Text("Remember")
-                            .font(.subheadline.weight(.semibold))
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.6)
-                            .frame(width: columnWidth)
-                    }
+                    Text("Remember")
+                        .font(.subheadline.weight(.semibold))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
+                        .frame(width: columnWidth)
                     Text("Pro")
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(Color.accentColor)
@@ -385,8 +432,8 @@ struct PaywallView: View {
         }
     }
 
-    /// 칸이 셋이면 좁힌다 — 기능 이름 칸이 먼저 숨을 쉬어야 한다.
-    private var columnWidth: CGFloat { showsTiers ? 56 : 60 }
+    /// 칸이 셋이라 좁힌다. 기능 이름 칸이 먼저 숨을 쉬어야 한다.
+    private let columnWidth: CGFloat = 56
 
     private func comparisonRow(_ feature: String, free: Any, remember: Any, pro: Any) -> some View {
         HStack {
@@ -397,19 +444,15 @@ struct PaywallView: View {
 
             comparisonCell(free)
                 .frame(width: columnWidth)
-            if showsTiers {
-                comparisonCell(remember)
-                    .frame(width: columnWidth)
-            }
+            comparisonCell(remember)
+                .frame(width: columnWidth)
             comparisonCell(pro)
                 .frame(width: columnWidth)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(showsTiers
-            ? "\(String(localized: String.LocalizationValue(feature))): \(String(localized: "Free")) \(accessibilityValue(free)), \(String(localized: "Remember")) \(accessibilityValue(remember)), \(String(localized: "Pro")) \(accessibilityValue(pro))"
-            : "\(String(localized: String.LocalizationValue(feature))): \(String(localized: "Free")) \(accessibilityValue(free)), \(String(localized: "Pro")) \(accessibilityValue(pro))")
+        .accessibilityLabel("\(String(localized: String.LocalizationValue(feature))): \(String(localized: "Free")) \(accessibilityValue(free)), \(String(localized: "Remember")) \(accessibilityValue(remember)), \(String(localized: "Pro")) \(accessibilityValue(pro))")
     }
 
     private func accessibilityValue(_ value: Any) -> String {
@@ -458,46 +501,6 @@ struct PaywallView: View {
                 .padding(.vertical, 16)
 
             } else {
-                Button {
-                    let product: StoreManager.ProductID = selection == .plus ? .remember : store.proOffer
-                    lastPurchase = product
-                    Task { await store.purchase(product) }
-                } label: {
-                    VStack(spacing: 6) {
-                        if store.purchaseState == .purchasing {
-                            ProgressView()
-                                .tint(.white)
-                        } else {
-                            Text(selection == .plus
-                                 ? String(localized: "Get Remember")
-                                 : String(localized: "Upgrade to Pro"))
-                                .font(.headline)
-                            if !selectedPrice.isEmpty {
-                                Text("\(selectedPrice) · One-time purchase")
-                                    .font(.caption)
-                                    .opacity(0.9)
-                            }
-                        }
-                    }
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
-                    .background(
-                        LinearGradient(
-                            colors: [Color.accentColor, Color.accentColor.opacity(0.8)],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-                    .cornerRadius(14)
-                    .shadow(color: Color.accentColor.opacity(0.3), radius: 8, y: 4)
-                }
-                .disabled(store.purchaseState == .purchasing)
-                .accessibilityLabel(selection == .plus
-                                    ? String(localized: "Get Remember")
-                                    : String(localized: "Upgrade to Pro"))
-                .accessibilityValue(selectedPrice)
-
                 // 1차 페이월 — "5번 더 체험" 옵션
                 if stage == .first,
                    let feature = triggeredBy,
@@ -543,12 +546,6 @@ struct PaywallView: View {
         }
     }
 
-    /// 버튼에 적을 가격 — 지금 고른 트림의 실제 결제 상품 가격.
-    private var selectedPrice: String {
-        if selection == .plus { return store.price(of: .remember) ?? "" }
-        return store.price(of: store.proOffer) ?? store.proPrice
-    }
-
     // MARK: - Restore
 
     private var restoreSection: some View {
@@ -581,9 +578,11 @@ struct PaywallView: View {
 
     private var legalSection: some View {
         VStack(spacing: 8) {
-            Text("One-time purchase. No subscription fees.")
+            Text("Lifetime is a one-time purchase. Yearly plans renew automatically unless you cancel at least 24 hours before the renewal date. Manage them in your App Store account settings.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
 
             HStack(spacing: 16) {
                 Link("Terms of Use", destination: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/")!)

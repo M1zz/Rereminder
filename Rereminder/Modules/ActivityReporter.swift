@@ -122,6 +122,8 @@ enum ActivityReporter {
         let paidRemember = StoreManager.storedRememberFlag && !StoreManager.isProUser
         metrics["flag.isPaid"] = (StoreManager.isPaidPurchase || paidRemember) ? 1 : 0
         metrics["flag.paidRemember"] = paidRemember ? 1 : 0
+        // 연 구독 중인가(어느 칸이든). 평생과 구독 중 무엇을 고르는지 본다.
+        metrics["flag.subscribed"] = StoreManager.subscriptionTier > .free ? 1 : 0
         metrics["flag.isComped"] = (StoreManager.isGrandfathered || StoreManager.isAutoProEnvironment) ? 1 : 0
         // 옛 키는 계속 보낸다 — 앱 자체 통계의 과거 기록과 이어 보려면 필요하다.
         // 다만 이 값은 접근 권한이지 결제가 아니다. 유료를 세는 데 쓰지 말 것.

@@ -9,6 +9,183 @@ DeployBar 가 배포할 때 아래 버전 절의 언어별 문구를 읽어 스�
 사용자에게 무엇이 좋아졌는지만 쓴다. 내부 구조나 빌드 설정 이야기는 쓰지 않는다.
 언어마다 다시 쓴다. 기계번역하지 말고 항목 수와 순서만 맞춘다.
 
+## 2.3.5
+
+### 앱스토어 (한국어)
+
+요금제가 무료, 기억, Pro 세 가지로 정리됐어요.
+기억과 Pro는 연 구독과 평생 중에 고를 수 있어요.
+구독 중이면 언제든 평생으로 바꿀 수 있어요.
+언제나 평생 패스로 모든 앱을 열 수 있어요.
+
+### App Store (English)
+
+Plans are now Free, Remember and Pro.
+Choose yearly or lifetime for each plan.
+Subscribed? Switch to lifetime anytime.
+One Forever Pass unlocks all our apps.
+
+### App Store (en-GB)
+
+Plans are now Free, Remember and Pro.
+Choose yearly or lifetime for each plan.
+Subscribed? Move to lifetime any time.
+One Forever Pass unlocks all our apps.
+
+### App Store (日本語)
+
+プランが無料、記憶、Proの3つになりました。
+記憶とProは年額か買い切りを選べます。
+購読中ならいつでも買い切りに切り替えられます。
+ずっとパスですべてのアプリが使えます。
+
+### 앱스토어 (중국어 간체)
+
+方案整理为免费、记忆和 Pro 三种。
+记忆和 Pro 可选年订阅或永久。
+订阅中可随时改为永久版。
+一张永久通行证即可解锁我们所有 App。
+
+### 앱스토어 (중국어 번체)
+
+方案整理為免費、記憶和 Pro 三種。
+記憶和 Pro 可選年訂閱或永久。
+訂閱中可隨時改為永久版。
+一張永久通行證即可解鎖我們所有 App。
+
+### App Store (Deutsch)
+
+Neu sortiert: Kostenlos, Merken und Pro.
+Wähle jährlich oder lebenslang.
+Im Abo jederzeit zu lebenslang wechseln.
+Ein Für-immer-Pass für alle unsere Apps.
+
+### App Store (Français)
+
+Trois formules : Gratuit, Mémoire, Pro.
+Annuel ou à vie, vous choisissez.
+Abonné ? Passez à vie quand vous voulez.
+Un Pass à vie ouvre toutes nos apps.
+
+### App Store (Español)
+
+Tres planes: Gratis, Memoria y Pro.
+Elige anual o de por vida en cada plan.
+Con suscripción, pásate a de por vida.
+Un Pase para siempre abre nuestras apps.
+
+### App Store (Português do Brasil)
+
+Três planos: Grátis, Memória e Pro.
+Escolha anual ou vitalício.
+Assinante pode mudar para o vitalício.
+Um Passe para sempre abre todos os apps.
+
+### 앱스토어 (포르투갈어(포르투갈))
+
+Três planos: Grátis, Memória e Pro.
+Escolha anual ou vitalício.
+Assinante pode passar para vitalício.
+Um passe para sempre abre todas as apps.
+
+### App Store (Italiano)
+
+Tre piani: Gratis, Memoria e Pro.
+Scegli annuale o a vita per ogni piano.
+Abbonato? Passa a vita quando vuoi.
+Un Pass per sempre apre tutte le app.
+
+### 앱스토어 (러시아어)
+
+Три тарифа: Бесплатно, Память и Pro.
+Выбирайте: на год или навсегда.
+Подписку можно сменить на «навсегда».
+Вечный пропуск откроет все приложения.
+
+### 앱스토어 (체코어)
+
+Nově tři plány: Zdarma, Paměť a Pro.
+U každého zvolte ročně, nebo doživotně.
+Předplatné změníte kdykoli na doživotní.
+Pas navždy odemkne všechny aplikace.
+
+### 앱스토어 (덴마크어)
+
+Nu tre planer: Gratis, Husk og Pro.
+Vælg årligt eller livstid.
+Abonnent? Skift til livstid, når du vil.
+Ét Evighedspas åbner alle vores apps.
+
+### 앱스토어 (그리스어)
+
+Τρία πακέτα: Δωρεάν, Μνήμη και Pro.
+Διαλέξτε ετήσια ή εφ’ όρου ζωής.
+Συνδρομητές περνούν σε εφ’ όρου ζωής.
+Το Πάσο για πάντα ανοίγει κάθε εφαρμογή.
+
+### 앱스토어 (핀란드어)
+
+Kolme tasoa: Ilmainen, Muisti ja Pro.
+Valitse vuosittain tai elinikäinen.
+Tilaajana voit vaihtaa elinikäiseen.
+Ikuinen passi avaa kaikki sovelluksemme.
+
+### 앱스토어 (인도네시아어)
+
+Kini ada tiga paket: Gratis, Ingat, Pro.
+Pilih tahunan atau seumur hidup.
+Pelanggan bisa beralih ke seumur hidup.
+Pass Selamanya membuka semua aplikasi.
+
+### 앱스토어 (Norsk bokmål)
+
+Nå tre planer: Gratis, Husk og Pro.
+Velg årlig eller livstid.
+Abonnent? Bytt til livstid når du vil.
+Ett Evighetspass åpner alle appene våre.
+
+### 앱스토어 (네덜란드어)
+
+Drie plannen: Gratis, Onthouden en Pro.
+Kies jaarlijks of levenslang.
+Abonnee? Stap over op levenslang.
+Eén Altijd-pas opent al onze apps.
+
+### 앱스토어 (폴란드어)
+
+Trzy plany: Za darmo, Pamięć i Pro.
+Wybierz rocznie lub dożywotnio.
+Abonament zamienisz na dostęp dożywotni.
+Jedna przepustka na wszystkie aplikacje.
+
+### 앱스토어 (스웨덴어)
+
+Nu tre nivåer: Gratis, Minne och Pro.
+Välj årsvis eller livstid.
+Prenumererar du? Byt till livstid.
+Ett Evighetspass öppnar alla våra appar.
+
+### 앱스토어 (태국어)
+
+แผนมีสามแบบแล้ว ฟรี จดจำ และ Pro
+เลือกได้ทั้งรายปีหรือตลอดชีพ
+สมาชิกเปลี่ยนเป็นตลอดชีพได้ทุกเมื่อ
+พาสตลอดกาลใบเดียวเปิดทุกแอปของเรา
+
+### 앱스토어 (튀르키예어)
+
+Üç plan var: Ücretsiz, Hafıza ve Pro.
+Yıllık ya da ömür boyu, sen seç.
+Aboneysen istediğin an ömür boyuya geç.
+Sonsuz Geçiş tüm uygulamalarımızı açar.
+
+### 앱스토어 (베트남어)
+
+Nay có ba gói: Miễn phí, Ghi nhớ và Pro.
+Chọn theo năm hoặc trọn đời.
+Người đăng ký có thể đổi sang trọn đời.
+Vé trọn đời mở khóa mọi ứng dụng.
+
 ## 2.3.4
 
 ### 앱스토어 (한국어)

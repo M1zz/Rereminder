@@ -7,12 +7,15 @@
 //  StoreKit 2 엔진(상품 로드·구매·복원·권한 추적·트랜잭션 리스너·오프라인 캐시)은
 //  이제 LeeoKit 의 LeeoStore 가 공용으로 담당한다. 이 파일은 그 위에 앱 고유의
 //  로직만 얹은 얇은 파사드로, 기존 호출부·ProGate·PaywallView 는 그대로 동작한다.
-//  - 일회성 구매 (Non-consumable) 세 개 — **트림**(`ProTier`):
-//      com.xa.toki.pro          Pro 전체(세션 모드·대본·오버타임·기록 + 기억)
-//      com.xa.toki.remember     기억(템플릿 저장·불러오기 + 마지막 설정 복원)만
-//      com.xa.toki.pro.upgrade  기억 → Pro 차액. 기억을 산 사람에게만 보인다. 권한은 pro 와 같다.
-//    ⚠️ `isProUser` 는 예전 그대로 **Pro 전체**를 뜻한다. 기억 트림은 `canRememberSetup` 만 연다.
+//  - 세 칸(`ProTier`): 무료 · 기억(Plus) · Pro. 유료 칸마다 연 구독과 평생을 나란히 판다(2026-10 개편).
+//      com.xa.toki.remember       기억 평생        com.xa.toki.plus.yearly  기억 연 구독
+//      com.xa.toki.pro            Pro 평생         com.xa.toki.pro.yearly   Pro 연 구독
+//      com.xa.toki.pro.upgrade    기억 평생에서 Pro 평생으로 올리는 차액. 권한은 pro 와 같다.
+//      com.xa.toki.pro.graduate   구독 졸업가 Pro 평생(구독 중인 사람에게만). 권한은 pro 와 같다.
+//    언제나 평생 패스(`LeeoForeverPass`)가 열려 있으면 Pro 다.
+//    ⚠️ `isProUser` 는 예전 그대로 **Pro 전체**를 뜻한다. 기억 칸은 `canRememberSetup` 만 연다.
 //       기존 구매자·그랜드파더링·창단 후원자는 전부 Pro 전체다 — 기억으로 떨어지면 신뢰 사고다.
+//    ⚠️ 평생만 래치에 적는다. 연 구독은 만료일이 있는 표식(`SubscriptionMark`)이다.
 //  - 구매 상태 영구 저장 (UserDefaults + Keychain, key "rereminder.pro.purchased")
 //    → 논isolated 정적 isProUser 가 항상 올바른 값을 읽도록 store.hasPro 를 미러링한다.
 //  - 개발/샌드박스/맥앱 자동 Pro → unlockOverride 로 LeeoStore 에 주입
@@ -42,13 +45,36 @@ final class StoreManager: ObservableObject {
         case pro = "com.xa.toki.pro"
         case remember = "com.xa.toki.remember"
         case proUpgrade = "com.xa.toki.pro.upgrade"
+        /// 기억(Plus) 연 구독. 같은 구독 그룹에서 Pro 연 구독보다 낮은 단계다.
+        case plusYearly = "com.xa.toki.plus.yearly"
+        /// Pro 연 구독.
+        case proYearly = "com.xa.toki.pro.yearly"
+        /// 구독 졸업가 Pro 평생. 구독 중인 사람에게만 보인다(`LeeoGraduationOfferView`). 권한은 pro 와 같다.
+        case proGraduate = "com.xa.toki.pro.graduate"
 
-        /// 이 상품이 여는 트림.
-        var tier: ProTier { self == .remember ? .plus : .session }
+        /// 이 상품이 여는 트림. 연 구독은 같은 칸의 평생과 같은 권한이다.
+        var tier: ProTier { (self == .remember || self == .plusYearly) ? .plus : .session }
+
+        /// 자동 갱신 구독인가. 구독은 끝나면 권한도 끝나므로 평생 래치(Keychain)에 적지 않는다.
+        var isSubscription: Bool { self == .plusYearly || self == .proYearly }
     }
 
-    /// Pro 전체 권한을 주는 상품. ⚠️ `RereminderSpec.paywallConfig.entitlementIDs` 와 같아야 한다.
-    nonisolated static let fullProductIDs: Set<String> = [ProductID.pro.rawValue, ProductID.proUpgrade.rawValue]
+    /// Pro 전체 권한을 주는 상품(평생 셋 + Pro 연 구독). ⚠️ `RereminderSpec.paywallConfig.entitlementIDs` 와 같아야 한다.
+    nonisolated static let fullProductIDs: Set<String> = [
+        ProductID.pro.rawValue, ProductID.proUpgrade.rawValue, ProductID.proGraduate.rawValue, ProductID.proYearly.rawValue,
+    ]
+
+    /// Pro 를 **평생** 여는 상품. 이것만 래치(`rereminder.pro.purchased`)에 적는다.
+    /// ⚠️ 연 구독을 여기 넣으면 구독이 끝나도 Pro 가 남는다.
+    nonisolated static let lifetimeProProductIDs: Set<String> = [
+        ProductID.pro.rawValue, ProductID.proUpgrade.rawValue, ProductID.proGraduate.rawValue,
+    ]
+
+    /// 연 구독 둘. 졸업 제안(`LeeoGraduation`)과 구독 표식(`SubscriptionMark`)이 본다.
+    nonisolated static let subscriptionProductIDs: Set<String> = Set(ProductID.allCases.filter(\.isSubscription).map(\.rawValue))
+
+    /// 언제나 평생 패스가 쓰는 iCloud 컨테이너(피드백 허브). 앱 entitlements 에 이미 있다.
+    nonisolated static let foreverPassContainer = "iCloud.com.Ysoup.FeedbackHub"
 
     /// 팁(응원) 상품 — **소모성**, 작은 것부터 큰 것 순(화면도 이 순서다). 아무 권한도 열지 않는다.
     /// ⚠️ `ProductID`·`productIDs`·`entitlementIDs` 어디에도 넣지 않는다 — 넣으면 팁을 낸 사람이 Pro 가 된다.
@@ -64,6 +90,8 @@ final class StoreManager: ObservableObject {
     @Published private(set) var isPro: Bool = false
     /// 설정을 기억해도 되는가 — 기억 트림 또는 Pro 전체. 화면은 이 값을 관찰해 자물쇠를 푼다.
     @Published private(set) var canRemember: Bool = false
+    /// 지금 살아 있는 연 구독의 칸(없으면 `.free`). 설정의 구독 관리 · '평생으로 바꾸기' 줄이 이걸 본다.
+    @Published private(set) var subscriptionTier: ProTier = .free
     @Published private(set) var purchaseState: PurchaseState = .idle
     @Published private(set) var errorMessage: String?
 
@@ -82,7 +110,14 @@ final class StoreManager: ObservableObject {
     // MARK: - Private (LeeoStore 엔진 + 상태 미러링)
 
     private let store: LeeoStore
+    /// 언제나 평생 패스. 열려 있으면 이 앱의 가장 높은 칸(Pro)이 열린다.
+    /// ⚠️ 패스 상품은 `paywallConfig` 의 상품 목록에 넣지 않는다. 판정은 이 객체가 따로 한다.
+    let foreverPass: LeeoForeverPass
     private var cancellable: AnyCancellable?
+    private var passCancellable: AnyCancellable?
+    /// 마지막으로 본 살아 있는 연 구독 상품들. 바뀔 때만 만료일을 다시 읽는다.
+    private var lastSeenSubscriptions: Set<String>?
+    private var isRefreshingSubscription = false
     private let keychainKey = "rereminder.pro.purchased"
     private let defaultsKey = "rereminder.pro.purchased"
     nonisolated private static let rememberKey = "rereminder.remember.purchased"
@@ -217,6 +252,7 @@ final class StoreManager: ObservableObject {
             // 기존 사용자 그랜드파더링 (구매 없을 때 LeeoStore 가 1회 호출).
             grandfather: { Self.grandfatherExistingUserIfNeeded() }
         )
+        foreverPass = LeeoForeverPass(containerIdentifier: Self.foreverPassContainer)
 
         // ⚠️ **먼저 잃어버린 자격부터 되살린다.** 앱을 지웠다 깐 그랜드파더링 사용자는
         //    UserDefaults 가 비어 있어 "평생 무료"가 사라진 채로 시작한다(Keychain 에는 남아 있다).
@@ -234,6 +270,16 @@ final class StoreManager: ObservableObject {
                 self?.objectWillChange.send()
             }
         }
+
+        // 패스는 정적 판정(`isProUser`)도 봐야 한다. 열리고 닫힐 때마다 표식을 고쳐 적는다.
+        passCancellable = foreverPass.$isActive.sink { [weak self] active in
+            Self.saveForeverPassState(active)
+            Task { @MainActor in
+                self?.syncFromStore()
+                self?.objectWillChange.send()
+            }
+        }
+        Task { [weak self] in await self?.foreverPass.refresh() }
     }
 
     // MARK: - 상태 미러링
@@ -251,7 +297,8 @@ final class StoreManager: ObservableObject {
         let live = store.hasPro
         // ⚠️ `hasPro` 는 그랜드파더링까지 참으로 본다. 구매 기록은 **실제 결제 트랜잭션**이 보일 때만
         //    적는다 — 예전에는 `live` 로 적어서 평생 무료 사용자도 결제한 사람(`flag.isPaid`)으로 셌다.
-        let purchased = !store.purchasedProductIDs.isDisjoint(with: store.config.entitlementIDs)
+        //    ⚠️ 래치는 **평생** 상품만이다. Pro 연 구독도 `hasPro` 를 열지만 끝나면 닫혀야 한다(`SubscriptionMark`).
+        let purchased = !store.purchasedProductIDs.isDisjoint(with: Self.lifetimeProProductIDs)
 
         if !Self.isAutoProEnvironment {
             if purchased {
@@ -280,10 +327,48 @@ final class StoreManager: ObservableObject {
             }
         }
 
+        // 연 구독: 래치가 아니라 만료일이 있는 표식이다. 살아 있는 구독이 바뀌었을 때만 만료일을 다시 읽는다.
+        let liveSubscriptions = store.purchasedProductIDs.intersection(Self.subscriptionProductIDs)
+        if liveSubscriptions != lastSeenSubscriptions {
+            lastSeenSubscriptions = liveSubscriptions
+            Task { [weak self] in await self?.refreshSubscriptionMark() }
+        }
+        let liveSubscriptionTier = ProTier.granted(by: liveSubscriptions)
+
         // 화면에 보이는 값(@Published)은 최종 판정과 언제나 같아야 한다 — 여기가 갈라지면
         // 페이월은 "구매하세요"라고 하는데 기능은 열려 있는(또는 그 반대의) 상태가 된다.
-        isPro = Self.isProUser || live
-        canRemember = isPro || Self.canRememberSetup || rememberLive
+        subscriptionTier = max(Self.subscriptionTier, liveSubscriptionTier)
+        isPro = Self.isProUser || live || foreverPass.isActive
+        canRemember = isPro || Self.canRememberSetup || rememberLive || subscriptionTier >= .plus
+    }
+
+    // MARK: - 연 구독 표식
+
+    /// 살아 있는 연 구독과 만료일을 읽어 표식(`SubscriptionMark`)에 적는다.
+    ///
+    /// ⚠️ **조회가 비었다고 지우지 않는다**(구매 기록과 같은 이유). 표식은 만료일이 지나면 저절로 닫히고,
+    ///    지우는 건 환불을 `Transaction.all` 로 확인했을 때뿐이다.
+    private func refreshSubscriptionMark() async {
+        guard !Self.isAutoProEnvironment, !isRefreshingSubscription else { return }
+        isRefreshingSubscription = true
+        defer { isRefreshingSubscription = false }
+
+        var found: [SubscriptionMark.Entry] = []
+        for await result in Transaction.currentEntitlements {
+            guard case .verified(let tx) = result,
+                  Self.subscriptionProductIDs.contains(tx.productID),
+                  tx.revocationDate == nil,
+                  let expires = tx.expirationDate else { continue }
+            found.append(.init(productID: tx.productID, expiresAt: expires))
+        }
+        if let best = SubscriptionMark.best(found) {
+            SubscriptionMark.save(best)
+        } else if SubscriptionMark.load() != nil {
+            let revocations = await Self.revocationDates(for: Self.subscriptionProductIDs)
+            if Self.isRevoked(proTransactionRevocationDates: revocations) { SubscriptionMark.clear() }
+        }
+        syncFromStore()
+        objectWillChange.send()
     }
 
     /// 기억 트림의 회수 확인 — `clearStoredPurchaseIfRevoked` 와 같은 근거(`Transaction.all`)로만 내린다.
@@ -295,7 +380,7 @@ final class StoreManager: ObservableObject {
         let revocations = await Self.revocationDates(for: [ProductID.remember.rawValue])
         guard Self.isRevoked(proTransactionRevocationDates: revocations) else { return }
         Self.saveRememberState(false)
-        canRemember = isPro || Self.canRememberSetup
+        syncFromStore()
     }
 
     /// 회수(환불)가 확인된 경우에만 저장된 구매 기록을 내린다.
@@ -309,11 +394,10 @@ final class StoreManager: ObservableObject {
         defer { isCheckingRevocation = false }
 
         // Pro 전체는 pro·업그레이드 어느 쪽으로든 얻는다 — 둘을 함께 봐야 "살아 있는 것이 하나라도"가 맞다.
-        let revocations = await Self.revocationDates(for: Self.fullProductIDs)
+        let revocations = await Self.revocationDates(for: Self.lifetimeProProductIDs)
         guard Self.isRevoked(proTransactionRevocationDates: revocations) else { return }
         savePurchaseState(false)
-        isPro = Self.isProUser || store.hasPro
-        canRemember = isPro || Self.canRememberSetup
+        syncFromStore()
     }
 
     /// 주어진 상품들의 트랜잭션 회수 시각 목록 (살아 있으면 nil). StoreKit 접촉은 여기까지다.
@@ -427,6 +511,9 @@ final class StoreManager: ObservableObject {
     /// 현재 유효한 구매 내역 확인 (앱 시작 시, 복원 시 호출)
     func verifyCurrentEntitlements() async {
         await store.refreshEntitlements()
+        // 갱신·만료는 앱 밖에서 일어난다. 복귀마다 구독 만료일도 다시 읽는다.
+        lastSeenSubscriptions = nil
+        syncFromStore()
     }
 
     // MARK: - Purchase
@@ -483,6 +570,8 @@ final class StoreManager: ObservableObject {
         errorMessage = nil
 
         await store.restore()
+        // 다른 앱에서 산 언제나 평생 패스도 복원에서 다시 찾는다.
+        await foreverPass.refresh()
         // 구매 기록이 없어도 평생 무료 자격이 Keychain 에 남아 있을 수 있다 — 복원은 그것도 되살린다.
         Self.recoverLostEntitlementIfPossible()
         syncFromStore()
@@ -529,9 +618,64 @@ enum ProTier: Int, Comparable, CaseIterable {
     static func < (lhs: ProTier, rhs: ProTier) -> Bool { lhs.rawValue < rhs.rawValue }
 
     /// 판정 (순수 함수 — 테스트 대상). Pro 전체 근거가 하나라도 있으면 기억 구매 여부와 무관하게 위다.
-    static func resolve(isFullPro: Bool, ownsRemember: Bool) -> ProTier {
+    /// - Parameter subscription: 살아 있는 연 구독의 칸(`SubscriptionMark`). 평생 기록과 높은 쪽을 쓴다.
+    static func resolve(isFullPro: Bool, ownsRemember: Bool, subscription: ProTier = .free) -> ProTier {
         if isFullPro { return .session }
-        return ownsRemember ? .plus : .free
+        return max(ownsRemember ? .plus : .free, subscription)
+    }
+
+    /// 상품들이 여는 가장 높은 칸 (순수 함수, 테스트 대상). 이 앱 상품이 아니면(팁 · 선물 · 패스) 아무것도 열지 않는다.
+    /// 연 구독은 같은 칸의 평생과 같고, 올리기 · 졸업은 Pro 평생과 같다.
+    static func granted(by productIDs: Set<String>) -> ProTier {
+        productIDs.compactMap { StoreManager.ProductID(rawValue: $0)?.tier }.max() ?? .free
+    }
+}
+
+// MARK: - 연 구독 표식
+
+/// 살아 있는 연 구독 하나와 그 만료일. **래치가 아니다**. 만료일이 지나면 저절로 닫힌다.
+///
+/// 정적 판정(`StoreManager.isProUser` · `tier`)은 StoreKit 을 기다릴 수 없어 저장된 값을 읽는다. 평생 상품은
+/// Keychain 래치에 적지만, 구독까지 거기 적으면 구독이 끝나도 Pro 가 남는다. 그래서 구독은 만료일과 함께 따로 둔다.
+/// 재설치하면 지워지지만 앱을 켤 때 StoreKit 이 다시 알려 준다.
+enum SubscriptionMark {
+    struct Entry: Equatable {
+        let productID: String
+        let expiresAt: Date
+    }
+
+    private static let productKey = "rereminder.subscription.productID"
+    private static let expiresKey = "rereminder.subscription.expiresAt"
+
+    /// 이 표식이 지금 여는 칸 (순수 함수, 테스트 대상).
+    static func tier(of entry: Entry?, now: Date = Date()) -> ProTier {
+        guard let entry, entry.expiresAt > now,
+              let id = StoreManager.ProductID(rawValue: entry.productID), id.isSubscription else { return .free }
+        return id.tier
+    }
+
+    /// 여러 구독 가운데 남길 하나: 높은 칸, 같은 칸이면 늦게 끝나는 것.
+    static func best(_ entries: [Entry]) -> Entry? {
+        entries.max { lhs, rhs in
+            let l = tier(of: lhs, now: .distantPast), r = tier(of: rhs, now: .distantPast)
+            return l == r ? lhs.expiresAt < rhs.expiresAt : l < r
+        }
+    }
+
+    static func load(defaults: UserDefaults = .standard) -> Entry? {
+        guard let id = defaults.string(forKey: productKey),
+              let expires = defaults.object(forKey: expiresKey) as? Date else { return nil }
+        return Entry(productID: id, expiresAt: expires)
+    }
+
+    static func save(_ entry: Entry, defaults: UserDefaults = .standard) {
+        defaults.set(entry.productID, forKey: productKey)
+        defaults.set(entry.expiresAt, forKey: expiresKey)
+    }
+
+    static func clear(defaults: UserDefaults = .standard) {
+        defaults.removeObject(forKey: productKey)
+        defaults.removeObject(forKey: expiresKey)
     }
 }
 
@@ -550,13 +694,18 @@ extension StoreManager {
         products.first { $0.id == id.rawValue }?.displayPrice
     }
 
-    /// 기억 트림을 팔 수 있는가 — 상품이 실제로 로드됐을 때만. ⚠️ App Store Connect 에 상품을
-    /// 만들기 전에 이 빌드가 나가도 페이월은 예전처럼 Pro 한 장만 보여 준다.
-    var offersRememberTier: Bool { price(of: .remember) != nil }
+    /// 상품. 아직 안 왔으면(또는 App Store Connect 에 없으면) nil.
+    func product(_ id: ProductID) -> Product? {
+        products.first { $0.id == id.rawValue }
+    }
 
-    /// Pro 를 살 때 실제로 결제할 상품 — 기억을 이미 가졌고 업그레이드 상품이 있으면 차액 상품.
-    var proOffer: ProductID {
-        (canRemember && !isPro && price(of: .proUpgrade) != nil) ? .proUpgrade : .pro
+    /// 기억 평생을 이미 샀는가(래치). 그러면 Pro 평생은 올리기 상품으로 판다.
+    var ownsLifetimeRemember: Bool { Self.storedRememberFlag }
+
+    /// Pro **평생**을 살 때 실제로 결제할 상품. 기억 평생을 이미 가졌고 올리기 상품이 있으면 차액 상품.
+    /// ⚠️ 기억 연 구독자는 올리기 대상이 아니다(올리기는 평생에서 평생으로 가는 차액이다).
+    var proLifetimeOffer: ProductID {
+        (ownsLifetimeRemember && !isPro && price(of: .proUpgrade) != nil) ? .proUpgrade : .pro
     }
 
     /// Pro 제품 이름
@@ -574,7 +723,7 @@ extension StoreManager {
     ///    그 기록은 래치라 지우지 않고(환불 확인 없이 내리지 않는다는 원칙), 셀 때 그랜드파더링을 뺀다.
     ///    평생 무료 사용자에게는 페이월이 뜨지 않아 따로 결제할 길이 없으므로 빼도 결제를 놓치지 않는다.
     nonisolated static var isPaidPurchase: Bool {
-        isPaid(storedPurchase: storedPurchaseFlag, grandfathered: isGrandfathered)
+        isPaid(storedPurchase: storedPurchaseFlag, grandfathered: isGrandfathered) || subscriptionTier > .free
     }
 
     /// `isPaidPurchase` 의 판정 (순수 함수 — 테스트 대상).
@@ -595,9 +744,25 @@ extension StoreManager {
         KeychainHelper.load(key: rememberKey) ?? UserDefaults.standard.bool(forKey: rememberKey)
     }
 
+    /// 살아 있는 연 구독의 칸(만료일이 지나면 `.free`).
+    nonisolated static var subscriptionTier: ProTier {
+        SubscriptionMark.tier(of: SubscriptionMark.load())
+    }
+
+    /// 언제나 평생 패스가 열려 있는가(마지막으로 확인한 값). `LeeoForeverPass.isActive` 를 옮겨 적은 것이다.
+    nonisolated static var hasForeverPass: Bool {
+        UserDefaults.standard.bool(forKey: foreverPassKey)
+    }
+
+    nonisolated private static let foreverPassKey = "rereminder.foreverPass.active"
+
+    nonisolated static func saveForeverPassState(_ active: Bool) {
+        UserDefaults.standard.set(active, forKey: foreverPassKey)
+    }
+
     /// 이 설치의 트림.
     nonisolated static var tier: ProTier {
-        ProTier.resolve(isFullPro: isProUser, ownsRemember: storedRememberFlag)
+        ProTier.resolve(isFullPro: isProUser, ownsRemember: storedRememberFlag, subscription: subscriptionTier)
     }
 
     /// **설정을 기억해도 되는가** — 기억 트림 이상. `ProGate.canRememberSetup` 의 근거.
@@ -607,6 +772,8 @@ extension StoreManager {
         if isAutoProEnvironment || isGrandfathered { return true }
         // 창단 후원자 표식은 결제·그랜드파더링에만 주어진다 — 앱을 지워도 남으므로 마지막 근거가 된다.
         if hasFounderRecord { return true }
+        // 언제나 평생 패스는 이 앱의 가장 높은 칸을 연다. Pro 연 구독은 만료일까지.
+        if hasForeverPass || subscriptionTier == .session { return true }
         return storedPurchaseFlag
     }
 }

@@ -28,17 +28,20 @@ enum RereminderSpec: LeeoAppSpec {
         appIdentifier: "com.xa.toki"
     )
 
-    /// 인앱 결제(페이월) — 비소비성 상품 셋, 트림(무료·플러스·프로)으로 나뉜다(`ProTier`, `StoreManager.ProductID`).
-    /// ⚠️ **`entitlementIDs` 는 Pro 전체를 주는 상품만이다** — 여기에 기억(remember)을 넣으면
-    ///    LeeoStore 의 `hasPro` 가 기억 구매자를 Pro 전체로 본다. 기억은 `StoreManager` 가 따로 센다.
+    /// 인앱 결제(페이월): 세 칸(무료·기억(Plus)·Pro), 유료 칸마다 연 구독과 평생(`ProTier`, `StoreManager.ProductID`).
+    /// ⚠️ **`entitlementIDs` 는 Pro 전체를 주는 상품만이다**(Pro 평생 · 올리기 · 졸업 · Pro 연 구독).
+    ///    여기에 기억(remember · plus.yearly)을 넣으면 LeeoStore 의 `hasPro` 가 기억 구매자를 Pro 전체로 본다.
+    ///    기억은 `StoreManager` 가 따로 센다. 언제나 평생 패스 상품도 넣지 않는다(`LeeoForeverPass` 가 판정).
     ///    배열 순서가 대표 상품 순서다 — `purchasePrimary` 가 첫 상품(pro)을 산다.
     /// cacheSuiteName: 앱 그룹(group.leeo.toki)에 권한을 캐시해 위젯/확장·오프라인에서도
     /// 마지막으로 확인된 Pro 상태로 즉시 잠금 해제한다.
     /// ⚠️ 상품 ID 는 App Store Connect 계약이다 — 변경 금지.
     /// 앱 내부에서는 언래핑이 필요 없는 이 비옵셔널 원본을 쓸 것 (StoreManager 등).
     static let paywallConfig = LeeoPaywallConfig(
-        productIDs: ["com.xa.toki.pro", "com.xa.toki.remember", "com.xa.toki.pro.upgrade"],
-        entitlementIDs: ["com.xa.toki.pro", "com.xa.toki.pro.upgrade"],
+        productIDs: ["com.xa.toki.pro", "com.xa.toki.remember", "com.xa.toki.pro.upgrade",
+                     "com.xa.toki.plus.yearly", "com.xa.toki.pro.yearly", "com.xa.toki.pro.graduate"],
+        entitlementIDs: ["com.xa.toki.pro", "com.xa.toki.pro.upgrade", "com.xa.toki.pro.graduate",
+                         "com.xa.toki.pro.yearly"],
         termsURL: URL(string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"),
         privacyURL: URL(string: "https://m1zz.github.io/Rereminder/privacy.html"),
         cacheSuiteName: "group.leeo.toki",
@@ -71,16 +74,17 @@ enum RereminderSpec: LeeoAppSpec {
         marketingURL: URL(string: "https://m1zz.github.io/Rereminder/")
     )
 
-    /// 수익모델 선언 (LeeoKit 3.x 부터 필수) — 무료로 쓰다가 1회 구매로 플러스(기억) 또는 Pro 해제.
+    /// 수익모델 선언 (LeeoKit 3.x 부터 필수): 무료로 쓰다가 연 구독 또는 평생으로 플러스(기억)나 Pro 해제.
     /// 무료 한도는 `ProGate.gatePolicy` 하나에 있다 — 페이월 판정(`ProGate.evaluate`)과 한도 미리 알림
     /// (`ProGate.nearLimitRemaining`)이 모두 그것을 읽는다. 선물·팁도 `paywallConfig` 와 같은 값을 싣는다
     /// (둘이 어긋나면 `LeeoStore` 와 계약이 서로 다른 상품을 본다).
-    static let monetization = LeeoMonetization.freemium(
-        LeeoPurchaseConfig(productIDs: paywallConfig.productIDs,
-                           entitlementIDs: paywallConfig.entitlementIDs,
-                           gate: paywallConfig.gate,
-                           cacheSuiteName: "group.leeo.toki",
-                           gift: paywallConfig.gift,
-                           tipJar: paywallConfig.tipJar)
+    static let monetization = LeeoMonetization.freemiumSubscription(
+        LeeoSubscriptionConfig(productIDs: paywallConfig.productIDs,
+                               termsURL: paywallConfig.termsURL!,
+                               entitlementIDs: paywallConfig.entitlementIDs,
+                               gate: paywallConfig.gate,
+                               cacheSuiteName: "group.leeo.toki",
+                               gift: paywallConfig.gift,
+                               tipJar: paywallConfig.tipJar)
     )
 }

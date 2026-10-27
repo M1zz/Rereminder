@@ -85,6 +85,9 @@ final class ProTierTests: XCTestCase {
         XCTAssertEqual(StoreManager.ProductID.remember.tier, .plus)
         XCTAssertEqual(StoreManager.ProductID.pro.tier, .session)
         XCTAssertEqual(StoreManager.ProductID.proUpgrade.tier, .session)
+        XCTAssertEqual(StoreManager.ProductID.plusYearly.tier, .plus)
+        XCTAssertEqual(StoreManager.ProductID.proYearly.tier, .session)
+        XCTAssertEqual(StoreManager.ProductID.proGraduate.tier, .session)
     }
 
     // MARK: - 상품 구성
