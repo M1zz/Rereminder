@@ -1,0 +1,181 @@
+{
+  "title": "Rereminder: đồng hồ hẹn giờ thuyết trình báo trước khi hết giờ",
+  "description": "Hẹn giờ báo trước 5 phút khi bài nói sắp hết, 3 phút trước khi tan lớp, hoặc bất cứ lúc nào bạn chọn. Báo trước miễn phí, không giới hạn.",
+  "hero": {
+    "headline": "Không phải lúc đã hết,\nmà là trước đó",
+    "lead": "5 phút trước khi bài thuyết trình kết thúc, 3 phút trước khi cuộc họp khép lại. Rereminder báo cho bạn ở mọi mốc bạn chọn, để bạn khỏi phải liếc đồng hồ liên tục.",
+    "cta": "Tải miễn phí trên App Store",
+    "note": "Báo trước miễn phí, không giới hạn. Dùng trên iPhone, Apple Watch và Mac."
+  },
+  "demo": {
+    "title": "Thử ngay tại đây",
+    "lead": "Chọn thời lượng và các mốc báo, rồi bấm nút đỏ. Một phút trôi qua trong một giây, và mỗi lần báo sẽ kêu đúng lúc.",
+    "app": "Rereminder",
+    "length": "Thời lượng",
+    "alerts": "Báo trước khi hết bao lâu",
+    "start": "Bắt đầu",
+    "stop": "Dừng",
+    "min": "{n} phút",
+    "sec": "{n} giây",
+    "msgMin": "Còn lại {n} phút",
+    "msgSec": "Còn {n} giây",
+    "done": "Hẹn giờ đã kết thúc",
+    "nextMin": "Tiếp theo: báo trước {a} (còn {m} phút {s} giây)",
+    "nextSec": "Tiếp theo: báo trước {a} (còn {s} giây)",
+    "endMin": "Tiếp theo: báo kết thúc (còn {m} phút {s} giây)",
+    "endSec": "Tiếp theo: báo kết thúc (còn {s} giây)",
+    "note": "Bản thử chạy nhanh gấp 60 lần và không lưu gì cả. Trong ứng dụng, bạn kéo chuông lên mặt đồng hồ, muốn đặt bao nhiêu cũng được."
+  },
+  "problem": {
+    "title": "Đã bao giờ đồng hồ reo khi mọi thứ đã muộn?",
+    "text": "Hẹn giờ thông thường chỉ reo khi về 0. Bài nói hết giờ trước khi đến phần kết luận, buổi học kết thúc mà chưa tóm tắt, cuộc họp lấn sang lịch sau mà chưa quyết được gì. Điều bạn cần không phải tiếng báo đã hết giờ, mà là một tín hiệu khi vẫn còn kịp để khép lại."
+  },
+  "features": [
+    {
+      "title": "Báo trước khi hết, bao nhiêu lần cũng được",
+      "text": "Kéo chuông trên mặt đồng hồ đến mốc 10, 5 hoặc 1 phút trước khi hết, hay bất kỳ chỗ nào khác. Không giới hạn số lượng, và mỗi lần báo có thể kèm lời nhắc riêng như \"Chốt lại slide\".\nKhi tắt màn hình, thời gian còn lại vẫn hiện trên Màn hình khóa và Dynamic Island, còn Apple Watch rung nhẹ trên cổ tay.",
+      "shot": "02-running"
+    },
+    {
+      "title": "Chia bài nói thành từng phần",
+      "text": "Mở đầu 5 phút, nội dung chính 20 phút, hỏi đáp 5 phút. Đặt tên và viết kịch bản cho từng phần. Mỗi lần chuyển phần, bạn được báo bằng chính tên phần đó, nên thời gian tự khắc được giữ đúng. (Pro)",
+      "shot": "03-session"
+    },
+    {
+      "title": "Điều cần nói lúc này, hiện ngay trên màn hình",
+      "text": "Trong lúc chạy, kịch bản của phần hiện tại và phần tiếp theo hiện chữ lớn. Quá 0, đồng hồ vẫn đếm tiếp để bạn biết mình đã lố bao lâu. (Pro)",
+      "shot": "04-sessionRunning"
+    }
+  ],
+  "steps": {
+    "title": "Bắt đầu chỉ với ba bước",
+    "items": [
+      {
+        "title": "Đặt thời gian",
+        "text": "Xoay mặt đồng hồ, hoặc chạm vào thời gian để nhập. Một vòng là 60 phút, hai vòng là 120 phút."
+      },
+      {
+        "title": "Đặt mốc báo",
+        "text": "Chạm vào nhãn như 1:00 hay 5:00 ở trên, hoặc kéo chuông lên mặt đồng hồ."
+      },
+      {
+        "title": "Bắt đầu rồi yên tâm",
+        "text": "Khóa iPhone. iPhone và Apple Watch sẽ báo ở mọi mốc bạn đã đặt."
+      }
+    ]
+  },
+  "reference": {
+    "title": "Những cách đặt hay dùng nhất",
+    "rows": [
+      [
+        "Thuyết trình 20 phút",
+        "Trước 5 phút \"Chuyển sang kết luận\", trước 1 phút \"Cảm ơn\""
+      ],
+      [
+        "Tiết học 45 phút",
+        "Trước 10 phút \"Giao bài tập\", trước 3 phút \"Tóm tắt\""
+      ],
+      [
+        "Họp 30 phút",
+        "Trước 5 phút \"Chốt quyết định\""
+      ],
+      [
+        "Buổi pilates hoặc yoga",
+        "Chế độ Phiên, mỗi chuỗi động tác một phần (Pro)"
+      ],
+      [
+        "Học 25 phút",
+        "Trước 5 phút, xong thì nghỉ"
+      ],
+      [
+        "Nghỉ 3 phút giữa các hiệp tập",
+        "Trước 30 giây \"Chuẩn bị hiệp sau\""
+      ],
+      [
+        "Buổi mentoring 1 tiếng",
+        "Trước 15 phút và 5 phút"
+      ]
+    ],
+    "note": "Lưu cách đặt hay dùng thành mẫu để mở lại chỉ bằng một chạm (từ gói Ghi nhớ trở lên). Bạn cũng có thể bắt đầu hoặc dừng hẹn giờ bằng Phím tắt và Siri."
+  },
+  "pricing": {
+    "title": "Báo trước miễn phí. Chỉ trả tiền khi muốn ứng dụng ghi nhớ.",
+    "free": {
+      "name": "Miễn phí",
+      "items": [
+        "Báo trước không giới hạn",
+        "Lời nhắc riêng cho từng lần báo",
+        "Hoạt động trực tiếp trên Màn hình khóa và Dynamic Island",
+        "Báo liên tục đến khi bạn phản hồi, kết thúc bằng báo thức đầy đủ",
+        "Ứng dụng Apple Watch và thanh menu trên Mac",
+        "Mọi màu chủ đề"
+      ]
+    },
+    "pro": {
+      "name": "Ghi nhớ · Pro",
+      "items": [
+        "Ghi nhớ: lưu cách đặt thành mẫu, mở lại chỉ bằng một chạm",
+        "Ghi nhớ: mở lại ứng dụng, mọi thứ vẫn như lần trước",
+        "Pro: toàn bộ Ghi nhớ cùng Chế độ Phiên với tên phần và kịch bản",
+        "Pro: đếm giờ lố, lịch sử và thống kê"
+      ],
+      "note": "Mỗi gói đều có thể chọn đăng ký theo năm hoặc mua một lần dùng trọn đời. Chế độ Phiên, đếm giờ lố và lịch sử có thể dùng thử vài lần trước khi trả tiền."
+    },
+    "note": "Không quảng cáo. Một Vé trọn đời còn mở khóa mọi ứng dụng do Leeo làm."
+  },
+  "faq": {
+    "title": "Câu hỏi thường gặp",
+    "items": [
+      {
+        "q": "Có lần báo không kêu.",
+        "a": "Hầu hết là do quyền thông báo hoặc chế độ Tập trung. Kiểm tra quyền thông báo trong ứng dụng ở Cài đặt › Cách thông báo. Nếu bạn dùng Tập trung, hãy thêm Rereminder vào ứng dụng được phép trong Cài đặt › Tập trung của iOS. Ở chế độ im lặng chỉ có rung. Nếu Rereminder nằm trong Cài đặt › Thông báo › Tóm tắt theo lịch, thông báo sẽ bị gom lại và đến muộn, hãy bỏ nó ra."
+      },
+      {
+        "q": "Ở chế độ im lặng, tôi có biết khi hết giờ không?",
+        "a": "Có. Bật \"Kết thúc bằng báo thức đầy đủ\" thì chuông sẽ reo to cả khi đang im lặng hay Tập trung. Bật \"Báo liên tục đến khi tôi phản hồi\" thì sẽ báo mãi đến khi bạn chạm Dừng hoặc Báo lại trên thông báo."
+      },
+      {
+        "q": "Apple Watch không đồng bộ.",
+        "a": "Mở Cài đặt › Thiết bị của tôi trong ứng dụng, bạn sẽ thấy còn thiếu bước nào. Đồng hồ phải được ghép đôi với iPhone này, Rereminder phải được cài trên đồng hồ, và sau khi cài bạn cần mở ứng dụng trên đồng hồ một lần. Sau đó hẹn giờ vẫn sang đồng hồ dù ứng dụng trên đồng hồ đang đóng."
+      },
+      {
+        "q": "Mac hiện là chưa kết nối.",
+        "a": "\"Đã kết nối\" nghĩa là ứng dụng đã mở trên chiếc Mac đó trong 10 phút gần nhất, nên Mac vừa thức dậy sẽ hiện ra sau vài phút. Hai thiết bị cần cùng một tài khoản iCloud và bật iCloud Drive. Ứng dụng Mac cần macOS 26 trở lên."
+      },
+      {
+        "q": "Tôi đã trả tiền nhưng chưa mở khóa.",
+        "a": "Chạm \"Khôi phục giao dịch mua\" ở màn hình gói, khi đăng nhập đúng Tài khoản Apple đã dùng để trả tiền. Gói trọn đời vẫn quay lại dù bạn xóa ứng dụng hay đổi máy."
+      },
+      {
+        "q": "Các mẫu đã lưu bị khóa.",
+        "a": "Mẫu vẫn còn nguyên. Khi không có Ghi nhớ hay Pro, chúng hiện ở trạng thái khóa và mở lại ngay khi bạn mua một trong hai."
+      },
+      {
+        "q": "Làm sao để được hoàn tiền?",
+        "a": "Apple là bên xử lý hoàn tiền. Hãy gửi yêu cầu tại reportaproblem.apple.com bằng Tài khoản Apple đã trả tiền. Nếu do lỗi, hãy báo cho tôi nữa để người sau không gặp lại."
+      },
+      {
+        "q": "Có thể dùng thử mà không cài không?",
+        "a": "Mở m1zz.github.io/rereminder trên iPhone, hẹn giờ sẽ chạy ngay dưới dạng App Clip. Mặt đồng hồ và các mốc báo đều có. Mẫu, Chế độ Phiên và ứng dụng đồng hồ có trong bản đầy đủ."
+      },
+      {
+        "q": "Dùng được trên những thiết bị nào?",
+        "a": "iPhone chạy iOS 26 trở lên, Apple Watch chạy watchOS 11.6 trở lên và Mac chạy macOS 26 trở lên. iPad hiện chưa được hỗ trợ. Ứng dụng có 24 ngôn ngữ."
+      },
+      {
+        "q": "Dữ liệu của tôi được lưu ở đâu?",
+        "a": "Hẹn giờ, mẫu, tên phần, kịch bản và lịch sử đều nằm trên thiết bị của bạn và sẽ mất khi xóa ứng dụng. Ứng dụng chỉ gửi thống kê sử dụng ẩn danh để sửa lỗi. Chi tiết có trong chính sách quyền riêng tư."
+      }
+    ]
+  },
+  "closing": {
+    "headline": "Buổi thuyết trình tới,\nbiết trước khi hết giờ",
+    "cta": "Tải miễn phí trên App Store"
+  },
+  "ui": {
+    "skip": "Chuyển đến nội dung",
+    "languages": "Ngôn ngữ",
+    "privacy": "Chính sách quyền riêng tư",
+    "contact": "Có câu hỏi hay góp ý? Hãy gửi đến {email}. Tôi thường trả lời trong 2 đến 3 ngày."
+  }
+}

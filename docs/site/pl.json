@@ -1,0 +1,181 @@
+{
+  "title": "Rereminder: minutnik wystąpień, który ostrzega, zanim skończy się czas",
+  "description": "Minutnik, który ostrzeże Cię 5 minut przed końcem wystąpienia, 3 przed końcem lekcji albo kiedy zechcesz. Ostrzeżenia są bezpłatne i bez limitu.",
+  "hero": {
+    "headline": "Nie wtedy, gdy już po wszystkim,\nale zanim",
+    "lead": "5 minut przed końcem wystąpienia, 3 przed końcem spotkania. Rereminder odzywa się w każdym wybranym przez Ciebie momencie, więc nie musisz co chwilę zerkać na zegarek.",
+    "cta": "Pobierz za darmo z App Store",
+    "note": "Ostrzeżenia są bezpłatne i bez limitu. Na iPhone’a, Apple Watch i Maca."
+  },
+  "demo": {
+    "title": "Wypróbuj tutaj",
+    "lead": "Wybierz długość i ostrzeżenia, a potem naciśnij czerwony przycisk. Minuta mija w sekundę, a każde ostrzeżenie odzywa się we właściwej chwili.",
+    "app": "Rereminder",
+    "length": "Długość",
+    "alerts": "Ile przed końcem ostrzec",
+    "start": "Start",
+    "stop": "Zatrzymaj",
+    "min": "{n} min",
+    "sec": "{n} s",
+    "msgMin": "Pozostało {n} min",
+    "msgSec": "Pozostało {n} s",
+    "done": "Minutnik zakończony",
+    "nextMin": "Następny: alert {a} (zostało {m} min {s} s)",
+    "nextSec": "Następny: alert {a} (zostało {s} s)",
+    "endMin": "Następny: sygnał końca (zostało {m} min {s} s)",
+    "endSec": "Następny: sygnał końca (zostało {s} s)",
+    "note": "Demo działa 60 razy szybciej i niczego nie zapisuje. W aplikacji przeciągasz dzwonki na tarczę, ile tylko chcesz."
+  },
+  "problem": {
+    "title": "Minutnik zadzwonił, gdy było już za późno?",
+    "text": "Zwykły minutnik dzwoni dopiero na zerze. Wystąpienie kończy się przed wnioskami, lekcja urywa się bez podsumowania, a spotkanie wchodzi na kolejne bez żadnej decyzji. Nie potrzebujesz sygnału, że czas minął, tylko ostrzeżenia, gdy wciąż jest czas, by spokojnie zakończyć."
+  },
+  "features": [
+    {
+      "title": "Ostrzeżenia przed końcem, ile chcesz",
+      "text": "Przeciągnij dzwonki na tarczy na 10, 5 lub 1 minutę przed końcem albo w dowolne inne miejsce. Nie ma limitu, a każde ostrzeżenie może mieć własny tekst, np. „Zamykaj slajdy”.\nPrzy wygaszonym ekranie pozostały czas widać na ekranie blokady i w Dynamic Island, a Apple Watch stuka Cię w nadgarstek.",
+      "shot": "02-running"
+    },
+    {
+      "title": "Podziel wystąpienie na części",
+      "text": "Wstęp 5 minut, rozwinięcie 20, pytania 5. Nadaj każdej części nazwę i tekst. Przy każdej zmianie dostajesz ostrzeżenie z jej nazwą, a plan czasowy trzyma się niemal sam. (Pro)",
+      "shot": "03-session"
+    },
+    {
+      "title": "To, co masz teraz powiedzieć, jest na ekranie",
+      "text": "W trakcie widzisz dużym drukiem tekst bieżącej części i to, co będzie dalej. Gdy przekroczysz zero, liczy dalej, więc wiesz, o ile przeciągnąłeś. (Pro)",
+      "shot": "04-sessionRunning"
+    }
+  ],
+  "steps": {
+    "title": "Zaczynasz w trzech krokach",
+    "items": [
+      {
+        "title": "Ustaw czas",
+        "text": "Obróć tarczę albo stuknij czas i wpisz go. Jedno okrążenie to 60 minut, dwa to 120."
+      },
+      {
+        "title": "Rozmieść ostrzeżenia",
+        "text": "Stuknij u góry etykietę, np. 1:00 lub 5:00, albo przeciągnij dzwonek na tarczę."
+      },
+      {
+        "title": "Uruchom i zapomnij",
+        "text": "Zablokuj iPhone’a. iPhone i Apple Watch odezwą się w każdym ustawionym momencie."
+      }
+    ]
+  },
+  "reference": {
+    "title": "Najczęściej używane ustawienia",
+    "rows": [
+      [
+        "Wystąpienie, 20 minut",
+        "5 min przed „Przejdź do wniosków”, 1 min przed „Podziękuj”"
+      ],
+      [
+        "Lekcja, 45 minut",
+        "10 min przed „Zadaj pracę domową”, 3 min przed „Podsumowanie”"
+      ],
+      [
+        "Spotkanie, 30 minut",
+        "5 min przed „Spisz decyzje”"
+      ],
+      [
+        "Zajęcia pilatesu lub jogi",
+        "Tryb sesji, jedna część na sekwencję (Pro)"
+      ],
+      [
+        "Nauka, 25 minut",
+        "5 min przed, potem przerwa"
+      ],
+      [
+        "Przerwa między seriami, 3 minuty",
+        "30 s przed „Szykuj się do kolejnej serii”"
+      ],
+      [
+        "Mentoring, godzina",
+        "15 i 5 min przed"
+      ]
+    ],
+    "note": "To, czego używasz często, zapisz jako szablon i uruchamiaj jednym stuknięciem (od planu Pamięć). Minutnik możesz też uruchomić lub zatrzymać przez Skróty i Siri."
+  },
+  "pricing": {
+    "title": "Ostrzeżenia są bezpłatne. Płacisz tylko, jeśli ma coś zapamiętać.",
+    "free": {
+      "name": "Za darmo",
+      "items": [
+        "Ostrzeżenia bez limitu",
+        "Własny tekst przy każdym ostrzeżeniu",
+        "Aktywność na żywo na ekranie blokady i w Dynamic Island",
+        "Alarmowanie, aż zareagujesz, i pełny alarm na koniec",
+        "Aplikacja na Apple Watch i pasek menu na Macu",
+        "Wszystkie kolory motywu"
+      ]
+    },
+    "pro": {
+      "name": "Pamięć · Pro",
+      "items": [
+        "Pamięć: zapisuj ustawienia jako szablony i uruchamiaj je jednym stuknięciem",
+        "Pamięć: po ponownym otwarciu wszystko jest tak, jak zostawiłeś",
+        "Pro: wszystko z Pamięci plus tryb sesji z nazwami części i tekstami",
+        "Pro: nadgodziny, historia i statystyki"
+      ],
+      "note": "Przy każdym planie wybierasz subskrypcję roczną albo jednorazowy zakup na zawsze. Tryb sesji, nadgodziny i historię możesz kilka razy wypróbować przed zapłatą."
+    },
+    "note": "Bez reklam. Jedna przepustka otwiera też wszystkie aplikacje Leeo."
+  },
+  "faq": {
+    "title": "Częste pytania",
+    "items": [
+      {
+        "q": "Ostrzeżenie się nie odezwało.",
+        "a": "Prawie zawsze chodzi o uprawnienia albo tryb skupienia. Sprawdź zgodę na powiadomienia w aplikacji w Ustawienia › Sposób powiadamiania. Jeśli używasz trybu skupienia, dodaj Rereminder do dozwolonych aplikacji w Ustawieniach iOS › Skupienie. W trybie cichym jest tylko wibracja. Jeśli Rereminder jest w Ustawienia › Powiadomienia › Zaplanowane podsumowanie, powiadomienia są wstrzymywane, więc go stamtąd usuń."
+      },
+      {
+        "q": "Czy zauważę koniec w trybie cichym?",
+        "a": "Tak. Włącz „Na koniec pełny alarm”, a zadzwoni głośno nawet w trybie cichym lub skupienia. Z opcją „Alarmuj, aż zareaguję” powtarza się, dopóki nie stukniesz Zatrzymaj lub Drzemka w powiadomieniu."
+      },
+      {
+        "q": "Apple Watch się nie synchronizuje.",
+        "a": "Otwórz w aplikacji Ustawienia › Moje urządzenia, gdzie zobaczysz, którego kroku brakuje. Zegarek musi być sparowany z tym iPhone’em, Rereminder musi być na nim zainstalowany, a po instalacji trzeba go raz otworzyć na zegarku. Potem minutnik trafia na zegarek nawet przy zamkniętej aplikacji."
+      },
+      {
+        "q": "Mac wyświetla się jako niepołączony.",
+        "a": "„Połączony” oznacza, że aplikacja była otwarta na tym Macu w ciągu ostatnich 10 minut, więc dopiero co wybudzony Mac pojawi się po kilku minutach. Oba urządzenia muszą używać tego samego konta iCloud z włączonym iCloud Drive. Aplikacja na Maca wymaga macOS 26 lub nowszego."
+      },
+      {
+        "q": "Zapłaciłem, ale nic się nie odblokowało.",
+        "a": "Stuknij „Odtwórz zakupy” na ekranie planów, będąc zalogowanym na to samo konto Apple, którym płaciłeś. Zakupy na zawsze wracają nawet po usunięciu aplikacji lub zmianie urządzenia."
+      },
+      {
+        "q": "Moje zapisane szablony są zablokowane.",
+        "a": "Wciąż tam są. Bez Pamięci lub Pro pozostają widoczne, ale zablokowane, i otwierają się od razu po zakupie jednego z planów."
+      },
+      {
+        "q": "Jak odzyskać pieniądze?",
+        "a": "Zwrotami zajmuje się Apple. Zgłoś prośbę na reportaproblem.apple.com z konta Apple, którym płaciłeś. Jeśli coś nie działało, napisz też do mnie, żeby następna osoba tego nie przeżyła."
+      },
+      {
+        "q": "Mogę spróbować bez instalowania?",
+        "a": "Otwórz m1zz.github.io/rereminder na iPhonie, a minutnik od razu ruszy jako App Clip. Tarcza i ostrzeżenia są na miejscu. Szablony, tryb sesji i aplikacja na zegarek są w pełnej aplikacji."
+      },
+      {
+        "q": "Na jakich urządzeniach działa?",
+        "a": "iPhone z iOS 26 lub nowszym, Apple Watch z watchOS 11.6 lub nowszym i Mac z macOS 26 lub nowszym. iPad nie jest jeszcze obsługiwany. Aplikacja jest dostępna w 24 językach."
+      },
+      {
+        "q": "Gdzie są moje dane?",
+        "a": "Minutniki, szablony, nazwy części, teksty i historia zostają na Twoim urządzeniu i znikają po usunięciu aplikacji. Aplikacja wysyła tylko anonimowe statystyki użycia, które pomagają ją ulepszać. Polityka prywatności podaje dokładnie, jakie."
+      }
+    ]
+  },
+  "closing": {
+    "headline": "Przy następnym wystąpieniu\nbędziesz wiedzieć wcześniej",
+    "cta": "Pobierz za darmo z App Store"
+  },
+  "ui": {
+    "skip": "Przejdź do treści",
+    "languages": "Język",
+    "privacy": "Polityka prywatności",
+    "contact": "Pytania lub uwagi? Napisz na {email}. Zwykle odpowiadam w ciągu 2–3 dni."
+  }
+}

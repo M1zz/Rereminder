@@ -1,0 +1,160 @@
+{
+  "title": "Rereminder: the presentation timer that warns you before time runs out",
+  "description": "A timer that alerts you 5 minutes before your talk ends, 3 before class wraps up, or whenever you choose. Pre-alerts are free, with no limit.",
+  "hero": {
+    "headline": "Know before\ntime runs out",
+    "lead": "5 minutes before your talk ends. 3 minutes before the meeting wraps. Rereminder taps you on the shoulder at every point you pick, so you can stop glancing at the clock.",
+    "cta": "Get it free on the App Store",
+    "note": "Pre-alerts are free, with no limit. iPhone, Apple Watch and Mac."
+  },
+  "demo": {
+    "title": "Try it right here",
+    "lead": "Pick a length and your alerts, then press the red button. A minute passes in a second, and you hear each alert as it comes up.",
+    "app": "Rereminder",
+    "length": "Timer length",
+    "alerts": "Alert me before the end",
+    "start": "Start",
+    "stop": "Stop",
+    "min": "{n} min",
+    "sec": "{n} sec",
+    "msgMin": "{n} min remaining",
+    "msgSec": "{n} sec remaining",
+    "done": "Timer finished",
+    "nextMin": "Next: {a} alert ({m} min {s} sec left)",
+    "nextSec": "Next: {a} alert ({s} sec left)",
+    "endMin": "Next: End alert ({m} min {s} sec left)",
+    "endSec": "Next: End alert ({s} sec left)",
+    "note": "This demo runs 60 times faster and saves nothing. In the app you drag bells onto the dial and place as many as you like."
+  },
+  "problem": {
+    "title": "Ever heard the timer when it was already too late?",
+    "text": "A basic timer only rings at zero. Your talk ends before you reach the conclusion, class runs out before the recap, and the meeting slides into the next one with nothing decided. What you need isn't a sound that says time's up. It's a nudge while there's still time to wrap up."
+  },
+  "features": [
+    {
+      "title": "Heads-ups before the end, as many as you want",
+      "text": "Drag bells onto the dial at 10, 5 or 1 minute before the end, or anywhere else. There's no limit, and each alert can carry its own message, like \"Wrap up the slides\".\nWith the screen off, the time left stays on the Lock Screen and in the Dynamic Island, and your Apple Watch taps your wrist.",
+      "shot": "02-running"
+    },
+    {
+      "title": "Split your talk into sections",
+      "text": "Intro 5 minutes, main talk 20, Q&A 5. Give each section a name and a script. Every time a section changes you get an alert with its name, so your timing holds without you thinking about it. (Pro)",
+      "shot": "03-session"
+    },
+    {
+      "title": "Your next line, right on screen",
+      "text": "While it runs, the script for the current section and what comes next are shown large. Go past zero and it keeps counting, so you know exactly how far over you went. (Pro)",
+      "shot": "04-sessionRunning"
+    }
+  ],
+  "steps": {
+    "title": "Three steps to start",
+    "items": [
+      {
+        "title": "Set the time",
+        "text": "Turn the dial, or tap the time and type it in. One lap is 60 minutes, two laps 120."
+      },
+      {
+        "title": "Place your alerts",
+        "text": "Tap a chip like 1:00 or 5:00 at the top, or drag a bell onto the dial."
+      },
+      {
+        "title": "Start and forget it",
+        "text": "Lock your phone. Your iPhone and Apple Watch speak up at each moment you set."
+      }
+    ]
+  },
+  "reference": {
+    "title": "Setups people use most",
+    "rows": [
+      ["20-minute talk", "5 min before \"Move to the conclusion\", 1 min before \"Thank the audience\""],
+      ["50-minute class", "10 min before \"Explain the homework\", 3 min before \"Recap\""],
+      ["30-minute meeting", "5 min before \"Confirm the decisions\""],
+      ["Pilates or yoga session", "Session Mode, one section per sequence (Pro)"],
+      ["25-minute study block", "5 min before, then take a break"],
+      ["3-minute rest between sets", "30 sec before \"Get ready\""],
+      ["One-hour mentoring session", "15 min and 5 min before"]
+    ],
+    "note": "Save the setups you reuse as templates and start them in one tap (Remember and up). You can also start or stop a timer with Shortcuts and Siri."
+  },
+  "pricing": {
+    "title": "Pre-alerts are free. Pay only if you want it to remember.",
+    "free": {
+      "name": "Free",
+      "items": [
+        "Unlimited pre-alerts",
+        "Your own message on every alert",
+        "Live Activity on the Lock Screen and in the Dynamic Island",
+        "Keep alerting until you answer, and end with a full alarm",
+        "Apple Watch app and Mac menu bar",
+        "Every theme color"
+      ]
+    },
+    "pro": {
+      "name": "Remember · Pro",
+      "items": [
+        "Remember: save setups as templates and start them in one tap",
+        "Remember: reopen the app to your last setup",
+        "Pro: everything in Remember, plus Session Mode with section names and scripts",
+        "Pro: overtime, history and stats"
+      ],
+      "note": "Choose yearly or a one-time lifetime purchase for either plan. You can try Session Mode, overtime and history a few times before paying."
+    },
+    "note": "No ads. One Forever Pass also unlocks every app Leeo makes."
+  },
+  "faq": {
+    "title": "Questions",
+    "items": [
+      {
+        "q": "An alert didn't go off.",
+        "a": "It's almost always permissions or Focus. Check notification access in the app under Settings › Notification Method. If you use a Focus, add Rereminder as an allowed app in iOS Settings › Focus. In Silent Mode you only get a vibration. If Rereminder is in Settings › Notifications › Scheduled Summary, its alerts are held back, so take it out."
+      },
+      {
+        "q": "Will I notice the end in Silent Mode?",
+        "a": "Yes. Turn on End with a full alarm, and it rings loudly even in Silent Mode or a Focus. Turn on Keep alerting until I answer, and it repeats until you tap Stop or Snooze on the notification."
+      },
+      {
+        "q": "My Apple Watch isn't syncing.",
+        "a": "Open Settings › My Devices in the app. It shows which step is missing. The watch needs to be paired with this iPhone, Rereminder needs to be installed on the watch, and you need to open it on the watch once after installing. After that the timer carries over even when the watch app is closed."
+      },
+      {
+        "q": "My Mac shows as not connected.",
+        "a": "Connected means the app was open on that Mac within the last 10 minutes, so a Mac that just woke up appears a few minutes later. Both devices need the same iCloud account with iCloud Drive turned on. The Mac app needs macOS 26 or later."
+      },
+      {
+        "q": "I paid, but nothing unlocked.",
+        "a": "Tap Restore Purchases on the plans screen, signed in with the same Apple Account you paid with. Lifetime purchases come back even after you delete the app or change devices."
+      },
+      {
+        "q": "My saved templates are locked.",
+        "a": "They're still there. Without Remember or Pro they stay locked on screen, and they open again the moment you buy either one."
+      },
+      {
+        "q": "How do I get a refund?",
+        "a": "Apple handles refunds. Request one at reportaproblem.apple.com with the Apple Account you paid with. If something was broken, please tell me too so the next person doesn't run into it."
+      },
+      {
+        "q": "Can I try it without installing?",
+        "a": "Open m1zz.github.io/rereminder on your iPhone and the timer runs right away as an App Clip. The dial and alerts are all there. Templates, Session Mode and the watch app are in the full app."
+      },
+      {
+        "q": "Which devices does it run on?",
+        "a": "iPhone with iOS 26 or later, Apple Watch with watchOS 11.6 or later, and Mac with macOS 26 or later. iPad isn't supported yet. The app comes in 24 languages."
+      },
+      {
+        "q": "Where is my data kept?",
+        "a": "Timers, templates, section names, scripts and history all stay on your device, and they go away when you delete the app. The app only sends anonymous usage stats that help fix it. The privacy policy lists exactly what."
+      }
+    ]
+  },
+  "closing": {
+    "headline": "At your next talk,\nknow before time's up",
+    "cta": "Get it free on the App Store"
+  },
+  "ui": {
+    "skip": "Skip to content",
+    "languages": "Language",
+    "privacy": "Privacy Policy",
+    "contact": "Questions or feedback? Write to {email}. I usually reply within 2 to 3 days."
+  }
+}

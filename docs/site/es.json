@@ -1,0 +1,181 @@
+{
+  "title": "Rereminder: el temporizador para presentaciones que te avisa antes del final",
+  "description": "Te avisa 5 minutos antes de que acabe tu charla, 3 antes del final de la clase o cuando quieras. Los avisos previos son gratis y sin límite.",
+  "hero": {
+    "headline": "No cuando ya terminó,\nsino antes",
+    "lead": "5 minutos antes de que acabe la charla, 3 antes de cerrar la reunión. Rereminder te avisa en cada momento que elijas, así no tienes que mirar el reloj a cada rato.",
+    "cta": "Descárgala gratis en el App Store",
+    "note": "Los avisos previos son gratis y sin límite. Para iPhone, Apple Watch y Mac."
+  },
+  "demo": {
+    "title": "Pruébalo aquí mismo",
+    "lead": "Elige una duración y tus avisos, y pulsa el botón rojo. Un minuto pasa en un segundo y oirás cada aviso cuando le toque.",
+    "app": "Rereminder",
+    "length": "Duración",
+    "alerts": "Avisarme antes del final",
+    "start": "Iniciar",
+    "stop": "Detener",
+    "min": "{n} min",
+    "sec": "{n} s",
+    "msgMin": "{n} min restantes",
+    "msgSec": "{n} s restantes",
+    "done": "Temporizador terminado",
+    "nextMin": "Siguiente: aviso de {a} (quedan {m} min {s} s)",
+    "nextSec": "Siguiente: aviso de {a} (quedan {s} s)",
+    "endMin": "Siguiente: aviso final (quedan {m} min {s} s)",
+    "endSec": "Siguiente: aviso final (quedan {s} s)",
+    "note": "La demo va 60 veces más rápido y no guarda nada. En la app arrastras campanas al dial y pones todas las que quieras."
+  },
+  "problem": {
+    "title": "¿Te ha sonado alguna vez el temporizador cuando ya era tarde?",
+    "text": "Un temporizador normal solo suena en cero. La charla se acaba antes de llegar a la conclusión, la clase termina sin repaso y la reunión se come la siguiente sin decidir nada. Lo que necesitas no es un aviso de que se acabó, sino uno cuando todavía hay tiempo para cerrar bien."
+  },
+  "features": [
+    {
+      "title": "Avisos antes del final, todos los que quieras",
+      "text": "Arrastra las campanas del dial a 10, 5 o 1 minuto antes del final, o a donde prefieras. No hay límite, y cada aviso puede llevar su propio mensaje, como «Cierra las diapositivas».\nCon la pantalla apagada, el tiempo restante sigue a la vista en la pantalla bloqueada y en la Dynamic Island, y el Apple Watch te da un toque en la muñeca.",
+      "shot": "02-running"
+    },
+    {
+      "title": "Divide tu charla en partes",
+      "text": "Introducción 5 minutos, desarrollo 20, preguntas 5. Ponle a cada parte un nombre y un guion. Cada vez que cambia de parte te avisa con su nombre, y el reparto del tiempo se cumple casi solo. (Pro)",
+      "shot": "03-session"
+    },
+    {
+      "title": "Lo que toca decir, en pantalla",
+      "text": "Mientras avanza, ves en grande el guion de la parte actual y la siguiente. Si pasas de cero, sigue contando para que sepas cuánto te has pasado. (Pro)",
+      "shot": "04-sessionRunning"
+    }
+  ],
+  "steps": {
+    "title": "Empieza en tres pasos",
+    "items": [
+      {
+        "title": "Ajusta el tiempo",
+        "text": "Gira el dial o toca la hora y escríbela. Una vuelta son 60 minutos; dos, 120."
+      },
+      {
+        "title": "Coloca los avisos",
+        "text": "Toca una etiqueta como 1:00 o 5:00 arriba, o arrastra una campana al dial."
+      },
+      {
+        "title": "Inicia y olvídate",
+        "text": "Bloquea el iPhone. El iPhone y el Apple Watch te avisan en cada momento que fijaste."
+      }
+    ]
+  },
+  "reference": {
+    "title": "Los ajustes más usados",
+    "rows": [
+      [
+        "Charla de 20 minutos",
+        "5 min antes «Pasa a la conclusión», 1 min antes «Despídete»"
+      ],
+      [
+        "Clase de 50 minutos",
+        "10 min antes «Explica los deberes», 3 min antes «Repaso»"
+      ],
+      [
+        "Reunión de 30 minutos",
+        "5 min antes «Repasa los acuerdos»"
+      ],
+      [
+        "Sesión de pilates o yoga",
+        "Modo sesión, una parte por secuencia (Pro)"
+      ],
+      [
+        "Estudio de 25 minutos",
+        "5 min antes y luego descanso"
+      ],
+      [
+        "Descanso de 3 minutos entre series",
+        "30 s antes «Prepárate para la siguiente»"
+      ],
+      [
+        "Mentoría de una hora",
+        "15 y 5 min antes"
+      ]
+    ],
+    "note": "Guarda como plantilla lo que repites y ábrelo con un toque (desde Memoria). También puedes iniciar o detener un temporizador con Atajos y Siri."
+  },
+  "pricing": {
+    "title": "Los avisos previos son gratis. Paga solo si quieres que recuerde.",
+    "free": {
+      "name": "Gratis",
+      "items": [
+        "Avisos previos sin límite",
+        "Tu propio mensaje en cada aviso",
+        "Actividad en vivo en la pantalla bloqueada y en la Dynamic Island",
+        "Seguir avisando hasta que respondas y terminar con una alarma completa",
+        "App para Apple Watch y barra de menús del Mac",
+        "Todos los colores de tema"
+      ]
+    },
+    "pro": {
+      "name": "Memoria · Pro",
+      "items": [
+        "Memoria: guarda ajustes como plantillas y ábrelos con un toque",
+        "Memoria: al volver a abrir la app, todo sigue como lo dejaste",
+        "Pro: todo lo de Memoria más el modo sesión con nombres de partes y guiones",
+        "Pro: tiempo extra, historial y estadísticas"
+      ],
+      "note": "En cada plan eliges suscripción anual o un pago único para siempre. Puedes probar el modo sesión, el tiempo extra y el historial unas cuantas veces antes de pagar."
+    },
+    "note": "Sin anuncios. Además, un Pase para siempre abre todas las apps de Leeo."
+  },
+  "faq": {
+    "title": "Preguntas frecuentes",
+    "items": [
+      {
+        "q": "Un aviso no sonó.",
+        "a": "Casi siempre son los permisos o un modo de concentración. Revisa el permiso de notificaciones en la app, en Ajustes › Método de aviso. Si usas un modo de concentración, añade Rereminder como app permitida en Ajustes › Concentración de iOS. En modo silencio solo vibra. Si Rereminder está en Ajustes › Notificaciones › Resumen programado, sus avisos se retienen; sácala de ahí."
+      },
+      {
+        "q": "¿Me enteraré del final en modo silencio?",
+        "a": "Sí. Activa «Terminar con una alarma completa» y sonará fuerte incluso en modo silencio o con un modo de concentración. Con «Seguir avisando hasta que responda», insiste hasta que toques Detener o Posponer en la notificación."
+      },
+      {
+        "q": "Mi Apple Watch no se sincroniza.",
+        "a": "Abre Ajustes › Mis dispositivos en la app; ahí verás qué paso falta. El reloj tiene que estar enlazado con este iPhone, Rereminder tiene que estar instalada en el reloj y tienes que abrirla una vez en el reloj después de instalarla. A partir de ahí, el temporizador llega aunque la app del reloj esté cerrada."
+      },
+      {
+        "q": "Mi Mac aparece como no conectado.",
+        "a": "«Conectado» significa que la app estuvo abierta en ese Mac en los últimos 10 minutos, así que un Mac que acaba de despertarse aparece al cabo de unos minutos. Los dos dispositivos necesitan la misma cuenta de iCloud con iCloud Drive activado. La app de Mac requiere macOS 26 o posterior."
+      },
+      {
+        "q": "He pagado y no se ha desbloqueado nada.",
+        "a": "Toca «Restaurar compras» en la pantalla de planes, con la misma cuenta de Apple con la que pagaste. Las compras para siempre vuelven aunque borres la app o cambies de dispositivo."
+      },
+      {
+        "q": "Mis plantillas guardadas están bloqueadas.",
+        "a": "Siguen ahí. Sin Memoria ni Pro se quedan visibles pero bloqueadas, y se abren otra vez en cuanto compras uno de los dos."
+      },
+      {
+        "q": "¿Cómo pido un reembolso?",
+        "a": "Los reembolsos los gestiona Apple. Pídelo en reportaproblem.apple.com con la cuenta de Apple con la que pagaste. Si algo fallaba, cuéntamelo también para que no le pase a la siguiente persona."
+      },
+      {
+        "q": "¿Puedo probarla sin instalarla?",
+        "a": "Abre m1zz.github.io/rereminder en tu iPhone y el temporizador arranca al momento como App Clip. El dial y los avisos están ahí. Las plantillas, el modo sesión y la app del reloj están en la app completa."
+      },
+      {
+        "q": "¿En qué dispositivos funciona?",
+        "a": "iPhone con iOS 26 o posterior, Apple Watch con watchOS 11.6 o posterior y Mac con macOS 26 o posterior. El iPad todavía no es compatible. La app está en 24 idiomas."
+      },
+      {
+        "q": "¿Dónde se guardan mis datos?",
+        "a": "Temporizadores, plantillas, nombres de partes, guiones e historial se quedan en tu dispositivo y desaparecen si borras la app. Solo se envían estadísticas de uso anónimas que ayudan a mejorarla. La política de privacidad detalla cuáles."
+      }
+    ]
+  },
+  "closing": {
+    "headline": "En tu próxima charla,\nentérate antes del final",
+    "cta": "Descárgala gratis en el App Store"
+  },
+  "ui": {
+    "skip": "Ir al contenido",
+    "languages": "Idioma",
+    "privacy": "Política de privacidad",
+    "contact": "¿Dudas o comentarios? Escribe a {email}. Suelo contestar en 2 o 3 días."
+  }
+}

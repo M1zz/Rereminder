@@ -1,0 +1,181 @@
+{
+  "title": "Rereminder: timer presentasi yang mengingatkan sebelum waktu habis",
+  "description": "Timer yang mengingatkan 5 menit sebelum presentasi selesai, 3 menit sebelum kelas usai, atau kapan pun Anda mau. Peringatan awal gratis tanpa batas.",
+  "hero": {
+    "headline": "Bukan setelah selesai,\ntapi sebelumnya",
+    "lead": "5 menit sebelum presentasi berakhir, 3 menit sebelum rapat ditutup. Rereminder memberi tanda di setiap titik yang Anda pilih, jadi Anda tak perlu terus melirik jam.",
+    "cta": "Unduh gratis di App Store",
+    "note": "Peringatan awal gratis tanpa batas. Untuk iPhone, Apple Watch, dan Mac."
+  },
+  "demo": {
+    "title": "Coba langsung di sini",
+    "lead": "Pilih durasi dan peringatan, lalu tekan tombol merah. Satu menit berlalu dalam satu detik, dan setiap peringatan berbunyi tepat waktunya.",
+    "app": "Rereminder",
+    "length": "Durasi timer",
+    "alerts": "Ingatkan berapa lama sebelum selesai",
+    "start": "Mulai",
+    "stop": "Hentikan",
+    "min": "{n} mnt",
+    "sec": "{n} dtk",
+    "msgMin": "Sisa {n} menit",
+    "msgSec": "Sisa {n} dtk",
+    "done": "Timer selesai",
+    "nextMin": "Berikutnya: peringatan {a} (sisa {m} mnt {s} dtk)",
+    "nextSec": "Berikutnya: peringatan {a} (sisa {s} dtk)",
+    "endMin": "Berikutnya: peringatan akhir (sisa {m} mnt {s} dtk)",
+    "endSec": "Berikutnya: peringatan akhir (sisa {s} dtk)",
+    "note": "Demo ini berjalan 60 kali lebih cepat dan tidak menyimpan apa pun. Di app, Anda bisa menyeret lonceng ke cakram sebanyak yang Anda mau."
+  },
+  "problem": {
+    "title": "Pernah timer berbunyi saat semuanya sudah terlambat?",
+    "text": "Timer biasa baru berbunyi di angka nol. Presentasi habis sebelum sampai kesimpulan, kelas selesai tanpa rangkuman, dan rapat molor ke jadwal berikutnya tanpa keputusan. Yang Anda perlukan bukan tanda bahwa waktu sudah habis, tapi tanda saat masih ada waktu untuk menutup."
+  },
+  "features": [
+    {
+      "title": "Diingatkan sebelum selesai, sebanyak yang Anda mau",
+      "text": "Seret lonceng di cakram ke 10, 5, atau 1 menit sebelum selesai, atau ke titik lain. Tidak ada batas, dan setiap peringatan bisa membawa pesan sendiri, misalnya \"Tutup slide\".\nSaat layar mati, sisa waktu tetap terlihat di Layar Terkunci dan Dynamic Island, dan Apple Watch mengetuk pergelangan tangan Anda.",
+      "shot": "02-running"
+    },
+    {
+      "title": "Bagi presentasi menjadi beberapa bagian",
+      "text": "Pembukaan 5 menit, isi 20 menit, tanya jawab 5 menit. Beri setiap bagian nama dan naskah. Setiap kali berganti bagian, Anda diingatkan dengan nama bagian itu, jadi pembagian waktu terjaga dengan sendirinya. (Pro)",
+      "shot": "03-session"
+    },
+    {
+      "title": "Apa yang harus diucapkan, ada di layar",
+      "text": "Selama berjalan, naskah bagian saat ini dan bagian berikutnya tampil besar. Lewat dari nol, hitungan terus berjalan sehingga Anda tahu seberapa lama Anda melewati waktu. (Pro)",
+      "shot": "04-sessionRunning"
+    }
+  ],
+  "steps": {
+    "title": "Mulai dalam tiga langkah",
+    "items": [
+      {
+        "title": "Atur waktu",
+        "text": "Putar cakram, atau ketuk waktunya lalu ketik. Satu putaran 60 menit, dua putaran 120 menit."
+      },
+      {
+        "title": "Pasang peringatan",
+        "text": "Ketuk label seperti 1:00 atau 5:00 di atas, atau seret lonceng ke cakram."
+      },
+      {
+        "title": "Mulai dan lupakan",
+        "text": "Kunci iPhone Anda. iPhone dan Apple Watch memberi tahu di setiap titik yang Anda atur."
+      }
+    ]
+  },
+  "reference": {
+    "title": "Pengaturan yang paling sering dipakai",
+    "rows": [
+      [
+        "Presentasi 20 menit",
+        "5 menit sebelum \"Masuk ke kesimpulan\", 1 menit sebelum \"Ucapkan terima kasih\""
+      ],
+      [
+        "Kelas 50 menit",
+        "10 menit sebelum \"Jelaskan PR\", 3 menit sebelum \"Rangkum\""
+      ],
+      [
+        "Rapat 30 menit",
+        "5 menit sebelum \"Tegaskan keputusan\""
+      ],
+      [
+        "Kelas pilates atau yoga",
+        "Mode Sesi, satu bagian per rangkaian gerakan (Pro)"
+      ],
+      [
+        "Belajar 25 menit",
+        "5 menit sebelum, lalu istirahat"
+      ],
+      [
+        "Istirahat 3 menit antar set",
+        "30 detik sebelum \"Siap untuk set berikutnya\""
+      ],
+      [
+        "Sesi mentoring 1 jam",
+        "15 dan 5 menit sebelum"
+      ]
+    ],
+    "note": "Simpan pengaturan yang sering dipakai sebagai templat dan buka dengan sekali ketuk (mulai paket Ingat). Anda juga bisa memulai atau menghentikan timer lewat Pintasan dan Siri."
+  },
+  "pricing": {
+    "title": "Peringatan awal gratis. Bayar hanya jika ingin pengaturan diingat.",
+    "free": {
+      "name": "Gratis",
+      "items": [
+        "Peringatan awal tanpa batas",
+        "Pesan sendiri untuk setiap peringatan",
+        "Aktivitas Langsung di Layar Terkunci dan Dynamic Island",
+        "Terus peringatkan sampai Anda merespons, dan akhiri dengan alarm penuh",
+        "App Apple Watch dan bar menu Mac",
+        "Semua warna tema"
+      ]
+    },
+    "pro": {
+      "name": "Ingat · Pro",
+      "items": [
+        "Ingat: simpan pengaturan sebagai templat dan mulai dengan sekali ketuk",
+        "Ingat: buka lagi app, semuanya seperti terakhir kali",
+        "Pro: semua fitur Ingat ditambah Mode Sesi dengan nama bagian dan naskah",
+        "Pro: waktu lebih, riwayat, dan statistik"
+      ],
+      "note": "Untuk setiap paket, pilih langganan tahunan atau beli sekali untuk selamanya. Mode Sesi, waktu lebih, dan riwayat bisa dicoba beberapa kali sebelum membayar."
+    },
+    "note": "Tanpa iklan. Satu Pass Selamanya juga membuka semua app buatan Leeo."
+  },
+  "faq": {
+    "title": "Pertanyaan umum",
+    "items": [
+      {
+        "q": "Peringatan tidak berbunyi.",
+        "a": "Hampir selalu soal izin atau Fokus. Periksa izin notifikasi di app pada Pengaturan › Metode Notifikasi. Jika memakai Fokus, tambahkan Rereminder sebagai app yang diizinkan di Pengaturan › Fokus milik iOS. Dalam mode senyap hanya ada getaran. Jika Rereminder ada di Pengaturan › Pemberitahuan › Ringkasan Terjadwal, peringatannya ditahan, jadi keluarkan dari sana."
+      },
+      {
+        "q": "Apakah saya tetap tahu waktunya habis dalam mode senyap?",
+        "a": "Ya. Nyalakan \"Akhiri dengan alarm penuh\" dan alarm berbunyi keras meski dalam mode senyap atau Fokus. Dengan \"Terus peringatkan sampai saya merespons\", peringatan berulang sampai Anda mengetuk Hentikan atau Tunda pada notifikasi."
+      },
+      {
+        "q": "Apple Watch tidak tersinkron.",
+        "a": "Buka Pengaturan › Perangkat Saya di app, di sana terlihat langkah mana yang kurang. Jam harus dipasangkan dengan iPhone ini, Rereminder harus terpasang di jam, dan Anda perlu membukanya sekali di jam setelah memasang. Setelah itu timer tetap terkirim meski app di jam tertutup."
+      },
+      {
+        "q": "Mac saya tertulis tidak terhubung.",
+        "a": "\"Terhubung\" berarti app terbuka di Mac itu dalam 10 menit terakhir, jadi Mac yang baru bangun muncul beberapa menit kemudian. Kedua perangkat perlu akun iCloud yang sama dengan iCloud Drive menyala. App Mac memerlukan macOS 26 atau lebih baru."
+      },
+      {
+        "q": "Sudah bayar, tapi tidak ada yang terbuka.",
+        "a": "Ketuk \"Pulihkan Pembelian\" di layar paket, dengan Akun Apple yang sama seperti saat membayar. Pembelian selamanya tetap kembali meski app dihapus atau ganti perangkat."
+      },
+      {
+        "q": "Templat yang saya simpan terkunci.",
+        "a": "Templatnya masih ada. Tanpa Ingat atau Pro, templat tetap terlihat tapi terkunci, dan langsung terbuka lagi begitu Anda membeli salah satunya."
+      },
+      {
+        "q": "Bagaimana cara meminta pengembalian dana?",
+        "a": "Pengembalian dana diurus oleh Apple. Ajukan di reportaproblem.apple.com dengan Akun Apple yang dipakai membayar. Jika ada yang rusak, kabari saya juga supaya orang berikutnya tidak mengalaminya."
+      },
+      {
+        "q": "Bisakah dicoba tanpa memasang app?",
+        "a": "Buka m1zz.github.io/rereminder di iPhone dan timer langsung berjalan sebagai App Clip. Cakram dan peringatan sudah ada. Templat, Mode Sesi, dan app jam ada di app lengkap."
+      },
+      {
+        "q": "Bisa dipakai di perangkat apa saja?",
+        "a": "iPhone dengan iOS 26 atau lebih baru, Apple Watch dengan watchOS 11.6 atau lebih baru, dan Mac dengan macOS 26 atau lebih baru. iPad belum didukung. App tersedia dalam 24 bahasa."
+      },
+      {
+        "q": "Di mana data saya disimpan?",
+        "a": "Timer, templat, nama bagian, naskah, dan riwayat tersimpan di perangkat Anda dan ikut terhapus bersama app. App hanya mengirim statistik penggunaan anonim untuk perbaikan. Rinciannya ada di kebijakan privasi."
+      }
+    ]
+  },
+  "closing": {
+    "headline": "Di presentasi berikutnya,\ntahu sebelum waktu habis",
+    "cta": "Unduh gratis di App Store"
+  },
+  "ui": {
+    "skip": "Langsung ke konten",
+    "languages": "Bahasa",
+    "privacy": "Kebijakan Privasi",
+    "contact": "Ada pertanyaan atau masukan? Kirim ke {email}. Biasanya saya membalas dalam 2 sampai 3 hari."
+  }
+}

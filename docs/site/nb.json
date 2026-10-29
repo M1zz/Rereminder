@@ -1,0 +1,181 @@
+{
+  "title": "Rereminder: tidtakeren som varsler deg før tiden er ute",
+  "description": "En tidtaker som varsler deg 5 minutter før foredraget slutter, 3 før timen er over, eller når du vil. Forvarsler er gratis og uten grense.",
+  "hero": {
+    "headline": "Ikke når det er over,\nmen før",
+    "lead": "5 minutter før foredraget er slutt, 3 før møtet runder av. Rereminder sier fra ved hvert punkt du velger, så du slipper å se på klokka hele tiden.",
+    "cta": "Last ned gratis i App Store",
+    "note": "Forvarsler er gratis og uten grense. For iPhone, Apple Watch og Mac."
+  },
+  "demo": {
+    "title": "Prøv det her",
+    "lead": "Velg lengde og forvarsler, og trykk på den røde knappen. Et minutt går på et sekund, og hvert forvarsel lyder når det er dets tur.",
+    "app": "Rereminder",
+    "length": "Lengde",
+    "alerts": "Hvor lenge før slutt den skal varsle",
+    "start": "Start",
+    "stop": "Stopp",
+    "min": "{n} min",
+    "sec": "{n} sek",
+    "msgMin": "{n} min igjen",
+    "msgSec": "{n} sek igjen",
+    "done": "Tidtakeren er ferdig",
+    "nextMin": "Neste: varsel ved {a} ({m} min {s} sek igjen)",
+    "nextSec": "Neste: varsel ved {a} ({s} sek igjen)",
+    "endMin": "Neste: sluttvarsel ({m} min {s} sek igjen)",
+    "endSec": "Neste: sluttvarsel ({s} sek igjen)",
+    "note": "Demoen går 60 ganger raskere og lagrer ingenting. I appen drar du bjeller inn på skiven, så mange du vil."
+  },
+  "problem": {
+    "title": "Har tidtakeren ringt når det allerede var for sent?",
+    "text": "En vanlig tidtaker ringer først på null. Foredraget er slutt før du kommer til konklusjonen, timen slutter uten oppsummering, og møtet glir over i det neste uten noen beslutning. Du trenger ikke et signal om at tiden er ute, men et varsel mens det fortsatt er tid til å runde av."
+  },
+  "features": [
+    {
+      "title": "Forvarsler før slutt, så mange du vil",
+      "text": "Dra bjellene på skiven til 10, 5 eller 1 minutt før slutt, eller hvor som helst. Det er ingen grense, og hvert forvarsel kan ha sin egen melding, for eksempel «Rund av lysbildene».\nMed skjermen av ser du gjenværende tid på låseskjermen og i Dynamic Island, og Apple Watch prikker deg på håndleddet.",
+      "shot": "02-running"
+    },
+    {
+      "title": "Del opp foredraget i deler",
+      "text": "Innledning 5 minutter, hoveddel 20, spørsmål 5. Gi hver del et navn og et manus. Hver gang delen skifter, får du et varsel med navnet, og tidsplanen holder nesten av seg selv. (Pro)",
+      "shot": "03-session"
+    },
+    {
+      "title": "Det du skal si nå, står på skjermen",
+      "text": "Mens den går, ser du manuset til delen du er i og hva som kommer etterpå med stor skrift. Går du forbi null, teller den videre, så du vet nøyaktig hvor mye du dro over. (Pro)",
+      "shot": "04-sessionRunning"
+    }
+  ],
+  "steps": {
+    "title": "I gang på tre trinn",
+    "items": [
+      {
+        "title": "Still inn tiden",
+        "text": "Drei på skiven, eller trykk på tiden og skriv den inn. Én runde er 60 minutter, to runder 120."
+      },
+      {
+        "title": "Sett forvarsler",
+        "text": "Trykk på en etikett som 1:00 eller 5:00 øverst, eller dra en bjelle inn på skiven."
+      },
+      {
+        "title": "Start og glem det",
+        "text": "Lås iPhonen. iPhone og Apple Watch sier fra ved hvert punkt du har satt."
+      }
+    ]
+  },
+  "reference": {
+    "title": "De mest brukte oppsettene",
+    "rows": [
+      [
+        "Foredrag på 20 minutter",
+        "5 min før «Gå over til konklusjonen», 1 min før «Takk for meg»"
+      ],
+      [
+        "Skoletime på 45 minutter",
+        "10 min før «Forklar lekser», 3 min før «Oppsummering»"
+      ],
+      [
+        "Møte på 30 minutter",
+        "5 min før «Bekreft beslutningene»"
+      ],
+      [
+        "Pilates- eller yogatime",
+        "Øktmodus med én del per serie (Pro)"
+      ],
+      [
+        "Lesing i 25 minutter",
+        "5 min før, så pause"
+      ],
+      [
+        "3 minutters pause mellom sett",
+        "30 sek før «Gjør deg klar til neste sett»"
+      ],
+      [
+        "Mentorsamtale på en time",
+        "15 og 5 min før"
+      ]
+    ],
+    "note": "Lagre det du bruker ofte som mal, og start det med ett trykk (fra Husk og oppover). Du kan også starte eller stoppe en tidtaker med Snarveier og Siri."
+  },
+  "pricing": {
+    "title": "Forvarsler er gratis. Betal bare hvis den skal huske noe.",
+    "free": {
+      "name": "Gratis",
+      "items": [
+        "Ubegrenset antall forvarsler",
+        "Din egen melding på hvert forvarsel",
+        "Live Activity på låseskjermen og i Dynamic Island",
+        "Fortsett å varsle til du svarer, og avslutt med ekte alarm",
+        "App for Apple Watch og menylinjen på Mac",
+        "Alle temafarger"
+      ]
+    },
+    "pro": {
+      "name": "Husk · Pro",
+      "items": [
+        "Husk: lagre oppsett som maler og start dem med ett trykk",
+        "Husk: åpne appen igjen, og alt er som du forlot det",
+        "Pro: alt i Husk pluss øktmodus med navn på delene og manus",
+        "Pro: overtid, historikk og statistikk"
+      ],
+      "note": "For hver plan velger du årsabonnement eller et engangskjøp for alltid. Du kan prøve øktmodus, overtid og historikk noen ganger før du betaler."
+    },
+    "note": "Ingen reklame. Ett Evighetspass åpner dessuten alle appene Leeo lager."
+  },
+  "faq": {
+    "title": "Vanlige spørsmål",
+    "items": [
+      {
+        "q": "Et forvarsel ringte ikke.",
+        "a": "Det er nesten alltid tillatelser eller fokus. Sjekk varslingstillatelsen i appen under Innstillinger › Varslingsmåte. Bruker du fokus, legg til Rereminder som tillatt app i iOS-innstillinger › Fokus. I lydløs modus kommer det bare vibrasjon. Står Rereminder under Innstillinger › Varslinger › Planlagt sammendrag, blir varslene holdt tilbake, så ta den ut derfra."
+      },
+      {
+        "q": "Merker jeg slutten i lydløs modus?",
+        "a": "Ja. Slå på «Avslutt med ekte alarm», så ringer den høyt også i lydløs modus eller med fokus. Med «Fortsett å varsle til jeg svarer» gjentar den seg til du trykker Stopp eller Slumre i varselet."
+      },
+      {
+        "q": "Apple Watch synkroniserer ikke.",
+        "a": "Åpne Innstillinger › Mine enheter i appen. Der ser du hvilket trinn som mangler. Klokka må være sammenkoblet med denne iPhonen, Rereminder må være installert på klokka, og du må åpne den én gang på klokka etter installering. Etter det kommer tidtakeren over selv om appen på klokka er lukket."
+      },
+      {
+        "q": "Macen står som ikke tilkoblet.",
+        "a": "«Tilkoblet» betyr at appen var åpen på den Macen de siste 10 minuttene, så en Mac som nettopp har våknet, dukker opp etter noen minutter. Begge enhetene må bruke samme iCloud-konto med iCloud Drive slått på. Mac-appen krever macOS 26 eller nyere."
+      },
+      {
+        "q": "Jeg har betalt, men ingenting er låst opp.",
+        "a": "Trykk på «Gjenopprett kjøp» på skjermen med planer, logget inn med den samme Apple-kontoen du betalte med. Kjøp for alltid kommer tilbake selv om du sletter appen eller bytter enhet."
+      },
+      {
+        "q": "De lagrede malene mine er låst.",
+        "a": "De er der fortsatt. Uten Husk eller Pro blir de stående låst, og de åpnes igjen med en gang du kjøper en av dem."
+      },
+      {
+        "q": "Hvordan får jeg pengene tilbake?",
+        "a": "Apple tar seg av refusjoner. Be om det på reportaproblem.apple.com med Apple-kontoen du betalte med. Hvis noe var ødelagt, si fra til meg også, så slipper neste person det samme."
+      },
+      {
+        "q": "Kan jeg prøve uten å installere?",
+        "a": "Åpne m1zz.github.io/rereminder på iPhonen, så går tidtakeren med en gang som App Clip. Skiven og forvarslene er med. Maler, øktmodus og klokkeappen finnes i den fulle appen."
+      },
+      {
+        "q": "Hvilke enheter fungerer den på?",
+        "a": "iPhone med iOS 26 eller nyere, Apple Watch med watchOS 11.6 eller nyere og Mac med macOS 26 eller nyere. iPad støttes ikke ennå. Appen finnes på 24 språk."
+      },
+      {
+        "q": "Hvor blir dataene mine av?",
+        "a": "Tidtakere, maler, navn på deler, manus og historikk blir på enheten din og forsvinner når du sletter appen. Appen sender bare anonym bruksstatistikk som hjelper å forbedre den. Personvernerklæringen sier nøyaktig hva."
+      }
+    ]
+  },
+  "closing": {
+    "headline": "På neste foredrag\nvet du det på forhånd",
+    "cta": "Last ned gratis i App Store"
+  },
+  "ui": {
+    "skip": "Gå til innholdet",
+    "languages": "Språk",
+    "privacy": "Personvern",
+    "contact": "Spørsmål eller tilbakemeldinger? Skriv til {email}. Jeg svarer vanligvis innen 2 til 3 dager."
+  }
+}

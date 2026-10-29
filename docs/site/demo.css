@@ -1,0 +1,55 @@
+/* 두번알림 웹 체험. 다이얼 색은 앱과 같다: 남은 시간 파랑, 예비 알림 종 주황, 시작 빨강. */
+.demo-card { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s5); align-items: center; }
+.rr-stage { position: relative; background: #0b0d0f; border-radius: var(--r-inner); padding: var(--s6) var(--s5);
+            display: grid; place-items: center; overflow: hidden; }
+.rr-stage svg { width: min(320px, 100%); height: auto; display: block; }
+.rr-track { fill: none; stroke: #48484a; stroke-width: 18; opacity: .6; }
+.rr-arc { fill: none; stroke: #0A84FF; stroke-width: 18; stroke-linecap: butt; }
+.rr-knob { fill: #fff; }
+.rr-bell circle { fill: #FF9F0A; stroke: #0b0d0f; stroke-width: 2; }
+.rr-bell path { fill: #fff; }
+.rr-bell.done circle { fill: #8e8e93; }
+
+.rr-center { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: var(--s3); }
+.rr-time { color: #fff; font-size: clamp(2.5rem, 7vw, 3.25rem); font-weight: 700; letter-spacing: -0.02em;
+           font-variant-numeric: tabular-nums; line-height: 1; }
+.rr-go { width: 56px; height: 56px; border-radius: 50%; border: 0; cursor: pointer; background: #FF375F;
+         display: grid; place-items: center; transition: transform .15s var(--ease); }
+.rr-go::before { content: ""; width: 0; height: 0; margin-left: 4px;
+                 border-left: 16px solid #fff; border-top: 10px solid transparent; border-bottom: 10px solid transparent; }
+.rr-go.stop { background: #8e8e93; }
+.rr-go.stop::before { margin: 0; width: 16px; height: 16px; border: 0; background: #fff; border-radius: 3px; }
+.rr-go:active { transform: scale(.94); }
+
+/* 알림이 오면 위에서 내려오는 배너: 잠금 화면 알림처럼 */
+.rr-toast { position: absolute; left: var(--s3); right: var(--s3); top: var(--s3);
+            display: flex; gap: var(--s3); align-items: center; padding: var(--s3);
+            background: rgb(255 255 255 / .92); color: #111418; border-radius: var(--r-inner);
+            box-shadow: 0 10px 30px rgb(0 0 0 / .35); transform: translateY(-140%);
+            transition: transform .45s var(--ease); }
+.rr-toast.show { transform: none; }
+.rr-toast img { border-radius: 8px; flex: none; }
+.rr-toast b { display: block; font-size: .8125rem; }
+.rr-toast span { display: block; font-weight: 600; }
+
+.rr-label { font-weight: 600; margin-bottom: var(--s2); }
+.rr-chips { display: flex; flex-wrap: wrap; gap: var(--s2); margin-bottom: var(--s5); }
+.chip { font: inherit; font-weight: 600; color: var(--accent); background: var(--bg); border: 0;
+        border-radius: 999px; padding: var(--s2) var(--s4); min-height: 44px; min-width: 56px; cursor: pointer;
+        transition: transform .15s var(--ease), background .15s var(--ease); }
+.chip:hover:not(:disabled) { background: color-mix(in srgb, var(--accent) 14%, var(--bg)); }
+.chip:active:not(:disabled) { transform: scale(.95); }
+.chip[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
+[data-group="alerts"] .chip[aria-pressed="true"] { background: #C25E00; color: #fff; }
+.chip:disabled { cursor: default; opacity: .4; }
+.rr-next { font-weight: 600; color: #C25E00; font-variant-numeric: tabular-nums; min-height: 1.6em; }
+@media (prefers-color-scheme: dark) {
+  [data-group="alerts"] .chip[aria-pressed="true"] { background: #FF9F0A; color: #0a0d0f; }
+  .rr-next { color: #FF9F0A; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rr-toast { transition: none; }
+  .rr-go, .chip { transition: none; }
+}
+@media (max-width: 760px) { .demo-card { grid-template-columns: 1fr; } }

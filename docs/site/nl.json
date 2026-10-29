@@ -1,0 +1,181 @@
+{
+  "title": "Rereminder: de presentatietimer die je waarschuwt voordat de tijd om is",
+  "description": "Waarschuwt je 5 minuten voor het einde van je praatje, 3 voor het einde van de les of wanneer jij wilt. Voorwaarschuwingen: gratis en onbeperkt.",
+  "hero": {
+    "headline": "Niet als het voorbij is,\nmaar ervoor",
+    "lead": "5 minuten voor het einde van je presentatie, 3 voordat de vergadering afloopt. Rereminder geeft een seintje op elk moment dat jij kiest, zodat je niet steeds op de klok hoeft te kijken.",
+    "cta": "Gratis in de App Store",
+    "note": "Voorwaarschuwingen zijn gratis en onbeperkt. Voor iPhone, Apple Watch en Mac."
+  },
+  "demo": {
+    "title": "Probeer het hier",
+    "lead": "Kies een duur en je waarschuwingen en druk op de rode knop. Een minuut duurt hier een seconde, en je hoort elke waarschuwing op het juiste moment.",
+    "app": "Rereminder",
+    "length": "Duur",
+    "alerts": "Hoe lang voor het einde waarschuwen",
+    "start": "Start",
+    "stop": "Stop",
+    "min": "{n} min",
+    "sec": "{n} sec",
+    "msgMin": "{n} min over",
+    "msgSec": "Nog {n} sec",
+    "done": "Timer afgelopen",
+    "nextMin": "Volgende: melding bij {a} (nog {m} min {s} sec)",
+    "nextSec": "Volgende: melding bij {a} (nog {s} sec)",
+    "endMin": "Volgende: eindsignaal (nog {m} min {s} sec)",
+    "endSec": "Volgende: eindsignaal (nog {s} sec)",
+    "note": "De demo loopt 60 keer sneller en bewaart niets. In de app sleep je belletjes op de wijzerplaat, zoveel als je wilt."
+  },
+  "problem": {
+    "title": "Ging je timer ooit af toen het al te laat was?",
+    "text": "Een gewone timer gaat pas af bij nul. Je presentatie is voorbij voordat je bij de conclusie bent, de les stopt zonder samenvatting en de vergadering loopt uit in de volgende zonder besluit. Je hebt geen signaal nodig dat de tijd om is, maar een seintje als er nog tijd is om af te ronden."
+  },
+  "features": [
+    {
+      "title": "Seintjes voor het einde, zoveel je wilt",
+      "text": "Sleep de belletjes op de wijzerplaat naar 10, 5 of 1 minuut voor het einde, of naar elke andere plek. Er is geen limiet, en elke waarschuwing kan een eigen tekst hebben, zoals ‘Rond de dia’s af’.\nMet het scherm uit zie je de resterende tijd op het toegangsscherm en in het Dynamic Island, en je Apple Watch tikt op je pols.",
+      "shot": "02-running"
+    },
+    {
+      "title": "Deel je presentatie op in blokken",
+      "text": "Intro 5 minuten, kern 20, vragen 5. Geef elk blok een naam en een script. Bij elke wissel krijg je een seintje met de naam van het blok, en je tijdsindeling klopt vanzelf. (Pro)",
+      "shot": "03-session"
+    },
+    {
+      "title": "Wat je nu wilt zeggen, staat op het scherm",
+      "text": "Tijdens het lopen zie je groot het script van het huidige blok en wat er daarna komt. Ga je over nul, dan telt hij door, zodat je precies weet hoeveel je uitloopt. (Pro)",
+      "shot": "04-sessionRunning"
+    }
+  ],
+  "steps": {
+    "title": "In drie stappen klaar",
+    "items": [
+      {
+        "title": "Stel de tijd in",
+        "text": "Draai aan de wijzerplaat of tik op de tijd en typ hem in. Eén rondje is 60 minuten, twee rondjes 120."
+      },
+      {
+        "title": "Zet je waarschuwingen",
+        "text": "Tik bovenaan op een label zoals 1:00 of 5:00, of sleep een belletje op de wijzerplaat."
+      },
+      {
+        "title": "Start en vergeet het",
+        "text": "Vergrendel je iPhone. Je iPhone en Apple Watch melden zich op elk moment dat je hebt ingesteld."
+      }
+    ]
+  },
+  "reference": {
+    "title": "Instellingen die veel gebruikt worden",
+    "rows": [
+      [
+        "Presentatie van 20 minuten",
+        "5 min van tevoren ‘Naar de conclusie’, 1 min van tevoren ‘Bedanken’"
+      ],
+      [
+        "Les van 50 minuten",
+        "10 min van tevoren ‘Huiswerk uitleggen’, 3 min van tevoren ‘Samenvatten’"
+      ],
+      [
+        "Vergadering van 30 minuten",
+        "5 min van tevoren ‘Besluiten vastleggen’"
+      ],
+      [
+        "Pilates- of yogales",
+        "Sessiemodus, één blok per reeks (Pro)"
+      ],
+      [
+        "Studieblok van 25 minuten",
+        "5 min van tevoren, daarna pauze"
+      ],
+      [
+        "3 minuten rust tussen sets",
+        "30 s van tevoren ‘Klaar voor de volgende set’"
+      ],
+      [
+        "Mentorgesprek van een uur",
+        "15 en 5 min van tevoren"
+      ]
+    ],
+    "note": "Bewaar wat je vaak gebruikt als sjabloon en start het met één tik (vanaf Onthouden). Je kunt een timer ook starten of stoppen met Opdrachten en Siri."
+  },
+  "pricing": {
+    "title": "Voorwaarschuwingen zijn gratis. Betaal alleen als hij iets moet onthouden.",
+    "free": {
+      "name": "Gratis",
+      "items": [
+        "Onbeperkt voorwaarschuwingen",
+        "Een eigen tekst bij elke waarschuwing",
+        "Live Activity op het toegangsscherm en in het Dynamic Island",
+        "Blijven melden tot je reageert, en eindigen met een echt alarm",
+        "Apple Watch-app en menubalk op de Mac",
+        "Alle themakleuren"
+      ]
+    },
+    "pro": {
+      "name": "Onthouden · Pro",
+      "items": [
+        "Onthouden: instellingen als sjabloon bewaren en met één tik starten",
+        "Onthouden: na heropenen staat alles zoals je het liet",
+        "Pro: alles van Onthouden plus sessiemodus met bloknamen en scripts",
+        "Pro: uitlooptijd, geschiedenis en statistieken"
+      ],
+      "note": "Voor elk plan kies je een jaarabonnement of een eenmalige aankoop voor altijd. Sessiemodus, uitlooptijd en geschiedenis kun je een paar keer proberen voordat je betaalt."
+    },
+    "note": "Geen advertenties. Met één Altijd-pas open je bovendien alle apps van Leeo."
+  },
+  "faq": {
+    "title": "Veelgestelde vragen",
+    "items": [
+      {
+        "q": "Een waarschuwing ging niet af.",
+        "a": "Meestal liggen toestemmingen of een focus eraan. Controleer de toestemming voor meldingen in de app onder Instellingen › Meldingsmethode. Gebruik je een focus, voeg Rereminder dan toe als toegestane app in Instellingen › Focus van iOS. In de stille modus krijg je alleen een trilling. Staat Rereminder in Instellingen › Berichtgeving › Geplande samenvatting, dan worden de meldingen opgespaard; haal hem daar weg."
+      },
+      {
+        "q": "Merk ik het einde ook in de stille modus?",
+        "a": "Ja. Zet ‘Eindig met een echt alarm’ aan en hij gaat luid af, ook in de stille modus of met een focus. Met ‘Blijf melden tot ik reageer’ houdt hij aan tot je in de melding op Stop of Sluimer tikt."
+      },
+      {
+        "q": "Mijn Apple Watch synchroniseert niet.",
+        "a": "Open Instellingen › Mijn apparaten in de app; daar zie je welke stap ontbreekt. De watch moet gekoppeld zijn aan deze iPhone, Rereminder moet op de watch staan en je moet de app na installatie één keer op de watch openen. Daarna komt de timer door, ook als de watch-app dicht is."
+      },
+      {
+        "q": "Mijn Mac staat op ‘niet verbonden’.",
+        "a": "‘Verbonden’ betekent dat de app de afgelopen 10 minuten op die Mac open was, dus een Mac die net wakker is, verschijnt na een paar minuten. Beide apparaten moeten hetzelfde iCloud-account gebruiken met iCloud Drive aan. De Mac-app vraagt macOS 26 of nieuwer."
+      },
+      {
+        "q": "Ik heb betaald, maar er is niets ontgrendeld.",
+        "a": "Tik op ‘Herstel aankopen’ in het scherm met abonnementen, ingelogd met hetzelfde Apple Account waarmee je betaalde. Aankopen voor altijd komen terug, ook na het verwijderen van de app of op een nieuw apparaat."
+      },
+      {
+        "q": "Mijn bewaarde sjablonen zijn vergrendeld.",
+        "a": "Ze zijn er nog. Zonder Onthouden of Pro blijven ze vergrendeld zichtbaar, en ze gaan meteen weer open zodra je een van beide koopt."
+      },
+      {
+        "q": "Hoe krijg ik mijn geld terug?",
+        "a": "Terugbetalingen lopen via Apple. Vraag het aan op reportaproblem.apple.com met het Apple Account waarmee je betaalde. Was er iets kapot, laat het mij dan ook weten, zodat de volgende er geen last van heeft."
+      },
+      {
+        "q": "Kan ik het proberen zonder te installeren?",
+        "a": "Open m1zz.github.io/rereminder op je iPhone en de timer draait meteen als App Clip. De wijzerplaat en waarschuwingen zitten erin. Sjablonen, sessiemodus en de watch-app zitten in de volledige app."
+      },
+      {
+        "q": "Op welke apparaten werkt het?",
+        "a": "iPhone met iOS 26 of nieuwer, Apple Watch met watchOS 11.6 of nieuwer en Mac met macOS 26 of nieuwer. iPad wordt nog niet ondersteund. De app is er in 24 talen."
+      },
+      {
+        "q": "Waar blijven mijn gegevens?",
+        "a": "Timers, sjablonen, bloknamen, scripts en geschiedenis blijven op je apparaat en verdwijnen als je de app verwijdert. De app stuurt alleen anonieme gebruiksstatistieken die helpen hem te verbeteren. Het privacybeleid vermeldt precies welke."
+      }
+    ]
+  },
+  "closing": {
+    "headline": "Bij je volgende presentatie\nweet je het van tevoren",
+    "cta": "Gratis in de App Store"
+  },
+  "ui": {
+    "skip": "Naar de inhoud",
+    "languages": "Taal",
+    "privacy": "Privacybeleid",
+    "contact": "Vragen of feedback? Mail naar {email}. Meestal antwoord ik binnen 2 à 3 dagen."
+  }
+}

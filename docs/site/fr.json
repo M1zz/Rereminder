@@ -1,0 +1,181 @@
+{
+  "title": "Rereminder : le minuteur d’exposé qui vous prévient avant la fin",
+  "description": "Il vous prévient 5 minutes avant la fin de l’exposé, 3 avant la fin du cours, ou quand vous voulez. Pré-alertes gratuites et illimitées.",
+  "hero": {
+    "headline": "Pas une fois fini,\nmais avant la fin",
+    "lead": "5 minutes avant la fin de l’exposé, 3 minutes avant la fin de la réunion. Rereminder vous fait signe à chaque moment que vous avez choisi, sans que vous ayez à surveiller l’horloge.",
+    "cta": "Télécharger gratuitement sur l’App Store",
+    "note": "Pré-alertes gratuites et sans limite. Sur iPhone, Apple Watch et Mac."
+  },
+  "demo": {
+    "title": "Essayez ici",
+    "lead": "Choisissez une durée et vos alertes, puis appuyez sur le bouton rouge. Une minute passe en une seconde, et chaque alerte sonne au bon moment.",
+    "app": "Rereminder",
+    "length": "Durée du minuteur",
+    "alerts": "Me prévenir avant la fin",
+    "start": "Démarrer",
+    "stop": "Arrêter",
+    "min": "{n} min",
+    "sec": "{n} s",
+    "msgMin": "{n} min restantes",
+    "msgSec": "{n} s restantes",
+    "done": "Minuteur terminé",
+    "nextMin": "Suivante : alerte {a} (encore {m} min {s} s)",
+    "nextSec": "Suivante : alerte {a} (encore {s} s)",
+    "endMin": "Suivante : alerte de fin (encore {m} min {s} s)",
+    "endSec": "Suivante : alerte de fin (encore {s} s)",
+    "note": "La démo tourne 60 fois plus vite et n’enregistre rien. Dans l’app, vous faites glisser des cloches sur le cadran, autant que vous voulez."
+  },
+  "problem": {
+    "title": "Votre minuteur a déjà sonné trop tard ?",
+    "text": "Un minuteur classique ne sonne qu’à zéro. L’exposé se termine avant la conclusion, le cours s’arrête sans récapitulatif, la réunion déborde sur la suivante sans décision. Il ne vous faut pas un signal qui dit que c’est fini, mais un signal quand il reste encore le temps de conclure."
+  },
+  "features": [
+    {
+      "title": "Prévenu avant la fin, autant de fois que vous voulez",
+      "text": "Faites glisser les cloches du cadran à 10, 5 ou 1 minute de la fin, ou n’importe où ailleurs. Aucune limite, et chaque alerte peut porter son propre message, comme « Conclure les diapos ».\nÉcran éteint, le temps restant reste visible sur l’écran verrouillé et dans la Dynamic Island, et l’Apple Watch vous tapote le poignet.",
+      "shot": "02-running"
+    },
+    {
+      "title": "Découpez votre exposé en parties",
+      "text": "Introduction 5 minutes, cœur du sujet 20, questions 5. Donnez à chaque partie un nom et un texte. À chaque changement, une alerte annonce son nom, et votre minutage tient sans y penser. (Pro)",
+      "shot": "03-session"
+    },
+    {
+      "title": "Ce que vous devez dire, à l’écran",
+      "text": "Pendant la séance, le texte de la partie en cours et la suivante s’affichent en grand. Une fois passé zéro, le décompte continue pour que vous sachiez de combien vous avez débordé. (Pro)",
+      "shot": "04-sessionRunning"
+    }
+  ],
+  "steps": {
+    "title": "Trois étapes pour commencer",
+    "items": [
+      {
+        "title": "Réglez la durée",
+        "text": "Tournez le cadran, ou touchez la durée pour la saisir. Un tour fait 60 minutes, deux tours 120."
+      },
+      {
+        "title": "Placez vos alertes",
+        "text": "Touchez une pastille comme 1:00 ou 5:00 en haut, ou faites glisser une cloche sur le cadran."
+      },
+      {
+        "title": "Lancez et oubliez",
+        "text": "Verrouillez votre iPhone. L’iPhone et l’Apple Watch vous préviennent à chaque moment choisi."
+      }
+    ]
+  },
+  "reference": {
+    "title": "Les réglages les plus utilisés",
+    "rows": [
+      [
+        "Exposé de 20 minutes",
+        "5 min avant « Passer à la conclusion », 1 min avant « Remercier »"
+      ],
+      [
+        "Cours de 50 minutes",
+        "10 min avant « Expliquer les devoirs », 3 min avant « Récapituler »"
+      ],
+      [
+        "Réunion de 30 minutes",
+        "5 min avant « Valider les décisions »"
+      ],
+      [
+        "Séance de Pilates ou de yoga",
+        "Mode Séance, une partie par enchaînement (Pro)"
+      ],
+      [
+        "Révisions de 25 minutes",
+        "5 min avant, puis une pause"
+      ],
+      [
+        "Récupération de 3 minutes entre deux séries",
+        "30 s avant « Préparer la série suivante »"
+      ],
+      [
+        "Mentorat d’une heure",
+        "15 min et 5 min avant"
+      ]
+    ],
+    "note": "Enregistrez les réglages que vous réutilisez comme modèles et relancez-les d’un geste (à partir de Mémoire). Vous pouvez aussi lancer ou arrêter un minuteur avec Raccourcis et Siri."
+  },
+  "pricing": {
+    "title": "Les pré-alertes sont gratuites. Payez seulement pour qu’il se souvienne.",
+    "free": {
+      "name": "Gratuit",
+      "items": [
+        "Pré-alertes illimitées",
+        "Votre propre message pour chaque alerte",
+        "Activité en direct sur l’écran verrouillé et dans la Dynamic Island",
+        "Alerter jusqu’à ma réponse, et finir par une vraie alarme",
+        "App Apple Watch et barre des menus du Mac",
+        "Toutes les couleurs de thème"
+      ]
+    },
+    "pro": {
+      "name": "Mémoire · Pro",
+      "items": [
+        "Mémoire : enregistrer des réglages comme modèles et les lancer d’un geste",
+        "Mémoire : retrouver votre dernier réglage en rouvrant l’app",
+        "Pro : tout Mémoire, plus le mode Séance avec noms de parties et textes",
+        "Pro : dépassement, historique et statistiques"
+      ],
+      "note": "Pour chaque formule, choisissez l’abonnement annuel ou un achat unique à vie. Vous pouvez essayer le mode Séance, le dépassement et l’historique quelques fois avant de payer."
+    },
+    "note": "Aucune publicité. Un Pass à vie ouvre aussi toutes les apps de Leeo."
+  },
+  "faq": {
+    "title": "Questions fréquentes",
+    "items": [
+      {
+        "q": "Une alerte n’a pas sonné.",
+        "a": "C’est presque toujours une question d’autorisations ou de mode de concentration. Vérifiez l’accès aux notifications dans l’app, sous Réglages › Mode de notification. Si vous utilisez un mode de concentration, ajoutez Rereminder aux apps autorisées dans Réglages › Concentration. En mode silencieux, vous n’avez que la vibration. Si Rereminder figure dans Réglages › Notifications › Résumé programmé, ses alertes sont retenues : retirez-la."
+      },
+      {
+        "q": "Vais-je remarquer la fin en mode silencieux ?",
+        "a": "Oui. Activez « Finir par une vraie alarme » et elle sonne fort, même en mode silencieux ou en concentration. Avec « Alerter jusqu’à ma réponse », l’alerte se répète jusqu’à ce que vous touchiez Arrêter ou Répéter dans la notification."
+      },
+      {
+        "q": "Mon Apple Watch ne se synchronise pas.",
+        "a": "Ouvrez Réglages › Mes appareils dans l’app : vous verrez l’étape qui manque. La montre doit être jumelée à cet iPhone, Rereminder doit y être installé, et vous devez l’ouvrir une fois sur la montre après l’installation. Ensuite, le minuteur passe sur la montre même app fermée."
+      },
+      {
+        "q": "Mon Mac apparaît comme non connecté.",
+        "a": "« Connecté » signifie que l’app était ouverte sur ce Mac au cours des 10 dernières minutes : un Mac qui vient de se réveiller apparaît quelques minutes plus tard. Les deux appareils doivent utiliser le même compte iCloud avec iCloud Drive activé. L’app Mac demande macOS 26 ou version ultérieure."
+      },
+      {
+        "q": "J’ai payé, mais rien ne s’est débloqué.",
+        "a": "Touchez « Restaurer les achats » sur l’écran des formules, connecté au même compte Apple que lors du paiement. Les achats à vie reviennent même après avoir supprimé l’app ou changé d’appareil."
+      },
+      {
+        "q": "Mes modèles enregistrés sont verrouillés.",
+        "a": "Ils sont toujours là. Sans Mémoire ni Pro, ils restent visibles mais verrouillés, et se rouvrent dès que vous achetez l’une des deux formules."
+      },
+      {
+        "q": "Comment obtenir un remboursement ?",
+        "a": "Les remboursements passent par Apple. Faites la demande sur reportaproblem.apple.com avec le compte Apple utilisé pour payer. Si quelque chose ne marchait pas, dites-le-moi aussi pour que la personne suivante n’ait pas le même souci."
+      },
+      {
+        "q": "Puis-je l’essayer sans l’installer ?",
+        "a": "Ouvrez m1zz.github.io/rereminder sur votre iPhone : le minuteur se lance aussitôt en App Clip. Le cadran et les alertes sont là. Les modèles, le mode Séance et l’app Apple Watch sont dans l’app complète."
+      },
+      {
+        "q": "Sur quels appareils fonctionne-t-elle ?",
+        "a": "iPhone avec iOS 26 ou version ultérieure, Apple Watch avec watchOS 11.6 ou version ultérieure, Mac avec macOS 26 ou version ultérieure. L’iPad n’est pas encore pris en charge. L’app existe en 24 langues."
+      },
+      {
+        "q": "Où sont conservées mes données ?",
+        "a": "Minuteurs, modèles, noms de parties, textes et historique restent sur votre appareil et disparaissent si vous supprimez l’app. L’app n’envoie que des statistiques d’utilisation anonymes qui aident à la corriger. La politique de confidentialité dit exactement lesquelles."
+      }
+    ]
+  },
+  "closing": {
+    "headline": "Au prochain exposé,\nsachez-le avant la fin",
+    "cta": "Télécharger gratuitement sur l’App Store"
+  },
+  "ui": {
+    "skip": "Aller au contenu",
+    "languages": "Langue",
+    "privacy": "Confidentialité",
+    "contact": "Une question, une remarque ? Écrivez à {email}. Je réponds en général sous 2 à 3 jours."
+  }
+}

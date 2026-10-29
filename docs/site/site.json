@@ -1,0 +1,148 @@
+{
+  "name": {
+    "en": "Rereminder",
+    "ko": "두번알림"
+  },
+  "url": "https://m1zz.github.io/Rereminder/",
+  "appStoreId": "6752551268",
+  "email": "leeo@kakao.com",
+  "copyright": "Rereminder",
+  "year": 2026,
+  "color": {
+    "light": "#D6334A",
+    "dark": "#FF7B80",
+    "darkBg": "#0a0d0f"
+  },
+  "shots": [
+    "01-dial",
+    "02-running",
+    "03-session",
+    "04-sessionRunning"
+  ],
+  "shotsFallback": "en",
+  "video": {
+    "ko": "screenshots/demo-usage.mp4"
+  },
+  "locales": [
+    {
+      "code": "en",
+      "path": "",
+      "name": "English"
+    },
+    {
+      "code": "ko",
+      "path": "ko/",
+      "name": "한국어"
+    },
+    {
+      "code": "ja",
+      "path": "ja/",
+      "name": "日本語"
+    },
+    {
+      "code": "zh-Hans",
+      "path": "zh-Hans/",
+      "name": "简体中文"
+    },
+    {
+      "code": "zh-Hant",
+      "path": "zh-Hant/",
+      "name": "繁體中文"
+    },
+    {
+      "code": "de",
+      "path": "de/",
+      "name": "Deutsch"
+    },
+    {
+      "code": "fr",
+      "path": "fr/",
+      "name": "Français"
+    },
+    {
+      "code": "es",
+      "path": "es/",
+      "name": "Español"
+    },
+    {
+      "code": "pt-BR",
+      "path": "pt-BR/",
+      "name": "Português (Brasil)"
+    },
+    {
+      "code": "pt-PT",
+      "path": "pt-PT/",
+      "name": "Português (Portugal)"
+    },
+    {
+      "code": "it",
+      "path": "it/",
+      "name": "Italiano"
+    },
+    {
+      "code": "ru",
+      "path": "ru/",
+      "name": "Русский"
+    },
+    {
+      "code": "cs",
+      "path": "cs/",
+      "name": "Čeština"
+    },
+    {
+      "code": "da",
+      "path": "da/",
+      "name": "Dansk"
+    },
+    {
+      "code": "el",
+      "path": "el/",
+      "name": "Ελληνικά"
+    },
+    {
+      "code": "fi",
+      "path": "fi/",
+      "name": "Suomi"
+    },
+    {
+      "code": "id",
+      "path": "id/",
+      "name": "Bahasa Indonesia"
+    },
+    {
+      "code": "nb",
+      "path": "nb/",
+      "name": "Norsk bokmål"
+    },
+    {
+      "code": "nl",
+      "path": "nl/",
+      "name": "Nederlands"
+    },
+    {
+      "code": "pl",
+      "path": "pl/",
+      "name": "Polski"
+    },
+    {
+      "code": "sv",
+      "path": "sv/",
+      "name": "Svenska"
+    },
+    {
+      "code": "th",
+      "path": "th/",
+      "name": "ไทย"
+    },
+    {
+      "code": "tr",
+      "path": "tr/",
+      "name": "Türkçe"
+    },
+    {
+      "code": "vi",
+      "path": "vi/",
+      "name": "Tiếng Việt"
+    }
+  ]
+}
