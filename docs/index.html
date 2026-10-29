@@ -46,6 +46,25 @@
   <link rel="stylesheet" href="demo.css">
   <style>:root{--accent:#D6334A}@media (prefers-color-scheme:dark){:root{--accent:#FF7B80}}</style>
   <script>document.documentElement.classList.add("js")</script>
+  <script>(function () {
+    var P = {"en": "", "ko": "ko/", "ja": "ja/", "zh-Hans": "zh-Hans/", "zh-Hant": "zh-Hant/", "de": "de/", "fr": "fr/", "es": "es/", "pt-BR": "pt-BR/", "pt-PT": "pt-PT/", "it": "it/", "ru": "ru/", "cs": "cs/", "da": "da/", "el": "el/", "fi": "fi/", "id": "id/", "nb": "nb/", "nl": "nl/", "pl": "pl/", "sv": "sv/", "th": "th/", "tr": "tr/", "vi": "vi/"}, here = "en", want;
+    try { want = localStorage.getItem("sitegen-lang"); } catch (e) {}
+    function match(tag) {
+      var t = (tag || "").toLowerCase(), b = t.split("-")[0], ks = Object.keys(P), i;
+      for (i = 0; i < ks.length; i++) if (ks[i].toLowerCase() === t) return ks[i];
+      if (b === "zh") return /hant|tw|hk|mo/.test(t) ? (P["zh-Hant"] !== undefined ? "zh-Hant" : null) : (P["zh-Hans"] !== undefined ? "zh-Hans" : null);
+      if (b === "no" || b === "nn") b = "nb";
+      if (P[b] !== undefined) return b;
+      for (i = 0; i < ks.length; i++) if (ks[i].toLowerCase().split("-")[0] === b) return ks[i];
+      return null;
+    }
+    if (!(want in P)) {
+      want = null;
+      var ls = navigator.languages || [navigator.language];
+      for (var i = 0; i < ls.length && !want; i++) want = match(ls[i]);
+    }
+    if (want && want !== here) location.replace(P[want] + location.hash);
+  })();</script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
@@ -188,6 +207,9 @@
       if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target) }
     }), { rootMargin: "0px 0px -10% 0px" });
     document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+    document.querySelectorAll(".langs a").forEach(a => a.addEventListener("click", () => {
+      try { localStorage.setItem("sitegen-lang", a.hreflang) } catch (e) {}
+    }));
   </script>
   <script src="demo.js"></script>
 </body>
