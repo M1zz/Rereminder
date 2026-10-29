@@ -62,6 +62,8 @@ struct TimerAlertView: View {
                 }
                 .scaleEffect(scale)
                 .accessibilityLabel(String(localized: "Dismiss timer alert"))
+                // 음성 제어: 화면에 보이는 "OK" 로도 부른다.
+                .accessibilityInputLabels([Text("OK"), Text("Stop")])
             }
         }
         .accessibilityAddTraits(.isModal)

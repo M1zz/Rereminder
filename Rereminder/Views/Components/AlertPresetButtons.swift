@@ -56,6 +56,15 @@ struct AlertPresetButtons: View {
     /// 색 없이 구분하기 — 켜진 칩은 주황, 꺼진 칩은 회색으로만 갈린다. 색을 구분하기 어려운 사람에게는
     /// 켜진 칩 앞에 체크를 붙여 **모양으로도** 갈리게 한다.
     @Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
+    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
+    @Environment(\.colorScheme) private var colorScheme
+
+    /// 칩 글자색. 밝은 화면의 주황 글자는 대비가 낮아(약 2:1), 대비 증가를 켰으면 짙은 주황으로 바꾼다.
+    private var chipTint: Color {
+        colorSchemeContrast == .increased && colorScheme == .light
+            ? Color(red: 0.72, green: 0.33, blue: 0)
+            : DSColor.marker
+    }
 
     /// 프리셋 + 현재 선택된 시점 — 켜진 알림이 앞, 나머지가 뒤(규칙은 `AlertPresets.displayOrder`).
     private var displayOffsets: [Int] {
@@ -129,8 +138,11 @@ struct AlertPresetButtons: View {
                             .buttonStyle(.bordered)
                             .controlSize(.small)
                             // 링 위의 알림 마커(주황)와 같은 색으로 선택 상태 표시
-                            .tint(selected ? DSColor.marker : .gray)
-                            .accessibilityLabel(String(localized: "Alert \(offset / 60) minutes before end"))
+                            .tint(selected ? chipTint : .gray)
+                            // 분으로 나누어 떨어지지 않는 지점(1:30 등)도 정확히 읽는다.
+                            .accessibilityLabel(String(localized: "Alert \(TimeMapper.durationText(offset)) before end"))
+                            // 음성 제어: 화면에 보이는 "1:00" 그대로 불러도 눌린다.
+                            .accessibilityInputLabels([Text(verbatim: offsetLabel(offset))])
                             .accessibilityHint(String(localized: "Double tap to toggle this alert."))
                             .accessibilityAddTraits(selected ? [.isSelected] : [])
                             // 커스텀 칩이 꺼질 때 축소+페이드로 사라지도록
@@ -169,8 +181,9 @@ struct AlertPresetButtons: View {
                 .controlSize(.small)
                 // 회색은 이 줄에서 "꺼진 프리셋"의 색이다 — 누를 수 있는 버튼까지 회색이면
                 // 비활성처럼 보인다. 실제로 하는 일(알림 추가)과 같은 색을 쓴다.
-                .tint(DSColor.marker)
+                .tint(chipTint)
                 .accessibilityLabel(String(localized: "Add alert time"))
+                .accessibilityInputLabels([Text("Add alert time"), Text("Add alert")])
                 .accessibilityHint(String(localized: "Adds an alert halfway between the last alert and the end."))
             }
             .padding(.horizontal, DSSpacing.md)

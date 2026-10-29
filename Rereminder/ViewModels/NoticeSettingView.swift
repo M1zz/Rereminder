@@ -447,6 +447,7 @@ struct NoticeSettingView: View {
                             Image(systemName: "info.circle")
                                 .foregroundStyle(.secondary)
                         }
+                        .accessibilityLabel(Text("Info"))
                     }
                 }
                 // ⚠️ 권한은 **여기서** 묻는다. 타이머를 시작하는 순간에 시스템 창을 띄우면
@@ -549,6 +550,7 @@ struct NoticeSettingView: View {
                             Image(systemName: "info.circle")
                                 .foregroundStyle(.secondary)
                         }
+                        .accessibilityLabel(Text("Info"))
                     }
                 }
                 .onChange(of: testModeEnabled) { _, newValue in

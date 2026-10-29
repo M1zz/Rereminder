@@ -930,6 +930,12 @@ struct TimerMainView: View {
                 ? String(localized: "Swipe up or down to adjust the time. Double tap to enter an exact time.")
                 : "")
             .accessibilityAddTraits(isTimeEditable ? [.isButton, .updatesFrequently] : .updatesFrequently)
+            // 음성 제어: 화면에는 숫자뿐이라 "Timer, Ready" 를 말하기 어렵다 — 짧은 이름으로도 부른다.
+            .accessibilityInputLabels([Text("Timer"), Text("Time")])
+            // 탭 제스처만으로는 VoiceOver·음성 제어의 "누르기"가 닿지 않을 수 있어 기본 동작을 따로 건다.
+            .accessibilityAction {
+                if isTimeEditable { showTimeInput = true }
+            }
             .accessibilityAdjustableAction { direction in
                 guard isTimeEditable else { return }
                 switch direction {
@@ -1032,10 +1038,14 @@ extension TimerMainView {
         HStack(spacing: 6) {
             Image(systemName: "bell.badge")
                 .dsScaledFont(16, weight: .semibold, relativeTo: .body, maxSize: 22)
+                .foregroundStyle(.orange)
+                .accessibilityHidden(true)
+            // 글자는 기본 글자색 — 옅은 주황 바탕 위의 주황 글자는 밝은 화면에서 대비가 모자랐다(약 2:1).
             Text(screenVM.nextAlertText)
                 .dsScaledFont(17, weight: .semibold, design: .rounded, relativeTo: .body, maxSize: 24)
+                .foregroundStyle(.primary)
         }
-        .foregroundStyle(.orange)
+        .accessibilityElement(children: .combine)
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 20)
         .padding(.vertical, 12)

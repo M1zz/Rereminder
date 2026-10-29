@@ -93,6 +93,8 @@ struct SectionCountdownList: View {
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Text("Section \(segment.index + 1)"))
         .accessibilityValue(Text(verbatim: Self.mmss(remaining)))
+        // 지금 구간은 진하기로만 갈린다 — VoiceOver 에는 "선택됨"으로 알려 준다.
+        .accessibilityAddTraits(phase == .active ? .isSelected : [])
     }
 
     /// 구간 길이에 비례한 막대. **오른쪽 정렬**이고 남은 만큼만 칠해진다 —

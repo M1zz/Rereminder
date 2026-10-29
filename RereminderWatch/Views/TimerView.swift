@@ -180,15 +180,16 @@ public struct TimerView: View {
     private var statusRow: some View {
         HStack(spacing: DSSpacing.xxs) {
             Image(systemName: statusSymbol)
-                .font(.system(size: 7, weight: .bold))
+                .dsScaledFont(7, weight: .bold, relativeTo: .caption2, maxSize: 11)
+                .accessibilityHidden(true)
                 .foregroundStyle(statusColor)
             Text(statusText)
-                .font(.system(size: 11, weight: .medium, design: .rounded))
+                .dsScaledFont(11, weight: .medium, design: .rounded, relativeTo: .caption2, maxSize: 16)
                 .foregroundStyle(.secondary)
             if let label = sectionLabel {
                 // 숫자 표기라 번역할 것이 없다 — 카탈로그에 끌려 들어가지 않게 verbatim.
                 Text(verbatim: label)
-                    .font(.system(size: 11, weight: .medium, design: .rounded))
+                    .dsScaledFont(11, weight: .medium, design: .rounded, relativeTo: .caption2, maxSize: 16)
                     .foregroundStyle(.secondary)
             }
         }

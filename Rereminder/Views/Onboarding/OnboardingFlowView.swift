@@ -142,7 +142,8 @@ struct OnboardingFlowView: View {
 
             VStack(spacing: DSSpacing.md) {
                 Text("One timer, several heads-ups")
-                    .font(.system(size: 30, weight: .bold, design: .rounded))
+                    .dsScaledFont(30, weight: .bold, design: .rounded, relativeTo: .largeTitle, maxSize: 44)
+                    .accessibilityAddTraits(.isHeader)
                     .multilineTextAlignment(.center)
                 Text("Most timers only ring at the end. This one taps you on the shoulder before that — so you can land on time instead of being cut off.")
                     .font(DSFont.body)
@@ -161,7 +162,8 @@ struct OnboardingFlowView: View {
         VStack(alignment: .leading, spacing: DSSpacing.md) {
             VStack(alignment: .leading, spacing: DSSpacing.xs) {
                 Text("What will you use it for?")
-                    .font(.system(size: 26, weight: .bold, design: .rounded))
+                    .dsScaledFont(26, weight: .bold, design: .rounded, relativeTo: .title, maxSize: 40)
+                    .accessibilityAddTraits(.isHeader)
                 Text("Pick one and we'll set the timer up for you. You can change everything later.")
                     .font(DSFont.callout)
                     .foregroundStyle(.secondary)
@@ -246,7 +248,8 @@ struct OnboardingFlowView: View {
 
             VStack(spacing: DSSpacing.md) {
                 Text("Keep this setup?")
-                    .font(.system(size: 26, weight: .bold, design: .rounded))
+                    .dsScaledFont(26, weight: .bold, design: .rounded, relativeTo: .title, maxSize: 40)
+                    .accessibilityAddTraits(.isHeader)
                 Text("Saved timers sit one tap away on the main screen, so you never build the same one twice.")
                     .font(DSFont.body)
                     .foregroundStyle(.secondary)
@@ -392,7 +395,8 @@ private struct OnboardingDemoStep: View {
             VStack(spacing: DSSpacing.xs) {
                 // 길이와 상관없이 체험은 늘 10초다 — 배속이 길이를 따라 바뀐다
                 Text("\(useCase.minutes) minutes in \(Int(OnboardingDemoTimer.demoSeconds)) seconds")
-                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                    .dsScaledFont(24, weight: .bold, design: .rounded, relativeTo: .title2, maxSize: 36)
+                    .accessibilityAddTraits(.isHeader)
                     .multilineTextAlignment(.center)
                 Text("Sped up \(Int(demo.speed))×. Watch the bells ring before the end.")
                     .font(DSFont.callout)

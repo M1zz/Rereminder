@@ -1704,3 +1704,25 @@ https://m1zz.github.io/Rereminder/vi/privacy.html
 ### 마케팅 URL
 
 https://m1zz.github.io/Rereminder/vi/
+
+## 손쉬운 사용
+
+<!-- DeployBar 가 App Store Connect '앱의 손쉬운 사용' 에 올린다. 실제로 확인한 것만 적는다. -->
+<!-- Mac(Catalyst)은 App Store Connect 에 macOS 플랫폼이 아직 없어 적지 않는다. 워치에는 음성 명령이 없다. -->
+
+### iPhone
+voiceOver
+voiceControl
+largerText
+darkInterface
+differentiateWithoutColor
+sufficientContrast
+reducedMotion
+
+### Apple Watch
+voiceOver
+largerText
+darkInterface
+differentiateWithoutColor
+sufficientContrast
+reducedMotion

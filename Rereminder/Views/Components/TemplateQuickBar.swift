@@ -96,6 +96,7 @@ struct TemplateQuickBar: View {
                 .buttonBorderShape(.circle)
                 .controlSize(.small)
                 .accessibilityLabel(String(localized: "Reset the timer to the default setup"))
+                .accessibilityInputLabels([Text("Reset")])
                 .transition(.opacity.combined(with: .scale(scale: 0.9)))
             }
 
@@ -123,6 +124,7 @@ struct TemplateQuickBar: View {
                 .buttonBorderShape(.capsule)
                 .controlSize(.small)
                 .accessibilityLabel(String(localized: "Save the current settings as a template"))
+                .accessibilityInputLabels([Text("Save")])
                 .transition(.opacity.combined(with: .scale(scale: 0.9)))
                 // 같은 설정을 여러 번 맞춰 본 뒤에야 뜬다 (타이머 3회 시작 + 저장 이력 없음)
                 .modifier(SaveTemplateTipAnchor())
@@ -166,7 +168,10 @@ struct TemplateQuickBar: View {
         .buttonStyle(.bordered)
         .buttonBorderShape(.capsule)
         .controlSize(.small)
-        .accessibilityLabel(String(localized: "Applies this template to the timer"))
+        // 칩마다 같은 말을 읽으면 어느 템플릿인지 알 수 없다 — 이름을 읽고, 하는 일은 힌트로.
+        .accessibilityLabel(Text(verbatim: displayName(template)))
+        .accessibilityValue(canLoad(template) ? Text(verbatim: "") : Text("Locked"))
+        .accessibilityHint(Text("Applies this template to the timer"))
     }
 
     /// 되돌릴 것이 있는가 — 기본 설정 그대로면 눌러도 아무 일이 없으니 숨긴다
