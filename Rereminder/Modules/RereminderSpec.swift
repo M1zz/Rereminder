@@ -62,7 +62,8 @@ enum RereminderSpec: LeeoAppSpec {
 
     /// 팁(응원). 이미 다 가진 사람이 더 내고 싶을 때. 아무것도 열지 않는 소모성 상품이다.
     /// ⚠️ 이것도 `productIDs` · `entitlementIDs` 에 넣지 않는다(사전 점검 `tip.sellsPro`).
-    static let tipJarConfig = LeeoTipJarConfig(productIDs: StoreManager.tipProductIDs)
+    static let tipJarConfig = LeeoTipJarConfig(productIDs: StoreManager.tipProductIDs,
+                                               thanksPage: URL(string: "https://m1zz.github.io/Rereminder/#leeo-thanks"))
 
     /// LeeoAppSpec witness — 타입을 옵셔널로 명시해야 프로토콜 기본값(nil)에 가려지지 않는다.
     static let paywall: LeeoPaywallConfig? = paywallConfig
