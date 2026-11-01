@@ -50,9 +50,13 @@ final class RereminderUITests: XCTestCase {
         cancel.tap()
         XCTAssertTrue(app.buttons["Start Timer"].waitForExistence(timeout: 5))
 
-        // 설정 — 개발자 메일·새로 생긴 것 행이 있다.
+        // 설정 ▸ 더 보기 — 개발자 메일 행이 있다.
         app.buttons["Settings"].firstMatch.tap()
         XCTAssertTrue(app.navigationBars["Settings"].waitForExistence(timeout: 5))
+        let more = app.buttons["More"].firstMatch
+        for _ in 0..<8 where !more.isHittable { app.collectionViews.firstMatch.swipeUp() }
+        more.tap()
+        XCTAssertTrue(app.navigationBars["More"].waitForExistence(timeout: 5))
         // SwiftUI `Link` 는 버튼이 아니라 링크로 잡힌다 — 종류를 가리지 않고 이름으로 찾는다.
         let list = app.collectionViews.firstMatch
         let mail = app.descendants(matching: .any).matching(NSPredicate(format: "label == %@", "Email the Developer")).firstMatch
