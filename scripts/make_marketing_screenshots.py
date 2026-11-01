@@ -10,8 +10,11 @@
 """
 import subprocess, sys, pathlib
 
-# 사용법: python3 scripts/make_marketing_screenshots.py [언어 ...]   (없으면 전부)
+# 사용법: python3 scripts/make_marketing_screenshots.py [--duo] [언어 ...]   (없으면 전부)
 # 입력: docs/screenshots/raw/<언어>/  출력: docs/screenshots/marketing/<언어>/  (1242×2688)
+# --duo: 아이폰 듀오 바깥 화면. 입력 docs/screenshots/raw-duo/<언어>/
+#        출력 docs/screenshots/marketing/<언어>/duo-<원본 이름> (1398x2034, DeployBar 가 픽셀로 듀오 칸에 넣는다)
+#        장면·순서·헤드라인은 아이폰과 같다. 배치만 넓고 낮은 화면에 맞춘다(DUO_LAYOUTS).
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 RAW = ROOT / "docs/screenshots/raw"             # scripts/capture_screenshots.sh 가 찍은 원본
@@ -19,6 +22,11 @@ OUT = ROOT / "docs/screenshots/marketing"       # 제출본 — DeployBar 가 �
 WORK = ROOT / "build/marketing-html"
 CHROME = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 W, H = 1242, 2688                               # 이 앱의 ASC 제출 규격
+DUO = "--duo" in sys.argv[1:]
+if DUO:
+    RAW = ROOT / "docs/screenshots/raw-duo"     # DEVICE=duo scripts/capture_screenshots.sh 가 찍은 원본
+    W, H = 1398, 2034                           # 듀오 바깥 화면 제출 규격(시뮬레이터 원본과 같은 크기)
+PREFIX = "duo-" if DUO else ""
 
 # (원본 파일, 레이아웃) — 순서가 곧 스토어에 보이는 순서다
 SLIDES = [
@@ -238,6 +246,41 @@ body { background:#131316; }
 """,
 }
 
+# 아이폰 듀오(바깥 화면): 아이폰보다 넓고 낮다. 같은 레이아웃 이름을 낮은 화면에 맞춰 줄인다.
+# 바깥 화면은 모서리가 덜 둥글다.
+DUO_CSS = """
+.phone { border-radius:84px; padding:22px; }
+.phone img { border-radius:62px; }
+"""
+DUO_LAYOUTS = {
+    "hero-bleed": """
+.headline { text-align:center; margin-top:150px; padding:0 80px; }
+.sub { text-align:center; margin-top:40px; padding:0 100px; }
+.wrap { display:flex; justify-content:center; margin-top:100px; }
+.phone { width:1060px; }
+""",
+    "left-text": """
+.headline { text-align:left; margin:150px 0 0 110px; }
+.sub { text-align:left; margin:40px 0 0 114px; }
+.wrap { perspective:2600px; perspective-origin:30% 30%; position:absolute; left:360px; top:720px; }
+.phone { width:960px; transform:rotateY(16deg) rotateX(2deg); }
+""",
+    "text-bottom": """
+.wrap { perspective:2800px; perspective-origin:50% 40%; display:flex; justify-content:center; margin-top:110px; }
+.phone { width:960px; transform:rotateY(-10deg) rotateX(2deg); }
+.headline { text-align:center; margin-top:90px; padding:0 80px; }
+.sub { text-align:center; margin-top:40px; padding:0 100px; }
+""",
+    "dark": """
+body { background:#131316; }
+.headline { color:#f5f5f7; text-align:center; margin-top:150px; padding:0 80px; }
+.sub { color:#77777d; text-align:center; margin-top:40px; padding:0 100px; }
+.wrap { display:flex; justify-content:center; margin-top:100px; }
+.phone { width:1020px; border-color:#48484e;
+  box-shadow: 0 0 160px rgba(80,140,255,.22), 40px 70px 110px rgba(0,0,0,.55); }
+""",
+}
+
 # text-bottom 은 폰이 먼저 오는 DOM 순서
 BODY_TEXT_FIRST = '<div class="headline">{headline}</div><div class="sub">{sub}</div><div class="wrap"><div class="phone"><img src="{img}"></div></div>'
 BODY_PHONE_FIRST = '<div class="wrap"><div class="phone"><img src="{img}"></div></div><div class="headline">{headline}</div><div class="sub">{sub}</div>'
@@ -259,14 +302,15 @@ def render(lang):
     for (fname, layout), (headline, sub) in zip(SLIDES, COPY[lang]):
         src = RAW / lang / fname
         if not src.exists():
-            sys.exit(f"원본 없음: {src} — 먼저 scripts/capture_screenshots.sh {lang}")
+            sys.exit(f"원본 없음: {src}, 먼저 {'DEVICE=duo ' if DUO else ''}scripts/capture_screenshots.sh {lang}")
         body_tpl = BODY_PHONE_FIRST if layout == "text-bottom" else BODY_TEXT_FIRST
         body = body_tpl.format(headline=headline, sub=sub, img=src.as_uri())
-        html_path = WORK / f"{lang}-{fname.replace('.png', '.html')}"
+        html_path = WORK / f"{lang}-{PREFIX}{fname.replace('.png', '.html')}"
+        layout_css = DUO_CSS + DUO_LAYOUTS[layout] if DUO else LAYOUTS[layout]
         html_path.write_text(HTML.format(
-            lang=lang, base=BASE_CSS, layout=LAYOUTS[layout], body=body,
+            lang=lang, base=BASE_CSS, layout=layout_css, body=body,
             headline_px=HEADLINE_PX.get(lang, LATIN_HEADLINE_PX)), encoding="utf-8")
-        out_png = out_dir / fname
+        out_png = out_dir / f"{PREFIX}{fname}"
         out_png.unlink(missing_ok=True)
         # ⚠️ 기계가 바쁘면 Chrome 이 그림을 다 쓴 뒤 정리 단계에서 죽어(Teardown watchdog) 0 이 아닌 값을 낸다.
         #    끝 코드가 아니라 그림이 실제로 써졌는지로 판정한다.
@@ -280,5 +324,5 @@ def render(lang):
 
 
 if __name__ == "__main__":
-    for lang in (sys.argv[1:] or COPY):
+    for lang in ([a for a in sys.argv[1:] if a != "--duo"] or COPY):
         render(lang)

@@ -5,8 +5,13 @@
 #   scripts/capture_screenshots.sh                 # 24개 언어 전부
 #   UDID=<기기> scripts/capture_screenshots.sh ru  # 기기를 정해서
 #   scripts/capture_screenshots.sh de fr           # 일부 언어만
+#   DEVICE=duo UDID=<듀오 기기> scripts/capture_screenshots.sh   # 아이폰 듀오 바깥 화면
 #
 # 결과: docs/screenshots/raw/<언어>/<번호>-<장면>.png  (1320×2868, 6.9" 원본)
+#       DEVICE=duo 면 docs/screenshots/raw-duo/<언어>/ (1398x2034, 듀오 바깥 화면 그대로가 제출 규격)
+#       듀오는 Xcode 27.1 이상으로 빌드해야 바깥 화면에 양옆 검은 띠(호환 틀) 없이 뜬다:
+#       DEVELOPER_DIR=~/Downloads/Xcode.app/Contents/Developer DEVICE=duo UDID=... scripts/capture_screenshots.sh
+#       안쪽(펼친) 화면은 손으로 펴야 해서 이 스크립트가 찍지 않는다.
 # 다음 단계: python3 scripts/make_marketing_screenshots.py  → docs/screenshots/marketing/<언어>/
 #
 # 화면 상태는 DEBUG 빌드의 `ScreenshotScene`(Rereminder/Modules/ScreenshotScene.swift)이 세운다.
@@ -17,9 +22,17 @@ ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT"
 
 BUNDLE_ID="com.xa.toki"
-DEVICE_NAME="${DEVICE_NAME:-iPhone 17 Pro Max}"
+DEVICE="${DEVICE:-iphone}"   # iphone | duo
+DEVICE_NAME="${DEVICE_NAME:-$([[ "$DEVICE" == duo ]] && echo "iPhone Duo" || echo "iPhone 17 Pro Max")}"
 DERIVED="${DERIVED:-$ROOT/build/screenshots}"
 OUT="$ROOT/docs/screenshots/raw"
+DISPLAY_ARG=""
+if [[ "$DEVICE" == duo ]]; then
+  # 듀오 시뮬레이터에는 화면이 둘이다. 1번이 바깥 화면(1398x2034)
+  DERIVED="$ROOT/build/duo-derived"
+  OUT="$ROOT/docs/screenshots/raw-duo"
+  DISPLAY_ARG="--display=1"
+fi
 
 # 번호-장면 (파일 이름 순서가 스토어에 보이는 순서다)
 SCENES=("01:dial" "02:running" "03:session" "04:sessionRunning")
@@ -80,7 +93,7 @@ for lang in "${LANGS[@]}"; do
       -hasSeenOnboarding YES >/dev/null
     # 실행 중 장면은 몇 초 흘러야 "도는 중"으로 보인다.
     sleep 6
-    xcrun simctl io "$UDID" screenshot "$OUT/$lang/$num-$scene.png" >/dev/null 2>&1
+    xcrun simctl io "$UDID" screenshot --type=png $DISPLAY_ARG "$OUT/$lang/$num-$scene.png" >/dev/null 2>&1
     echo "📸 $lang/$num-$scene.png"
   done
 done
