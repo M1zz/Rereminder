@@ -876,6 +876,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
   (`EscalationSchedule.crossDeviceDelay`) 동안 확인이 없으면 iPhone 이 합류한다.
   iPhone 이 `.secondary` 가 되는 조건은 **워치가 돌리는 타이머를 받아 왔을 때**
   (`TimerEngine.applyRemoteRunning`)이고, 직접 시작한 타이머는 `.primary` 다.
+  ⚠️ 워치 시작을 받는 `onTimerStart` 에서 `timerVM.start()` 를 부르지 말 것 — `applyWatchRunning` 이 받는다.
   ⚠️ 둘 다 primary 로 두면 동시에 울려 "번진다"는 뜻이 사라진다.
 - ⚠️ **반대 방향(iPhone → 워치)은 성립하지 않는다.** 워치 앱은 폰이 시작한 타이머를 받아
   처리하지 않고, 무엇보다 **꺼져 있는 워치 앱은 알림을 미리 깔 수 없다.** 대신 iOS 알림은
@@ -962,6 +963,9 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - ⚠️ **종료 알림에도 `categoryIdentifier` 를 붙인다**(iPhone `TimerEngine`·워치
   `NotificationService` 양쪽). 되풀이 알림에만 붙어 있어서 첫 알림에서 끄려던 사람은 버튼을
   찾지 못하고 다음 되풀이까지 기다려야 했다.
+
+### 아이폰에서 건 타이머와 손목
+- ⚠️ **아이폰에서 건 타이머는 워치 앱으로 넘어가지 않는다.** 워치는 `onTimerStart` 를 받지 않고(콜백은 아이폰 `TimerScreenViewModel` 만 건다), 손목에 닿는 길은 iOS 알림 전달뿐이다. 그 전달은 아이폰이 잠겨 있을 때만 일어나는데 타이머가 도는 동안 화면을 켜 둔다(`isIdleTimerDisabled`). 그래서 앱을 띄워 둔 채로는 손목이 조용하다(제보 2026-11-01). 사용자 문구에 "워치에서 따라 보세요"라고 쓰지 말 것.
 
 ### 끝나면 알람으로 울리기 (AlarmKit) — "크게" 는 소리 파일로 되는 일이 아니다
 `Shared/Modules/RereminderAlarmManager.swift` + 설정 > 알림 > **끝나면 알람으로 울리기**.

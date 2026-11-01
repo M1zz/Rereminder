@@ -92,8 +92,13 @@ struct DeviceConnectionHelpView: View {
         } header: {
             Text("Try this")
         } footer: {
-            if device == .mac {
+            switch device {
+            case .mac:
                 Text("\"Connected\" here means Rereminder was open on that Mac within the last 10 minutes — it isn't a live link.")
+            case .watch:
+                // ⚠️ 워치 앱은 아이폰에서 건 타이머를 받지 않는다. 손목에 닿는 길은 iOS 알림 전달뿐이고,
+                //    그건 아이폰이 잠겨 있을 때만 일어난다(타이머가 도는 동안 화면은 켜 둔다).
+                Text("A timer started on your Apple Watch alerts you on your wrist. A timer started on iPhone reaches your wrist only while iPhone is locked. The screen stays on while a timer runs, so press the side button to lock it.")
             }
         }
     }
@@ -163,7 +168,6 @@ struct DeviceConnectionHelpView: View {
             return [
                 "Wear your Apple Watch and keep it near this iPhone.",
                 "On iPhone, open the Watch app → My Watch, and install Rereminder if it isn't there.",
-                "Open Rereminder on your Apple Watch — the remaining time appears while a timer runs.",
                 "If it still doesn't connect, check that Bluetooth and Wi-Fi are on for both devices.",
             ]
         case .mac:

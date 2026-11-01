@@ -6846,6 +6846,154 @@
         }
       }
     },
+    "A timer started on your Apple Watch alerts you on your wrist. A timer started on iPhone reaches your wrist only while iPhone is locked. The screen stays on while a timer runs, so press the side button to lock it." : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch에서 건 타이머는 손목에서 바로 알려 줍니다. iPhone에서 건 타이머는 iPhone이 잠겨 있을 때만 손목으로 넘어옵니다. 타이머가 도는 동안에는 화면이 켜져 있으니 측면 버튼을 눌러 잠가 주세요."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A timer started on your Apple Watch alerts you on your wrist. A timer started on iPhone reaches your wrist only while iPhone is locked. The screen stays on while a timer runs, so press the side button to lock it."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watchで開始したタイマーは手首で通知します。iPhoneで開始したタイマーは、iPhoneがロックされているときだけ手首に届きます。タイマーの動作中は画面がついたままなので、サイドボタンを押してロックしてください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 Apple Watch 上启动的计时器会直接在手腕上提醒。在 iPhone 上启动的计时器，只有 iPhone 锁定时才会转到手腕。计时器运行时屏幕保持常亮，请按侧边按钮锁定。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 Apple Watch 上啟動的計時器會直接在手腕上提醒。在 iPhone 上啟動的計時器，只有 iPhone 鎖定時才會轉到手腕。計時器執行時螢幕會保持開啟，請按側邊按鈕鎖定。"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Timer, den du auf der Apple Watch startest, meldet sich direkt am Handgelenk. Ein Timer vom iPhone erreicht dein Handgelenk nur, solange das iPhone gesperrt ist. Während ein Timer läuft, bleibt der Bildschirm an. Drücke also die Seitentaste, um es zu sperren."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un minuteur lancé sur l’Apple Watch vous alerte directement au poignet. Un minuteur lancé sur l’iPhone n’arrive au poignet que lorsque l’iPhone est verrouillé. L’écran reste allumé pendant le minuteur : appuyez sur le bouton latéral pour le verrouiller."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un temporizador iniciado en el Apple Watch te avisa directamente en la muñeca. Uno iniciado en el iPhone solo llega a la muñeca cuando el iPhone está bloqueado. La pantalla sigue encendida mientras corre el temporizador, así que pulsa el botón lateral para bloquearlo."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Um timer iniciado no Apple Watch avisa direto no pulso. Um timer iniciado no iPhone só chega ao pulso quando o iPhone está bloqueado. A tela fica ligada enquanto o timer corre, então pressione o botão lateral para bloquear."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Um temporizador iniciado no Apple Watch avisa diretamente no pulso. Um temporizador iniciado no iPhone só chega ao pulso quando o iPhone está bloqueado. O ecrã mantém-se ligado enquanto o temporizador decorre, por isso prima o botão lateral para o bloquear."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un timer avviato su Apple Watch ti avvisa direttamente al polso. Un timer avviato su iPhone arriva al polso solo quando iPhone è bloccato. Mentre il timer è attivo lo schermo resta acceso, quindi premi il tasto laterale per bloccarlo."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Таймер, запущенный на Apple Watch, оповещает прямо на запястье. Таймер, запущенный на iPhone, доходит до запястья, только когда iPhone заблокирован. Пока идёт таймер, экран остаётся включённым, поэтому заблокируйте iPhone боковой кнопкой."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Časovač spuštěný na Apple Watch vás upozorní přímo na zápěstí. Časovač spuštěný na iPhonu se na zápěstí dostane jen tehdy, když je iPhone zamčený. Během běhu časovače zůstává obrazovka zapnutá, proto ho zamkněte bočním tlačítkem."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En timer, der er startet på Apple Watch, giver besked direkte på håndleddet. En timer, der er startet på iPhone, når kun håndleddet, når iPhone er låst. Skærmen forbliver tændt, mens timeren kører, så tryk på sideknappen for at låse den."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ένα χρονόμετρο που ξεκινά στο Apple Watch σάς ειδοποιεί απευθείας στον καρπό. Ένα χρονόμετρο που ξεκινά στο iPhone φτάνει στον καρπό μόνο όταν το iPhone είναι κλειδωμένο. Η οθόνη μένει αναμμένη όσο τρέχει το χρονόμετρο, οπότε πατήστε το πλευρικό κουμπί για να το κλειδώσετε."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watchissa käynnistetty ajastin hälyttää suoraan ranteessa. iPhonessa käynnistetty ajastin tulee ranteeseen vain, kun iPhone on lukittu. Näyttö pysyy päällä ajastimen käydessä, joten lukitse iPhone painamalla sivupainiketta."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer yang dimulai di Apple Watch memberi tahu langsung di pergelangan tangan. Timer yang dimulai di iPhone hanya sampai ke pergelangan tangan saat iPhone terkunci. Layar tetap menyala selama timer berjalan, jadi tekan tombol samping untuk menguncinya."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En tidtaker startet på Apple Watch varsler deg rett på håndleddet. En tidtaker startet på iPhone når håndleddet bare når iPhone er låst. Skjermen forblir på mens tidtakeren går, så trykk på sideknappen for å låse den."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Een timer die je op je Apple Watch start, waarschuwt je direct op je pols. Een timer die je op je iPhone start, bereikt je pols alleen als je iPhone vergrendeld is. Het scherm blijft aan terwijl de timer loopt, dus druk op de zijknop om te vergrendelen."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minutnik uruchomiony na Apple Watch powiadamia bezpośrednio na nadgarstku. Minutnik uruchomiony na iPhonie dociera na nadgarstek tylko wtedy, gdy iPhone jest zablokowany. Podczas działania minutnika ekran pozostaje włączony, więc zablokuj go przyciskiem bocznym."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En timer som startas på Apple Watch meddelar dig direkt på handleden. En timer som startas på iPhone når handleden bara när iPhone är låst. Skärmen förblir tänd medan timern går, så tryck på sidoknappen för att låsa den."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ตัวจับเวลาที่เริ่มบน Apple Watch จะแจ้งเตือนที่ข้อมือทันที ส่วนตัวจับเวลาที่เริ่มบน iPhone จะส่งมาที่ข้อมือเฉพาะเมื่อ iPhone ล็อกอยู่ หน้าจอจะเปิดค้างขณะตัวจับเวลาทำงาน จึงต้องกดปุ่มด้านข้างเพื่อล็อก"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch'ta başlatılan zamanlayıcı doğrudan bileğinizde uyarır. iPhone'da başlatılan zamanlayıcı yalnızca iPhone kilitliyken bileğinize ulaşır. Zamanlayıcı çalışırken ekran açık kalır, bu yüzden kilitlemek için yan düğmeye basın."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hẹn giờ bắt đầu trên Apple Watch sẽ báo ngay trên cổ tay. Hẹn giờ bắt đầu trên iPhone chỉ đến cổ tay khi iPhone đang khóa. Màn hình luôn bật trong khi hẹn giờ chạy, vì vậy hãy nhấn nút sườn để khóa."
+          }
+        }
+      }
+    },
     "Add alert" : {
       "comment" : "Voice Control name for the add-alert button",
       "localizations" : {
@@ -21534,6 +21682,154 @@
         }
       }
     },
+    "For alerts on your wrist, start the timer on your Apple Watch" : {
+      "localizations" : {
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "손목에서 알림을 받으려면 Apple Watch에서 타이머를 거세요"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For alerts on your wrist, start the timer on your Apple Watch"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "手首で通知を受けるには、Apple Watchでタイマーを開始してください"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要在手腕上收到提醒，请在 Apple Watch 上启动计时器"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "若要在手腕上收到提醒，請在 Apple Watch 上啟動計時器"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für Hinweise am Handgelenk starte den Timer auf deiner Apple Watch"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour être alerté au poignet, lancez le minuteur sur votre Apple Watch"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para recibir avisos en la muñeca, inicia el temporizador en tu Apple Watch"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para receber alertas no pulso, inicie o timer no seu Apple Watch"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para receber alertas no pulso, inicie o temporizador no seu Apple Watch"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Per ricevere gli avvisi al polso, avvia il timer su Apple Watch"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Чтобы получать оповещения на запястье, запускайте таймер на Apple Watch"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chcete-li dostávat upozornění na zápěstí, spusťte časovač na Apple Watch"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start timeren på dit Apple Watch for at få beskeder på håndleddet"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Για ειδοποιήσεις στον καρπό, ξεκινήστε το χρονόμετρο στο Apple Watch"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saat hälytykset ranteeseen käynnistämällä ajastimen Apple Watchissa"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agar mendapat peringatan di pergelangan tangan, mulai timer di Apple Watch"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start tidtakeren på Apple Watch for å få varsler på håndleddet"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start de timer op je Apple Watch voor meldingen op je pols"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aby otrzymywać powiadomienia na nadgarstku, uruchom minutnik na Apple Watch"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Starta timern på Apple Watch för att få aviseringar på handleden"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "หากต้องการรับการแจ้งเตือนที่ข้อมือ ให้เริ่มตัวจับเวลาบน Apple Watch"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uyarıları bileğinizde almak için zamanlayıcıyı Apple Watch'ta başlatın"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Để nhận cảnh báo trên cổ tay, hãy bắt đầu hẹn giờ trên Apple Watch"
+          }
+        }
+      }
+    },
     "For breaks you keep skipping. Your iPhone rings at alarm volume - through Silent Mode and Focus - and does not stop until you get up and press Stop." : {
       "localizations" : {
         "cs" : {
@@ -27969,151 +28265,151 @@
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spusťte, pozastavte nebo zastavte časovač na jednom zařízení a druhé se přizpůsobí – i na pozadí."
+            "value" : "Spusťte, pozastavte nebo zastavte časovač na Apple Watch a iPhone se přizpůsobí."
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Start, sæt på pause eller stop på den ene enhed, så følger den anden med – også i baggrunden."
+            "value" : "Start, sæt på pause eller stop på Apple Watch, så følger din iPhone med."
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Starte, pausiere oder stoppe auf einem Gerät, und das andere zieht mit – auch im Hintergrund."
+            "value" : "Starte, pausiere oder stoppe auf der Apple Watch, und dein iPhone zieht mit."
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ξεκινήστε, κάντε παύση ή σταματήστε σε μία συσκευή και ενημερώνεται και η άλλη — ακόμα και στο παρασκήνιο."
+            "value" : "Ξεκινήστε, παύστε ή σταματήστε στο Apple Watch και το iPhone ακολουθεί."
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Start, pause, or stop on one device and it updates on the other — even in the background."
+            "value" : "Start, pause, or stop on your Apple Watch and your iPhone follows."
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Start, pause, or stop on one device and it updates on the other — even in the background."
+            "value" : "Start, pause or stop on your Apple Watch and your iPhone follows."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Inicia, pausa o detén en un dispositivo y se actualiza en el otro, incluso en segundo plano."
+            "value" : "Inicia, pausa o detén en el Apple Watch y el iPhone lo sigue."
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Käynnistä, keskeytä tai pysäytä yhdellä laitteella, niin toinen seuraa perässä – myös taustalla."
+            "value" : "Käynnistä, keskeytä tai pysäytä Apple Watchissa, niin iPhone seuraa mukana."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lancez, mettez en pause ou arrêtez sur un appareil, et l’autre suit, même en arrière-plan."
+            "value" : "Lancez, mettez en pause ou arrêtez sur l’Apple Watch, et l’iPhone suit."
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mulai, jeda, atau hentikan di satu perangkat, perangkat lain ikut diperbarui, bahkan di latar belakang."
+            "value" : "Mulai, jeda, atau hentikan di Apple Watch, dan iPhone akan mengikuti."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Avvia, metti in pausa o ferma su un dispositivo e l'altro si aggiorna, anche in background."
+            "value" : "Avvia, metti in pausa o ferma su Apple Watch e iPhone si adegua."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "片方のデバイスで開始・一時停止・停止すると、バックグラウンドでももう片方に反映されます。"
+            "value" : "Apple Watchで開始・一時停止・停止すると、iPhoneも連動します。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "한쪽 기기에서 시작·일시정지·정지하면 백그라운드에서도 다른 기기에 그대로 반영돼요."
+            "value" : "Apple Watch에서 시작·일시정지·정지하면 iPhone도 따라갑니다."
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Start, sett på pause eller stopp på én enhet, så oppdateres den andre – også i bakgrunnen."
+            "value" : "Start, sett på pause eller stopp på Apple Watch, så følger iPhone etter."
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Start, pauzeer of stop op het ene apparaat en het andere volgt — zelfs op de achtergrond."
+            "value" : "Start, pauzeer of stop op je Apple Watch en je iPhone volgt."
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uruchom, wstrzymaj lub zatrzymaj na jednym urządzeniu, a drugie od razu się dostosuje – nawet w tle."
+            "value" : "Uruchamiaj, wstrzymuj i zatrzymuj na Apple Watch, a iPhone pójdzie w ślad."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Inicie, pause ou pare em um dispositivo e o outro é atualizado — mesmo em segundo plano."
+            "value" : "Inicie, pause ou pare no Apple Watch e o iPhone acompanha."
           }
         },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Inicie, pause ou pare num dispositivo e o outro é atualizado — mesmo em segundo plano."
+            "value" : "Inicie, pause ou pare no Apple Watch e o iPhone acompanha."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Запустите, поставьте на паузу или остановите на одном устройстве — и другое обновится, даже в фоне."
+            "value" : "Запускайте, приостанавливайте и останавливайте таймер на Apple Watch — iPhone последует за ними."
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Starta, pausa eller stoppa på en enhet så uppdateras den andra – även i bakgrunden."
+            "value" : "Starta, pausa eller stoppa på Apple Watch så följer iPhone med."
           }
         },
         "th" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "เริ่ม หยุดพัก หรือหยุดบนอุปกรณ์หนึ่ง อีกเครื่องก็อัปเดตตาม แม้ทำงานอยู่เบื้องหลัง"
+            "value" : "เริ่ม หยุดชั่วคราว หรือหยุดบน Apple Watch แล้ว iPhone จะทำตาม"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bir aygıtta başlat, duraklat ya da durdur; diğeri de güncellenir, arka planda bile."
+            "value" : "Apple Watch'ta başlatın, duraklatın veya durdurun; iPhone da aynısını yapar."
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bắt đầu, tạm dừng hoặc dừng trên một thiết bị, thiết bị kia sẽ cập nhật theo — kể cả khi chạy nền."
+            "value" : "Bắt đầu, tạm dừng hoặc dừng trên Apple Watch và iPhone sẽ làm theo."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在一台设备上开始、暂停或停止，另一台也会跟着更新 — 即使在后台也一样。"
+            "value" : "在 Apple Watch 上开始、暂停或停止，iPhone 会随之同步。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在一台裝置上開始、暫停或停止，另一台也會跟著更新 — 即使在背景也一樣。"
+            "value" : "在 Apple Watch 上開始、暫停或停止，iPhone 會跟著同步。"
           }
         }
       }
@@ -44824,154 +45120,6 @@
         }
       }
     },
-    "Now check the remaining time on your Apple Watch too" : {
-      "localizations" : {
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zbývající čas teď uvidíte i na Apple Watch"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Se nu også den resterende tid på dit Apple Watch"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sieh die Restzeit jetzt auch auf deiner Apple Watch"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Δείτε τώρα τον χρόνο που απομένει και στο Apple Watch σας"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Now check the remaining time on your Apple Watch too"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ahora consulta también el tiempo restante en tu Apple Watch"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Näet nyt jäljellä olevan ajan myös Apple Watchissa"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Voyez aussi le temps restant sur votre Apple Watch"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sekarang lihat juga sisa waktu di Apple Watch Anda"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ora controlla il tempo rimanente anche su Apple Watch"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "これからはApple Watchでも残り時間を確認できます"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이제 Apple Watch에서도 남은 시간을 확인하세요"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Se gjenværende tid på Apple Watch også"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bekijk de resterende tijd nu ook op je Apple Watch"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Teraz sprawdzaj pozostały czas także na Apple Watch"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Agora veja o tempo restante também no seu Apple Watch"
-          }
-        },
-        "pt-PT" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Agora veja o tempo restante também no Apple Watch"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Теперь оставшееся время видно и на Apple Watch"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Se återstående tid på din Apple Watch också"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ตอนนี้ดูเวลาที่เหลือบน Apple Watch ได้ด้วย"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Artık kalan süreyi Apple Watch'unda da gör"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Giờ bạn cũng xem được thời gian còn lại trên Apple Watch"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "现在在 Apple Watch 上也能看到剩余时间"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "現在在 Apple Watch 上也能看到剩餘時間"
-          }
-        }
-      }
-    },
     "Now press start" : {
       "localizations" : {
         "cs" : {
@@ -46746,302 +46894,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "開啟 Rereminder"
-          }
-        }
-      }
-    },
-    "Open Rereminder on your Apple Watch — the remaining time appears while a timer runs." : {
-      "localizations" : {
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otevřete Rereminder na Apple Watch – zbývající čas se zobrazí, když běží časovač."
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Åbn Rereminder på dit Apple Watch – den resterende tid vises, mens en timer kører."
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Öffne Rereminder auf deiner Apple Watch – die Restzeit erscheint, während ein Timer läuft."
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ανοίξτε το Rereminder στο Apple Watch — ο χρόνος που απομένει εμφανίζεται όσο τρέχει ο χρονομετρητής."
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open Rereminder on your Apple Watch — the remaining time appears while a timer runs."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abre Rereminder en tu Apple Watch: el tiempo restante aparece mientras corre un temporizador."
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Avaa Rereminder Apple Watchissa – jäljellä oleva aika näkyy, kun ajastin on käynnissä."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ouvrez Rereminder sur votre Apple Watch : le temps restant s’affiche pendant qu’un minuteur tourne."
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Buka Rereminder di Apple Watch Anda. Sisa waktu tampil selama timer berjalan."
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apri Rereminder su Apple Watch: il tempo rimanente appare mentre il timer è in corso."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apple WatchでRereminderを開いてください。タイマー中は残り時間が表示されます。"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apple Watch에서 두번알림을 여세요. 타이머가 도는 동안 남은 시간이 보여요."
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Åpne Rereminder på Apple Watch – gjenværende tid vises mens en tidtaker går."
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open Rereminder op je Apple Watch — de resterende tijd verschijnt zolang er een timer loopt."
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otwórz Rereminder na Apple Watch – pozostały czas pojawi się, gdy minutnik działa."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abra o Rereminder no Apple Watch — o tempo restante aparece enquanto um timer roda."
-          }
-        },
-        "pt-PT" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abra o Rereminder no Apple Watch — o tempo restante aparece enquanto um temporizador corre."
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Откройте Rereminder на Apple Watch — пока идёт таймер, там видно оставшееся время."
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Öppna Rereminder på din Apple Watch – återstående tid visas medan en timer går."
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "เปิด Rereminder บน Apple Watch แล้วเวลาที่เหลือจะแสดงขณะที่ตัวจับเวลาเดิน"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apple Watch'unda Rereminder'ı aç; zamanlayıcı çalışırken kalan süre görünür."
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mở Rereminder trên Apple Watch — thời gian còn lại sẽ hiện khi hẹn giờ đang chạy."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在 Apple Watch 上打开 Rereminder。计时进行时会显示剩余时间。"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在 Apple Watch 上開啟 Rereminder。計時進行時會顯示剩餘時間。"
-          }
-        }
-      }
-    },
-    "Open Rereminder on your Apple Watch to follow along" : {
-      "localizations" : {
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otevřete Rereminder na Apple Watch a sledujte odpočet"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Åbn Rereminder på dit Apple Watch for at følge med"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Öffne Rereminder auf deiner Apple Watch, um mitzuverfolgen"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ανοίξτε το Rereminder στο Apple Watch για να το παρακολουθείτε"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open Rereminder on your Apple Watch to follow along"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abre Rereminder en tu Apple Watch para seguirlo"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Avaa Rereminder Apple Watchissa ja seuraa mukana"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ouvrez Rereminder sur votre Apple Watch pour suivre"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Buka Rereminder di Apple Watch untuk ikut memantau"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apri Rereminder su Apple Watch per seguirlo"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apple WatchでRereminderを開いて一緒に確認しましょう"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apple Watch에서 두번알림을 열어 함께 보세요"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Åpne Rereminder på Apple Watch for å følge med"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Open Rereminder op je Apple Watch om mee te kijken"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Otwórz Rereminder na Apple Watch, aby śledzić czas"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abra o Rereminder no Apple Watch para acompanhar"
-          }
-        },
-        "pt-PT" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abra o Rereminder no Apple Watch para acompanhar"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Откройте Rereminder на Apple Watch, чтобы следить за таймером"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Öppna Rereminder på din Apple Watch för att följa med"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "เปิด Rereminder บน Apple Watch เพื่อติดตามไปด้วยกัน"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Takip etmek için Apple Watch'unda Rereminder'ı aç"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Mở Rereminder trên Apple Watch để theo dõi cùng"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在 Apple Watch 上打开 Rereminder 一起看"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "在 Apple Watch 上開啟 Rereminder 一起看"
           }
         }
       }

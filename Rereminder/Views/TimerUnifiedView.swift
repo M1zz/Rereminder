@@ -1020,14 +1020,14 @@ struct TimerUnifiedView: View {
 
     private func deviceGuidanceText(_ device: DeviceOwnership.Device) -> String {
         switch device {
-        case .watch: return String(localized: "Now check the remaining time on your Apple Watch too")
+        case .watch: return String(localized: "For alerts on your wrist, start the timer on your Apple Watch")
         case .mac:   return String(localized: "Now check the remaining time in your Mac menu bar too")
         }
     }
 
     private func deviceReminderText(_ device: DeviceOwnership.Device) -> String {
         switch device {
-        case .watch: return String(localized: "Open Rereminder on your Apple Watch to follow along")
+        case .watch: return String(localized: "For alerts on your wrist, start the timer on your Apple Watch")
         case .mac:   return String(localized: "Open Rereminder on your Mac to follow along")
         }
     }
