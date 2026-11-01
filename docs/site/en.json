@@ -67,21 +67,44 @@
   "reference": {
     "title": "Setups people use most",
     "rows": [
-      ["20-minute talk", "5 min before \"Move to the conclusion\", 1 min before \"Thank the audience\""],
-      ["50-minute class", "10 min before \"Explain the homework\", 3 min before \"Recap\""],
-      ["30-minute meeting", "5 min before \"Confirm the decisions\""],
-      ["Pilates or yoga session", "Session Mode, one section per sequence (Pro)"],
-      ["25-minute study block", "5 min before, then take a break"],
-      ["3-minute rest between sets", "30 sec before \"Get ready\""],
-      ["One-hour mentoring session", "15 min and 5 min before"]
+      [
+        "20-minute talk",
+        "5 min before \"Move to the conclusion\", 1 min before \"Thank the audience\""
+      ],
+      [
+        "50-minute class",
+        "10 min before \"Explain the homework\", 3 min before \"Recap\""
+      ],
+      [
+        "30-minute meeting",
+        "5 min before \"Confirm the decisions\""
+      ],
+      [
+        "Pilates or yoga session",
+        "Session Mode, one section per sequence (Pro)"
+      ],
+      [
+        "25-minute study block",
+        "5 min before, then take a break"
+      ],
+      [
+        "3-minute rest between sets",
+        "30 sec before \"Get ready\""
+      ],
+      [
+        "One-hour mentoring session",
+        "15 min and 5 min before"
+      ]
     ],
-    "note": "Save the setups you reuse as templates and start them in one tap (Remember and up). You can also start or stop a timer with Shortcuts and Siri."
+    "note": "Save the setups you reuse as templates and start them in one tap. You can also start or stop a timer with Shortcuts and Siri."
   },
   "pricing": {
-    "title": "Pre-alerts are free. Pay only if you want it to remember.",
+    "title": "Everything is open at first. Pay only if you want more.",
     "free": {
       "name": "Free",
       "items": [
+        "Every feature is open until 14 days of use or 5 sessions",
+        "Free for good: your last setup, saved templates, up to 3 new templates, and overtime",
         "Unlimited pre-alerts",
         "Your own message on every alert",
         "Live Activity on the Lock Screen and in the Dynamic Island",
@@ -93,12 +116,10 @@
     "pro": {
       "name": "Remember · Pro",
       "items": [
-        "Remember: save setups as templates and start them in one tap",
-        "Remember: reopen the app to your last setup",
-        "Pro: everything in Remember, plus Session Mode with section names and scripts",
-        "Pro: overtime, history and stats"
+        "Remember: Unlimited templates and your full history",
+        "Pro: everything in Remember, plus Session Mode with section names and scripts"
       ],
-      "note": "Choose yearly or a one-time lifetime purchase for either plan. You can try Session Mode, overtime and history a few times before paying."
+      "note": "Choose yearly or a one-time lifetime purchase for either plan. Session Mode keeps a few tries after the free period."
     },
     "note": "No ads. One Forever Pass also unlocks every app Leeo makes."
   },
@@ -107,7 +128,7 @@
     "items": [
       {
         "q": "An alert didn't go off.",
-        "a": "It's almost always permissions or Focus. Check notification access in the app under Settings › Notification Method. If you use a Focus, add Rereminder as an allowed app in iOS Settings › Focus. In Silent Mode you only get a vibration. If Rereminder is in Settings › Notifications › Scheduled Summary, its alerts are held back, so take it out."
+        "a": "It's almost always permissions or Focus. Check notification access in the app under Settings › Notification Settings › Notification Method. If you use a Focus, add Rereminder as an allowed app in iOS Settings › Focus. In Silent Mode you only get a vibration. If Rereminder is in Settings › Notifications › Scheduled Summary, its alerts are held back, so take it out."
       },
       {
         "q": "Will I notice the end in Silent Mode?",
@@ -126,8 +147,8 @@
         "a": "Tap Restore Purchases on the plans screen, signed in with the same Apple Account you paid with. Lifetime purchases come back even after you delete the app or change devices."
       },
       {
-        "q": "My saved templates are locked.",
-        "a": "They're still there. Without Remember or Pro they stay locked on screen, and they open again the moment you buy either one."
+        "q": "Will my saved templates get locked?",
+        "a": "No. Saved templates are never deleted and always open. After the free period you can save up to 3 new ones for free, and Remember removes the limit."
       },
       {
         "q": "How do I get a refund?",

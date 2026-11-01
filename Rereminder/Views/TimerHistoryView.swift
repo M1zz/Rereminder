@@ -11,7 +11,7 @@ import SwiftData
 struct TimerHistoryView: View {
     @Environment(\.dismiss) private var dismiss
     @Query(sort: [SortDescriptor(\TimerRecord.date, order: .reverse)])
-    private var records: [TimerRecord]
+    private var allRecords: [TimerRecord]
 
     @State private var showPaywall = false
     @State private var displayLimit = 50
@@ -24,12 +24,15 @@ struct TimerHistoryView: View {
 
     private var isPro: Bool { store.isPro || StoreManager.isProUser }
 
+    /// 지금 보이는 기록. 잠그지 않는다 — 문턱 뒤에도 문턱 전 기록과 최근 기록은 그대로 보인다(`FreeUse`).
+    private var records: [TimerRecord] {
+        historyGate.isAllowed ? allRecords : allRecords.filter { FreeUse.isRecordVisible(date: $0.date) }
+    }
+
     var body: some View {
         NavigationStack {
             Group {
-                if !historyGate.isAllowed {
-                    lockedView
-                } else if records.isEmpty {
+                if records.isEmpty {
                     ContentUnavailableView(
                         String(localized: "No timer history"),
                         systemImage: "clock.badge.questionmark",
@@ -37,6 +40,16 @@ struct TimerHistoryView: View {
                     )
                 } else {
                     List {
+                        if !historyGate.isAllowed, records.count < allRecords.count {
+                            Section {
+                                Button {
+                                    showPaywall = true
+                                } label: {
+                                    Text("Older history is included in Remember")
+                                        .font(.body)
+                                }
+                            }
+                        }
                         if let remaining = historyGate.trialRemaining, !isPro {
                             Section {
                                 HStack {
@@ -74,79 +87,6 @@ struct TimerHistoryView: View {
                     ProGate.recordUsage(.timerHistory)
                 }
             }
-        }
-    }
-
-    // MARK: - Locked View (무료)
-
-    private var lockedView: some View {
-        VStack(spacing: 24) {
-            Spacer()
-
-            Image(systemName: "chart.bar.fill")
-                .dsScaledFont(60, relativeTo: .largeTitle, maxSize: 84)
-                .foregroundStyle(Color.accentColor.opacity(0.6))
-                .accessibilityHidden(true)
-
-            VStack(spacing: DSSpacing.sm) {
-                Text("Timer History & Stats", comment: "History locked title")
-                    .font(.title2.weight(.bold))
-                Text("Track your timer usage patterns\nand improve your time management", comment: "History locked description")
-                    .font(DSFont.callout)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-            }
-            .accessibilityElement(children: .combine)
-
-            // 미리보기 (블러 처리) — 잠금 상태이므로 VoiceOver 에서는 숨김
-            VStack(spacing: DSSpacing.md) {
-                previewStatRow(String(localized: "Total Sessions"), value: "\(records.count)")
-                previewStatRow(String(localized: "Completed"), value: "\(records.filter(\.finished).count)")
-                previewStatRow(String(localized: "Total Time"), value: formatTotalTime())
-            }
-            .padding(DSSpacing.xl)
-            .background(
-                RoundedRectangle(cornerRadius: DSRadius.lg)
-                    .fill(Color(uiColor: .secondarySystemBackground))
-            )
-            .blur(radius: 4)
-            .overlay(
-                Image(systemName: "lock.fill")
-                    .font(.title)
-                    .foregroundStyle(.orange)
-            )
-            .padding(.horizontal, DSSpacing.xxxl)
-            .accessibilityHidden(true)
-
-            Button {
-                showPaywall = true
-            } label: {
-                HStack(spacing: DSSpacing.sm) {
-                    ProBadge(small: true)
-                    Text("Unlock with Pro", comment: "History unlock button")
-                        .font(.headline)
-                }
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, DSSpacing.md)
-                .background(Color.accentColor)
-                .cornerRadius(DSRadius.md)
-            }
-            .padding(.horizontal, DSSpacing.xxxl)
-
-            Spacer()
-            Spacer()
-        }
-    }
-
-    private func previewStatRow(_ label: String, value: String) -> some View {
-        HStack {
-            Text(label)
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-            Spacer()
-            Text(value)
-                .font(.subheadline.weight(.semibold))
         }
     }
 

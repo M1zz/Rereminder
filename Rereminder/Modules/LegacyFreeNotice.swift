@@ -49,9 +49,7 @@ enum LegacyFreeNotice {
 
     /// 첫 실행에 심는 시드 템플릿의 이름(`TimerConfigService.seedIfNeeded`).
     /// 안내에서 "저장해 두신 템플릿"을 셀 때는 빼야 한다 — 사용자가 만든 것이 아니다.
-    static let seedTemplateNames: Set<String> = [
-        "Presentation 30 min", "Mentoring 40 min", "Study 25 min", "Exercise 30 min", "Meeting 60 min",
-    ]
+    static var seedTemplateNames: Set<String> { Timer.seedTemplateNames }
 
     // MARK: - 판정 (순수 함수)
 

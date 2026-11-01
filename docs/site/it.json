@@ -96,13 +96,15 @@
         "15 e 5 min prima"
       ]
     ],
-    "note": "Salva come modello quello che ripeti e riaprilo con un tocco (da Memoria in su). Puoi anche avviare o fermare un timer con Comandi Rapidi e Siri."
+    "note": "Salva come modello quello che ripeti e riaprilo con un tocco. Puoi anche avviare o fermare un timer con Comandi Rapidi e Siri."
   },
   "pricing": {
-    "title": "I preavvisi sono gratis. Paghi solo se vuoi che si ricordi.",
+    "title": "All’inizio è tutto aperto. Paga solo se vuoi di più.",
     "free": {
       "name": "Gratis",
       "items": [
+        "Tutte le funzioni aperte fino a 14 giorni di utilizzo o 5 sessioni",
+        "Sempre gratis: l’ultima configurazione, i modelli salvati, fino a 3 nuovi modelli e il tempo extra",
         "Preavvisi senza limiti",
         "Il tuo messaggio per ogni preavviso",
         "Attività in tempo reale nella schermata di blocco e nella Dynamic Island",
@@ -114,12 +116,10 @@
     "pro": {
       "name": "Memoria · Pro",
       "items": [
-        "Memoria: salva le impostazioni come modelli e avviale con un tocco",
-        "Memoria: riaprendo l’app ritrovi l’ultima impostazione",
-        "Pro: tutto Memoria più la Modalità Sessione con nomi delle parti e tracce",
-        "Pro: tempo extra, cronologia e statistiche"
+        "Memoria: Modelli illimitati e tutta la cronologia",
+        "Pro: tutto Memoria più la Modalità Sessione con nomi delle parti e tracce"
       ],
-      "note": "Per ogni piano scegli l’abbonamento annuale o un acquisto unico a vita. Puoi provare la Modalità Sessione, il tempo extra e la cronologia qualche volta prima di pagare."
+      "note": "Scegli annuale o acquisto unico a vita per entrambi i piani. La modalità Sessione resta disponibile per qualche utilizzo dopo il periodo gratuito."
     },
     "note": "Niente pubblicità. Un Pass per sempre apre anche tutte le app di Leeo."
   },
@@ -128,7 +128,7 @@
     "items": [
       {
         "q": "Un preavviso non è suonato.",
-        "a": "Quasi sempre dipende dai permessi o da una modalità Full immersion. Controlla il permesso per le notifiche nell’app, in Impostazioni › Modalità di avviso. Se usi una modalità Full immersion, aggiungi Rereminder tra le app consentite in Impostazioni › Full immersion di iOS. In modalità silenziosa senti solo la vibrazione. Se Rereminder è in Impostazioni › Notifiche › Riepilogo programmato, i suoi avvisi vengono trattenuti: toglila da lì."
+        "a": "Quasi sempre dipende dai permessi o da una modalità Full immersion. Controlla il permesso per le notifiche nell’app, in Impostazioni › Impostazioni notifiche › Modalità di avviso. Se usi una modalità Full immersion, aggiungi Rereminder tra le app consentite in Impostazioni › Full immersion di iOS. In modalità silenziosa senti solo la vibrazione. Se Rereminder è in Impostazioni › Notifiche › Riepilogo programmato, i suoi avvisi vengono trattenuti: toglila da lì."
       },
       {
         "q": "Mi accorgo della fine anche in modalità silenziosa?",
@@ -147,8 +147,8 @@
         "a": "Tocca «Ripristina acquisti» nella schermata dei piani, con lo stesso Account Apple usato per pagare. Gli acquisti a vita tornano anche se elimini l’app o cambi dispositivo."
       },
       {
-        "q": "I miei modelli salvati sono bloccati.",
-        "a": "Sono ancora lì. Senza Memoria o Pro restano visibili ma bloccati, e si riaprono appena acquisti uno dei due."
+        "q": "I miei modelli salvati verranno bloccati?",
+        "a": "No. I modelli salvati non vengono mai eliminati e si aprono sempre. Dopo il periodo gratuito puoi salvarne fino a 3 nuovi gratis, e Memoria toglie il limite."
       },
       {
         "q": "Come ottengo un rimborso?",

@@ -151,6 +151,10 @@ enum ActivityReporter {
         // 체험(5+5)은 **기능마다 따로** 돈다. 세 갈래를 다 보낸다 — 어느 기능이 벽이 되는지가
         // 값을 어디에 매길지를 정한다. 발표 모드 하나만 보내던 동안은, 오버타임·기록에서
         // 막힌 사람이 허브에서 아무것도 안 쓰는 사람과 구분되지 않았다.
+        // 무료 기간(`FreeUse`). 문턱에 닿았는지·며칠 걸렸는지를 가른다.
+        metrics["freeUse.days"] = Double(FreeUse.days)
+        metrics["freeUse.sessions"] = Double(FreeUse.sessions)
+        metrics["flag.freeUseActive"] = FreeUse.isActive ? 1 : 0
         metrics["trial.presentation"] = Double(TrialCounter.count(for: .presentationMode))
         metrics["trial.overtime"] = Double(TrialCounter.count(for: .overtimeTracking))
         metrics["trial.history"] = Double(TrialCounter.count(for: .timerHistory))

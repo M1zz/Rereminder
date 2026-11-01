@@ -11,6 +11,17 @@ import LeeoKit
 
 final class ReleaseReadinessTests: XCTestCase {
 
+    // 이 파일은 문턱 뒤의 판정을 본다. 무료 기간은 `FreeUseTests`.
+    override func setUp() {
+        super.setUp()
+        FreeUse.markReachedForTesting()
+    }
+
+    override func tearDown() {
+        FreeUse.resetForTesting()
+        super.tearDown()
+    }
+
     // MARK: - LeeoKit 사전 점검
 
     /// 부트스트랩의 DEBUG 감사와 별개로 시험이 지킨다 — 개인정보·지원 주소, 결제 상품 선언 등이 비면 여기서 걸린다.
@@ -59,7 +70,7 @@ final class ReleaseReadinessTests: XCTestCase {
         let remember = ProBenefitsView.limitRows(tier: .plus, usage: usage)
         XCTAssertEqual(remember.map(\.id), ["setups"])
         XCTAssertEqual(remember.first?.freeLimit, ProGate.freeSavedSetups)
-        XCTAssertEqual(remember.first?.extra, 4)
+        XCTAssertEqual(remember.first?.extra, 4 - ProGate.freeSavedSetups)
 
         let pro = ProBenefitsView.limitRows(tier: .session, usage: usage)
         XCTAssertEqual(pro.map(\.id), ["setups", "sessions"])

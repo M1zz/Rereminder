@@ -22,7 +22,7 @@ import AppIntents
 //    원색을 `.borderedProminent` 로 칠하고 keyline 도 주황 고정이라, 앱을 보다가 잠금화면을 보면
 //    다른 앱처럼 보였다. 규칙은 앱과 동일하다:
 //      • 진행·강조 = **사용자가 고른 테마 강조색**(`SharedAccent` — 앱 그룹으로 건너온다)
-//      • 시작·재개 = `DSColor.positive` / 일시정지 = `DSColor.negativeSoft` / 정지 = `DSColor.plain`
+//      • 시작·재개 = 테마 강조색 / 일시정지 = `DSColor.negativeSoft` / 정지 = `DSColor.plain`
 //    ⚠️ 주황을 진행 표시에 쓰지 말 것 — 이 앱에서 주황은 **알림 종**의 색이다.
 
 struct RereminderAlarmLiveActivity: Widget {
@@ -175,7 +175,7 @@ struct RereminderAlarmLiveActivity: Widget {
             if context.state.isPaused {
                 circleButton(intent: ResumeIntent(alarmID: ""),
                              systemImage: "play.fill",
-                             tint: DSColor.positive,
+                             tint: accent,
                              label: String(localized: "Resume timer"))
             } else {
                 circleButton(intent: PauseIntent(alarmID: ""),

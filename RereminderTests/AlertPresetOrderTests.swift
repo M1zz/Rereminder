@@ -2,9 +2,7 @@
 //  AlertPresetOrderTests.swift
 //  RereminderTests
 //
-//  알림 칩 줄의 배치 규칙 — 켜진 알림이 먼저, 나머지가 시간순.
-//  "지금 뭐가 걸려 있나"를 스크롤 없이 보여주는 게 이 줄의 목적이라, 순서가 조용히
-//  시간순으로 돌아가면 그 목적이 사라진다.
+//  `+` 가 켤 다음 알림 — 타이머 길이에 맞는 시간을 쓸모 있는 순서로.
 //
 
 import XCTest
@@ -12,32 +10,50 @@ import XCTest
 
 final class AlertPresetOrderTests: XCTestCase {
 
-    func test_selectedComesFirst_restStaysInTimeOrder() {
-        // 프리셋 1:00·3:00 에 1:30 을 켜 둔 상태 → 1:30, 1:00, 3:00
-        let order = AlertPresets.displayOrder(presets: [60, 180], selected: [90])
-        XCTAssertEqual(order, [90, 60, 180])
+    private func sequence(total: Int, raw: String = AlertPresets.defaultRaw, count: Int) -> [Int] {
+        var selected = Set<Int>()
+        var out: [Int] = []
+        for _ in 0..<count {
+            guard let next = AlertPresets.nextAlert(totalSeconds: total, presetsRaw: raw, selected: selected) else { break }
+            out.append(next)
+            selected.insert(next)
+        }
+        return out
     }
 
-    func test_multipleSelected_areSortedAmongThemselves() {
-        let order = AlertPresets.displayOrder(presets: [60, 120, 180, 300], selected: [300, 120])
-        XCTAssertEqual(order, [120, 300, 60, 180])
+    func test_emphasis_timeOnly_andNotInsideLongerLabel() {
+        let text = DialAlertLine.emphasized("11 min before, 1 min before", items: [
+            .init(label: "11 min before", time: "11 min", color: .blue),
+            .init(label: "1 min before", time: "1 min", color: .green),
+        ])
+        let strong = text.runs.filter { $0.inlinePresentationIntent == .stronglyEmphasized }
+            .map { String(text[$0.range].characters) }
+        XCTAssertEqual(strong, ["11 min", "1 min"])
     }
 
-    func test_nothingSelected_isPlainTimeOrder() {
-        XCTAssertEqual(AlertPresets.displayOrder(presets: [300, 60, 180], selected: []),
-                       [60, 180, 300])
+    func test_bellIndex_firstRingingBellIsFirstSection() {
+        XCTAssertEqual(AlertPresets.bellSectionIndex(of: 600, among: [60, 300, 600]), 0)
+        XCTAssertEqual(AlertPresets.bellSectionIndex(of: 60, among: [60, 300, 600]), 2)
     }
 
-    func test_selectedPresetIsNotDuplicated() {
-        // 켜진 시점이 프리셋에도 있는 흔한 경우 — 칩이 두 번 나오면 안 된다
-        let order = AlertPresets.displayOrder(presets: [60, 180, 300], selected: [180])
-        XCTAssertEqual(order, [180, 60, 300])
-        XCTAssertEqual(Set(order).count, order.count)
+    func test_next_followsTimerLength() {
+        XCTAssertEqual(sequence(total: 1800, count: 4), [300, 60, 600, 180])
+        XCTAssertTrue(sequence(total: 30, count: 8).contains(20))
     }
 
-    func test_selectionOutsidePresets_stillAppearsFirst() {
-        // 링에서 종을 끌어 만든 시점(프리셋에 없는 값)도 맨 앞에 온다
-        let order = AlertPresets.displayOrder(presets: [60, 180], selected: [45, 240])
-        XCTAssertEqual(order, [45, 240, 60, 180])
+    func test_next_neverReachesTheEnd_andNeverRepeats() {
+        for total in [10, 30, 40, 90, 600, 3600, 7200] {
+            let list = sequence(total: total, count: 12)
+            XCTAssertTrue(list.allSatisfy { $0 < total }, "\(total)")
+            XCTAssertEqual(Set(list).count, list.count, "\(total)")
+        }
+    }
+
+    func test_next_customPresetsComeFirst() {
+        XCTAssertEqual(AlertPresets.nextAlert(totalSeconds: 600, presetsRaw: "420", selected: []), 420)
+    }
+
+    func test_next_skipsWhatIsAlreadyOn() {
+        XCTAssertEqual(AlertPresets.nextAlert(totalSeconds: 1800, presetsRaw: AlertPresets.defaultRaw, selected: [300]), 60)
     }
 }

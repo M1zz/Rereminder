@@ -36,6 +36,8 @@ final class TemplateSaveTests: XCTestCase {
 
     override func setUpWithError() throws {
         try super.setUpWithError()
+        // 이 파일은 문턱 뒤의 판정을 본다. 무료 기간은 `FreeUseTests`.
+        FreeUse.markReachedForTesting()
 
         // DEBUG 빌드의 개발자 자동 Pro·그랜드파더링을 꺼서 "무료 사용자" 전제를 만든다
         let defaults = UserDefaults.standard
@@ -64,6 +66,7 @@ final class TemplateSaveTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
+        FreeUse.resetForTesting()
         service = nil
         context = nil
         container = nil
@@ -121,9 +124,10 @@ final class TemplateSaveTests: XCTestCase {
         insert(mainSeconds: 1800, offsets: [600, 300], name: "Presentation 30 min")
         insert(mainSeconds: 1500, offsets: [300, 60], name: "Study 25 min")
 
-        let saved = save(mainSec: 900, offsets: [60])
+        let saved = service.saveIfNeeded(mainSec: 900, offsets: [60], prealertMessages: [:],
+                                         finishMessage: nil, automatic: true)
 
-        XCTAssertFalse(saved, "무료는 저장하지 않는다")
+        XCTAssertFalse(saved, "시작할 때 저절로 저장하는 것은 무료 몫을 쓰지 않는다")
         XCTAssertEqual(service.fetchRecents().count, 2, "갖고 있던 템플릿은 그대로 남아야 한다")
     }
 
@@ -134,10 +138,22 @@ final class TemplateSaveTests: XCTestCase {
         XCTAssertGreaterThan(seeded, 0, "시드가 심어져야 이후 검증이 의미가 있다")
 
         for minutes in [10, 20, 30] {
-            _ = save(mainSec: minutes * 60, offsets: [60])
+            _ = service.saveIfNeeded(mainSec: minutes * 60, offsets: [60], prealertMessages: [:],
+                                     finishMessage: nil, automatic: true)
         }
 
         XCTAssertEqual(service.fetchRecents().count, seeded)
+    }
+
+    /// 문턱 뒤 무료: 직접 저장은 한도까지, 넘게 갖고 있어도 지우지 않는다. 시드는 세지 않는다.
+    func test_freeUser_explicitSave_upToLimit_keepsEverything() {
+        service.seedIfNeeded()
+        let seeded = service.fetchRecents().count
+        for minutes in 1...ProGate.freeSavedSetups {
+            XCTAssertTrue(save(mainSec: minutes * 60, offsets: []), "\(minutes)")
+        }
+        XCTAssertFalse(save(mainSec: 3000, offsets: []), "한도를 넘는 새 저장은 막는다")
+        XCTAssertEqual(service.fetchRecents().count, seeded + ProGate.freeSavedSetups)
     }
 
     // MARK: - Pro 사용자

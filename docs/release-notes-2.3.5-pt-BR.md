@@ -1,5 +1,6 @@
 Rereminder 2.3.5
 
+Teste tudo primeiro e depois decida.
 Três planos: Grátis, Memória e Pro.
 Escolha anual ou vitalício.
 Assinante pode mudar para o vitalício.

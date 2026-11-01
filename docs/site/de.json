@@ -96,13 +96,15 @@
         "15 und 5 Min. vorher"
       ]
     ],
-    "note": "Was du oft brauchst, sicherst du als Vorlage und startest es mit einem Tipp (ab Merken). Mit Kurzbefehlen und Siri kannst du einen Timer auch starten oder stoppen."
+    "note": "Was du oft brauchst, sicherst du als Vorlage und startest es mit einem Tipp. Mit Kurzbefehlen und Siri kannst du einen Timer auch starten oder stoppen."
   },
   "pricing": {
-    "title": "Vorwarnungen sind kostenlos. Zahlen nur, wenn er sich etwas merken soll.",
+    "title": "Am Anfang ist alles offen. Zahle nur, wenn du mehr willst.",
     "free": {
       "name": "Kostenlos",
       "items": [
+        "Alle Funktionen sind offen, bis 14 Nutzungstage oder 5 Sessions erreicht sind",
+        "Dauerhaft kostenlos: letztes Setup, gespeicherte Vorlagen, bis zu 3 neue Vorlagen und Überzeit",
         "Unbegrenzt viele Vorwarnungen",
         "Eigener Text für jede Vorwarnung",
         "Live-Aktivität auf dem Sperrbildschirm und in der Dynamic Island",
@@ -114,12 +116,10 @@
     "pro": {
       "name": "Merken · Pro",
       "items": [
-        "Merken: Einstellungen als Vorlage sichern und mit einem Tipp starten",
-        "Merken: beim nächsten Öffnen ist dein letztes Setup wieder da",
-        "Pro: alles aus Merken plus Session-Modus mit Abschnittsnamen und Skripten",
-        "Pro: Überziehungszeit, Verlauf und Statistik"
+        "Merken: Unbegrenzte Vorlagen und dein gesamter Verlauf",
+        "Pro: alles aus Merken plus Session-Modus mit Abschnittsnamen und Skripten"
       ],
-      "note": "Für beide wählst du jährlich oder einmal zahlen und für immer behalten. Session-Modus, Überziehungszeit und Verlauf kannst du vor dem Kauf ein paar Mal ausprobieren."
+      "note": "Beide Pläne gibt es als Jahresabo oder als einmaligen Kauf auf Dauer. Der Session-Modus bleibt nach der Gratiszeit noch für ein paar Durchgänge offen."
     },
     "note": "Keine Werbung. Mit einem Für-immer-Pass öffnest du außerdem alle Apps von Leeo."
   },
@@ -128,7 +128,7 @@
     "items": [
       {
         "q": "Eine Vorwarnung kam nicht.",
-        "a": "Fast immer liegt es an Berechtigungen oder am Fokus. Prüf in der App unter Einstellungen › Mitteilungsart, ob Mitteilungen erlaubt sind. Nutzt du einen Fokus, füg Rereminder in den iOS-Einstellungen › Fokus als erlaubte App hinzu. Im Stummmodus gibt es nur Vibration. Steht Rereminder unter Einstellungen › Mitteilungen › Geplante Zusammenfassung, werden die Mitteilungen gesammelt und kommen zu spät, also nimm die App dort heraus."
+        "a": "Fast immer liegt es an Berechtigungen oder am Fokus. Prüf in der App unter Einstellungen › Mitteilungseinstellungen › Mitteilungsart, ob Mitteilungen erlaubt sind. Nutzt du einen Fokus, füg Rereminder in den iOS-Einstellungen › Fokus als erlaubte App hinzu. Im Stummmodus gibt es nur Vibration. Steht Rereminder unter Einstellungen › Mitteilungen › Geplante Zusammenfassung, werden die Mitteilungen gesammelt und kommen zu spät, also nimm die App dort heraus."
       },
       {
         "q": "Merke ich das Ende auch im Stummmodus?",
@@ -147,8 +147,8 @@
         "a": "Tipp im Tarifbildschirm auf „Käufe wiederherstellen“, angemeldet mit demselben Apple Account, mit dem du bezahlt hast. Einmalkäufe kommen auch nach dem Löschen der App oder auf einem neuen Gerät zurück."
       },
       {
-        "q": "Meine gesicherten Vorlagen sind gesperrt.",
-        "a": "Sie sind noch da. Ohne Merken oder Pro bleiben sie gesperrt sichtbar und sind sofort wieder offen, sobald du eins davon kaufst."
+        "q": "Werden meine gespeicherten Vorlagen gesperrt?",
+        "a": "Nein. Gespeicherte Vorlagen werden nie gelöscht und lassen sich immer öffnen. Nach der Gratiszeit kannst du bis zu 3 neue kostenlos speichern, mit Merken entfällt die Grenze."
       },
       {
         "q": "Wie bekomme ich mein Geld zurück?",

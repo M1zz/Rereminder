@@ -96,13 +96,15 @@
         "Trước 15 phút và 5 phút"
       ]
     ],
-    "note": "Lưu cách đặt hay dùng thành mẫu để mở lại chỉ bằng một chạm (từ gói Ghi nhớ trở lên). Bạn cũng có thể bắt đầu hoặc dừng hẹn giờ bằng Phím tắt và Siri."
+    "note": "Lưu cách đặt hay dùng thành mẫu để mở lại chỉ bằng một chạm. Bạn cũng có thể bắt đầu hoặc dừng hẹn giờ bằng Phím tắt và Siri."
   },
   "pricing": {
-    "title": "Báo trước miễn phí. Chỉ trả tiền khi muốn ứng dụng ghi nhớ.",
+    "title": "Ban đầu mọi thứ đều mở. Chỉ trả tiền khi bạn muốn nhiều hơn.",
     "free": {
       "name": "Miễn phí",
       "items": [
+        "Mọi tính năng đều mở cho đến 14 ngày sử dụng hoặc 5 phiên",
+        "Luôn miễn phí: cài đặt gần nhất, mẫu đã lưu, tối đa 3 mẫu mới và quá giờ",
         "Báo trước không giới hạn",
         "Lời nhắc riêng cho từng lần báo",
         "Hoạt động trực tiếp trên Màn hình khóa và Dynamic Island",
@@ -114,12 +116,10 @@
     "pro": {
       "name": "Ghi nhớ · Pro",
       "items": [
-        "Ghi nhớ: lưu cách đặt thành mẫu, mở lại chỉ bằng một chạm",
-        "Ghi nhớ: mở lại ứng dụng, mọi thứ vẫn như lần trước",
-        "Pro: toàn bộ Ghi nhớ cùng Chế độ Phiên với tên phần và kịch bản",
-        "Pro: đếm giờ lố, lịch sử và thống kê"
+        "Ghi nhớ: Mẫu không giới hạn và toàn bộ lịch sử",
+        "Pro: toàn bộ Ghi nhớ cùng Chế độ Phiên với tên phần và kịch bản"
       ],
-      "note": "Mỗi gói đều có thể chọn đăng ký theo năm hoặc mua một lần dùng trọn đời. Chế độ Phiên, đếm giờ lố và lịch sử có thể dùng thử vài lần trước khi trả tiền."
+      "note": "Mỗi gói đều có thể chọn theo năm hoặc mua một lần trọn đời. Chế độ Phiên vẫn dùng được thêm vài lần sau thời gian miễn phí."
     },
     "note": "Không quảng cáo. Một Vé trọn đời còn mở khóa mọi ứng dụng do Leeo làm."
   },
@@ -128,7 +128,7 @@
     "items": [
       {
         "q": "Có lần báo không kêu.",
-        "a": "Hầu hết là do quyền thông báo hoặc chế độ Tập trung. Kiểm tra quyền thông báo trong ứng dụng ở Cài đặt › Cách thông báo. Nếu bạn dùng Tập trung, hãy thêm Rereminder vào ứng dụng được phép trong Cài đặt › Tập trung của iOS. Ở chế độ im lặng chỉ có rung. Nếu Rereminder nằm trong Cài đặt › Thông báo › Tóm tắt theo lịch, thông báo sẽ bị gom lại và đến muộn, hãy bỏ nó ra."
+        "a": "Hầu hết là do quyền thông báo hoặc chế độ Tập trung. Kiểm tra quyền thông báo trong ứng dụng ở Cài đặt › Cài đặt thông báo › Cách thông báo. Nếu bạn dùng Tập trung, hãy thêm Rereminder vào ứng dụng được phép trong Cài đặt › Tập trung của iOS. Ở chế độ im lặng chỉ có rung. Nếu Rereminder nằm trong Cài đặt › Thông báo › Tóm tắt theo lịch, thông báo sẽ bị gom lại và đến muộn, hãy bỏ nó ra."
       },
       {
         "q": "Ở chế độ im lặng, tôi có biết khi hết giờ không?",
@@ -147,8 +147,8 @@
         "a": "Chạm \"Khôi phục giao dịch mua\" ở màn hình gói, khi đăng nhập đúng Tài khoản Apple đã dùng để trả tiền. Gói trọn đời vẫn quay lại dù bạn xóa ứng dụng hay đổi máy."
       },
       {
-        "q": "Các mẫu đã lưu bị khóa.",
-        "a": "Mẫu vẫn còn nguyên. Khi không có Ghi nhớ hay Pro, chúng hiện ở trạng thái khóa và mở lại ngay khi bạn mua một trong hai."
+        "q": "Mẫu đã lưu của tôi có bị khóa không?",
+        "a": "Không. Mẫu đã lưu không bao giờ bị xóa và luôn mở được. Sau thời gian miễn phí, bạn có thể lưu miễn phí tối đa 3 mẫu mới, và gói Ghi nhớ bỏ giới hạn này."
       },
       {
         "q": "Làm sao để được hoàn tiền?",

@@ -96,13 +96,15 @@
         "15 og 5 min før"
       ]
     ],
-    "note": "Lagre det du bruker ofte som mal, og start det med ett trykk (fra Husk og oppover). Du kan også starte eller stoppe en tidtaker med Snarveier og Siri."
+    "note": "Lagre det du bruker ofte som mal, og start det med ett trykk. Du kan også starte eller stoppe en tidtaker med Snarveier og Siri."
   },
   "pricing": {
-    "title": "Forvarsler er gratis. Betal bare hvis den skal huske noe.",
+    "title": "I starten er alt åpent. Betal bare hvis du vil ha mer.",
     "free": {
       "name": "Gratis",
       "items": [
+        "Alle funksjoner er åpne til 14 dagers bruk eller 5 økter",
+        "Alltid gratis: siste oppsett, lagrede maler, opptil 3 nye maler og overtid",
         "Ubegrenset antall forvarsler",
         "Din egen melding på hvert forvarsel",
         "Live Activity på låseskjermen og i Dynamic Island",
@@ -114,12 +116,10 @@
     "pro": {
       "name": "Husk · Pro",
       "items": [
-        "Husk: lagre oppsett som maler og start dem med ett trykk",
-        "Husk: åpne appen igjen, og alt er som du forlot det",
-        "Pro: alt i Husk pluss øktmodus med navn på delene og manus",
-        "Pro: overtid, historikk og statistikk"
+        "Husk: Ubegrensede maler og hele historikken",
+        "Pro: alt i Husk pluss øktmodus med navn på delene og manus"
       ],
-      "note": "For hver plan velger du årsabonnement eller et engangskjøp for alltid. Du kan prøve øktmodus, overtid og historikk noen ganger før du betaler."
+      "note": "Velg årlig eller engangskjøp for livstid på begge planene. Øktmodus kan brukes noen ganger til etter gratisperioden."
     },
     "note": "Ingen reklame. Ett Evighetspass åpner dessuten alle appene Leeo lager."
   },
@@ -128,7 +128,7 @@
     "items": [
       {
         "q": "Et forvarsel ringte ikke.",
-        "a": "Det er nesten alltid tillatelser eller fokus. Sjekk varslingstillatelsen i appen under Innstillinger › Varslingsmåte. Bruker du fokus, legg til Rereminder som tillatt app i iOS-innstillinger › Fokus. I lydløs modus kommer det bare vibrasjon. Står Rereminder under Innstillinger › Varslinger › Planlagt sammendrag, blir varslene holdt tilbake, så ta den ut derfra."
+        "a": "Det er nesten alltid tillatelser eller fokus. Sjekk varslingstillatelsen i appen under Innstillinger › Varslingsinnstillinger › Varslingsmåte. Bruker du fokus, legg til Rereminder som tillatt app i iOS-innstillinger › Fokus. I lydløs modus kommer det bare vibrasjon. Står Rereminder under Innstillinger › Varslinger › Planlagt sammendrag, blir varslene holdt tilbake, så ta den ut derfra."
       },
       {
         "q": "Merker jeg slutten i lydløs modus?",
@@ -147,8 +147,8 @@
         "a": "Trykk på «Gjenopprett kjøp» på skjermen med planer, logget inn med den samme Apple-kontoen du betalte med. Kjøp for alltid kommer tilbake selv om du sletter appen eller bytter enhet."
       },
       {
-        "q": "De lagrede malene mine er låst.",
-        "a": "De er der fortsatt. Uten Husk eller Pro blir de stående låst, og de åpnes igjen med en gang du kjøper en av dem."
+        "q": "Blir de lagrede malene mine låst?",
+        "a": "Nei. Lagrede maler slettes aldri og kan alltid åpnes. Etter gratisperioden kan du lagre opptil 3 nye gratis, og Husk fjerner grensen."
       },
       {
         "q": "Hvordan får jeg pengene tilbake?",

@@ -116,7 +116,7 @@ final class StorePurchaseLatchTests: XCTestCase {
     func test_proGateFollowsStoredPurchase() {
         UserDefaults.standard.set(true, forKey: Self.proKey)
         XCTAssertTrue(ProGate.canRememberSetup)
-        XCTAssertTrue(ProGate.canSaveTemplate())
+        XCTAssertTrue(ProGate.canSaveTemplate(currentCount: 0))
     }
 
     // MARK: - 평생 무료를 잃어버리는 길 (2026-09-18 제보)

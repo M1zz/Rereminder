@@ -2,8 +2,7 @@
 //  OnboardingDemoTests.swift
 //  RereminderTests
 //
-//  온보딩 체험의 속도 규칙 — **길이와 상관없이 10초 안에 끝나야 한다.**
-//  배속을 고정해 두면 30분짜리 상황이 30초를 잡아먹는다(온보딩에서 30초는 아무도 안 기다린다).
+//  첫 실행 그림의 장난감 타이머와 백지 시작 판정.
 //
 
 import XCTest
@@ -12,51 +11,71 @@ import XCTest
 @MainActor
 final class OnboardingDemoTests: XCTestCase {
 
-    func test_speed_scalesWithLength_soEveryDemoEndsInTenSeconds() {
-        for useCase in OnboardingUseCase.all {
-            let demo = OnboardingDemoTimer(totalSeconds: useCase.totalSeconds, alerts: useCase.alerts)
-            let realSeconds = Double(useCase.totalSeconds) / demo.speed
-            XCTAssertEqual(realSeconds, OnboardingDemoTimer.demoSeconds, accuracy: 0.01,
-                           "\(useCase.id) 체험이 10초를 벗어난다")
+    func test_speed_followsDemoLength() {
+        for total in [600, 1800, 3600] {
+            let demo = OnboardingDemoTimer(totalSeconds: total, alerts: [60])
+            XCTAssertEqual(Double(total) / demo.speed, OnboardingDemoTimer.demoSeconds, accuracy: 0.01)
         }
-    }
-
-    func test_everySuggestedUseCase_hasAtLeastTwoAlerts() {
-        // 알림이 하나뿐이면 "끝나기 전에 여러 번"을 체험에서 보여 줄 수 없다
-        for useCase in OnboardingUseCase.all {
-            XCTAssertGreaterThanOrEqual(useCase.alerts.count, 2, "\(useCase.id)")
-            for alert in useCase.alerts {
-                XCTAssertLessThan(alert, useCase.totalSeconds, "\(useCase.id) 알림이 타이머보다 길다")
-            }
-        }
-    }
-
-    /// 구간 이름은 **알림 경계에서 파생**된다 — 알림 N개면 구간은 N+1개다.
-    /// 개수가 어긋나면 이름이 조용히 빠지거나 엉뚱한 구간에 붙는다.
-    func test_sectionNames_matchTheSectionsTheAlertsCreate() {
-        for useCase in OnboardingUseCase.all where !useCase.sectionNames.isEmpty {
-            XCTAssertEqual(useCase.sectionNames.count, useCase.alerts.count + 1,
-                           "\(useCase.id) 구간 이름 수가 알림이 만드는 구간 수와 다르다")
-        }
-    }
-
-    /// 다이얼이 받을 수 있는 길이여야 한다 — 넘으면 온보딩이 권한 설정을 화면이 표현하지 못한다.
-    func test_everyUseCaseFitsOnTheDial() {
-        for useCase in OnboardingUseCase.all {
-            XCTAssertLessThanOrEqual(useCase.minutes, TimeMapper.maxMinutes, "\(useCase.id)")
-        }
-    }
-
-    /// ⚠️ 요리는 일부러 뺐다 — 시리를 이길 수 없는 싸움이고, 고른 사람은 이틀 뒤 앱을 지운다.
-    /// 그리고 **돈을 내는 상황**(남 앞에서 시간을 운영하는 것)이 목록에 있어야 한다.
-    func test_theListSpeaksToPeopleWhoRunTimeForOthers() {
-        let ids = Set(OnboardingUseCase.all.map(\.id))
-        XCTAssertFalse(ids.contains("cooking"), "요리를 되살렸다 — OnboardingUseCase 머리말 참고")
-        XCTAssertTrue(ids.isSuperset(of: ["presentation", "class", "workshop"]))
     }
 
     func test_alertsOutsideTheTimer_areDropped() {
         let demo = OnboardingDemoTimer(totalSeconds: 600, alerts: [900, 300, 0, -1])
         XCTAssertEqual(demo.alerts, [300])
+    }
+
+    /// 기존 사용자는 백지 시작이 아니다 — 온보딩을 봤거나 타이머를 건 적이 있으면 화면이 그대로다.
+    func test_blankStart_onlyForNewInstalls() {
+        XCTAssertTrue(BlankStart.isNewInstall(hasSeenOnboarding: false, timerStarts: 0))
+        XCTAssertFalse(BlankStart.isNewInstall(hasSeenOnboarding: true, timerStarts: 0))
+        XCTAssertFalse(BlankStart.isNewInstall(hasSeenOnboarding: false, timerStarts: 3))
+    }
+
+    private func stage(new: Bool, runs: Int = 0, pref: BlankStart.Preference = .automatic, session: Bool = false) -> BlankStart.Stage {
+        BlankStart.stage(isNewInstall: new, completions: runs, preference: pref, hasUsedSession: session)
+    }
+
+    func test_기존_사용자는_고르지_않으면_전부_보인다() {
+        XCTAssertEqual(stage(new: false), .everything)
+    }
+
+    func test_새_사용자는_완주할수록_하나씩_드러난다() {
+        let stages = (0...5).map { stage(new: true, runs: $0) }
+        XCTAssertEqual(stages, [.dial, .alerts, .saving, .session, .session, .everything])
+    }
+
+    func test_단순하게_골라도_써_본_세션_모드는_남는다() {
+        XCTAssertEqual(stage(new: false, pref: .simple), .saving)
+        XCTAssertEqual(stage(new: false, pref: .simple, session: true), .session)
+    }
+
+    func test_단순하게_고른_사람은_완주해도_저절로_돌아오지_않는다() {
+        XCTAssertEqual(stage(new: false, runs: 50, pref: .simple), .saving)
+    }
+
+    func test_모든_기능_보기는_언제나_전부다() {
+        XCTAssertEqual(stage(new: true, pref: .all), .everything)
+        XCTAssertEqual(stage(new: false, pref: .all), .everything)
+    }
+
+    func test_복잡한지는_기존_사용자에게_한_번만_묻는다() {
+        XCTAssertTrue(BlankStart.shouldAskComplexity(isNewInstall: false, preference: .automatic, alreadyAsked: false))
+        XCTAssertFalse(BlankStart.shouldAskComplexity(isNewInstall: false, preference: .automatic, alreadyAsked: true))
+        XCTAssertFalse(BlankStart.shouldAskComplexity(isNewInstall: true, preference: .automatic, alreadyAsked: false))
+        XCTAssertFalse(BlankStart.shouldAskComplexity(isNewInstall: false, preference: .all, alreadyAsked: false))
+    }
+
+    func test_수업은_한_번에_하나씩_놓친_것부터() {
+        XCTAssertNil(BlankStart.dueLesson(completions: 0, learned: []))
+        XCTAssertEqual(BlankStart.dueLesson(completions: 1, learned: []), .moreAlerts)
+        XCTAssertEqual(BlankStart.dueLesson(completions: 3, learned: []), .moreAlerts)
+        XCTAssertEqual(BlankStart.dueLesson(completions: 3, learned: [.moreAlerts]), .templates)
+        XCTAssertNil(BlankStart.dueLesson(completions: 3, learned: [.moreAlerts, .templates]))
+        XCTAssertEqual(BlankStart.dueLesson(completions: 4, learned: [.moreAlerts, .templates]), .overtime)
+    }
+
+    func test_차오르기는_첫_시작_전에는_열_때마다_쓰던_사람에게는_한_번() {
+        XCTAssertTrue(BlankStart.shouldPlayDialFill(timerStarts: 0, alreadyPlayed: true))
+        XCTAssertTrue(BlankStart.shouldPlayDialFill(timerStarts: 20, alreadyPlayed: false))
+        XCTAssertFalse(BlankStart.shouldPlayDialFill(timerStarts: 20, alreadyPlayed: true))
     }
 }

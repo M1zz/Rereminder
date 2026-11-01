@@ -96,13 +96,15 @@
         "15 og 5 min før"
       ]
     ],
-    "note": "Gem det, du bruger tit, som skabelon, og start det med ét tryk (fra Husk og op). Du kan også starte eller stoppe en timer med Genveje og Siri."
+    "note": "Gem det, du bruger tit, som skabelon, og start det med ét tryk. Du kan også starte eller stoppe en timer med Genveje og Siri."
   },
   "pricing": {
-    "title": "Forvarsler er gratis. Betal kun, hvis den skal huske noget.",
+    "title": "I starten er alt åbent. Betal kun, hvis du vil have mere.",
     "free": {
       "name": "Gratis",
       "items": [
+        "Alle funktioner er åbne indtil 14 dages brug eller 5 sessioner",
+        "Altid gratis: din seneste opsætning, gemte skabeloner, op til 3 nye skabeloner og overtid",
         "Ubegrænset antal forvarsler",
         "Din egen besked på hvert forvarsel",
         "Live Activity på låseskærmen og i Dynamic Island",
@@ -114,12 +116,10 @@
     "pro": {
       "name": "Husk · Pro",
       "items": [
-        "Husk: gem opsætninger som skabeloner og start dem med ét tryk",
-        "Husk: åbn appen igen, og alt er, som du forlod det",
-        "Pro: alt fra Husk plus sessionstilstand med afsnitsnavne og manuskripter",
-        "Pro: overtid, historik og statistik"
+        "Husk: Ubegrænsede skabeloner og hele din historik",
+        "Pro: alt fra Husk plus sessionstilstand med afsnitsnavne og manuskripter"
       ],
-      "note": "For hver plan vælger du årligt abonnement eller et engangskøb for altid. Du kan prøve sessionstilstand, overtid og historik et par gange, før du betaler."
+      "note": "Vælg årligt eller et engangskøb for livstid til begge planer. Sessionstilstand kan bruges et par gange mere efter den gratis periode."
     },
     "note": "Ingen reklamer. Ét Evighedspas åbner desuden alle Leeos apps."
   },
@@ -128,7 +128,7 @@
     "items": [
       {
         "q": "Et forvarsel lød ikke.",
-        "a": "Det er næsten altid tilladelser eller fokus. Tjek tilladelsen til notifikationer i appen under Indstillinger › Notifikationsmetode. Bruger du fokus, så tilføj Rereminder som tilladt app i iOS-indstillinger › Fokus. I lydløs tilstand får du kun vibration. Står Rereminder under Indstillinger › Notifikationer › Planlagt oversigt, bliver notifikationerne holdt tilbage, så tag den ud derfra."
+        "a": "Det er næsten altid tilladelser eller fokus. Tjek tilladelsen til notifikationer i appen under Indstillinger › Indstillinger for meddelelser › Notifikationsmetode. Bruger du fokus, så tilføj Rereminder som tilladt app i iOS-indstillinger › Fokus. I lydløs tilstand får du kun vibration. Står Rereminder under Indstillinger › Notifikationer › Planlagt oversigt, bliver notifikationerne holdt tilbage, så tag den ud derfra."
       },
       {
         "q": "Opdager jeg slutningen i lydløs tilstand?",
@@ -147,8 +147,8 @@
         "a": "Tryk på „Gendan køb“ på skærmen med planer, logget ind med den samme Apple-konto, som du betalte med. Køb for altid kommer tilbage, selv hvis du sletter appen eller skifter enhed."
       },
       {
-        "q": "Mine gemte skabeloner er låst.",
-        "a": "De er der stadig. Uden Husk eller Pro bliver de synlige, men låste, og de åbner igen, så snart du køber en af dem."
+        "q": "Bliver mine gemte skabeloner låst?",
+        "a": "Nej. Gemte skabeloner slettes aldrig og kan altid åbnes. Efter den gratis periode kan du gemme op til 3 nye gratis, og Husk fjerner grænsen."
       },
       {
         "q": "Hvordan får jeg pengene tilbage?",

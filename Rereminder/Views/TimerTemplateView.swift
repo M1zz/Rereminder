@@ -49,6 +49,7 @@ struct TimerTemplateView: View {
 
     private var canRememberSetup: Bool { store.canRemember || ProGate.canRememberSetup }
 
+    @ObservedObject var screenVM: TimerScreenViewModel
     let onSelect: (Timer) -> Void
 
     var body: some View {
@@ -58,19 +59,30 @@ struct TimerTemplateView: View {
                     ContentUnavailableView(
                         "No saved templates",
                         systemImage: "clock.badge.questionmark",
-                        description: Text("Templates are automatically saved when you start a timer")
+                        // 새로 설치한 사람은 저절로 저장되지 않는다(`BlankStart`)
+                        description: BlankStart.isNewInstall ? nil : Text("Templates are automatically saved when you start a timer")
                     )
                     .padding(.top, 40)
+                    if hasUnsavedChanges || !screenVM.isAtDefaultSetup {
+                        List {
+                            saveSection
+                            resetSection
+                        }
+                    }
                 } else {
                     List {
-                        ForEach(templates) { t in
-                            templateRow(for: t)
+                        saveSection
+                        Section {
+                            ForEach(templates) { t in
+                                templateRow(for: t)
+                            }
                         }
+                        resetSection
                     }
                     .listStyle(.insetGrouped)
                 }
             }
-            .navigationTitle("Timer Templates")
+            .navigationTitle("Saved setups")
             .navigationBarTitleDisplayMode(.inline)
             .safeAreaInset(edge: .bottom) {
                 if !canRememberSetup {
@@ -107,6 +119,75 @@ struct TimerTemplateView: View {
         }
     }
 
+    private var canSave: Bool {
+        store.canRemember || ProGate.canSaveTemplate(
+            currentCount: allTemplates.filter { !Timer.seedTemplateNames.contains($0.name) }.count)
+    }
+
+    /// 지금 다이얼과 같은 저장본이 없고, 기본 설정 그대로도 아니다.
+    private var hasUnsavedChanges: Bool {
+        guard !screenVM.isAtDefaultSetup else { return false }
+        let cfg = screenVM.normalizedCurrentConfig
+        guard cfg.mainSec > 0 else { return false }
+        let finish: String? = screenVM.finishMessage.isEmpty ? nil : screenVM.finishMessage
+        return !allTemplates.contains {
+            $0.mainSeconds == cfg.mainSec
+                && $0.prealertOffsetsSec == cfg.offsets
+                && $0.prealertMessages == screenVM.prealertMessages
+                && $0.finishMessage == finish
+        }
+    }
+
+    @ViewBuilder
+    private var saveSection: some View {
+        if hasUnsavedChanges {
+            Section {
+                Button {
+                    guard canSave else {
+                        paywallFeature = .unlimitedTemplates
+                        showPaywall = true
+                        return
+                    }
+                    screenVM.saveCurrentAsTemplate()
+                    // 한 번 저장해 본 사람에게는 더 권하지 않는다
+                    FeatureTips.markTemplateSaved()
+                    dismiss()
+                } label: {
+                    VStack(alignment: .leading, spacing: DSSpacing.xxs) {
+                        Label(String(localized: "Save"), systemImage: "bookmark.fill")
+                            .font(.body.weight(.semibold))
+                        Text(detailText(mainSeconds: screenVM.normalizedCurrentConfig.mainSec,
+                                        offsets: screenVM.normalizedCurrentConfig.offsets))
+                            .font(.body)
+                            .foregroundStyle(.secondary)
+                            .lineLimit(1)
+                    }
+                }
+                .accessibilityLabel(String(localized: "Save the current settings as a template"))
+                .accessibilityInputLabels([Text("Save")])
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var resetSection: some View {
+        if !screenVM.isAtDefaultSetup {
+            Section {
+                Button {
+                    withAnimation(.easeInOut(duration: 0.25)) { screenVM.resetToDefaultSetup() }
+                    dismiss()
+                } label: {
+                    Text("Reset the timer to the default setup")
+                        .font(.body)
+                }
+            }
+        }
+    }
+
+    private func detailText(mainSeconds: Int, offsets: [Int]) -> String {
+        ([TimeMapper.durationText(mainSeconds)] + offsets.sorted().map(AlertPresets.label)).joined(separator: " · ")
+    }
+
     @ViewBuilder
     private func templateRow(for timer: Timer) -> some View {
         Button {
@@ -115,18 +196,12 @@ struct TimerTemplateView: View {
             dismiss()
         } label: {
             HStack(spacing: DSSpacing.md) {
-                // 즐겨찾기 아이콘
-                Button {
-                    toggleFavorite(timer)
-                } label: {
-                    Image(systemName: timer.isFavorite ? "star.fill" : "star")
-                        .foregroundStyle(timer.isFavorite ? .yellow : .gray)
-                        .font(.title3)
-                        .frame(width: 44, height: 44)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(timer.isFavorite ? String(localized: "Remove from favorites") : String(localized: "Add to favorites"))
+                // 어떤 타이머인지 이름보다 먼저 모양으로 보인다
+                OnboardingDemoRing(totalSeconds: max(1, timer.mainSeconds),
+                                   alerts: timer.prealertOffsetsSec.filter { $0 < timer.mainSeconds },
+                                   elapsed: 0, size: 52, showsTime: false)
+                    .padding(DSSpacing.xxs)
+                    .accessibilityHidden(true)
 
                 VStack(alignment: .leading, spacing: DSSpacing.xs) {
                     // 1행: 템플릿 이름이 주인공, 라벨은 색 칩으로 보조
@@ -151,57 +226,33 @@ struct TimerTemplateView: View {
                         }
                     }
 
-                    // 2행: 시간 정보를 심볼 + M:SS로 (다이얼 화면과 같은 시각 언어)
-                    HStack(spacing: DSSpacing.md) {
-                        HStack(spacing: DSSpacing.xxs) {
-                            Image(systemName: "timer")
-                                .font(.caption2)
-                            Text(mmssText(timer.mainSeconds))
-                                .font(DSFont.caption.monospacedDigit())
-                        }
+                    // 2행: 시간과 알림을 다이얼 줄과 같은 말로
+                    Text(detailText(mainSeconds: timer.mainSeconds, offsets: timer.prealertOffsetsSec))
+                        .font(.body)
                         .foregroundStyle(.secondary)
-
-                        if !timer.prealertOffsetsSec.isEmpty {
-                            HStack(spacing: DSSpacing.xxs) {
-                                Image(systemName: "bell.fill")
-                                    .font(.caption2)
-                                    .foregroundStyle(DSColor.marker)
-                                Text(
-                                    timer.prealertOffsetsSec
-                                        .sorted()
-                                        .map { mmssText($0) }
-                                        .joined(separator: ", ")
-                                )
-                                .font(DSFont.caption.monospacedDigit())
-                                .foregroundStyle(.secondary)
-                            }
-                        }
-
-                        if timer.usageCount > 0 {
-                            HStack(spacing: DSSpacing.xxs) {
-                                Image(systemName: "play.circle.fill")
-                                    .font(.caption2)
-                                Text("\(timer.usageCount)")
-                                    .font(DSFont.caption)
-                            }
-                            .foregroundStyle(.tertiary)
-                        }
-                    }
+                        .lineLimit(1)
                 }
                 .accessibilityElement(children: .combine)
 
                 Spacer()
 
-                // 탭 결과를 명시: 이 템플릿을 타이머에 적용
-                Text("Apply")
-                    .font(DSFont.caption.weight(.semibold))
-                    .padding(.horizontal, DSSpacing.sm)
-                    .padding(.vertical, DSSpacing.xs)
-                    .background(Capsule().fill(Color.accentColor.opacity(0.15)))
-                    .foregroundStyle(Color.accentColor)
+                // 즐겨찾기 아이콘
+                Button {
+                    toggleFavorite(timer)
+                } label: {
+                    Image(systemName: timer.isFavorite ? "star.fill" : "star")
+                        .foregroundStyle(timer.isFavorite ? .yellow : .gray)
+                        .font(.title3)
+                        .frame(width: 44, height: 44)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(timer.isFavorite ? String(localized: "Remove from favorites") : String(localized: "Add to favorites"))
             }
             .padding(.vertical, DSSpacing.xs)
         }
+        // 목록 안 버튼은 기본이 파란 글자다. 저장한 설정이 전부 링크처럼 읽히지 않게 한다.
+        .buttonStyle(.plain)
         .accessibilityHint(String(localized: "Applies this template to the timer"))
         .contextMenu {
             Button {
@@ -244,7 +295,7 @@ struct TimerTemplateView: View {
 
     private func startEdit(_ timer: Timer) {
         editingTimer = timer
-        editName = timer.name
+        editName = timer.displayName
         editLabel = timer.label
         editColorHex = timer.colorHex
     }
@@ -301,7 +352,8 @@ struct TimerTemplateView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {
-                        timer.name = editName
+                        // 고치지 않았으면 저장값을 두어야 언어를 바꿔도 다시 번역된다.
+                        if editName != timer.displayName { timer.name = editName }
                         timer.label = editLabel
                         timer.colorHex = editColorHex
                         do {

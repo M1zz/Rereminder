@@ -37,6 +37,8 @@ struct ClipClock: View {
     @State private var lingeringAlertOffset: Int?
     @State private var alertLingerTask: Task<Void, Never>?
     @State private var alertDrag = DialDragTracker()
+    /// 겹친 종을 잡았지만 핸들로 넘어간 드래그인가(`DialDragTracker.shouldHandOffToDial`)
+    @State private var alertDragHandedToDial = false
 
     /// 다이얼 중심을 알아야 각도를 계산할 수 있어, 회전에 휘둘리지 않는 고정 좌표계를 따로 둔다
     private static let dialSpace = "clip.dial"
@@ -183,30 +185,37 @@ struct ClipClock: View {
         // 좌표계만 고정 좌표계로 바꾼다 — 인식 거리는 그대로 둔다
         return DragGesture(coordinateSpace: .named(Self.dialSpace))
             .onChanged { value in
-                showDragTooltip = true
-                dragTooltipLingerTask?.cancel()
-
-                if !mainDrag.isActive {
-                    mainDrag.begin(at: value.startLocation,
-                                   center: dialCenter,
-                                   knobAngle: viewModel.mainAngle)
-                }
-
-                viewModel.updateMainAngle(
-                    mainDrag.update(to: value.location,
-                                    center: dialCenter,
-                                    maxAngle: TimeMapper.maxAngle)
-                )
+                updateDialDrag(start: value.startLocation, location: value.location)
             }
-            .onEnded { _ in
-                mainDrag.end()
-                // 손을 놓은 뒤에도 잠시 유지
-                dragTooltipLingerTask = Task {
-                    try? await Task.sleep(for: .seconds(Self.tooltipLingerSeconds))
-                    guard !Task.isCancelled else { return }
-                    withAnimation(.easeOut(duration: Self.dissolveDuration)) { showDragTooltip = false }
-                }
-            }
+            .onEnded { _ in endDialDrag() }
+    }
+
+    /// `start` 가 없으면 지금 손끝에서 잡는다(겹친 종에서 넘어온 드래그).
+    private func updateDialDrag(start: CGPoint? = nil, location: CGPoint) {
+        showDragTooltip = true
+        dragTooltipLingerTask?.cancel()
+
+        if !mainDrag.isActive {
+            mainDrag.begin(at: start ?? location,
+                           center: dialCenter,
+                           knobAngle: viewModel.mainAngle)
+        }
+
+        viewModel.updateMainAngle(
+            mainDrag.update(to: location,
+                            center: dialCenter,
+                            maxAngle: TimeMapper.maxAngle)
+        )
+    }
+
+    private func endDialDrag() {
+        mainDrag.end()
+        // 손을 놓은 뒤에도 잠시 유지
+        dragTooltipLingerTask = Task {
+            try? await Task.sleep(for: .seconds(Self.tooltipLingerSeconds))
+            guard !Task.isCancelled else { return }
+            withAnimation(.easeOut(duration: Self.dissolveDuration)) { showDragTooltip = false }
+        }
     }
 
     // MARK: - 알림 종 노브
@@ -231,6 +240,8 @@ struct ClipClock: View {
                 // 하나를 옮기는 동안 나머지는 물러나 있어야 어느 종을 만지는지 헷갈리지 않는다
                 let dimmed = isHighlighting && !isFocused
                 let fired = isProgressMode && viewModel.remainingRatio <= CGFloat(offsetSec) / total
+                // 지금 놓으면 지워지는 자리다 — 메인 앱과 같은 신호
+                let willRemove = isDraggingThis && TimeMapper.angleToSeconds(from: alertDragAngle) == 0
 
                 ZStack {
                     Circle()
@@ -241,7 +252,7 @@ struct ClipClock: View {
                         .foregroundStyle(.white)
                 }
                 .frame(width: lineWidth * scale, height: lineWidth * scale)
-                .opacity(fired ? 0.35 : (dimmed ? 0.25 : 1.0))
+                .opacity(fired || willRemove ? 0.35 : (dimmed ? 0.25 : 1.0))
                 // 링을 따라 돌아도 종 아이콘은 똑바로 서 있도록 역회전
                 .rotationEffect(.degrees(90 - angle))
                 .frame(width: lineWidth * 2.8, height: lineWidth * 2.8)
@@ -310,6 +321,10 @@ struct ClipClock: View {
     private func alertDragGesture(for offsetSec: Int) -> some Gesture {
         DragGesture(coordinateSpace: .named(Self.dialSpace))
             .onChanged { value in
+                if alertDragHandedToDial {
+                    updateDialDrag(location: value.location)
+                    return
+                }
                 if draggingAlertOffset != offsetSec {
                     draggingAlertOffset = offsetSec
                     alertDrag.begin(
@@ -327,8 +342,26 @@ struct ClipClock: View {
                     // 알림은 총 시간보다 앞이어야 의미가 있다 (메인 앱과 같은 10초 여유)
                     maxAngle: DialDragTracker.maxAlertAngle(totalSeconds: viewModel.totalSeconds)
                 )
+                // 짧은 타이머는 종과 핸들이 겹친다. 시계 방향으로 더 끌면 핸들을 잡으려던 것이다.
+                if DialDragTracker.shouldHandOffToDial(
+                    rawAngle: alertDrag.rawAngle,
+                    maxAlertAngle: DialDragTracker.maxAlertAngle(totalSeconds: viewModel.totalSeconds),
+                    bellAngle: Double(offsetSec) / TimeMapper.secondsPerDegree,
+                    dialAngle: viewModel.mainAngle,
+                    grabSpanDegrees: lineWidth * 2.8 / (size / 2) * 180 / .pi
+                ) {
+                    alertDrag.end()
+                    draggingAlertOffset = nil
+                    alertDragHandedToDial = true
+                    updateDialDrag(location: value.location)
+                }
             }
             .onEnded { _ in
+                if alertDragHandedToDial {
+                    alertDragHandedToDial = false
+                    endDialDrag()
+                    return
+                }
                 alertDrag.end()
                 guard let dragged = draggingAlertOffset else { return }
                 let newSec = TimeMapper.angleToSeconds(from: alertDragAngle)
@@ -337,9 +370,9 @@ struct ClipClock: View {
                 // ⚠️ 손을 뗄 때는 애니메이션을 걸지 않는다 — 메인 앱과 같은 이유다.
                 //    ForEach 의 id 가 알림 초라서 지웠다 넣는 순간 SwiftUI 가 "다른 종"으로 보고
                 //    `.transition(.scale + .opacity)` 를 재생해 종이 펑 튀어 보인다.
-                //    (링 밖으로 끌어 지우는 경우는 그대로 페이드아웃)
+                //    지우는 경우도 페이드 없이 바로 없앤다 — 메인 앱과 같다.
                 var transaction = Transaction()
-                transaction.disablesAnimations = keeps
+                transaction.disablesAnimations = true
                 withTransaction(transaction) {
                     viewModel.moveAlert(from: dragged, to: newSec)
                     // 놓은 자리의 시간을 잠시 유지 — 그동안 종도 큰 채로 남는다

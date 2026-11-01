@@ -96,13 +96,15 @@
         "15 y 5 min antes"
       ]
     ],
-    "note": "Guarda como plantilla lo que repites y ábrelo con un toque (desde Memoria). También puedes iniciar o detener un temporizador con Atajos y Siri."
+    "note": "Guarda como plantilla lo que repites y ábrelo con un toque. También puedes iniciar o detener un temporizador con Atajos y Siri."
   },
   "pricing": {
-    "title": "Los avisos previos son gratis. Paga solo si quieres que recuerde.",
+    "title": "Al principio todo está abierto. Paga solo si quieres más.",
     "free": {
       "name": "Gratis",
       "items": [
+        "Todas las funciones abiertas hasta 14 días de uso o 5 sesiones",
+        "Gratis siempre: tu última configuración, las plantillas guardadas, hasta 3 plantillas nuevas y tiempo extra",
         "Avisos previos sin límite",
         "Tu propio mensaje en cada aviso",
         "Actividad en vivo en la pantalla bloqueada y en la Dynamic Island",
@@ -114,12 +116,10 @@
     "pro": {
       "name": "Memoria · Pro",
       "items": [
-        "Memoria: guarda ajustes como plantillas y ábrelos con un toque",
-        "Memoria: al volver a abrir la app, todo sigue como lo dejaste",
-        "Pro: todo lo de Memoria más el modo sesión con nombres de partes y guiones",
-        "Pro: tiempo extra, historial y estadísticas"
+        "Memoria: Plantillas ilimitadas y todo tu historial",
+        "Pro: todo lo de Memoria más el modo sesión con nombres de partes y guiones"
       ],
-      "note": "En cada plan eliges suscripción anual o un pago único para siempre. Puedes probar el modo sesión, el tiempo extra y el historial unas cuantas veces antes de pagar."
+      "note": "Elige por año o una compra única de por vida en cualquiera de los planes. El Modo sesión conserva unos cuantos usos después del periodo gratuito."
     },
     "note": "Sin anuncios. Además, un Pase para siempre abre todas las apps de Leeo."
   },
@@ -128,7 +128,7 @@
     "items": [
       {
         "q": "Un aviso no sonó.",
-        "a": "Casi siempre son los permisos o un modo de concentración. Revisa el permiso de notificaciones en la app, en Ajustes › Método de aviso. Si usas un modo de concentración, añade Rereminder como app permitida en Ajustes › Concentración de iOS. En modo silencio solo vibra. Si Rereminder está en Ajustes › Notificaciones › Resumen programado, sus avisos se retienen; sácala de ahí."
+        "a": "Casi siempre son los permisos o un modo de concentración. Revisa el permiso de notificaciones en la app, en Ajustes › Ajustes de notificaciones › Método de aviso. Si usas un modo de concentración, añade Rereminder como app permitida en Ajustes › Concentración de iOS. En modo silencio solo vibra. Si Rereminder está en Ajustes › Notificaciones › Resumen programado, sus avisos se retienen; sácala de ahí."
       },
       {
         "q": "¿Me enteraré del final en modo silencio?",
@@ -147,8 +147,8 @@
         "a": "Toca «Restaurar compras» en la pantalla de planes, con la misma cuenta de Apple con la que pagaste. Las compras para siempre vuelven aunque borres la app o cambies de dispositivo."
       },
       {
-        "q": "Mis plantillas guardadas están bloqueadas.",
-        "a": "Siguen ahí. Sin Memoria ni Pro se quedan visibles pero bloqueadas, y se abren otra vez en cuanto compras uno de los dos."
+        "q": "¿Se bloquearán mis plantillas guardadas?",
+        "a": "No. Las plantillas guardadas nunca se borran y siempre se abren. Tras el periodo gratuito puedes guardar hasta 3 nuevas gratis, y Memoria quita el límite."
       },
       {
         "q": "¿Cómo pido un reembolso?",

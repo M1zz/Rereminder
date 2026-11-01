@@ -96,13 +96,15 @@
         "15 en 5 min van tevoren"
       ]
     ],
-    "note": "Bewaar wat je vaak gebruikt als sjabloon en start het met één tik (vanaf Onthouden). Je kunt een timer ook starten of stoppen met Opdrachten en Siri."
+    "note": "Bewaar wat je vaak gebruikt als sjabloon en start het met één tik. Je kunt een timer ook starten of stoppen met Opdrachten en Siri."
   },
   "pricing": {
-    "title": "Voorwaarschuwingen zijn gratis. Betaal alleen als hij iets moet onthouden.",
+    "title": "In het begin staat alles open. Betaal alleen als je meer wilt.",
     "free": {
       "name": "Gratis",
       "items": [
+        "Alle functies open tot 14 dagen gebruik of 5 sessies",
+        "Altijd gratis: je laatste instelling, bewaarde sjablonen, tot 3 nieuwe sjablonen en overtijd",
         "Onbeperkt voorwaarschuwingen",
         "Een eigen tekst bij elke waarschuwing",
         "Live Activity op het toegangsscherm en in het Dynamic Island",
@@ -114,12 +116,10 @@
     "pro": {
       "name": "Onthouden · Pro",
       "items": [
-        "Onthouden: instellingen als sjabloon bewaren en met één tik starten",
-        "Onthouden: na heropenen staat alles zoals je het liet",
-        "Pro: alles van Onthouden plus sessiemodus met bloknamen en scripts",
-        "Pro: uitlooptijd, geschiedenis en statistieken"
+        "Onthouden: Onbeperkt sjablonen en je volledige geschiedenis",
+        "Pro: alles van Onthouden plus sessiemodus met bloknamen en scripts"
       ],
-      "note": "Voor elk plan kies je een jaarabonnement of een eenmalige aankoop voor altijd. Sessiemodus, uitlooptijd en geschiedenis kun je een paar keer proberen voordat je betaalt."
+      "note": "Kies voor beide plannen per jaar of een eenmalige levenslange aankoop. Sessiemodus blijft na de gratis periode nog een paar keer beschikbaar."
     },
     "note": "Geen advertenties. Met één Altijd-pas open je bovendien alle apps van Leeo."
   },
@@ -128,7 +128,7 @@
     "items": [
       {
         "q": "Een waarschuwing ging niet af.",
-        "a": "Meestal liggen toestemmingen of een focus eraan. Controleer de toestemming voor meldingen in de app onder Instellingen › Meldingsmethode. Gebruik je een focus, voeg Rereminder dan toe als toegestane app in Instellingen › Focus van iOS. In de stille modus krijg je alleen een trilling. Staat Rereminder in Instellingen › Berichtgeving › Geplande samenvatting, dan worden de meldingen opgespaard; haal hem daar weg."
+        "a": "Meestal liggen toestemmingen of een focus eraan. Controleer de toestemming voor meldingen in de app onder Instellingen › Meldingsinstellingen › Meldingsmethode. Gebruik je een focus, voeg Rereminder dan toe als toegestane app in Instellingen › Focus van iOS. In de stille modus krijg je alleen een trilling. Staat Rereminder in Instellingen › Berichtgeving › Geplande samenvatting, dan worden de meldingen opgespaard; haal hem daar weg."
       },
       {
         "q": "Merk ik het einde ook in de stille modus?",
@@ -147,8 +147,8 @@
         "a": "Tik op ‘Herstel aankopen’ in het scherm met abonnementen, ingelogd met hetzelfde Apple Account waarmee je betaalde. Aankopen voor altijd komen terug, ook na het verwijderen van de app of op een nieuw apparaat."
       },
       {
-        "q": "Mijn bewaarde sjablonen zijn vergrendeld.",
-        "a": "Ze zijn er nog. Zonder Onthouden of Pro blijven ze vergrendeld zichtbaar, en ze gaan meteen weer open zodra je een van beide koopt."
+        "q": "Worden mijn bewaarde sjablonen vergrendeld?",
+        "a": "Nee. Bewaarde sjablonen worden nooit verwijderd en openen altijd. Na de gratis periode kun je er tot 3 nieuwe gratis bewaren, en Onthouden haalt de limiet weg."
       },
       {
         "q": "Hoe krijg ik mijn geld terug?",

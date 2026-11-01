@@ -96,13 +96,15 @@
         "15 i 5 min przed"
       ]
     ],
-    "note": "To, czego używasz często, zapisz jako szablon i uruchamiaj jednym stuknięciem (od planu Pamięć). Minutnik możesz też uruchomić lub zatrzymać przez Skróty i Siri."
+    "note": "To, czego używasz często, zapisz jako szablon i uruchamiaj jednym stuknięciem. Minutnik możesz też uruchomić lub zatrzymać przez Skróty i Siri."
   },
   "pricing": {
-    "title": "Ostrzeżenia są bezpłatne. Płacisz tylko, jeśli ma coś zapamiętać.",
+    "title": "Na początku wszystko jest otwarte. Płać tylko, jeśli chcesz więcej.",
     "free": {
       "name": "Za darmo",
       "items": [
+        "Wszystkie funkcje otwarte do 14 dni używania lub 5 sesji",
+        "Zawsze za darmo: ostatnie ustawienie, zapisane szablony, do 3 nowych szablonów i czas po upływie",
         "Ostrzeżenia bez limitu",
         "Własny tekst przy każdym ostrzeżeniu",
         "Aktywność na żywo na ekranie blokady i w Dynamic Island",
@@ -114,12 +116,10 @@
     "pro": {
       "name": "Pamięć · Pro",
       "items": [
-        "Pamięć: zapisuj ustawienia jako szablony i uruchamiaj je jednym stuknięciem",
-        "Pamięć: po ponownym otwarciu wszystko jest tak, jak zostawiłeś",
-        "Pro: wszystko z Pamięci plus tryb sesji z nazwami części i tekstami",
-        "Pro: nadgodziny, historia i statystyki"
+        "Pamięć: Bez limitu szablonów i pełna historia",
+        "Pro: wszystko z Pamięci plus tryb sesji z nazwami części i tekstami"
       ],
-      "note": "Przy każdym planie wybierasz subskrypcję roczną albo jednorazowy zakup na zawsze. Tryb sesji, nadgodziny i historię możesz kilka razy wypróbować przed zapłatą."
+      "note": "W obu planach wybierz subskrypcję roczną lub jednorazowy zakup dożywotni. Tryb sesji zostaje na kilka użyć po okresie bezpłatnym."
     },
     "note": "Bez reklam. Jedna przepustka otwiera też wszystkie aplikacje Leeo."
   },
@@ -128,7 +128,7 @@
     "items": [
       {
         "q": "Ostrzeżenie się nie odezwało.",
-        "a": "Prawie zawsze chodzi o uprawnienia albo tryb skupienia. Sprawdź zgodę na powiadomienia w aplikacji w Ustawienia › Sposób powiadamiania. Jeśli używasz trybu skupienia, dodaj Rereminder do dozwolonych aplikacji w Ustawieniach iOS › Skupienie. W trybie cichym jest tylko wibracja. Jeśli Rereminder jest w Ustawienia › Powiadomienia › Zaplanowane podsumowanie, powiadomienia są wstrzymywane, więc go stamtąd usuń."
+        "a": "Prawie zawsze chodzi o uprawnienia albo tryb skupienia. Sprawdź zgodę na powiadomienia w aplikacji w Ustawienia › Ustawienia powiadomień › Sposób powiadamiania. Jeśli używasz trybu skupienia, dodaj Rereminder do dozwolonych aplikacji w Ustawieniach iOS › Skupienie. W trybie cichym jest tylko wibracja. Jeśli Rereminder jest w Ustawienia › Powiadomienia › Zaplanowane podsumowanie, powiadomienia są wstrzymywane, więc go stamtąd usuń."
       },
       {
         "q": "Czy zauważę koniec w trybie cichym?",
@@ -147,8 +147,8 @@
         "a": "Stuknij „Odtwórz zakupy” na ekranie planów, będąc zalogowanym na to samo konto Apple, którym płaciłeś. Zakupy na zawsze wracają nawet po usunięciu aplikacji lub zmianie urządzenia."
       },
       {
-        "q": "Moje zapisane szablony są zablokowane.",
-        "a": "Wciąż tam są. Bez Pamięci lub Pro pozostają widoczne, ale zablokowane, i otwierają się od razu po zakupie jednego z planów."
+        "q": "Czy moje zapisane szablony zostaną zablokowane?",
+        "a": "Nie. Zapisane szablony nigdy nie są usuwane i zawsze się otwierają. Po okresie bezpłatnym możesz za darmo zapisać do 3 nowych, a plan Pamięć znosi limit."
       },
       {
         "q": "Jak odzyskać pieniądze?",

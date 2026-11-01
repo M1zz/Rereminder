@@ -20,6 +20,8 @@ final class ProMentionTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
+        // 이 파일은 문턱 뒤의 판정을 본다. 무료 기간은 `FreeUseTests`.
+        FreeUse.markReachedForTesting()
         suiteName = "ProMentionTests.\(UUID().uuidString)"
         suite = UserDefaults(suiteName: suiteName)
         calendar.timeZone = TimeZone(identifier: "Asia/Seoul") ?? .gmt
@@ -28,6 +30,7 @@ final class ProMentionTests: XCTestCase {
     }
 
     override func tearDown() {
+        FreeUse.resetForTesting()
         suite.removePersistentDomain(forName: suiteName)
         ProMention.defaults = .standard
         ProMention.calendar = .current

@@ -105,9 +105,10 @@ final class TimerConfigService {
 
     /// 같은 설정의 템플릿이 없을 때만 저장하고, 최대 개수를 넘으면 오래된 것을 지운다.
     ///
-    /// ⚠️ **무료 사용자에게는 아무것도 하지 않는다 — 저장도, 삭제도.**
-    ///    저장이 Pro 인 것(`ProGate.canSaveTemplate`)과 갖고 있던 템플릿이 사라지는 것은
-    ///    전혀 다른 일이다. 칩은 잠긴 채로 남아 있어야 한다(`TemplateQuickBar` 머리말).
+    /// ⚠️ **돈을 내지 않은 사람의 템플릿은 어떤 경우에도 지우지 않는다.**
+    ///    저장이 막히는 것과 갖고 있던 템플릿이 사라지는 것은 전혀 다른 일이다.
+    /// ⚠️ 시작할 때 저절로 저장하는 것(`automatic`)은 무료 몫을 쓰지 않는다 — 쓰면 사용자가 고르지도
+    ///    않은 설정이 한도를 채워, 정작 저장을 누를 때 막힌다.
     ///
     /// 중복은 **전체 템플릿**과 견준다. 맨 앞 하나만 보면 A·B 를 번갈아 쓸 때마다 같은 설정이
     /// 다시 쌓여 칩이 복사본으로 채워진다(시작할 때마다 이 함수가 불린다).
@@ -118,9 +119,15 @@ final class TimerConfigService {
         mainSec: Int,
         offsets: [Int],
         prealertMessages: [Int: String],
-        finishMessage: String?
+        finishMessage: String?,
+        automatic: Bool = false
     ) -> Bool {
-        guard ProGate.canSaveTemplate() else { return false }
+        if automatic {
+            guard ProGate.canRememberSetup else { return false }
+        } else {
+            let saved = fetchRecents().filter { !Timer.seedTemplateNames.contains($0.name) }.count
+            guard ProGate.canSaveTemplate(currentCount: saved) else { return false }
+        }
         guard let ctx = context else { return false }
         let interval = Self.signposter.beginInterval("saveTemplate")
         defer { Self.signposter.endInterval("saveTemplate", interval) }
@@ -160,7 +167,7 @@ final class TimerConfigService {
 
         // 최대 개수 초과 시 오래된 것부터 삭제
         let recents = fetchRecents()
-        if recents.count > maxTemplates {
+        if StoreManager.canRememberSetup, recents.count > maxTemplates {
             for old in recents.dropFirst(maxTemplates) {
                 ctx.delete(old)
             }

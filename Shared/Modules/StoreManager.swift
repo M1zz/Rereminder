@@ -82,7 +82,14 @@ final class StoreManager: ObservableObject {
 
     /// Pro 선물 상품 — **소모성**(몇 번이고 보낼 수 있어야 한다). 받은 사람이 `ProductID.pro` 를 산 것과 같아진다.
     /// ⚠️ 이것도 `productIDs`·`entitlementIDs` 에 넣지 않는다 — 넣으면 선물을 산 사람 자신이 Pro 가 된다.
-    nonisolated static let giftProductID = "com.xa.toki.gift.pro"
+    /// 예전 선물 코드로 받은 Pro 의 기록(LeeoKit 이 남긴 것). 선물은 2.3.5 에서 뺐고(지침 3.1.1) 새로 생기지 않는다.
+    nonisolated private static let legacyGiftRedeemedKey = "leeo.gift.redeemed.com.xa.toki.gift.pro"
+
+    /// 예전 선물 코드로 이미 Pro 를 받은 사람. **받은 Pro 는 그대로 둔다.**
+    nonisolated static var hasLegacyGiftPro: Bool {
+        if UserDefaults.standard.data(forKey: legacyGiftRedeemedKey) != nil { return true }
+        return UserDefaults(suiteName: "group.leeo.toki")?.data(forKey: legacyGiftRedeemedKey) != nil
+    }
 
     // MARK: - Published State
 
@@ -485,13 +492,10 @@ final class StoreManager: ObservableObject {
         return found
     }
 
-    // MARK: - 팁 · 선물 (LeeoStore 가 엔진을 가진다)
+    // MARK: - 팁 (LeeoStore 가 엔진을 가진다)
 
     /// 팁(응원) 엔진. 상품이 App Store 에서 와야 `isAvailable` 이 참이 되고, 그때만 설정에 줄이 선다.
     var tipJar: LeeoTipJar? { store.tipJar }
-
-    /// Pro 선물 엔진. 받은 선물은 LeeoStore 가 `purchasedProductIDs` 에 합쳐 Pro 로 연다.
-    var gift: LeeoGiftStore? { store.gift }
 
     // MARK: - Load Products / Entitlements (LeeoStore 로 위임)
 
@@ -769,7 +773,7 @@ extension StoreManager {
     nonisolated static var canRememberSetup: Bool { tier >= .plus }
 
     nonisolated static var isProUser: Bool {
-        if isAutoProEnvironment || isGrandfathered { return true }
+        if isAutoProEnvironment || isGrandfathered || hasLegacyGiftPro { return true }
         // 창단 후원자 표식은 결제·그랜드파더링에만 주어진다 — 앱을 지워도 남으므로 마지막 근거가 된다.
         if hasFounderRecord { return true }
         // 언제나 평생 패스는 이 앱의 가장 높은 칸을 연다. Pro 연 구독은 만료일까지.

@@ -122,18 +122,16 @@ struct OnboardingDemoRing: View {
     let alerts: [Int]
     let elapsed: Double
     var size: CGFloat = 220
+    /// 저장한 설정 목록의 작은 다이얼은 숫자 없이 모양만 그린다
+    var showsTime = true
+    /// 첫 실행의 그림에서 빈 원이 차오르는 정도(0~1). 12시에서 시계 방향이다.
+    var fill: CGFloat = 1
 
     private var lineWidth: CGFloat { size * 0.083 }
     private var elapsedSec: Int { Int(elapsed.rounded()) }
 
     private var segments: [TimerSections.Segment] {
         TimerSections.derive(mainSeconds: totalSeconds, alertOffsets: Set(alerts))
-    }
-
-    private var sectionProgress: TimerSections.Progress? {
-        TimerSections.progress(mainSeconds: totalSeconds,
-                               alertOffsets: Set(alerts),
-                               elapsedSec: elapsedSec)
     }
 
     private var remainingRatio: CGFloat {
@@ -156,29 +154,40 @@ struct OnboardingDemoRing: View {
                         .stroke(SectionPalette.color(segment.index),
                                 style: StrokeStyle(lineWidth: lineWidth, lineCap: .butt))
                         .rotationEffect(.degrees(-90))
+                        .mask {
+                            Circle()
+                                .trim(from: 0, to: fill)
+                                .stroke(style: StrokeStyle(lineWidth: lineWidth + 2, lineCap: .butt))
+                                .rotationEffect(.degrees(-90))
+                        }
                 }
             }
 
             // 알림 종 — 이 앱의 주인공이라 체험에서도 그대로 보인다
             ForEach(alerts, id: \.self) { alert in
                 let fraction = Double(alert) / Double(totalSeconds)
-                bell(at: fraction, isRung: remainingRatio <= CGFloat(fraction))
+                bell(at: fraction, isRung: remainingRatio <= CGFloat(fraction),
+                     color: SectionPalette.color(AlertPresets.bellSectionIndex(of: alert, among: Set(alerts))))
             }
 
-            centerTimes
+            if showsTime {
+                centerTimes
+            }
         }
         .frame(width: size, height: size)
         .animation(.linear(duration: 0.1), value: elapsed)
     }
 
-    private func bell(at fraction: Double, isRung: Bool) -> some View {
+    private func bell(at fraction: Double, isRung: Bool, color: Color) -> some View {
         ZStack {
-            Circle().fill(DSColor.marker)
+            Circle().fill(color)
             Image(systemName: "bell.fill")
                 .font(.system(size: lineWidth * 0.62, weight: .bold))
                 .foregroundStyle(.white)
         }
         .frame(width: lineWidth * 1.5, height: lineWidth * 1.5)
+        // 링을 따라 돌려 자리를 잡아도 종 자체는 언제나 똑바로 선다(`TimerMainView` 의 노브와 같다)
+        .rotationEffect(.degrees(90 - fraction * 360))
         // 울린 종은 물러난다 — 남은 종이 무엇인지가 보여야 한다
         .opacity(isRung ? 0.35 : 1)
         .offset(x: size / 2)
@@ -187,25 +196,11 @@ struct OnboardingDemoRing: View {
     }
 
     private var centerTimes: some View {
-        let fontSize = size * 0.2
-        return VStack(spacing: fontSize * 0.08) {
-            Text(TimeMapper.mmss(Int(remaining.rounded())))
-                .font(.system(size: fontSize, weight: .bold, design: .rounded))
-                .monospacedDigit()
-
-            if let progress = sectionProgress, progress.isDivided {
-                HStack(spacing: fontSize * 0.16) {
-                    Circle()
-                        .fill(SectionPalette.color(progress.index))
-                        .frame(width: fontSize * 0.2, height: fontSize * 0.2)
-                    Text(TimeMapper.mmss(progress.remainingSec))
-                        .monospacedDigit()
-                }
-                .font(.system(size: fontSize * 0.62, weight: .bold, design: .rounded))
-                .foregroundStyle(.primary.opacity(0.85))
-            }
-        }
-        .accessibilityElement(children: .combine)
+        Text(TimeMapper.mmss(Int(remaining.rounded())))
+            .font(.system(size: size * 0.2, weight: .bold, design: .rounded))
+            .monospacedDigit()
+            // 숫자는 그냥 바뀐다. 링의 애니메이션을 물려받으면 앞뒤 숫자가 겹쳐 보인다.
+            .transaction { $0.animation = nil }
     }
 
     private var remaining: Double { max(0, Double(totalSeconds) - elapsed) }
