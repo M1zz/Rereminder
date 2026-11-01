@@ -156,6 +156,23 @@ struct TimerDialRings: View {
                         .frame(width: size, height: size)
                         .rotationEffect(.degrees(-90))
 
+                    // 호 전체의 양 끝만 둥글게. 경계는 위처럼 맞붙는다.
+                    let opacity = arcOpacity(sectionIndex: sectionIndex, isEditingThis: isEditingThis)
+                    let color = SectionPalette.color(sectionIndex)
+                    // 한 바퀴를 꽉 채운 줄은 시작과 끝이 맞닿아 끝이 없다
+                    if from == 0, lap == 1 || plan.totalFraction < 1 {
+                        RingEndCap(fraction: 0, facesForward: false, lineWidth: plan.lineWidth)
+                            .fill(color)
+                            .opacity(opacity)
+                            .frame(width: size, height: size)
+                    }
+                    if bounds[i + 1] == plan.totalFraction, to < 1 {
+                        RingEndCap(fraction: to, facesForward: true, lineWidth: plan.lineWidth)
+                            .fill(color)
+                            .opacity(opacity)
+                            .frame(width: size, height: size)
+                    }
+
                     // 구간 번호 — 리스트의 "1, 2, 3"과 링의 호를 잇는 이름표.
                     // 호가 짧으면(숫자보다 좁으면) 넣지 않는다 — 옆 구간 위로 삐져나온다.
                     if plan.showsSectionNumbers, to - from >= 0.055 {
@@ -194,6 +211,36 @@ struct TimerDialRings: View {
     }
 }
 
+// MARK: - 호의 둥근 끝
+
+/// 호 끝에 붙이는 반원. 12시 기준 시계 방향 좌표(1.0 = 한 바퀴)이고, 호와 함께 움직이도록 애니메이션된다.
+/// ⚠️ 구간 호에 `.round` 캡을 쓰면 옆 구간으로 부풀고, 원을 얹으면 흐린 구간에서 겹친 자리만 진해진다.
+///    호 바깥쪽 반원만 그려야 어느 투명도에서도 한 덩어리로 보인다.
+struct RingEndCap: Shape {
+    var fraction: CGFloat
+    let facesForward: Bool
+    let lineWidth: CGFloat
+
+    var animatableData: CGFloat {
+        get { fraction }
+        set { fraction = newValue }
+    }
+
+    func path(in rect: CGRect) -> Path {
+        let degrees = Double(fraction) * 360 - 90
+        let radians = degrees * .pi / 180
+        let center = CGPoint(x: rect.midX + rect.width / 2 * cos(radians),
+                             y: rect.midY + rect.width / 2 * sin(radians))
+        var path = Path()
+        path.addArc(center: center, radius: lineWidth / 2,
+                    startAngle: .degrees(degrees),
+                    endAngle: .degrees(degrees + (facesForward ? 180 : -180)),
+                    clockwise: !facesForward)
+        path.closeSubpath()
+        return path
+    }
+}
+
 // MARK: - 차오르는 가림막
 
 /// 12시에서 시계 방향으로 `laps` 까지만 보이는 가림막. 한 바퀴를 넘으면 안쪽 줄로 이어진다.
@@ -223,7 +270,7 @@ struct DialFillMask: Shape {
             var arc = Path()
             arc.addArc(center: center, radius: radius,
                        startAngle: .degrees(-90), endAngle: .degrees(-90 + Double(laps) * 360), clockwise: false)
-            path.addPath(arc.strokedPath(StrokeStyle(lineWidth: lineWidth + 2, lineCap: .butt)))
+            path.addPath(arc.strokedPath(StrokeStyle(lineWidth: lineWidth + 2, lineCap: .round)))
         }
         addArc(radius: size / 2, laps: min(1, laps))
         addArc(radius: innerSize / 2, laps: min(1, laps - 1))

@@ -63,7 +63,7 @@ final class ClipTimerViewModel: ObservableObject {
         engine.onTick = { [weak self] value in
             Task { @MainActor in self?.remaining = value }
         }
-        engine.onPreAlert = { [weak self] _ in
+        engine.onPreAlert = { _ in
             Task { @MainActor in ring() }
         }
         engine.onFinish = { [weak self] in

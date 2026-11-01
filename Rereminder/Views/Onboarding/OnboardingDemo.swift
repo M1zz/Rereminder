@@ -149,15 +149,28 @@ struct OnboardingDemoRing: View {
                 let end = CGFloat(totalSeconds - segment.startSec) / CGFloat(totalSeconds)
                 let visibleEnd = min(end, remainingRatio)
                 if visibleEnd > start {
-                    Circle()
-                        .trim(from: start, to: visibleEnd)
-                        .stroke(SectionPalette.color(segment.index),
-                                style: StrokeStyle(lineWidth: lineWidth, lineCap: .butt))
-                        .rotationEffect(.degrees(-90))
+                    ZStack {
+                        Circle()
+                            .trim(from: start, to: visibleEnd)
+                            .stroke(SectionPalette.color(segment.index),
+                                    style: StrokeStyle(lineWidth: lineWidth, lineCap: .butt))
+                            .rotationEffect(.degrees(-90))
+                        // 호 전체의 양 끝만 둥글게(본 화면과 같다). 꽉 찬 원에는 끝이 없다.
+                        if remainingRatio < 1 {
+                            if start == 0 {
+                                RingEndCap(fraction: 0, facesForward: false, lineWidth: lineWidth)
+                                    .fill(SectionPalette.color(segment.index))
+                            }
+                            if visibleEnd == remainingRatio {
+                                RingEndCap(fraction: visibleEnd, facesForward: true, lineWidth: lineWidth)
+                                    .fill(SectionPalette.color(segment.index))
+                            }
+                        }
+                    }
                         .mask {
                             Circle()
                                 .trim(from: 0, to: fill)
-                                .stroke(style: StrokeStyle(lineWidth: lineWidth + 2, lineCap: .butt))
+                                .stroke(style: StrokeStyle(lineWidth: lineWidth + 2, lineCap: .round))
                                 .rotationEffect(.degrees(-90))
                         }
                 }

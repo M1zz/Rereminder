@@ -17,13 +17,13 @@ import LeeoKit
 extension RereminderSpec {
     static var roadmap: [LeeoRoadmapItem] {[
         // MARK: 다음에 만들어요
-        .init(id: "a11y.voiceover", status: .planned,
+        .init(id: "a11y.voiceover", status: .shipped("2.3.5"),
               title: String(localized: "Better VoiceOver support", comment: "Roadmap item: VoiceOver"),
               detail: String(localized: "VoiceOver reads every timer and button, in the right order.", comment: "Roadmap item detail: VoiceOver")),
-        .init(id: "a11y.largetext", status: .planned,
+        .init(id: "a11y.largetext", status: .shipped("2.3.5"),
               title: String(localized: "Ready for larger text", comment: "Roadmap item: larger text"),
               detail: String(localized: "Screens rearrange neatly when you make text bigger, with nothing cut off.", comment: "Roadmap item detail: larger text")),
-        .init(id: "a11y.contrast", status: .planned,
+        .init(id: "a11y.contrast", status: .shipped("2.3.5"),
               title: String(localized: "Easier-to-see colors", comment: "Roadmap item: color and contrast"),
               detail: String(localized: "Timers stay readable with Increase Contrast on or when colors are hard to tell apart.", comment: "Roadmap item detail: color and contrast")),
         .init(id: "a11y.keyboard", status: .planned,

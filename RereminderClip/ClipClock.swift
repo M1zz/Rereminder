@@ -165,7 +165,9 @@ struct ClipClock: View {
         Circle()
             .fill(.white)
             .frame(width: lineWidth, height: lineWidth)
-            .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 0)
+            .raisedKnob(isHeld: mainDrag.isActive)
+            // 링을 따라 돌아도 빛은 늘 위에서 온다
+            .rotationEffect(.degrees(90 - viewModel.mainAngle))
             // 손가락으로 잡기 쉽도록 보이는 크기보다 넓은 히트 영역
             .frame(width: lineWidth * 2.8, height: lineWidth * 2.8)
             .contentShape(Circle())
@@ -246,7 +248,7 @@ struct ClipClock: View {
                 ZStack {
                     Circle()
                         .fill(DSColor.marker)
-                        .shadow(color: .black.opacity(0.25), radius: 2, x: 0, y: 1)
+                        .raisedKnob(isHeld: isFocused)
                     Image(systemName: fired ? "bell.slash.fill" : "bell.fill")
                         .font(.system(size: lineWidth * 0.7 * (isEditable ? 1.0 : 0.8), weight: .bold))
                         .foregroundStyle(.white)

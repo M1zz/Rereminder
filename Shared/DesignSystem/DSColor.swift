@@ -44,3 +44,20 @@ enum DSColor {
     /// 사전 알림 마커 색 (선명한 주황)
     static let marker = Color(red: 1.0, green: 0.6, blue: 0.0)
 }
+
+// MARK: - 다이얼 손잡이의 입체감
+
+extension View {
+    /// 흰 핸들·종 노브처럼 **손으로 잡는 원**에만 쓴다. 링과 숫자는 평평해야 구간 색과 시간이 읽힌다.
+    /// 빛은 늘 위에서 온다 — 링을 따라 회전하는 뷰는 역회전한 안쪽에서 적용할 것.
+    func raisedKnob(isHeld: Bool = false) -> some View {
+        overlay {
+            Circle().fill(LinearGradient(colors: [.white.opacity(0.3), .clear, .black.opacity(0.14)],
+                                         startPoint: .top, endPoint: .bottom))
+        }
+        .shadow(color: .black.opacity(isHeld ? 0.4 : 0.3),
+                radius: isHeld ? 6 : 3,
+                y: isHeld ? 3 : 1.5)
+        .animation(.easeOut(duration: 0.15), value: isHeld)
+    }
+}

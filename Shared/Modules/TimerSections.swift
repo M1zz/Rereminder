@@ -32,6 +32,11 @@ enum TimerSections {
     ///   - alertOffsets: **종료까지 남은 시간** 기준 알림 지점(예: 5분 전 = 300).
     ///     0 이하이거나 전체 길이 이상인 값은 경계가 될 수 없어 무시한다.
     /// - Returns: 시작 → 종료 순서의 구간 목록. 알림이 없으면 전체가 한 구간이다.
+    /// 종의 색 번호 — 그 종이 끝내는 구간. 먼저 울리는 종이 첫 구간이다. iPhone 노브와 워치 점이 함께 쓴다.
+    static func bellSectionIndex(of seconds: Int, among offsets: Set<Int>) -> Int {
+        offsets.sorted(by: >).firstIndex(of: seconds) ?? 0
+    }
+
     static func derive(mainSeconds: Int, alertOffsets: Set<Int>) -> [Segment] {
         guard mainSeconds > 0 else { return [] }
         let boundaries = alertOffsets

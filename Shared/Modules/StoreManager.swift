@@ -172,7 +172,7 @@ final class StoreManager: ObservableObject {
     /// v2: v1은 부여 직후 verifyCurrentEntitlements 가 구매 부재로 Pro 를 되돌리는
     /// 버그가 있었다. 부여 사실을 별도 플래그로 기록해 검증에서 보호하고,
     /// v1 에서 부여받았다 잃은 사용자를 위해 흔적 검사를 한 번 더 수행한다.
-    private static let grandfatherCheckKey = "rereminder.grandfather.checked.v2"
+    nonisolated private static let grandfatherCheckKey = "rereminder.grandfather.checked.v2"
     nonisolated private static let grandfatherGrantedKey = "rereminder.grandfather.granted"
     /// 창단 후원자 자격이 남는 자리(`FoundingSupporter.keychainKey`). 앱 전용 파일이라
     /// 여기서는 **문자열로** 읽는다 — `Shared/` 는 워치·위젯에서도 컴파일된다.

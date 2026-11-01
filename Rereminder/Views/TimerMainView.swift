@@ -52,8 +52,17 @@ struct TimerMainView: View {
     /// App Clip 의 `ClipClock` 도 **같은 `DialDragTracker`** 를 쓴다 (규칙이 갈라지지 않게).
     @State private var markerDrag = DialDragTracker()
     @State private var shrinkHintPulse = false
+    /// 타이머를 막 걸었을 때 줄어드는 방향을 잠깐 보여 주는 중인가
+    @State private var runningHintVisible = false
+    @State private var runningHintTask: Task<Void, Never>?
     /// 겹친 종을 잡았지만 핸들로 넘어간 드래그인가(`DialDragTracker.shouldHandOffToDial`)
     @State private var markerDragHandedToDial = false
+    /// 원 가운데가 종의 값을 말하는 중인가. 끄는 상태와 따로 둔다 — 손을 떼는 순간은 애니메이션을 끄는 자리라,
+    /// 그 상태에 화면을 묶으면 잡을 때도 놓을 때도 뚝 바뀐다.
+    @State private var bellReadoutVisible = false
+    /// 가운데에 적을 값. 놓은 뒤 녹는 동안에도 글자가 남아 있어야 해서 마지막 값을 들고 있는다.
+    @State private var bellReadoutSeconds: Int?
+    @State private var bellReadoutTask: Task<Void, Never>?
     @State private var mainDrag = DialDragTracker()
 
     /// 다이얼 중심을 알아야 각도를 계산할 수 있어, 회전에 휘둘리지 않는 고정 좌표계를 따로 둔다
@@ -97,6 +106,12 @@ struct TimerMainView: View {
     private static let tooltipLingerSeconds: Double = 3
     /// 사라질 땐 뚝 끊지 않고 녹여서 — 들어올 땐 빠르게, 나갈 땐 천천히
     private static let dissolveDuration: Double = 0.35
+    /// 종을 잡고 놓을 때 원 가운데가 바뀌는 속도
+    private static let bellReadoutFade: Double = 0.4
+    /// 놓은 뒤 정해진 값을 읽을 만큼 머무는 시간
+    private static let bellReadoutHold: Double = 0.6
+    /// 시작한 뒤 줄어드는 방향을 보여 주는 시간
+    private static let runningHintSeconds: Double = 3
 
     /// 실행/일시정지/오버타임: 설정 시간을 100%로 보는 비율 모드
     private var isProgressMode: Bool {
@@ -204,7 +219,6 @@ struct TimerMainView: View {
             let clockSize = fullClockSize * (isPresentationMode ? 0.72 : 1.0)
             let lineWidth = clockSize * 0.083
             let spacing = availableHeight * 0.01
-            let buttonSize = clockSize * 0.18
             // 링의 **보이는** 아래 끝은 레이아웃 프레임보다 아래에 있다 — 흰 핸들(지름 lineWidth)과
             // 종 노브(lineWidth × 1.6)는 원 위에 중심을 두고 그려져 절반이 프레임 밖으로 나간다.
             // 그 몫을 빼 두지 않으면 원 아래에 세우는 것(구간 길이 칩·카운트다운)이 6시 방향
@@ -490,9 +504,9 @@ struct TimerMainView: View {
                 // ⚠️ 종을 끄는 동안 가운데가 그 종의 값을 말한다. 링 옆 배지는 손가락에 가려 지웠다.
                 //    자리는 그대로 쓴다. 시간과 버튼을 치우고 끼우면 원 안이 흔들린다.
                 centerTimeDisplay(fontSize: fontSize)
-                    .opacity(draggingBellSeconds == nil ? 1 : 0)
+                    .opacity(bellReadoutVisible ? 0 : 1)
                     .overlay {
-                        if let seconds = draggingBellSeconds {
+                        if let seconds = bellReadoutSeconds {
                             Text(seconds == 0
                                  ? AttributedString(String(localized: "Release to remove"))
                                  : DialAlertLine.emphasized(AlertPresets.label(seconds), items: [
@@ -506,18 +520,20 @@ struct TimerMainView: View {
                                 .monospacedDigit()
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
+                                .opacity(bellReadoutVisible ? 1 : 0)
                         }
                     }
                 buttonRow(buttonSize: buttonSize)
-                    .opacity(draggingBellSeconds == nil ? 1 : 0)
+                    .opacity(bellReadoutVisible ? 0 : 1)
                     .overlay {
-                        if let seconds = draggingBellSeconds, seconds > 0 {
+                        if let seconds = bellReadoutSeconds, seconds > 0 {
                             // 발표자는 "시작하고 얼마나 지났나"로도 읽는다
                             Text(String(localized: "\(TimeMapper.mmss(max(0, screenVM.configuredMainSeconds - seconds))) after start"))
                                 .font(.body)
                                 .foregroundStyle(.secondary)
                                 // 대기 중 버튼은 하나라 자리가 좁다. 글자 폭대로 그린다.
                                 .fixedSize()
+                                .opacity(bellReadoutVisible ? 1 : 0)
                         }
                     }
             }
@@ -535,6 +551,15 @@ struct TimerMainView: View {
         .onChange(of: screenVM.mainAngle) { _, _ in deferSectionNumbers() }
         .onChange(of: screenVM.sortedOffsetsDesc) { _, _ in deferSectionNumbers() }
         .onChange(of: markerDragAngle) { _, _ in deferSectionNumbers() }
+        .onChange(of: draggingBellSeconds) { _, seconds in
+            if let seconds { bellReadoutSeconds = seconds }
+        }
+        .onChange(of: draggingMarkerOffset != nil) { _, isDragging in
+            updateBellReadout(isDragging: isDragging)
+        }
+        .onChange(of: screenVM.state) { old, new in
+            updateRunningHint(from: old, to: new)
+        }
         .onChange(of: focusedSectionIndex) { _, index in
             editingHoldTask?.cancel()
             guard index == nil else {
@@ -651,7 +676,7 @@ struct TimerMainView: View {
     /// 나머지가 물러나 있어 어디서부터 줄어드는지 시작하기 전에 읽힌다.
     /// 끄는 동안에는 경계를 봐야 하므로 전부 진하게 둔다.
     private var activeSectionIndex: Int? {
-        guard dialFillAngle == nil, draggingMarkerOffset == nil, !mainDrag.isActive,
+        guard dialFillAngle == nil, !bellReadoutVisible, !mainDrag.isActive,
               !screenVM.selectedOffsets.isEmpty else { return nil }
         guard isProgressMode else { return 0 }
         let total = screenVM.configuredMainSeconds
@@ -659,23 +684,33 @@ struct TimerMainView: View {
                                       elapsedSec: max(0, total - Int(remaining.rounded())))?.index
     }
 
-    /// 걸기 전, 흰 핸들 바로 앞에서 줄어드는 방향을 가리키는 표시.
-    /// 시간은 핸들에서 12시 쪽(반시계)으로 줄어든다. 첫 구간이 너무 짧으면 자리가 없어 그리지 않는다.
+    /// 줄어드는 방향을 가리키는 표시. 걸기 전에는 흰 핸들 앞에 있고, 시작한 뒤에도 호 끝을 따라 잠깐 남는다.
+    /// 시간은 12시 쪽(반시계)으로 줄어든다. 지금 구간이 너무 짧으면 자리가 없어 그리지 않는다.
     @ViewBuilder
     private func firstShrinkHint(size: CGFloat, lineWidth: CGFloat) -> some View {
-        let handleAngle = screenVM.mainAngle
-        let radius = ringSize(forAngle: handleAngle, size: size, lineWidth: lineWidth) / 2
+        let isRunning = screenVM.state == .running
+        // 알림 종과 같은 좌표계로 잰다. 도는 동안은 설정 시간이 한 바퀴일 수 있다.
+        let total = Double(max(1, screenVM.configuredMainSeconds))
+        let degreesPerSecond = isRunning && !usesAbsoluteRing ? 360 / total : 1 / TimeMapper.secondsPerDegree
+        let headAngle = isRunning
+            ? Double(usesAbsoluteRing ? remainingLaps : ratio) * 360
+            : screenVM.mainAngle
+        let radius = ringSize(forAngle: headAngle, size: size, lineWidth: lineWidth) / 2
         let gap = Double(lineWidth * 1.2 / max(1, radius)) * 180 / .pi
-        let firstEnd = (screenVM.selectedOffsets.max()).map { Double($0) / TimeMapper.secondsPerDegree } ?? 0
-        if isTimeEditable, dialFillAngle == nil, draggingMarkerOffset == nil, !mainDrag.isActive,
-           handleAngle - firstEnd > gap * 2 {
-            let angle = handleAngle - gap
+        let sectionEnd = screenVM.selectedOffsets
+            .map { Double($0) * degreesPerSecond }
+            .filter { $0 < headAngle }
+            .max() ?? 0
+        if isTimeEditable || (isRunning && runningHintVisible), dialFillAngle == nil, !bellReadoutVisible, !mainDrag.isActive,
+           headAngle - sectionEnd > gap * 2 {
             Image(systemName: "chevron.left.2")
                 .font(.system(size: lineWidth * 0.55, weight: .heavy))
                 .foregroundStyle(.white)
                 .opacity(shrinkHintPulse ? 1 : 0.6)
-                .rotationEffect(.degrees(angle))
-                .offset(x: sin(angle * .pi / 180) * radius, y: -cos(angle * .pi / 180) * radius)
+                // 호 끝과 같이 돌아야 도는 동안 함께 움직인다
+                .offset(y: -radius)
+                .rotationEffect(.degrees(headAngle - gap))
+                .animation(ringTickAnimation, value: remaining)
                 .allowsHitTesting(false)
                 .accessibilityHidden(true)
                 .onAppear {
@@ -688,6 +723,43 @@ struct TimerMainView: View {
                     }
                 }
                 .onDisappear { shrinkHintPulse = false }
+                .transition(.opacity)
+        }
+    }
+
+    /// 처음 걸었을 때만 보여 준다. 다시 이어 갈 때는 이미 본 사람이다.
+    private func updateRunningHint(from old: TimerState, to new: TimerState) {
+        guard new == .running, old != .paused else {
+            if new != .running {
+                runningHintTask?.cancel()
+                runningHintVisible = false
+            }
+            return
+        }
+        runningHintVisible = true
+        runningHintTask?.cancel()
+        runningHintTask = Task {
+            try? await Task.sleep(for: .seconds(Self.runningHintSeconds))
+            guard !Task.isCancelled else { return }
+            withAnimation(.easeOut(duration: Self.bellReadoutFade)) { runningHintVisible = false }
+        }
+    }
+
+    /// 종을 잡으면 천천히 바뀌고, 놓으면 정해진 값을 읽을 틈을 준 뒤 돌아온다.
+    /// 지운 종과 핸들로 넘어간 경우는 머물지 않는다 — 없는 종의 값이나 다른 조작의 안내가 남는다.
+    private func updateBellReadout(isDragging: Bool) {
+        bellReadoutTask?.cancel()
+        guard !isDragging else {
+            withAnimation(.easeInOut(duration: Self.bellReadoutFade)) { bellReadoutVisible = true }
+            return
+        }
+        let holds = !mainDrag.isActive && bellReadoutSeconds != 0
+        bellReadoutTask = Task {
+            if holds {
+                try? await Task.sleep(for: .seconds(Self.bellReadoutHold))
+                guard !Task.isCancelled else { return }
+            }
+            withAnimation(.easeInOut(duration: Self.bellReadoutFade)) { bellReadoutVisible = false }
         }
     }
 
@@ -828,10 +900,10 @@ struct TimerMainView: View {
         )
     }
 
-    /// 물러날 땐 빠르게, 돌아올 땐 배지가 녹는 속도에 맞춰 천천히
+    /// 다른 종이 물러나는 것도 원 가운데가 바뀌는 속도에 맞춘다
     private var highlightAnimation: Animation {
         highlightedMarker != nil
-            ? .easeInOut(duration: 0.2)
+            ? .easeInOut(duration: Self.bellReadoutFade)
             : .easeOut(duration: Self.dissolveDuration)
     }
 
@@ -840,6 +912,9 @@ struct TimerMainView: View {
             Circle()
                 .fill(.white)
                 .frame(width: lineWidth, height: lineWidth)
+                .raisedKnob(isHeld: mainDrag.isActive)
+                // 링을 따라 돌아도 빛은 늘 위에서 온다
+                .rotationEffect(.degrees(90 - (dialFillAngle ?? screenVM.mainAngle)))
                 // 잡는 자리는 보이는 크기보다 넓게 — 선 두께(약 25pt)만으로는 손끝이 자꾸 빗나간다.
                 // 종 노브(lineWidth * 2.8)와 같은 크기로 맞춘다.
                 .frame(width: lineWidth * 2.8, height: lineWidth * 2.8)
@@ -962,7 +1037,7 @@ struct TimerMainView: View {
                         .fill(SectionPalette.color(AlertPresets.bellSectionIndex(
                             of: isDraggingThis ? TimeMapper.angleToSeconds(from: markerDragAngle) : offsetSec,
                             among: liveOffsets)))
-                        .shadow(color: .black.opacity(0.35), radius: 3, x: 0, y: 1)
+                        .raisedKnob(isHeld: isFocused)
                     Image(systemName: fired ? "bell.slash.fill" : "bell.fill")
                         .font(.system(size: lineWidth * 0.7 * (isTimeEditable ? 1.0 : 0.8), weight: .bold))
                         .foregroundStyle(.white)

@@ -43,7 +43,7 @@ final class CloudTimerSyncManager: ObservableObject {
 
     private let store = NSUbiquitousKeyValueStore.default
     private static let snapshotKey = "cloudTimerSnapshot"
-    private static let deviceIDKey = "cloudSyncDeviceID"
+    nonisolated private static let deviceIDKey = "cloudSyncDeviceID"
 
     /// 이 기기의 동기화 식별자 — **기기 존재 표시(DevicePresence)도 같은 값을 쓴다.**
     /// (따로 만들면 같은 기기가 두 개로 보인다.)
@@ -55,7 +55,7 @@ final class CloudTimerSyncManager: ObservableObject {
     }
 
     /// 사람이 읽는 기기 이름 — 존재 표시에도 같은 값을 쓴다.
-    nonisolated static var deviceDisplayName: String { currentDeviceName }
+    static var deviceDisplayName: String { currentDeviceName }
 
     private let deviceID: String
 
@@ -161,7 +161,7 @@ final class CloudTimerSyncManager: ObservableObject {
         #endif
     }
 
-    nonisolated private static var currentDeviceName: String {
+    private static var currentDeviceName: String {
         #if canImport(UIKit)
         return UIDevice.current.name
         #else

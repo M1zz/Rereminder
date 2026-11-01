@@ -1099,6 +1099,10 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 주인공은 원과 시작 버튼이다. 강한 색은 시작 버튼(테마 강조색) 하나다. 원 위는 비운다. 원 아래는 문장 하나와 버튼 하나다(`DialAlertLine`). 알림 조작은 셋뿐: `+ 알림 추가`(길이에 맞는 다음 시간, `AlertPresets.nextAlert`), 종 끌기, 종 탭으로 지우기(되돌리기 4초). 저장·초기화·불러오기는 🔖 시트(`TimerTemplateView`) 안이다. 칩 줄과 `TemplateQuickBar` 는 지웠다 — 되살리지 말 것.
 종은 주황 하나가 아니라 **그 종이 끝내는 구간의 색**이다(`AlertPresets.bellSectionIndex`). 링 조각·종·문장의 시간 글자가 같은 색이라 어느 종이 어느 시간인지 읽힌다. 문장에서는 시간만 칠한다("전"은 그대로).
 **어디부터 줄어드는지 걸기 전에 보인다.** 먼저 줄어들 구간(1구간)만 진하고 나머지는 40%, 핸들 앞에 줄어드는 방향의 ‹‹ 가 있다(`activeSectionIndex`, `firstShrinkHint`). 도는 동안에는 지금 구간이 진하다. 끄는 동안은 경계를 봐야 해서 전부 진하다.
+**종을 끄는 동안 원 가운데는 천천히 바뀐다**(`bellReadoutVisible`, 0.4초). 놓으면 값을 0.6초 보여 준 뒤 돌아온다. 손을 떼는 자리는 애니메이션을 끄므로(아래 "다이얼 드래그") 화면을 `draggingMarkerOffset` 에 바로 묶으면 뚝 바뀐다. 종과 링 자체는 손가락을 바로 따라간다.
+**시작하면 ‹‹ 가 호 끝을 따라 3초 보이다 사라진다**(`runningHintVisible`). 일시정지 뒤 재개에는 나오지 않는다.
+**호 전체의 양 끝은 둥글다**(`RingEndCap`). 구간 경계는 맞붙는다. ⚠️ 구간 호에 `.round` 캡을 쓰면 옆 구간으로 부풀고, 원을 얹으면 흐린 구간에서 겹친 자리만 진해진다. 호 바깥쪽 반원만 그린다. 워치·첫 실행 그림도 끝이 둥글다.
+종·핸들은 입체(`raisedKnob`)다. 빛은 언제나 위에서 오도록 역회전 안쪽에 건다. 모드 전환 탭은 글자 없이 심볼이다.
 ⚠️ 구간 번호와 아래의 구간 길이 칩은 일반 화면에 다시 세우지 말 것. 숫자 `1:00` 이 알림과 구간 길이 두 뜻으로 나왔다. `SectionLengthBar` 는 펼친 듀오 화면에서만 쓴다. 프리셋 안내 팁은 지웠다.
 
 ### 대기 중 화면 — 구간 길이를 걸기 전에 보여준다
@@ -1303,8 +1307,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 > 타겟·소스·엔타이틀먼트는 **그대로 살아 있고**, 메인 앱과의 연결 두 줄만 뺐다:
 > ① `Embed App Clips` 페이즈의 `RereminderClip.app in Embed App Clips` 항목
 > ② 메인 앱 타겟 `dependencies` 의 `454D3869CE4B00C1FF7146B1 /* PBXTargetDependency */`
-> 두 정의(`07C42068B7266377CF890D07`, `454D3869CE4B00C1FF7146B1`)는 pbxproj 에 남겨 뒀으므로
-> **되살릴 때는 그 두 줄을 각 목록에 도로 넣으면 된다.** 확인법: 빌드한 `Rereminder.app` 에
+> 두 정의는 이제 pbxproj 에 없다(Xcode 가 정리했다). **되살릴 때는 임베드 항목과 타겟 의존성을 새로 만든다.** 확인법: 빌드한 `Rereminder.app` 에
 > `AppClips/` 폴더가 생기는지 본다.
 > 되살릴 때 함께 볼 것 — 클립 `MARKETING_VERSION` 이 메인 앱과 같아야 하고(제출 게이트),
 > Catalyst 빌드를 위해 임베드 항목에 `platformFilter = ios;` 가 붙어 있어야 한다.

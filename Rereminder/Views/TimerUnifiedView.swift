@@ -451,19 +451,19 @@ struct TimerUnifiedView: View {
                 // ⚠️ Picker("", …)는 빈 문자열을 문자열 카탈로그에 추출시켜 다국어 검사를 막는다.
                 //    라벨은 제대로 주고 화면에서만 숨긴다.
                 Picker(selection: modeBinding) {
-                    Text(String(localized: "Timer"))
+                    // 심볼로만 가른다. 글자는 언어마다 길이가 달라 막대가 넘치면 설정 버튼이 `…` 메뉴로 숨었다.
+                    Label(String(localized: "Timer"), systemImage: "timer")
+                        .labelStyle(.iconOnly)
                         .tag(AppMode.timer)
-                    // 짧게 쓴다. 길면 막대가 넘쳐 설정 버튼이 `…` 메뉴로 숨는다(독일어에서 실제로 그랬다).
-                    Text(String(localized: "Session"))
-                        .accessibilityLabel(String(localized: "Session Mode"))
+                    Label(String(localized: "Session Mode"), systemImage: FeatureLesson.session.symbol)
+                        .labelStyle(.iconOnly)
                         .tag(AppMode.presentation)
                 } label: {
                     Text(String(localized: "Mode"))
                 }
                 .pickerStyle(.segmented)
                 .labelsHidden()
-                // 폭을 묶는다. 글자에 맞추면 긴 언어에서 막대가 넘쳐 설정 버튼이 `…` 메뉴로 숨는다.
-                .frame(width: 172)
+                .frame(width: 128)
                 // 타이머를 두 번 이상 완주한 뒤, 발표 모드를 아직 안 써 봤을 때만 알려준다
                 .modifier(PresentationModeTipAnchor(isAllowed: tipsAllowed))
             }
