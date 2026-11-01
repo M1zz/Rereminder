@@ -741,7 +741,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
   (자기 컨테이너를 본다) 앱이 테마를 바꿀 때마다 **앱 그룹에 hex 를 한 벌 적어 둔다**
   (`SharedAccent`). `ThemeManager` 의 `didSet` **과 `init` 양쪽**에서 쓴다 — init 에서는 didSet 이
   돌지 않아, 그것만 빼먹으면 업데이트 직후 잠금화면만 기본색으로 남는다.
-- 버튼은 **동그라미**, 색도 앱과 같다: 정지 `DSColor.plain`(회색, 왼쪽) / 일시정지
+- 버튼은 **동그라미**, 색도 앱과 같다: 정지 `DSColor.plain`(회색, 왼쪽, 일시정지 중에는 빨강) / 일시정지
   `DSColor.negativeSoft`(주황) / 재개 `DSColor.positive`. 배치도 앱의 원 안과 같은 순서다.
 - ⚠️ **주황을 진행 표시에 쓰지 말 것** — 이 앱에서 주황은 알림 종의 색이다.
 - ⚠️ 카운트다운은 **`Text(timerInterval:countsDown:)`** 으로 그린다.
@@ -1100,7 +1100,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 종은 주황 하나가 아니라 **그 종이 끝내는 구간의 색**이다(`AlertPresets.bellSectionIndex`). 링 조각·종·문장의 시간 글자가 같은 색이라 어느 종이 어느 시간인지 읽힌다. 문장에서는 시간만 칠한다("전"은 그대로).
 **어디부터 줄어드는지 걸기 전에 보인다.** 먼저 줄어들 구간(1구간)만 진하고 나머지는 40%, 핸들 앞에 줄어드는 방향의 ‹‹ 가 있다(`activeSectionIndex`, `firstShrinkHint`). 도는 동안에는 지금 구간이 진하다. 끄는 동안은 경계를 봐야 해서 전부 진하다.
 **종을 끄는 동안 원 가운데는 천천히 바뀐다**(`bellReadoutVisible`, 0.4초). 놓으면 값을 0.6초 보여 준 뒤 돌아온다. 손을 떼는 자리는 애니메이션을 끄므로(아래 "다이얼 드래그") 화면을 `draggingMarkerOffset` 에 바로 묶으면 뚝 바뀐다. 종과 링 자체는 손가락을 바로 따라간다.
-**시작하면 ‹‹ 가 호 끝을 따라 3초 보이다 사라진다**(`runningHintVisible`). 일시정지 뒤 재개에는 나오지 않는다.
+**시작하면 ‹‹ 가 호 끝을 따라 3초 보이다 사라진다**(`runningHintExpired`). 일시정지 뒤 재개에는 나오지 않는다.
 **호 전체의 양 끝은 둥글다**(`RingEndCap`). 구간 경계는 맞붙는다. ⚠️ 구간 호에 `.round` 캡을 쓰면 옆 구간으로 부풀고, 원을 얹으면 흐린 구간에서 겹친 자리만 진해진다. 호 바깥쪽 반원만 그린다. 워치·첫 실행 그림도 끝이 둥글다.
 종·핸들은 입체(`raisedKnob`)다. 빛은 언제나 위에서 오도록 역회전 안쪽에 건다. 모드 전환 탭은 글자 없이 심볼이다.
 ⚠️ 구간 번호와 아래의 구간 길이 칩은 일반 화면에 다시 세우지 말 것. 숫자 `1:00` 이 알림과 구간 길이 두 뜻으로 나왔다. `SectionLengthBar` 는 펼친 듀오 화면에서만 쓴다. 프리셋 안내 팁은 지웠다.
@@ -1135,7 +1135,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 
 - **버튼은 원 안에 있다**(`TimerButtonStyle`, `buttonRow`) — 가운데 시간 바로 아래.
   원 밖으로 뺐던 이유는 가운데를 두 줄(전체 + 구간)로 쓰려던 것인데, 그 두 줄이 없어졌으므로
-  버튼이 다시 안으로 들어왔다. 정지는 회색 원(`DSColor.plain`, 대기 중에는 없다),
+  버튼이 다시 안으로 들어왔다. 정지는 회색 원(`DSColor.plain`, 대기 중에는 없다. 일시정지 중에는 빨강으로 눈에 띄게 — 워치·잠금화면도 같다),
   시작·재개는 `DSColor.positive`, 일시정지는 `DSColor.negativeSoft`(주황).
 - **가운데는 전체 남은 시간 한 줄뿐이다.** "지금 구간이 얼마 남았나"는 원 아래 리스트가 답한다.
 - **SectionCountdownList** (`Rereminder/Views/Components/SectionCountdownList.swift`):

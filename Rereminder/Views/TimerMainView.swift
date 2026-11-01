@@ -52,8 +52,9 @@ struct TimerMainView: View {
     /// App Clip 의 `ClipClock` 도 **같은 `DialDragTracker`** 를 쓴다 (규칙이 갈라지지 않게).
     @State private var markerDrag = DialDragTracker()
     @State private var shrinkHintPulse = false
-    /// 타이머를 막 걸었을 때 줄어드는 방향을 잠깐 보여 주는 중인가
-    @State private var runningHintVisible = false
+    /// 시작 후 방향 표시를 보여 줄 때가 지났는가.
+    /// ⚠️ "보여 주는 중"으로 두고 시작한 뒤에 켜면 그 사이 표시가 지워졌다가 새 자리에 다시 생겨, 링을 따라가지 않고 튄다.
+    @State private var runningHintExpired = false
     @State private var runningHintTask: Task<Void, Never>?
     /// 겹친 종을 잡았지만 핸들로 넘어간 드래그인가(`DialDragTracker.shouldHandOffToDial`)
     @State private var markerDragHandedToDial = false
@@ -546,6 +547,8 @@ struct TimerMainView: View {
         .onAppear {
             innerRingReveal = hasSecondRow ? 1 : 0
             deferSectionNumbers()
+            // 되살린 타이머는 막 건 것이 아니다
+            runningHintExpired = screenVM.state == .running
         }
         // 값이 바뀔 때마다 숫자를 감추고 다시 예약한다 (드래그 중엔 계속 밀린다)
         .onChange(of: screenVM.mainAngle) { _, _ in deferSectionNumbers() }
@@ -557,8 +560,8 @@ struct TimerMainView: View {
         .onChange(of: draggingMarkerOffset != nil) { _, isDragging in
             updateBellReadout(isDragging: isDragging)
         }
-        .onChange(of: screenVM.state) { old, new in
-            updateRunningHint(from: old, to: new)
+        .onChange(of: screenVM.state) { _, state in
+            updateRunningHint(to: state)
         }
         .onChange(of: focusedSectionIndex) { _, index in
             editingHoldTask?.cancel()
@@ -695,13 +698,14 @@ struct TimerMainView: View {
         let headAngle = isRunning
             ? Double(usesAbsoluteRing ? remainingLaps : ratio) * 360
             : screenVM.mainAngle
-        let radius = ringSize(forAngle: headAngle, size: size, lineWidth: lineWidth) / 2
+        // 설정 시간이 한 바퀴인 동안은 막 시작해 360° 여도 바깥 줄이다. 안쪽으로 들어갔다 나오면 안 된다.
+        let radius = (isRunning && !usesAbsoluteRing ? size : ringSize(forAngle: headAngle, size: size, lineWidth: lineWidth)) / 2
         let gap = Double(lineWidth * 1.2 / max(1, radius)) * 180 / .pi
         let sectionEnd = screenVM.selectedOffsets
             .map { Double($0) * degreesPerSecond }
             .filter { $0 < headAngle }
             .max() ?? 0
-        if isTimeEditable || (isRunning && runningHintVisible), dialFillAngle == nil, !bellReadoutVisible, !mainDrag.isActive,
+        if isTimeEditable || (isRunning && !runningHintExpired), dialFillAngle == nil, !bellReadoutVisible, !mainDrag.isActive,
            headAngle - sectionEnd > gap * 2 {
             Image(systemName: "chevron.left.2")
                 .font(.system(size: lineWidth * 0.55, weight: .heavy))
@@ -727,21 +731,20 @@ struct TimerMainView: View {
         }
     }
 
-    /// 처음 걸었을 때만 보여 준다. 다시 이어 갈 때는 이미 본 사람이다.
-    private func updateRunningHint(from old: TimerState, to new: TimerState) {
-        guard new == .running, old != .paused else {
-            if new != .running {
-                runningHintTask?.cancel()
-                runningHintVisible = false
-            }
-            return
-        }
-        runningHintVisible = true
+    /// 처음 걸었을 때만 보여 준다. 일시정지했다 이어 갈 때는 이미 본 사람이다.
+    private func updateRunningHint(to state: TimerState) {
         runningHintTask?.cancel()
-        runningHintTask = Task {
-            try? await Task.sleep(for: .seconds(Self.runningHintSeconds))
-            guard !Task.isCancelled else { return }
-            withAnimation(.easeOut(duration: Self.bellReadoutFade)) { runningHintVisible = false }
+        switch state {
+        case .running where !runningHintExpired:
+            runningHintTask = Task {
+                try? await Task.sleep(for: .seconds(Self.runningHintSeconds))
+                guard !Task.isCancelled else { return }
+                withAnimation(.easeOut(duration: Self.bellReadoutFade)) { runningHintExpired = true }
+            }
+        case .idle, .finished:
+            runningHintExpired = false
+        default:
+            runningHintExpired = true
         }
     }
 
@@ -1178,7 +1181,8 @@ struct TimerMainView: View {
     /// ⚠️ 버튼은 원 밖에 있다(`body`). 안에 두면 이 두 줄이 들어갈 자리가 없다.
     private func centerTimeDisplay(fontSize: CGFloat) -> some View {
         let isTicking = screenVM.state == .running || screenVM.state == .overtime
-        let shown = isTicking
+        // 멈춰 있는 동안에도 남은 시간이다. 설정 시간으로 돌아가면 처음부터 다시 도는 줄 안다.
+        let shown = isProgressMode
             ? screenVM.timeString(from: screenVM.timerVM.remaining)
             : mmss(sec: screenVM.mainSeconds, min: screenVM.mainMinutes)
         return Text(shown)
@@ -1250,7 +1254,7 @@ extension TimerMainView {
                     .font(.title2)
                     .imageScale(.medium)
             }
-            .buttonStyle(TimerButtonStyle(tint: DSColor.plain, size: buttonSize))
+            .buttonStyle(TimerButtonStyle(tint: screenVM.state == .paused ? DSColor.negative : DSColor.plain, size: buttonSize))
             .accessibilityLabel(String(localized: "Cancel Timer"))
             // 음성 제어로 "정지 누르기"처럼 짧게 부를 수 있게 — 화면에는 아이콘뿐이라 부를 이름이 없다.
             .accessibilityInputLabels([Text("Cancel Timer"), Text("Stop"), Text("Cancel")])

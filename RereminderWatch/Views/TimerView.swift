@@ -254,7 +254,7 @@ public struct TimerView: View {
                     Image(systemName: "xmark")
                         .font(.system(size: 14, weight: .semibold))
                 }
-                .buttonStyle(WatchRoundButtonStyle(tint: DSColor.plain))
+                .buttonStyle(WatchRoundButtonStyle(tint: timerViewModel.isPaused ? DSColor.negative : DSColor.plain))
                 .accessibilityLabel(String(localized: "Stop timer"))
 
                 Button {
