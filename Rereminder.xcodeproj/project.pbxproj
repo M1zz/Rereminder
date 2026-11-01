@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		07C42068B7266377CF890D07 /* RereminderClip.app in Embed App Clips */ = {isa = PBXBuildFile; fileRef = A78942BCAED1D1FFB2FDB397 /* RereminderClip.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		1EE0C17AC0DE000000000003 /* LeeoKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1EE0C17AC0DE000000000002 /* LeeoKit */; };
 		2B302B142E4375170089A14A /* RereminderWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 2B302B0A2E4375150089A14A /* RereminderWatch.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		581D85DC2F48C24200F2F032 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 581D85DB2F48C24200F2F032 /* StoreKit.framework */; };
@@ -20,13 +19,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		99710589F5E66A7D0F32C3B8 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 260414C32E1B9FA200CBA29B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 6ED914668010A8B195B84C58;
-			remoteInfo = RereminderClip;
-		};
 		1B3C36D9E795C141B7C19198 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 260414C32E1B9FA200CBA29B /* Project object */;
@@ -457,7 +449,6 @@
 			children = (
 				7653E5DFA75539A050DB2789 /* RereminderUITests.swift */,
 			);
-			name = RereminderUITests;
 			path = RereminderUITests;
 			sourceTree = "<group>";
 		};
@@ -834,12 +825,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		454D3869CE4B00C1FF7146B1 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = RereminderClip;
-			target = 6ED914668010A8B195B84C58 /* RereminderClip */;
-			targetProxy = 99710589F5E66A7D0F32C3B8 /* PBXContainerItemProxy */;
-		};
 		2B302B132E4375170089A14A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			platformFilter = ios;
