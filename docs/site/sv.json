@@ -96,13 +96,15 @@
         "15 och 5 min före"
       ]
     ],
-    "note": "Spara det du använder ofta som mall och starta det med ett tryck (från Minne och uppåt). Du kan också starta eller stoppa en timer med Genvägar och Siri."
+    "note": "Spara det du använder ofta som mall och starta det med ett tryck. Du kan också starta eller stoppa en timer med Genvägar och Siri."
   },
   "pricing": {
-    "title": "Förvarningar är gratis. Betala bara om den ska minnas.",
+    "title": "I början är allt öppet. Betala bara om du vill ha mer.",
     "free": {
       "name": "Gratis",
       "items": [
+        "Alla funktioner öppna fram till 14 dagars användning eller 5 sessioner",
+        "Alltid gratis: din senaste inställning, sparade mallar, upp till 3 nya mallar och övertid",
         "Obegränsat antal förvarningar",
         "Eget meddelande för varje förvarning",
         "Live Activity på låsskärmen och i Dynamic Island",
@@ -114,12 +116,10 @@
     "pro": {
       "name": "Minne · Pro",
       "items": [
-        "Minne: spara inställningar som mallar och starta dem med ett tryck",
-        "Minne: öppna appen igen och allt är som du lämnade det",
-        "Pro: allt i Minne plus sessionsläge med avsnittsnamn och manus",
-        "Pro: övertid, historik och statistik"
+        "Minne: Obegränsat med mallar och hela din historik",
+        "Pro: allt i Minne plus sessionsläge med avsnittsnamn och manus"
       ],
-      "note": "För varje plan väljer du årsabonnemang eller ett engångsköp för alltid. Sessionsläge, övertid och historik kan du prova några gånger innan du betalar."
+      "note": "Välj per år eller ett engångsköp för livstid i båda planerna. Sessionsläge finns kvar några gånger till efter gratisperioden."
     },
     "note": "Ingen reklam. Ett Evighetspass öppnar dessutom alla appar som Leeo gör."
   },
@@ -128,7 +128,7 @@
     "items": [
       {
         "q": "En förvarning hördes inte.",
-        "a": "Det beror nästan alltid på behörigheter eller fokus. Kontrollera notisbehörigheten i appen under Inställningar › Notissätt. Använder du fokus, lägg till Rereminder som tillåten app i iOS-inställningar › Fokus. I ljudlöst läge får du bara vibration. Står Rereminder under Inställningar › Notiser › Schemalagd sammanfattning hålls notiserna tillbaka, så ta bort den därifrån."
+        "a": "Det beror nästan alltid på behörigheter eller fokus. Kontrollera notisbehörigheten i appen under Inställningar › Notisinställningar › Notissätt. Använder du fokus, lägg till Rereminder som tillåten app i iOS-inställningar › Fokus. I ljudlöst läge får du bara vibration. Står Rereminder under Inställningar › Notiser › Schemalagd sammanfattning hålls notiserna tillbaka, så ta bort den därifrån."
       },
       {
         "q": "Märker jag slutet i ljudlöst läge?",
@@ -147,8 +147,8 @@
         "a": "Tryck på ”Återskapa köp” på skärmen med planer, inloggad med samma Apple-konto som du betalade med. Köp för alltid kommer tillbaka även om du raderar appen eller byter enhet."
       },
       {
-        "q": "Mina sparade mallar är låsta.",
-        "a": "De finns kvar. Utan Minne eller Pro syns de som låsta och öppnas igen så fort du köper någon av dem."
+        "q": "Låses mina sparade mallar?",
+        "a": "Nej. Sparade mallar raderas aldrig och går alltid att öppna. Efter gratisperioden kan du spara upp till 3 nya gratis, och Minne tar bort gränsen."
       },
       {
         "q": "Hur får jag pengarna tillbaka?",

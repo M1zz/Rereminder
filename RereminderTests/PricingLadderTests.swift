@@ -31,6 +31,8 @@ final class PricingLadderTests: XCTestCase {
 
     override func setUpWithError() throws {
         try super.setUpWithError()
+        // 이 파일은 문턱 뒤의 판정을 본다. 무료 기간은 `FreeUseTests`.
+        FreeUse.markReachedForTesting()
         let defaults = UserDefaults.standard
         savedDevPaywall = defaults.bool(forKey: Self.devPaywallKey)
         savedGrandfather = defaults.bool(forKey: Self.grandfatherKey)
@@ -40,6 +42,7 @@ final class PricingLadderTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
+        FreeUse.resetForTesting()
         clear()
         let defaults = UserDefaults.standard
         defaults.set(savedDevPaywall, forKey: Self.devPaywallKey)
@@ -84,7 +87,6 @@ final class PricingLadderTests: XCTestCase {
     /// 팁 · 선물 · 패스 상품은 이 판정에서 아무것도 열지 않는다(선물은 받은 쪽에 pro 로, 패스는 `LeeoForeverPass` 가 연다).
     func test_tipGiftPassOpenNothingHere() {
         var others = Set(StoreManager.tipProductIDs)
-        others.insert(StoreManager.giftProductID)
         others.formUnion(LeeoForeverPassRule.productIDs(bundleID: "com.xa.toki"))
         XCTAssertEqual(ProTier.granted(by: others), .free)
         XCTAssertEqual(ProTier.granted(by: []), .free)

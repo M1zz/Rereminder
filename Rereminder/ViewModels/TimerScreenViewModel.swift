@@ -95,22 +95,22 @@ final class TimerScreenViewModel: ObservableObject {
             self.selectedOffsets = Set(syncData.prealertOffsets)
             self.applyCurrentSettings()
             self.timerVM.start()
-            self.showToast?("⌚️ Timer started from Watch")
+            self.showToast?(String(localized: "⌚️ Timer started from Watch"))
         }
 
         connectivity.onTimerPause = { [weak self] in
             self?.timerVM.pause()
-            self?.showToast?("⌚️ Paused from Watch")
+            self?.showToast?(String(localized: "⌚️ Paused from Watch"))
         }
 
         connectivity.onTimerResume = { [weak self] in
             self?.timerVM.resume()
-            self?.showToast?("⌚️ Resumed from Watch")
+            self?.showToast?(String(localized: "⌚️ Resumed from Watch"))
         }
 
         connectivity.onTimerStop = { [weak self] in
             self?.timerVM.stop()
-            self?.showToast?("⌚️ Stopped from Watch")
+            self?.showToast?(String(localized: "⌚️ Stopped from Watch"))
         }
     }
 
@@ -193,6 +193,8 @@ final class TimerScreenViewModel: ObservableObject {
     }
 
     func seedTemplatesIfNeeded() {
+        // 백지로 시작하는 사람에게는 칩을 심지 않는다 — 자기가 저장한 것만 보인다.
+        guard !BlankStart.isNewInstall else { return }
         configService.seedIfNeeded()
     }
 
@@ -246,7 +248,7 @@ final class TimerScreenViewModel: ObservableObject {
     }
 
     func cancel() {
-        showToast?("Cancel")
+        showToast?(String(localized: "Cancel"))
         timerVM.stop()
         justConfigure(save: false, toast: false)
     }
@@ -267,7 +269,7 @@ final class TimerScreenViewModel: ObservableObject {
 
     func start() {
         if holdForPermissionWarning(then: { [weak self] in self?.start() }) { return }
-        showToast?("Start")
+        showToast?(String(localized: "Start"))
         timerVM.start()
         ActivityReporter.log("timer_start")
         // "이 설정 자주 쓰시네요, 저장해 둘까요?" 팁의 노출 조건
@@ -275,12 +277,12 @@ final class TimerScreenViewModel: ObservableObject {
     }
 
     func pause() {
-        showToast?("Pause")
+        showToast?(String(localized: "Pause"))
         timerVM.pause()
     }
 
     func resume() {
-        showToast?("Resume")
+        showToast?(String(localized: "Resume"))
         timerVM.resume()
     }
 
@@ -290,22 +292,8 @@ final class TimerScreenViewModel: ObservableObject {
         TimeMapper.formatRemaining(interval)
     }
 
-    func showPrealertToast(for seconds: Int, isEnabled: Bool) {
-        let minutes = seconds / 60
-        let message = isEnabled ? "\(minutes) min pre-alert set" : "\(minutes) min pre-alert off"
-        showToast?(message)
-    }
-
     func showTemplateApplyToast(for template: Timer) {
-        let mMain = template.mainSeconds / 60
-        let sMain = template.mainSeconds % 60
-        let mainLabel = sMain > 0 ? "Main \(mMain) min \(sMain) sec" : "Main \(mMain) min"
-        let preList = template.prealertOffsetsSec
-            .sorted()
-            .map { "\($0/60) min" }
-            .joined(separator: ", ")
-        let message = preList.isEmpty ? "\(mainLabel), Pre-alert: none" : "\(mainLabel), Pre-alert: \(preList)"
-        showToast?(message)
+        showToast?(appliedMessage(mainSec: template.mainSeconds, offsets: template.prealertOffsetsSec))
     }
 
     // MARK: - Internal Configure
@@ -354,6 +342,10 @@ final class TimerScreenViewModel: ObservableObject {
     /// ⚠️ 저장이 실제로 됐을 때만 "저장됨"이라고 말한다. 결과와 상관없이 토스트를 띄우면
     ///    저장이 안 된 순간에도 됐다고 말하게 되고, 그건 "템플릿이 저장되지 않는다"는 제보가
     ///    원인을 찾기 어려워지는 이유가 된다.
+    var onTemplateSaved: (() -> Void)?
+    /// 방금 탭해서 지운 알림. 잠깐 되돌리기를 보여 준다(`DialAlertLine`).
+    @Published var justRemovedAlert: Int?
+
     func saveCurrentAsTemplate() {
         let cfg = normalizedCurrentConfig
         guard cfg.mainSec > 0 else { return }
@@ -365,6 +357,7 @@ final class TimerScreenViewModel: ObservableObject {
         )
         guard saved else { return }
         showToast?(String(localized: "Template saved"))
+        onTemplateSaved?()
     }
 
     /// 템플릿 설정만 다이얼에 반영한다 (apply(template:)와 달리 시작하지 않음)
@@ -440,17 +433,11 @@ final class TimerScreenViewModel: ObservableObject {
     /// 앱 시작 시 마지막으로 사용한 타이머 설정을 다이얼에 복원한다 (타이머 시작은 하지 않음).
     /// 실행 중 타이머 복원(restoreTimerIfNeeded)이 성공했으면 건드리지 않는다.
     ///
-    /// ⚠️ **무료 사용자에게는 복원하지 않는다** — 이 앱이 파는 한 문장이 "설정을 기억한다"이기
-    ///    때문이다(`ProGate.canRememberSetup`). 이 함수는 `onAppear` 에서 **콜드 런치에 한 번만**
-    ///    돌므로(`didRestoreLastUsedConfig`), 홈에 다녀오는 정도로는 초기화되지 않는다 —
-    ///    그건 제한이 아니라 고장으로 읽힌다.
-    ///
-    /// ⚠️ 저장(`persistLastUsedConfig`)은 무료에서도 계속 한다. 결제하는 순간 마지막에 쓰던
-    ///    설정이 그대로 돌아오는 편이, 결제하고 나서 빈손으로 시작하는 것보다 낫다.
+    /// ⚠️ **누구에게나 복원한다.** 어제 쓰던 설정이 사라지면 제한이 아니라 고장으로 읽힌다.
+    ///    이 함수는 `onAppear` 에서 **콜드 런치에 한 번만** 돈다(`didRestoreLastUsedConfig`).
     func restoreLastUsedConfigIfNeeded() {
         guard !didRestoreLastUsedConfig else { return }
         didRestoreLastUsedConfig = true
-        guard ProGate.canRememberSetup else { return }
         guard timerVM.state == .idle,
               let data = Self.lastUsedDefaults.data(forKey: Self.lastUsedConfigKey),
               let cfg = try? JSONDecoder().decode(LastUsedConfig.self, from: data),
@@ -485,28 +472,33 @@ final class TimerScreenViewModel: ObservableObject {
         configuredMainSeconds = mainSec
 
         if save {
-            configService.saveIfNeeded(
-                mainSec: mainSec,
-                offsets: normalizedOffsets,
-                prealertMessages: prealertMessages,
-                finishMessage: finishMessage.isEmpty ? nil : finishMessage
-            )
+            // 새로 설치한 사람의 칩은 자기가 저장한 것만이다. 저절로 쌓이면 저장을 배우기 전에 화면이 찬다.
+            if !BlankStart.isNewInstall {
+                configService.saveIfNeeded(
+                    mainSec: mainSec,
+                    offsets: normalizedOffsets,
+                    prealertMessages: prealertMessages,
+                    finishMessage: finishMessage.isEmpty ? nil : finishMessage,
+                    automatic: true
+                )
+            }
             persistLastUsedConfig(mainSec: mainSec, offsets: normalizedOffsets)
         }
 
         if toast {
-            let mainLabel = secPart > 0
-                ? String(localized: "\(mainMinutes)min \(secPart)sec")
-                : String(localized: "\(mainMinutes)min")
-            let preText = normalizedOffsets.sorted()
-                .map { String(localized: "\($0 / 60)min") }
-                .joined(separator: ", ")
-            timerVM.showToast?(
-                preText.isEmpty
-                    ? String(localized: "Timer applied: \(mainLabel)")
-                    : String(localized: "Timer applied: \(mainLabel) / Pre-alert \(preText)")
-            )
+            timerVM.showToast?(appliedMessage(mainSec: mainSec, offsets: normalizedOffsets))
         }
+    }
+
+    /// "타이머 적용" 한 줄. ⚠️ 시간은 `TimeMapper.durationText` 로만 쓴다 — 단위를 직접 붙이면 말이 섞인다.
+    private func appliedMessage(mainSec: Int, offsets: [Int]) -> String {
+        let mainLabel = TimeMapper.durationText(mainSec)
+        let preText = offsets.sorted()
+            .map { TimeMapper.durationText($0) }
+            .joined(separator: ", ")
+        return preText.isEmpty
+            ? String(localized: "Timer applied: \(mainLabel)")
+            : String(localized: "Timer applied: \(mainLabel) / Pre-alert \(preText)")
     }
 }
 

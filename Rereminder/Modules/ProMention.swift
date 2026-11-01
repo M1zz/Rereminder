@@ -66,7 +66,8 @@ enum ProMention {
                            isPro: Bool,
                            paywallViews: Int = Int(UsageMetrics.value(.paywallViews)),
                            now: Date = Date()) -> Bool {
-        guard !isPro else { return false }
+        // 무료 기간에는 앱이 먼저 Pro 를 꺼내지 않는다(`FreeUse`). 사려는 사람은 설정에서 찾아온다.
+        guard !isPro, !FreeUse.isActive else { return false }
         guard !defaults.bool(forKey: tappedKey), paywallViews < learnedPaywallViews else { return false }
         guard count < maxMentions, !usedKinds.contains(kind.rawValue) else { return false }
         if let last = defaults.object(forKey: lastDayKey) as? Int,

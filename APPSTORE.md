@@ -41,7 +41,7 @@ Deine Erinnerungen teilen die Zeit in Abschnitte, und der Ring zeigt jeden Absch
 Session-Modus (Pro)
 Gib jedem Abschnitt einen Namen – Einstieg, Übung, Fragen – und notiere, was du darin sagen willst. Ist ein Abschnitt an der Reihe, klappt dein Skript von selbst auf.
 
-Merkt sich deine Setups (Pro)
+Merkt sich deine Setups
 Sichere Zeit und Erinnerungen als Vorlage und starte sie nächstes Mal mit einem Tipp. Dein letztes Setup ist beim nächsten Öffnen automatisch wieder da.
 
 Ein Ende, das du nicht verpasst
@@ -57,7 +57,7 @@ Pilates, Yoga und Training: Aufwärmen, Hauptteil, Cool-down, ohne mitzuzählen
 Fokusarbeit: sanft zum Ende kommen, statt abrupt unterbrochen zu werden
 
 Über Pro
-Pro ist ein Einmalkauf, kein Abo. Vorwarnungen sind unbegrenzt, die Apple Watch App und die Mac App sind kostenlos. Pro verkauft genau eine Sache: Die App merkt sich deine Setups – Vorlagen, dein letztes Setup, Session-Modus, Überzeit und Verlauf.
+Solange du die App ausprobierst, sind alle Funktionen offen. Danach bleiben Vorwarnungen, dein letztes Setup und gespeicherte Vorlagen kostenlos. Merken ergänzt unbegrenzte Vorlagen und den gesamten Verlauf, Pro den Session-Modus. Beides gibt es als Jahresabo oder Einmalkauf.
 
 ### 지원 URL
 
@@ -106,7 +106,7 @@ Les alertes découpent le temps en parties, chacune de sa couleur sur l’anneau
 Mode Séance (Pro)
 Nommez chaque partie, par exemple introduction, démonstration, questions, puis notez ce que vous voulez y dire. Quand vient son tour, vos notes s’affichent d’elles-mêmes.
 
-Vos réglages mémorisés (Pro)
+Vos réglages mémorisés
 Enregistrez une durée et ses alertes comme modèle, et retrouvez-les d’un toucher. Votre dernier réglage est aussi restauré quand vous rouvrez l’app.
 
 Une fin impossible à manquer
@@ -122,7 +122,7 @@ Pilates, yoga et sport : échauffement, séance principale, retour au calme, san
 Travail concentré : sortez en douceur au lieu d’être coupé net
 
 À propos de Pro
-Pro est un achat unique, pas un abonnement. Les pré-alertes sont illimitées, et les apps Apple Watch et Mac sont gratuites. Pro promet une seule chose : l’app mémorise vos réglages. Modèles, dernier réglage, mode Séance, dépassement et historique.
+Tant que vous essayez l’app, toutes les fonctions sont ouvertes. Ensuite, les pré-alertes, votre dernier réglage et vos modèles enregistrés restent gratuits. Mémoire ajoute les modèles illimités et l’historique complet, Pro le mode Séance. Chaque formule existe à l’année ou en achat unique.
 
 ### 지원 URL
 
@@ -171,7 +171,7 @@ Los avisos dividen el tiempo en secciones, cada una con su color en el anillo. D
 Modo sesión (Pro)
 Pon nombre a cada sección (introducción, demostración, preguntas) y escribe lo que quieres decir en cada una. Cuando le toca a esa sección, el guion aparece solo.
 
-Recuerda tus configuraciones (Pro)
+Recuerda tus configuraciones
 Guarda un tiempo y sus avisos como plantilla y recupéralos con un toque. Tu última configuración también vuelve al abrir la app.
 
 Un final que no se te escapa
@@ -187,7 +187,7 @@ Pilates, yoga y entrenamiento: calentamiento, parte principal y vuelta a la calm
 Trabajo concentrado: sal poco a poco en lugar de cortar de golpe
 
 Sobre Pro
-Pro es una compra única, no una suscripción. Los avisos previos no tienen límite, y las apps de Apple Watch y Mac son gratis. Pro se resume en una frase: la app recuerda tus configuraciones. Plantillas, última configuración, Modo sesión, tiempo extra e historial.
+Mientras pruebas la app, todas las funciones están abiertas. Después, los avisos previos, tu última configuración y las plantillas guardadas siguen gratis. Memoria añade plantillas ilimitadas y todo el historial, y Pro añade el Modo sesión. Cada plan se ofrece por año o en compra única.
 
 ### 지원 URL
 
@@ -236,7 +236,7 @@ Os alertas dividem o tempo em etapas, cada uma com sua cor no anel. Logo abaixo,
 Modo Sessão (Pro)
 Dê um nome a cada etapa, como abertura, demonstração e perguntas, e escreva o que vai dizer em cada uma. Quando chega a vez da etapa, o roteiro aparece na tela.
 
-O app lembra suas configurações (Pro)
+O app lembra suas configurações
 Salve um tempo e seus alertas como modelo e volte a ele com um toque. A última configuração usada também volta sozinha quando você abre o app.
 
 Um fim que você não perde
@@ -252,7 +252,7 @@ Pilates, yoga e treinos: aquecimento, parte principal e volta à calma, sem prec
 Trabalho focado: saia da concentração aos poucos, em vez de ser interrompido
 
 Sobre o Pro
-O Pro é uma compra única, não uma assinatura. Os pré-alertas são ilimitados e os apps para Apple Watch e Mac são gratuitos. O Pro vende uma coisa só: o app lembra suas configurações. Modelos, a última configuração, Modo Sessão, tempo extra e histórico.
+Enquanto você experimenta o app, todos os recursos ficam abertos. Depois, os pré-alertas, sua última configuração e os modelos salvos continuam grátis. O Memória adiciona modelos ilimitados e todo o histórico, e o Pro adiciona o Modo Sessão. Cada plano pode ser anual ou compra única.
 
 ### 지원 URL
 
@@ -301,7 +301,7 @@ Os alertas dividem o tempo em etapas, cada uma com a sua cor no anel. Logo abaix
 Modo Sessão (Pro)
 Dê um nome a cada etapa, como abertura, demonstração e perguntas, e escreva o que vai dizer em cada uma. Quando chega a vez dessa etapa, o guião aparece no ecrã.
 
-A app lembra-se das suas definições (Pro)
+A app lembra-se das suas definições
 Guarde um tempo e os respetivos alertas como modelo e volte a ele com um toque. A última configuração usada também é reposta quando abre a app.
 
 Um fim que não lhe escapa
@@ -317,7 +317,7 @@ Pilates, ioga e treinos: aquecimento, parte principal e retorno à calma, sem te
 Trabalho concentrado: saia da concentração aos poucos, em vez de ser interrompido
 
 Sobre o Pro
-O Pro é uma compra única, não uma subscrição. Os pré-alertas são ilimitados e as apps para Apple Watch e Mac são gratuitas. O Pro vende uma única coisa: a app lembra-se das suas definições. Modelos, a última configuração, Modo Sessão, tempo extra e histórico.
+Enquanto experimenta a app, todas as funcionalidades estão abertas. Depois, os pré-alertas, a sua última configuração e os modelos guardados continuam grátis. O plano Memória acrescenta modelos ilimitados e todo o histórico, e o Pro acrescenta o Modo Sessão. Cada plano pode ser anual ou compra única.
 
 ### 지원 URL
 
@@ -366,7 +366,7 @@ Gli avvisi dividono il tempo in sezioni, ognuna con il suo colore sull'anello. S
 Modalità Sessione (Pro)
 Dai un nome a ogni sezione (apertura, dimostrazione, domande) e scrivi il copione di cosa dire. Quando arriva il suo turno, il copione si apre da solo.
 
-Ricorda le tue configurazioni (Pro)
+Ricorda le tue configurazioni
 Salva tempo e avvisi come modello e richiamali con un tocco. Quando riapri l'app, ritrovi anche l'ultima configurazione usata.
 
 Una fine che non puoi perderti
@@ -382,7 +382,7 @@ Pilates, yoga e allenamento: riscaldamento, parte centrale, defaticamento, senza
 Lavoro concentrato: non un taglio brusco, ma una chiusura graduale
 
 Informazioni su Pro
-Pro è un acquisto una tantum, non un abbonamento. I preavvisi sono illimitati per tutti e le app per Apple Watch e Mac sono gratuite. Pro fa una cosa sola: l'app ricorda le tue configurazioni. Modelli, ultima configurazione, modalità Sessione, tempo extra e cronologia.
+Mentre provi l’app, tutte le funzioni sono aperte. Dopo, i preavvisi, l’ultima configurazione e i modelli salvati restano gratis. Memoria aggiunge modelli illimitati e tutta la cronologia, Pro la modalità Sessione. Ogni piano è annuale o con acquisto unico.
 
 ### 지원 URL
 
@@ -465,6 +465,8 @@ https://m1zz.github.io/Rereminder/it/
 
 re + reminder = 한 번 더 알려주다
 끝나기 전에 다시 한 번, 미리미리 알려드립니다.
+
+써 보는 동안에는 모든 기능이 열려 있습니다. 그 뒤에도 예비 알림, 마지막 설정, 저장한 템플릿은 무료입니다. 기억은 템플릿 무제한과 전체 기록을, Pro는 세션 모드를 더합니다. 각각 연 구독 또는 한 번 결제로 고를 수 있습니다.
 
 광고 없음 · 구독 강요 없음 · 인터넷 연결 불필요
 
@@ -551,6 +553,8 @@ WHY "Rereminder"?
 
 re + reminder = remind you again
 We remind you before it's too late — again and again.
+
+Every feature is open while you try the app. After that, pre-alerts, your last setup and saved templates stay free. Remember adds unlimited templates and your full history. Pro adds Session Mode. Each comes yearly or as a one-time purchase.
 
 No ads · No forced subscriptions · No internet required
 
@@ -640,6 +644,8 @@ WHY "Rereminder"?
 re + reminder = remind you again
 We remind you before it's too late — again and again.
 
+Every feature is open while you try the app. After that, pre-alerts, your last setup and saved templates stay free. Remember adds unlimited templates and your full history. Pro adds Session Mode. Each comes yearly or as a one-time purchase.
+
 No ads · No forced subscriptions · No internet required
 
 ### 지원 URL
@@ -720,6 +726,8 @@ Rereminderは、終わる前に知らせてくれます。
 re + reminder = もう一度知らせる
 終わる前にもう一度、前もってお知らせします。
 
+試している間は、すべての機能が使えます。その後も、事前通知、前回の設定、保存したテンプレートは無料です。記憶はテンプレート無制限と全履歴を、Proはセッションモードを追加します。それぞれ年額または買い切りから選べます。
+
 広告なし・サブスクの押し売りなし・インターネット接続不要
 
 ### 지원 URL
@@ -767,7 +775,7 @@ Rereminder 让你在结束之前就被提醒 —— 想放几次就放几次。
 分段模式（Pro）
 给每一段起名 —— 开场、示范、问答 —— 再为每一段写下要说的话。轮到那一段时，讲稿自己展开。
 
-记住你的设置（Pro）
+记住你的设置
 把一套时间和提醒存成模板，下次点一下就回来。上次用的设置也会在重新打开时自动恢复。
 
 不会被错过的结束
@@ -783,7 +791,7 @@ Rereminder 让你在结束之前就被提醒 —— 想放几次就放几次。
 专注工作：不是被突然打断，而是慢慢收尾
 
 关于 Pro
-Pro 是一次性买断，不是订阅。提前提醒不限个数，Apple Watch App 和 Mac App 都免费。Pro 卖的是一句话：App 会记住你的设置 —— 模板、上次的设置、分段模式、超时和历史统计。
+试用期间所有功能都开放。之后，提前提醒、上次的设置和已保存的模板依然免费。记忆增加不限数量的模板和完整历史记录，Pro 增加分段模式。都可以选择按年订阅或一次买断。
 
 ### 지원 URL
 
@@ -830,7 +838,7 @@ Rereminder 讓你在結束之前就被提醒 —— 想放幾次就放幾次。
 分段模式（Pro）
 幫每一段命名 —— 開場、示範、問答 —— 再為每一段寫下要說的話。輪到那一段時，講稿自己展開。
 
-記住你的設定（Pro）
+記住你的設定
 把一套時間和提醒存成範本，下次點一下就回來。上次用的設定也會在重新開啟時自動恢復。
 
 不會被錯過的結束
@@ -846,7 +854,7 @@ Rereminder 讓你在結束之前就被提醒 —— 想放幾次就放幾次。
 專注工作：不是被突然打斷，而是慢慢收尾
 
 關於 Pro
-Pro 是一次買斷，不是訂閱。提前提醒不限個數，Apple Watch App 和 Mac App 都免費。Pro 賣的是一句話：App 會記住你的設定 —— 範本、上次的設定、分段模式、超時和歷史統計。
+試用期間所有功能都開放。之後，提前提醒、上次的設定和已儲存的範本依然免費。記憶增加不限數量的範本和完整歷史記錄，Pro 增加分段模式。都可以選擇按年訂閱或一次買斷。
 
 ### 지원 URL
 
@@ -895,7 +903,7 @@ Rereminder предупреждает заранее, и столько раз, 
 Режим этапов (Pro)
 Дайте каждому этапу название, например вступление, практика, вопросы, и запишите, что хотите в нём сказать. Когда наступает очередь этапа, заметка раскрывается сама.
 
-Помнит ваши настройки (Pro)
+Помнит ваши настройки
 Сохраните время и сигналы как шаблон и запускайте его в следующий раз одним касанием. Последняя настройка сама вернётся, когда вы снова откроете приложение.
 
 Конец, который не пропустить
@@ -911,7 +919,7 @@ Rereminder предупреждает заранее, и столько раз, 
 Работа в фокусе: мягко завершить, а не оборваться на полуслове
 
 О Pro
-Pro — это разовая покупка, а не подписка. Предупреждения без ограничений, приложения для Apple Watch и Mac бесплатны. Pro даёт ровно одно: приложение запоминает ваши настройки. Это шаблоны, последняя настройка, режим этапов, овертайм и история.
+Пока вы пробуете приложение, открыты все функции. Затем предупреждения, последняя настройка и сохранённые шаблоны остаются бесплатными. Тариф «Память» добавляет неограниченные шаблоны и всю историю, Pro добавляет режим этапов. Каждый тариф можно взять на год или купить разово.
 
 ### 지원 URL
 
@@ -960,7 +968,7 @@ Upozornění rozdělí čas na úseky a kruh každý úsek zobrazí vlastní bar
 Režim sezení (Pro)
 Pojmenujte každý úsek – úvod, cvičení, dotazy – a poznamenejte si, co v něm chcete říct. Když na úsek přijde řada, váš scénář se sám rozbalí.
 
-Pamatuje si vaše nastavení (Pro)
+Pamatuje si vaše nastavení
 Uložte čas a upozornění jako šablonu a příště je spusťte jedním klepnutím. Vaše poslední nastavení je při dalším otevření automaticky zpět.
 
 Konec, který nepropásnete
@@ -976,7 +984,7 @@ Pilates, jóga a cvičení: rozcvička, hlavní část, protažení – bez poč
 Soustředěná práce: v klidu dokončit, místo abyste byli náhle přerušeni
 
 O verzi Pro
-Pro je jednorázový nákup, ne předplatné. Upozornění předem jsou neomezená, aplikace pro Apple Watch i pro Mac jsou zdarma. Pro nabízí jedinou věc: aplikace si pamatuje vaše nastavení – šablony, poslední nastavení, režim sezení, přesčas a historii.
+Dokud aplikaci zkoušíte, jsou otevřené všechny funkce. Potom zůstanou zdarma upozornění předem, poslední nastavení i uložené šablony. Plán Paměť přidává neomezené šablony a celou historii, Pro přidává režim sezení. Každý plán je na rok nebo jako jednorázový nákup.
 
 ### 지원 URL
 
@@ -1025,7 +1033,7 @@ Dine påmindelser deler tiden op i afsnit, og ringen viser hvert afsnit i sin eg
 Sessionstilstand (Pro)
 Giv hvert afsnit et navn – indledning, øvelse, spørgsmål – og skriv ned, hvad du vil sige. Når det bliver et afsnits tur, folder dit manus sig ud af sig selv.
 
-Husker dine opsætninger (Pro)
+Husker dine opsætninger
 Gem tid og påmindelser som skabelon, og start den med ét tryk næste gang. Din seneste opsætning er automatisk tilbage, når du åbner appen igen.
 
 En slutning, du ikke går glip af
@@ -1041,7 +1049,7 @@ Pilates, yoga og træning: opvarmning, hoveddel og nedkøling uden at tælle
 Fokusarbejde: glid roligt ud af arbejdet i stedet for at blive afbrudt brat
 
 Om Pro
-Pro er et engangskøb, ikke et abonnement. Forvarsler er ubegrænsede, og Apple Watch-appen og Mac-appen er gratis. Pro sælger præcis én ting: Appen husker dine opsætninger – skabeloner, din seneste opsætning, Sessionstilstand, overtid og historik.
+Mens du prøver appen, er alle funktioner åbne. Derefter er forvarsler, din seneste opsætning og gemte skabeloner stadig gratis. Husk tilføjer ubegrænsede skabeloner og hele historikken, Pro tilføjer Sessionstilstand. Begge fås årligt eller som engangskøb.
 
 ### 지원 URL
 
@@ -1090,7 +1098,7 @@ Rereminder: Χρονόμετρο ομιλίας
 Λειτουργία συνεδρίας (Pro)
 Δώστε όνομα σε κάθε ενότητα, όπως εισαγωγή, άσκηση, ερωτήσεις, και σημειώστε τι θέλετε να πείτε. Μόλις έρθει η σειρά μιας ενότητας, το κείμενό σας ανοίγει μόνο του.
 
-Θυμάται τις ρυθμίσεις σας (Pro)
+Θυμάται τις ρυθμίσεις σας
 Αποθηκεύστε διάρκεια και ειδοποιήσεις ως πρότυπο και ξεκινήστε το την επόμενη φορά με ένα πάτημα. Η τελευταία σας ρύθμιση επιστρέφει αυτόματα όταν ξανανοίγετε την εφαρμογή.
 
 Ένα τέλος που δεν θα χάσετε
@@ -1106,7 +1114,7 @@ Rereminder: Χρονόμετρο ομιλίας
 Εργασία με συγκέντρωση: κλείστε ήρεμα αντί να σας διακόψει απότομα το τέλος
 
 Σχετικά με το Pro
-Το Pro είναι εφάπαξ αγορά, όχι συνδρομή. Οι προειδοποιήσεις είναι απεριόριστες και οι εφαρμογές για Apple Watch και Mac είναι δωρεάν. Το Pro προσφέρει ένα μόνο πράγμα: η εφαρμογή θυμάται τις ρυθμίσεις σας. Πρότυπα, η τελευταία σας ρύθμιση, Λειτουργία συνεδρίας, υπέρβαση χρόνου και ιστορικό.
+Όσο δοκιμάζετε την εφαρμογή, όλες οι λειτουργίες είναι ανοιχτές. Μετά, οι προειδοποιήσεις, η τελευταία ρύθμιση και τα αποθηκευμένα πρότυπα μένουν δωρεάν. Το Μνήμη προσθέτει απεριόριστα πρότυπα και όλο το ιστορικό, το Pro τη Λειτουργία συνεδρίας. Κάθε πρόγραμμα είναι ετήσιο ή εφάπαξ αγορά.
 
 ### 지원 URL
 
@@ -1155,7 +1163,7 @@ Muistutukset jakavat ajan osioihin, ja rengas näyttää jokaisen osion omalla v
 Sessiotila (Pro)
 Nimeä jokainen osio, esimerkiksi alku, harjoitus, kysymykset, ja kirjoita muistiin, mitä haluat sanoa. Kun osion vuoro tulee, käsikirjoituksesi avautuu itsestään.
 
-Muistaa asetuksesi (Pro)
+Muistaa asetuksesi
 Tallenna aika ja muistutukset malliksi ja käynnistä ne ensi kerralla yhdellä napautuksella. Viimeisimmät asetuksesi palaavat automaattisesti, kun avaat apin uudelleen.
 
 Loppu, jota et ohita
@@ -1171,7 +1179,7 @@ Pilates, jooga ja treeni: lämmittely, pääosa ja jäähdyttely ilman laskemist
 Keskittynyt työ: lopettele rauhassa sen sijaan, että aika katkaisee työn kesken
 
 Tietoa Prosta
-Pro on kertaosto, ei tilaus. Ennakkomuistutuksia saa rajattomasti, ja Apple Watch -appi sekä Mac-appi ovat ilmaisia. Pro tarjoaa yhden asian: appi muistaa asetuksesi. Mallit, viimeisimmät asetukset, Sessiotila, yliaika ja historia.
+Kun kokeilet appia, kaikki toiminnot ovat auki. Sen jälkeen ennakkohälytykset, viimeisin asetus ja tallennetut mallit pysyvät ilmaisina. Muisti lisää rajattomat mallit ja koko historian, Pro lisää Sessiotilan. Kumpikin on saatavilla vuodeksi tai kertaostoksena.
 
 ### 지원 URL
 
@@ -1220,7 +1228,7 @@ Peringatan Anda membagi waktu menjadi beberapa bagian, dan cincin menampilkan se
 Mode Sesi (Pro)
 Beri nama setiap bagian, misalnya pembuka, latihan, tanya jawab, lalu catat apa yang ingin Anda sampaikan. Saat giliran sebuah bagian tiba, naskah Anda terbuka dengan sendirinya.
 
-Mengingat pengaturan Anda (Pro)
+Mengingat pengaturan Anda
 Simpan waktu dan peringatan sebagai templat, lalu mulai lagi dengan sekali ketuk lain kali. Pengaturan terakhir Anda otomatis kembali saat app dibuka lagi.
 
 Akhir yang tidak akan terlewat
@@ -1236,7 +1244,7 @@ Pilates, yoga, dan olahraga: pemanasan, latihan inti, pendinginan, tanpa perlu m
 Kerja fokus: keluar dengan pelan, bukan terputus tiba-tiba
 
 Tentang Pro
-Pro adalah pembelian satu kali, bukan langganan. Peringatan awal tanpa batas, app Apple Watch dan app Mac gratis. Pro hanya menjual satu hal: app mengingat pengaturan Anda, yaitu templat, pengaturan terakhir, Mode Sesi, lewat waktu, dan riwayat.
+Selama Anda mencoba app, semua fitur terbuka. Setelah itu, peringatan awal, pengaturan terakhir, dan templat tersimpan tetap gratis. Ingat menambahkan templat tanpa batas dan seluruh riwayat, Pro menambahkan Mode Sesi. Keduanya tersedia tahunan atau sekali beli.
 
 ### 지원 URL
 
@@ -1285,7 +1293,7 @@ Varslene deler tiden inn i deler, og ringen viser hver del i sin egen farge. Und
 Øktmodus (Pro)
 Gi hver del et navn – åpning, øvelse, spørsmål – og skriv ned hva du vil si. Når det blir delens tur, folder manuset ditt seg ut av seg selv.
 
-Husker oppsettene dine (Pro)
+Husker oppsettene dine
 Lagre tid og varsler som en mal, og start den med ett trykk neste gang. Det siste oppsettet ditt er automatisk tilbake når du åpner appen igjen.
 
 En slutt du ikke går glipp av
@@ -1301,7 +1309,7 @@ Pilates, yoga og trening: oppvarming, hoveddel og nedtrapping uten å telle
 Fokusarbeid: gli rolig ut av arbeidet i stedet for å bli brått avbrutt
 
 Om Pro
-Pro er et engangskjøp, ikke et abonnement. Forvarslene er ubegrensede, og appene for Apple Watch og Mac er gratis. Pro selger én eneste ting: Appen husker oppsettene dine – maler, det siste oppsettet, øktmodus, overtid og historikk.
+Mens du prøver appen, er alle funksjoner åpne. Etterpå er forvarsler, siste oppsett og lagrede maler fortsatt gratis. Husk legger til ubegrensede maler og hele historikken, Pro legger til Øktmodus. Begge fås årlig eller som engangskjøp.
 
 ### 지원 URL
 
@@ -1350,7 +1358,7 @@ Je meldingen verdelen de tijd in onderdelen, en de ring toont elk onderdeel in e
 Sessiemodus (Pro)
 Geef elk onderdeel een naam – intro, oefening, vragen – en schrijf op wat je wilt zeggen. Zodra een onderdeel begint, klapt je script vanzelf open.
 
-Onthoudt je instellingen (Pro)
+Onthoudt je instellingen
 Bewaar duur en meldingen als sjabloon en start die de volgende keer met één tik. Je laatste instellingen staan automatisch klaar als je de app weer opent.
 
 Een einde dat je niet mist
@@ -1366,7 +1374,7 @@ Pilates, yoga en sport: warming-up, kern en cooling-down zonder te tellen
 Focuswerk: rustig afronden in plaats van abrupt onderbroken worden
 
 Over Pro
-Pro is een eenmalige aankoop, geen abonnement. Voorwaarschuwingen zijn onbeperkt, en de Apple Watch-app en de Mac-app zijn gratis. Pro voegt precies één ding toe: de app onthoudt je instellingen – sjablonen, je laatste instellingen, Sessiemodus, overtijd en geschiedenis.
+Zolang je de app uitprobeert, staan alle functies open. Daarna blijven voorwaarschuwingen, je laatste instelling en bewaarde sjablonen gratis. Onthouden voegt onbeperkt sjablonen en de volledige geschiedenis toe, Pro voegt Sessiemodus toe. Beide zijn er per jaar of als eenmalige aankoop.
 
 ### 지원 URL
 
@@ -1415,7 +1423,7 @@ Alerty dzielą czas na etapy, a tarcza pokazuje każdy etap w innym kolorze. Pod
 Tryb sesji (Pro)
 Nazwij każdy etap – wstęp, ćwiczenie, pytania – i zapisz, co chcesz powiedzieć. Gdy zaczyna się dany etap, Twoje notatki rozwijają się same.
 
-Pamięta Twoje ustawienia (Pro)
+Pamięta Twoje ustawienia
 Zapisz czas i alerty jako szablon i następnym razem uruchom go jednym stuknięciem. Ostatnie ustawienia wracają automatycznie, gdy znów otworzysz aplikację.
 
 Koniec, którego nie przegapisz
@@ -1431,7 +1439,7 @@ Pilates, joga i trening: rozgrzewka, część główna i wyciszenie bez liczenia
 Skupiona praca: spokojnie kończysz zamiast gwałtownie przerywać
 
 O wersji Pro
-Pro to jednorazowy zakup, nie subskrypcja. Ostrzeżenia są bez limitu, a aplikacje na Apple Watch i Maca są darmowe. Pro daje dokładnie jedno: aplikacja pamięta Twoje ustawienia – szablony, ostatnie ustawienia, Tryb sesji, czas po końcu i historię.
+Gdy wypróbowujesz aplikację, wszystkie funkcje są otwarte. Potem wcześniejsze alerty, ostatnie ustawienie i zapisane szablony pozostają bezpłatne. Plan Pamięć dodaje szablony bez limitu i pełną historię, a Pro dodaje Tryb sesji. Każdy plan jest roczny lub jako zakup jednorazowy.
 
 ### 지원 URL
 
@@ -1480,7 +1488,7 @@ Dina påminnelser delar upp tiden i avsnitt, och ringen visar varje avsnitt i en
 Sessionsläge (Pro)
 Ge varje avsnitt ett namn – intro, övning, frågor – och skriv ner vad du vill säga. När ett avsnitt börjar fälls ditt manus ut av sig självt.
 
-Kommer ihåg dina inställningar (Pro)
+Kommer ihåg dina inställningar
 Spara tid och påminnelser som mall och starta den med ett tryck nästa gång. Din senaste inställning finns automatiskt kvar när du öppnar appen igen.
 
 Ett slut du inte missar
@@ -1496,7 +1504,7 @@ Pilates, yoga och träning: uppvärmning, huvuddel och nedvarvning utan att räk
 Fokusarbete: avsluta lugnt i stället för att bli avbruten tvärt
 
 Om Pro
-Pro är ett engångsköp, inte en prenumeration. Förvarningarna är obegränsade, och Apple Watch-appen och Mac-appen är gratis. Pro ger exakt en sak: appen kommer ihåg dina inställningar – mallar, din senaste inställning, Sessionsläge, övertid och historik.
+Medan du provar appen är alla funktioner öppna. Sedan är förvarningar, din senaste inställning och sparade mallar fortfarande gratis. Minne lägger till obegränsat med mallar och hela historiken, Pro lägger till Sessionsläge. Båda finns per år eller som engångsköp.
 
 ### 지원 URL
 
@@ -1545,7 +1553,7 @@ Rereminder เตือนคุณล่วงหน้าแต่เนิ่
 โหมดเซสชัน (Pro)
 ตั้งชื่อให้แต่ละช่วง เช่น เกริ่นนำ ฝึกปฏิบัติ ถามตอบ แล้วเขียนสิ่งที่อยากพูดไว้ เมื่อถึงช่วงไหน บทพูดของช่วงนั้นจะเปิดขึ้นมาเอง
 
-จำการตั้งค่าของคุณ (Pro)
+จำการตั้งค่าของคุณ
 บันทึกเวลาและการแจ้งเตือนเป็นเทมเพลต ครั้งหน้าแตะเดียวก็เริ่มได้ และเมื่อเปิดแอปอีกครั้ง การตั้งค่าล่าสุดจะกลับมาให้อัตโนมัติ
 
 ตอนจบที่ไม่มีวันพลาด
@@ -1561,7 +1569,7 @@ Rereminder เตือนคุณล่วงหน้าแต่เนิ่
 งานที่ต้องใช้สมาธิ ค่อยๆ ปิดงานอย่างสบายใจ แทนที่จะถูกตัดกลางคัน
 
 เกี่ยวกับ Pro
-Pro เป็นการซื้อครั้งเดียว ไม่ใช่ค่าสมาชิก แจ้งเตือนล่วงหน้าใช้ได้ไม่จำกัด และแอป Apple Watch กับแอป Mac ใช้ได้ฟรี สิ่งที่ Pro เพิ่มให้มีอย่างเดียวคือ แอปจะจำการตั้งค่าของคุณ ได้แก่ เทมเพลต การตั้งค่าล่าสุด โหมดเซสชัน เวลาเกิน และประวัติ
+ระหว่างที่ลองใช้ ทุกฟีเจอร์เปิดให้ใช้ทั้งหมด หลังจากนั้นการแจ้งเตือนล่วงหน้า การตั้งค่าล่าสุด และเทมเพลตที่บันทึกไว้ยังฟรี จดจำเพิ่มเทมเพลตไม่จำกัดและประวัติทั้งหมด Pro เพิ่มโหมดเซสชัน เลือกได้ทั้งรายปีหรือซื้อครั้งเดียว
 
 ### 지원 URL
 
@@ -1610,7 +1618,7 @@ Uyarıların süreyi bölümlere ayırır, halka her bölümü kendi renginde g�
 Oturum Modu (Pro)
 Her bölüme bir ad ver: giriş, alıştırma, sorular. Söylemek istediklerini yaz. Sıra o bölüme geldiğinde metnin kendiliğinden açılır.
 
-Ayarlarını hatırlar (Pro)
+Ayarlarını hatırlar
 Süreyi ve uyarıları şablon olarak kaydet, bir dahaki sefere tek dokunuşla başlat. Uygulamayı yeniden açtığında son ayarın otomatik olarak geri gelir.
 
 Kaçırmayacağın bir bitiş
@@ -1626,7 +1634,7 @@ Pilates, yoga ve antrenman: ısınma, ana bölüm ve soğuma, saymadan
 Odaklı çalışma: aniden kesilmek yerine sakince toparla
 
 Pro hakkında
-Pro tek seferlik bir satın almadır, abonelik değildir. Ön uyarılar sınırsızdır; Apple Watch ve Mac uygulamaları ücretsizdir. Pro tek bir şey sunar: uygulama ayarlarını hatırlar. Şablonlar, son ayarın, Oturum Modu, ek süre ve geçmiş.
+Uygulamayı denerken tüm özellikler açıktır. Sonrasında ön uyarılar, son ayarın ve kayıtlı şablonlar ücretsiz kalır. Hafıza sınırsız şablon ve tüm geçmişi, Pro ise Oturum Modu’nu ekler. Her ikisi de yıllık veya tek seferlik alınabilir.
 
 ### 지원 URL
 
@@ -1675,7 +1683,7 @@ Các chuông báo chia thời gian thành từng phần, và vòng tròn hiển 
 Chế độ Phiên (Pro)
 Đặt tên cho từng phần, như mở đầu, thực hành, hỏi đáp, rồi ghi lại điều bạn muốn nói. Đến lượt phần nào, kịch bản của phần đó tự mở ra.
 
-Ghi nhớ cài đặt của bạn (Pro)
+Ghi nhớ cài đặt của bạn
 Lưu thời gian và các chuông báo thành mẫu, lần sau chỉ cần một chạm để bắt đầu. Cài đặt gần nhất tự động được khôi phục khi bạn mở lại ứng dụng.
 
 Kết thúc không thể bỏ lỡ
@@ -1691,7 +1699,7 @@ Pilates, yoga và tập luyện: khởi động, phần chính, giãn cơ mà kh
 Làm việc tập trung: kết thúc nhẹ nhàng thay vì bị cắt ngang đột ngột
 
 Về Pro
-Pro là mua một lần, không phải thuê bao. Báo trước không giới hạn, ứng dụng Apple Watch và ứng dụng Mac đều miễn phí. Pro chỉ mang lại một điều: ứng dụng ghi nhớ cài đặt của bạn. Mẫu, cài đặt gần nhất, Chế độ Phiên, quá giờ và lịch sử.
+Trong lúc dùng thử, mọi tính năng đều mở. Sau đó, cảnh báo trước, cài đặt gần nhất và mẫu đã lưu vẫn miễn phí. Ghi nhớ thêm mẫu không giới hạn và toàn bộ lịch sử, Pro thêm Chế độ Phiên. Mỗi gói có thể mua theo năm hoặc một lần.
 
 ### 지원 URL
 

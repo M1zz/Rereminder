@@ -96,13 +96,15 @@
         "15 a 5 min předem"
       ]
     ],
-    "note": "Co používáte často, uložte jako šablonu a spusťte jedním klepnutím (od plánu Paměť). Časovač můžete spustit nebo zastavit i přes Zkratky a Siri."
+    "note": "Co používáte často, uložte jako šablonu a spusťte jedním klepnutím. Časovač můžete spustit nebo zastavit i přes Zkratky a Siri."
   },
   "pricing": {
-    "title": "Upozornění předem jsou zdarma. Platíte, jen když si má něco pamatovat.",
+    "title": "Na začátku je otevřené vše. Plaťte, jen když chcete víc.",
     "free": {
       "name": "Zdarma",
       "items": [
+        "Všechny funkce otevřené do 14 dnů používání nebo 5 sezení",
+        "Trvale zdarma: poslední nastavení, uložené šablony, až 3 nové šablony a přesčas",
         "Neomezený počet upozornění předem",
         "Vlastní text u každého upozornění",
         "Živá aktivita na zamčené obrazovce a v Dynamic Islandu",
@@ -114,12 +116,10 @@
     "pro": {
       "name": "Paměť · Pro",
       "items": [
-        "Paměť: uložte nastavení jako šablonu a spusťte ho jedním klepnutím",
-        "Paměť: po znovuotevření je vše, jak jste to nechali",
-        "Pro: vše z Paměti plus režim sezení s názvy částí a texty",
-        "Pro: přetažení času, historie a statistiky"
+        "Paměť: Neomezené šablony a celá historie",
+        "Pro: vše z Paměti plus režim sezení s názvy částí a texty"
       ],
-      "note": "U každého plánu volíte roční předplatné, nebo jednorázový nákup navždy. Režim sezení, přetažení času a historii si můžete před zaplacením párkrát vyzkoušet."
+      "note": "U obou plánů si vyberete roční předplatné nebo jednorázový nákup natrvalo. Režim sezení zůstane po období zdarma ještě na několik použití."
     },
     "note": "Žádné reklamy. Pas navždy navíc odemkne všechny aplikace od Leeo."
   },
@@ -128,7 +128,7 @@
     "items": [
       {
         "q": "Upozornění se neozvalo.",
-        "a": "Skoro vždy jde o oprávnění nebo režim soustředění. Zkontrolujte oprávnění k oznámením v aplikaci v Nastavení › Způsob upozornění. Pokud používáte režim soustředění, přidejte Rereminder mezi povolené aplikace v Nastavení › Soustředění v iOS. V tichém režimu jen zavibruje. Je-li Rereminder v Nastavení › Oznámení › Plánovaný souhrn, upozornění se zadržují, tak ho odtamtud vyřaďte."
+        "a": "Skoro vždy jde o oprávnění nebo režim soustředění. Zkontrolujte oprávnění k oznámením v aplikaci v Nastavení › Nastavení oznámení › Způsob upozornění. Pokud používáte režim soustředění, přidejte Rereminder mezi povolené aplikace v Nastavení › Soustředění v iOS. V tichém režimu jen zavibruje. Je-li Rereminder v Nastavení › Oznámení › Plánovaný souhrn, upozornění se zadržují, tak ho odtamtud vyřaďte."
       },
       {
         "q": "Poznám konec i v tichém režimu?",
@@ -147,8 +147,8 @@
         "a": "Na obrazovce s plány klepněte na „Obnovit nákupy“, přihlášeni ke stejnému Apple účtu, ze kterého jste platili. Nákupy navždy se vrátí i po smazání aplikace nebo na novém zařízení."
       },
       {
-        "q": "Uložené šablony jsou zamčené.",
-        "a": "Pořád tam jsou. Bez Paměti nebo Pro zůstanou vidět zamčené a hned po zakoupení jednoho z nich se znovu otevřou."
+        "q": "Zamknou se moje uložené šablony?",
+        "a": "Ne. Uložené šablony se nikdy nemažou a vždy je otevřete. Po období zdarma můžete zdarma uložit až 3 nové a plán Paměť limit ruší."
       },
       {
         "q": "Jak získám peníze zpět?",

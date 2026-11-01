@@ -9,7 +9,7 @@
 //     넘어선 만큼을 따로 짚는다.
 //
 //  ⚠️ 한도는 게이트(`ProGate`)와 **같은 셈법·같은 상수**를 쓴다.
-//     - 저장한 설정: 무료 몫은 없다(`ProGate.freeSavedSetups` = 0, 저장 자체가 기억 트림).
+//     - 저장한 설정: 문턱 뒤 무료 한도는 `ProGate.freeSavedSetups`.
 //       첫 실행에 심어 준 시드(`LegacyFreeNotice.seedTemplateNames`)는 세지 않는다 —
 //       세면 무료로도 가졌을 것을 산 덕으로 부풀리게 된다.
 //     - 세션 모드: 무료 체험은 최대 `TrialCounter.secondStageLimit` 번(5+5).
@@ -197,15 +197,11 @@ struct ProBenefitsView: View {
     /// 켜지고 꺼지는 것·쌓이는 것. 쓰고 있는 모습을 값으로 보여 준다.
     private var unlockedSection: some View {
         Section {
-            valueRow("Remembers your last timer", symbol: "arrow.counterclockwise",
-                     value: String(localized: "On"))
+            valueRow("Timer History", symbol: "chart.bar.fill",
+                     value: usage.records.formatted(.number))
             if tier == .session {
                 valueRow("Section Scripts", symbol: "text.quote",
                          value: usage.scripts.formatted(.number))
-                valueRow("Overtime Tracking", symbol: "timer.circle.fill",
-                         value: String(localized: "On"))
-                valueRow("Timer History", symbol: "chart.bar.fill",
-                         value: usage.records.formatted(.number))
             }
         } header: {
             Text(tier == .session ? "Unlocked with Pro" : "Unlocked with Remember")

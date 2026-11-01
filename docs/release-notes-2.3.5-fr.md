@@ -1,5 +1,6 @@
 Rereminder 2.3.5
 
+Essayez tout d’abord, décidez ensuite.
 Trois formules : Gratuit, Mémoire, Pro.
 Annuel ou à vie, vous choisissez.
 Abonné ? Passez à vie quand vous voulez.

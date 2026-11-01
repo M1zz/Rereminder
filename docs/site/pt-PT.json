@@ -96,13 +96,15 @@
         "15 e 5 min antes"
       ]
     ],
-    "note": "Guarde como modelo o que repete e abra-o com um toque (a partir de Memória). Também pode iniciar ou parar um temporizador com Atalhos e Siri."
+    "note": "Guarde como modelo o que repete e abra-o com um toque. Também pode iniciar ou parar um temporizador com Atalhos e Siri."
   },
   "pricing": {
-    "title": "Os pré-alertas são gratuitos. Pague só se quiser que se lembre.",
+    "title": "No início está tudo aberto. Pague só se quiser mais.",
     "free": {
       "name": "Grátis",
       "items": [
+        "Todas as funcionalidades abertas até 14 dias de utilização ou 5 sessões",
+        "Sempre grátis: a sua última configuração, modelos guardados, até 3 modelos novos e tempo extra",
         "Pré-alertas sem limite",
         "A sua própria mensagem em cada alerta",
         "Atividade em direto no ecrã bloqueado e na Dynamic Island",
@@ -114,12 +116,10 @@
     "pro": {
       "name": "Memória · Pro",
       "items": [
-        "Memória: guarde definições como modelos e abra-as com um toque",
-        "Memória: ao reabrir a app, fica tudo como deixou",
-        "Pro: tudo o que a Memória tem, mais o Modo Sessão com nomes de partes e guiões",
-        "Pro: tempo extra, histórico e estatísticas"
+        "Memória: Modelos ilimitados e todo o seu histórico",
+        "Pro: tudo o que a Memória tem, mais o Modo Sessão com nomes de partes e guiões"
       ],
-      "note": "Em cada plano, escolha assinatura anual ou uma compra única vitalícia. Pode experimentar o Modo Sessão, o tempo extra e o histórico algumas vezes antes de pagar."
+      "note": "Escolha anual ou compra única vitalícia em qualquer plano. O Modo Sessão mantém algumas utilizações depois do período gratuito."
     },
     "note": "Sem anúncios. E um passe para sempre abre todas as apps da Leeo."
   },
@@ -128,7 +128,7 @@
     "items": [
       {
         "q": "Um alerta não tocou.",
-        "a": "Quase sempre são permissões ou um modo de foco. Verifique a permissão de notificações na app, em Definições › Método de notificação. Se usa um modo de foco, adicione o Rereminder às apps permitidas em Definições › Foco do iOS. No modo silencioso só vibra. Se o Rereminder estiver em Definições › Notificações › Resumo agendado, os alertas ficam retidos; retire-o de lá."
+        "a": "Quase sempre são permissões ou um modo de foco. Verifique a permissão de notificações na app, em Definições › Definições de notificações › Método de notificação. Se usa um modo de foco, adicione o Rereminder às apps permitidas em Definições › Foco do iOS. No modo silencioso só vibra. Se o Rereminder estiver em Definições › Notificações › Resumo agendado, os alertas ficam retidos; retire-o de lá."
       },
       {
         "q": "Vou dar pelo fim no modo silencioso?",
@@ -147,8 +147,8 @@
         "a": "Toque em \"Restaurar compras\" no ecrã de planos, com a mesma conta Apple com que pagou. As compras vitalícias regressam mesmo depois de apagar a app ou mudar de dispositivo."
       },
       {
-        "q": "Os meus modelos guardados estão bloqueados.",
-        "a": "Continuam lá. Sem Memória ou Pro ficam visíveis mas bloqueados, e voltam a abrir assim que comprar um dos dois."
+        "q": "Os meus modelos guardados vão ficar bloqueados?",
+        "a": "Não. Os modelos guardados nunca são apagados e abrem sempre. Depois do período gratuito pode guardar até 3 novos gratuitamente, e o plano Memória remove o limite."
       },
       {
         "q": "Como peço um reembolso?",

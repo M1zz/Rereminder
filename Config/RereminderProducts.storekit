@@ -155,28 +155,6 @@
       "productID" : "com.xa.toki.tip.large",
       "referenceName" : "Tip Large",
       "type" : "Consumable"
-    },
-    {
-      "displayPrice" : "17.99",
-      "familyShareable" : false,
-      "id" : "com.xa.toki.gift.pro",
-      "internalID" : "gift_pro_001",
-      "locale" : "en_US",
-      "localizations" : [
-        {
-          "description" : "다른 사람에게 Pro 를 선물합니다. 코드를 보내 주세요.",
-          "displayName" : "두번알림 Pro 선물",
-          "locale" : "ko_KR"
-        },
-        {
-          "description" : "Give Pro to someone else with a gift code.",
-          "displayName" : "Gift Rereminder Pro",
-          "locale" : "en_US"
-        }
-      ],
-      "productID" : "com.xa.toki.gift.pro",
-      "referenceName" : "Gift Pro",
-      "type" : "Consumable"
     }
   ],
   "settings" : {

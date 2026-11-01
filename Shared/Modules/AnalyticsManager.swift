@@ -61,6 +61,8 @@ enum AnalyticsManager {
 
         // 기기 보유 여부 (앱이 직접 물어본 답) — 워치·맥 안내를 누구에게 할지 가르는 값
         case deviceOwnershipAnswered(device: String, owns: Bool)
+        /// "너무 복잡하지 않나요?"에 답했다. 새 화면이 정말 복잡하게 느껴졌는지를 본다.
+        case complexityAnswered(simpler: Bool)
 
         /// "다음 자리"를 예약했다 — 주기가 긴 사용자(학회 발표자·분기 워크숍)를 앱이 다시 부르는 경로.
         /// 이 예약이 실제로 복귀로 이어지는지가 그 설계의 판정 기준이다.
@@ -113,6 +115,7 @@ enum AnalyticsManager {
             case .presentationModeStarted: return "presentation_mode_started"
             case .watchSyncUsed:           return "watch_sync_used"
             case .deviceOwnershipAnswered: return "device_ownership_answered"
+            case .complexityAnswered: return "complexity_answered"
             }
         }
 
@@ -128,6 +131,7 @@ enum AnalyticsManager {
             case .premiumTrialExhausted(let feature, _):   return "premium_trial_exhausted:\(feature.rawValue)"
             case .deviceOwnershipAnswered(let device, let owns):
                 return "device_ownership:\(device)_\(owns ? "yes" : "no")"
+            case .complexityAnswered(let simpler):         return "complexity_answered:\(simpler ? "simpler" : "fine")"
             case .rememberPitchShown(let kind):            return "remember_pitch_shown:\(kind)"
             case .rememberPitchTapped(let kind):           return "remember_pitch_tapped:\(kind)"
             case .paywallShown(let trigger):               return "paywall_shown:\(trigger?.rawValue ?? "general")"
@@ -170,6 +174,8 @@ enum AnalyticsManager {
                 return ["page": page]
             case .deviceOwnershipAnswered(let device, let owns):
                 return ["device": device, "owns": owns]
+            case .complexityAnswered(let simpler):
+                return ["simpler": simpler]
             case .rememberPitchShown(let kind), .rememberPitchTapped(let kind):
                 return ["kind": kind]
             case .purchaseRestored,

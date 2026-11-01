@@ -144,8 +144,9 @@ extension Timer {
 // MARK: - 화면에 보이는 이름
 
 /// ⚠️ 저장된 이름은 **영어 그대로 두고 보여 줄 때 번역한다.**
-/// 시드 템플릿("Study 25 min")과 자동 이름("Main 25 min / Pre-alert 5·1 min")은 이미 수많은
-/// 기기의 SwiftData 에 영어로 들어가 있고, `LegacyFreeNotice.seedTemplateNames` 가 그 이름으로
+/// 시드 템플릿("Study 25 min")과 자동 이름("Main 25 min / Pre-alert 5·1 min", 더 옛날 판의
+/// "메인 25분 / 예비 5·1분")은 이미 수많은
+/// 기기의 SwiftData 에 영어로 들어가 있고, `Timer.seedTemplateNames` 가 그 이름으로
 /// 시드를 가려낸다. 저장값을 번역해 바꾸면 그 판정이 깨지고, 언어를 바꾼 뒤에는 또 틀린 말이 된다.
 extension Timer {
     /// 시드 템플릿의 라벨 — 이름·라벨 번역에 함께 쓴다
@@ -161,6 +162,13 @@ extension Timer {
         return "\(base) / Pre-alert \(pre) min"
     }
 
+    /// 앱이 만든 이름인가. ⚠️ 값이 지금 설정과 같은지는 보지 않는다 — 템플릿을 고치면 이름만 옛 값으로
+    /// 남고, 한국어 시절 이름도 있어서, 값으로 견주면 저장된 글자가 그대로 나가 말이 섞인다.
+    static func isGeneratedName(_ name: String) -> Bool {
+        let pattern = #"^(메인( 알림)?|Main)\s*\d+\s*(분|min)(\s*\d+\s*(초|sec))?(\s*[/,]\s*(예비|Pre-alert).*)?$"#
+        return name.range(of: pattern, options: .regularExpression) != nil
+    }
+
     /// 시드 이름("Study 25 min")이면 그 분을 돌려준다. 사용자가 붙인 이름이면 nil
     private var seedNameMinutes: Int? {
         guard Self.seedLabels.contains(label),
@@ -174,15 +182,18 @@ extension Timer {
         if let minutes = seedNameMinutes {
             return "\(displayLabel) \(TimeMapper.durationText(minutes * 60))"
         }
-        if name == Self.generatedName(mainSec: mainSeconds, offsets: prealertOffsetsSec) {
-            let main = TimeMapper.durationText(mainSeconds)
-            guard !prealertOffsetsSec.isEmpty else { return main }
-            let alerts = prealertOffsetsSec.sorted(by: >)
-                .map { TimeMapper.durationText($0) }
-                .joined(separator: ", ")
-            return String(localized: "\(main) · alerts \(alerts) before end")
-        }
-        return name
+        return Self.displayName(stored: name, mainSeconds: mainSeconds, offsets: prealertOffsetsSec)
+    }
+
+    /// 저장된 이름을 화면에 보여 줄 이름으로. 앱이 만든 이름은 실제 값으로 지금 언어로 다시 쓴다.
+    static func displayName(stored name: String, mainSeconds: Int, offsets: [Int]) -> String {
+        guard isGeneratedName(name) else { return name }
+        let main = TimeMapper.durationText(mainSeconds)
+        guard !offsets.isEmpty else { return main }
+        let alerts = offsets.sorted(by: >)
+            .map { TimeMapper.durationText($0) }
+            .joined(separator: ", ")
+        return String(localized: "\(main) · alerts \(alerts) before end")
     }
 
     /// 라벨 칩 문구. 앱이 준 라벨(프리셋)만 번역하고 사용자가 쓴 라벨은 그대로
@@ -203,4 +214,12 @@ extension Timer {
         default: return label
         }
     }
+}
+
+extension Timer {
+    /// 첫 실행에 심는 시드 템플릿의 이름(`TimerConfigService.seedIfNeeded`).
+    /// "사용자가 저장한 템플릿"을 셀 때는 빼야 한다 — 사용자가 만든 것이 아니다.
+    static let seedTemplateNames: Set<String> = [
+        "Presentation 30 min", "Mentoring 40 min", "Study 25 min", "Exercise 30 min", "Meeting 60 min",
+    ]
 }

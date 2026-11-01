@@ -40,6 +40,10 @@ struct TimerDialRings: View {
         var plainColor: Color
         /// 이름을 편집 중인 구간 — 그 호만 도드라지고 나머지는 물러난다.
         var focusedSectionIndex: Int?
+        /// 지금 줄어드는 구간(걸기 전에는 먼저 줄어들 구간). 이것만 진하게 그린다.
+        var activeSectionIndex: Int? = nil
+        /// 차오르는 중이면 12시에서 여기까지만 칠한다(1.0 = 한 바퀴).
+        var fillLaps: CGFloat = DialFillMask.noMask
         /// 구간 번호(1·2·3)를 붙일 때인가. 움직이는 동안에는 붙이지 않는다.
         var showsSectionNumbers: Bool
     }
@@ -50,30 +54,38 @@ struct TimerDialRings: View {
         ZStack {
             backgroundCircle
 
-            // 바깥 줄 = 첫 바퀴
-            if plan.showsSectionColors {
-                sectionArcs(size: plan.size, lap: 0)
-            } else {
-                plainArc(to: plan.outerFraction, size: plan.size)
-            }
-
-            // 안쪽 줄 = 60분을 넘어간 시간.
-            // 예전에는 같은 원 위에 연두색으로 겹쳐 그려서 두 바퀴가 서로를 덮었다.
+            // 안쪽 줄에도 옅은 바탕 링 — 얼마나 더 갈 수 있는지 보이도록.
+            // 나타날 때는 12시부터 시계 방향으로 차오르고, 사라질 때는 같은 길로 되감긴다.
             if plan.innerFraction > 0 || plan.innerRingReveal > 0 {
-                // 얼마나 더 갈 수 있는지 보이도록 안쪽에도 옅은 바탕 링.
-                // 나타날 때는 12시부터 시계 방향으로 차오르고, 사라질 때는 같은 길로 되감긴다.
                 Circle()
                     .trim(from: 0, to: plan.innerRingReveal)
                     .stroke(.plain.opacity(0.5),
                             style: StrokeStyle(lineWidth: plan.lineWidth, lineCap: .round))
                     .frame(width: plan.innerSize, height: plan.innerSize)
                     .rotationEffect(.degrees(-90))
+            }
 
+            // 색만 가린다. 바탕 링은 처음부터 보여야 "빈 원"이다.
+            ZStack {
+                // 바깥 줄 = 첫 바퀴
                 if plan.showsSectionColors {
-                    sectionArcs(size: plan.innerSize, lap: 1)
+                    sectionArcs(size: plan.size, lap: 0)
                 } else {
-                    plainArc(to: plan.innerFraction, size: plan.innerSize)
+                    plainArc(to: plan.outerFraction, size: plan.size)
                 }
+
+                // 안쪽 줄 = 60분을 넘어간 시간.
+                // 예전에는 같은 원 위에 연두색으로 겹쳐 그려서 두 바퀴가 서로를 덮었다.
+                if plan.innerFraction > 0 || plan.innerRingReveal > 0 {
+                    if plan.showsSectionColors {
+                        sectionArcs(size: plan.innerSize, lap: 1)
+                    } else {
+                        plainArc(to: plan.innerFraction, size: plan.innerSize)
+                    }
+                }
+            }
+            .mask {
+                DialFillMask(laps: plan.fillLaps, size: plan.size, innerSize: plan.innerSize, lineWidth: plan.lineWidth)
             }
         }
         .accessibilityHidden(true)
@@ -99,6 +111,12 @@ struct TimerDialRings: View {
 
     /// 알림 경계로 나뉜 구간 색 호들.
     /// 구간이 바퀴 경계를 걸치면 잘라서 양쪽 줄에 나눠 그린다(`lap` 0 = 바깥, 1 = 안쪽).
+    private func arcOpacity(sectionIndex: Int, isEditingThis: Bool) -> Double {
+        if plan.focusedSectionIndex != nil { return isEditingThis ? 1.0 : 0.55 }
+        guard let active = plan.activeSectionIndex else { return 1.0 }
+        return sectionIndex == active ? 1.0 : 0.4
+    }
+
     private func sectionArcs(size: CGFloat, lap: Int) -> some View {
         let bounds = [0] + plan.markers.filter { $0 > 0 && $0 < plan.totalFraction }.sorted()
             + [plan.totalFraction]
@@ -134,7 +152,7 @@ struct TimerDialRings: View {
                             style: StrokeStyle(lineWidth: plan.lineWidth, lineCap: .butt)
                         )
                         // 다른 구간을 편집 중이면 이 호는 한 발 물러난다 (리스트 행과 같은 값)
-                        .opacity(plan.focusedSectionIndex == nil || isEditingThis ? 1.0 : 0.55)
+                        .opacity(arcOpacity(sectionIndex: sectionIndex, isEditingThis: isEditingThis))
                         .frame(width: size, height: size)
                         .rotationEffect(.degrees(-90))
 
@@ -148,6 +166,7 @@ struct TimerDialRings: View {
         }
         .animation(.easeInOut(duration: 0.2), value: plan.markers)
         .animation(.easeInOut(duration: 0.2), value: plan.focusedSectionIndex)
+        .animation(.easeInOut(duration: 0.3), value: plan.activeSectionIndex)
     }
 
     /// 링 위 한 지점(0~1)에 구간 번호를 세워서 얹는다.
@@ -172,6 +191,43 @@ struct TimerDialRings: View {
                 y: size / 2 * CGFloat(sin((angle - 90) * .pi / 180))
             )
             .accessibilityHidden(true)
+    }
+}
+
+// MARK: - 차오르는 가림막
+
+/// 12시에서 시계 방향으로 `laps` 까지만 보이는 가림막. 한 바퀴를 넘으면 안쪽 줄로 이어진다.
+/// ⚠️ 호마다 `trim` 을 움직이면 구간들이 동시에 자란다. 가림막 하나를 움직여야 차례로 찬다.
+struct DialFillMask: Shape {
+    /// 가리지 않는 값. 다이얼 최대는 두 바퀴다.
+    static let noMask: CGFloat = 3
+
+    var laps: CGFloat
+    let size: CGFloat
+    let innerSize: CGFloat
+    let lineWidth: CGFloat
+
+    var animatableData: CGFloat {
+        get { laps }
+        set { laps = newValue }
+    }
+
+    func path(in rect: CGRect) -> Path {
+        guard laps < Self.noMask else {
+            return Path(rect.insetBy(dx: -lineWidth * 2, dy: -lineWidth * 2))
+        }
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        var path = Path()
+        func addArc(radius: CGFloat, laps: CGFloat) {
+            guard laps > 0 else { return }
+            var arc = Path()
+            arc.addArc(center: center, radius: radius,
+                       startAngle: .degrees(-90), endAngle: .degrees(-90 + Double(laps) * 360), clockwise: false)
+            path.addPath(arc.strokedPath(StrokeStyle(lineWidth: lineWidth + 2, lineCap: .butt)))
+        }
+        addArc(radius: size / 2, laps: min(1, laps))
+        addArc(radius: innerSize / 2, laps: min(1, laps - 1))
+        return path
     }
 }
 

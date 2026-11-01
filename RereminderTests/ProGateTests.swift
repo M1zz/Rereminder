@@ -24,6 +24,8 @@ final class ProGateTests: XCTestCase {
 
     override func setUpWithError() throws {
         try super.setUpWithError()
+        // 이 파일은 문턱 뒤의 판정을 본다. 무료 기간은 `FreeUseTests`.
+        FreeUse.markReachedForTesting()
 
         // TrialCounter 격리
         trialDefaults = UserDefaults(suiteName: Self.trialSuiteName)
@@ -43,6 +45,7 @@ final class ProGateTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
+        FreeUse.resetForTesting()
         trialDefaults.removePersistentDomain(forName: Self.trialSuiteName)
         TrialCounter.defaults = .standard
         clearProState()
@@ -209,9 +212,10 @@ final class ProGateTests: XCTestCase {
     // MARK: - Legacy bool API
 
     /// ⚠️ 무료 몫이 없다 — **저장 자체가 Pro** 다. 개수로 다시 나누지 말 것(`ProGate` 머리말).
-    func test_canSaveTemplate_freeUser_isAlwaysFalse() {
+    func test_canSaveTemplate_freeUser_upToFreeLimit() {
         setProUser(false)
-        XCTAssertFalse(ProGate.canSaveTemplate(currentCount: 0))
+        XCTAssertTrue(ProGate.canSaveTemplate(currentCount: ProGate.freeSavedSetups - 1))
+        XCTAssertFalse(ProGate.canSaveTemplate(currentCount: ProGate.freeSavedSetups))
         XCTAssertFalse(ProGate.canRememberSetup)
     }
 

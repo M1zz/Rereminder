@@ -16,7 +16,7 @@ import SwiftUI
 
 enum WhatsNewContent {
     /// 이 안내가 소개하는 버전. 무관한 버전 올림에서는 다시 뜨지 않도록 앱 버전이 아니라 내용 기준으로 고정한다.
-    static let version = "2.3.4"
+    static let version = "2.3.5"
     /// 마지막으로 본 안내의 버전.
     static let lastSeenKey = "whatsNew.lastSeenVersion"
 }
@@ -60,6 +60,12 @@ struct WhatsNewView: View {
                     }
 
                     VStack(alignment: .leading, spacing: 18) {
+                        featureRow(symbol: "circle.dashed",
+                                   title: "A calmer main screen",
+                                   detail: "Every feature is still here. Saved setups are behind the bookmark button, and alerts are one button below the dial.")
+                        featureRow(symbol: "sparkles",
+                                   title: "Try everything first",
+                                   detail: "All features are open while you try the app. What you already have stays yours, and every future Pro feature stays included for early supporters.")
                         featureRow(symbol: "checkmark.seal.fill",
                                    title: "See your benefits",
                                    detail: "With Pro or Remember, tap it in Settings to see what is unlocked and how much you use it.")

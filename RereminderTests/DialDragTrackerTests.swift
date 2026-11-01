@@ -96,6 +96,25 @@ final class DialDragTrackerTests: XCTestCase {
         XCTAssertEqual(DialDragTracker.maxAlertAngle(totalSeconds: 600), expected, accuracy: 0.001)
     }
 
+    // MARK: - 겹친 종에서 핸들로 넘기기
+
+    func test_handOff_whenBellAtLimitAndFingerGoesClockwise() {
+        // 30초 타이머(3°) + 20초 종(2°): 종의 한계가 곧 2° 다
+        XCTAssertTrue(DialDragTracker.shouldHandOffToDial(rawAngle: 4, maxAlertAngle: 2, bellAngle: 2,
+                                                          dialAngle: 3, grabSpanDegrees: 26))
+    }
+
+    func test_noHandOff_whenFingerGoesCounterclockwise() {
+        XCTAssertFalse(DialDragTracker.shouldHandOffToDial(rawAngle: 1, maxAlertAngle: 2, bellAngle: 2,
+                                                           dialAngle: 3, grabSpanDegrees: 26))
+    }
+
+    func test_noHandOff_whenDialIsFarFromBell() {
+        // 10분 타이머 + 1분 종: 멀리 떨어져 있으면 종은 그냥 종이다
+        XCTAssertFalse(DialDragTracker.shouldHandOffToDial(rawAngle: 80, maxAlertAngle: 59, bellAngle: 6,
+                                                           dialAngle: 60, grabSpanDegrees: 26))
+    }
+
     // MARK: - 활성 상태
 
     func test_isActiveTracksBeginAndEnd() {

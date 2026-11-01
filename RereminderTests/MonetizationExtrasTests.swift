@@ -19,23 +19,29 @@ import LeeoKit
 
 final class MonetizationExtrasTests: XCTestCase {
 
+    // 이 파일은 문턱 뒤의 판정을 본다. 무료 기간은 `FreeUseTests`.
+    override func setUp() {
+        super.setUp()
+        FreeUse.markReachedForTesting()
+    }
+
+    override func tearDown() {
+        FreeUse.resetForTesting()
+        super.tearDown()
+    }
+
     private let config = RereminderSpec.paywallConfig
 
     // MARK: - 상품
 
-    func test_팁과_선물은_권한을_열지_않는다() {
+    func test_팁은_권한을_열지_않는다() {
         let sold = Set(config.productIDs).union(config.entitlementIDs)
         XCTAssertTrue(sold.isDisjoint(with: StoreManager.tipProductIDs))
-        XCTAssertFalse(sold.contains(StoreManager.giftProductID))
-        XCTAssertFalse(StoreManager.tipProductIDs.contains(StoreManager.giftProductID))
     }
 
-    func test_선물은_Pro_전체를_연다() {
-        let gift = try! XCTUnwrap(config.gift)
-        XCTAssertEqual(gift.productID, StoreManager.giftProductID)
-        XCTAssertEqual(gift.grantsProductID, StoreManager.ProductID.pro.rawValue)
-        XCTAssertTrue(config.entitlementIDs.contains(gift.grantsProductID))
-        XCTAssertEqual(gift.containerIdentifier, "iCloud.com.Ysoup.FeedbackHub")
+    /// 선물 코드로 Pro 를 여는 길은 지침 3.1.1 에 걸린다(클립키보드 5.1.16 거절). 다시 넣지 말 것.
+    func test_선물_경로가_없다() {
+        XCTAssertNil(config.gift)
     }
 
     func test_플러스는_Pro_권한이_아니다() {
@@ -45,7 +51,7 @@ final class MonetizationExtrasTests: XCTestCase {
     }
 
     func test_새_상품_ID_는_기존_접두사를_따른다() {
-        for id in StoreManager.tipProductIDs + [StoreManager.giftProductID] {
+        for id in StoreManager.tipProductIDs {
             XCTAssertTrue(id.hasPrefix("com.xa.toki."), id)
         }
         XCTAssertEqual(StoreManager.tipProductIDs.count, 3)

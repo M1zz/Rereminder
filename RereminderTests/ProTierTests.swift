@@ -27,6 +27,8 @@ final class ProTierTests: XCTestCase {
 
     override func setUpWithError() throws {
         try super.setUpWithError()
+        // 이 파일은 문턱 뒤의 판정을 본다. 무료 기간은 `FreeUseTests`.
+        FreeUse.markReachedForTesting()
         let defaults = UserDefaults.standard
         savedDevPaywall = defaults.bool(forKey: Self.devPaywallKey)
         savedGrandfather = defaults.bool(forKey: Self.grandfatherKey)
@@ -37,6 +39,7 @@ final class ProTierTests: XCTestCase {
     }
 
     override func tearDownWithError() throws {
+        FreeUse.resetForTesting()
         clear()
         let defaults = UserDefaults.standard
         defaults.set(savedDevPaywall, forKey: Self.devPaywallKey)
@@ -77,8 +80,8 @@ final class ProTierTests: XCTestCase {
     func test_featureTiers() {
         XCTAssertEqual(ProGate.Feature.unlimitedTemplates.tier, .plus)
         XCTAssertEqual(ProGate.Feature.presentationMode.tier, .session)
-        XCTAssertEqual(ProGate.Feature.overtimeTracking.tier, .session)
-        XCTAssertEqual(ProGate.Feature.timerHistory.tier, .session)
+        XCTAssertEqual(ProGate.Feature.overtimeTracking.tier, .free)
+        XCTAssertEqual(ProGate.Feature.timerHistory.tier, .plus)
     }
 
     func test_productTiers() {
@@ -119,7 +122,7 @@ final class ProTierTests: XCTestCase {
         XCTAssertEqual(StoreManager.tier, .plus)
         XCTAssertFalse(StoreManager.isProUser)
         XCTAssertTrue(ProGate.canRememberSetup)
-        XCTAssertTrue(ProGate.canSaveTemplate())
+        XCTAssertTrue(ProGate.canSaveTemplate(currentCount: 0))
         if case .allowed = ProGate.evaluate(.unlimitedTemplates) {} else {
             XCTFail("기억 트림은 템플릿을 열어야 한다")
         }

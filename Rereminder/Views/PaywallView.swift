@@ -286,8 +286,8 @@ struct PaywallView: View {
     private func planSummary(_ tier: ProTier) -> String {
         switch tier {
         case .free: return String(localized: "Timer, unlimited pre-alerts, Live Activity, Apple Watch and widgets")
-        case .plus: return String(localized: "Saved setups and your last timer")
-        case .session: return String(localized: "Everything in Remember, plus Session Mode, scripts, overtime and history")
+        case .plus: return String(localized: "Unlimited saved setups and full history")
+        case .session: return String(localized: "Everything in Remember, plus Session Mode and scripts")
         }
     }
 
@@ -405,14 +405,15 @@ struct PaywallView: View {
                 Divider()
 
                 // Rows
-                // ⚠️ 첫 두 줄이 이 페이월의 문장이다 — "당신 설정을 기억한다".
-                //    기능 나열이 아니라 **무엇을 사는지**가 맨 위에 와야 한다.
-                comparisonRow("Saved setups", free: false, remember: true, pro: true)
-                comparisonRow("Remembers your last timer", free: false, remember: true, pro: true)
+                // ⚠️ 맨 위 줄이 이 페이월의 문장이다 — **무엇을 사는지**가 먼저 와야 한다.
+                comparisonRow("Saved setups", free: String(ProGate.freeSavedSetups), remember: "∞", pro: "∞")
+                comparisonRow("Timer History", free: String(FreeUse.recentHistoryDays), remember: "∞", pro: "∞")
                 Divider()
+                comparisonRow("Remembers your last timer", free: true, remember: true, pro: true)
                 comparisonRow("Timer", free: true, remember: true, pro: true)
                 // 알림은 이제 양쪽 다 무제한이다 — 이 줄이 곧 이번 변경의 문장이다.
                 comparisonRow("Pre-alerts", free: "∞", remember: "∞", pro: "∞")
+                comparisonRow("Overtime Tracking", free: true, remember: true, pro: true)
                 comparisonRow("Live Activity", free: true, remember: true, pro: true)
                 comparisonRow("Watch / Widget", free: true, remember: true, pro: true)
                 Divider()
@@ -420,8 +421,6 @@ struct PaywallView: View {
                 Divider()
                 comparisonRow("Session Mode", free: false, remember: false, pro: true)
                 comparisonRow("Section Scripts", free: false, remember: false, pro: true)
-                comparisonRow("Overtime Tracking", free: false, remember: false, pro: true)
-                comparisonRow("Timer History", free: false, remember: false, pro: true)
             }
             .background(Color(uiColor: .secondarySystemBackground).opacity(0.5))
             .cornerRadius(14)

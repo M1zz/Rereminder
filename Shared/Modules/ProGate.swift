@@ -16,26 +16,26 @@
 //  - 무료: 타이머, **예비 알림 무제한**, Live Activity, 소리/진동, Watch, 위젯, 커스텀 메시지,
 //    테마/라벨 색상. ⚠️ **워치·맥을 유료로 돌리지 말 것** — 수업 중 강사 손목에서 진동하는
 //    워치 화면은 다른 강사에게 보이는 유일한 광고다. 막으면 획득 경로를 스스로 끊는다.
-//  - Pro 가 파는 한 문장은 **"앱이 당신의 설정을 기억한다"**이다.
-//    템플릿 저장·불러오기 + **마지막 설정 복원**이 그 문장의 알맹이고, 세션 모드(구간 이름·대본)·
-//    오버타임·기록도 같은 Pro 안에 있다. 게이트는 흩어지지 않고 여기 하나로 통일된다.
-//
-//  ⚠️ **무료 사용자는 앱을 껐다 켜면 다이얼이 기본값으로 돌아온다**(`ProGate.canRememberSetup`).
-//     백그라운드에 다녀오는 것은 초기화하지 않는다 — 그건 제한이 아니라 고장으로 읽힌다.
+//  - 유료 칸이 파는 것은 **쌓이는 것**(템플릿 무제한·전체 기록)과 **세션 운영**(구간 이름·대본)이다.
 //
 //  ⚠️ 이름은 "발표 모드"가 아니라 **"세션 모드"**다. 필라테스 강사는 "발표 모드"를 보고 자기
 //     것이라고 생각하지 않는데, 실제로는 그가 이 기능의 주 사용자다("세션"은 강사·트레이너가
 //     쓰는 말이고 학회 발표자에게도 통한다). 코드 식별자(`presentationMode`)는 계약이라 그대로다.
 //
 //  트림(`ProTier`, 2.3.3):
-//  - 플러스 = 기억(`ProTier.plus`, com.xa.toki.remember, $2.99) — 템플릿 저장·불러오기 + 마지막 설정 복원(`canRememberSetup`)
-//  - Pro 전체(session, $9.99) — 기억 + 세션 모드·대본·오버타임·기록
-//    기억을 산 사람은 차액(proUpgrade, $6.99)으로 올린다.
-//  ⚠️ 트림은 **기능으로** 나눈다. 개수(템플릿 몇 개)로 나누지 말 것 — 아래 Free Limits 참고.
+//  - 플러스 = 기억(`ProTier.plus`) — 템플릿 무제한 + 전체 기록
+//  - Pro 전체(session) — 기억 + 세션 모드·대본
+//    기억을 산 사람은 차액(proUpgrade)으로 올린다. 가격은 App Store Connect 가 원본이다.
 //
-//  5+5 trial:
-//  - presentationMode, overtimeTracking, timerHistory 에 적용
-//  - unlimitedTemplates 는 체험 없이 hard gate — 무료 몫이 아예 없다(아래 Free Limits 참고)
+//  무료 기간(`FreeUse`, 2.3.5): 문턱에 닿을 때까지는 **모든 기능이 열린다.**
+//  ⚠️ 이 파일의 판정은 언제나 예전 판정보다 **넓어야** 한다 — 이미 누리던 것을 줄이지 않는다.
+//     무료 기간에는 5+5 를 태우지 않고, 문턱 뒤에도 남은 횟수는 그대로다(`FreeUseTests`).
+//
+//  문턱 뒤 무료:
+//  - 언제나 무료: 마지막 설정 복원, 저장해 둔 템플릿 불러오기, 오버타임
+//  - 템플릿 저장은 `freeSavedSetups` 개까지(이미 더 있으면 지우지 않고 새로 저장만 막는다)
+//  - 기록은 문턱 전 기록 + 최근 30일(`FreeUse.isRecordVisible`), 처음 열어 보는 5+5 는 전체
+//  - 세션 모드는 5+5 가 남은 만큼
 //
 
 import Foundation
@@ -77,13 +77,17 @@ enum ProGate {
 
         /// 이 기능을 여는 가장 낮은 트림. 페이월은 이걸 보고 어느 트림을 앞에 세울지 정한다.
         var tier: ProTier {
-            self == .unlimitedTemplates ? .plus : .session
+            switch self {
+            case .overtimeTracking:                return .free
+            case .unlimitedTemplates, .timerHistory: return .plus
+            case .presentationMode:                return .session
+            }
         }
 
         /// 5+5 trial 적용 대상인지 (slot 기반 templates 는 제외)
         var supportsTrial: Bool {
             switch self {
-            case .unlimitedTemplates: return false
+            case .unlimitedTemplates, .overtimeTracking: return false
             default: return true
             }
         }
@@ -96,12 +100,9 @@ enum ProGate {
     //    벽에 걸리는 사람이 하필 결제 가능성이 가장 큰 사람(발표자·강사·퍼실리테이터)이었다.
     //    자세한 근거는 파일 머리말 참고.
     //
-    // ⚠️ 템플릿에도 **무료 몫이 없다**(예전의 `freeTemplateLimit = 3` 은 삭제). 저장·불러오기
-    //    자체가 Pro 다 — 그게 이제 이 앱이 파는 한 문장이기 때문이다. 개수로 다시 나누지 말 것.
-
-    /// 무료로 저장할 수 있는 설정 수 — **0 이다**(위 주석). 판정은 개수를 보지 않고 `canRememberSetup` 하나로
-    /// 하지만, "무료였다면 어디까지였나"를 말하는 화면(`ProBenefitsView`)이 같은 숫자를 읽도록 여기 둔다.
-    static let freeSavedSetups = 0
+    /// 문턱 뒤 무료로 **새로** 저장할 수 있는 설정 수의 한도. 시드는 세지 않는다.
+    /// ⚠️ 한도를 넘게 갖고 있어도 지우거나 잠그지 않는다 — 새 저장만 막는다.
+    static let freeSavedSetups = 3
 
     // MARK: - 무료 한도 선언 (LeeoGatePolicy)
 
@@ -131,7 +132,7 @@ enum ProGate {
                                    extended: Bool? = nil,
                                    isUnlocked: Bool? = nil) -> Int? {
         let unlocked = isUnlocked ?? (StoreManager.isProUser || StoreManager.tier >= feature.tier)
-        guard feature.supportsTrial, !unlocked else { return nil }
+        guard feature.supportsTrial, !unlocked, !FreeUse.isActive else { return nil }
         let used = used ?? TrialCounter.count(for: feature)
         let extended = extended ?? TrialCounter.extensionAccepted(for: feature)
         // 첫 바퀴를 다 쓴 뒤 둘째 바퀴를 받지 않았다면 이미 벽이다.
@@ -175,6 +176,8 @@ enum ProGate {
         if StoreManager.isProUser { return .allowed }
         // 기억 트림은 기억 기능만 연다 — 세션 모드·오버타임·기록은 여전히 Pro 전체다.
         if StoreManager.tier >= feature.tier { return .allowed }
+        // 무료 기간에는 전부 열린다. ⚠️ `recordUsage` 도 멈추므로 원래 갖고 있던 5+5 는 그대로 남는다.
+        if FreeUse.isActive { return .allowed }
 
         // Trial 미지원 기능은 무조건 blocked
         guard feature.supportsTrial else {
@@ -200,7 +203,7 @@ enum ProGate {
 
     /// 사용자가 기능을 실제로 사용했을 때 호출 (Pro면 no-op)
     static func recordUsage(_ feature: Feature) {
-        guard !StoreManager.isProUser else { return }
+        guard !StoreManager.isProUser, !FreeUse.isActive else { return }
         guard feature.supportsTrial else { return }
         TrialCounter.increment(feature)
         AnalyticsManager.log(.premiumFeatureUsed(
@@ -221,16 +224,15 @@ enum ProGate {
         evaluate(feature).isAllowed
     }
 
-    /// **앱이 설정을 기억해도 되는가** — 템플릿 저장·불러오기와 마지막 설정 복원의 단일 판정.
-    ///
-    /// 체험(5+5)이 없는 hard gate 다. "몇 번 더 써 보세요"가 성립하지 않는 종류의 기능이라
-    /// (기억은 쌓여야 값이 나오는데 체험이 끝나면 쌓인 것이 사라진다) 처음부터 명확히 가른다.
-    ///
-    /// 기억 트림(`ProTier.plus`) 이상이면 열린다 — Pro 전체를 살 필요는 없다.
-    static var canRememberSetup: Bool { StoreManager.canRememberSetup }
+    /// **템플릿을 개수 제한 없이 저장해도 되는가** — 기억 트림 이상이거나 무료 기간.
+    /// 불러오기와 마지막 설정 복원은 이 판정을 보지 않는다(언제나 무료).
+    static var canRememberSetup: Bool { StoreManager.canRememberSetup || FreeUse.isActive }
 
-    /// 템플릿 저장 가능 여부. ⚠️ 개수는 보지 않는다 — 저장 자체가 Pro 다.
-    static func canSaveTemplate(currentCount: Int = 0) -> Bool { canRememberSetup }
+    /// 템플릿을 하나 더 저장해도 되는가.
+    /// - Parameter currentCount: 사용자가 저장한 템플릿 수(시드 제외).
+    static func canSaveTemplate(currentCount: Int) -> Bool {
+        canRememberSetup || currentCount < freeSavedSetups
+    }
 
     /// 발표 모드 사용 가능 여부
     static var canUsePresentationMode: Bool {

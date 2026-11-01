@@ -96,13 +96,15 @@
         "15 min et 5 min avant"
       ]
     ],
-    "note": "Enregistrez les réglages que vous réutilisez comme modèles et relancez-les d’un geste (à partir de Mémoire). Vous pouvez aussi lancer ou arrêter un minuteur avec Raccourcis et Siri."
+    "note": "Enregistrez les réglages que vous réutilisez comme modèles et relancez-les d’un geste. Vous pouvez aussi lancer ou arrêter un minuteur avec Raccourcis et Siri."
   },
   "pricing": {
-    "title": "Les pré-alertes sont gratuites. Payez seulement pour qu’il se souvienne.",
+    "title": "Tout est ouvert au début. Ne payez que si vous voulez plus.",
     "free": {
       "name": "Gratuit",
       "items": [
+        "Toutes les fonctions sont ouvertes jusqu’à 14 jours d’utilisation ou 5 séances",
+        "Toujours gratuit : dernier réglage, modèles enregistrés, jusqu’à 3 nouveaux modèles et dépassement",
         "Pré-alertes illimitées",
         "Votre propre message pour chaque alerte",
         "Activité en direct sur l’écran verrouillé et dans la Dynamic Island",
@@ -114,12 +116,10 @@
     "pro": {
       "name": "Mémoire · Pro",
       "items": [
-        "Mémoire : enregistrer des réglages comme modèles et les lancer d’un geste",
-        "Mémoire : retrouver votre dernier réglage en rouvrant l’app",
-        "Pro : tout Mémoire, plus le mode Séance avec noms de parties et textes",
-        "Pro : dépassement, historique et statistiques"
+        "Mémoire : Modèles illimités et historique complet",
+        "Pro : tout Mémoire, plus le mode Séance avec noms de parties et textes"
       ],
-      "note": "Pour chaque formule, choisissez l’abonnement annuel ou un achat unique à vie. Vous pouvez essayer le mode Séance, le dépassement et l’historique quelques fois avant de payer."
+      "note": "Chaque formule existe à l’année ou en achat unique à vie. Le mode Séance reste disponible pour quelques essais après la période gratuite."
     },
     "note": "Aucune publicité. Un Pass à vie ouvre aussi toutes les apps de Leeo."
   },
@@ -128,7 +128,7 @@
     "items": [
       {
         "q": "Une alerte n’a pas sonné.",
-        "a": "C’est presque toujours une question d’autorisations ou de mode de concentration. Vérifiez l’accès aux notifications dans l’app, sous Réglages › Mode de notification. Si vous utilisez un mode de concentration, ajoutez Rereminder aux apps autorisées dans Réglages › Concentration. En mode silencieux, vous n’avez que la vibration. Si Rereminder figure dans Réglages › Notifications › Résumé programmé, ses alertes sont retenues : retirez-la."
+        "a": "C’est presque toujours une question d’autorisations ou de mode de concentration. Vérifiez l’accès aux notifications dans l’app, sous Réglages › Réglages des notifications › Mode de notification. Si vous utilisez un mode de concentration, ajoutez Rereminder aux apps autorisées dans Réglages › Concentration. En mode silencieux, vous n’avez que la vibration. Si Rereminder figure dans Réglages › Notifications › Résumé programmé, ses alertes sont retenues : retirez-la."
       },
       {
         "q": "Vais-je remarquer la fin en mode silencieux ?",
@@ -147,8 +147,8 @@
         "a": "Touchez « Restaurer les achats » sur l’écran des formules, connecté au même compte Apple que lors du paiement. Les achats à vie reviennent même après avoir supprimé l’app ou changé d’appareil."
       },
       {
-        "q": "Mes modèles enregistrés sont verrouillés.",
-        "a": "Ils sont toujours là. Sans Mémoire ni Pro, ils restent visibles mais verrouillés, et se rouvrent dès que vous achetez l’une des deux formules."
+        "q": "Mes modèles enregistrés seront-ils verrouillés ?",
+        "a": "Non. Les modèles enregistrés ne sont jamais supprimés et s’ouvrent toujours. Après la période gratuite, vous pouvez en enregistrer jusqu’à 3 nouveaux gratuitement, et Mémoire supprime la limite."
       },
       {
         "q": "Comment obtenir un remboursement ?",

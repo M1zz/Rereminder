@@ -60,7 +60,6 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2B302B092E4375150089A14A"
             BuildableName = "RereminderWatch.app"
-            BlueprintName = "RereminderWatch"
             ReferencedContainer = "container:Rereminder.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -77,7 +76,6 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2B302B092E4375150089A14A"
             BuildableName = "RereminderWatch.app"
-            BlueprintName = "RereminderWatch"
             ReferencedContainer = "container:Rereminder.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

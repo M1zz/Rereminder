@@ -204,7 +204,8 @@ final class TimerViewModel: ObservableObject {
             CloudTimerSyncManager.shared.pushPaused(
                 mainSeconds: Int(cfg.mainDuration),
                 prealertOffsets: cfg.prealertOffsetsSec.map { Int($0) },
-                name: cfg.name,
+                name: Timer.displayName(stored: cfg.name, mainSeconds: Int(cfg.mainDuration),
+                                       offsets: cfg.prealertOffsetsSec.map { Int($0) }),
                 remaining: max(0, remaining)
             )
         }
@@ -239,7 +240,8 @@ final class TimerViewModel: ObservableObject {
         CloudTimerSyncManager.shared.pushRunning(
             mainSeconds: Int(cfg.mainDuration),
             prealertOffsets: cfg.prealertOffsetsSec.map { Int($0) },
-            name: cfg.name,
+            name: Timer.displayName(stored: cfg.name, mainSeconds: Int(cfg.mainDuration),
+                                       offsets: cfg.prealertOffsetsSec.map { Int($0) }),
             endDate: end
         )
     }
@@ -312,7 +314,9 @@ final class TimerViewModel: ObservableObject {
             elapsedSeconds: elapsedSeconds,
             snapshotMainSeconds: template.mainSeconds,
             snapshotPrealertOffsetsSec: template.prealertOffsetsSec,
-            template: template
+            // ⚠️ 저장한 적 없는 임시 설정을 기록에 물리면 함께 삽입되어 템플릿 칩으로 쌓인다.
+            //    새로 설치한 사람의 칩은 자기가 저장한 것만이다. 기존 사용자는 쓰던 그대로 둔다.
+            template: BlankStart.isNewInstall && template.modelContext == nil ? nil : template
         )
 
         context.insert(record)

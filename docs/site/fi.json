@@ -96,13 +96,15 @@
         "15 ja 5 min ennen"
       ]
     ],
-    "note": "Tallenna usein käyttämäsi asetukset malleiksi ja käynnistä ne yhdellä napautuksella (Muisti-tasosta alkaen). Ajastimen voi myös käynnistää tai pysäyttää Pikakomennoilla ja Sirillä."
+    "note": "Tallenna usein käyttämäsi asetukset malleiksi ja käynnistä ne yhdellä napautuksella. Ajastimen voi myös käynnistää tai pysäyttää Pikakomennoilla ja Sirillä."
   },
   "pricing": {
-    "title": "Muistutukset ovat ilmaisia. Maksa vain, jos haluat sen muistavan.",
+    "title": "Aluksi kaikki on auki. Maksa vain, jos haluat enemmän.",
     "free": {
       "name": "Ilmainen",
       "items": [
+        "Kaikki toiminnot auki 14 käyttöpäivään tai 5 sessioon asti",
+        "Aina ilmainen: viimeisin asetus, tallennetut mallit, enintään 3 uutta mallia ja yliaika",
         "Rajattomasti muistutuksia",
         "Oma viesti jokaiseen muistutukseen",
         "Live Activity lukitulla näytöllä ja Dynamic Islandissa",
@@ -114,12 +116,10 @@
     "pro": {
       "name": "Muisti · Pro",
       "items": [
-        "Muisti: tallenna asetukset malleiksi ja käynnistä yhdellä napautuksella",
-        "Muisti: avaa appi uudelleen, ja kaikki on kuten jätit",
-        "Pro: kaikki Muistin ominaisuudet sekä sessiotila osien nimillä ja käsikirjoituksilla",
-        "Pro: yliaika, historia ja tilastot"
+        "Muisti: Rajattomasti malleja ja koko historia",
+        "Pro: kaikki Muistin ominaisuudet sekä sessiotila osien nimillä ja käsikirjoituksilla"
       ],
-      "note": "Jokaiseen tasoon voit valita vuositilauksen tai kertaostoksen ikuisesti. Sessiotilaa, yliaikaa ja historiaa voi kokeilla muutaman kerran ennen maksamista."
+      "note": "Valitse kumpaankin vuosimaksu tai kertaostos pysyvästi. Sessiotila säilyy vielä muutaman käyttökerran ilmaisjakson jälkeen."
     },
     "note": "Ei mainoksia. Ikuinen passi avaa lisäksi kaikki Leeon tekemät apit."
   },
@@ -128,7 +128,7 @@
     "items": [
       {
         "q": "Muistutus ei soinut.",
-        "a": "Syy on lähes aina luvissa tai keskittymistilassa. Tarkista ilmoituslupa apissa kohdasta Asetukset › Ilmoitustapa. Jos käytät keskittymistilaa, lisää Rereminder sallittuihin appeihin iOS:n kohdassa Asetukset › Keskittyminen. Äänettömässä tilassa tulee vain värinä. Jos Rereminder on kohdassa Asetukset › Ilmoitukset › Ajoitettu yhteenveto, ilmoitukset pidätetään, joten poista se sieltä."
+        "a": "Syy on lähes aina luvissa tai keskittymistilassa. Tarkista ilmoituslupa apissa kohdasta Asetukset › Ilmoitusasetukset › Ilmoitustapa. Jos käytät keskittymistilaa, lisää Rereminder sallittuihin appeihin iOS:n kohdassa Asetukset › Keskittyminen. Äänettömässä tilassa tulee vain värinä. Jos Rereminder on kohdassa Asetukset › Ilmoitukset › Ajoitettu yhteenveto, ilmoitukset pidätetään, joten poista se sieltä."
       },
       {
         "q": "Huomaanko lopun äänettömässä tilassa?",
@@ -147,8 +147,8 @@
         "a": "Napauta tasojen näytössä ”Palauta ostot”, kun olet kirjautunut samalla Apple-tilillä, jolla maksoit. Ikuiset ostot palaavat, vaikka poistaisit apin tai vaihtaisit laitetta."
       },
       {
-        "q": "Tallentamani mallit ovat lukossa.",
-        "a": "Ne ovat yhä tallessa. Ilman Muistia tai Prota ne näkyvät lukittuina ja avautuvat heti, kun ostat jommankumman."
+        "q": "Lukitaanko tallennetut mallini?",
+        "a": "Ei. Tallennettuja malleja ei koskaan poisteta, ja ne aukeavat aina. Ilmaisjakson jälkeen voit tallentaa enintään 3 uutta maksutta, ja Muisti poistaa rajan."
       },
       {
         "q": "Miten saan rahani takaisin?",

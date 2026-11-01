@@ -28,17 +28,14 @@ struct NoticeSettingView: View {
     @ObservedObject private var themeManager = ThemeManager.shared
     @State private var showAlarmKitInfo = false
     @State private var showAlarmPermissionDenied = false
-    @State private var showOnboarding = false
     @State private var showTestModeInfo = false
     @State private var showPermissionGuide = false
     @State private var showPaywall = false
     /// 창단 후원자의 혜택 변경 안내 — 설정에서 언제든 다시 열 수 있다.
     @State private var showFounderWelcome = false
-    @State private var showLegacyFreeNotice = false
     @State private var showLostProResult = false
     @State private var lostProRecovered = false
     /// 달라진 점 안내에서 "Pro 알아보기"를 눌렀다 — 시트가 닫힌 뒤 페이월을 연다.
-    @State private var showPaywallAfterLegacyNotice = false
     @State private var showFeedback = false
     /// App Store 코드 사용 시트(오퍼 코드·인앱결제 프로모션 코드).
     @State private var showRedeemCode = false
@@ -56,6 +53,19 @@ struct NoticeSettingView: View {
 
     // 연결 상태 — 워치는 WatchConnectivity가 실시간으로, 맥은 iCloud에 남긴 표시로 알아낸다.
     @ObservedObject private var watchLink = WatchConnectivityManager.shared
+    @AppStorage(BlankStart.completionsKey) private var blankStartCompletions = 0
+    @AppStorage(BlankStart.preferenceKey) private var blankStartPreference = BlankStart.Preference.automatic.rawValue
+
+    /// 끄면 기존 사용자는 단순한 화면으로, 새 사용자는 쓴 만큼 드러나는 화면으로 간다.
+    private var showAllFeatures: Binding<Bool> {
+        Binding(
+            get: { BlankStart.currentStage(completions: blankStartCompletions, preferenceRaw: blankStartPreference) == .everything },
+            set: { isOn in
+                let off: BlankStart.Preference = BlankStart.isNewInstall ? .automatic : .simple
+                blankStartPreference = (isOn ? BlankStart.Preference.all : off).rawValue
+            }
+        )
+    }
     @State private var macPresence: DevicePresence.Status = .away(lastSeen: nil)
     /// 눌러서 연 "어떻게 연결하나" 안내의 대상 기기.
     @State private var connectionHelpDevice: DeviceOwnership.Device?
@@ -71,6 +81,9 @@ struct NoticeSettingView: View {
     }
     @State private var editingPreset: PresetEditTarget?
 
+    // ⚠️ **첫 화면에는 자주 쓰는 것만 둔다.** 줄이 쌓이면 찾는 줄이 묻힌다.
+    //    요금제 → 알림 → 화면 → 기록·기기 → 도움, 나머지는 한 겹 안쪽(`alertsPage`·`devicesPage`·`morePage`).
+    // ⚠️ 의견 보내기는 첫 화면에 둔다 — 안쪽에 묻으면 불만이 있는 사람이 찾지 못한다.
     var body: some View {
         Form {
             // Pro 상태 섹션
@@ -185,21 +198,6 @@ struct NoticeSettingView: View {
                         }
                     }
 
-                    // 개편 전부터 무료로 쓰던 사람 — 안내는 한 번 뜨므로, 다시 읽을 자리를 여기 둔다.
-                    if LegacyFreeNotice.isEligible {
-                        Button {
-                            showLegacyFreeNotice = true
-                        } label: {
-                            HStack {
-                                Text("What changed for you")
-                                    .foregroundStyle(.primary)
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .font(.caption)
-                                    .foregroundStyle(.secondary)
-                            }
-                        }
-                    }
                 }
 
                 // 연 구독 중인 사람. 구독 관리와 '평생으로 바꾸기' 를 늘 여기 둔다(구독 중일 때만).
@@ -235,46 +233,13 @@ struct NoticeSettingView: View {
                     }
                 }
 
-                // ⚠️ 기억 트림만 산 사람에게도 보인다 — 그랜드파더링·창단 후원자가 기억을 산 뒤 재설치하면
-                //    Pro 가 사라진 채 기억만 남는데, 이 줄이 무료 칸 안에만 있으면 되살릴 길이 없었다.
-                if !store.isPro {
-                    // "예전에 Pro 였는데 사라졌어요" — 앱을 지웠다 깐 그랜드파더링 사용자의 자격이
-                    // UserDefaults 에만 있어 통째로 사라지던 시절이 있었다(2.2.8 에서 Keychain 에도
-                    // 남기게 고쳤다). 남은 기록으로 되살릴 수 있으면 여기서 되살린다.
-                    Button {
-                        lostProRecovered = StoreManager.recoverLostEntitlementIfPossible()
-                        showLostProResult = true
-                    } label: {
-                        HStack {
-                            Text("Had Pro before but it is gone?")
-                                .foregroundStyle(.primary)
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-
-                    // 할인·선물로 받은 코드를 여기서 바로 쓴다 — App Store 앱으로 나갔다 오지 않아도 된다.
-                    Button {
-                        showRedeemCode = true
-                    } label: {
-                        HStack {
-                            Label("Redeem Code", systemImage: "giftcard")
-                                .foregroundStyle(.primary)
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .accessibilityHidden(true)
-                        }
-                    }
-
+                // 무료 기간에는 왜 다 열려 있는지 한 줄로 말한다 — 모르면 언젠가 잠길까 불안하다.
+                if !store.canRemember, FreeUse.isActive {
+                    Text("All features are open while you try the app · Day \(FreeUse.days) of \(FreeUse.dayThreshold)")
+                        .font(.body)
+                        .foregroundStyle(.secondary)
                 }
             }
-
-            // 선물·응원 — 상품이 App Store 에서 와야 선다(`GiftAndTipSection`).
-            GiftAndTipSection()
 
             Section {
                 HStack(spacing: 16){
@@ -289,10 +254,132 @@ struct NoticeSettingView: View {
                         WatchConnectivityManager.shared.sendRingMode(newMode.rawValue)
                     }
                 }
+                NavigationLink {
+                    alertsPage
+                } label: {
+                    HStack {
+                        Label("Notification Settings", systemImage: "bell.badge")
+                        Spacer()
+                        if appStateManager.notificationAuthStatus == .denied {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundStyle(.red)
+                                .accessibilityLabel(Text("Notification permission denied"))
+                        }
+                    }
+                }
             }
 
+            Section(header: Text("Appearance")) {
+                Toggle("Show all features", isOn: showAllFeatures)
+
+                HStack(spacing: 16) {
+                    Text("Mode")
+                    Picker("Mode", selection: $themeManager.appearanceMode) {
+                        ForEach(AppearanceMode.allCases) { mode in
+                            Text(mode.displayName).tag(mode)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                }
+
+                NavigationLink {
+                    ThemeSettingView()
+                } label: {
+                    HStack {
+                        Label("Theme", systemImage: "paintpalette.fill")
+                        Spacer()
+                        Circle()
+                            .fill(ThemeManager.shared.accentColor)
+                            .frame(width: 20, height: 20)
+                    }
+                }
+            }
+
+            Section {
+                NavigationLink {
+                    TimerHistoryView()
+                } label: {
+                    HStack {
+                        Label("Timer History", systemImage: "chart.bar.fill")
+                        Spacer()
+                        if !store.isPro {
+                            ProBadge(small: true)
+                        }
+                    }
+                }
+                NavigationLink {
+                    devicesPage
+                } label: {
+                    Label("My Devices", systemImage: "applewatch")
+                }
+            }
+
+            Section(header: Text("Help")) {
+                NavigationLink {
+                    GuideBookView()
+                } label: {
+                    Label("How to Use This App", systemImage: "book.fill")
+                }
+
+                Button {
+                    showFeedback = true
+                } label: {
+                    HStack {
+                        Label("Send Feedback", systemImage: "envelope.fill")
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .foregroundStyle(.primary)
+
+                NavigationLink {
+                    morePage
+                } label: {
+                    Label("More", systemImage: "ellipsis.circle")
+                }
+            }
+
+            Section(header: Text("Info")) {
+                HStack {
+                    Text("Version")
+                    Spacer()
+                    Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")
+                        .foregroundStyle(.secondary)
+                }
+                .contentShape(Rectangle())
+                .onTapGesture(perform: handleVersionTap)
+            }
+        }
+        .navigationTitle("Settings")
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            appStateManager.checkNotificationPermission()
+        }
+        .sheet(isPresented: $showFeedback) {
+            FeedbackView()
+        }
+        .sheet(isPresented: $showWhatsNew) {
+            WhatsNewView(onClose: { showWhatsNew = false })
+        }
+        .paywallGate(isPresented: $showPaywall)
+        .manageSubscriptionsSheet(isPresented: $showManageSubscription)
+        .sheet(isPresented: $showGraduation) {
+            SubscriptionGraduationSheet()
+        }
+        .sheet(isPresented: $showFounderWelcome) {
+            // 설정에서 다시 열어 본 것이라 "봤음" 표시를 다시 남기지 않는다.
+            FounderWelcomeView(isFirstShowing: false)
+        }
+    }
+
+    // MARK: - 알림 설정
+
+    private var alertsPage: some View {
+        Form {
             // ⚠️ **되풀이·알람·햅틱은 있는 줄 몰라서 안 쓰인다.** 제보로 들어온 요청 셋 중 둘이
-            //    이미 있는 기능이었다. 그래서 설정 안쪽이 아니라 알림 구역 **맨 앞**에 세운다.
+            //    이미 있는 기능이었다. 그래서 이 화면 **맨 앞**에 세운다.
             Section {
                 NavigationLink {
                     FeatureIntroView()
@@ -539,6 +626,200 @@ struct NoticeSettingView: View {
             Section {
                 Toggle("Show Toast Messages", isOn: $toastEnabled)
             }
+        }
+        .navigationTitle("Notification Settings")
+        .navigationBarTitleDisplayMode(.inline)
+        .alert("What is a full alarm?", isPresented: $showAlarmKitInfo) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("When the timer ends, your iPhone rings like an alarm clock instead of showing a notification.\n\nIt plays at alarm volume even in Silent Mode or a Focus, takes over the whole screen, and keeps ringing until you press Stop. Snooze gives you five more minutes.\n\nUse it when you must not miss the end - a workout set, a break you keep skipping. Leave it off for quiet places.")
+        }
+        .alert("Alarm permission needed", isPresented: $showAlarmPermissionDenied) {
+            Button("Open Settings", action: openSettings)
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Allow alarms for Rereminder in Settings to use the full alarm.")
+        }
+        .alert("How to Enable Notifications", isPresented: $showPermissionGuide) {
+            Button("Go to Settings", role: .none) {
+                openSettings()
+            }
+            Button("Close", role: .cancel) {}
+        } message: {
+            Text("Follow these steps to enable notifications:\n\n1. Tap 'Go to Settings' button\n2. Find '\(AppName.display)' app in Settings\n3. Select 'Notifications' menu\n4. Turn on 'Allow Notifications'\n\n💡 Recommended settings:\n• Show on Lock Screen\n• Show in Notification Center\n• Show as Banners\n\nThis ensures you never miss timer alerts!")
+        }
+    }
+
+    // MARK: - 내 기기
+
+    private var devicesPage: some View {
+        Form {
+            // 타이머를 쓰는 중에 물어본 답이 여기로 온다. 여기서 바꾸면 안내도 따라 바뀐다 —
+            // "없음"으로 두면 그 기기 이야기는 다시 나오지 않는다.
+            Section(header: Text("My Devices"),
+                    footer: Text("Rereminder points you to the devices you have, and stays quiet about the ones you don't. Set a device to No and it won't be mentioned again.")) {
+                deviceOwnershipRow(title: "Apple Watch", systemImage: "applewatch", raw: $watchOwnershipRaw)
+                // 가지고 있다고 한 기기만 연결 상태를 보여준다 — 없는 기기의 연결 상태는 의미가 없다.
+                if watchOwnershipRaw == DeviceOwnership.Answer.yes.rawValue,
+                   let watch = watchConnectionDisplay {
+                    connectionRow(watch, device: .watch)
+                }
+                deviceOwnershipRow(title: "Mac", systemImage: "laptopcomputer", raw: $macOwnershipRaw)
+                // 맥에서 돌 때는 맥의 연결 상태 줄을 감춘다 — 자기 자신은 세지 않으므로
+                // 늘 "연결 안 됨"으로 보인다(맥 앞에 앉은 사람에게는 헛소리다).
+                if macOwnershipRaw == DeviceOwnership.Answer.yes.rawValue,
+                   DevicePresence.currentPlatform != .mac {
+                    connectionRow(macConnectionDisplay, device: .mac)
+                }
+            }
+        }
+        .navigationTitle("My Devices")
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            // 화면을 열 때 지금 상태를 다시 읽는다(워치는 그 사이 꺼졌을 수 있다).
+            watchLink.refreshLinkStatus()
+            NSUbiquitousKeyValueStore.default.synchronize()
+            macPresence = DevicePresence.status(of: .mac)
+        }
+        // 다른 기기가 표시를 남기면 iCloud가 알려준다 — 화면을 열어 둔 채로도 따라간다.
+        .onReceive(NotificationCenter.default.publisher(
+            for: NSUbiquitousKeyValueStore.didChangeExternallyNotification)) { _ in
+            macPresence = DevicePresence.status(of: .mac)
+        }
+        .sheet(item: $connectionHelpDevice) { device in
+            DeviceConnectionHelpView(device: device)
+        }
+    }
+
+    // MARK: - 더 보기
+
+    private var morePage: some View {
+        Form {
+            Section {
+                // 업데이트 뒤 한 번만 뜨는 안내를 다시 본다.
+                Button {
+                    showWhatsNew = true
+                } label: {
+                    HStack {
+                        Label("What's New", systemImage: "gift")
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                            .accessibilityHidden(true)
+                    }
+                }
+                .foregroundStyle(.primary)
+
+                NavigationLink {
+                    MultiDeviceGuideView()
+                } label: {
+                    Label("Use on All Your Devices", systemImage: "square.stack.3d.up.fill")
+                }
+                .foregroundStyle(.primary)
+            }
+
+            Section(footer: Text("The developer reads every message. Tell us what you need or what felt off.")) {
+                // 메일 앱으로 바로 — 스크린샷을 붙이거나 긴 이야기를 쓰고 싶은 사람은 이쪽이 편하다.
+                if let mailURL = Self.developerMailURL {
+                    Link(destination: mailURL) {
+                        HStack {
+                            Label("Email the Developer", systemImage: "at")
+                            Spacer()
+                            Image(systemName: "arrow.up.right")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .accessibilityHidden(true)
+                        }
+                    }
+                    .foregroundStyle(.primary)
+                }
+
+                // 앞으로 만들 기능 — 원본은 RereminderRoadmap.swift
+                NavigationLink(LeeoRoadmapText.entry) { RoadmapScreen() }
+
+                // 핸들(@lee25_ios)만 고유명사이고 문장은 언어별로 번역돼 있다.
+                Link(destination: URL(string: "https://instagram.com/lee25_ios")!) {
+                    HStack {
+                        Label("Instagram DM (@lee25_ios)", systemImage: "paperplane.fill")
+                        Spacer()
+                        Image(systemName: "arrow.up.right")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+
+            // 응원 — 상품이 App Store 에서 와야 선다(`GiftAndTipSection`).
+            GiftAndTipSection()
+
+            Section {
+                // 같은 개발자가 만든 다른 앱 — 이 앱과 함께 쓰는 순간을 앱마다 한 줄로.
+                LeeoFamilySettingsRow<RereminderSpec>()
+
+                Button {
+                    shareApp()
+                } label: {
+                    HStack {
+                        Label("Share App", systemImage: "square.and.arrow.up")
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .foregroundStyle(.primary)
+
+                Button {
+                    rateApp()
+                } label: {
+                    HStack {
+                        Label("Rate App", systemImage: "star.fill")
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .foregroundStyle(.primary)
+            }
+
+            // 코드와 잃어버린 Pro. 무료·기억인 사람에게만 뜻이 있다.
+            if !store.isPro {
+                Section {
+                    // "예전에 Pro 였는데 사라졌어요" — 앱을 지웠다 깐 그랜드파더링 사용자의 자격이
+                    // UserDefaults 에만 있어 통째로 사라지던 시절이 있었다(2.2.8 에서 Keychain 에도
+                    // 남기게 고쳤다). 남은 기록으로 되살릴 수 있으면 여기서 되살린다.
+                    Button {
+                        lostProRecovered = StoreManager.recoverLostEntitlementIfPossible()
+                        showLostProResult = true
+                    } label: {
+                        HStack {
+                            Text("Had Pro before but it is gone?")
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+
+                    // 할인·선물로 받은 코드를 여기서 바로 쓴다 — App Store 앱으로 나갔다 오지 않아도 된다.
+                    Button {
+                        showRedeemCode = true
+                    } label: {
+                        HStack {
+                            Label("Redeem Code", systemImage: "giftcard")
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .accessibilityHidden(true)
+                        }
+                    }
+                }
+            }
 
             Section(header: Text("Test Mode")) {
                 Toggle(isOn: $testModeEnabled) {
@@ -588,197 +869,8 @@ struct NoticeSettingView: View {
                 }
             }
 
-            Section(header: Text("Appearance")) {
-                HStack(spacing: 16) {
-                    Text("Mode")
-                    Picker("Mode", selection: $themeManager.appearanceMode) {
-                        ForEach(AppearanceMode.allCases) { mode in
-                            Text(mode.displayName).tag(mode)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                }
-
-                NavigationLink {
-                    ThemeSettingView()
-                } label: {
-                    HStack {
-                        Label("Theme", systemImage: "paintpalette.fill")
-                        Spacer()
-                        Circle()
-                            .fill(ThemeManager.shared.accentColor)
-                            .frame(width: 20, height: 20)
-                    }
-                }
-            }
-
-            Section(header: Text("Data")) {
-                NavigationLink {
-                    TimerHistoryView()
-                } label: {
-                    HStack {
-                        Label("Timer History", systemImage: "chart.bar.fill")
-                        Spacer()
-                        if !store.isPro {
-                            ProBadge(small: true)
-                        }
-                    }
-                }
-            }
-
-            // 타이머를 쓰는 중에 물어본 답이 여기로 온다. 여기서 바꾸면 안내도 따라 바뀐다 —
-            // "없음"으로 두면 그 기기 이야기는 다시 나오지 않는다.
-            Section(header: Text("My Devices"),
-                    footer: Text("Rereminder points you to the devices you have, and stays quiet about the ones you don't. Set a device to No and it won't be mentioned again.")) {
-                deviceOwnershipRow(title: "Apple Watch", systemImage: "applewatch", raw: $watchOwnershipRaw)
-                // 가지고 있다고 한 기기만 연결 상태를 보여준다 — 없는 기기의 연결 상태는 의미가 없다.
-                if watchOwnershipRaw == DeviceOwnership.Answer.yes.rawValue,
-                   let watch = watchConnectionDisplay {
-                    connectionRow(watch, device: .watch)
-                }
-                deviceOwnershipRow(title: "Mac", systemImage: "laptopcomputer", raw: $macOwnershipRaw)
-                // 맥에서 돌 때는 맥의 연결 상태 줄을 감춘다 — 자기 자신은 세지 않으므로
-                // 늘 "연결 안 됨"으로 보인다(맥 앞에 앉은 사람에게는 헛소리다).
-                if macOwnershipRaw == DeviceOwnership.Answer.yes.rawValue,
-                   DevicePresence.currentPlatform != .mac {
-                    connectionRow(macConnectionDisplay, device: .mac)
-                }
-            }
-
-            // ⚠️ **피드백은 Help 안에 두지 말 것.** 예전에는 "How to Use" 밑 여섯 번째 줄에
-            //    묻혀 있었는데, 그 섹션은 부제까지 "첫 실행 안내가 전부 여기 있습니다"라
-            //    **사용법 문서로 읽힌다.** 불만이 있는 사람은 도움말을 열지 않는다.
-            //    통계는 어디서 떨어지는지까지만 말해 주고, 왜 그런지는 이 줄로만 들어온다.
-            Section(header: Text("Feedback"),
-                    footer: Text("The developer reads every message. Tell us what you need or what felt off.")) {
-                // CloudKit 직접 제출 (메일 앱 불필요) — 실패 시 FeedbackView 내부에서 이메일 폴백
-                Button {
-                    showFeedback = true
-                } label: {
-                    HStack {
-                        Label("Send Feedback", systemImage: "envelope.fill")
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .foregroundStyle(.primary)
-
-                // 메일 앱으로 바로 — 스크린샷을 붙이거나 긴 이야기를 쓰고 싶은 사람은 이쪽이 편하다.
-                if let mailURL = Self.developerMailURL {
-                    Link(destination: mailURL) {
-                        HStack {
-                            Label("Email the Developer", systemImage: "at")
-                            Spacer()
-                            Image(systemName: "arrow.up.right")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                                .accessibilityHidden(true)
-                        }
-                    }
-                    .foregroundStyle(.primary)
-                }
-
-                // 앞으로 만들 기능 — 원본은 RereminderRoadmap.swift
-                NavigationLink(LeeoRoadmapText.entry) { RoadmapScreen() }
-
-                // 핸들(@lee25_ios)만 고유명사이고 문장은 언어별로 번역돼 있다.
-                Link(destination: URL(string: "https://instagram.com/lee25_ios")!) {
-                    HStack {
-                        Label("Instagram DM (@lee25_ios)", systemImage: "paperplane.fill")
-                        Spacer()
-                        Image(systemName: "arrow.up.right")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-            }
-
-            Section(header: Text("Help"), footer: Text("Everything from the first-run walkthrough is here — including how to use Rereminder on Apple Watch, Mac, widgets, and Siri.")) {
-                Button {
-                    showOnboarding = true
-                } label: {
-                    HStack {
-                        Label("How to Use This App", systemImage: "book.fill")
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .foregroundStyle(.primary)
-
-                NavigationLink {
-                    FeatureIntroView()
-                } label: {
-                    Label("Things you might not know", systemImage: "sparkles")
-                }
-
-                // 업데이트 뒤 한 번만 뜨는 안내를 다시 본다.
-                Button {
-                    showWhatsNew = true
-                } label: {
-                    HStack {
-                        Label("What's New", systemImage: "gift")
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                            .accessibilityHidden(true)
-                    }
-                }
-                .foregroundStyle(.primary)
-
-                NavigationLink {
-                    MultiDeviceGuideView()
-                } label: {
-                    Label("Use on All Your Devices", systemImage: "square.stack.3d.up.fill")
-                }
-                .foregroundStyle(.primary)
-
-                // 같은 개발자가 만든 다른 앱 — 이 앱과 함께 쓰는 순간을 앱마다 한 줄로.
-                LeeoFamilySettingsRow<RereminderSpec>()
-
-                Button {
-                    shareApp()
-                } label: {
-                    HStack {
-                        Label("Share App", systemImage: "square.and.arrow.up")
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .foregroundStyle(.primary)
-
-                Button {
-                    rateApp()
-                } label: {
-                    HStack {
-                        Label("Rate App", systemImage: "star.fill")
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .foregroundStyle(.primary)
-
-                Button {
-                    ReviewRequestManager.shared.openAppStoreReviewPage()
-                } label: {
-                    HStack {
-                        Label("Write a Review on App Store", systemImage: "square.and.pencil")
-                        Spacer()
-                        Image(systemName: "arrow.up.right")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                .foregroundStyle(.primary)
-
+            if masterModeEnabled || testModeEnabled {
+                Section {
                 // 개발자 전용 — 버전 행 7번 탭으로 노출
                 if masterModeEnabled {
                     developerLinks
@@ -801,80 +893,19 @@ struct NoticeSettingView: View {
                     }
                     .padding(.vertical, 4)
                 }
-            }
-
-            Section(header: Text("Info")) {
-                HStack {
-                    Text("Version")
-                    Spacer()
-                    Text(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0")
-                        .foregroundStyle(.secondary)
                 }
-                .contentShape(Rectangle())
-                .onTapGesture(perform: handleVersionTap)
             }
         }
-        .navigationTitle("Settings")
+        .navigationTitle("More")
         .navigationBarTitleDisplayMode(.inline)
-        .onAppear {
-            appStateManager.checkNotificationPermission()
-        }
-        .alert("What is a full alarm?", isPresented: $showAlarmKitInfo) {
-            Button("OK", role: .cancel) {}
-        } message: {
-            Text("When the timer ends, your iPhone rings like an alarm clock instead of showing a notification.\n\nIt plays at alarm volume even in Silent Mode or a Focus, takes over the whole screen, and keeps ringing until you press Stop. Snooze gives you five more minutes.\n\nUse it when you must not miss the end - a workout set, a break you keep skipping. Leave it off for quiet places.")
-        }
-        .alert("Alarm permission needed", isPresented: $showAlarmPermissionDenied) {
-            Button("Open Settings", action: openSettings)
-            Button("OK", role: .cancel) {}
-        } message: {
-            Text("Allow alarms for Rereminder in Settings to use the full alarm.")
-        }
         .alert("What is Quick Test Mode?", isPresented: $showTestModeInfo) {
             Button("OK", role: .cancel) {}
         } message: {
             Text("A mode to quickly verify that the timer works correctly.\n\n• 10x: 10-minute timer finishes in 1 minute\n• 30x: 10-minute timer finishes in 20 seconds\n• 60x: 10-minute timer finishes in 10 seconds\n\nYou can quickly test all features including alerts, pre-alerts, and overtime.\n\n⚠️ Make sure to turn off test mode for actual use!")
         }
-        .alert("How to Enable Notifications", isPresented: $showPermissionGuide) {
-            Button("Go to Settings", role: .none) {
-                openSettings()
-            }
-            Button("Close", role: .cancel) {}
-        } message: {
-            Text("Follow these steps to enable notifications:\n\n1. Tap 'Go to Settings' button\n2. Find '\(AppName.display)' app in Settings\n3. Select 'Notifications' menu\n4. Turn on 'Allow Notifications'\n\n💡 Recommended settings:\n• Show on Lock Screen\n• Show in Notification Center\n• Show as Banners\n\nThis ensures you never miss timer alerts!")
-        }
-        .onAppear {
-            // 화면을 열 때 지금 상태를 다시 읽는다(워치는 그 사이 꺼졌을 수 있다).
-            watchLink.refreshLinkStatus()
-            NSUbiquitousKeyValueStore.default.synchronize()
-            macPresence = DevicePresence.status(of: .mac)
-        }
-        // 다른 기기가 표시를 남기면 iCloud가 알려준다 — 화면을 열어 둔 채로도 따라간다.
-        .onReceive(NotificationCenter.default.publisher(
-            for: NSUbiquitousKeyValueStore.didChangeExternallyNotification)) { _ in
-            macPresence = DevicePresence.status(of: .mac)
-        }
-        .sheet(item: $connectionHelpDevice) { device in
-            DeviceConnectionHelpView(device: device)
-        }
-        .fullScreenCover(isPresented: $showOnboarding) {
-            OnboardingFlowView(isPresented: $showOnboarding)
-                .environmentObject(screenVM)
-        }
-        .sheet(isPresented: $showFeedback) {
-            FeedbackView()
-        }
-        .sheet(isPresented: $showWhatsNew) {
-            WhatsNewView(onClose: { showWhatsNew = false })
-        }
         .offerCodeRedemption(isPresented: $showRedeemCode) { _ in
             // 시트가 닫히는 즉시 권한을 다시 읽는다 — 그래야 자물쇠가 그 자리에서 풀린다.
             Task { await store.verifyCurrentEntitlements() }
-        }
-        .paywallGate(isPresented: $showPaywall)
-        .manageSubscriptionsSheet(isPresented: $showManageSubscription)
-        .sheet(isPresented: $showGraduation) {
-            SubscriptionGraduationSheet()
         }
         .alert(lostProRecovered
                ? String(localized: "Your Pro access is back")
@@ -885,17 +916,6 @@ struct NoticeSettingView: View {
             Text(lostProRecovered
                  ? String(localized: "Everything is unlocked again. Sorry for the trouble.")
                  : String(localized: "If you bought Pro, open the Pro screen above and tap Restore Purchases. If you had it for free as an early user, send us a message from Feedback below and we will bring it back for you."))
-        }
-        .sheet(isPresented: $showLegacyFreeNotice, onDismiss: {
-            guard showPaywallAfterLegacyNotice else { return }
-            showPaywallAfterLegacyNotice = false
-            showPaywall = true
-        }) {
-            LegacyFreeNoticeView(isFirstShowing: false, onSeePro: { showPaywallAfterLegacyNotice = true })
-        }
-        .sheet(isPresented: $showFounderWelcome) {
-            // 설정에서 다시 열어 본 것이라 "봤음" 표시를 다시 남기지 않는다.
-            FounderWelcomeView(isFirstShowing: false)
         }
     }
 }

@@ -1,0 +1,381 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>두번알림 듀오 시안</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* 레이아웃: 한 줄 설명 → 원칙 → 자세별 기기 시안(실측 pt 를 viewBox 로 그대로) → 코드 규칙 → 순서 */
+:root {
+  --bg: #f3f4f6;
+  --paper: #ffffff;
+  --fg: #16181d;
+  --muted: #5d6470;
+  --line: #d9dde3;
+  --accent: #0a6fe0;
+  --bell: #e58600;
+  --hinge: #c43d3d;
+  --font-body: "IBM Plex Sans KR", system-ui, -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0e1013; --paper: #171a1f; --fg: #e9ebef; --muted: #9aa2ad; --line: #2b3038;
+  --accent: #4da3ff; --bell: #ffae3d; --hinge: #ff6b6b; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0e1013; --paper: #171a1f; --fg: #e9ebef; --muted: #9aa2ad; --line: #2b3038;
+  --accent: #4da3ff; --bell: #ffae3d; --hinge: #ff6b6b; color-scheme: dark; }
+
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.6; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 40px 72px; display: grid; gap: 48px; }
+h1 { font-size: 30px; line-height: 1.25; margin: 0; text-wrap: balance; font-weight: 700; }
+h2 { font-size: 21px; margin: 0; text-wrap: balance; }
+h3 { font-size: 16px; margin: 0; }
+p { margin: 0; max-width: 66ch; }
+.lede { color: var(--muted); font-size: 16px; }
+.eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: .06em; color: var(--muted); text-transform: uppercase; }
+header { display: grid; gap: 12px; }
+section { display: grid; gap: 20px; }
+
+.rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+.rule { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 16px; display: grid; gap: 6px; align-content: start; }
+.rule b { font-size: 15px; }
+.rule span { color: var(--muted); font-size: 14px; }
+
+.scene { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 28px; align-items: center; background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 24px; }
+.scene.wide { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); }
+@media (max-width: 760px) { .scene, .scene.wide { grid-template-columns: 1fr; } }
+.scene .copy { display: grid; gap: 10px; min-width: 0; }
+.scene .copy ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; color: var(--muted); font-size: 14px; }
+.tag { display: inline-flex; gap: 6px; align-items: center; font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.pill { font-family: var(--font-body); font-size: 12px; padding: 2px 8px; border-radius: 99px; border: 1px solid var(--line); color: var(--fg); }
+.pill.hot { border-color: var(--accent); color: var(--accent); }
+.pill.warn { border-color: var(--bell); color: var(--bell); }
+.device { display: grid; justify-items: center; gap: 8px; min-width: 0; }
+.device svg { width: 100%; height: auto; display: block; }
+.device .cap { font-family: var(--font-mono); font-size: 12px; color: var(--muted); text-align: center; }
+.portrait svg { max-width: 330px; }
+.outer svg { max-width: 240px; }
+
+.laptop { perspective: 900px; display: grid; justify-items: center; width: 100%; }
+.laptop .top, .laptop .bottom { width: 100%; max-width: 360px; }
+.laptop .bottom { transform: rotateX(52deg); transform-origin: top center; margin-top: -2px; }
+
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: end; }
+
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+.tablebox { overflow-x: auto; background: var(--paper); border: 1px solid var(--line); border-radius: 10px; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 500; color: var(--muted); font-size: 13px; }
+tr:last-child td { border-bottom: 0; }
+code { font-family: var(--font-mono); font-size: 13px; }
+ol.steps { margin: 0; padding-left: 20px; display: grid; gap: 8px; }
+ol.steps li { max-width: 70ch; }
+ol.steps small { color: var(--muted); display: block; }
+.note { border-left: 3px solid var(--bell); padding: 10px 14px; background: var(--paper); border-radius: 0 8px 8px 0; color: var(--muted); font-size: 14px; }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Rereminder · iPhone Duo · 시안 v1 · 2026-10-16</div>
+    <h1>두번알림, 펼치면 다이얼과 계획이 마주 본다</h1>
+    <p class="lede">클립키보드의 듀오 규칙을 그대로 가져왔습니다. 접힌 선은 하기 전과 한 뒤의 경계입니다. 손이 일하는 쪽(아래·왼쪽)에는 다이얼과 조작을, 눈이 확인하는 쪽(위·오른쪽)에는 계획과 남은 시간을 둡니다. 접으면 지금 아이폰 화면 그대로입니다.</p>
+  </header>
+
+  <section>
+    <h2>가져온 원칙 넷</h2>
+    <div class="rules">
+      <div class="rule"><b>접으면 지금 그대로</b><span>바깥 화면 466×678pt는 지금 아이폰 앱과 같은 화면입니다. 펴면 그 옆(위)에 판이 하나 더해질 뿐입니다.</span></div>
+      <div class="rule"><b>손은 아래·왼쪽</b><span>다이얼, 종 노브, 시작·정지는 고르는 쪽 판에 둡니다. 가로로 펴면 왼쪽, 세로로 펴면 아래입니다.</span></div>
+      <div class="rule"><b>눈은 위·오른쪽</b><span>구간 계획, 알림 문구, 실행 중 남은 시간처럼 확인할 것은 결과 쪽 판에 둡니다.</span></div>
+      <div class="rule"><b>선 앞뒤 24pt는 비움</b><span>다이얼, 배지, 시트, 알림창, 아래 막대 무엇도 접힌 선을 가로지르지 않습니다.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>자세별 화면</h2>
+
+    <div class="scene wide">
+      <div class="device"><svg id="m-idle-land" viewBox="0 0 951 669" role="img" aria-label="가로로 편 대기 화면 시안"></svg><div class="cap">안쪽 화면 · 가로로 폄 · 951×669pt</div></div>
+      <div class="copy">
+        <span class="tag">대기 <span class="pill hot">가장 먼저</span></span>
+        <h3>왼쪽 다이얼 | 오른쪽 오늘의 계획</h3>
+        <p>지금은 종을 옮겨 놓고 나서야 "첫 구간이 몇 분이지?"를 머리로 셉니다. 원 아래 칩 한 줄(<code>SectionLengthBar</code>)로 답하던 것을 판 하나에 크게 세웁니다.</p>
+        <ul>
+          <li>구간마다 시작→끝 시각, 길이, 이름. 링과 같은 구간 색</li>
+          <li>종마다 그 순간 나갈 알림 문구를 미리 보여 줌 (지금은 설정 깊숙이 숨어 있음)</li>
+          <li>종을 끌면 오른쪽 줄이 손끝을 따라 바뀜 (<code>liveOffsets</code>)</li>
+          <li>템플릿 칩은 계획 판 맨 아래. 누르면 왼쪽 다이얼이 바뀜</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="scene">
+      <div class="device portrait"><svg id="m-idle-port" viewBox="0 0 669 951" role="img" aria-label="세로로 편 대기 화면 시안"></svg><div class="cap">안쪽 화면 · 세로로 폄 · 669×951pt</div></div>
+      <div class="copy">
+        <span class="tag">대기</span>
+        <h3>아래 다이얼 | 위 계획</h3>
+        <p>세로로 펴면 같은 두 판이 위아래로 섭니다. 위 판은 폭이 넓으니 계획을 <b>길이 비례 막대</b>로 그립니다. 20분과 1분이 눈으로 20:1로 보입니다.</p>
+        <ul>
+          <li>아래 판이 바깥 화면과 거의 같은 크기라 다이얼이 접었을 때와 같은 크기로 섬</li>
+          <li>모드 전환·설정 막대는 아래 판 바닥으로 (<code>FoldTabBar</code> 와 같은 이유)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="scene">
+      <div class="device">
+        <div class="laptop">
+          <svg class="top" id="m-lap-top" viewBox="0 0 669 463" role="img" aria-label="반쯤 접어 세운 위 판: 큰 남은 시간"></svg>
+          <svg class="bottom" id="m-lap-bottom" viewBox="0 0 669 463" role="img" aria-label="반쯤 접어 눕힌 아래 판: 대본과 조작"></svg>
+        </div>
+        <div class="cap">반쯤 접어 세움 · 위 판 세움 / 아래 판 눕힘</div>
+      </div>
+      <div class="copy">
+        <span class="tag">세션 실행 <span class="pill hot">이 앱만의 자리</span></span>
+        <h3>발표대에 반쯤 접어 세워 두는 타이머</h3>
+        <p>발표자·강사가 강단에 폰을 눕혀 두면 숫자가 누워서 안 읽힙니다. 듀오는 반쯤 접으면 위 판이 섭니다. 선 자리가 그대로 "보는 것 | 만지는 것"의 경계가 됩니다.</p>
+        <ul>
+          <li>위 판(세움): 남은 시간을 판 높이 가득, 지금 구간 이름, 다음 종까지</li>
+          <li>아래 판(눕힘): 이 구간의 대본, 크게 누르는 일시정지·정지</li>
+          <li>구간이 바뀌면 위 판 바탕이 그 구간 색으로 한 번 물듦. 멀리서도 넘어간 걸 앎</li>
+          <li>지금 <code>PresentationScriptPanel</code> 이 원 아래에서 하는 일을 판 하나로</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="scene wide">
+      <div class="device"><svg id="m-edit-land" viewBox="0 0 951 669" role="img" aria-label="세션 편집 시안: 구간 목록과 대본"></svg><div class="cap">세션 편집 · 가로로 폄</div></div>
+      <div class="copy">
+        <span class="tag">세션 준비</span>
+        <h3>왼쪽 구간 목록 | 오른쪽 그 구간의 대본</h3>
+        <p>지금은 구간 카드의 대본 줄을 누르면 시트(<code>SectionScriptSheet</code>)가 올라와 목록을 가립니다. 펴면 시트를 띄우지 않고 오른쪽 판에서 바로 씁니다.</p>
+        <ul>
+          <li>목록에서 고르면 오른쪽만 바뀜 (클립키보드 <code>FoldNavigation</code> 과 같은 문법)</li>
+          <li>키보드는 오른쪽 판 아래에만 올라옴. 왼쪽 목록은 그대로 보임</li>
+          <li>다음 발표 전날 저녁, 리허설 시간에 쓰는 화면</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="scene">
+      <div class="device"><div class="pair">
+        <div class="device outer"><svg id="m-outer-fold" viewBox="0 0 466 678" role="img" aria-label="접은 바깥 화면: 지금 앱 그대로"></svg><div class="cap">접음 · 지금 그대로</div></div>
+        <div class="device outer"><svg id="m-outer-back" viewBox="0 0 466 678" role="img" aria-label="펼친 채 바깥 화면을 발표자 쪽으로"></svg><div class="cap">펼침 · 바깥 화면은 발표자 쪽</div></div>
+      </div></div>
+      <div class="copy">
+        <span class="tag">타임키퍼 <span class="pill warn">확인 필요</span></span>
+        <h3>앞줄 타임키퍼가 펼쳐 들면, 바깥 화면은 발표자에게</h3>
+        <p>학회·워크숍에는 시간 카드를 들어 올리는 사람이 따로 있습니다. 펼친 듀오의 바깥 화면은 등을 향합니다. 안쪽은 타임키퍼가 조작하고, 바깥에는 남은 시간과 구간 색만 크게 띄우면 카드가 필요 없습니다.</p>
+        <ul>
+          <li>바깥에는 숫자와 색만. 대본과 조작은 절대 내보내지 않음</li>
+          <li>무대 위에서 다른 사람들이 보는 화면이라 워치처럼 광고가 됩니다. 무료로 둡니다</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">타임키퍼 화면은 펼친 상태에서 앱이 바깥 화면에 따로 장면을 띄울 수 있어야 성립합니다. Apple Tech Talk "Leverage multiple displays and scenes on iPhone Duo"에서 다루는 내용이라 가능성은 있지만, 이 앱 같은 일반 앱에 열려 있는지는 아직 확인하지 못했습니다. 실기기나 27.1 시뮬레이터에서 먼저 확인할 항목입니다.</p>
+  </section>
+
+  <section>
+    <h2>그 밖의 화면</h2>
+    <div class="tablebox"><table>
+      <thead><tr><th>화면</th><th>고르는 쪽 (손)</th><th>결과 쪽 (눈)</th></tr></thead>
+      <tbody>
+        <tr><td>설정</td><td>설정 목록</td><td>고른 항목. 알림 방식이면 그 알림이 실제로 어떻게 뜨는지 미리보기 카드</td></tr>
+        <tr><td>이런 것도 있어요</td><td>기능 카드와 토글</td><td>켠 기능이 무엇을 하는지 짧은 재생 (알람 전체 화면, 다이얼 딸깍)</td></tr>
+        <tr><td>타이머 기록</td><td>날짜별 목록</td><td>고른 날의 구간별 실제 시간과 초과 시간 차트</td></tr>
+        <tr><td>온보딩</td><td>상황 고르기 (발표·수업·워크숍…)</td><td>10초 체험 타이머가 옆에서 바로 돔</td></tr>
+        <tr><td>페이월</td><td>트림 카드와 버튼</td><td>지금까지 한 것 + 비교표. 시트는 결과 쪽 판에만</td></tr>
+        <tr><td>다음 자리 예약</td><td>날짜 고르기</td><td>그날 쓸 설정 요약 (전날 저녁 19시에 다이얼에 올라감)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>이 앱에서 특히 조심할 것</h2>
+    <div class="tablebox"><table>
+      <thead><tr><th>지금 코드</th><th>펼치면 생기는 일</th><th>할 일</th></tr></thead>
+      <tbody>
+        <tr><td>다이얼 크기를 화면 폭으로 잡음 (<code>TimerMainView</code>)</td><td>가로로 펴면 원이 창 가운데, 곧 접힌 선 위에 섬</td><td>다이얼은 고르는 쪽 판 크기로만 잰다</td></tr>
+        <tr><td>종 배지 x 를 화면 폭으로 자름 (<code>markerBadgeHalfWidth</code>)</td><td>3시 방향 종의 배지가 선을 넘어 오른쪽 판에 걸침</td><td>자르는 기준을 판 폭으로</td></tr>
+        <tr><td>다이얼 드래그 좌표계 <code>rereminder.dial</code></td><td>판이 바뀌어도 원 중심이 <code>size/2</code> 여야 함</td><td>프레임을 판 안에서 고정. <code>DialDragTrackerTests</code> 에 판 크기 경우 추가</td></tr>
+        <tr><td>아래 두 캡슐(모드·설정)이 화면 양 끝</td><td>가로로 펴면 하나는 왼쪽, 하나는 오른쪽 판으로 갈라짐</td><td>펴면 둘 다 고르는 쪽 판 바닥으로</td></tr>
+        <tr><td>시트 여러 곳 (페이월·예약·대본·혜택 안내)</td><td>창 바닥부터 끝까지 올라 선을 덮음</td><td>클립키보드 <code>FoldSheetGuard</code> 를 그대로</td></tr>
+        <tr><td>타이머 상태가 화면 뷰에 붙어 있음</td><td>펴고 접는 순간 뷰가 다시 만들어지면 돌던 화면이 처음으로</td><td>펴고 접어도 같은 뷰로 남게 (<code>FoldSplitView</code> 의 <code>AnyLayout</code> 방식)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section>
+    <h2>제안 순서</h2>
+    <ol class="steps">
+      <li><b>클립키보드의 Fold 모듈을 LeeoKit 으로 옮긴다.</b><small><code>FoldLayout</code>·<code>FoldSplitView</code>·<code>FoldSheetGuard</code>·<code>FoldTabBar</code> 는 앱 고유 코드가 거의 없습니다. 두 앱이 각자 들고 있으면 고칠 때 한쪽만 고치게 됩니다.</small></li>
+      <li><b>대기 화면: 다이얼 | 계획.</b><small>가장 많이 보는 화면이고, 계획 판은 이미 있는 계산(<code>TimerSections</code>)만 그리면 됩니다.</small></li>
+      <li><b>시트·배지·아래 막대를 선에서 비킨다.</b><small>안 하면 펼친 화면이 깨져 보입니다. 1번을 하면 거의 공짜입니다.</small></li>
+      <li><b>세션 실행: 반쯤 접어 세우기.</b><small>이 앱만의 자리라 소개 페이지·스크린샷의 얼굴이 될 수 있습니다. 반쯤 접힌 자세를 시스템이 알려 주는지부터 확인합니다.</small></li>
+      <li><b>세션 편집: 목록 | 대본.</b></li>
+      <li><b>타임키퍼 바깥 화면.</b><small>API 가 열려 있는지 확인한 뒤에만.</small></li>
+    </ol>
+    <p class="note">세션 실행 화면의 대본 판은 세션 모드라 Pro 입니다. 다이얼 | 계획과 타임키퍼 바깥 화면은 무료로 둡니다. 계획 판은 예비 알림의 가치를 보여 주는 자리이고, 바깥 화면은 남들이 보는 화면이라 광고 역할을 합니다.</p>
+  </section>
+</div>
+
+<script>
+(function () {
+  const C = { bg: "#000", card: "#1c1c1e", card2: "#2c2c2e", track: "#3a3a3c", text: "#fff", sub: "#8e8e93",
+    blue: "#0a84ff", green: "#30d158", pink: "#bf5af2", cyan: "#40c8e0", bell: "#ff9f0a", red: "#ff375f", hinge: "#ff6b6b" };
+  const SECTIONS = [
+    { name: "도입", min: 20, color: C.blue }, { name: "본론", min: 5, color: C.green },
+    { name: "정리", min: 4, color: C.pink }, { name: "질문", min: 1, color: C.cyan }];
+  const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+  const t = (x, y, s, size, fill, opts = {}) =>
+    `<text x="${x}" y="${y}" font-size="${size}" fill="${fill}" font-family="${opts.mono ? "IBM Plex Mono, monospace" : "IBM Plex Sans KR, -apple-system, sans-serif"}" font-weight="${opts.w || 500}" text-anchor="${opts.a || "start"}">${esc(s)}</text>`;
+  const r = (x, y, w, h, fill, rx = 0, extra = "") => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}" fill="${fill}" ${extra}/>`;
+
+  // 다이얼: 남은 시간 좌표(12시 = 끝). 1시간 = 한 바퀴. 구간은 끝 쪽부터.
+  function dial(cx, cy, rad, w, opts = {}) {
+    const circ = 2 * Math.PI * rad;
+    let out = `<circle cx="${cx}" cy="${cy}" r="${rad}" fill="none" stroke="${C.track}" stroke-width="${w}"/>`;
+    let start = 0;
+    const order = [...SECTIONS].reverse();
+    order.forEach(s => {
+      const f = s.min / 60;
+      out += `<circle cx="${cx}" cy="${cy}" r="${rad}" fill="none" stroke="${s.color}" stroke-width="${w}" stroke-dasharray="${f * circ - 2} ${circ}" stroke-dashoffset="${-start * circ}" transform="rotate(-90 ${cx} ${cy})"/>`;
+      start += f;
+    });
+    const at = f => { const a = f * 2 * Math.PI - Math.PI / 2; return [cx + rad * Math.cos(a), cy + rad * Math.sin(a)]; };
+    [1, 5, 10].forEach(m => { const [x, y] = at(m / 60); out += `<circle cx="${x}" cy="${y}" r="${w * 0.85}" fill="${C.bell}"/><path d="M${x - w * .35} ${y + w * .25} h${w * .7} l-${w * .1} -${w * .12} v-${w * .3} a${w * .25} ${w * .25} 0 0 0 -${w * .5} 0 v${w * .3} z" fill="#fff"/>`; });
+    const [hx, hy] = at(30 / 60);
+    out += `<circle cx="${hx}" cy="${hy}" r="${w * 0.6}" fill="#fff"/>`;
+    out += t(cx, cy + rad * 0.12, opts.time || "30:00", rad * 0.38, C.text, { a: "middle", w: 700 });
+    out += `<circle cx="${cx}" cy="${cy + rad * 0.45}" r="${rad * 0.15}" fill="${C.red}"/><path d="M${cx - rad * .045} ${cy + rad * .38} l${rad * .11} ${rad * .07} l-${rad * .11} ${rad * .07} z" fill="#fff"/>`;
+    return out;
+  }
+  function hingeV(x, h) { return r(x - 12, 0, 24, h, "url(#hatch)") + `<line x1="${x}" y1="0" x2="${x}" y2="${h}" stroke="${C.hinge}" stroke-dasharray="6 6" stroke-width="2"/>`; }
+  function hingeH(y, w) { return r(0, y - 12, w, 24, "url(#hatch)") + `<line x1="0" y1="${y}" x2="${w}" y2="${y}" stroke="${C.hinge}" stroke-dasharray="6 6" stroke-width="2"/>`; }
+  const defs = `<defs><pattern id="hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="10" height="10" fill="#120607"/><line x1="0" y1="0" x2="0" y2="10" stroke="${C.hinge}" stroke-opacity=".45" stroke-width="3"/></pattern></defs>`;
+  function capsules(x, y, w) {
+    return r(x, y, 120, 52, C.card, 26) + `<circle cx="${x + 32}" cy="${y + 26}" r="18" fill="${C.card2}"/>` + `<circle cx="${x + 88}" cy="${y + 26}" r="9" fill="none" stroke="${C.sub}" stroke-width="2.5"/>` +
+      r(x + w - 120, y, 120, 52, C.card, 26) + r(x + w - 92, y + 18, 20, 3, C.blue) + r(x + w - 92, y + 25, 20, 3, C.blue) + r(x + w - 92, y + 32, 20, 3, C.blue) + `<circle cx="${x + w - 36}" cy="${y + 26}" r="10" fill="none" stroke="${C.blue}" stroke-width="3"/>`;
+  }
+  const fmt = m => `${m}:00`;
+  function planRows(x, y, w, opts = {}) {
+    let out = t(x, y, "오늘의 계획", 26, C.text, { w: 700 }) + t(x + w, y, "30:00 · 알림 3개", 17, C.sub, { a: "end" });
+    let cy = y + 44, elapsed = 0;
+    SECTIONS.forEach((s, i) => {
+      const end = elapsed + s.min;
+      out += r(x, cy, w, 58, C.card, 12) + `<circle cx="${x + 24}" cy="${cy + 29}" r="8" fill="none" stroke="${s.color}" stroke-width="3"/>` +
+        t(x + 44, cy + 25, `${i + 1} · ${s.name}`, 18, C.text, { w: 700 }) + t(x + 44, cy + 46, `${fmt(elapsed)} → ${fmt(end)}`, 14, C.sub, { mono: true }) +
+        t(x + w - 16, cy + 37, fmt(s.min), 22, s.color, { a: "end", w: 700, mono: true });
+      cy += 66;
+      if (i < SECTIONS.length - 1 && opts.messages) {
+        const msg = ["본론으로 넘어가세요", "정리할 시간이에요", "1분 남았어요"][i];
+        const left = 30 - end;
+        out += `<circle cx="${x + 24}" cy="${cy + 6}" r="9" fill="${C.bell}"/>` + t(x + 44, cy + 12, `${left}:00 남았을 때 · "${msg}"`, 15, C.bell);
+        cy += 30;
+      }
+      elapsed = end;
+    });
+    return { svg: out, bottom: cy };
+  }
+  function chips(x, y, labels) {
+    let out = "", cx = x;
+    labels.forEach(l => { const w = l.length * 15 + 28; out += r(cx, y, w, 34, "#0b2a4a", 17) + t(cx + w / 2, y + 23, l, 15, C.blue, { a: "middle" }); cx += w + 8; });
+    return out;
+  }
+  function status(x, y) { return t(x, y, "9:41", 18, C.text, { w: 700 }); }
+
+  // A. 대기 · 가로
+  (function () {
+    const W = 951, H = 669, hx = W / 2;
+    let s = defs + r(0, 0, W, H, C.bg, 0);
+    s += status(30, 34) + dial(232, 300, 150, 26) + capsules(24, H - 76, 416);
+    const p = planRows(512, 64, 410, { messages: true });
+    s += p.svg + t(512, H - 76, "템플릿", 14, C.sub) + chips(512, H - 64, ["회의 1시간", "운동 30분", "강의 50분"]);
+    s += hingeV(hx, H);
+    document.getElementById("m-idle-land").innerHTML = s;
+  })();
+
+  // B. 대기 · 세로
+  (function () {
+    const W = 669, H = 951, hy = H / 2;
+    let s = defs + r(0, 0, W, H, C.bg, 0) + status(30, 40);
+    s += t(32, 92, "오늘의 계획", 26, C.text, { w: 700 }) + t(W - 32, 92, "30:00 · 알림 3개", 17, C.sub, { a: "end" });
+    // 길이 비례 막대
+    let x = 32; const bw = W - 64, total = 30;
+    SECTIONS.forEach((sec, i) => {
+      const w = bw * sec.min / total;
+      s += r(x, 120, w - 4, 40, sec.color, 8);
+      if (sec.min >= 4) s += t(x + 10, 146, `${sec.name} ${fmt(sec.min)}`, 15, "#000", { w: 700 });
+      if (i < SECTIONS.length - 1) s += `<circle cx="${x + w - 2}" cy="${112}" r="10" fill="${C.bell}"/>`;
+      x += w;
+    });
+    s += t(32, 188, "0:00", 13, C.sub, { mono: true }) + t(W - 32, 188, "30:00", 13, C.sub, { mono: true, a: "end" });
+    const msgs = [["10:00 남았을 때", "본론으로 넘어가세요"], ["5:00 남았을 때", "정리할 시간이에요"], ["1:00 남았을 때", "1분 남았어요"]];
+    msgs.forEach((m, i) => { const y = 222 + i * 62; s += r(32, y, W - 64, 52, C.card, 12) + `<circle cx="${56}" cy="${y + 26}" r="10" fill="${C.bell}"/>` + t(78, y + 32, m[0], 16, C.bell, { w: 700 }) + t(250, y + 32, `"${m[1]}"`, 16, C.text); });
+    s += t(32, 430, "템플릿", 14, C.sub) + chips(100, 410, ["회의 1시간", "운동 30분", "강의 50분"]);
+    s += dial(W / 2, hy + 200, 145, 26) + capsules(24, H - 76, W - 48);
+    s += hingeH(hy, W);
+    document.getElementById("m-idle-port").innerHTML = s;
+  })();
+
+  // C. 반쯤 접어 세움
+  (function () {
+    const W = 669, H = 463;
+    let top = r(0, 0, W, H, C.bg) + r(0, 0, W, H, C.green, 0, 'fill-opacity=".10"');
+    top += `<circle cx="40" cy="44" r="8" fill="${C.green}"/>` + t(58, 52, "2 · 본론", 24, C.text, { w: 700 }) + t(W - 32, 52, "다음 종까지 2:40", 20, C.bell, { a: "end", w: 700 });
+    top += t(W / 2, 290, "12:40", 210, C.text, { a: "middle", w: 700, mono: true });
+    // 구간 진행 막대
+    let x = 32; const bw = W - 64;
+    SECTIONS.forEach((sec, i) => { const w = bw * sec.min / 30; top += r(x, 380, w - 4, 14, sec.color, 7, i === 0 ? 'fill-opacity=".25"' : ""); x += w; });
+    top += r(32 + bw * (17.33 / 30), 372, 4, 30, "#fff", 2);
+    top += t(32, 430, "전체 남은 시간", 16, C.sub) + t(W - 32, 430, "질문까지 7:40", 16, C.sub, { a: "end" });
+    document.getElementById("m-lap-top").innerHTML = defs + top + hingeH(H - 6, W);
+
+    let bot = r(0, 0, W, H, C.bg) + r(24, 24, W - 48, 250, C.card, 16);
+    bot += `<circle cx="52" cy="62" r="7" fill="${C.green}"/>` + t(68, 69, "본론", 20, C.text, { w: 700 }) + t(W - 48, 69, "다음: 정리", 16, C.sub, { a: "end" });
+    ["첫째, 측정하지 않으면 줄일 수 없습니다.", "둘째, 지난 분기 숫자 세 개를 보여 줍니다.", "셋째, 팀이 바로 할 수 있는 한 가지."].forEach((l, i) => bot += t(52, 120 + i * 44, l, 22, C.text, { w: 400 }));
+    bot += `<circle cx="${W / 2 - 110}" cy="370" r="54" fill="#8e8e93"/>` + `<path d="M${W / 2 - 128} 352 l36 36 M${W / 2 - 92} 352 l-36 36" stroke="#fff" stroke-width="7" stroke-linecap="round"/>`;
+    bot += `<circle cx="${W / 2 + 110}" cy="370" r="54" fill="${C.bell}"/>` + r(W / 2 + 92, 346, 12, 48, "#fff", 3) + r(W / 2 + 116, 346, 12, 48, "#fff", 3);
+    document.getElementById("m-lap-bottom").innerHTML = defs + bot;
+  })();
+
+  // D. 세션 편집 · 가로
+  (function () {
+    const W = 951, H = 669, hx = W / 2;
+    let s = defs + r(0, 0, W, H, C.bg) + status(30, 34) + t(30, 84, "세션 구간", 26, C.text, { w: 700 }) + t(440, 84, "30:00", 18, C.sub, { a: "end", mono: true });
+    SECTIONS.forEach((sec, i) => {
+      const y = 110 + i * 92, sel = i === 1;
+      s += r(30, y, 410, 80, sel ? "#12301c" : C.card, 14, sel ? `stroke="${C.green}" stroke-width="2"` : "");
+      s += `<circle cx="58" cy="${y + 40}" r="9" fill="none" stroke="${sec.color}" stroke-width="3"/>` + t(80, y + 34, `${i + 1} · ${sec.name}`, 20, C.text, { w: 700 });
+      s += t(80, y + 60, i === 1 ? "대본 3줄" : (i === 3 ? "대본 없음" : "대본 2줄"), 15, C.sub) + t(420, y + 48, fmt(sec.min), 22, sec.color, { a: "end", w: 700, mono: true });
+    });
+    s += capsules(24, H - 76, 416);
+    s += t(512, 84, "2 · 본론 대본", 26, C.text, { w: 700 }) + t(922, 84, "완료", 18, C.blue, { a: "end", w: 700 });
+    s += r(512, 110, 410, 300, C.card, 16);
+    ["첫째, 측정하지 않으면 줄일 수 없습니다.", "둘째, 지난 분기 숫자 세 개를 보여 줍니다.", "셋째, 팀이 바로 할 수 있는 한 가지.|"].forEach((l, i) => s += t(536, 156 + i * 40, l, 19, C.text, { w: 400 }));
+    s += r(512, 430, 410, 210, C.card2, 16) + t(717, 545, "키보드는 이 판에만", 18, C.sub, { a: "middle" });
+    s += hingeV(hx, H);
+    document.getElementById("m-edit-land").innerHTML = s;
+  })();
+
+  // E. 바깥 화면 둘
+  (function () {
+    const W = 466, H = 678;
+    let a = r(0, 0, W, H, C.bg) + status(24, 34) + `<circle cx="34" cy="76" r="10" fill="${C.bell}"/>`;
+    ["1:00", "5:00", "10:00"].forEach((l, i) => a += r(60 + i * 90, 58, 80, 36, "#3a2600", 18) + t(100 + i * 90, 82, l, 16, C.bell, { a: "middle", w: 700 }));
+    a += dial(W / 2, 320, 160, 26);
+    a += `<circle cx="120" cy="545" r="6" fill="none" stroke="${C.blue}" stroke-width="2"/>` + t(132, 551, "20:00", 15, C.blue) + `<circle cx="210" cy="545" r="6" fill="none" stroke="${C.green}" stroke-width="2"/>` + t(222, 551, "5:00", 15, C.green) + `<circle cx="290" cy="545" r="6" fill="none" stroke="${C.pink}" stroke-width="2"/>` + t(302, 551, "4:00", 15, C.pink);
+    a += capsules(20, H - 76, W - 40);
+    document.getElementById("m-outer-fold").innerHTML = a;
+
+    let b = r(0, 0, W, H, C.green) + r(0, 0, W, H, "#000", 0, 'fill-opacity=".82"');
+    b += t(W / 2, 110, "본론", 46, C.green, { a: "middle", w: 700 });
+    b += t(W / 2, 400, "12:40", 150, C.text, { a: "middle", w: 700, mono: true });
+    let x = 40; SECTIONS.forEach(sec => { const w = (W - 80) * sec.min / 30; b += r(x, 470, w - 4, 16, sec.color, 8); x += w; });
+    b += t(W / 2, 560, "정리까지 2:40", 28, C.bell, { a: "middle", w: 700 });
+    document.getElementById("m-outer-back").innerHTML = b;
+  })();
+})();
+</script>
+
+</body></html>

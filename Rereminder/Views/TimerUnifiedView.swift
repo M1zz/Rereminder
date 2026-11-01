@@ -34,10 +34,26 @@ struct MultiDeviceTip: Tip {
 
 /// popoverTip은 iOS 17+ 전용이라 가용성 가드를 한 곳에 모은 모디파이어.
 /// 하위 버전에서는 아무 것도 붙이지 않는다.
-private struct PresentationModeTipAnchor: ViewModifier {
+private struct SaveTemplateTipAnchor: ViewModifier {
+    var isAllowed = true
+
     func body(content: Content) -> some View {
         if #available(iOS 17.0, *) {
-            content.popoverTip(PresentationModeTip(), arrowEdge: .top)
+            // 새로 설치한 사람은 저장하는 순간 수업이 있다(`FeatureLesson.templates`).
+            content.popoverTip(isAllowed && !BlankStart.isNewInstall ? SaveTemplateTip() : nil, arrowEdge: .bottom)
+        } else {
+            content
+        }
+    }
+}
+
+private struct PresentationModeTipAnchor: ViewModifier {
+    /// ⚠️ 수업 화면이 떠 있을 때 말풍선을 띄우면 그 위에 겹쳐 **터치를 막는다**(실제로 그랬다).
+    var isAllowed = true
+
+    func body(content: Content) -> some View {
+        if #available(iOS 17.0, *) {
+            content.popoverTip(isAllowed ? PresentationModeTip() : nil, arrowEdge: .top)
         } else {
             content
         }
@@ -45,9 +61,11 @@ private struct PresentationModeTipAnchor: ViewModifier {
 }
 
 private struct MultiDeviceTipAnchor: ViewModifier {
+    var isAllowed = true
+
     func body(content: Content) -> some View {
         if #available(iOS 17.0, *) {
-            content.popoverTip(MultiDeviceTip(), arrowEdge: .top)
+            content.popoverTip(isAllowed ? MultiDeviceTip() : nil, arrowEdge: .top)
         } else {
             content
         }
@@ -64,6 +82,18 @@ struct TimerUnifiedView: View {
     @StateObject private var appStateManager = AppStateManager()
 
     @State private var showHistory = false
+    @State private var templatesLessonPending = false
+    @State private var showIntroPractice = false
+    @State private var activeLesson: FeatureLesson?
+    /// 다 드러나기 전이나 수업 중에는 말풍선을 띄우지 않는다.
+    private var tipsAllowed: Bool { activeLesson == nil && stage >= .everything }
+    @AppStorage(BlankStart.completionsKey) private var blankStartCompletions = 0
+    @AppStorage(BlankStart.preferenceKey) private var blankStartPreference = BlankStart.Preference.automatic.rawValue
+    private var stage: BlankStart.Stage {
+        BlankStart.currentStage(completions: blankStartCompletions, preferenceRaw: blankStartPreference)
+    }
+    /// 기존 사용자에게 한 번 묻는 "너무 복잡하지 않나요?"
+    @State private var showComplexityQuestion = false
     @State private var showProPaywall = false
     @State private var paywallStage: ProGate.PaywallStage = .second
 
@@ -74,10 +104,10 @@ struct TimerUnifiedView: View {
     // 창단 후원자에게 혜택 변경을 알리는 화면 — 최초 1회.
     // ⚠️ 그랜드파더링 안내보다 **우선한다** — 같은 말을 더 자세히 하므로, 둘 다 띄우면 겹친다.
     @State private var showFounderWelcome = false
-    /// 개편 전부터 무료로 쓰던 사람에게 달라진 점 안내 (`LegacyFreeNotice`).
-    @State private var showLegacyFreeNotice = false
+    /// 무료 기간의 문턱에 닿았다는 안내 (`FreeUse`). 한 번만 뜬다.
+    @State private var showFreeUseReached = false
     /// 혜택 변경 안내 둘 중 하나가 떠 있는가 — 떠 있으면 다른 안내는 전부 양보한다.
-    private var isShowingPlanChangeNotice: Bool { showFounderWelcome || showLegacyFreeNotice }
+    private var isShowingPlanChangeNotice: Bool { showFounderWelcome || showFreeUseReached }
 
     // 가끔 먼저 물어보는 의견 요청 — 조건 판정은 FeedbackNudge가 한다
     @State private var showFeedbackNudge = false
@@ -108,7 +138,6 @@ struct TimerUnifiedView: View {
     /// 안내 시트에서 "Pro 알아보기"를 눌렀다 — 시트가 다 닫힌 뒤에 페이월을 연다(겹치면 안 뜬다).
     @State private var showRememberPaywallAfterNotice = false
     // 다음 자리 전날, 무료 사용자에게 "이게 Pro 가 매번 하는 일"이라고 알려 준다(`RememberPitch` ③).
-    @State private var eveNotice: NextOccasionReminder.Booking?
     /// 이번 실행에서 다이얼이 기본값으로 돌아간 무료 사용자의 **지난번 설정**.
     /// 사용자가 손으로 그 설정에 다시 맞추면 한 번 말을 건다(`checkReentry`). 앱이 대신 올려 준 경우는 아니다.
     @State private var reentryTarget: RepeatDetector.Config?
@@ -158,6 +187,7 @@ struct TimerUnifiedView: View {
                     if let left { warnFreeSessionsLeft(left) }
                     AnalyticsManager.log(.presentationModeStarted)
                     FeatureTips.markPresentationModeUsed()
+                    presentLessonIfDue(.session)
                 case .blocked(let stage):
                     paywallStage = stage
                     showProPaywall = true
@@ -190,6 +220,28 @@ struct TimerUnifiedView: View {
 
     var body: some View {
         mainContent
+            // 첫 실행의 그림은 **덮는다** — 시트로 띄우면 뒤의 화면이 먼저 비쳤다가 올라온다.
+            .overlay {
+                if showOnboarding {
+                    Group {
+                        if showIntroPractice {
+                            BlankStartPractice(onFinish: finishIntro)
+                                .transition(.opacity)
+                        } else {
+                            BlankStartIntro(onFinish: {
+                                withAnimation(.easeInOut(duration: 0.35)) { showIntroPractice = true }
+                            })
+                            .transition(.opacity)
+                        }
+                    }
+                        .accessibilityAddTraits(.isModal)
+                        .foldConfined()
+                        .transition(.opacity)
+                }
+            }
+            .fullScreenCover(item: $activeLesson) { lesson in
+                FeatureLessonView(lesson: lesson, onClose: { activeLesson = nil })
+            }
             .paywallGate(
                 isPresented: $showProPaywall,
                 feature: .presentationMode,
@@ -210,14 +262,14 @@ struct TimerUnifiedView: View {
             .sheet(isPresented: $showFounderWelcome) {
                 FounderWelcomeView()
             }
-            // 개편 전부터 무료로 쓰던 사람 — 얻은 것·잃은 것·그대로 남은 것을 그대로 적어 보여 준다.
-            .sheet(isPresented: $showLegacyFreeNotice, onDismiss: {
+            // 문턱에 닿은 사람 — 그대로인 것을 먼저 말한다. 닫아도 잃는 것이 없다.
+            .sheet(isPresented: $showFreeUseReached, onDismiss: {
                 guard showRememberPaywallAfterNotice else { return }
                 showRememberPaywallAfterNotice = false
                 rememberPaywallFocus = nil
                 showRememberPaywall = true
             }) {
-                LegacyFreeNoticeView(onSeePro: { showRememberPaywallAfterNotice = true })
+                FreeUseReachedView(onSeePlans: { showRememberPaywallAfterNotice = true })
             }
             // 석 달 뒤에 돌아와 주길 기대하지 않는다 — 전날 저녁에 앱이 먼저 찾아간다.
             .sheet(isPresented: $showNextOccasion) {
@@ -240,6 +292,12 @@ struct TimerUnifiedView: View {
                 Button(String(localized: "Don't Show Again")) { FeedbackNudge.snooze() }
             } message: {
                 Text(String(localized: "Tell us what you need or what felt off — the developer reads every message."))
+            }
+            .alert(String(localized: "Does this feel too complicated?"), isPresented: $showComplexityQuestion) {
+                Button(String(localized: "Make it simpler")) { answerComplexityQuestion(simpler: true) }
+                Button(String(localized: "It's fine as it is"), role: .cancel) { answerComplexityQuestion(simpler: false) }
+            } message: {
+                Text(String(localized: "Nothing has been removed. You can keep only the essentials on the main screen and bring the rest back anytime in Settings."))
             }
             .sheet(isPresented: $showFeedbackSheet) {
                 FeedbackView()
@@ -295,24 +353,6 @@ struct TimerUnifiedView: View {
                 }
             }
             // 예약해 둔 자리의 전날 — 설정은 이미 다이얼에 올렸고, 무료 사용자에게만 그 뜻을 말해 준다.
-            .alert(String(localized: "Tomorrow's setup is ready"),
-                   isPresented: eveNoticeBinding,
-                   presenting: eveNotice) { _ in
-                Button(String(localized: "See Pro")) {
-                    AnalyticsManager.log(.rememberPitchTapped(kind: "eve"))
-                    ProMention.markTapped()
-                    // 예약은 세션 모드로 완주한 사람만 한다 — 기억($2.99)보다 Pro 가 맞는 사람이다.
-                    rememberPaywallFocus = .session
-                    showRememberPaywall = true
-                }
-                Button(String(localized: "OK"), role: .cancel) {}
-            } message: { booking in
-                if ProMention.usesSessionCopy {
-                    Text(String(localized: "Your \(TimeMapper.clockText(booking.mainSec)) setup with \(booking.offsets.count) alerts is back on the dial. Pro saves setups like this with your section names and scripts."))
-                } else {
-                    Text(String(localized: "Your \(TimeMapper.clockText(booking.mainSec)) setup with \(booking.offsets.count) alerts is back on the dial. This is what Pro does every time you open the app."))
-                }
-            }
             // 저장 제안이 "이 설정을 기억해 둘까"라면, 이건 "지금 이걸 하려던 참 아닌가"다.
             .alert(String(localized: "Same time as usual"),
                    isPresented: timeSuggestionBinding,
@@ -374,7 +414,7 @@ struct TimerUnifiedView: View {
     private var dialScreen: some View {
         NavigationStack {
             // 두 모드 모두 다이얼 화면 사용 — 발표 모드는 구간 링·구간 편집 모달이 추가됨
-            TimerMainView()
+            TimerMainView(holdsDialFill: isShowingLaunchNotice)
                 .padding()
                 .toolbar { bottomToolbar }
                 // 타이머 화면 어디를 탭해도 키보드 내림 (버튼·드래그 등 기존 조작은 그대로)
@@ -387,15 +427,14 @@ struct TimerUnifiedView: View {
         }
         .environmentObject(screenVM)
         .environmentObject(appStateManager)
-        // 온보딩은 **여기서** 띄운다 — 고른 상황을 다이얼에 올리고 템플릿까지 저장하므로
-        // `screenVM` 이 있는 자리여야 한다(예전엔 ContentView 에 있어서 손이 닿지 않았다).
-        .fullScreenCover(isPresented: $showOnboarding) {
-            OnboardingFlowView(isPresented: $showOnboarding)
-                .environmentObject(screenVM)
-                .foldConfined()
-        }
-        .sheet(isPresented: $showHistory) {
-            TimerTemplateView { selected in
+        .sheet(isPresented: $showHistory, onDismiss: {
+            // 시트가 떠 있는 동안에는 수업을 띄울 수 없다. 닫힌 뒤에 띄운다.
+            if templatesLessonPending {
+                templatesLessonPending = false
+                presentLessonIfDue(.templates)
+            }
+        }) {
+            TimerTemplateView(screenVM: screenVM) { selected in
                 screenVM.apply(template: selected)
             }
             .presentationDetents([.medium, .large])
@@ -406,33 +445,42 @@ struct TimerUnifiedView: View {
     @ToolbarContentBuilder
     private var bottomToolbar: some ToolbarContent {
         ToolbarItemGroup(placement: .bottomBar) {
-            // ⚠️ Picker("", …)는 빈 문자열을 문자열 카탈로그에 추출시켜 다국어 검사를 막는다.
-            //    라벨은 제대로 주고 화면에서만 숨긴다.
-            Picker(selection: modeBinding) {
-                Image(systemName: "timer")
-                    .accessibilityLabel(String(localized: "Timer"))
-                    .tag(AppMode.timer)
-                Image(systemName: "rectangle.inset.filled.and.person.filled")
-                    .accessibilityLabel(String(localized: "Session Mode"))
-                    .tag(AppMode.presentation)
-            } label: {
-                Text(String(localized: "Mode"))
+            // 백지로 시작한 사람에게는 단계마다 하나씩 열린다(`BlankStart`).
+            // ⚠️ 세션 모드에 들어가 있으면 단계와 상관없이 둔다. 없으면 나올 길이 없다.
+            if stage >= .session || screenVM.currentMode == .presentation {
+                // ⚠️ Picker("", …)는 빈 문자열을 문자열 카탈로그에 추출시켜 다국어 검사를 막는다.
+                //    라벨은 제대로 주고 화면에서만 숨긴다.
+                Picker(selection: modeBinding) {
+                    Text(String(localized: "Timer"))
+                        .tag(AppMode.timer)
+                    // 짧게 쓴다. 길면 막대가 넘쳐 설정 버튼이 `…` 메뉴로 숨는다(독일어에서 실제로 그랬다).
+                    Text(String(localized: "Session"))
+                        .accessibilityLabel(String(localized: "Session Mode"))
+                        .tag(AppMode.presentation)
+                } label: {
+                    Text(String(localized: "Mode"))
+                }
+                .pickerStyle(.segmented)
+                .labelsHidden()
+                // 폭을 묶는다. 글자에 맞추면 긴 언어에서 막대가 넘쳐 설정 버튼이 `…` 메뉴로 숨는다.
+                .frame(width: 172)
+                // 타이머를 두 번 이상 완주한 뒤, 발표 모드를 아직 안 써 봤을 때만 알려준다
+                .modifier(PresentationModeTipAnchor(isAllowed: tipsAllowed))
             }
-            .pickerStyle(.segmented)
-            .labelsHidden()
-            .fixedSize()
-            // 타이머를 두 번 이상 완주한 뒤, 발표 모드를 아직 안 써 봤을 때만 알려준다
-            .modifier(PresentationModeTipAnchor())
 
             Spacer()
 
-            Button {
-                showHistory = true
-            } label: {
-                Image(systemName: "list.bullet")
+            if stage >= .saving {
+                Button {
+                    showHistory = true
+                } label: {
+                    Image(systemName: "bookmark")
+                }
+                .accessibilityLabel(String(localized: "Saved timers"))
+                .accessibilityInputLabels([Text("Saved timers"), Text("Templates")])
+                // 같은 설정을 여러 번 맞춰 본 뒤에야 뜬다 (타이머 3회 시작 + 저장 이력 없음)
+                .modifier(SaveTemplateTipAnchor(isAllowed: tipsAllowed))
             }
-            .accessibilityLabel(String(localized: "Saved timers"))
-            .accessibilityInputLabels([Text("Saved timers"), Text("Templates")])
 
             NavigationLink {
                 NoticeSettingView()
@@ -440,7 +488,7 @@ struct TimerUnifiedView: View {
                     .environmentObject(screenVM)
             } label: {
                 Image(systemName: "gearshape")
-                    .modifier(MultiDeviceTipAnchor())
+                    .modifier(MultiDeviceTipAnchor(isAllowed: tipsAllowed))
             }
             .accessibilityLabel(String(localized: "Settings"))
             .accessibilityInputLabels([Text("Settings")])
@@ -498,11 +546,10 @@ struct TimerUnifiedView: View {
         // ⚠️ 이 판정과 창 닫기는 `seedTemplatesIfNeeded` 보다 **앞에** 있어야 한다. 시드가 먼저 심기면
         //    새로 설치한 사람의 시드가 "창보다 먼저 만든 템플릿"이 되어 신규 사용자 전원이 이 안내를 본다.
         LegacyFreeNotice.refresh(context: context, windowJustClosed: windowWasOpen)
-        if !showFounderWelcome,
-           LegacyFreeNotice.shouldAnnounce(isPro: StoreManager.canRememberSetup, isFounder: FoundingSupporter.isFounder) {
-            showLegacyFreeNotice = true
-            AnalyticsManager.log(.rememberPitchShown(kind: "legacy"))
-            ProMention.markMentioned(.legacy)
+        if !showFounderWelcome, FreeUse.shouldAnnounce(isPaid: StoreManager.canRememberSetup) {
+            FreeUse.markAnnounced()
+            showFreeUseReached = true
+            AnalyticsManager.log(.rememberPitchShown(kind: "freeUse"))
         }
 
         // 새로 생긴 것 — 혜택 변경 안내가 뜨는 차례면 양보하고 다음 실행에 온다(그건 그날이 아니면 뜻이 준다).
@@ -533,6 +580,7 @@ struct TimerUnifiedView: View {
         screenVM.seedTemplatesIfNeeded()
         screenVM.timerVM.showToast = { toast.show(Toast($0)) }
         screenVM.showToast = { toast.show(Toast($0)) }
+        screenVM.onTemplateSaved = { templatesLessonPending = true }
         screenVM.timerVM.appStateManager = appStateManager
         // ⚠️ 콜드 런치에서는 scenePhase onChange 가 오지 않아 권한 상태가 `.notDetermined` 로
         //    남는다 — 그러면 시작 전 알림 권한 경고가 영영 뜨지 않는다. 여기서도 읽어 둔다.
@@ -561,6 +609,62 @@ struct TimerUnifiedView: View {
         }
         armReentryWatch()
         finishSetupOnAppear()
+    }
+
+    /// 첫 실행을 끝냈다. 해 보기에서 고른 자리를 진짜 다이얼에 올리고, 알림 권한은 여기서 묻는다.
+    private func finishIntro(alert: Int?) {
+        if let alert {
+            screenVM.selectedOffsets = [alert]
+            screenVM.initialConfiguration()
+            AnalyticsManager.log(.onboardingCompleted)
+        } else {
+            AnalyticsManager.log(.onboardingSkipped(page: 0))
+        }
+        UserDefaults.standard.set(true, forKey: "hasSeenOnboarding")
+        withAnimation(.easeOut(duration: 0.35)) { showOnboarding = false }
+        ContentView.requestNotificationPermission()
+    }
+
+    /// 그 기능을 처음 쓰는 순간의 그림 수업. **새로 설치한 사람에게만** 한 번 뜬다.
+    /// ⚠️ 다른 안내가 뜨는 차례면 양보한다. 겹치면 둘 다 안 읽힌다.
+    private func presentLessonIfDue(_ lesson: FeatureLesson) {
+        guard BlankStart.isNewInstall, !lesson.isLearned, activeLesson == nil,
+              !isShowingLaunchNotice else { return }
+        lesson.markLearned()
+        activeLesson = lesson
+    }
+
+    /// 앱을 열 때 뜨는 안내가 떠 있는가. 다이얼의 그림과 다음 안내는 이것이 닫히길 기다린다.
+    private var isShowingLaunchNotice: Bool {
+        showOnboarding || showWhatsNew || showFeedbackNudge || showGrandfatherThanks || isShowingPlanChangeNotice
+            || repeatProposal != nil || timeSuggestion != nil
+    }
+
+    /// 끝난 타이머를 닫고 돌아온 순간 하나만 건넨다. 도는 중에는 끼어들지 않는다.
+    private func offerNextStepAfterRun() {
+        let completions = BlankStart.completions
+        if BlankStart.isNewInstall {
+            let learned = Set(FeatureLesson.allCases.filter(\.isLearned))
+            if let lesson = BlankStart.dueLesson(completions: completions, learned: learned) {
+                presentLessonIfDue(lesson)
+            } else if completions == 3, stage == .session {
+                // 세션 모드는 필요한 사람만 쓴다. 온 화면 수업 대신 생긴 자리만 알린다.
+                toast.show(Toast(String(localized: "Session Mode is now in the bottom bar"), duration: 3.0))
+            }
+            return
+        }
+        guard BlankStart.shouldAskComplexity, activeLesson == nil, !isShowingLaunchNotice, !showNextOccasion,
+              !screenVM.showTimerAlert, deviceQuestion == nil else { return }
+        BlankStart.markComplexityAsked()
+        showComplexityQuestion = true
+    }
+
+    private func answerComplexityQuestion(simpler: Bool) {
+        AnalyticsManager.log(.complexityAnswered(simpler: simpler))
+        guard simpler else { return }
+        withAnimation(.easeInOut(duration: 0.3)) {
+            blankStartPreference = BlankStart.Preference.simple.rawValue
+        }
     }
 
     /// 업데이트한 사람에게 "새로 생긴 것"을 한 번 보여 준다. 판정은 `WhatsNewAudience` 한 곳.
@@ -639,6 +743,17 @@ struct TimerUnifiedView: View {
 
         // 막 시작한 순간에만 — 일시정지에서 돌아올 때마다 물으면 잔소리가 된다.
         if newState == .running, oldState != .paused { askOrRemindAboutDevices() }
+
+        // 무료 기간은 끝까지 마친 날로 센다(`FreeUse`). 끝난 뒤 시간을 넘기는 중이면 상태는 overtime 이다.
+        if newState == .finished || newState == .overtime, oldState != .finished, oldState != .overtime {
+            FreeUse.recordCompletion(isSession: screenVM.currentMode == .presentation)
+            BlankStart.recordCompletion()
+        }
+
+        // 끝난 타이머를 닫고 돌아온 순간이 다음 것을 배울 때다.
+        if newState == .idle, oldState == .overtime || oldState == .finished {
+            offerNextStepAfterRun()
+        }
 
         // 끝까지 마친 순간에만 — 도중에 멈춘 사람에게 "다음 자리"를 묻는 건 눈치가 없다.
         if newState == .finished, oldState != .finished { offerNextOccasionIfDue() }
@@ -720,7 +835,8 @@ struct TimerUnifiedView: View {
         guard isIdle, !showOnboarding else { return false }
         guard !showFeedbackNudge, !showGrandfatherThanks, !isShowingPlanChangeNotice, deviceQuestion == nil else { return false }
 
-        let canSave = canRememberSetup
+        let canSave = canRememberSetup || ProGate.canSaveTemplate(
+            currentCount: savedTemplates.filter { !Timer.seedTemplateNames.contains($0.name) }.count)
         if !canSave, !LeeoRemoteFlags.isEnabled(RereminderFlag.rememberPitchEnabled) { return false }
         // 무료에게 이 제안은 Pro 권유다 — 설치당 예산 안에서만(`ProMention`).
         if !canSave, !ProMention.canMention(.repeatSetup, isPro: false) { return false }
@@ -806,7 +922,7 @@ struct TimerUnifiedView: View {
             reentryTarget = nil
 
             guard isIdle, !canRememberSetup, !isShowingPlanChangeNotice,
-                  repeatProposal == nil, timeSuggestion == nil, eveNotice == nil,
+                  repeatProposal == nil, timeSuggestion == nil,
                   LeeoRemoteFlags.isEnabled(RereminderFlag.rememberPitchEnabled),
                   ProMention.canMention(.reentry, isPro: false) else { return }
 
@@ -817,11 +933,6 @@ struct TimerUnifiedView: View {
             AnalyticsManager.log(.rememberPitchShown(kind: "reentry"))
             ProMention.markMentioned(.reentry)
         }
-    }
-
-    private var eveNoticeBinding: Binding<Bool> {
-        Binding(get: { eveNotice != nil },
-                set: { if !$0 { eveNotice = nil } })
     }
 
     /// 예약해 둔 자리의 **전날 저녁부터 그날까지** 앱을 열면, 그때 쓰던 설정을 다이얼에 올린다.
@@ -842,16 +953,8 @@ struct TimerUnifiedView: View {
             screenVM.applyRepeatConfig(mainSec: booking.mainSec, offsets: booking.offsets, toast: false)
         }
 
-        // 혜택 변경 안내가 떠 있으면 알림창은 그 시트에 가려 뜨지 못한다 — 토스트로 알린다.
-        // 설정을 올려 주는 건 약속이라 늘 하고, "이게 Pro 가 하는 일" 이라는 말만 예산 안에서 한다.
-        if canRememberSetup || !LeeoRemoteFlags.isEnabled(RereminderFlag.rememberPitchEnabled)
-            || isShowingPlanChangeNotice || !ProMention.canMention(.eve, isPro: false) {
-            toast.show(Toast(String(localized: "Tomorrow's setup is back on the dial"), duration: 3.0))
-        } else {
-            eveNotice = booking
-            AnalyticsManager.log(.rememberPitchShown(kind: "eve"))
-            ProMention.markMentioned(.eve)
-        }
+        // 설정을 올려 주는 건 약속이다. 마지막 설정 복원이 무료가 됐으니 "이게 Pro 가 하는 일"이라고 말하지 않는다.
+        toast.show(Toast(String(localized: "Tomorrow's setup is back on the dial"), duration: 3.0))
         return true
     }
 
@@ -870,7 +973,8 @@ struct TimerUnifiedView: View {
     /// 둘 중 하나만 한다(같은 실행에서 질문과 안내가 겹치면 시끄럽다).
     private func askOrRemindAboutDevices() {
         // 혜택 변경 안내가 떠 있으면 양보한다 — 그 화면 뒤에서 질문이 쌓이면 둘 다 안 읽힌다.
-        guard !isShowingPlanChangeNotice else { return }
+        // 처음 한 번을 끝까지 마치기 전에는 묻지 않는다 — 지금은 타이머 하나만 볼 때다.
+        guard !isShowingPlanChangeNotice, stage >= .everything else { return }
         #if DEBUG
         if ScreenshotScene.isActive { return }
         #endif

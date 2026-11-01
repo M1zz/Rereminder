@@ -1,5 +1,6 @@
 Rereminder 2.3.5
 
+Coba semua fitur dulu, lalu putuskan.
 Kini ada tiga paket: Gratis, Ingat, Pro.
 Pilih tahunan atau seumur hidup.
 Pelanggan bisa beralih ke seumur hidup.

@@ -56,6 +56,9 @@ struct DialDragTracker {
         return Self.clamped(fingerAngle + grabDelta, maxAngle: maxAngle)
     }
 
+    /// 자르기 전 각도 — 손가락이 허용 범위를 얼마나 넘었는지 볼 때 쓴다.
+    var rawAngle: Double { fingerAngle + grabDelta }
+
     /// 손을 뗐을 때.
     mutating func end() {
         isActive = false
@@ -65,6 +68,16 @@ struct DialDragTracker {
     static func clamped(_ angle: Double, maxAngle: Double) -> Double {
         max(0, min(angle, max(0, maxAngle)))
     }
+
+    /// 종이 한계까지 왔는데 손가락이 시계 방향으로 더 간다 + 흰 핸들이 종의 잡는 자리 안에 겹쳐 있다
+    /// → 사람이 잡으려던 것은 핸들이다. 짧은 타이머(30초 + 20초 알림)는 둘이 3° 안에 붙어 있어,
+    /// 위에 있는 종이 터치를 다 가져가면 시간을 늘릴 길이 없다.
+    static func shouldHandOffToDial(rawAngle: Double, maxAlertAngle: Double,
+                                    bellAngle: Double, dialAngle: Double, grabSpanDegrees: Double) -> Bool {
+        abs(dialAngle - bellAngle) < grabSpanDegrees && rawAngle > maxAlertAngle + handOffSlopDegrees
+    }
+
+    private static let handOffSlopDegrees: Double = 1.5
 
     /// 종 노브가 갈 수 있는 최대 각도 — 알림은 총 시간보다 **10초 앞**이어야 의미가 있다.
     /// 메인 앱과 클립이 같은 여유를 쓰도록 여기 둔다.

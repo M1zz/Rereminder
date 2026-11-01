@@ -21,18 +21,24 @@ struct ContentView: View {
                 // 스크린샷 장면에서는 권한 창이 화면을 가린다.
                 if ScreenshotScene.isActive { return }
                 #endif
-                // Sound/Vibration 알림 Request Permission
-                UNUserNotificationCenter.current().requestAuthorization(
-                    options: [.alert, .sound, .badge]) { _, error in
-                        if let error = error {
-                            RereminderApp.log.error("알림 권한 요청 오류: \(String(describing: error), privacy: .public)")
-                        }
-                    }
+                // 첫 실행의 그림 위에 시스템 창을 띄우지 않는다 — 그림이 끝난 뒤에 묻는다(`TimerUnifiedView`).
+                if !UserDefaults.standard.bool(forKey: "hasSeenOnboarding") { return }
+                Self.requestNotificationPermission()
             }
             #if targetEnvironment(macCatalyst)
             // macOS: 큰 화면에 맞춰 글자를 한 단계 키운다
             .environment(\.dynamicTypeSize, .xLarge)
             #endif
+    }
+
+    /// Sound/Vibration 알림 Request Permission
+    static func requestNotificationPermission() {
+        UNUserNotificationCenter.current().requestAuthorization(
+            options: [.alert, .sound, .badge]) { _, error in
+                if let error = error {
+                    RereminderApp.log.error("알림 권한 요청 오류: \(String(describing: error), privacy: .public)")
+                }
+            }
     }
 
     /// Mac(Catalyst)에서 타이머 앱에 어울리는 창 크기로 제약한다.

@@ -2,12 +2,11 @@
 //  AlertPresetButtons.swift
 //  Rereminder
 //
-//  종료 전 알림 시점을 켜고 끄는 토글 버튼 행
+//  알림 프리셋 저장과 알림 문구, `+` 가 켤 다음 시간(`AlertPresets`).
 //  프리셋(기본 1·3·5분)은 설정에서 사용자가 변경 가능
 //
 
-import SwiftUI
-import TipKit
+import Foundation
 
 /// 미리 알림 프리셋 저장 (UserDefaults, "60,180,300" 형태)
 enum AlertPresets {
@@ -23,202 +22,46 @@ enum AlertPresets {
         Array(Set(list.filter { $0 > 0 })).sorted().map(String.init).joined(separator: ",")
     }
 
-    /// 칩 줄에 늘어놓을 순서 — **켜져 있는 알림이 먼저, 그 뒤에 나머지**(각 묶음 안에서는 시간순).
-    ///
-    /// 예: 프리셋 1:00·3:00 에 1:30 을 켜 두면 → `[90, 60, 180]` (1:30, 1:00, 3:00)
-    ///
-    /// 지금 무엇이 걸려 있는지가 이 줄에서 가장 중요한 정보인데, 시간순으로만 늘어놓으면
-    /// 프리셋이 늘어날수록 켜 둔 칩이 오른쪽으로 밀려 스크롤해야 보인다.
-    static func displayOrder(presets: [Int], selected: Set<Int>) -> [Int] {
-        let all = Set(presets).union(selected)
-        return all.filter { selected.contains($0) }.sorted() + all.subtracting(selected).sorted()
-    }
-}
-
-/// 프리셋을 설정에서 바꿀 수 있다는 안내 팁
-@available(iOS 17.0, *)
-struct AlertPresetTip: Tip {
-    var title: Text {
-        Text("Customize alert presets")
-    }
-    var message: Text? {
-        Text("You can set your own alert times in Settings.")
-    }
-    var image: Image? {
-        Image(systemName: "bell.fill")
-    }
-}
-
-struct AlertPresetButtons: View {
-    @ObservedObject var screenVM: TimerScreenViewModel
-
-    @AppStorage(AlertPresets.storageKey) private var presetsRaw = AlertPresets.defaultRaw
-    /// 색 없이 구분하기 — 켜진 칩은 주황, 꺼진 칩은 회색으로만 갈린다. 색을 구분하기 어려운 사람에게는
-    /// 켜진 칩 앞에 체크를 붙여 **모양으로도** 갈리게 한다.
-    @Environment(\.accessibilityDifferentiateWithoutColor) private var differentiateWithoutColor
-    @Environment(\.colorSchemeContrast) private var colorSchemeContrast
-    @Environment(\.colorScheme) private var colorScheme
-
-    /// 칩 글자색. 밝은 화면의 주황 글자는 대비가 낮아(약 2:1), 대비 증가를 켰으면 짙은 주황으로 바꾼다.
-    private var chipTint: Color {
-        colorSchemeContrast == .increased && colorScheme == .light
-            ? Color(red: 0.72, green: 0.33, blue: 0)
-            : DSColor.marker
+    /// 문장 안에서 칠할 시간 부분. "5분 전"의 "5분", "17:40 전"의 "17:40".
+    static func timePart(_ sec: Int) -> String {
+        if sec < 60 { return String(localized: "\(sec) sec") }
+        if sec % 60 == 0 { return String(localized: "\(sec / 60) min") }
+        return TimeMapper.mmss(sec)
     }
 
-    /// 프리셋 + 현재 선택된 시점 — 켜진 알림이 앞, 나머지가 뒤(규칙은 `AlertPresets.displayOrder`).
-    private var displayOffsets: [Int] {
-        AlertPresets.displayOrder(presets: AlertPresets.decode(presetsRaw),
-                                  selected: screenVM.selectedOffsets)
+    /// 종의 색 — 그 종이 끝내는 구간의 색. 먼저 울리는 종이 첫 구간(링과 같은 번호)이다.
+    /// 링 조각·종·문장의 시간이 같은 색이라 어느 종이 어느 시간인지 읽힌다.
+    static func bellSectionIndex(of seconds: Int, among offsets: Set<Int>) -> Int {
+        offsets.sorted(by: >).firstIndex(of: seconds) ?? 0
     }
 
-    var body: some View {
-        VStack(alignment: .leading, spacing: DSSpacing.xs) {
-            // 팝오버는 첫 탭을 "닫기"로 소비해 + 버튼 첫 클릭을 막으므로 인라인 팁 사용
-            presetTipView
-
-            ScrollViewReader { proxy in
-                chipRow(proxy: proxy)
-            }
-        }
+    static func label(_ sec: Int) -> String {
+        if sec < 60 { return String(localized: "\(sec) sec before") }
+        if sec % 60 == 0 { return String(localized: "\(sec / 60) min before") }
+        return String(localized: "\(TimeMapper.mmss(sec)) before")
     }
 
-    @ViewBuilder
-    private var presetTipView: some View {
-        if #available(iOS 17.0, *) {
-            TipView(AlertPresetTip())
-                .padding(.horizontal, DSSpacing.md)
-                // ⚠️ 팁은 **상한을 둔다.** 접근성 최대 크기에서 이 카드 하나가 화면의 1/3(약 380pt)을
-                //    먹어서, 원 아래 기기 칩이 탭 바 뒤로 밀려 겹쳤다. 팁은 지나가는 힌트이고
-                //    닫을 수도 있다 — 주인공(원 안의 시간)이 밀려나면 안 된다.
-                //    가운데 시간도 같은 방식으로 상한을 둔다(TimerMainView.centerTimeDisplay).
-                .dynamicTypeSize(...DynamicTypeSize.xxLarge)
-        }
-    }
+    /// 제안 시점의 재료 — 사람이 말하는 시간만 쓴다
+    private static let friendlySeconds = [5, 10, 15, 20, 30, 45, 60, 120, 180, 300, 600, 900, 1200, 1800, 2700, 3600, 5400]
 
-    private func chipRow(proxy: ScrollViewProxy) -> some View {
-            HStack(spacing: DSSpacing.sm) {
-                // 텍스트 설명 대신 심볼 — 링 위 알림 마커와 같은 색
-                Image(systemName: "bell.fill")
-                    // 상한을 둔다 — 이 줄이 부풀면 아래 링 위로 올라탄다(큰 글씨에서 실제로 겹쳤다)
-                    .dsScaledFont(22, weight: .semibold, relativeTo: .title2, maxSize: 30)
-                    .foregroundStyle(DSColor.marker)
-                    .accessibilityHidden(true)
+    /// `+` 를 누를 때 켤 다음 알림. 설정에서 바꾼 프리셋이 먼저, 그다음 이 길이에서 쓸모 있는 순서다.
+    /// 예: 30분 → 5분 전 → 1분 전 → 10분 전 → 3분 전. 다 켜졌으면 시작과 첫 알림의 중간(개수 한도는 없다).
+    static func nextAlert(totalSeconds: Int, presetsRaw: String, selected: Set<Int>) -> Int? {
+        guard totalSeconds > 0 else { return nil }
+        let custom = presetsRaw == defaultRaw ? [] : decode(presetsRaw).filter { $0 < totalSeconds }
+        let ranked = [6.0, 30, 3, 10, 2, 1.5].compactMap { friendly(near: Double(totalSeconds) / $0, below: totalSeconds) }
+        if let next = (custom + ranked).first(where: { !selected.contains($0) }) { return next }
 
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: DSSpacing.sm) {
-                        ForEach(displayOffsets, id: \.self) { offset in
-                            let selected = screenVM.selectedOffsets.contains(offset)
-                            Button {
-                                if selected {
-                                    withAnimation(.easeInOut(duration: 0.25)) {
-                                        _ = screenVM.selectedOffsets.remove(offset)
-                                    }
-                                } else {
-                                    insert(offset)
-                                }
-                            } label: {
-                                // 2.2.2 에서 알림 개수 잠금(자물쇠)이 사라졌다 —
-                                // 파는 축이 "알림 개수"에서 "세션 운영"으로 옮겨졌기 때문.
-                                // 글자 상한은 유지한다(큰 글씨에서 이 줄이 링 위로 올라탔다).
-                                HStack(spacing: 4) {
-                                    if selected && differentiateWithoutColor {
-                                        Image(systemName: "checkmark")
-                                            .font(.caption.weight(.bold))
-                                            .accessibilityHidden(true)
-                                    }
-                                    Text(offsetLabel(offset))
-                                        .dsScaledFont(16, weight: .medium,
-                                                      relativeTo: .callout, maxSize: 24)
-                                        .lineLimit(1)
-                                }
-                                    .padding(.horizontal, DSSpacing.xs)
-                                    .frame(minWidth: 48, minHeight: 34)
-                            }
-                            .buttonStyle(.bordered)
-                            .controlSize(.small)
-                            // 링 위의 알림 마커(주황)와 같은 색으로 선택 상태 표시
-                            .tint(selected ? chipTint : .gray)
-                            // 분으로 나누어 떨어지지 않는 지점(1:30 등)도 정확히 읽는다.
-                            .accessibilityLabel(String(localized: "Alert \(TimeMapper.durationText(offset)) before end"))
-                            // 음성 제어: 화면에 보이는 "1:00" 그대로 불러도 눌린다.
-                            .accessibilityInputLabels([Text(verbatim: offsetLabel(offset))])
-                            .accessibilityHint(String(localized: "Double tap to toggle this alert."))
-                            .accessibilityAddTraits(selected ? [.isSelected] : [])
-                            // 커스텀 칩이 꺼질 때 축소+페이드로 사라지도록
-                            .transition(.scale.combined(with: .opacity))
-                            .id(offset)
-                        }
-                    }
-                    .animation(.easeInOut(duration: 0.25), value: displayOffsets)
-                }
-                // 알림이 새로 켜지면 그 칩이 보이도록 스크롤한다.
-                // + 버튼뿐 아니라 링에서 종을 끌어 만든 알림·템플릿 적용까지 전부 여기서 처리한다.
-                // ⚠️ 켜진 칩은 항상 맨 앞 묶음으로 가므로 **왼쪽 끝**을 보여준다. 목록(displayOffsets)이
-                //    아니라 선택 자체를 봐야 이미 있던 프리셋을 켠 경우(목록은 그대로, 자리만 앞으로
-                //    이동)에도 따라간다.
-                // 실제로 칩이 레이아웃된 다음 프레임에 스크롤해야 "아직 없는 id로 scrollTo"가
-                // 무시되는 타이밍 레이스를 피할 수 있다.
-                .onChange(of: screenVM.selectedOffsets) { previous, current in
-                    // 여러 개가 한꺼번에 켜지면(템플릿 적용 등) 가장 왼쪽 것을 기준으로 삼는다
-                    guard let target = current.subtracting(previous).min() else { return }
-                    DispatchQueue.main.async {
-                        withAnimation(.easeInOut(duration: 0.35)) {
-                            proxy.scrollTo(target, anchor: .leading)
-                        }
-                    }
-                }
-
-                // 스크롤과 무관하게 항상 트레일링에 고정
-                Button {
-                    addMidpointAlert()
-                } label: {
-                    Image(systemName: "plus")
-                        .font(DSFont.callout.weight(.semibold))
-                        .frame(minWidth: 34, minHeight: 34)
-                }
-                .buttonStyle(.bordered)
-                .controlSize(.small)
-                // 회색은 이 줄에서 "꺼진 프리셋"의 색이다 — 누를 수 있는 버튼까지 회색이면
-                // 비활성처럼 보인다. 실제로 하는 일(알림 추가)과 같은 색을 쓴다.
-                .tint(chipTint)
-                .accessibilityLabel(String(localized: "Add alert time"))
-                .accessibilityInputLabels([Text("Add alert time"), Text("Add alert")])
-                .accessibilityHint(String(localized: "Adds an alert halfway between the last alert and the end."))
-            }
-            .padding(.horizontal, DSSpacing.md)
-            .frame(maxWidth: .infinity, alignment: .leading)
-    }
-
-    /// 타이머 시작과 가장 먼저 울리는 알림 사이의 중간 지점에 알림 추가
-    /// → 새 알림이 항상 가장 먼저 울리는 알림이 된다
-    /// 예: 10분 타이머에 5분 전 알림만 있으면 → 7:30 전(경과 2:30 시점) 추가
-    /// 알림이 없으면 타이머 전체의 중간 지점에 추가
-    /// (추가된 칩으로의 스크롤은 `displayOffsets` 변화를 보고 알아서 따라간다)
-    private func addMidpointAlert() {
-        let mainSec = screenVM.mainMinutes * 60 + screenVM.mainSeconds
-        guard mainSec > 0 else { return }
-
-        let firstOffset = screenVM.selectedOffsets
-            .filter { $0 < mainSec }
-            .max()
-        let rawOffset = firstOffset.map { (mainSec + $0) / 2 } ?? mainSec / 2
+        let first = selected.filter { $0 < totalSeconds }.max()
+        let raw = first.map { (totalSeconds + $0) / 2 } ?? totalSeconds / 2
         // 5초 단위로 반올림, 최소 5초
-        let newOffset = max(5, Int((Double(rawOffset) / 5.0).rounded()) * 5)
-
-        guard newOffset < mainSec,
-              !screenVM.selectedOffsets.contains(newOffset) else { return }
-
-        insert(newOffset)
+        let midpoint = max(5, Int((Double(raw) / 5.0).rounded()) * 5)
+        return midpoint < totalSeconds && !selected.contains(midpoint) ? midpoint : nil
     }
 
-    /// 알림을 하나 켠다. **개수 한도는 없다** — 게이트를 다시 끼워 넣지 말 것(`ProGate` 머리말).
-    private func insert(_ offset: Int) {
-        withAnimation(.easeInOut(duration: 0.25)) {
-            _ = screenVM.selectedOffsets.insert(offset)
-        }
+    private static func friendly(near target: Double, below total: Int) -> Int? {
+        friendlySeconds
+            .filter { $0 < total }
+            .min { abs(log(Double($0) / target)) < abs(log(Double($1) / target)) }
     }
-
-    /// 항상 "M:SS" 표기 (예: 1:00, 2:30)
-    private func offsetLabel(_ sec: Int) -> String { TimeMapper.mmss(sec) }
 }
