@@ -321,6 +321,12 @@ struct NoticeSettingView: View {
                     Label("How to Use This App", systemImage: "book.fill")
                 }
 
+                NavigationLink {
+                    TroubleshootingView { showFeedback = true }
+                } label: {
+                    Label("Having a problem?", systemImage: "wrench.and.screwdriver.fill")
+                }
+
                 Button {
                     showFeedback = true
                 } label: {

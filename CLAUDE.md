@@ -1171,6 +1171,8 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 `NoticeSettingView`: 요금제 → 알림 → 화면 모드 → 기록·기기 → 도움 → 버전. 나머지는 한 겹 안쪽 `alertsPage`(알림 설정)·`devicesPage`(내 기기)·`morePage`(더 보기).
 ⚠️ 의견 보내기는 첫 화면에 둔다. 코드 사용·잃어버린 Pro·빠른 테스트는 더 보기에 있다. 경로를 바꾸면 지원 페이지의 메뉴 경로도 고칠 것.
 
+`TroubleshootingView`(설정 ▸ 도움말 ▸ 문제가 있나요?): 증상을 고르면 해 볼 일이 나온다. 안내가 실제 동작과 어긋나지 않게 고칠 때 함께 볼 것.
+
 ### 저장된 이름은 그대로 내보내지 않는다
 `Timer.displayName(stored:)`: 앱이 만든 이름("Main 10 min / Pre-alert …", 옛 "메인 10분 / 예비 …")은 값이 달라도 알아보고 실제 값을 지금 언어로 쓴다(`TimerDisplayNameTests`).
 ⚠️ 토스트에 `showToast?("Start")` 처럼 리터럴을 넘기지 말 것 — `String` 은 번역되지 않는다. `String(localized:)` 로.

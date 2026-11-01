@@ -6846,6 +6846,154 @@
         }
       }
     },
+    "A timer started on iPhone reaches your wrist only while iPhone is locked. Press the side button after starting, or start the timer on your Apple Watch." : {
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A timer started on iPhone reaches your wrist only while iPhone is locked. Press the side button after starting, or start the timer on your Apple Watch."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone에서 건 타이머는 iPhone이 잠겨 있을 때만 손목으로 넘어옵니다. 시작한 뒤 측면 버튼을 누르거나 Apple Watch에서 타이머를 거세요."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhoneで開始したタイマーは、iPhoneがロックされているときだけ手首に届きます。開始後にサイドボタンを押すか、Apple Watchでタイマーを開始してください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 iPhone 上启动的计时器，只有 iPhone 锁定时才会转到手腕。请在启动后按侧边按钮，或在 Apple Watch 上启动计时器。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 iPhone 上啟動的計時器，只有 iPhone 鎖定時才會轉到手腕。請在啟動後按側邊按鈕，或在 Apple Watch 上啟動計時器。"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein Timer vom iPhone erreicht dein Handgelenk nur, solange das iPhone gesperrt ist. Drücke nach dem Start die Seitentaste oder starte den Timer auf deiner Apple Watch."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un minuteur lancé sur l’iPhone n’arrive au poignet que lorsque l’iPhone est verrouillé. Appuyez sur le bouton latéral après le lancement, ou lancez le minuteur sur votre Apple Watch."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un temporizador iniciado en el iPhone solo llega a la muñeca cuando el iPhone está bloqueado. Pulsa el botón lateral después de iniciarlo o inicia el temporizador en tu Apple Watch."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Um timer iniciado no iPhone só chega ao pulso quando o iPhone está bloqueado. Pressione o botão lateral depois de iniciar ou inicie o timer no seu Apple Watch."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Um temporizador iniciado no iPhone só chega ao pulso quando o iPhone está bloqueado. Prima o botão lateral depois de iniciar ou inicie o temporizador no Apple Watch."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un timer avviato su iPhone arriva al polso solo quando iPhone è bloccato. Premi il tasto laterale dopo l’avvio oppure avvia il timer su Apple Watch."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Таймер, запущенный на iPhone, доходит до запястья, только когда iPhone заблокирован. После запуска нажмите боковую кнопку или запускайте таймер на Apple Watch."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Časovač spuštěný na iPhonu se na zápěstí dostane jen tehdy, když je iPhone zamčený. Po spuštění stiskněte boční tlačítko, nebo spusťte časovač na Apple Watch."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En timer, der er startet på iPhone, når kun håndleddet, når iPhone er låst. Tryk på sideknappen efter start, eller start timeren på dit Apple Watch."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ένα χρονόμετρο που ξεκινά στο iPhone φτάνει στον καρπό μόνο όταν το iPhone είναι κλειδωμένο. Πατήστε το πλευρικό κουμπί μετά την έναρξη ή ξεκινήστε το χρονόμετρο στο Apple Watch."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhonessa käynnistetty ajastin tulee ranteeseen vain, kun iPhone on lukittu. Paina sivupainiketta käynnistyksen jälkeen tai käynnistä ajastin Apple Watchissa."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer yang dimulai di iPhone hanya sampai ke pergelangan tangan saat iPhone terkunci. Tekan tombol samping setelah memulai, atau mulai timer di Apple Watch."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En tidtaker startet på iPhone når håndleddet bare når iPhone er låst. Trykk på sideknappen etter start, eller start tidtakeren på Apple Watch."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Een timer die je op je iPhone start, bereikt je pols alleen als je iPhone vergrendeld is. Druk na het starten op de zijknop of start de timer op je Apple Watch."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minutnik uruchomiony na iPhonie dociera na nadgarstek tylko wtedy, gdy iPhone jest zablokowany. Po uruchomieniu naciśnij przycisk boczny albo uruchom minutnik na Apple Watch."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En timer som startas på iPhone når handleden bara när iPhone är låst. Tryck på sidoknappen efter starten eller starta timern på Apple Watch."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ตัวจับเวลาที่เริ่มบน iPhone จะส่งมาที่ข้อมือเฉพาะเมื่อ iPhone ล็อกอยู่ กดปุ่มด้านข้างหลังจากเริ่ม หรือเริ่มตัวจับเวลาบน Apple Watch"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone'da başlatılan zamanlayıcı yalnızca iPhone kilitliyken bileğinize ulaşır. Başlattıktan sonra yan düğmeye basın veya zamanlayıcıyı Apple Watch'ta başlatın."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hẹn giờ bắt đầu trên iPhone chỉ đến cổ tay khi iPhone đang khóa. Nhấn nút sườn sau khi bắt đầu hoặc bắt đầu hẹn giờ trên Apple Watch."
+          }
+        }
+      }
+    },
     "A timer started on your Apple Watch alerts you on your wrist. A timer started on iPhone reaches your wrist only while iPhone is locked. The screen stays on while a timer runs, so press the side button to lock it." : {
       "localizations" : {
         "ko" : {
@@ -8471,6 +8619,154 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "提前提醒預設"
+          }
+        }
+      }
+    },
+    "Alerts don't arrive when the screen is off" : {
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alerts don't arrive when the screen is off"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "화면이 꺼지면 알림이 오지 않아요"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "画面がオフだと通知が届かない"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "屏幕关闭后收不到提醒"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "螢幕關閉後收不到提醒"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bei ausgeschaltetem Bildschirm kommen keine Hinweise"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune alerte quand l’écran est éteint"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No llegan avisos con la pantalla apagada"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Os alertas não chegam com a tela desligada"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Os alertas não chegam com o ecrã desligado"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gli avvisi non arrivano a schermo spento"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "При выключенном экране не приходят оповещения"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Při vypnuté obrazovce nechodí upozornění"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der kommer ingen beskeder, når skærmen er slukket"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν έρχονται ειδοποιήσεις με σβηστή οθόνη"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ilmoitukset eivät tule näytön ollessa pois päältä"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peringatan tidak datang saat layar mati"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Varsler kommer ikke når skjermen er av"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meldingen komen niet aan als het scherm uit is"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przy wyłączonym ekranie nie ma powiadomień"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aviseringar kommer inte när skärmen är släckt"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ไม่มีการแจ้งเตือนเมื่อปิดหน้าจอ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ekran kapalıyken uyarılar gelmiyor"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không có cảnh báo khi màn hình tắt"
           }
         }
       }
@@ -12791,6 +13087,154 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "重新檢查"
+          }
+        }
+      }
+    },
+    "Check that notifications are allowed for Rereminder." : {
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check that notifications are allowed for Rereminder."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder의 알림이 허용되어 있는지 확인하세요."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminderの通知が許可されているか確認してください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "确认已允许 Rereminder 发送通知。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "確認已允許 Rereminder 傳送通知。"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prüfe, ob Mitteilungen für Rereminder erlaubt sind."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifiez que les notifications sont autorisées pour Rereminder."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comprueba que las notificaciones de Rereminder están permitidas."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verifique se as notificações do Rereminder estão permitidas."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Confirme que as notificações do Rereminder estão permitidas."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controlla che le notifiche di Rereminder siano consentite."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Проверьте, что уведомления Rereminder разрешены."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zkontrolujte, že jsou oznámení z Rereminderu povolená."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tjek, at notifikationer er tilladt for Rereminder."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ελέγξτε ότι οι γνωστοποιήσεις του Rereminder επιτρέπονται."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tarkista, että Rereminderin ilmoitukset on sallittu."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pastikan pemberitahuan Rereminder diizinkan."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sjekk at varslinger er tillatt for Rereminder."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleer of berichtgeving voor Rereminder is toegestaan."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprawdź, czy powiadomienia Rereminder są dozwolone."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontrollera att notiser är tillåtna för Rereminder."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ตรวจสอบว่าอนุญาตการแจ้งเตือนของ Rereminder แล้ว"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder bildirimlerine izin verildiğini kontrol edin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kiểm tra thông báo của Rereminder đã được cho phép."
           }
         }
       }
@@ -30725,6 +31169,154 @@
         }
       }
     },
+    "Having a problem?" : {
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Having a problem?"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "문제가 있나요?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "お困りですか？"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "遇到问题了？"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "遇到問題了嗎？"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gibt es ein Problem?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un problème ?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Tienes un problema?"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Algum problema?"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Algum problema?"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hai un problema?"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Возникла проблема?"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Máte problém?"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Har du et problem?"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Έχετε πρόβλημα;"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Onko ongelmia?"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ada masalah?"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Har du et problem?"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Is er een probleem?"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masz problem?"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Har du problem?"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "มีปัญหาใช่ไหม"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir sorun mu var?"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bạn gặp sự cố?"
+          }
+        }
+      }
+    },
     "Help" : {
       "localizations" : {
         "cs" : {
@@ -31615,6 +32207,154 @@
         }
       }
     },
+    "I can't hear the alert" : {
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "I can't hear the alert"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "알림 소리가 들리지 않아요"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知音が聞こえない"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "听不到提醒声音"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "聽不到提醒聲音"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ich höre den Hinweis nicht"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Je n’entends pas l’alerte"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No oigo el aviso"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não ouço o alerta"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Não ouço o alerta"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non sento l’avviso"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не слышно оповещения"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neslyším upozornění"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jeg kan ikke høre beskeden"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δεν ακούω την ειδοποίηση"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En kuule hälytystä"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saya tidak mendengar peringatan"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jeg hører ikke varselet"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ik hoor de melding niet"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nie słyszę powiadomienia"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jag hör inte aviseringen"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ไม่ได้ยินเสียงแจ้งเตือน"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uyarıyı duymuyorum"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tôi không nghe thấy cảnh báo"
+          }
+        }
+      }
+    },
     "I don't have one" : {
       "localizations" : {
         "cs" : {
@@ -31907,6 +32647,154 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "有"
+          }
+        }
+      }
+    },
+    "If a Focus is on, add Rereminder to its allowed apps." : {
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If a Focus is on, add Rereminder to its allowed apps."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "집중 모드를 켰다면 허용된 앱에 Rereminder를 추가하세요."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "集中モードがオンの場合は、許可するアプリにRereminderを追加してください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "如果打开了专注模式，请将 Rereminder 添加到允许的 App。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "如果開啟了專注模式，請將 Rereminder 加入允許的 App。"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wenn ein Fokus aktiv ist, füge Rereminder zu seinen erlaubten Apps hinzu."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si un mode de concentration est activé, ajoutez Rereminder à ses apps autorisées."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si hay un modo de concentración activo, añade Rereminder a sus apps permitidas."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se um modo de foco estiver ativo, adicione o Rereminder aos apps permitidos."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se um modo de foco estiver ativo, adicione o Rereminder às apps permitidas."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se è attiva una modalità Full Immersion, aggiungi Rereminder alle app consentite."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Если включён режим фокусирования, добавьте Rereminder в разрешённые приложения."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pokud je zapnutý režim soustředění, přidejte Rereminder mezi povolené aplikace."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvis et fokus er slået til, så føj Rereminder til dets tilladte apps."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αν είναι ενεργή μια λειτουργία εστίασης, προσθέστε το Rereminder στις επιτρεπόμενες εφαρμογές."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jos keskittymistila on päällä, lisää Rereminder sen sallittuihin appeihin."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jika mode fokus menyala, tambahkan Rereminder ke app yang diizinkan."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvis en fokusmodus er på, legg Rereminder til blant de tillatte appene."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Als een focus aan staat, voeg Rereminder toe aan de toegestane apps."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jeśli włączony jest tryb skupienia, dodaj Rereminder do dozwolonych aplikacji."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Om ett fokusläge är på, lägg till Rereminder bland de tillåtna apparna."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "หากเปิดโหมดโฟกัสอยู่ ให้เพิ่ม Rereminder ในแอปที่อนุญาต"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir odak modu açıksa Rereminder'ı izin verilen uygulamalara ekleyin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nếu đang bật chế độ tập trung, hãy thêm Rereminder vào các ứng dụng được phép."
           }
         }
       }
@@ -33091,6 +33979,154 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "在分段模式下，這些文案會依分段名稱自動產生，你在這裡寫的內容會被取代。"
+          }
+        }
+      }
+    },
+    "In Settings on your Apple Watch, check that haptic alerts are on." : {
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Settings on your Apple Watch, check that haptic alerts are on."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch의 설정에서 햅틱 알림이 켜져 있는지 확인하세요."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watchの設定で、触覚通知がオンになっているか確認してください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 Apple Watch 的“设置”中，确认触感提醒已打开。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 Apple Watch 的「設定」中，確認觸覺提醒已開啟。"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prüfe in den Einstellungen deiner Apple Watch, ob haptische Hinweise aktiviert sind."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dans les Réglages de votre Apple Watch, vérifiez que les alertes haptiques sont activées."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En Ajustes de tu Apple Watch, comprueba que los avisos hápticos están activados."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nos Ajustes do Apple Watch, verifique se os alertas hápticos estão ativados."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nas Definições do Apple Watch, confirme que os alertas hápticos estão ativos."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Impostazioni su Apple Watch, controlla che gli avvisi aptici siano attivi."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В настройках Apple Watch проверьте, что тактильные оповещения включены."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "V Nastavení na Apple Watch zkontrolujte, že jsou zapnutá haptická upozornění."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tjek i Indstillinger på dit Apple Watch, at haptiske beskeder er slået til."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Στις Ρυθμίσεις του Apple Watch, ελέγξτε ότι οι απτικές ειδοποιήσεις είναι ενεργές."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tarkista Apple Watchin Asetuksista, että haptiset ilmoitukset ovat päällä."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Di Pengaturan Apple Watch, pastikan peringatan haptik menyala."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sjekk i Innstillinger på Apple Watch at haptiske varsler er på."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Controleer in Instellingen op je Apple Watch of haptische meldingen aan staan."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "W Ustawieniach na Apple Watch sprawdź, czy powiadomienia haptyczne są włączone."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kontrollera i Inställningar på Apple Watch att haptiska aviseringar är på."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ในการตั้งค่าของ Apple Watch ตรวจสอบว่าเปิดการแจ้งเตือนแบบสัมผัสไว้"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch'unuzun Ayarlar bölümünde dokunsal uyarıların açık olduğunu kontrol edin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trong Cài đặt trên Apple Watch, kiểm tra cảnh báo xúc giác đang bật."
           }
         }
       }
@@ -39922,6 +40958,154 @@
         }
       }
     },
+    "My Apple Watch doesn't vibrate" : {
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My Apple Watch doesn't vibrate"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch에서 진동이 오지 않아요"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watchが振動しない"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch 不振动"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch 沒有震動"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meine Apple Watch vibriert nicht"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mon Apple Watch ne vibre pas"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mi Apple Watch no vibra"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meu Apple Watch não vibra"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O meu Apple Watch não vibra"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il mio Apple Watch non vibra"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch не вибрируют"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch nevibrují"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit Apple Watch vibrerer ikke"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το Apple Watch δεν δονείται"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch ei värise"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch saya tidak bergetar"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch vibrerer ikke"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mijn Apple Watch trilt niet"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch nie wibruje"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Min Apple Watch vibrerar inte"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch ไม่สั่น"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch'um titremiyor"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Watch không rung"
+          }
+        }
+      }
+    },
     "My Benefits" : {
       "localizations" : {
         "cs" : {
@@ -40214,6 +41398,154 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "我的裝置"
+          }
+        }
+      }
+    },
+    "My purchase isn't showing" : {
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "My purchase isn't showing"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구매한 내역이 보이지 않아요"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "購入内容が表示されない"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "看不到已购项目"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "看不到已購項目"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mein Kauf wird nicht angezeigt"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mon achat n’apparaît pas"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No aparece mi compra"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minha compra não aparece"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A minha compra não aparece"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il mio acquisto non compare"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Не отображается покупка"
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nezobrazuje se můj nákup"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit køb vises ikke"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Η αγορά μου δεν εμφανίζεται"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ostokseni ei näy"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pembelian saya tidak muncul"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kjøpet mitt vises ikke"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mijn aankoop wordt niet getoond"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mój zakup się nie wyświetla"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mitt köp visas inte"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ไม่เห็นรายการที่ซื้อ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Satın alımım görünmüyor"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Không thấy giao dịch mua của tôi"
           }
         }
       }
@@ -46305,6 +47637,154 @@
         }
       }
     },
+    "On iPhone, open the Watch app, go to Notifications, and check that Rereminder is allowed." : {
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "On iPhone, open the Watch app, go to Notifications, and check that Rereminder is allowed."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone의 Watch 앱에서 알림으로 들어가 Rereminder가 허용되어 있는지 확인하세요."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhoneのWatchアプリで「通知」を開き、Rereminderが許可されているか確認してください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 iPhone 的 Watch App 中打开“通知”，确认已允许 Rereminder。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 iPhone 的 Watch App 中打開「通知」，確認已允許 Rereminder。"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffne auf dem iPhone die Watch-App, gehe zu „Mitteilungen“ und prüfe, ob Rereminder erlaubt ist."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sur l’iPhone, ouvrez l’app Watch, allez dans Notifications et vérifiez que Rereminder est autorisé."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En el iPhone, abre la app Watch, ve a Notificaciones y comprueba que Rereminder está permitido."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No iPhone, abra o app Watch, vá em Notificações e verifique se o Rereminder está permitido."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No iPhone, abra a app Watch, vá a Notificações e confirme que o Rereminder está permitido."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Su iPhone apri l’app Watch, vai su Notifiche e controlla che Rereminder sia consentito."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "На iPhone откройте приложение Watch, перейдите в «Уведомления» и проверьте, что Rereminder разрешён."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na iPhonu otevřete aplikaci Watch, přejděte do Oznámení a zkontrolujte, že je Rereminder povolený."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Åbn Watch-appen på iPhone, gå til Notifikationer, og tjek, at Rereminder er tilladt."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Στο iPhone, ανοίξτε την εφαρμογή Watch, μεταβείτε στις Γνωστοποιήσεις και ελέγξτε ότι το Rereminder επιτρέπεται."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avaa iPhonessa Watch-appi, siirry kohtaan Ilmoitukset ja tarkista, että Rereminder on sallittu."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Di iPhone, buka app Watch, buka Pemberitahuan, lalu pastikan Rereminder diizinkan."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Åpne Watch-appen på iPhone, gå til Varslinger og sjekk at Rereminder er tillatt."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open op je iPhone de Watch-app, ga naar Berichtgeving en controleer of Rereminder is toegestaan."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na iPhonie otwórz aplikację Watch, przejdź do Powiadomień i sprawdź, czy Rereminder jest dozwolony."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öppna Watch-appen på iPhone, gå till Notiser och kontrollera att Rereminder är tillåtet."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "บน iPhone เปิดแอป Watch ไปที่การแจ้งเตือน แล้วตรวจสอบว่าอนุญาต Rereminder แล้ว"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iPhone'da Watch uygulamasını açın, Bildirimler'e gidin ve Rereminder'a izin verildiğini kontrol edin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trên iPhone, mở ứng dụng Watch, vào Thông báo và kiểm tra Rereminder đã được cho phép."
+          }
+        }
+      }
+    },
     "One buzz is easy to miss. Rereminder repeats the end alert until you tap Stop or Snooze." : {
       "localizations" : {
         "cs" : {
@@ -47338,6 +48818,154 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "開啟設定"
+          }
+        }
+      }
+    },
+    "Open the Pro screen and restore your purchases, signed in to the Apple Account you bought with." : {
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open the Pro screen and restore your purchases, signed in to the Apple Account you bought with."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro 화면에서 구매를 복원하세요. 구매할 때 쓴 Apple 계정으로 로그인되어 있어야 합니다."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proの画面で購入を復元してください。購入に使ったApple Accountでサインインしている必要があります。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请在 Pro 页面恢复购买，并确保已登录购买时使用的 Apple 账户。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "請在 Pro 畫面回復購買，並確認已登入購買時使用的 Apple 帳號。"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffne den Pro-Bildschirm und stelle deine Käufe wieder her. Du musst mit dem Apple Account angemeldet sein, mit dem du gekauft hast."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrez l’écran Pro et restaurez vos achats, en étant connecté au compte Apple utilisé pour l’achat."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre la pantalla Pro y restaura tus compras con la sesión iniciada en la cuenta de Apple con la que compraste."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abra a tela Pro e restaure suas compras, conectado à Conta Apple usada na compra."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abra o ecrã Pro e restaure as compras, com sessão iniciada na Conta Apple usada na compra."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apri la schermata Pro e ripristina gli acquisti, con l’Apple Account usato per comprare."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Откройте экран Pro и восстановите покупки, войдя в Apple Account, с которого совершена покупка."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otevřete obrazovku Pro a obnovte nákupy. Musíte být přihlášeni k Apple Accountu, kterým jste platili."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Åbn Pro-skærmen, og gendan dine køb, mens du er logget ind på den Apple-konto, du købte med."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ανοίξτε την οθόνη Pro και επαναφέρετε τις αγορές σας, συνδεδεμένοι με τον λογαριασμό Apple της αγοράς."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avaa Pro-näkymä ja palauta ostokset. Sinun on oltava kirjautuneena Apple-tilille, jolla ostit."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Buka layar Pro dan pulihkan pembelian, dengan masuk ke Akun Apple yang dipakai saat membeli."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Åpne Pro-skjermen og gjenopprett kjøpene dine, pålogget Apple-kontoen du kjøpte med."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open het Pro-scherm en herstel je aankopen terwijl je bent ingelogd met het Apple Account waarmee je kocht."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwórz ekran Pro i przywróć zakupy, będąc zalogowanym na Apple Account użyte do zakupu."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öppna Pro-skärmen och återställ dina köp, inloggad på det Apple-konto du köpte med."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "เปิดหน้าจอ Pro แล้วกู้คืนรายการที่ซื้อ โดยลงชื่อเข้าด้วยบัญชี Apple ที่ใช้ซื้อ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pro ekranını açın ve satın alımlarınızı geri yükleyin; satın alırken kullandığınız Apple Hesabı ile oturum açmış olun."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mở màn hình Pro và khôi phục giao dịch mua, khi đã đăng nhập Tài khoản Apple dùng để mua."
           }
         }
       }
@@ -63190,6 +64818,154 @@
         }
       }
     },
+    "Silent Mode mutes alert sounds. Check the switch and the volume." : {
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Silent Mode mutes alert sounds. Check the switch and the volume."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "무음 모드에서는 알림 소리가 나지 않습니다. 무음 설정과 음량을 확인하세요."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "消音モードでは通知音が鳴りません。消音の設定と音量を確認してください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "静音模式下不会播放提醒声音。请检查静音设置和音量。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "靜音模式下不會播放提醒聲音。請檢查靜音設定和音量。"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Im Stummmodus sind Hinweistöne aus. Prüfe den Stummmodus und die Lautstärke."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le mode silencieux coupe le son des alertes. Vérifiez le mode silencieux et le volume."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El modo silencio apaga el sonido de los avisos. Comprueba el modo silencio y el volumen."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O modo silencioso desliga o som dos alertas. Verifique o modo silencioso e o volume."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O modo silencioso desliga o som dos alertas. Verifique o modo silencioso e o volume."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La modalità silenziosa disattiva il suono degli avvisi. Controlla la modalità silenziosa e il volume."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "В бесшумном режиме звук оповещений отключён. Проверьте бесшумный режим и громкость."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tichý režim vypíná zvuk upozornění. Zkontrolujte tichý režim a hlasitost."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lydløs tilstand slår lyden fra. Tjek lydløs tilstand og lydstyrken."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Η αθόρυβη λειτουργία σβήνει τον ήχο των ειδοποιήσεων. Ελέγξτε την αθόρυβη λειτουργία και την ένταση."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Äänetön tila vaimentaa hälytysäänet. Tarkista äänetön tila ja äänenvoimakkuus."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mode Senyap mematikan suara peringatan. Periksa mode senyap dan volume."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lydløs modus slår av varsellyden. Sjekk lydløs modus og volumet."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De stille modus zet meldingsgeluiden uit. Controleer de stille modus en het volume."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tryb cichy wyłącza dźwięk powiadomień. Sprawdź tryb cichy i głośność."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ljudlöst läge stänger av aviseringsljud. Kontrollera ljudlöst läge och volymen."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "โหมดเงียบจะปิดเสียงแจ้งเตือน ตรวจสอบโหมดเงียบและระดับเสียง"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sessiz mod uyarı seslerini kapatır. Sessiz modu ve ses düzeyini kontrol edin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chế độ im lặng tắt âm thanh cảnh báo. Kiểm tra chế độ im lặng và âm lượng."
+          }
+        }
+      }
+    },
     "Skip" : {
       "localizations" : {
         "cs" : {
@@ -65112,6 +66888,154 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "目前狀態"
+          }
+        }
+      }
+    },
+    "Still not working? Tell us which device you started the timer on and what you expected." : {
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Still not working? Tell us which device you started the timer on and what you expected."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "그래도 안 되나요? 어느 기기에서 타이머를 시작했는지, 어떻게 되길 기대했는지 알려 주세요."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "それでも解決しませんか？どのデバイスでタイマーを開始したか、どうなると思っていたかを教えてください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "还是不行？请告诉我们你在哪台设备上启动了计时器，以及你期望的结果。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "還是不行嗎？請告訴我們你在哪台裝置上啟動計時器，以及你預期的結果。"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Klappt es immer noch nicht? Schreib uns, auf welchem Gerät du den Timer gestartet hast und was du erwartet hast."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toujours pas de solution ? Dites-nous sur quel appareil vous avez lancé le minuteur et ce que vous attendiez."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Sigue sin funcionar? Cuéntanos en qué dispositivo iniciaste el temporizador y qué esperabas."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ainda não funcionou? Conte em qual dispositivo você iniciou o timer e o que esperava."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continua sem funcionar? Diga-nos em que dispositivo iniciou o temporizador e o que esperava."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ancora niente? Dicci su quale dispositivo hai avviato il timer e cosa ti aspettavi."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Всё ещё не работает? Напишите, на каком устройстве вы запустили таймер и чего ожидали."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pořád to nefunguje? Napište nám, na kterém zařízení jste časovač spustili a co jste očekávali."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Virker det stadig ikke? Fortæl os, hvilken enhed du startede timeren på, og hvad du forventede."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ακόμη δεν λειτουργεί; Πείτε μας σε ποια συσκευή ξεκινήσατε το χρονόμετρο και τι περιμένατε."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eikö vieläkään toimi? Kerro meille, millä laitteella käynnistit ajastimen ja mitä odotit."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masih belum berhasil? Beri tahu kami di perangkat mana Anda memulai timer dan apa yang Anda harapkan."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Virker det fortsatt ikke? Fortell oss hvilken enhet du startet tidtakeren på og hva du forventet."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lukt het nog steeds niet? Laat ons weten op welk apparaat je de timer startte en wat je verwachtte."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nadal nie działa? Napisz, na którym urządzeniu uruchomiono minutnik i czego oczekiwano."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fungerar det fortfarande inte? Berätta på vilken enhet du startade timern och vad du förväntade dig."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ยังไม่ได้ผลใช่ไหม บอกเราว่าคุณเริ่มตัวจับเวลาบนอุปกรณ์ใดและคาดหวังอะไร"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hâlâ çalışmıyor mu? Zamanlayıcıyı hangi cihazda başlattığınızı ve ne beklediğinizi bize yazın."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vẫn chưa được? Hãy cho chúng tôi biết bạn bắt đầu hẹn giờ trên thiết bị nào và bạn mong đợi điều gì."
           }
         }
       }
@@ -76415,6 +78339,154 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "要儲存這個設定嗎？"
+          }
+        }
+      }
+    },
+    "To ring through Silent Mode and Focus, turn on the full alarm in this app's Settings." : {
+      "localizations" : {
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "To ring through Silent Mode and Focus, turn on the full alarm in this app's Settings."
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "무음 모드와 집중 모드에서도 울리게 하려면 이 앱의 설정에서 알람으로 울리기를 켜세요."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "消音モードや集中モードでも鳴らすには、このアプリの設定でアラームをオンにしてください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要在静音模式和专注模式下也响铃，请在本 App 的设置中打开闹钟。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "若要在靜音模式和專注模式下也響鈴，請在本 App 的設定中開啟鬧鐘。"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Damit es auch im Stummmodus und im Fokus klingelt, schalte in den Einstellungen dieser App den Alarm ein."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour sonner malgré le mode silencieux et la concentration, activez l’alarme dans les réglages de cette app."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para que suene en modo silencio y concentración, activa la alarma en los ajustes de esta app."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para tocar no modo silencioso e no foco, ative o alarme nos ajustes deste app."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Para tocar no modo silencioso e no foco, ative o alarme nas definições desta app."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Per farlo suonare anche in modalità silenziosa e Full Immersion, attiva la sveglia nelle impostazioni di questa app."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Чтобы звонок срабатывал в бесшумном режиме и при фокусировании, включите будильник в настройках этого приложения."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aby zvonil i v tichém režimu a při soustředění, zapněte budík v nastavení této aplikace."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slå alarmen til i denne apps indstillinger for at ringe trods lydløs tilstand og fokus."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Για να χτυπά και σε αθόρυβη λειτουργία και εστίαση, ενεργοποιήστε το ξυπνητήρι στις ρυθμίσεις αυτής της εφαρμογής."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jos haluat hälytyksen soivan myös äänettömässä tilassa ja keskittymistilassa, laita herätys päälle tämän apin asetuksista."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agar tetap berbunyi saat mode senyap dan fokus, nyalakan alarm di pengaturan app ini."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slå på alarmen i innstillingene til denne appen for å ringe også i lydløs modus og fokus."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zet het alarm aan in de instellingen van deze app om ook in de stille modus en focus te laten rinkelen."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aby dzwoniło także w trybie cichym i skupienia, włącz alarm w ustawieniach tej aplikacji."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slå på alarmet i den här appens inställningar för att ringa även i ljudlöst läge och fokus."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "หากต้องการให้ดังแม้อยู่ในโหมดเงียบและโฟกัส ให้เปิดนาฬิกาปลุกในการตั้งค่าของแอปนี้"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sessiz modda ve odakta da çalması için bu uygulamanın ayarlarından alarmı açın."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Để đổ chuông cả khi im lặng và tập trung, hãy bật báo thức trong cài đặt của ứng dụng này."
           }
         }
       }
