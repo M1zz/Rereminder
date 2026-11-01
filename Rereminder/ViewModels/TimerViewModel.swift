@@ -271,6 +271,20 @@ final class TimerViewModel: ObservableObject {
         }
     }
 
+    /// 워치에서 건 타이머를 받는다. 울리는 순서는 다른 기기에서 받은 타이머와 같고(`.secondary`),
+    /// 사용자가 이번에 새로 건 것이므로 시작 기록을 남기고 맥에도 전한다.
+    func applyWatchRunning(mainSeconds: Int, prealertOffsets: [Int], endDate: Date) {
+        applyCloudRunning(mainSeconds: mainSeconds,
+                          prealertOffsets: prealertOffsets,
+                          name: "",
+                          endDate: endDate)
+        RepeatDetector.record(.init(mainSec: mainSeconds, offsets: prealertOffsets))
+        AnalyticsManager.log(.timerStarted(durationSeconds: mainSeconds,
+                                           alertCount: prealertOffsets.count,
+                                           presetName: nil))
+        pushCloudRunning()
+    }
+
     func applyCloudPause(mainSeconds: Int, prealertOffsets: [Int], name: String, remaining r: TimeInterval) {
         if currentTemplate == nil {
             currentTemplate = Timer(

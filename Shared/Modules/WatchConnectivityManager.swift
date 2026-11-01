@@ -480,4 +480,10 @@ struct TimerSyncData {
     let duration: TimeInterval
     let prealertOffsets: [Int]
     let timestamp: TimeInterval
+
+    /// 보낸 기기와 같은 순간에 끝나도록 **보낸 시각**에서 잰다. 받은 시각에서 재면 전달이 늦은 만큼
+    /// 늦게 끝난다. 시계 차이로 보낸 시각이 미래여도 지금보다 뒤에서 시작하지는 않는다.
+    func endDate(now: Date = Date()) -> Date {
+        Date(timeIntervalSince1970: min(timestamp, now.timeIntervalSince1970) + duration)
+    }
 }
