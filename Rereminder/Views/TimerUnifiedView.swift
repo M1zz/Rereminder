@@ -86,7 +86,10 @@ struct TimerUnifiedView: View {
     @State private var showIntroPractice = false
     @State private var activeLesson: FeatureLesson?
     /// 다 드러나기 전이나 수업 중에는 말풍선을 띄우지 않는다.
-    private var tipsAllowed: Bool { activeLesson == nil && stage >= .everything }
+    private var tipsAllowed: Bool { hasSettledLaunch && activeLesson == nil && stage >= .everything }
+    /// 첫 화면이 그려졌는가. 팁은 그 뒤에 붙인다 — 붙이는 순간 TipKit 이 규칙을 평가하는데(24ms),
+    /// 그게 첫 프레임 앞에 있으면 앱이 그만큼 늦게 뜬다. 켜자마자 말풍선이 화면을 덮지도 않는다.
+    @State private var hasSettledLaunch = false
     @AppStorage(BlankStart.completionsKey) private var blankStartCompletions = 0
     @AppStorage(BlankStart.preferenceKey) private var blankStartPreference = BlankStart.Preference.automatic.rawValue
     private var stage: BlankStart.Stage {
@@ -600,7 +603,6 @@ struct TimerUnifiedView: View {
         screenVM.restoreTimerIfNeeded()
         // 다이나믹 아일랜드에서 눌러 둔 명령을 먼저 적용하고, 남은 활동이 있으면 치운다
         screenVM.applyPendingLiveActivityCommand()
-        screenVM.cleanUpOrphanLiveActivities()
         // 실행 중 타이머가 없으면 마지막 사용 설정을 다이얼에 복원
         screenVM.restoreLastUsedConfigIfNeeded()
         // 예약해 둔 자리의 전날이면 그 설정이 오늘의 주인공이다 — 다른 제안은 모두 건너뛴다.
@@ -693,10 +695,18 @@ struct TimerUnifiedView: View {
         // 첫 화면이 떴다 — 3초 더 살아 있으면 이번 실행은 무사히 연 것으로 친다(크래시 루프 판정).
         RereminderApp.launchGuard.markLaunchSucceededAfterSurvivalDelay()
 
-        // 위젯·제어센터 목록을 지금 템플릿으로 맞추고, 그쪽에서 눌러 앱을 연 것이면 시작한다.
+        // 위젯·제어센터에서 눌러 앱을 연 것이면 시작한다.
         // ⚠️ 복원(`restoreTimerIfNeeded`)이 끝난 **뒤**여야 한다 — 도는 타이머를 모른 채 덮어쓰지 않게.
-        QuickStartPublisher.publish(context: context)
         startRequestedSetupIfAny()
+
+        // 화면에 보이지 않는 뒷정리는 첫 프레임 뒤로 미룬다 — 그만큼 앱이 먼저 뜬다.
+        DispatchQueue.main.async {
+            // 남은 Live Activity 정리. 타이머가 돌고 있으면 아무것도 하지 않으므로, 그 사이 위젯에서
+            // 시작한 타이머의 것을 지우지 않는다.
+            screenVM.cleanUpOrphanLiveActivities()
+            QuickStartPublisher.publish(context: context)
+            hasSettledLaunch = true
+        }
 
         #if targetEnvironment(macCatalyst)
         // 지금 맥에서 돌고 있으니 "맥 있으세요?"를 물어볼 이유가 없다 — 아는 건 묻지 않는다.

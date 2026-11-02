@@ -35,4 +35,16 @@ final class WatchStartedTimerTests: XCTestCase {
         engine.start()
         XCTAssertEqual(engine.escalationRole, .primary)
     }
+
+    /// 다른 기기에서 온 깨진 값은 문에서 버린다 — `Int(duration)` 에 무한대·NaN 이 들어가면 앱이 죽는다.
+    func test_syncData_rejectsBrokenValues() {
+        let now = Date().timeIntervalSince1970
+        XCTAssertTrue(TimerSyncData.isUsable(duration: 600, timestamp: now))
+        XCTAssertFalse(TimerSyncData.isUsable(duration: .infinity, timestamp: now))
+        XCTAssertFalse(TimerSyncData.isUsable(duration: .nan, timestamp: now))
+        XCTAssertFalse(TimerSyncData.isUsable(duration: 1e300, timestamp: now))
+        XCTAssertFalse(TimerSyncData.isUsable(duration: 0, timestamp: now))
+        XCTAssertFalse(TimerSyncData.isUsable(duration: -5, timestamp: now))
+        XCTAssertFalse(TimerSyncData.isUsable(duration: 600, timestamp: .nan))
+    }
 }

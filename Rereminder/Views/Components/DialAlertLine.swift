@@ -78,7 +78,8 @@ struct DialAlertLine: View {
                 .font(.body)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
-                .lineLimit(2)
+                // ⚠️ 줄 수를 막지 않는다. 알림이 셋이면 기본 글자 크기에서도 두 줄이 차서, 글자를 키우면 뒤의 알림이 잘렸다.
+                .fixedSize(horizontal: false, vertical: true)
                 .frame(minHeight: 48)
                 .accessibilityAddTraits(.updatesFrequently)
 
@@ -95,6 +96,9 @@ struct DialAlertLine: View {
             }
         }
         .padding(.horizontal)
+        // 원 아래 자리는 정해져 있다. 가장 큰 글자에서는 세 알림 문장이 버튼을 덮었다 —
+        // 가운데 시간(`TimerMainView`)과 같은 상한을 두고, 그 안에서는 줄이 필요한 만큼 내려간다.
+        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
         .task(id: screenVM.justRemovedAlert) {
             guard screenVM.justRemovedAlert != nil else { return }
             try? await Task.sleep(for: .seconds(4))

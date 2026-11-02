@@ -381,6 +381,7 @@ extension WatchConnectivityManager: WCSessionDelegate {
                 guard let duration = message["duration"] as? TimeInterval else { return }
                 let prealertOffsets = message["prealertOffsets"] as? [Int] ?? []
                 let timestamp = message["timestamp"] as? TimeInterval ?? Date().timeIntervalSince1970
+                guard TimerSyncData.isUsable(duration: duration, timestamp: timestamp) else { return }
 
                 let syncData = TimerSyncData(
                     duration: duration,
@@ -425,6 +426,7 @@ extension WatchConnectivityManager: WCSessionDelegate {
                 if let duration = applicationContext["duration"] as? TimeInterval {
                     let prealertOffsets = applicationContext["prealertOffsets"] as? [Int] ?? []
                     let timestamp = applicationContext["timestamp"] as? TimeInterval ?? Date().timeIntervalSince1970
+                    guard TimerSyncData.isUsable(duration: duration, timestamp: timestamp) else { return }
                     let syncData = TimerSyncData(duration: duration, prealertOffsets: prealertOffsets, timestamp: timestamp)
                     onTimerStart?(syncData)
                 }
@@ -480,6 +482,15 @@ struct TimerSyncData {
     let duration: TimeInterval
     let prealertOffsets: [Int]
     let timestamp: TimeInterval
+
+    /// 이 앱에 하루를 넘는 타이머는 없다. 그보다 큰 값은 깨진 값이다.
+    static let maxDuration: TimeInterval = 86_400
+
+    /// 다른 기기에서 온 값을 그대로 믿지 않는다 — 무한대·NaN·터무니없이 큰 값이 `Int(duration)` 에
+    /// 들어가면 그 자리에서 앱이 죽는다. 버전이 다른 기기가 보낸 값 하나로 죽지 않게 문에서 거른다.
+    static func isUsable(duration: TimeInterval, timestamp: TimeInterval) -> Bool {
+        duration.isFinite && duration > 0 && duration <= maxDuration && timestamp.isFinite
+    }
 
     /// 보낸 기기와 같은 순간에 끝나도록 **보낸 시각**에서 잰다. 받은 시각에서 재면 전달이 늦은 만큼
     /// 늦게 끝난다. 시계 차이로 보낸 시각이 미래여도 지금보다 뒤에서 시작하지는 않는다.

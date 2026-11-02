@@ -137,13 +137,22 @@ final class CloudTimerSyncManager: ObservableObject {
         guard updatedAt > lastAppliedAt else { return }
         lastAppliedAt = updatedAt
 
+        // 다른 기기가 적은 값을 그대로 믿지 않는다 — 무한대·NaN 이 시간 계산과 `Int()` 에 들어가면 앱이 죽는다.
+        let mainSeconds = dict["mainSeconds"] as? Int ?? 0
+        let endEpoch = dict["endDate"] as? Double
+        let remaining = dict["remaining"] as? Double ?? 0
+        guard updatedAtEpoch.isFinite,
+              (0...Int(TimerSyncData.maxDuration)).contains(mainSeconds),
+              remaining.isFinite, abs(remaining) <= TimerSyncData.maxDuration,
+              endEpoch?.isFinite ?? true else { return }
+
         let snapshot = CloudTimerSnapshot(
             state: state,
-            mainSeconds: dict["mainSeconds"] as? Int ?? 0,
+            mainSeconds: mainSeconds,
             prealertOffsets: dict["prealertOffsets"] as? [Int] ?? [],
             name: dict["name"] as? String ?? "",
-            endDate: (dict["endDate"] as? Double).map(Date.init(timeIntervalSince1970:)),
-            remaining: dict["remaining"] as? Double ?? 0,
+            endDate: endEpoch.map(Date.init(timeIntervalSince1970:)),
+            remaining: remaining,
             updatedAt: updatedAt,
             sourceDeviceName: dict["sourceDeviceName"] as? String ?? ""
         )

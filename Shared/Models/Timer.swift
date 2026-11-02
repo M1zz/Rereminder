@@ -102,6 +102,23 @@ extension Timer {
     ]
 
     /// Pre-alert Message 가져오기 (커스텀 메시지가 없으면 기본 메시지 반환)
+    /// 스토어에 넣지 않은 사본. 원본이 지워져도 안전하게 읽을 수 있다(`TimerViewModel.use`).
+    /// ⚠️ 사본은 절대 삽입하지 않는다 — id 가 새것이라 넣으면 같은 템플릿이 둘이 된다.
+    func detachedCopy() -> Timer {
+        Timer(name: name,
+              mainSeconds: mainSeconds,
+              prealertOffsetsSec: prealertOffsetsSec,
+              prealertMessages: prealertMessages,
+              finishMessage: finishMessage,
+              label: label,
+              colorHex: colorHex,
+              isFavorite: isFavorite,
+              isPresentation: isPresentation,
+              sectionsData: sectionsData,
+              createdAt: createdAt,
+              lastUsedAt: lastUsedAt)
+    }
+
     func getPrealertMessage(for offsetSec: Int) -> String {
         Self.prealertMessage(for: offsetSec, custom: prealertMessages)
     }

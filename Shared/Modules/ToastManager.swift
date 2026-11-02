@@ -13,16 +13,16 @@ final class ToastManager: ObservableObject {
     private var queue: [Toast] = []
     private var isShowing = false
 
+    /// ⚠️ 줄(`queue`)은 메인 스레드에서만 만진다. 예전에는 넣기만 부른 스레드에서 해서, 메인 밖에서
+    ///    부르면 메인이 꺼내는 순간과 겹쳐 배열이 깨질 수 있었다.
     func show(_ toast: Toast) {
         guard isToastEnabled() else { return }
-
-        queue.append(toast)
-
-        if Thread.isMainThread {
-            displayNext()
-        } else {
-            DispatchQueue.main.async { self.displayNext() }
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async { self.show(toast) }
+            return
         }
+        queue.append(toast)
+        displayNext()
     }
 
     private func isToastEnabled() -> Bool {
