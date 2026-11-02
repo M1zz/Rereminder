@@ -1173,6 +1173,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 
 `TroubleshootingView`(설정 ▸ 도움말 ▸ 문제가 있나요?): 증상을 고르면 해 볼 일이 나온다. 안내가 실제 동작과 어긋나지 않게 고칠 때 함께 볼 것.
 
+단계·패턴 제안·무료 문턱·말 걸기를 한 장에 모은 그림은 `docs/product/EXPERIENCE_EVOLUTION.md` — 숫자를 바꾸면 함께 고칠 것.
 ### 저장된 이름은 그대로 내보내지 않는다
 `Timer.displayName(stored:)`: 앱이 만든 이름("Main 10 min / Pre-alert …", 옛 "메인 10분 / 예비 …")은 값이 달라도 알아보고 실제 값을 지금 언어로 쓴다(`TimerDisplayNameTests`).
 ⚠️ 토스트에 `showToast?("Start")` 처럼 리터럴을 넘기지 말 것 — `String` 은 번역되지 않는다. `String(localized:)` 로.
