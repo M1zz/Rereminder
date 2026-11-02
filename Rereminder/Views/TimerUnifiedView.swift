@@ -371,6 +371,10 @@ struct TimerUnifiedView: View {
             .onChange(of: scenePhase) { oldPhase, newPhase in
                 handleScenePhase(oldPhase, newPhase)
             }
+            // 앱이 이미 떠 있을 때 위젯·제어센터에서 누른 것(콜드 런치는 `finishSetupOnAppear` 가 받는다)
+            .onReceive(NotificationCenter.default.publisher(for: .quickStartRequested)) { _ in
+                startRequestedSetupIfAny()
+            }
             .onChange(of: screenVM.state) { oldState, newState in
                 handleStateChange(oldState, newState)
             }
@@ -689,6 +693,11 @@ struct TimerUnifiedView: View {
         // 첫 화면이 떴다 — 3초 더 살아 있으면 이번 실행은 무사히 연 것으로 친다(크래시 루프 판정).
         RereminderApp.launchGuard.markLaunchSucceededAfterSurvivalDelay()
 
+        // 위젯·제어센터 목록을 지금 템플릿으로 맞추고, 그쪽에서 눌러 앱을 연 것이면 시작한다.
+        // ⚠️ 복원(`restoreTimerIfNeeded`)이 끝난 **뒤**여야 한다 — 도는 타이머를 모른 채 덮어쓰지 않게.
+        QuickStartPublisher.publish(context: context)
+        startRequestedSetupIfAny()
+
         #if targetEnvironment(macCatalyst)
         // 지금 맥에서 돌고 있으니 "맥 있으세요?"를 물어볼 이유가 없다 — 아는 건 묻지 않는다.
         DeviceOwnership.markUsed(.mac)
@@ -718,9 +727,14 @@ struct TimerUnifiedView: View {
         } else {
             DevicePresence.endHeartbeat()
         }
+        // 저장·이름 바꾸기·지우기·사용 기록은 전부 앱이 앞에 있는 동안 일어난다 — 뒤로 갈 때 한 번 옮겨 적는다.
+        if newPhase == .background {
+            QuickStartPublisher.publish(context: context)
+        }
         if newPhase == .active {
             screenVM.timerVM.engine.recalculateOnForeground()
             handleControlWidgetAction()
+            startRequestedSetupIfAny()
             screenVM.applyPendingLiveActivityCommand()
             // 전날 알림을 탭해 돌아온 경우 — 콜드 런치가 아니어도 설정을 올려 준다.
             prepareOccasionEveIfDue()
@@ -1030,6 +1044,21 @@ struct TimerUnifiedView: View {
         case .watch: return String(localized: "For alerts on your wrist, start the timer on your Apple Watch")
         case .mac:   return String(localized: "Open Rereminder on your Mac to follow along")
         }
+    }
+
+    /// 위젯·제어센터에서 누른 저장한 설정을 시작한다.
+    ///
+    /// ⚠️ **🔖 시트에서 템플릿을 누른 것과 똑같은 길이다**(`apply(template:)`). 결제·권한 판정을 여기서
+    ///    따로 하지 않는다 — 따로 하면 같은 템플릿이 앱과 위젯에서 다르게 동작한다.
+    private func startRequestedSetupIfAny() {
+        // 화면 준비 전(콜드 런치에서 활성화가 먼저 온 경우)이면 기록을 남겨 두고 `finishSetupOnAppear` 에서 받는다.
+        guard screenVM.timerVM.modelContext != nil else { return }
+        guard let id = QuickStartShelf.takeRequest() else { return }
+        // 이미 도는 타이머는 덮지 않는다. 앱이 열렸으니 도는 타이머가 그대로 보인다.
+        guard isIdle, let template = QuickStartPublisher.template(id: id, context: context) else { return }
+        AnalyticsManager.log(.presetUsed(name: template.name))
+        ActivityReporter.log("quick_start_used")
+        screenVM.apply(template: template)
     }
 
     private func handleControlWidgetAction() {

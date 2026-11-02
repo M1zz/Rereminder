@@ -12,7 +12,7 @@ import SwiftUI
 struct RereminderAlarmBundle: WidgetBundle {
     var body: some Widget {
         RereminderAlarm()
-        RereminderAlarmControl()
+        QuickStartControl()
         RereminderAlarmLiveActivity()
     }
 }

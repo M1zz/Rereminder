@@ -751,6 +751,27 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
   확장·**App Clip** 세 타겟에 모두 들어가야 한다 — 클립도 `ThemeManager` 를 쓰므로 빠지면
   클립 빌드가 깨진다.
 
+### 제어센터·홈 화면 위젯에서 바로 시작 (QuickStart)
+`Shared/Modules/QuickStartShelf.swift`(목록·요청) + `Shared/Intents/QuickStartIntents.swift`(`StartSavedSetupIntent`)
++ `Rereminder/Modules/QuickStartPublisher.swift`(앱이 목록을 적는다) + `RereminderAlarm/QuickStartControl.swift`.
+
+- 제어센터 버튼 하나 = 저장한 설정 하나(길게 눌러 고른다, 안 고르면 가장 자주 쓰는 것). 홈 화면 위젯은
+  **쉬는 동안** 저장한 설정을 버튼으로 보여 준다(작은 2 · 중간 4 · 큰 6). 도는 동안은 예전처럼 카운트다운이다.
+  순서는 즐겨찾기 → 쓴 횟수 → 최근 사용(`QuickStartPublisher.ordered`).
+- ⚠️ **시작은 🔖 시트에서 누른 것과 똑같은 길(`apply(template:)`)이다.** 결제·권한 판정을 위젯 쪽에 따로 두지 말 것 —
+  같은 템플릿이 앱과 위젯에서 다르게 동작하게 된다. 불러오기는 누구에게나 열려 있어 판정이 없다(`QuickStartTests`).
+- ⚠️ 누르면 **앱이 열리며** 시작한다(`supportedModes = .foreground`). 화면 없이 시작하는 길을 따로 만들지 말 것 —
+  권한 경고·Live Activity·예약·기록이 한 길에 묶여 있다. 그래서 인텐트는 **앱·확장 양쪽**에서 컴파일된다
+  (앱 타겟에 없으면 눌러도 아무 일도 없다. 클립키보드 `docs/engineering/CONTROL_CENTER_APP_LAUNCH.md`).
+  검증: `Rereminder.app/Metadata.appintents/extract.actionsdata` 에 `StartSavedSetupIntent` 가 `supportedModes: 2` 로 있어야 한다.
+- 목록은 앱이 앱 그룹에 가볍게 적는다(확장에는 `Timer` 모델이 없다). 화면이 뜰 때와 **뒤로 갈 때** 적는다.
+  id 만 믿고, 누르면 앱이 스토어에서 다시 읽는다.
+- 요청은 기록(콜드 런치) + 알림(떠 있을 때) 두 겹이고 한 번만 꺼내진다. **60초**가 지난 요청은 버린다.
+  받는 자리는 `TimerUnifiedView.startRequestedSetupIfAny` — 복원 **뒤**, 도는 타이머가 있으면 덮지 않는다.
+- ⚠️ 인텐트 이름·매개변수를 바꾸면 `QuickStartShelf.controlKind` 를 올릴 것(옛 컨트롤이 죽은 채 남는다).
+  2.3.5 까지의 `RereminderAlarmControl` 은 Xcode 템플릿 그대로라 iOS 26 에서 눌러도 아무 일도 없었다 — 지웠다.
+- 제어센터는 시뮬레이터를 믿을 수 없다. 실기기에서 확인한다. 지표: `quick_start_used`.
+
 ### 워치 스마트 스택 — 손목에서 앱을 열지 않고 보는 자리
 `RereminderWatchWidget/` (타겟 `RereminderWatchWidgetExtension`, 번들 ID
 `com.xa.toki.watchkitapp.widget`). **워치 앱 안에 임베드된다** — `RereminderWatch.app/PlugIns/`.
@@ -1152,6 +1173,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 
 ### 첫 실행 — 하얀 화면과 그림 한 번 (BlankStart)
 `Rereminder/Modules/BlankStart.swift` + `Views/Onboarding/BlankStartIntro.swift`. 옛 다섯 장 온보딩(`OnboardingFlowView`·`OnboardingUseCase`)은 지웠다.
+단계·패턴 제안·무료 문턱·말 걸기를 한 장에 모은 그림은 `docs/product/EXPERIENCE_EVOLUTION.md` — 숫자를 바꾸면 함께 고칠 것.
 
 - 흐름: 그림(`BlankStartIntro`, 15초쯤) → 해 보기(`BlankStartPractice`, 종을 옮기고 시작을 눌러 빠르게 본다. 고른 자리가 진짜 다이얼에 올라간다) → 앱. 덮개라 뒤 화면이 비치지 않는다.
 - 단계(`BlankStart.Stage`, 완주 횟수): 0 다이얼·설정·할 일 한 줄 → 1 알림 문장·`+ 알림 추가` → 2 저장 🔖 → 3 세션 전환 → 5 전부(기기 칩·기기 질문·팁). 시드 템플릿은 심지 않는다. 설정 ▸ 모양 ▸ 모든 기능 보기로 언제든 전부 연다(세션 모드가 당장 필요한 발표자의 길이다).
@@ -1173,7 +1195,6 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 
 `TroubleshootingView`(설정 ▸ 도움말 ▸ 문제가 있나요?): 증상을 고르면 해 볼 일이 나온다. 안내가 실제 동작과 어긋나지 않게 고칠 때 함께 볼 것.
 
-단계·패턴 제안·무료 문턱·말 걸기를 한 장에 모은 그림은 `docs/product/EXPERIENCE_EVOLUTION.md` — 숫자를 바꾸면 함께 고칠 것.
 ### 저장된 이름은 그대로 내보내지 않는다
 `Timer.displayName(stored:)`: 앱이 만든 이름("Main 10 min / Pre-alert …", 옛 "메인 10분 / 예비 …")은 값이 달라도 알아보고 실제 값을 지금 언어로 쓴다(`TimerDisplayNameTests`).
 ⚠️ 토스트에 `showToast?("Start")` 처럼 리터럴을 넘기지 말 것 — `String` 은 번역되지 않는다. `String(localized:)` 로.
@@ -1474,6 +1495,8 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - [ ] 홈 화면 위젯 표시 확인
 - [ ] 잠금 화면 위젯 표시 확인
 - [ ] 위젯에서 타이머 제어 확인
+- [ ] (실기기) 쉬는 위젯의 저장한 설정을 누르면 앱이 열리며 그 설정으로 바로 시작하는지 — 앱을 완전히 끈 상태에서도
+- [ ] (실기기) 제어센터 '저장한 설정 시작' 버튼을 길게 눌러 고른 설정으로 시작하는지, 타이머가 도는 중에 누르면 덮지 않는지
 
 ### App Clip
 - [ ] 시간 프리셋 선택 시 알림 3개 지점이 갱신되는지

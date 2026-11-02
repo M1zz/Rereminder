@@ -3,8 +3,10 @@
 //  RereminderAlarm
 //
 //  홈 화면 위젯: App Group UserDefaults에서 타이머 상태를 읽어 표시
+//  쉬는 동안에는 저장한 설정을 버튼으로 보여 주고, 누르면 바로 시작한다(`QuickStartShelf`).
 //
 
+import AppIntents
 import WidgetKit
 import SwiftUI
 
@@ -18,6 +20,8 @@ struct TimerWidgetEntry: TimelineEntry {
     let totalDuration: TimeInterval
     let timerName: String
     let prealertOffsets: [Int]
+    /// 쉬는 동안 보여 줄 저장한 설정(자주 쓰는 순)
+    let setups: [QuickStartItem]
 }
 
 // MARK: - Timeline Provider
@@ -33,7 +37,8 @@ struct TimerWidgetProvider: TimelineProvider {
             endDate: nil,
             totalDuration: 0,
             timerName: "",
-            prealertOffsets: []
+            prealertOffsets: [],
+            setups: []
         )
     }
 
@@ -54,7 +59,8 @@ struct TimerWidgetProvider: TimelineProvider {
                 endDate: nil,
                 totalDuration: 0,
                 timerName: "",
-                prealertOffsets: []
+                prealertOffsets: [],
+                setups: entry.setups
             )
             entries.append(finishedEntry)
             completion(Timeline(entries: entries, policy: .atEnd))
@@ -83,7 +89,8 @@ struct TimerWidgetProvider: TimelineProvider {
             endDate: endDate,
             totalDuration: totalDuration,
             timerName: timerName,
-            prealertOffsets: prealertOffsets
+            prealertOffsets: prealertOffsets,
+            setups: QuickStartShelf.items
         )
     }
 }
@@ -268,19 +275,83 @@ struct TimerWidgetEntryView: View {
 
     // MARK: - Idle
 
-    private var idleView: some View {
-        VStack(spacing: 8) {
-            Spacer()
-            Image(systemName: "timer")
-                .font(.system(size: family == .systemSmall ? 28 : 36))
-                .foregroundStyle(.secondary)
-            Text(String(localized: "No active timer"))
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-            Spacer()
+    /// 크기마다 보여 줄 칸 수 — 작은 것 2 · 중간 4(2열) · 큰 것 6(2열).
+    private var setupSlots: Int {
+        switch family {
+        case .systemSmall: return 2
+        case .systemMedium: return 4
+        default: return QuickStartShelf.maxItems
         }
-        .frame(maxWidth: .infinity)
+    }
+
+    @ViewBuilder
+    private var idleView: some View {
+        let setups = Array(entry.setups.prefix(setupSlots))
+        if setups.isEmpty {
+            // 저장한 설정이 없으면 앱으로 들어가는 자리다(위젯 탭 = 앱 열기).
+            VStack(spacing: 8) {
+                Spacer()
+                Image(systemName: "timer")
+                    .font(.system(size: family == .systemSmall ? 28 : 36))
+                    .foregroundStyle(.secondary)
+                Text(String(localized: "Save a setup in the app to start it here."))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                Spacer()
+            }
+            .frame(maxWidth: .infinity)
+        } else {
+            let columns = family == .systemSmall ? 1 : 2
+            Grid(horizontalSpacing: 8, verticalSpacing: 8) {
+                ForEach(0..<((setups.count + columns - 1) / columns), id: \.self) { row in
+                    GridRow {
+                        ForEach(0..<columns, id: \.self) { col in
+                            let index = row * columns + col
+                            if index < setups.count {
+                                setupButton(setups[index])
+                            } else {
+                                Color.clear
+                            }
+                        }
+                    }
+                }
+            }
+            .frame(maxHeight: .infinity, alignment: .top)
+        }
+    }
+
+    /// 누르면 앱이 열리며 바로 시작한다 — 🔖 시트에서 누른 것과 같다(`StartSavedSetupIntent`).
+    private func setupButton(_ item: QuickStartItem) -> some View {
+        Button(intent: StartSavedSetupIntent(templateID: item.id)) {
+            HStack(spacing: 6) {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(item.name)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+                    HStack(spacing: 4) {
+                        Text(item.durationText)
+                        if item.alertCount > 0 {
+                            Label { Text(verbatim: "\(item.alertCount)") } icon: { Image(systemName: "bell.fill") }
+                                .labelStyle(.titleAndIcon)
+                        }
+                    }
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
+                }
+                Spacer(minLength: 0)
+                Image(systemName: "play.fill")
+                    .font(.caption)
+                    .foregroundStyle(SharedAccent.color)
+            }
+            .padding(.horizontal, 10)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .background(SharedAccent.color.opacity(0.15), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(Text(verbatim: "\(item.name), \(item.durationText)"))
     }
 
     // MARK: - Lock Screen: Circular
@@ -401,7 +472,7 @@ struct RereminderAlarm: Widget {
                 .containerBackground(.fill.tertiary, for: .widget)
         }
         .configurationDisplayName(String(localized: "Timer"))
-        .description(String(localized: "Shows current timer status"))
+        .description(String(localized: "Start a saved setup, or see the running timer."))
         .supportedFamilies([.systemSmall, .systemMedium, .systemLarge, .accessoryCircular, .accessoryRectangular, .accessoryInline])
     }
 }
@@ -418,7 +489,8 @@ struct RereminderAlarm: Widget {
         endDate: Date().addingTimeInterval(600),
         totalDuration: 1800,
         timerName: "Study 25 min",
-        prealertOffsets: [300, 60]
+        prealertOffsets: [300, 60],
+        setups: []
     )
     TimerWidgetEntry(
         date: .now,
@@ -427,6 +499,10 @@ struct RereminderAlarm: Widget {
         endDate: nil,
         totalDuration: 0,
         timerName: "",
-        prealertOffsets: []
+        prealertOffsets: [],
+        setups: [
+            QuickStartItem(id: "a", name: "Pomodoro", durationText: "25 min", alertCount: 2),
+            QuickStartItem(id: "b", name: "Talk", durationText: "15 min", alertCount: 3),
+        ]
     )
 }

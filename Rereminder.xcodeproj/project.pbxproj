@@ -255,9 +255,11 @@
 				DesignSystem/DSSpacing.swift,
 				DesignSystem/SharedAccent.swift,
 				Intents/LiveActivityIntents.swift,
+				Intents/QuickStartIntents.swift,
 				Models/TimerActivityAttributes.swift,
 				Modules/LiveActivityCommand.swift,
 				Modules/LiveActivityController.swift,
+				Modules/QuickStartShelf.swift,
 			);
 			target = 58AA3EAC2ECF5509007D4BBD /* RereminderAlarmExtension */;
 		};
