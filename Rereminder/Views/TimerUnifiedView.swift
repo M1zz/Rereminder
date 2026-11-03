@@ -477,17 +477,17 @@ struct TimerUnifiedView: View {
 
             Spacer()
 
-            if stage >= .saving {
-                Button {
-                    showHistory = true
-                } label: {
-                    Image(systemName: "bookmark")
-                }
-                .accessibilityLabel(String(localized: "Saved timers"))
-                .accessibilityInputLabels([Text("Saved timers"), Text("Templates")])
-                // 같은 설정을 여러 번 맞춰 본 뒤에야 뜬다 (타이머 3회 시작 + 저장 이력 없음)
-                .modifier(SaveTemplateTipAnchor(isAllowed: tipsAllowed))
+            // 🔖 는 단계와 상관없이 처음부터 있다. 맞춘 설정을 저장하고 싶은 순간은 첫날에도 온다 —
+            // 숨겨 두면 "저장해서 시작하고 싶은데 길이 없다"가 되고, 위젯도 "앱에서 저장하라"고 말하는데 버튼이 없었다.
+            Button {
+                showHistory = true
+            } label: {
+                Image(systemName: "bookmark")
             }
+            .accessibilityLabel(String(localized: "Saved timers"))
+            .accessibilityInputLabels([Text("Saved timers"), Text("Templates")])
+            // 같은 설정을 여러 번 맞춰 본 뒤에야 뜬다 (타이머 3회 시작 + 저장 이력 없음)
+            .modifier(SaveTemplateTipAnchor(isAllowed: tipsAllowed))
 
             NavigationLink {
                 NoticeSettingView()

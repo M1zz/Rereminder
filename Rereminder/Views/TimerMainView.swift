@@ -334,8 +334,12 @@ struct TimerMainView: View {
                                 .transition(.opacity)
                         }
                         // 백지로 시작한 사람에게는 다음에 할 일 한 줄뿐이다(`BlankStart`).
-                        if isSimpleStart {
-                            coachLine(String(localized: "Drag the bell to choose when you hear it, then press start"))
+                        // ⚠️ 종을 지웠거나 하나도 없으면 문장 줄을 세운다 — 한 줄뿐이면 되돌리기도 다시 더하기도 없어 갇힌다.
+                        //    종을 끄는 동안은 지우는 법을 말한다(지우는 길이 화면에 보이지 않는다).
+                        if isSimpleStart, screenVM.justRemovedAlert == nil, !screenVM.selectedOffsets.isEmpty {
+                            coachLine(liveOffsets != screenVM.selectedOffsets
+                                ? String(localized: "Tap a bell to remove it.")
+                                : String(localized: "Drag the bell to choose when you hear it, then press start"))
                         } else {
                             DialAlertLine(screenVM: screenVM, liveOffsets: liveOffsets)
                         }

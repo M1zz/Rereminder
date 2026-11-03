@@ -38,12 +38,34 @@ struct TimerWidgetProvider: TimelineProvider {
             totalDuration: 0,
             timerName: "",
             prealertOffsets: [],
-            setups: []
+            setups: Self.sampleSetups
         )
     }
 
     func getSnapshot(in context: Context, completion: @escaping (TimerWidgetEntry) -> Void) {
-        completion(readCurrentEntry())
+        let entry = readCurrentEntry()
+        // 위젯 고르는 화면에서 빈 칸을 보여 주면 무엇을 하는 위젯인지 모른다. 저장한 설정이 없으면 예시로 보여 준다.
+        // (고르는 화면의 그림은 눌리지 않는다. 홈 화면에 놓인 뒤에는 실제 목록만 쓴다.)
+        guard context.isPreview, entry.setups.isEmpty, !entry.isRunning, !entry.isPaused else {
+            completion(entry)
+            return
+        }
+        completion(TimerWidgetEntry(date: entry.date, isRunning: false, isPaused: false, endDate: nil,
+                                    totalDuration: 0, timerName: "", prealertOffsets: [],
+                                    setups: Self.sampleSetups))
+    }
+
+    /// 고르는 화면·자리표시용 예시. 이름은 시드 라벨의 번역을, 길이는 시스템 표기를 쓴다(새 문구 없음).
+    static var sampleSetups: [QuickStartItem] {
+        func minutes(_ m: Int) -> String {
+            Duration.seconds(m * 60).formatted(.units(allowed: [.minutes], width: .abbreviated))
+        }
+        return [
+            QuickStartItem(id: "", name: String(localized: "Presentation"), durationText: minutes(15), alertCount: 3),
+            QuickStartItem(id: "", name: String(localized: "Study"), durationText: minutes(25), alertCount: 2),
+            QuickStartItem(id: "", name: String(localized: "Exercise"), durationText: minutes(30), alertCount: 2),
+            QuickStartItem(id: "", name: String(localized: "Meeting"), durationText: minutes(60), alertCount: 3),
+        ]
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<TimerWidgetEntry>) -> Void) {
