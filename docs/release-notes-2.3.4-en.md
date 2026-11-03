@@ -1,7 +1,6 @@
-Rereminder 2.3.5
+Rereminder 2.3.4
 
-Try every feature first, then decide.
-Plans are now Free, Remember and Pro.
-Choose yearly or lifetime for each plan.
-Subscribed? Switch to lifetime anytime.
-One Forever Pass unlocks all our apps.
+See what Remember or Pro unlocks.
+Redeem codes right inside the app.
+See what is coming next in Settings.
+Voice Control now knows every button.

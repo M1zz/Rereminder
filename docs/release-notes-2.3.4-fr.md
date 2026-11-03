@@ -1,7 +1,6 @@
-Rereminder 2.3.5
+Rereminder 2.3.4
 
-Essayez tout d’abord, décidez ensuite.
-Trois formules : Gratuit, Mémoire, Pro.
-Annuel ou à vie, vous choisissez.
-Abonné ? Passez à vie quand vous voulez.
-Un Pass à vie ouvre toutes nos apps.
+Voyez ce que Mémoire ou Pro débloque.
+Utilisez vos codes dans l’app.
+Ce qui arrive bientôt, dans Réglages.
+Le Contrôle vocal connaît chaque bouton.

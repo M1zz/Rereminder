@@ -1,7 +1,6 @@
-Rereminder 2.3.5
+Rereminder 2.3.4
 
-Erst alles ausprobieren, dann entscheiden.
-Neu sortiert: Kostenlos, Merken und Pro.
-Wähle jährlich oder lebenslang.
-Im Abo jederzeit zu lebenslang wechseln.
-Ein Für-immer-Pass für alle unsere Apps.
+Sieh, was Merken oder Pro freischaltet.
+Codes direkt in der App einlösen.
+Was kommt, zeigen die Einstellungen.
+Die Sprachsteuerung kennt jede Taste.

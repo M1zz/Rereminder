@@ -1,7 +1,6 @@
-Rereminder 2.3.5
+Rereminder 2.3.4
 
-Teste tudo primeiro e depois decida.
-Três planos: Grátis, Memória e Pro.
-Escolha anual ou vitalício.
-Assinante pode mudar para o vitalício.
-Um Passe para sempre abre todos os apps.
+Veja o que o Memória ou o Pro libera.
+Resgate códigos dentro do app.
+Veja o que vem por aí em Ajustes.
+Controle por Voz reconhece cada botão.

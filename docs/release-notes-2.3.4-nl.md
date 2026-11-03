@@ -1,7 +1,6 @@
-Rereminder 2.3.5
+Rereminder 2.3.4
 
-Probeer eerst alles en beslis daarna.
-Drie plannen: Gratis, Onthouden en Pro.
-Kies jaarlijks of levenslang.
-Abonnee? Stap over op levenslang.
-Eén Altijd-pas opent al onze apps.
+Zie wat Onthouden of Pro ontgrendelt.
+Wissel codes in binnen de app.
+Bekijk wat er komt in Instellingen.
+Stembediening kent elke knop.

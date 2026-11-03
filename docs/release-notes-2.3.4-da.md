@@ -1,7 +1,6 @@
-Rereminder 2.3.5
+Rereminder 2.3.4
 
-Prøv alt først, og beslut dig så.
-Nu tre planer: Gratis, Husk og Pro.
-Vælg årligt eller livstid.
-Abonnent? Skift til livstid, når du vil.
-Ét Evighedspas åbner alle vores apps.
+Se, hvad Husk eller Pro låser op.
+Indløs koder direkte i appen.
+Se kommende funktioner i Indstillinger.
+Stemmestyring kender alle knapper.
