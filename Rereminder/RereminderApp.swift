@@ -30,6 +30,9 @@ struct RereminderApp: App {
                                          category: "launch")
 
     init() {
+        // 백업 금고는 맨 먼저 — 예약된 복원을 저장소(SwiftData · 앱 그룹 defaults)가 열리기 전에 적용한다.
+        LeeoVault.start(RereminderSpec.self)
+
         // 분석 이벤트 → 익명 사용 허브 전송 훅 — 다른 어떤 로그보다 먼저 꽂아야 유실이 없다
         AnalyticsManager.eventSink = { ActivityReporter.log($0) }
 

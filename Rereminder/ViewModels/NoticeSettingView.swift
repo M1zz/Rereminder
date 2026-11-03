@@ -340,6 +340,11 @@ struct NoticeSettingView: View {
                 }
                 .foregroundStyle(.primary)
 
+                // 백업 및 복원 (LeeoKit 금고) — 문구는 LeeoKit 이 언어마다 갖고 있다.
+                NavigationLink { LeeoVaultView(appName: RereminderSpec.displayName) } label: {
+                    Label(LeeoVaultText.entry, systemImage: "externaldrive.badge.timemachine")
+                }
+
                 NavigationLink {
                     morePage
                 } label: {

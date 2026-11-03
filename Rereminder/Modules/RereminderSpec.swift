@@ -21,6 +21,9 @@ enum RereminderSpec: LeeoAppSpec {
     /// 이 값으로 자기 자신을 목록에서 뺀다.
     static let familyID: String? = "rereminder"
 
+    /// 백업 금고가 함께 담는 앱 그룹 — SwiftData 저장소와 위젯·인텐트가 같이 쓰는 자리.
+    static let appGroups = ["group.leeo.toki"]
+
     /// Rereminder.entitlements에 iCloud.com.Ysoup.FeedbackHub 컨테이너가 있어야 한다.
     /// 공용 피드백 허브(FeedbackHub)로 수집 — appIdentifier로 앱을 구분한다.
     static let feedback = LeeoFeedbackConfig(
