@@ -61,10 +61,14 @@ struct TimerWidgetProvider: TimelineProvider {
             Duration.seconds(m * 60).formatted(.units(allowed: [.minutes], width: .abbreviated))
         }
         return [
-            QuickStartItem(id: "", name: String(localized: "Presentation"), durationText: minutes(15), alertCount: 3),
-            QuickStartItem(id: "", name: String(localized: "Study"), durationText: minutes(25), alertCount: 2),
-            QuickStartItem(id: "", name: String(localized: "Exercise"), durationText: minutes(30), alertCount: 2),
-            QuickStartItem(id: "", name: String(localized: "Meeting"), durationText: minutes(60), alertCount: 3),
+            QuickStartItem(id: "", name: String(localized: "Presentation"), durationText: minutes(15), alertCount: 3,
+                          mainSeconds: 900, alertOffsets: [300, 120, 60]),
+            QuickStartItem(id: "", name: String(localized: "Study"), durationText: minutes(25), alertCount: 2,
+                          mainSeconds: 1500, alertOffsets: [300, 60]),
+            QuickStartItem(id: "", name: String(localized: "Exercise"), durationText: minutes(30), alertCount: 2,
+                          mainSeconds: 1800, alertOffsets: [600, 300]),
+            QuickStartItem(id: "", name: String(localized: "Meeting"), durationText: minutes(60), alertCount: 3,
+                          mainSeconds: 3600, alertOffsets: [900, 300, 60]),
         ]
     }
 
@@ -297,12 +301,14 @@ struct TimerWidgetEntryView: View {
 
     // MARK: - Idle
 
-    /// 크기마다 보여 줄 칸 수 — 작은 것 2 · 중간 4(2열) · 큰 것 6(2열).
+    /// 크기마다 보여 줄 칸 수 — 작은 것 1 · 중간 2 · 큰 것 4(2×2).
+    /// ⚠️ 칸을 더 넣지 말 것. 작은 2·중간 4·큰 6일 때는 칸마다 글자가 눌려 찌그러져 보였다.
+    ///    시간 숫자가 한눈에 읽히는 크기가 먼저다.
     private var setupSlots: Int {
         switch family {
-        case .systemSmall: return 2
-        case .systemMedium: return 4
-        default: return QuickStartShelf.maxItems
+        case .systemSmall: return 1
+        case .systemMedium: return 2
+        default: return 4
         }
     }
 
@@ -323,15 +329,18 @@ struct TimerWidgetEntryView: View {
                 Spacer()
             }
             .frame(maxWidth: .infinity)
+        } else if family == .systemSmall, let only = setups.first {
+            // 작은 위젯은 위젯 전체가 버튼 하나다 — 안에 상자를 또 그리면 상자 속 상자가 된다.
+            setupButton(only) { SetupTile(item: only, size: .large, framed: false) }
         } else {
-            let columns = family == .systemSmall ? 1 : 2
-            Grid(horizontalSpacing: 8, verticalSpacing: 8) {
-                ForEach(0..<((setups.count + columns - 1) / columns), id: \.self) { row in
+            let rows = (setups.count + 1) / 2
+            Grid(horizontalSpacing: 10, verticalSpacing: 10) {
+                ForEach(0..<rows, id: \.self) { row in
                     GridRow {
-                        ForEach(0..<columns, id: \.self) { col in
-                            let index = row * columns + col
+                        ForEach(0..<2, id: \.self) { col in
+                            let index = row * 2 + col
                             if index < setups.count {
-                                setupButton(setups[index])
+                                setupButton(setups[index]) { SetupTile(item: setups[index], size: .regular, framed: true) }
                             } else {
                                 Color.clear
                             }
@@ -339,41 +348,14 @@ struct TimerWidgetEntryView: View {
                     }
                 }
             }
-            .frame(maxHeight: .infinity, alignment: .top)
         }
     }
 
     /// 누르면 앱이 열리며 바로 시작한다 — 🔖 시트에서 누른 것과 같다(`StartSavedSetupIntent`).
-    private func setupButton(_ item: QuickStartItem) -> some View {
-        Button(intent: StartSavedSetupIntent(templateID: item.id)) {
-            HStack(spacing: 6) {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(item.name)
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.primary)
-                        .lineLimit(1)
-                    HStack(spacing: 4) {
-                        Text(item.durationText)
-                        if item.alertCount > 0 {
-                            Label { Text(verbatim: "\(item.alertCount)") } icon: { Image(systemName: "bell.fill") }
-                                .labelStyle(.titleAndIcon)
-                        }
-                    }
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
-                }
-                Spacer(minLength: 0)
-                Image(systemName: "play.fill")
-                    .font(.caption)
-                    .foregroundStyle(SharedAccent.color)
-            }
-            .padding(.horizontal, 10)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            .background(SharedAccent.color.opacity(0.15), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(Text(verbatim: "\(item.name), \(item.durationText)"))
+    private func setupButton(_ item: QuickStartItem, @ViewBuilder label: () -> some View) -> some View {
+        Button(intent: StartSavedSetupIntent(templateID: item.id), label: label)
+            .buttonStyle(.plain)
+            .accessibilityLabel(Text(verbatim: "\(item.name), \(item.durationText)"))
     }
 
     // MARK: - Lock Screen: Circular
@@ -501,6 +483,86 @@ struct RereminderAlarm: Widget {
 
 // MARK: - Preview
 
+
+/// 칸 속 작은 링. 한 바퀴가 그 설정의 전체 시간이고, 알림이 나눈 구간마다 `SectionPalette` 색이다.
+/// 12시에서 시계 방향으로 "남은 시간" 좌표 — 앱 다이얼과 같다. 링 정보가 없는 옛 목록이면 강조색 한 바퀴다.
+struct SetupRing: View {
+    let mainSeconds: Int
+    let offsets: [Int]
+
+    /// (시작, 끝, 구간 번호) 비율. 구간 번호는 경과 순서(`TimerSections.derive`)와 같다.
+    private var arcs: [(from: Double, to: Double, index: Int)] {
+        guard mainSeconds > 0 else { return [] }
+        let points = [mainSeconds] + offsets.filter { $0 > 0 && $0 < mainSeconds }.sorted(by: >) + [0]
+        return (0..<(points.count - 1)).map { i in
+            (Double(points[i + 1]) / Double(mainSeconds), Double(points[i]) / Double(mainSeconds), i)
+        }
+    }
+
+    var body: some View {
+        GeometryReader { geo in
+            let line = geo.size.width * 0.14
+            ZStack {
+                if arcs.isEmpty {
+                    Circle().stroke(SharedAccent.color, lineWidth: line)
+                } else {
+                    ForEach(arcs, id: \.index) { arc in
+                        Circle()
+                            .trim(from: arc.from, to: arc.to)
+                            .stroke(SectionPalette.color(arc.index), style: StrokeStyle(lineWidth: line, lineCap: .butt))
+                    }
+                }
+            }
+            .rotationEffect(.degrees(-90))
+            .padding(line / 2)
+        }
+    }
+}
+
+// MARK: - 저장한 설정 칸
+
+/// 위에 작은 링(가운데 재생), 아래에 시간(가장 크게)과 이름(또는 알림 시각).
+/// 시간이 주인공이다. 이름은 사용자가 지은 말이라 길이가 제각각이고, 시간은 한눈에 읽혀야 한다.
+struct SetupTile: View {
+    enum Size { case regular, large }
+
+    let item: QuickStartItem
+    let size: Size
+    /// 칸마다 상자를 그리나(중간·큰 위젯). 작은 위젯은 위젯 자체가 상자다.
+    let framed: Bool
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            // 앱의 다이얼을 작게 — 알림이 나눈 구간이 링에서와 같은 색이다. 가운데가 재생 버튼이다.
+            SetupRing(mainSeconds: item.mainSeconds ?? 0, offsets: item.alertOffsets ?? [])
+                .frame(width: size == .large ? 72 : 58, height: size == .large ? 72 : 58)
+                .overlay {
+                    Image(systemName: "play.fill")
+                        .font(.system(size: size == .large ? 18 : 15, weight: .bold))
+                        .foregroundStyle(SharedAccent.color)
+                }
+            Spacer(minLength: 6)
+            Text(item.durationText)
+                .font(.system(size: size == .large ? 30 : 24, weight: .bold, design: .rounded))
+                .foregroundStyle(.primary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.6)
+            // 사용자가 지은 이름, 또는 알림 시각("5분 전, 1분 전")
+            Text(item.name.isEmpty ? " " : item.name)
+                .font(.footnote.weight(.medium))
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+        }
+        .padding(framed ? 12 : 0)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .background {
+            if framed {
+                ContainerRelativeShape().fill(SharedAccent.color.opacity(0.16))
+            }
+        }
+    }
+}
+
 #Preview(as: .systemSmall) {
     RereminderAlarm()
 } timeline: {
@@ -523,8 +585,8 @@ struct RereminderAlarm: Widget {
         timerName: "",
         prealertOffsets: [],
         setups: [
-            QuickStartItem(id: "a", name: "Pomodoro", durationText: "25 min", alertCount: 2),
-            QuickStartItem(id: "b", name: "Talk", durationText: "15 min", alertCount: 3),
+            QuickStartItem(id: "a", name: "Pomodoro", durationText: "25 min", alertCount: 2, mainSeconds: 1500, alertOffsets: [300, 60]),
+            QuickStartItem(id: "b", name: "Talk", durationText: "15 min", alertCount: 3, mainSeconds: 900, alertOffsets: [300, 120, 60]),
         ]
     )
 }

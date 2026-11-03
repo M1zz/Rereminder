@@ -756,7 +756,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 + `Rereminder/Modules/QuickStartPublisher.swift`(앱이 목록을 적는다) + `RereminderAlarm/QuickStartControl.swift`.
 
 - 제어센터 버튼 하나 = 저장한 설정 하나(길게 눌러 고른다, 안 고르면 가장 자주 쓰는 것). 홈 화면 위젯은
-  **쉬는 동안** 저장한 설정을 버튼으로 보여 준다(작은 2 · 중간 4 · 큰 6). 도는 동안은 예전처럼 카운트다운이다.
+  **쉬는 동안** 저장한 설정을 칸으로 보여 준다(작은 1 · 중간 2 · 큰 4, `SetupTile`: 구간 색 작은 링(`SetupRing`, 가운데 재생) + 큰 시간 + 이름). ⚠️ 칸을 늘리지 말 것 — 2·4·6 일 때 찌그러져 보였다. 앱이 지은 이름이면 둘째 줄은 알림 시각만이다(`QuickStartPublisher.tileName`), 제어센터 제목은 시간이다. 도는 동안은 예전처럼 카운트다운이다.
   순서는 즐겨찾기 → 쓴 횟수 → 최근 사용(`QuickStartPublisher.ordered`).
 - ⚠️ **시작은 🔖 시트에서 누른 것과 똑같은 길(`apply(template:)`)이다.** 결제·권한 판정을 위젯 쪽에 따로 두지 말 것 —
   같은 템플릿이 앱과 위젯에서 다르게 동작하게 된다. 불러오기는 누구에게나 열려 있어 판정이 없다(`QuickStartTests`).
@@ -1733,12 +1733,12 @@ git commit -m "docs: claude.md 업데이트 - [변경 내용 요약]"
 
 ## 버전 히스토리
 
-### v2.3.5 (준비 중)
+### v2.3.4 (준비 중 — 2.3.5 로 준비하다 번호를 2.3.4 로 정했다. 옛 2.3.4 빌드 23 의 선물·내 혜택·코드 사용도 함께 들어 있다)
 **세 칸 요금제**: 무료 · 기억(Plus) · Pro, 유료 칸마다 연 구독과 평생. 위 "가격 트림" 절.
 - 새 상품: `plus.yearly` · `pro.yearly` · `pro.graduate`. 연 구독은 래치가 아니라 만료일 표식(`SubscriptionMark`)
 - 언제나 평생 패스(`LeeoForeverPass`)가 Pro 를 연다. 구독 졸업 시트와 설정의 '평생으로 바꾸기'
 - 페이월의 "한 번 구매, 평생 사용" · "구독료 없음" 문구를 고쳤다(이제 틀린 말)
-- LeeoKit 3.23.0 이상. 릴리즈 노트: `docs/release-notes-2.3.5-<25개 언어>.md`
+- LeeoKit 3.23.0 이상. 릴리즈 노트: `docs/release-notes-2.3.4-<25개 언어>.md`
 
 ### v2.3.3 (2026-10-17)
 **가격 트림** — 기억($2.99) · Pro($9.99) · 기억→Pro 차액($6.99). 위 "가격 트림" 절.

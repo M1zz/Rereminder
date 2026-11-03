@@ -1,6 +1,7 @@
-Rereminder 2.3.4
+Rereminder 2.3.5
 
-Xem Ghi nhớ hay Pro mở khóa những gì.
-Đổi mã ngay trong ứng dụng.
-Xem tính năng sắp ra mắt trong Cài đặt.
-Khẩu lệnh nhận biết mọi nút.
+Hãy thử mọi tính năng trước rồi quyết định.
+Nay có ba gói: Miễn phí, Ghi nhớ và Pro.
+Chọn theo năm hoặc trọn đời.
+Người đăng ký có thể đổi sang trọn đời.
+Vé trọn đời mở khóa mọi ứng dụng.

@@ -253,6 +253,7 @@
 				DesignSystem/DSOpacity.swift,
 				DesignSystem/DSRadius.swift,
 				DesignSystem/DSSpacing.swift,
+				DesignSystem/SectionPalette.swift,
 				DesignSystem/SharedAccent.swift,
 				Intents/LiveActivityIntents.swift,
 				Intents/QuickStartIntents.swift,

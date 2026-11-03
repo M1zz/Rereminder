@@ -35,11 +35,23 @@ enum QuickStartPublisher {
             .map { t in
                 QuickStartItem(
                     id: t.id.uuidString,
-                    name: t.displayName,
+                    name: tileName(t),
                     durationText: TimeMapper.durationText(t.mainSeconds),
-                    alertCount: t.prealertOffsetsSec.filter { $0 > 0 && $0 < t.mainSeconds }.count
+                    alertCount: t.prealertOffsetsSec.filter { $0 > 0 && $0 < t.mainSeconds }.count,
+                    mainSeconds: t.mainSeconds,
+                    alertOffsets: t.prealertOffsetsSec.filter { $0 > 0 && $0 < t.mainSeconds }
                 )
             }
+    }
+
+    /// 칸의 둘째 줄. 사용자가 지은 이름이면 그것, 앱이 지은 이름("10분 · 알림 1분 전")이면 알림 시각만 —
+    /// 시간은 칸에 이미 크게 있어서, 같은 말을 한 번 더 쓰면 잘려서 찌그러져 보였다.
+    static func tileName(_ t: Timer) -> String {
+        guard Timer.isGeneratedName(t.name) else { return t.displayName }
+        return t.prealertOffsetsSec.filter { $0 > 0 && $0 < t.mainSeconds }
+            .sorted(by: >)
+            .map { AlertPresets.label($0) }
+            .joined(separator: ", ")
     }
 
     static func publish(context: ModelContext) {

@@ -1,6 +1,7 @@
-Rereminder 2.3.4
+Rereminder 2.3.5
 
-Zobacz, co odblokowuje Pamięć lub Pro.
-Realizuj kody prosto w aplikacji.
-Plany na przyszłość w Ustawieniach.
-Sterowanie głosem zna każdy przycisk.
+Najpierw wypróbuj wszystko, potem zdecyduj.
+Trzy plany: Za darmo, Pamięć i Pro.
+Wybierz rocznie lub dożywotnio.
+Abonament zamienisz na dostęp dożywotni.
+Jedna przepustka na wszystkie aplikacje.

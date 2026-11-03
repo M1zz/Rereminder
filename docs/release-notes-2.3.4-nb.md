@@ -1,6 +1,7 @@
-Rereminder 2.3.4
+Rereminder 2.3.5
 
-Se hva Husk eller Pro låser opp.
-Løs inn koder rett i appen.
-Se hva som kommer i Innstillinger.
-Stemmestyring kjenner alle knappene.
+Prøv alt først, og bestem deg etterpå.
+Nå tre planer: Gratis, Husk og Pro.
+Velg årlig eller livstid.
+Abonnent? Bytt til livstid når du vil.
+Ett Evighetspass åpner alle appene våre.

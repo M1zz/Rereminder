@@ -97,7 +97,8 @@ struct QuickStartControl: ControlWidget {
             guard let item = picked ?? items.first else {
                 return Value(id: "", title: String(localized: "Start a saved setup"), subtitle: "")
             }
-            return Value(id: item.id, title: item.name, subtitle: item.durationText)
+            // 시간이 제목이다 — 앱이 지은 이름이면 `name` 은 알림 시각뿐이다(`QuickStartPublisher.tileName`).
+            return Value(id: item.id, title: item.durationText, subtitle: item.name)
         }
     }
 }

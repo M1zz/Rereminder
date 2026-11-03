@@ -1,6 +1,7 @@
-Rereminder 2.3.4
+Rereminder 2.3.5
 
-Scopri cosa sbloccano Memoria o Pro.
-Riscatta i codici nell’app.
-Le novità in arrivo in Impostazioni.
-Controllo vocale conosce ogni tasto.
+Prima prova tutto, poi decidi.
+Tre piani: Gratis, Memoria e Pro.
+Scegli annuale o a vita per ogni piano.
+Abbonato? Passa a vita quando vuoi.
+Un Pass per sempre apre tutte le app.

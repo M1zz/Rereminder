@@ -1,6 +1,7 @@
-Rereminder 2.3.4
+Rereminder 2.3.5
 
-Hafıza veya Pro ile açılanları gör.
-Kodları doğrudan uygulamada kullan.
-Sıradaki özellikleri Ayarlar'da gör.
-Sesle Denetim her düğmeyi tanıyor.
+Önce her şeyi deneyin, sonra karar verin.
+Üç plan var: Ücretsiz, Hafıza ve Pro.
+Yıllık ya da ömür boyu, sen seç.
+Aboneysen istediğin an ömür boyuya geç.
+Sonsuz Geçiş tüm uygulamalarımızı açar.

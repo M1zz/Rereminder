@@ -1,6 +1,7 @@
-Rereminder 2.3.4
+Rereminder 2.3.5
 
-Näe, mitä Muisti tai Pro avaa.
-Lunasta koodit suoraan sovelluksessa.
-Tulevat ominaisuudet ovat asetuksissa.
-Puheohjaus tuntee jokaisen painikkeen.
+Kokeile ensin kaikkea ja päätä sitten.
+Kolme tasoa: Ilmainen, Muisti ja Pro.
+Valitse vuosittain tai elinikäinen.
+Tilaajana voit vaihtaa elinikäiseen.
+Ikuinen passi avaa kaikki sovelluksemme.

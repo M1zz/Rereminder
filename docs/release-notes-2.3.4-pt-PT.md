@@ -1,6 +1,7 @@
-Rereminder 2.3.4
+Rereminder 2.3.5
 
-Veja os benefícios do Memória e do Pro.
-Resgate códigos dentro da app.
-Veja o que aí vem em Definições.
-O Controlo por voz reconhece cada botão.
+Experimente tudo primeiro e depois decida.
+Três planos: Grátis, Memória e Pro.
+Escolha anual ou vitalício.
+Assinante pode passar para vitalício.
+Um passe para sempre abre todas as apps.

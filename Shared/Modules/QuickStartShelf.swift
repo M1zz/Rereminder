@@ -29,6 +29,9 @@ struct QuickStartItem: Codable, Hashable, Identifiable {
     /// 적을 때의 언어로 만든 길이(`TimeMapper.durationText`) — 확장에는 그 함수가 없다.
     let durationText: String
     let alertCount: Int
+    /// 위젯 칸의 작은 링을 그리는 재료. 2.3.5 첫 빌드가 적은 목록에는 없어서 선택값이다.
+    var mainSeconds: Int?
+    var alertOffsets: [Int]?
 }
 
 enum QuickStartShelf {
