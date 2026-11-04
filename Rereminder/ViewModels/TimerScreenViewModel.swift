@@ -90,11 +90,14 @@ final class TimerScreenViewModel: ObservableObject {
         connectivity.onTimerStart = { [weak self] syncData in
             guard let self = self else { return }
             let mainSeconds = Int(syncData.duration)
-            self.mainMinutes = mainSeconds / 60
-            self.mainSeconds = mainSeconds % 60
-            self.selectedOffsets = Set(syncData.prealertOffsets)
-            self.applyCurrentSettings()
-            self.timerVM.start()
+            // ⚠️ `timerVM.start()` 로 걸지 말 것 — 아이폰이 이 타이머의 주인(`.primary`)이 되어
+            //    "손목 먼저, 30초 뒤 폰 합류" 순서가 깨지고 AlarmKit 알람까지 곧바로 울린다.
+            self.applyCloudUIFields(mainSeconds: mainSeconds, offsets: syncData.prealertOffsets)
+            self.timerVM.applyWatchRunning(
+                mainSeconds: mainSeconds,
+                prealertOffsets: syncData.prealertOffsets,
+                endDate: syncData.endDate()
+            )
             self.showToast?(String(localized: "⌚️ Timer started from Watch"))
         }
 

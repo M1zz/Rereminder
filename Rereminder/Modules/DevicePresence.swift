@@ -156,6 +156,7 @@ enum DevicePresence {
 
     @MainActor private static var timer: Foundation.Timer?
 
+    @MainActor
     private static func write(now: Date = Date()) {
         var all = store.dictionary(forKey: presenceKey) ?? [:]
 

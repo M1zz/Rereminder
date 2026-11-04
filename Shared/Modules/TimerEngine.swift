@@ -79,7 +79,7 @@ final class TimerEngine {
     /// 직접 시작한 타이머면 `.primary`(종료 순간 바로 울린다), 워치가 돌리는 것을 받아 온
     /// 것이면 `.secondary`(손목이 먼저 울리고, 확인이 없을 때만 30초 뒤 합류한다).
     /// ⚠️ 둘 다 primary 로 두면 폰과 워치가 **동시에** 울려 "번지는" 뜻이 사라진다.
-    private var escalationRole: EscalationRole = .primary
+    private(set) var escalationRole: EscalationRole = .primary
     #endif
 
     // MARK: - Public API

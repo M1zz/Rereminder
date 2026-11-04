@@ -124,9 +124,9 @@ struct TimerTemplateView: View {
             currentCount: allTemplates.filter { !Timer.seedTemplateNames.contains($0.name) }.count)
     }
 
-    /// 지금 다이얼과 같은 저장본이 없고, 기본 설정 그대로도 아니다.
+    /// 지금 다이얼과 같은 저장본이 없다.
+    /// ⚠️ 기본 설정이라고 저장을 숨기지 말 것 — 10분 그대로를 저장해 위젯에서 시작하고 싶은 사람에게 길이 없었다.
     private var hasUnsavedChanges: Bool {
-        guard !screenVM.isAtDefaultSetup else { return false }
         let cfg = screenVM.normalizedCurrentConfig
         guard cfg.mainSec > 0 else { return false }
         let finish: String? = screenVM.finishMessage.isEmpty ? nil : screenVM.finishMessage

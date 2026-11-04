@@ -741,7 +741,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
   (자기 컨테이너를 본다) 앱이 테마를 바꿀 때마다 **앱 그룹에 hex 를 한 벌 적어 둔다**
   (`SharedAccent`). `ThemeManager` 의 `didSet` **과 `init` 양쪽**에서 쓴다 — init 에서는 didSet 이
   돌지 않아, 그것만 빼먹으면 업데이트 직후 잠금화면만 기본색으로 남는다.
-- 버튼은 **동그라미**, 색도 앱과 같다: 정지 `DSColor.plain`(회색, 왼쪽) / 일시정지
+- 버튼은 **동그라미**, 색도 앱과 같다: 정지 `DSColor.plain`(회색, 왼쪽, 일시정지 중에는 빨강) / 일시정지
   `DSColor.negativeSoft`(주황) / 재개 `DSColor.positive`. 배치도 앱의 원 안과 같은 순서다.
 - ⚠️ **주황을 진행 표시에 쓰지 말 것** — 이 앱에서 주황은 알림 종의 색이다.
 - ⚠️ 카운트다운은 **`Text(timerInterval:countsDown:)`** 으로 그린다.
@@ -750,6 +750,28 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - `Color(hex:)` 는 `SharedAccent.swift` 에 있다(예전엔 `ThemeManager` 안). ⚠️ 그 파일은 앱·위젯
   확장·**App Clip** 세 타겟에 모두 들어가야 한다 — 클립도 `ThemeManager` 를 쓰므로 빠지면
   클립 빌드가 깨진다.
+
+### 제어센터·홈 화면 위젯에서 바로 시작 (QuickStart)
+`Shared/Modules/QuickStartShelf.swift`(목록·요청) + `Shared/Intents/QuickStartIntents.swift`(`StartSavedSetupIntent`)
++ `Rereminder/Modules/QuickStartPublisher.swift`(앱이 목록을 적는다) + `RereminderAlarm/QuickStartControl.swift`.
+
+- 제어센터 버튼 하나 = 저장한 설정 하나(길게 눌러 고른다, 안 고르면 가장 자주 쓰는 것). 홈 화면 위젯은
+  **쉬는 동안** 저장한 설정을 칸으로 보여 준다(작은 1 · 중간 2 · 큰 4, `SetupTile`: 구간 색 작은 링(`SetupRing`, 가운데 재생) + 큰 시간 + 이름). ⚠️ 칸을 늘리지 말 것 — 2·4·6 일 때 찌그러져 보였다. 앱이 지은 이름이면 둘째 줄은 알림 시각만이다(`QuickStartPublisher.tileName`), 제어센터 제목은 시간이다. 도는 동안은 예전처럼 카운트다운이다.
+  순서는 즐겨찾기 → 쓴 횟수 → 최근 사용(`QuickStartPublisher.ordered`).
+- ⚠️ **시작은 🔖 시트에서 누른 것과 똑같은 길(`apply(template:)`)이다.** 결제·권한 판정을 위젯 쪽에 따로 두지 말 것 —
+  같은 템플릿이 앱과 위젯에서 다르게 동작하게 된다. 불러오기는 누구에게나 열려 있어 판정이 없다(`QuickStartTests`).
+- ⚠️ 누르면 **앱이 열리며** 시작한다(`supportedModes = .foreground`). 화면 없이 시작하는 길을 따로 만들지 말 것 —
+  권한 경고·Live Activity·예약·기록이 한 길에 묶여 있다. 그래서 인텐트는 **앱·확장 양쪽**에서 컴파일된다
+  (앱 타겟에 없으면 눌러도 아무 일도 없다. 클립키보드 `docs/engineering/CONTROL_CENTER_APP_LAUNCH.md`).
+  검증: `Rereminder.app/Metadata.appintents/extract.actionsdata` 에 `StartSavedSetupIntent` 가 `supportedModes: 2` 로 있어야 한다.
+- 위젯 고르는 화면(`context.isPreview`)·자리표시는 저장한 설정이 없으면 예시 넷을 보여 준다(시드 라벨 번역 + 시스템 길이 표기). 놓인 뒤에는 실제 목록만. 🔖 시트는 기본 설정(10분)도 저장할 수 있다.
+- 목록은 앱이 앱 그룹에 가볍게 적는다(확장에는 `Timer` 모델이 없다). 화면이 뜰 때와 **뒤로 갈 때** 적는다.
+  id 만 믿고, 누르면 앱이 스토어에서 다시 읽는다.
+- 요청은 기록(콜드 런치) + 알림(떠 있을 때) 두 겹이고 한 번만 꺼내진다. **60초**가 지난 요청은 버린다.
+  받는 자리는 `TimerUnifiedView.startRequestedSetupIfAny` — 복원 **뒤**, 도는 타이머가 있으면 덮지 않는다.
+- ⚠️ 인텐트 이름·매개변수를 바꾸면 `QuickStartShelf.controlKind` 를 올릴 것(옛 컨트롤이 죽은 채 남는다).
+  2.3.5 까지의 `RereminderAlarmControl` 은 Xcode 템플릿 그대로라 iOS 26 에서 눌러도 아무 일도 없었다 — 지웠다.
+- 제어센터는 시뮬레이터를 믿을 수 없다. 실기기에서 확인한다. 지표: `quick_start_used`.
 
 ### 워치 스마트 스택 — 손목에서 앱을 열지 않고 보는 자리
 `RereminderWatchWidget/` (타겟 `RereminderWatchWidgetExtension`, 번들 ID
@@ -876,6 +898,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
   (`EscalationSchedule.crossDeviceDelay`) 동안 확인이 없으면 iPhone 이 합류한다.
   iPhone 이 `.secondary` 가 되는 조건은 **워치가 돌리는 타이머를 받아 왔을 때**
   (`TimerEngine.applyRemoteRunning`)이고, 직접 시작한 타이머는 `.primary` 다.
+  ⚠️ 워치 시작을 받는 `onTimerStart` 에서 `timerVM.start()` 를 부르지 말 것 — `applyWatchRunning` 이 받는다.
   ⚠️ 둘 다 primary 로 두면 동시에 울려 "번진다"는 뜻이 사라진다.
 - ⚠️ **반대 방향(iPhone → 워치)은 성립하지 않는다.** 워치 앱은 폰이 시작한 타이머를 받아
   처리하지 않고, 무엇보다 **꺼져 있는 워치 앱은 알림을 미리 깔 수 없다.** 대신 iOS 알림은
@@ -962,6 +985,9 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - ⚠️ **종료 알림에도 `categoryIdentifier` 를 붙인다**(iPhone `TimerEngine`·워치
   `NotificationService` 양쪽). 되풀이 알림에만 붙어 있어서 첫 알림에서 끄려던 사람은 버튼을
   찾지 못하고 다음 되풀이까지 기다려야 했다.
+
+### 아이폰에서 건 타이머와 손목
+- ⚠️ **아이폰에서 건 타이머는 워치 앱으로 넘어가지 않는다.** 워치는 `onTimerStart` 를 받지 않고(콜백은 아이폰 `TimerScreenViewModel` 만 건다), 손목에 닿는 길은 iOS 알림 전달뿐이다. 그 전달은 아이폰이 잠겨 있을 때만 일어나는데 타이머가 도는 동안 화면을 켜 둔다(`isIdleTimerDisabled`). 그래서 앱을 띄워 둔 채로는 손목이 조용하다(제보 2026-11-01). 사용자 문구에 "워치에서 따라 보세요"라고 쓰지 말 것.
 
 ### 끝나면 알람으로 울리기 (AlarmKit) — "크게" 는 소리 파일로 되는 일이 아니다
 `Shared/Modules/RereminderAlarmManager.swift` + 설정 > 알림 > **끝나면 알람으로 울리기**.
@@ -1096,9 +1122,13 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
   어지럽다.
 
 ### 메인 화면 위계 (2.3.5)
-주인공은 원과 시작 버튼이다. 강한 색은 시작 버튼(테마 강조색) 하나다. 원 위는 비운다. 원 아래는 문장 하나와 버튼 하나다(`DialAlertLine`). 알림 조작은 셋뿐: `+ 알림 추가`(길이에 맞는 다음 시간, `AlertPresets.nextAlert`), 종 끌기, 종 탭으로 지우기(되돌리기 4초). 저장·초기화·불러오기는 🔖 시트(`TimerTemplateView`) 안이다. 칩 줄과 `TemplateQuickBar` 는 지웠다 — 되살리지 말 것.
+주인공은 원과 시작 버튼이다. 강한 색은 시작 버튼(테마 강조색) 하나다. 원 위는 비운다. 원 아래는 문장 하나와 버튼 하나다(`DialAlertLine`). 알림 조작은 셋뿐: `+ 알림 추가`(길이에 맞는 다음 시간, `AlertPresets.nextAlert`), 종 끌기, 종 탭으로 지우기(되돌리기 4초). 지우는 길은 화면에 안 보여서, 한 번 지워 보기 전까지는 종을 더하거나 끌 때 "종을 누르면 지워집니다"를 4초 말한다(`DialAlertLine`, 백지 단계에서는 할 일 한 줄이 그 말로 바뀐다). 저장·초기화·불러오기는 🔖 시트(`TimerTemplateView`) 안이다. 칩 줄과 `TemplateQuickBar` 는 지웠다 — 되살리지 말 것.
 종은 주황 하나가 아니라 **그 종이 끝내는 구간의 색**이다(`AlertPresets.bellSectionIndex`). 링 조각·종·문장의 시간 글자가 같은 색이라 어느 종이 어느 시간인지 읽힌다. 문장에서는 시간만 칠한다("전"은 그대로).
 **어디부터 줄어드는지 걸기 전에 보인다.** 먼저 줄어들 구간(1구간)만 진하고 나머지는 40%, 핸들 앞에 줄어드는 방향의 ‹‹ 가 있다(`activeSectionIndex`, `firstShrinkHint`). 도는 동안에는 지금 구간이 진하다. 끄는 동안은 경계를 봐야 해서 전부 진하다.
+**종을 끄는 동안 원 가운데는 천천히 바뀐다**(`bellReadoutVisible`, 0.4초). 놓으면 값을 0.6초 보여 준 뒤 돌아온다. 손을 떼는 자리는 애니메이션을 끄므로(아래 "다이얼 드래그") 화면을 `draggingMarkerOffset` 에 바로 묶으면 뚝 바뀐다. 종과 링 자체는 손가락을 바로 따라간다.
+**시작하면 ‹‹ 가 호 끝을 따라 3초 보이다 사라진다**(`runningHintExpired`). 일시정지 뒤 재개에는 나오지 않는다.
+**호 전체의 양 끝은 둥글다**(`RingEndCap`). 구간 경계는 맞붙는다. ⚠️ 구간 호에 `.round` 캡을 쓰면 옆 구간으로 부풀고, 원을 얹으면 흐린 구간에서 겹친 자리만 진해진다. 호 바깥쪽 반원만 그린다. 워치·첫 실행 그림도 끝이 둥글다.
+종·핸들은 입체(`raisedKnob`)다. 빛은 언제나 위에서 오도록 역회전 안쪽에 건다. 모드 전환 탭은 글자 없이 심볼이다.
 ⚠️ 구간 번호와 아래의 구간 길이 칩은 일반 화면에 다시 세우지 말 것. 숫자 `1:00` 이 알림과 구간 길이 두 뜻으로 나왔다. `SectionLengthBar` 는 펼친 듀오 화면에서만 쓴다. 프리셋 안내 팁은 지웠다.
 
 ### 대기 중 화면 — 구간 길이를 걸기 전에 보여준다
@@ -1131,7 +1161,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 
 - **버튼은 원 안에 있다**(`TimerButtonStyle`, `buttonRow`) — 가운데 시간 바로 아래.
   원 밖으로 뺐던 이유는 가운데를 두 줄(전체 + 구간)로 쓰려던 것인데, 그 두 줄이 없어졌으므로
-  버튼이 다시 안으로 들어왔다. 정지는 회색 원(`DSColor.plain`, 대기 중에는 없다),
+  버튼이 다시 안으로 들어왔다. 정지는 회색 원(`DSColor.plain`, 대기 중에는 없다. 일시정지 중에는 빨강으로 눈에 띄게 — 워치·잠금화면도 같다),
   시작·재개는 `DSColor.positive`, 일시정지는 `DSColor.negativeSoft`(주황).
 - **가운데는 전체 남은 시간 한 줄뿐이다.** "지금 구간이 얼마 남았나"는 원 아래 리스트가 답한다.
 - **SectionCountdownList** (`Rereminder/Views/Components/SectionCountdownList.swift`):
@@ -1144,9 +1174,10 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 
 ### 첫 실행 — 하얀 화면과 그림 한 번 (BlankStart)
 `Rereminder/Modules/BlankStart.swift` + `Views/Onboarding/BlankStartIntro.swift`. 옛 다섯 장 온보딩(`OnboardingFlowView`·`OnboardingUseCase`)은 지웠다.
+단계·패턴 제안·무료 문턱·말 걸기를 한 장에 모은 그림은 `docs/product/EXPERIENCE_EVOLUTION.md` — 숫자를 바꾸면 함께 고칠 것.
 
 - 흐름: 그림(`BlankStartIntro`, 15초쯤) → 해 보기(`BlankStartPractice`, 종을 옮기고 시작을 눌러 빠르게 본다. 고른 자리가 진짜 다이얼에 올라간다) → 앱. 덮개라 뒤 화면이 비치지 않는다.
-- 단계(`BlankStart.Stage`, 완주 횟수): 0 다이얼·설정·할 일 한 줄 → 1 알림 문장·`+ 알림 추가` → 2 저장 🔖 → 3 세션 전환 → 5 전부(기기 칩·기기 질문·팁). 시드 템플릿은 심지 않는다. 설정 ▸ 모양 ▸ 모든 기능 보기로 언제든 전부 연다(세션 모드가 당장 필요한 발표자의 길이다).
+- 단계(`BlankStart.Stage`, 완주 횟수): 0 다이얼·설정·할 일 한 줄 → 1 알림 문장·`+ 알림 추가` → 2 저장 수업 → 3 세션 전환 → 5 전부(기기 칩·기기 질문·팁). ⚠️ 🔖 는 단계와 무관하게 처음부터 보인다 — 숨겼더니 "설정을 저장해 시작하고 싶은데 길이 없다"가 됐고 위젯은 앱에서 저장하라고 말했다. 백지 단계에서 종을 지웠거나 하나도 없으면 문장 줄(되돌리기·`+`)을 세운다. 시드 템플릿은 심지 않는다. 설정 ▸ 모양 ▸ 모든 기능 보기로 언제든 전부 연다(세션 모드가 당장 필요한 발표자의 길이다).
 - 기능 수업(`FeatureLessonView`): 직접 눌러 보는 장난감이다. 새로 설치한 사람에게 완주 뒤 하나씩(`dueLesson`: 1 알림 더하기 · 2 저장 · 4 오버타임, 양보해서 놓치면 다음 완주에). 세션 모드는 첫 진입에 배우고, 3회째에는 토스트로 자리만 알린다. 설정 ▸ 이 앱 활용법 보기(`GuideBookView`)에서 언제든 다시 본다.
 - **빈 원이 차오른다**(`dialFillAngle`, `DialFillMask`): 12시에서 핸들까지 차며 지나는 자리에 종이 나타나고, 도착하면 햅틱 뒤 1구간 강조와 ‹‹ 로 이어진다. 줄어드는 길을 거꾸로 먼저 보여 준다. 첫 시작 전에는 열 때마다, 이미 쓰던 사람에게는 한 번(`shouldPlayDialFill`). 손이 닿거나 시작하면 바로 끝난 모습이 된다. 동작 줄이기면 재생하지 않는다. ⚠️ 호마다 `trim` 을 움직이면 구간이 동시에 자란다. 가림막 하나를 움직일 것. ⚠️ 앱을 열 때 뜨는 안내가 닫힌 뒤에 재생한다(`holdsDialFill`).
 - **기존 사용자에게는 묻는다**: 기능은 그대로 전부 보이고, 업데이트 뒤 첫 완주를 닫을 때 "너무 복잡하지 않나요?"를 한 번 묻는다(`shouldAskComplexity`). 단순하게 고르면 저장까지 보이고, 세션 모드를 써 본 사람은 세션 전환도 남는다. 지표: `complexity_answered:{simpler|fine}`.
@@ -1162,6 +1193,8 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 ### 설정 — 첫 화면에는 자주 쓰는 것만
 `NoticeSettingView`: 요금제 → 알림 → 화면 모드 → 기록·기기 → 도움 → 버전. 나머지는 한 겹 안쪽 `alertsPage`(알림 설정)·`devicesPage`(내 기기)·`morePage`(더 보기).
 ⚠️ 의견 보내기는 첫 화면에 둔다. 코드 사용·잃어버린 Pro·빠른 테스트는 더 보기에 있다. 경로를 바꾸면 지원 페이지의 메뉴 경로도 고칠 것.
+
+`TroubleshootingView`(설정 ▸ 도움말 ▸ 문제가 있나요?): 증상을 고르면 해 볼 일이 나온다. 안내가 실제 동작과 어긋나지 않게 고칠 때 함께 볼 것.
 
 ### 저장된 이름은 그대로 내보내지 않는다
 `Timer.displayName(stored:)`: 앱이 만든 이름("Main 10 min / Pre-alert …", 옛 "메인 10분 / 예비 …")은 값이 달라도 알아보고 실제 값을 지금 언어로 쓴다(`TimerDisplayNameTests`).
@@ -1303,8 +1336,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 > 타겟·소스·엔타이틀먼트는 **그대로 살아 있고**, 메인 앱과의 연결 두 줄만 뺐다:
 > ① `Embed App Clips` 페이즈의 `RereminderClip.app in Embed App Clips` 항목
 > ② 메인 앱 타겟 `dependencies` 의 `454D3869CE4B00C1FF7146B1 /* PBXTargetDependency */`
-> 두 정의(`07C42068B7266377CF890D07`, `454D3869CE4B00C1FF7146B1`)는 pbxproj 에 남겨 뒀으므로
-> **되살릴 때는 그 두 줄을 각 목록에 도로 넣으면 된다.** 확인법: 빌드한 `Rereminder.app` 에
+> 두 정의는 이제 pbxproj 에 없다(Xcode 가 정리했다). **되살릴 때는 임베드 항목과 타겟 의존성을 새로 만든다.** 확인법: 빌드한 `Rereminder.app` 에
 > `AppClips/` 폴더가 생기는지 본다.
 > 되살릴 때 함께 볼 것 — 클립 `MARKETING_VERSION` 이 메인 앱과 같아야 하고(제출 게이트),
 > Catalyst 빌드를 위해 임베드 항목에 `platformFilter = ios;` 가 붙어 있어야 한다.
@@ -1464,6 +1496,8 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - [ ] 홈 화면 위젯 표시 확인
 - [ ] 잠금 화면 위젯 표시 확인
 - [ ] 위젯에서 타이머 제어 확인
+- [ ] (실기기) 쉬는 위젯의 저장한 설정을 누르면 앱이 열리며 그 설정으로 바로 시작하는지 — 앱을 완전히 끈 상태에서도
+- [ ] (실기기) 제어센터 '저장한 설정 시작' 버튼을 길게 눌러 고른 설정으로 시작하는지, 타이머가 도는 중에 누르면 덮지 않는지
 
 ### App Clip
 - [ ] 시간 프리셋 선택 시 알림 3개 지점이 갱신되는지

@@ -27,8 +27,26 @@ final class TimerViewModel: ObservableObject {
     var onTimerFinish: (() -> Void)?
     var modelContext: ModelContext?
 
+    /// 이번 실행이 읽는 설정.
+    ///
+    /// ⚠️ **저장된 템플릿을 그대로 들고 있지 않는다.** 도는 중에 🔖 시트에서 그 템플릿을 지우면
+    ///    지운 객체의 속성을 읽는 순간 SwiftData 가 앱을 죽인다("backing data was detached").
+    ///    그 순간이 하필 다음 예비 알림·종료다. 그래서 시작할 때 사본을 떠 두고(`use`) 그것만 읽는다.
     private var currentTemplate: Timer?
+    /// 사본의 원본(저장된 템플릿). 기록을 물릴 때만 쓰고, 그 전에 살아 있는지 본다(`saveTimerRecord`).
+    private var sourceTemplate: Timer?
     private var timerStartTime: Date?
+
+    /// 이번 실행의 설정을 정한다. 저장된 것이면 사본을 읽고 원본은 기록용으로만 둔다.
+    private func use(_ template: Timer) {
+        if template.modelContext != nil {
+            sourceTemplate = template
+            currentTemplate = template.detachedCopy()
+        } else {
+            sourceTemplate = nil
+            currentTemplate = template
+        }
+    }
 
     /// 현재 타이머의 라벨 (예: "Mentoring") — 없으면 빈 문자열
     var currentLabel: String { currentTemplate?.label ?? "" }
@@ -135,7 +153,7 @@ final class TimerViewModel: ObservableObject {
                     mainSeconds: Int(cfg.mainDuration),
                     prealertOffsetsSec: cfg.prealertOffsetsSec.map { Int($0) }
                 )
-                currentTemplate = temp
+                use(temp)
                 startLiveActivity(template: temp, adoptExisting: true)
             }
         }
@@ -146,7 +164,7 @@ final class TimerViewModel: ObservableObject {
     // MARK: - Configuration
 
     func configure(from template: Timer) {
-        currentTemplate = template
+        use(template)
         engine.configure(
             mainSeconds: template.mainSeconds,
             prealertOffsetsSec: template.prealertOffsetsSec,
@@ -254,7 +272,7 @@ final class TimerViewModel: ObservableObject {
             mainSeconds: mainSeconds,
             prealertOffsetsSec: prealertOffsets
         )
-        currentTemplate = template
+        use(template)
         timerStartTime = endDate.addingTimeInterval(-TimeInterval(mainSeconds))
 
         engine.applyRemoteRunning(
@@ -271,13 +289,27 @@ final class TimerViewModel: ObservableObject {
         }
     }
 
+    /// 워치에서 건 타이머를 받는다. 울리는 순서는 다른 기기에서 받은 타이머와 같고(`.secondary`),
+    /// 사용자가 이번에 새로 건 것이므로 시작 기록을 남기고 맥에도 전한다.
+    func applyWatchRunning(mainSeconds: Int, prealertOffsets: [Int], endDate: Date) {
+        applyCloudRunning(mainSeconds: mainSeconds,
+                          prealertOffsets: prealertOffsets,
+                          name: "",
+                          endDate: endDate)
+        RepeatDetector.record(.init(mainSec: mainSeconds, offsets: prealertOffsets))
+        AnalyticsManager.log(.timerStarted(durationSeconds: mainSeconds,
+                                           alertCount: prealertOffsets.count,
+                                           presetName: nil))
+        pushCloudRunning()
+    }
+
     func applyCloudPause(mainSeconds: Int, prealertOffsets: [Int], name: String, remaining r: TimeInterval) {
         if currentTemplate == nil {
-            currentTemplate = Timer(
+            use(Timer(
                 name: name,
                 mainSeconds: mainSeconds,
                 prealertOffsetsSec: prealertOffsets
-            )
+            ))
         }
         engine.applyRemotePause(
             mainSeconds: mainSeconds,
@@ -300,6 +332,22 @@ final class TimerViewModel: ObservableObject {
 
     // MARK: - Timer Record
 
+    /// 기록을 어느 템플릿에 물릴까.
+    /// - 저장된 템플릿으로 시작했으면 그 원본. ⚠️ 도는 중에 지워졌으면 물리지 않는다 —
+    ///   지운 객체를 물리면 저장하다 죽고, 사본을 물리면 지운 템플릿이 칩으로 되살아난다.
+    /// - 저장한 적 없는 임시 설정은 물리면 함께 삽입되어 템플릿 칩으로 쌓인다.
+    ///   새로 설치한 사람의 칩은 자기가 저장한 것만이다. 기존 사용자는 쓰던 그대로 둔다.
+    private func linkedTemplate(for template: Timer) -> Timer? {
+        Self.recordLink(source: sourceTemplate, running: template, isNewInstall: BlankStart.isNewInstall)
+    }
+
+    static func recordLink(source: Timer?, running: Timer, isNewInstall: Bool) -> Timer? {
+        if let source {
+            return source.modelContext != nil && !source.isDeleted ? source : nil
+        }
+        return isNewInstall ? nil : running
+    }
+
     private func saveTimerRecord(finished: Bool) {
         guard let template = currentTemplate,
               let context = modelContext,
@@ -314,13 +362,11 @@ final class TimerViewModel: ObservableObject {
             elapsedSeconds: elapsedSeconds,
             snapshotMainSeconds: template.mainSeconds,
             snapshotPrealertOffsetsSec: template.prealertOffsetsSec,
-            // ⚠️ 저장한 적 없는 임시 설정을 기록에 물리면 함께 삽입되어 템플릿 칩으로 쌓인다.
-            //    새로 설치한 사람의 칩은 자기가 저장한 것만이다. 기존 사용자는 쓰던 그대로 둔다.
-            template: BlankStart.isNewInstall && template.modelContext == nil ? nil : template
+            template: linkedTemplate(for: template)
         )
 
         context.insert(record)
-        template.lastUsedAt = Date()
+        record.template?.lastUsedAt = Date()
         do {
             try context.save()
         } catch {

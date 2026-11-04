@@ -31,7 +31,7 @@ struct PauseIntent: LiveActivityIntent {
     static var description = IntentDescription("Pause the timer")
 
     // 쓰이지 않지만 호출부(위젯의 Button)가 넘기는 값 — 기본값이 있어야 시스템이 값을 되묻지 않는다
-    @Parameter(title: "alarmID", default: "")
+    @Parameter(title: "alarmID", description: "The timer this button controls.", default: "")
     var alarmID: String
 
     init(alarmID: String) { self.alarmID = alarmID }
@@ -53,7 +53,7 @@ struct ResumeIntent: LiveActivityIntent {
     static var description = IntentDescription("Resume the timer")
 
     // 쓰이지 않지만 호출부(위젯의 Button)가 넘기는 값 — 기본값이 있어야 시스템이 값을 되묻지 않는다
-    @Parameter(title: "alarmID", default: "")
+    @Parameter(title: "alarmID", description: "The timer this button controls.", default: "")
     var alarmID: String
 
     init(alarmID: String) { self.alarmID = alarmID }
@@ -73,7 +73,7 @@ struct StopIntent: LiveActivityIntent {
     static var description = IntentDescription("Stop the timer")
 
     // 쓰이지 않지만 호출부(위젯의 Button)가 넘기는 값 — 기본값이 있어야 시스템이 값을 되묻지 않는다
-    @Parameter(title: "alarmID", default: "")
+    @Parameter(title: "alarmID", description: "The timer this button controls.", default: "")
     var alarmID: String
 
     init(alarmID: String) { self.alarmID = alarmID }

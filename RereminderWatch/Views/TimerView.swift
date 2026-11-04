@@ -97,6 +97,13 @@ public struct TimerView: View {
                 .stroke(DSColor.plain.opacity(DSOpacity.track),
                         style: StrokeStyle(lineWidth: Self.lineWidth, lineCap: .round))
 
+            // 호의 양 끝만 둥글게. 둥근 캡을 먼저 깔아 경계 쪽으로 부푼 자리는 아래 조각이 덮는다.
+            ForEach(ringPieces.filter { $0.start == ringPieces.first?.start || $0.end == ringPieces.last?.end }) { piece in
+                RoundedRectRing.Ring(cornerRadius: geometry.radius)
+                    .trim(from: piece.start, to: piece.end)
+                    .stroke(piece.color, style: StrokeStyle(lineWidth: Self.lineWidth, lineCap: .round))
+            }
+
             // 남은 시간 — 알림 경계로 나뉜 **구간 색** 그대로 (iPhone 과 같은 규칙)
             ForEach(ringPieces) { piece in
                 RoundedRectRing.Ring(cornerRadius: geometry.radius)
@@ -119,9 +126,11 @@ public struct TimerView: View {
                     let point = RoundedRectRing.point(atFraction: fraction,
                                                       in: geometry.size,
                                                       cornerRadius: geometry.radius)
+                    // iPhone 의 종과 같은 색. 같은 색 호 위에서도 보이게 흰 테를 두른다.
                     Circle()
-                        .fill(DSColor.marker)
-                        .frame(width: 7, height: 7)
+                        .fill(SectionPalette.color(TimerSections.bellSectionIndex(of: offset, among: Set(effectiveOffsets))))
+                        .overlay(Circle().strokeBorder(.white, lineWidth: 1.5))
+                        .frame(width: 9, height: 9)
                         .position(point)
                 }
             }
@@ -245,7 +254,7 @@ public struct TimerView: View {
                     Image(systemName: "xmark")
                         .font(.system(size: 14, weight: .semibold))
                 }
-                .buttonStyle(WatchRoundButtonStyle(tint: DSColor.plain))
+                .buttonStyle(WatchRoundButtonStyle(tint: timerViewModel.isPaused ? DSColor.negative : DSColor.plain))
                 .accessibilityLabel(String(localized: "Stop timer"))
 
                 Button {

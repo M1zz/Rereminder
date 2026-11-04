@@ -30,6 +30,9 @@ struct RereminderApp: App {
                                          category: "launch")
 
     init() {
+        // 백업 금고는 맨 먼저 — 예약된 복원을 저장소(SwiftData · 앱 그룹 defaults)가 열리기 전에 적용한다.
+        LeeoVault.start(RereminderSpec.self)
+
         // 분석 이벤트 → 익명 사용 허브 전송 훅 — 다른 어떤 로그보다 먼저 꽂아야 유실이 없다
         AnalyticsManager.eventSink = { ActivityReporter.log($0) }
 
@@ -94,6 +97,7 @@ struct RereminderApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .storeFallbackNotice()
                 // 아이폰 듀오: 창 크기·접힌 선을 재서 아래로 흘린다. 접혀 있으면 아무것도 바뀌지 않는다.
                 // 맨 바깥에 건다 — 루트에서 띄우는 시트·알림창도 접힘을 알아야 선을 비켜 선다.
                 .foldAware()
@@ -139,12 +143,49 @@ struct RereminderApp: App {
             RereminderApp.log.fault("SwiftData 컨테이너 로드 실패 — 이번 실행은 저장되지 않는다: \(String(describing: error), privacy: .public)")
             // 앱을 죽이지는 않는다. 타이머 자체는 SwiftData 없이도 돌아간다.
             // 메모리 스토어는 파일·CloudKit 규칙을 타지 않아 실패할 길이 없다 — 여기서 실패하면 되돌아갈 곳도 없다.
-            // swiftlint:disable:next force_try
-            return try! ModelContainer(
-                for: schema,
-                configurations: ModelConfiguration(schema: schema, isStoredInMemoryOnly: true,
-                                                   cloudKitDatabase: .none)
-            )
+            return StoreFallback.memoryContainer(schema: schema, after: error)
         }
     }()
+}
+
+// MARK: - 저장소를 못 연 날
+//
+// 원래 저장소를 못 열면 이번 실행만 메모리에서 연다. 디스크의 기록은 건드리지 않는다.
+// 예전에는 아무 말 없이 넘어가서, 사용자는 저장되는 줄 알고 계속 적었다 — 이제는 알린다.
+
+enum StoreFallback {
+    /// 이번 실행이 임시(메모리) 저장소로 열렸는가
+    private(set) static var isActive = false
+
+    static func memoryContainer(schema: Schema, after error: Error) -> ModelContainer {
+        isActive = true
+        print("⚠️ 저장소를 열지 못해 이번 실행은 메모리에서 엽니다: \(error)")
+        do {
+            return try ModelContainer(
+                for: schema,
+                configurations: ModelConfiguration(schema: schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none)
+            )
+        } catch {
+            // 메모리 저장소마저 안 되는 건 스키마 자체가 잘못된 것 — 개발 중에 바로 드러난다
+            fatalError("메모리 저장소도 열지 못함: \(error)")
+        }
+    }
+}
+
+extension View {
+    /// 임시 저장소로 열렸으면 한 번 알린다. 앱의 맨 바깥 화면에 붙인다.
+    func storeFallbackNotice() -> some View {
+        modifier(StoreFallbackNotice())
+    }
+}
+
+private struct StoreFallbackNotice: ViewModifier {
+    @State private var isPresented = StoreFallback.isActive
+
+    func body(content: Content) -> some View {
+        content.alert("Couldn't open your records", isPresented: $isPresented) {
+        } message: {
+            Text("Your saved records haven't been deleted. Anything you add now won't be saved, so please close the app and open it again.")
+        }
+    }
 }

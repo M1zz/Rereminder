@@ -32,7 +32,7 @@ enum AlertPresets {
     /// 종의 색 — 그 종이 끝내는 구간의 색. 먼저 울리는 종이 첫 구간(링과 같은 번호)이다.
     /// 링 조각·종·문장의 시간이 같은 색이라 어느 종이 어느 시간인지 읽힌다.
     static func bellSectionIndex(of seconds: Int, among offsets: Set<Int>) -> Int {
-        offsets.sorted(by: >).firstIndex(of: seconds) ?? 0
+        TimerSections.bellSectionIndex(of: seconds, among: offsets)
     }
 
     static func label(_ sec: Int) -> String {

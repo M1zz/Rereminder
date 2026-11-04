@@ -86,7 +86,10 @@ struct TimerUnifiedView: View {
     @State private var showIntroPractice = false
     @State private var activeLesson: FeatureLesson?
     /// 다 드러나기 전이나 수업 중에는 말풍선을 띄우지 않는다.
-    private var tipsAllowed: Bool { activeLesson == nil && stage >= .everything }
+    private var tipsAllowed: Bool { hasSettledLaunch && activeLesson == nil && stage >= .everything }
+    /// 첫 화면이 그려졌는가. 팁은 그 뒤에 붙인다 — 붙이는 순간 TipKit 이 규칙을 평가하는데(24ms),
+    /// 그게 첫 프레임 앞에 있으면 앱이 그만큼 늦게 뜬다. 켜자마자 말풍선이 화면을 덮지도 않는다.
+    @State private var hasSettledLaunch = false
     @AppStorage(BlankStart.completionsKey) private var blankStartCompletions = 0
     @AppStorage(BlankStart.preferenceKey) private var blankStartPreference = BlankStart.Preference.automatic.rawValue
     private var stage: BlankStart.Stage {
@@ -371,6 +374,10 @@ struct TimerUnifiedView: View {
             .onChange(of: scenePhase) { oldPhase, newPhase in
                 handleScenePhase(oldPhase, newPhase)
             }
+            // 앱이 이미 떠 있을 때 위젯·제어센터에서 누른 것(콜드 런치는 `finishSetupOnAppear` 가 받는다)
+            .onReceive(NotificationCenter.default.publisher(for: .quickStartRequested)) { _ in
+                startRequestedSetupIfAny()
+            }
             .onChange(of: screenVM.state) { oldState, newState in
                 handleStateChange(oldState, newState)
             }
@@ -436,6 +443,7 @@ struct TimerUnifiedView: View {
         }) {
             TimerTemplateView(screenVM: screenVM) { selected in
                 screenVM.apply(template: selected)
+                OpenSavedSetupIntent.donate(selected)
             }
             .presentationDetents([.medium, .large])
             .presentationDragIndicator(.visible)
@@ -451,36 +459,36 @@ struct TimerUnifiedView: View {
                 // ⚠️ Picker("", …)는 빈 문자열을 문자열 카탈로그에 추출시켜 다국어 검사를 막는다.
                 //    라벨은 제대로 주고 화면에서만 숨긴다.
                 Picker(selection: modeBinding) {
-                    Text(String(localized: "Timer"))
+                    // 심볼로만 가른다. 글자는 언어마다 길이가 달라 막대가 넘치면 설정 버튼이 `…` 메뉴로 숨었다.
+                    Label(String(localized: "Timer"), systemImage: "timer")
+                        .labelStyle(.iconOnly)
                         .tag(AppMode.timer)
-                    // 짧게 쓴다. 길면 막대가 넘쳐 설정 버튼이 `…` 메뉴로 숨는다(독일어에서 실제로 그랬다).
-                    Text(String(localized: "Session"))
-                        .accessibilityLabel(String(localized: "Session Mode"))
+                    Label(String(localized: "Session Mode"), systemImage: FeatureLesson.session.symbol)
+                        .labelStyle(.iconOnly)
                         .tag(AppMode.presentation)
                 } label: {
                     Text(String(localized: "Mode"))
                 }
                 .pickerStyle(.segmented)
                 .labelsHidden()
-                // 폭을 묶는다. 글자에 맞추면 긴 언어에서 막대가 넘쳐 설정 버튼이 `…` 메뉴로 숨는다.
-                .frame(width: 172)
+                .frame(width: 128)
                 // 타이머를 두 번 이상 완주한 뒤, 발표 모드를 아직 안 써 봤을 때만 알려준다
                 .modifier(PresentationModeTipAnchor(isAllowed: tipsAllowed))
             }
 
             Spacer()
 
-            if stage >= .saving {
-                Button {
-                    showHistory = true
-                } label: {
-                    Image(systemName: "bookmark")
-                }
-                .accessibilityLabel(String(localized: "Saved timers"))
-                .accessibilityInputLabels([Text("Saved timers"), Text("Templates")])
-                // 같은 설정을 여러 번 맞춰 본 뒤에야 뜬다 (타이머 3회 시작 + 저장 이력 없음)
-                .modifier(SaveTemplateTipAnchor(isAllowed: tipsAllowed))
+            // 🔖 는 단계와 상관없이 처음부터 있다. 맞춘 설정을 저장하고 싶은 순간은 첫날에도 온다 —
+            // 숨겨 두면 "저장해서 시작하고 싶은데 길이 없다"가 되고, 위젯도 "앱에서 저장하라"고 말하는데 버튼이 없었다.
+            Button {
+                showHistory = true
+            } label: {
+                Image(systemName: "bookmark")
             }
+            .accessibilityLabel(String(localized: "Saved timers"))
+            .accessibilityInputLabels([Text("Saved timers"), Text("Templates")])
+            // 같은 설정을 여러 번 맞춰 본 뒤에야 뜬다 (타이머 3회 시작 + 저장 이력 없음)
+            .modifier(SaveTemplateTipAnchor(isAllowed: tipsAllowed))
 
             NavigationLink {
                 NoticeSettingView()
@@ -596,7 +604,6 @@ struct TimerUnifiedView: View {
         screenVM.restoreTimerIfNeeded()
         // 다이나믹 아일랜드에서 눌러 둔 명령을 먼저 적용하고, 남은 활동이 있으면 치운다
         screenVM.applyPendingLiveActivityCommand()
-        screenVM.cleanUpOrphanLiveActivities()
         // 실행 중 타이머가 없으면 마지막 사용 설정을 다이얼에 복원
         screenVM.restoreLastUsedConfigIfNeeded()
         // 예약해 둔 자리의 전날이면 그 설정이 오늘의 주인공이다 — 다른 제안은 모두 건너뛴다.
@@ -689,6 +696,19 @@ struct TimerUnifiedView: View {
         // 첫 화면이 떴다 — 3초 더 살아 있으면 이번 실행은 무사히 연 것으로 친다(크래시 루프 판정).
         RereminderApp.launchGuard.markLaunchSucceededAfterSurvivalDelay()
 
+        // 위젯·제어센터에서 눌러 앱을 연 것이면 시작한다.
+        // ⚠️ 복원(`restoreTimerIfNeeded`)이 끝난 **뒤**여야 한다 — 도는 타이머를 모른 채 덮어쓰지 않게.
+        startRequestedSetupIfAny()
+
+        // 화면에 보이지 않는 뒷정리는 첫 프레임 뒤로 미룬다 — 그만큼 앱이 먼저 뜬다.
+        DispatchQueue.main.async {
+            // 남은 Live Activity 정리. 타이머가 돌고 있으면 아무것도 하지 않으므로, 그 사이 위젯에서
+            // 시작한 타이머의 것을 지우지 않는다.
+            screenVM.cleanUpOrphanLiveActivities()
+            QuickStartPublisher.publish(context: context)
+            hasSettledLaunch = true
+        }
+
         #if targetEnvironment(macCatalyst)
         // 지금 맥에서 돌고 있으니 "맥 있으세요?"를 물어볼 이유가 없다 — 아는 건 묻지 않는다.
         DeviceOwnership.markUsed(.mac)
@@ -718,9 +738,14 @@ struct TimerUnifiedView: View {
         } else {
             DevicePresence.endHeartbeat()
         }
+        // 저장·이름 바꾸기·지우기·사용 기록은 전부 앱이 앞에 있는 동안 일어난다 — 뒤로 갈 때 한 번 옮겨 적는다.
+        if newPhase == .background {
+            QuickStartPublisher.publish(context: context)
+        }
         if newPhase == .active {
             screenVM.timerVM.engine.recalculateOnForeground()
             handleControlWidgetAction()
+            startRequestedSetupIfAny()
             screenVM.applyPendingLiveActivityCommand()
             // 전날 알림을 탭해 돌아온 경우 — 콜드 런치가 아니어도 설정을 올려 준다.
             prepareOccasionEveIfDue()
@@ -1020,16 +1045,31 @@ struct TimerUnifiedView: View {
 
     private func deviceGuidanceText(_ device: DeviceOwnership.Device) -> String {
         switch device {
-        case .watch: return String(localized: "Now check the remaining time on your Apple Watch too")
+        case .watch: return String(localized: "For alerts on your wrist, start the timer on your Apple Watch")
         case .mac:   return String(localized: "Now check the remaining time in your Mac menu bar too")
         }
     }
 
     private func deviceReminderText(_ device: DeviceOwnership.Device) -> String {
         switch device {
-        case .watch: return String(localized: "Open Rereminder on your Apple Watch to follow along")
+        case .watch: return String(localized: "For alerts on your wrist, start the timer on your Apple Watch")
         case .mac:   return String(localized: "Open Rereminder on your Mac to follow along")
         }
+    }
+
+    /// 위젯·제어센터에서 누른 저장한 설정을 시작한다.
+    ///
+    /// ⚠️ **🔖 시트에서 템플릿을 누른 것과 똑같은 길이다**(`apply(template:)`). 결제·권한 판정을 여기서
+    ///    따로 하지 않는다 — 따로 하면 같은 템플릿이 앱과 위젯에서 다르게 동작한다.
+    private func startRequestedSetupIfAny() {
+        // 화면 준비 전(콜드 런치에서 활성화가 먼저 온 경우)이면 기록을 남겨 두고 `finishSetupOnAppear` 에서 받는다.
+        guard screenVM.timerVM.modelContext != nil else { return }
+        guard let id = QuickStartShelf.takeRequest() else { return }
+        // 이미 도는 타이머는 덮지 않는다. 앱이 열렸으니 도는 타이머가 그대로 보인다.
+        guard isIdle, let template = QuickStartPublisher.template(id: id, context: context) else { return }
+        AnalyticsManager.log(.presetUsed(name: template.name))
+        ActivityReporter.log("quick_start_used")
+        screenVM.apply(template: template)
     }
 
     private func handleControlWidgetAction() {

@@ -34,7 +34,7 @@ final class RereminderAlarmManager: ObservableObject {
     static let shared = RereminderAlarmManager()
 
     /// 사용자가 설정에서 켰는지. ⚠️ 키 이름은 설정 화면(`NoticeSettingView`)과 같아야 한다.
-    static let enabledKey = "useAlarmKit"
+    nonisolated static let enabledKey = "useAlarmKit"
 
     @Published private(set) var authorizationState: AlarmManager.AuthorizationState = .notDetermined
 
@@ -190,7 +190,7 @@ final class RereminderAlarmManager: ObservableObject {
 @MainActor
 final class RereminderAlarmManager: ObservableObject {
     static let shared = RereminderAlarmManager()
-    static let enabledKey = "useAlarmKit"
+    nonisolated static let enabledKey = "useAlarmKit"
     nonisolated static var isPreferred: Bool { false }
 
     private init() {}
