@@ -9,6 +9,8 @@
 //  것도 늘 앱이 뒤로 간 다음이다.
 //
 
+import AppIntents
+import CoreSpotlight
 import Foundation
 import SwiftData
 import WidgetKit
@@ -56,6 +58,7 @@ enum QuickStartPublisher {
 
     static func publish(context: ModelContext) {
         guard let templates = try? context.fetch(FetchDescriptor<Timer>()) else { return }
+        SavedSetupEntity.reindex(templates)
         guard QuickStartShelf.write(items(from: templates)) else { return }
         WidgetCenter.shared.reloadTimelines(ofKind: QuickStartShelf.widgetKind)
         #if !targetEnvironment(macCatalyst)
@@ -68,5 +71,91 @@ enum QuickStartPublisher {
         var descriptor = FetchDescriptor<Timer>(predicate: #Predicate { $0.id == id })
         descriptor.fetchLimit = 1
         return try? context.fetch(descriptor).first
+    }
+}
+
+// MARK: - Siri · Spotlight
+//
+// 저장한 설정을 Spotlight 에 색인해, Siri·Spotlight 가 이름으로 찾아 바로 시작하게 한다.
+// 시작은 위젯·제어센터와 같은 길(`QuickStartShelf.request`)이다 — 앱이 스토어에서 다시 읽어 `apply(template:)` 한다.
+// 색인은 위젯 목록과 같은 때(앱이 뜰 때 · 뒤로 갈 때) 통째로 다시 적는다. 위젯과 달리 6개로 자르지 않는다.
+
+struct SavedSetupEntity: IndexedEntity {
+    static let typeDisplayRepresentation = TypeDisplayRepresentation(name: "Saved setup")
+    static let defaultQuery = SavedSetupQuery()
+
+    /// `Timer.id` 문자열
+    let id: String
+    let name: String
+    let durationText: String
+
+    var displayRepresentation: DisplayRepresentation {
+        // 사용자가 지은 이름이라 번역하지 않는다 — 리터럴로 쓰면 "%@" 가 카탈로그에 추출된다.
+        DisplayRepresentation(title: LocalizedStringResource(stringLiteral: name),
+                              subtitle: LocalizedStringResource(stringLiteral: durationText))
+    }
+
+    init(_ template: Timer) {
+        id = template.id.uuidString
+        name = template.displayName
+        durationText = TimeMapper.durationText(template.mainSeconds)
+    }
+
+    static func reindex(_ templates: [Timer]) {
+        let entities = QuickStartPublisher.ordered(templates.filter { $0.mainSeconds > 0 }).map(SavedSetupEntity.init)
+        Task {
+            let index = CSSearchableIndex.default()
+            try? await index.deleteAppEntities(ofType: SavedSetupEntity.self)
+            try? await index.indexAppEntities(entities)
+        }
+    }
+}
+
+struct SavedSetupQuery: EntityStringQuery {
+    @MainActor
+    private func all() -> [SavedSetupEntity] {
+        let context = RereminderApp.sharedModelContainer.mainContext
+        let templates = (try? context.fetch(FetchDescriptor<Timer>())) ?? []
+        return QuickStartPublisher.ordered(templates.filter { $0.mainSeconds > 0 }).map(SavedSetupEntity.init)
+    }
+
+    @MainActor
+    func entities(for identifiers: [String]) async throws -> [SavedSetupEntity] {
+        all().filter { identifiers.contains($0.id) }
+    }
+
+    @MainActor
+    func entities(matching string: String) async throws -> [SavedSetupEntity] {
+        all().filter { $0.name.localizedStandardContains(string) }
+    }
+
+    @MainActor
+    func suggestedEntities() async throws -> [SavedSetupEntity] {
+        all()
+    }
+}
+
+/// Spotlight 에서 저장한 설정을 누르거나 Siri 에게 이름으로 시키면 앱을 열고 그 설정을 시작한다.
+/// 이미 도는 타이머는 덮지 않는다(`TimerUnifiedView.startRequestedSetupIfAny`).
+struct OpenSavedSetupIntent: OpenIntent {
+    static let title: LocalizedStringResource = "Start a saved setup"
+    static let description = IntentDescription("Opens the app and starts the saved setup you pick.")
+
+    @Parameter(title: "Saved setup", description: "The saved setup to start.")
+    var target: SavedSetupEntity
+
+    init() {}
+    init(target: SavedSetupEntity) { self.target = target }
+
+    /// 🔖 시트에서 같은 일을 했을 때 기부한다 — Siri 가 "이 설정 시작" 을 배운다.
+    static func donate(_ template: Timer) {
+        IntentDonationManager.shared.donate(intent: OpenSavedSetupIntent(target: SavedSetupEntity(template)))
+    }
+
+    @MainActor
+    func perform() async throws -> some IntentResult {
+        QuickStartShelf.request(templateID: target.id)
+        NotificationCenter.default.post(name: .quickStartRequested, object: nil)
+        return .result()
     }
 }

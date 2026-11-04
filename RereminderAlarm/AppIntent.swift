@@ -25,7 +25,7 @@ struct OpenAlarmAppIntent: LiveActivityIntent {
     static var description = IntentDescription("Open Rereminder app")
     static var openAppWhenRun = true
 
-    @Parameter(title: "alarmID")
+    @Parameter(title: "alarmID", description: "The timer this button controls.")
     var alarmID: String
 
     init(alarmID: String) {

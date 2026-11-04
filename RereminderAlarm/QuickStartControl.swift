@@ -55,8 +55,9 @@ struct QuickStartEntityQuery: EntityQuery {
 
 struct QuickStartControlConfiguration: ControlConfigurationIntent {
     static let title: LocalizedStringResource = "Choose a saved setup"
+    static let description = IntentDescription("Choose which saved setup the button starts.")
 
-    @Parameter(title: "Saved setup")
+    @Parameter(title: "Saved setup", description: "The saved setup to start.")
     var setup: QuickStartEntity?
 }
 

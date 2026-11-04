@@ -29,7 +29,7 @@ struct StartSavedSetupIntent: AppIntent {
     static let isDiscoverable = false
 
     /// `Timer.id` 문자열. 비어 있으면 앱만 연다(저장한 설정이 아직 없는 사람).
-    @Parameter(title: "Saved setup")
+    @Parameter(title: "Saved setup", description: "The saved setup to start.")
     var templateID: String
 
     init() { self.templateID = "" }

@@ -16,7 +16,7 @@ struct StartTimerSiriIntent: AppIntent {
     static let description = IntentDescription("Start a timer in Rereminder")
     static let openAppWhenRun = true
 
-    @Parameter(title: "Minutes", default: 0)
+    @Parameter(title: "Minutes", description: "How long the timer runs, in minutes. Leave at 0 to use the time already set.", default: 0)
     var minutes: Int
 
     private static let suiteName = "group.leeo.toki"

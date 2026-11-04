@@ -443,6 +443,7 @@ struct TimerUnifiedView: View {
         }) {
             TimerTemplateView(screenVM: screenVM) { selected in
                 screenVM.apply(template: selected)
+                OpenSavedSetupIntent.donate(selected)
             }
             .presentationDetents([.medium, .large])
             .presentationDragIndicator(.visible)

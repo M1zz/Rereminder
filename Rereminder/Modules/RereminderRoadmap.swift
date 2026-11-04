@@ -38,6 +38,9 @@ extension RereminderSpec {
         .init(id: "data.delete", status: .planned,
               title: String(localized: "Delete all my data", comment: "Roadmap item: delete all data"),
               detail: String(localized: "Erase all your timers and history from inside the app whenever you want.", comment: "Roadmap item detail: delete all data")),
+        .init(id: "siri-ai", status: .planned,
+              title: String(localized: "Just ask Siri", comment: "Roadmap item: Siri without the app name"),
+              detail: String(localized: "Tell Siri what you need without saying the app name, and it starts your saved setup or timer.", comment: "Roadmap item detail: Siri without the app name")),
         // MARK: 만들었어요
         .init(id: "whatsnew", status: .shipped("2.3.4"),
               title: String(localized: "What's new after updates", comment: "Roadmap item: what's new"),
