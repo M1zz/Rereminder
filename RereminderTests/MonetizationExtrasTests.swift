@@ -39,9 +39,19 @@ final class MonetizationExtrasTests: XCTestCase {
         XCTAssertTrue(sold.isDisjoint(with: StoreManager.tipProductIDs))
     }
 
-    /// 선물 코드로 Pro 를 여는 길은 지침 3.1.1 에 걸린다(클립키보드 5.1.16 거절). 다시 넣지 말 것.
-    func test_선물_경로가_없다() {
-        XCTAssertNil(config.gift)
+    /// 선물은 App Store 오퍼 코드로만 간다(LeeoKit 3.40). 앱이 만든 코드로 Pro 를 여는 길은 지침 3.1.1 에 걸린다
+    /// (클립키보드 5.1.16 거절). 그래서 선물 상품 자체는 아무 권한도 열지 않고, 받는 사람이 여는 상품만 가리킨다.
+    func test_선물은_오퍼_코드로_받는_상품만_가리킨다() {
+        let gifts = config.gifts
+        XCTAssertEqual(gifts.map(\.productID), [StoreManager.giftProductID, StoreManager.rememberGiftProductID])
+        XCTAssertEqual(gifts.map(\.grantsProductID),
+                       [StoreManager.ProductID.pro.rawValue, StoreManager.ProductID.remember.rawValue])
+        // 선물 상품을 판매 · 권한 목록에 넣으면 선물을 산 사람이 그 등급이 된다.
+        let sold = Set(config.productIDs).union(config.entitlementIDs)
+        XCTAssertTrue(sold.isDisjoint(with: gifts.map(\.productID)))
+        // 첫 선물(Pro)은 번들 ID 묶음, 기억은 허브와 약속한 따로 된 묶음.
+        XCTAssertNil(gifts[0].poolKey)
+        XCTAssertEqual(gifts[1].poolKey, "com.xa.toki#com.xa.toki.remember")
     }
 
     func test_플러스는_Pro_권한이_아니다() {
@@ -61,6 +71,12 @@ final class MonetizationExtrasTests: XCTestCase {
         let monetization = RereminderSpec.monetization
         XCTAssertEqual(monetization.gate, config.gate)
         XCTAssertEqual(config.tipJar?.productIDs, StoreManager.tipProductIDs)
+        if case .freemiumSubscription(let contract) = monetization {
+            XCTAssertEqual(([contract.gift].compactMap { $0 } + contract.moreGifts).map(\.productID),
+                           config.gifts.map(\.productID))
+        } else {
+            XCTFail("수익 모델이 바뀌었다")
+        }
     }
 
     func test_사전_점검에_팁_선물_오류가_없다() {
