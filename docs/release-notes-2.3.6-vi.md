@@ -1,4 +1,4 @@
-Rereminder 2.3.5
+Rereminder 2.3.6
 
 Hãy thử mọi tính năng trước rồi quyết định.
 Nay có ba gói: Miễn phí, Ghi nhớ và Pro.

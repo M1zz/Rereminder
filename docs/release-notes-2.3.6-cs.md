@@ -1,4 +1,4 @@
-Rereminder 2.3.5
+Rereminder 2.3.6
 
 Nejdřív vše vyzkoušejte, pak se rozhodněte.
 Nově tři plány: Zdarma, Paměť a Pro.

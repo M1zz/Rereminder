@@ -1,4 +1,4 @@
-Rereminder 2.3.5
+Rereminder 2.3.6
 
 Kokeile ensin kaikkea ja päätä sitten.
 Kolme tasoa: Ilmainen, Muisti ja Pro.

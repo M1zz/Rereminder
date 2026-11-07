@@ -1,4 +1,4 @@
-Rereminder 2.3.5
+Rereminder 2.3.6
 
 Try every feature first, then decide.
 Plans are now Free, Remember and Pro.

@@ -1,4 +1,4 @@
-Rereminder 2.3.5
+Rereminder 2.3.6
 
 Prøv alt først, og beslut dig så.
 Nu tre planer: Gratis, Husk og Pro.

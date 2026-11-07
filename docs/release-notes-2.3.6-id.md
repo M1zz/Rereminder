@@ -1,4 +1,4 @@
-Rereminder 2.3.5
+Rereminder 2.3.6
 
 Coba semua fitur dulu, lalu putuskan.
 Kini ada tiga paket: Gratis, Ingat, Pro.

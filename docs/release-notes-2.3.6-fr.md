@@ -1,4 +1,4 @@
-Rereminder 2.3.5
+Rereminder 2.3.6
 
 Essayez tout d’abord, décidez ensuite.
 Trois formules : Gratuit, Mémoire, Pro.

@@ -1,4 +1,4 @@
-Rereminder 2.3.5
+Rereminder 2.3.6
 
 Önce her şeyi deneyin, sonra karar verin.
 Üç plan var: Ücretsiz, Hafıza ve Pro.

@@ -1,4 +1,4 @@
-Rereminder 2.3.5
+Rereminder 2.3.6
 
 Prima prova tutto, poi decidi.
 Tre piani: Gratis, Memoria e Pro.

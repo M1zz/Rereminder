@@ -1,4 +1,4 @@
-Rereminder 2.3.5
+Rereminder 2.3.6
 
 Erst alles ausprobieren, dann entscheiden.
 Neu sortiert: Kostenlos, Merken und Pro.

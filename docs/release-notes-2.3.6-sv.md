@@ -1,4 +1,4 @@
-Rereminder 2.3.5
+Rereminder 2.3.6
 
 Prova allt först och bestäm dig sedan.
 Nu tre nivåer: Gratis, Minne och Pro.
