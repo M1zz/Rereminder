@@ -96,6 +96,22 @@ struct RereminderApp: App {
 
     var body: some Scene {
         WindowGroup {
+            #if DEBUG
+            if let shot = ReviewShot.giftProductID {
+                ReviewShotView(productID: shot)
+                    .preferredColorScheme(.dark)
+                    .tint(themeManager.accentColor)
+            } else {
+                mainWindow
+            }
+            #else
+            mainWindow
+            #endif
+        }
+        .modelContainer(Self.sharedModelContainer)
+    }
+
+    private var mainWindow: some View {
             ContentView()
                 .storeFallbackNotice()
                 // 아이폰 듀오: 창 크기·접힌 선을 재서 아래로 흘린다. 접혀 있으면 아무것도 바뀌지 않는다.
@@ -107,8 +123,6 @@ struct RereminderApp: App {
                 .environmentObject(themeManager)
                 // 연 구독 중인 사람에게 때가 되면 평생으로 바꾸는 길을 한 번 보인다.
                 .subscriptionGraduationPrompt()
-        }
-        .modelContainer(Self.sharedModelContainer)
     }
 
     // MARK: - SwiftData

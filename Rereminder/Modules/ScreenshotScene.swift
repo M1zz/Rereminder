@@ -201,3 +201,34 @@ enum ScreenshotScene: String {
     ]
 }
 #endif
+
+#if DEBUG
+import SwiftUI
+import LeeoKit
+
+/// 인앱 상품 **심사용 이미지** — 선물 화면을 결제 없이 그린다(LeeoKit `LeeoGiftView(previewPrice:)`).
+/// 시뮬레이터에는 StoreKit 상품이 오지 않아 실제 화면은 단추가 비어 있다. **DEBUG 빌드에서만.**
+///
+///     xcrun simctl launch <기기> com.xa.toki -reviewShot com.xa.toki.gift.plus -reviewShotPrice '$8.99'
+enum ReviewShot {
+    static var giftProductID: String? { UserDefaults.standard.string(forKey: "reviewShot") }
+}
+
+struct ReviewShotView: View {
+    let productID: String
+    @ObservedObject private var store = StoreManager.shared
+
+    var body: some View {
+        NavigationStack {
+            if let gift = store.gifts.first(where: { $0.config.productID == productID }) {
+                LeeoGiftView<RereminderSpec>(previewPrice: UserDefaults.standard.string(forKey: "reviewShotPrice") ?? "$9.99",
+                                             gift: gift)
+                    .navigationTitle(String(localized: "Send a Gift"))
+                    .navigationBarTitleDisplayMode(.inline)
+            } else {
+                Text(verbatim: "no gift \(productID)")
+            }
+        }
+    }
+}
+#endif
