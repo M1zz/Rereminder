@@ -49,8 +49,33 @@ enum RereminderSpec: LeeoAppSpec {
         privacyURL: URL(string: "https://m1zz.github.io/Rereminder/privacy.html"),
         cacheSuiteName: "group.leeo.toki",
         gate: ProGate.gatePolicy,
+        gift: giftConfig,
+        moreGifts: moreGiftConfigs,
         tipJar: tipJarConfig
     )
+
+    /// Pro 선물하기 — App Store 오퍼 코드 링크로(LeeoKit `LeeoOfferCodePool`, 클립키보드와 같다).
+    /// 보내는 사람이 소모성 선물 상품을 사면 허브 공개 DB 의 오퍼 코드 묶음에서 한 장을 가져와 App Store 사용 링크로
+    /// 공유한다. 받는 사람은 링크를 누르고 "사용" 한 번 — Pro 를 여는 것은 App Store 다(지침 3.1.1).
+    /// ⚠️ 예전처럼 LeeoKit 이 만든 코드로 Pro 를 열지 않는다(그 길이 3.1.1 로 거절됐다. 2.3.5 에서 뺀 것도 그 길이다).
+    /// ⚠️ 선물 상품은 `productIDs` · `entitlementIDs` 에 넣지 않는다. 넣으면 선물을 산 사람이 Pro 가 된다.
+    /// ⚠️ 묶음은 FeedbackHub ▸ 인앱 구입 ▸ 선물 코드 묶음에서 채운다. 비어 있으면 산 사람이 "준비 중" 에서 기다린다.
+    static let giftConfig = LeeoGiftConfig(
+        productID: StoreManager.giftProductID,
+        grantsProductID: StoreManager.ProductID.pro.rawValue,
+        containerIdentifier: "iCloud.com.Ysoup.FeedbackHub",
+        sellsGifts: true
+    )
+
+    /// 기억(Plus)도 선물한다. 받는 사람에게 기억 평생(`remember`)이 오퍼 코드로 열린다. 묶음은 Pro 와 따로다(`poolKey`).
+    static let moreGiftConfigs = [LeeoGiftConfig(
+        productID: StoreManager.rememberGiftProductID,
+        grantsProductID: StoreManager.ProductID.remember.rawValue,
+        containerIdentifier: "iCloud.com.Ysoup.FeedbackHub",
+        sellsGifts: true,
+        tierName: String(localized: "Remember"),
+        poolKey: StoreManager.rememberGiftPoolKey
+    )]
 
     /// 팁(응원). 이미 다 가진 사람이 더 내고 싶을 때. 아무것도 열지 않는 소모성 상품이다.
     /// ⚠️ 이것도 `productIDs` · `entitlementIDs` 에 넣지 않는다(사전 점검 `tip.sellsPro`).
@@ -77,6 +102,8 @@ enum RereminderSpec: LeeoAppSpec {
                                entitlementIDs: paywallConfig.entitlementIDs,
                                gate: paywallConfig.gate,
                                cacheSuiteName: "group.leeo.toki",
+                               gift: paywallConfig.gift,
+                               moreGifts: paywallConfig.moreGifts,
                                tipJar: paywallConfig.tipJar)
     )
 }

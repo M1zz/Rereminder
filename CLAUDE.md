@@ -322,7 +322,11 @@ Pro 가 파는 한 문장이 "앱이 설정을 기억한다"인데 무료 사용
 - ⚠️ 시작할 때 저절로 저장(`automatic`)은 무료 몫을 쓰지 않는다. 돈을 내지 않은 사람의 템플릿은 어떤 경우에도 지우지 않는다.
 - 칸: 기억 = 템플릿 무제한 + 전체 기록, Pro = 기억 + 세션 모드·대본(`Feature.tier`).
 - `RememberPitch` 의 다시 연 순간·손으로 다시 맞춘 순간은 복원이 무료가 되어 조건이 서지 않는다. 전날 권유 알림창은 지웠고 토스트만 남았다.
-- ⚠️ 선물 코드로 Pro 를 여는 길은 뺐다(지침 3.1.1, 클립키보드 5.1.16 거절) — 되살리지 말 것. 이미 받은 Pro 는 `hasLegacyGiftPro` 로 남는다.
+- ⚠️ LeeoKit 이 만든 선물 코드로 Pro 를 여는 길은 뺐다(지침 3.1.1, 클립키보드 5.1.16 거절) — 되살리지 말 것. 이미 받은 Pro 는 `hasLegacyGiftPro` 로 남는다.
+- 선물은 **App Store 오퍼 코드**로 다시 판다(LeeoKit 3.40, 클립키보드와 같다): `RereminderSpec.giftConfig`(Pro, `gift.pro`) · `moreGiftConfigs`(기억, `gift.plus`, 묶음 열쇠 `com.xa.toki#com.xa.toki.remember`).
+  보내는 사람이 소모성 선물 상품을 사면 FeedbackHub 의 오퍼 코드 묶음에서 한 장을 링크로 보내고, 여는 것은 App Store 다.
+  ⚠️ 묶음이 비면 산 사람이 "준비 중" 에서 기다린다 — 배포 전에 FeedbackHub 에서 등급별 묶음을 채울 것. 선물 상품은 `productIDs`·`entitlementIDs` 에 넣지 않는다.
+- 설정 ▸ 요금제와 응원(`Plan & Support`) 칸: 요금제 줄 → 응원(후원 단계 배지) → 선물하기(`SettingsGiftView`) → 구매 복원. 문구는 `GiftAndTipSection.swift`.
 - 지표: 스냅샷 `freeUse.days`·`freeUse.sessions`·`flag.freeUseActive`, 이벤트 `remember_pitch_shown:freeUse`. 테스트: `FreeUseTests`
 
 ### 결제 게이트 — 파는 축은 "세션 운영"이다

@@ -80,9 +80,16 @@ final class StoreManager: ObservableObject {
     /// ⚠️ `ProductID`·`productIDs`·`entitlementIDs` 어디에도 넣지 않는다 — 넣으면 팁을 낸 사람이 Pro 가 된다.
     nonisolated static let tipProductIDs = ["com.xa.toki.tip.small", "com.xa.toki.tip.medium", "com.xa.toki.tip.large"]
 
-    /// Pro 선물 상품 — **소모성**(몇 번이고 보낼 수 있어야 한다). 받은 사람이 `ProductID.pro` 를 산 것과 같아진다.
+    /// Pro 선물 상품 — **소모성**(몇 번이고 보낼 수 있어야 한다). 받은 사람에게는 App Store 오퍼 코드로 `ProductID.pro` 가 열린다.
     /// ⚠️ 이것도 `productIDs`·`entitlementIDs` 에 넣지 않는다 — 넣으면 선물을 산 사람 자신이 Pro 가 된다.
-    /// 예전 선물 코드로 받은 Pro 의 기록(LeeoKit 이 남긴 것). 선물은 2.3.5 에서 뺐고(지침 3.1.1) 새로 생기지 않는다.
+    /// ⚠️ App Store Connect 에 소모성 상품으로 승인돼 있어야 뜬다. 없으면 설정의 선물 줄이 숨는다.
+    nonisolated static let giftProductID = "com.xa.toki.gift.pro"
+    /// 기억(Plus) 선물 상품(소모성). 받은 사람에게 기억 평생(`ProductID.remember`)이 오퍼 코드로 열린다.
+    nonisolated static let rememberGiftProductID = "com.xa.toki.gift.plus"
+    /// 기억 선물의 오퍼 코드 묶음 열쇠. 허브(FeedbackHub `GiftCodePool.tierPools`)가 같은 열쇠로 채운다.
+    nonisolated static let rememberGiftPoolKey = "com.xa.toki#com.xa.toki.remember"
+
+    /// 예전 선물 코드(LeeoKit 이 만든 코드)로 받은 Pro 의 기록. 그 길은 2.3.5 에서 뺐고(지침 3.1.1) 새로 생기지 않는다.
     nonisolated private static let legacyGiftRedeemedKey = "leeo.gift.redeemed.com.xa.toki.gift.pro"
 
     /// 예전 선물 코드로 이미 Pro 를 받은 사람. **받은 Pro 는 그대로 둔다.**
@@ -122,6 +129,7 @@ final class StoreManager: ObservableObject {
     let foreverPass: LeeoForeverPass
     private var cancellable: AnyCancellable?
     private var passCancellable: AnyCancellable?
+    private var giftCancellables: [AnyCancellable] = []
     /// 마지막으로 본 살아 있는 연 구독 상품들. 바뀔 때만 만료일을 다시 읽는다.
     private var lastSeenSubscriptions: Set<String>?
     private var isRefreshingSubscription = false
@@ -287,6 +295,15 @@ final class StoreManager: ObservableObject {
             }
         }
         Task { [weak self] in await self?.foreverPass.refresh() }
+
+        // 선물 상품이 불러와지거나 링크가 준비되면 설정 · 선물 화면도 다시 그린다.
+        // 이미 그 등급을 가진 사람은 받기 줄을 보지 않는다.
+        for gift in store.gifts {
+            giftCancellables.append(gift.objectWillChange.sink { [weak self] in
+                Task { @MainActor in self?.objectWillChange.send() }
+            })
+        }
+        store.gift?.alreadyEntitled = { Self.isProUser }
     }
 
     // MARK: - 상태 미러링
@@ -496,6 +513,11 @@ final class StoreManager: ObservableObject {
 
     /// 팁(응원) 엔진. 상품이 App Store 에서 와야 `isAvailable` 이 참이 되고, 그때만 설정에 줄이 선다.
     var tipJar: LeeoTipJar? { store.tipJar }
+
+    // MARK: - 선물 (LeeoStore 가 엔진을 가진다)
+
+    /// 파는 선물 전부(Pro · 기억). 첫째가 Pro. 받은 사람의 권한은 App Store 오퍼 코드로 정식 구매가 되어 들어온다.
+    var gifts: [LeeoGiftStore] { store.gifts }
 
     // MARK: - Load Products / Entitlements (LeeoStore 로 위임)
 

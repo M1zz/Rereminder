@@ -43,6 +43,8 @@ struct NoticeSettingView: View {
     @State private var showManageSubscription = false
     /// 구독 졸업(평생으로 바꾸기) 시트.
     @State private var showGraduation = false
+    /// 설정의 구매 복원 결과
+    @State private var restoreMessage: String?
     /// 이번 버전에 새로 생긴 것 — 업데이트 뒤 한 번 뜬 안내를 여기서 다시 연다.
     @State private var showWhatsNew = false
 
@@ -164,20 +166,15 @@ struct NoticeSettingView: View {
                     .accessibilityElement(children: .combine)
                     }
                     .accessibilityHint(String(localized: "Shows what Remember unlocks and how much you use it"))
-                    Button {
-                        showPaywall = true
+                    // 설정의 다른 줄처럼 화면으로 넘어간다(클립키보드와 같다)
+                    NavigationLink {
+                        PaywallView(focus: .session, embedded: true)
                     } label: {
-                        HStack {
-                            Text("Upgrade to Pro")
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
+                        Text("Upgrade to Pro")
                     }
                 } else {
-                    Button {
-                        showPaywall = true
+                    NavigationLink {
+                        PaywallView(embedded: true)
                     } label: {
                         HStack(spacing: 12) {
                             Image(systemName: "crown.fill")
@@ -191,10 +188,6 @@ struct NoticeSettingView: View {
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
                         }
                     }
 
@@ -239,6 +232,27 @@ struct NoticeSettingView: View {
                         .font(.body)
                         .foregroundStyle(.secondary)
                 }
+
+                // 응원도 같은 칸 — 돈 이야기는 여기 모여 있다(클립키보드와 같다). 상품이 App Store 에서 와야 선다.
+                GiftAndTipSection()
+
+                // 평생을 가진 사람은 되돌릴 구매가 없다. 나머지는 칸 끝에 복원을 둔다.
+                if !(StoreManager.storedPurchaseFlag || StoreManager.isGrandfathered) {
+                    Button {
+                        Task {
+                            await store.restorePurchases()
+                            restoreMessage = store.purchaseState == .restored
+                                ? String(localized: "Restored successfully!")
+                                : (store.errorMessage ?? String(localized: "No purchases to restore"))
+                        }
+                    } label: {
+                        Label("Restore Purchases", systemImage: "arrow.clockwise")
+                            .foregroundStyle(.secondary)
+                    }
+                    .disabled(store.purchaseState == .purchasing)
+                }
+            } header: {
+                Text("Plan & Support")
             }
 
             Section {
@@ -376,6 +390,10 @@ struct NoticeSettingView: View {
         }
         .paywallGate(isPresented: $showPaywall)
         .manageSubscriptionsSheet(isPresented: $showManageSubscription)
+        .alert(restoreMessage ?? "", isPresented: Binding(get: { restoreMessage != nil },
+                                                          set: { if !$0 { restoreMessage = nil } })) {
+            Button("OK", role: .cancel) { }
+        }
         .sheet(isPresented: $showGraduation) {
             SubscriptionGraduationSheet()
         }
@@ -760,9 +778,6 @@ struct NoticeSettingView: View {
                     }
                 }
             }
-
-            // 응원 — 상품이 App Store 에서 와야 선다(`GiftAndTipSection`).
-            GiftAndTipSection()
 
             Section {
                 // 같은 개발자가 만든 다른 앱 — 이 앱과 함께 쓰는 순간을 앱마다 한 줄로.

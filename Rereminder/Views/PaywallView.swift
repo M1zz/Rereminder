@@ -45,48 +45,30 @@ struct PaywallView: View {
     /// App Store 의 코드 사용 시트(오퍼 코드·인앱결제 프로모션 코드).
     @State private var showRedeemCode = false
 
+    /// 설정 줄에서 **화면으로 넘어와** 열렸다 — 내비게이션 · 닫기 단추는 바깥 것을 쓴다(클립키보드와 같다).
+    var embedded = false
+
     /// 고른 칸. 처음에는 들어온 자리의 칸(기억 자리는 기억, 세션 자리는 Pro). 이미 가진 칸은 고를 수 없다.
     @State private var chosenTier: ProTier?
 
     var body: some View {
-        NavigationStack {
-            // 그림으로 파는 틀(LeeoKit `LeeoShowcasePaywall`, 골드위크 · 클립키보드와 같다):
-            // 기억 | Pro → 기능 그림(옆으로 넘김) → 연 구독 · 평생 → 늘 떠 있는 구매 단추.
-            // 머리말(왕관 · 앱 이름 · 미사여구)은 두지 않는다. 지금까지 한 것 · 비교표 · 복원 · 약관은 스크롤한 아래에.
-            LeeoShowcasePaywall(showcases: showcases) {
-                if purchasableTiers.count > 1 { tierSwitch }
-            } plans: {
-                plans
-            } button: {
-                if !store.isPro, let tier = selectedTier {
-                    buyButton(tier, product: offer(tier, termBinding(tier).wrappedValue))
-                }
-            } details: {
-                VStack(spacing: 24) {
-                    purchaseSection
-                    if let receipt = PaywallReceipt.pick(
-                        completions: Int(UsageMetrics.value(.timerCompletions)),
-                        sessions: Int(UsageMetrics.value(.presentationRuns)),
-                        focus: focusTier
-                    ), !store.isPro {
-                        receiptLine(receipt)
-                    }
-                    // 언제나 평생 패스. 이미 Pro 인 사람도 다른 앱까지 열고 싶을 수 있다.
-                    LeeoForeverPassLine(pass: store.foreverPass, ownsLifetimePro: StoreManager.storedPurchaseFlag)
-                    restoreSection
-                    legalSection
-                    featureComparisonSection
-                }
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button { dismiss() } label: {
-                        Image(systemName: "xmark.circle.fill")
-                            .foregroundStyle(.secondary)
-                            .font(.title3)
-                    }
-                    .accessibilityLabel(String(localized: "Close"))
+        Group {
+            if embedded {
+                // 아래 떠 있는 구매 단추를 탭 막대가 가리지 않게
+                page.toolbar(.hidden, for: .tabBar)
+            } else {
+                NavigationStack {
+                    page
+                        .toolbar {
+                            ToolbarItem(placement: .topBarTrailing) {
+                                Button { dismiss() } label: {
+                                    Image(systemName: "xmark.circle.fill")
+                                        .foregroundStyle(.secondary)
+                                        .font(.title3)
+                                }
+                                .accessibilityLabel(String(localized: "Close"))
+                            }
+                        }
                 }
             }
         }
@@ -123,6 +105,60 @@ struct PaywallView: View {
                 }
             }
         }
+    }
+
+    private var page: some View {
+            // 그림으로 파는 틀(LeeoKit `LeeoShowcasePaywall`, 골드위크 · 클립키보드와 같다):
+            // 기억 | Pro → 기능 그림(옆으로 넘김) → 연 구독 · 평생 → 늘 떠 있는 구매 단추.
+            // 머리말(왕관 · 앱 이름 · 미사여구)은 두지 않는다. 지금까지 한 것 · 비교표 · 복원 · 약관은 스크롤한 아래에.
+            LeeoShowcasePaywall(showcases: showcases) {
+                if purchasableTiers.count > 1 { tierSwitch }
+            } plans: {
+                plans
+            } button: {
+                if !store.isPro, let tier = selectedTier {
+                    buyButton(tier, product: offer(tier, termBinding(tier).wrappedValue))
+                }
+            } details: {
+                VStack(spacing: 24) {
+                    purchaseSection
+                    if let receipt = PaywallReceipt.pick(
+                        completions: Int(UsageMetrics.value(.timerCompletions)),
+                        sessions: Int(UsageMetrics.value(.presentationRuns)),
+                        focus: focusTier
+                    ), !store.isPro {
+                        receiptLine(receipt)
+                    }
+                    // 언제나 평생 패스. 이미 Pro 인 사람도 다른 앱까지 열고 싶을 수 있다.
+                    LeeoForeverPassLine(pass: store.foreverPass, ownsLifetimePro: StoreManager.storedPurchaseFlag)
+                    // 다 가진 사람이 더 내고 싶을 때 갈 곳(응원). 팁 상품이 와 있을 때만(클립키보드와 같다).
+                    if store.isPro, let tipJar = store.tipJar, tipJar.isAvailable {
+                        NavigationLink {
+                            LeeoTipJarView<RereminderSpec>(tipJar: tipJar)
+                        } label: {
+                            Label(LeeoTipText.entry, systemImage: "heart.fill")
+                                .font(.body.weight(.semibold))
+                                .foregroundStyle(Color.accentColor)
+                        }
+                    }
+                    restoreSection
+                    legalSection
+                    // 사는 사람에게는 접어 둔다 — 고를 것은 위에 다 있다. 이미 가진 사람은 무엇이 열렸는지 보러 왔으니 편다.
+                    if store.isPro {
+                        featureComparisonSection
+                    } else {
+                        DisclosureGroup {
+                            featureComparisonSection.padding(.top, 12)
+                        } label: {
+                            Text("Compare Plans")
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                        }
+                        .tint(.secondary)
+                    }
+                }
+            }
+            .navigationBarTitleDisplayMode(.inline)
     }
 
     // MARK: - 칸
