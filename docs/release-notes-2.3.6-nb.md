@@ -1,7 +1,7 @@
 Rereminder 2.3.6
 
-Prøv alt først, og bestem deg etterpå.
+Gi Husk eller Pro i gave.
 Nå tre planer: Gratis, Husk og Pro.
 Velg årlig eller livstid.
-Abonnent? Bytt til livstid når du vil.
+Planer, tips og gaver samlet på ett sted.
 Ett Evighetspass åpner alle appene våre.

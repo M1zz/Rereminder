@@ -1,7 +1,7 @@
 Rereminder 2.3.6
 
-Prima prova tutto, poi decidi.
+Regala Memoria o Pro a chi vuoi.
 Tre piani: Gratis, Memoria e Pro.
 Scegli annuale o a vita per ogni piano.
-Abbonato? Passa a vita quando vuoi.
+Piani, mance e regali in un unico posto.
 Un Pass per sempre apre tutte le app.

@@ -1,7 +1,7 @@
 Rereminder 2.3.6
 
-Kokeile ensin kaikkea ja päätä sitten.
+Anna Muisti tai Pro lahjaksi.
 Kolme tasoa: Ilmainen, Muisti ja Pro.
 Valitse vuosittain tai elinikäinen.
-Tilaajana voit vaihtaa elinikäiseen.
+Tasot, tipit ja lahjat yhdessä paikassa.
 Ikuinen passi avaa kaikki sovelluksemme.

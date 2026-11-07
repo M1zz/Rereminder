@@ -1,7 +1,7 @@
 Rereminder 2.3.6
 
-Erst alles ausprobieren, dann entscheiden.
+Verschenke Merken oder Pro.
 Neu sortiert: Kostenlos, Merken und Pro.
 Wähle jährlich oder lebenslang.
-Im Abo jederzeit zu lebenslang wechseln.
+Pläne, Trinkgeld und Geschenke an einem Ort.
 Ein Für-immer-Pass für alle unsere Apps.

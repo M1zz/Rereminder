@@ -1,7 +1,7 @@
 Rereminder 2.3.6
 
-Najpierw wypróbuj wszystko, potem zdecyduj.
+Podaruj Pamięć lub Pro innej osobie.
 Trzy plany: Za darmo, Pamięć i Pro.
 Wybierz rocznie lub dożywotnio.
-Abonament zamienisz na dostęp dożywotni.
+Plany, napiwki i prezenty w jednym miejscu.
 Jedna przepustka na wszystkie aplikacje.

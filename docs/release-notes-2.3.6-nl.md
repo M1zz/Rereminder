@@ -1,7 +1,7 @@
 Rereminder 2.3.6
 
-Probeer eerst alles en beslis daarna.
+Geef Onthouden of Pro cadeau.
 Drie plannen: Gratis, Onthouden en Pro.
 Kies jaarlijks of levenslang.
-Abonnee? Stap over op levenslang.
+Plannen, fooi en cadeaus op één plek.
 Eén Altijd-pas opent al onze apps.

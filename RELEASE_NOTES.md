@@ -13,202 +13,202 @@ DeployBar 가 배포할 때 아래 버전 절의 언어별 문구를 읽어 스�
 
 ### 앱스토어 (한국어)
 
-모든 기능을 먼저 써 보고 결정할 수 있어요.
+기억과 Pro를 다른 사람에게 선물할 수 있어요.
 요금제가 무료, 기억, Pro 세 가지로 정리됐어요.
 기억과 Pro는 연 구독과 평생 중에 고를 수 있어요.
-구독 중이면 언제든 평생으로 바꿀 수 있어요.
+설정에 요금제, 응원, 선물을 한곳에 모았어요.
 언제나 평생 패스로 모든 앱을 열 수 있어요.
 
 ### App Store (English)
 
-Try every feature first, then decide.
+Gift Remember or Pro to someone else.
 Plans are now Free, Remember and Pro.
 Choose yearly or lifetime for each plan.
-Subscribed? Switch to lifetime anytime.
+Plans, tips and gifts now in one place.
 One Forever Pass unlocks all our apps.
 
 ### App Store (en-GB)
 
-Try every feature first, then decide.
+Gift Remember or Pro to someone else.
 Plans are now Free, Remember and Pro.
 Choose yearly or lifetime for each plan.
-Subscribed? Move to lifetime any time.
+Plans, tips and gifts now in one place.
 One Forever Pass unlocks all our apps.
 
 ### App Store (日本語)
 
-すべての機能を試してから決められます。
+記憶とProを誰かに贈れるようになりました。
 プランが無料、記憶、Proの3つになりました。
 記憶とProは年額か買い切りを選べます。
-購読中ならいつでも買い切りに切り替えられます。
+設定でプラン、応援、ギフトをまとめました。
 ずっとパスですべてのアプリが使えます。
 
 ### 앱스토어 (중국어 간체)
 
-可以先试用所有功能，再做决定。
+现在可以把记忆和 Pro 送给别人。
 方案整理为免费、记忆和 Pro 三种。
 记忆和 Pro 可选年订阅或永久。
-订阅中可随时改为永久版。
+设置里汇集了方案、支持和礼物。
 一张永久通行证即可解锁我们所有 App。
 
 ### 앱스토어 (중국어 번체)
 
-可以先試用所有功能，再做決定。
+現在可以把記憶和 Pro 送給別人。
 方案整理為免費、記憶和 Pro 三種。
 記憶和 Pro 可選年訂閱或永久。
-訂閱中可隨時改為永久版。
+設定裡匯集了方案、支持和禮物。
 一張永久通行證即可解鎖我們所有 App。
 
 ### App Store (Deutsch)
 
-Erst alles ausprobieren, dann entscheiden.
+Verschenke Merken oder Pro.
 Neu sortiert: Kostenlos, Merken und Pro.
 Wähle jährlich oder lebenslang.
-Im Abo jederzeit zu lebenslang wechseln.
+Pläne, Trinkgeld und Geschenke an einem Ort.
 Ein Für-immer-Pass für alle unsere Apps.
 
 ### App Store (Français)
 
-Essayez tout d’abord, décidez ensuite.
+Offrez Mémoire ou Pro à un proche.
 Trois formules : Gratuit, Mémoire, Pro.
 Annuel ou à vie, vous choisissez.
-Abonné ? Passez à vie quand vous voulez.
+Formules, pourboires et cadeaux réunis.
 Un Pass à vie ouvre toutes nos apps.
 
 ### App Store (Español)
 
-Prueba todo primero y luego decide.
+Regala Memoria o Pro a quien quieras.
 Tres planes: Gratis, Memoria y Pro.
 Elige anual o de por vida en cada plan.
-Con suscripción, pásate a de por vida.
+Planes, propinas y regalos en un solo lugar.
 Un Pase para siempre abre nuestras apps.
 
 ### App Store (Português do Brasil)
 
-Teste tudo primeiro e depois decida.
+Dê Memória ou Pro de presente.
 Três planos: Grátis, Memória e Pro.
 Escolha anual ou vitalício.
-Assinante pode mudar para o vitalício.
+Planos, gorjetas e presentes num só lugar.
 Um Passe para sempre abre todos os apps.
 
 ### 앱스토어 (포르투갈어(포르투갈))
 
-Experimente tudo primeiro e depois decida.
+Ofereça Memória ou Pro a alguém.
 Três planos: Grátis, Memória e Pro.
 Escolha anual ou vitalício.
-Assinante pode passar para vitalício.
+Planos, gorjetas e presentes num só sítio.
 Um passe para sempre abre todas as apps.
 
 ### App Store (Italiano)
 
-Prima prova tutto, poi decidi.
+Regala Memoria o Pro a chi vuoi.
 Tre piani: Gratis, Memoria e Pro.
 Scegli annuale o a vita per ogni piano.
-Abbonato? Passa a vita quando vuoi.
+Piani, mance e regali in un unico posto.
 Un Pass per sempre apre tutte le app.
 
 ### 앱스토어 (러시아어)
 
-Сначала попробуйте всё, потом решите.
+Дарите «Память» или Pro другим.
 Три тарифа: Бесплатно, Память и Pro.
 Выбирайте: на год или навсегда.
-Подписку можно сменить на «навсегда».
+Тарифы, чаевые и подарки в одном месте.
 Вечный пропуск откроет все приложения.
 
 ### 앱스토어 (체코어)
 
-Nejdřív vše vyzkoušejte, pak se rozhodněte.
+Darujte Paměť nebo Pro někomu blízkému.
 Nově tři plány: Zdarma, Paměť a Pro.
 U každého zvolte ročně, nebo doživotně.
-Předplatné změníte kdykoli na doživotní.
+Plány, spropitné a dárky na jednom místě.
 Pas navždy odemkne všechny aplikace.
 
 ### 앱스토어 (덴마크어)
 
-Prøv alt først, og beslut dig så.
+Giv Husk eller Pro i gave.
 Nu tre planer: Gratis, Husk og Pro.
 Vælg årligt eller livstid.
-Abonnent? Skift til livstid, når du vil.
+Planer, drikkepenge og gaver samlet ét sted.
 Ét Evighedspas åbner alle vores apps.
 
 ### 앱스토어 (그리스어)
 
-Δοκιμάστε τα πρώτα όλα και μετά αποφασίστε.
+Χαρίστε τη Μνήμη ή το Pro σε κάποιον.
 Τρία πακέτα: Δωρεάν, Μνήμη και Pro.
 Διαλέξτε ετήσια ή εφ’ όρου ζωής.
-Συνδρομητές περνούν σε εφ’ όρου ζωής.
+Πακέτα, φιλοδωρήματα και δώρα μαζί.
 Το Πάσο για πάντα ανοίγει κάθε εφαρμογή.
 
 ### 앱스토어 (핀란드어)
 
-Kokeile ensin kaikkea ja päätä sitten.
+Anna Muisti tai Pro lahjaksi.
 Kolme tasoa: Ilmainen, Muisti ja Pro.
 Valitse vuosittain tai elinikäinen.
-Tilaajana voit vaihtaa elinikäiseen.
+Tasot, tipit ja lahjat yhdessä paikassa.
 Ikuinen passi avaa kaikki sovelluksemme.
 
 ### 앱스토어 (인도네시아어)
 
-Coba semua fitur dulu, lalu putuskan.
+Hadiahkan Ingat atau Pro ke orang lain.
 Kini ada tiga paket: Gratis, Ingat, Pro.
 Pilih tahunan atau seumur hidup.
-Pelanggan bisa beralih ke seumur hidup.
+Paket, tip, dan hadiah kini di satu tempat.
 Pass Selamanya membuka semua aplikasi.
 
 ### 앱스토어 (Norsk bokmål)
 
-Prøv alt først, og bestem deg etterpå.
+Gi Husk eller Pro i gave.
 Nå tre planer: Gratis, Husk og Pro.
 Velg årlig eller livstid.
-Abonnent? Bytt til livstid når du vil.
+Planer, tips og gaver samlet på ett sted.
 Ett Evighetspass åpner alle appene våre.
 
 ### 앱스토어 (네덜란드어)
 
-Probeer eerst alles en beslis daarna.
+Geef Onthouden of Pro cadeau.
 Drie plannen: Gratis, Onthouden en Pro.
 Kies jaarlijks of levenslang.
-Abonnee? Stap over op levenslang.
+Plannen, fooi en cadeaus op één plek.
 Eén Altijd-pas opent al onze apps.
 
 ### 앱스토어 (폴란드어)
 
-Najpierw wypróbuj wszystko, potem zdecyduj.
+Podaruj Pamięć lub Pro innej osobie.
 Trzy plany: Za darmo, Pamięć i Pro.
 Wybierz rocznie lub dożywotnio.
-Abonament zamienisz na dostęp dożywotni.
+Plany, napiwki i prezenty w jednym miejscu.
 Jedna przepustka na wszystkie aplikacje.
 
 ### 앱스토어 (스웨덴어)
 
-Prova allt först och bestäm dig sedan.
+Ge bort Minne eller Pro i present.
 Nu tre nivåer: Gratis, Minne och Pro.
 Välj årsvis eller livstid.
-Prenumererar du? Byt till livstid.
+Nivåer, dricks och presenter på ett ställe.
 Ett Evighetspass öppnar alla våra appar.
 
 ### 앱스토어 (태국어)
 
-ลองทุกฟีเจอร์ก่อนแล้วค่อยตัดสินใจ
+มอบ จดจำ หรือ Pro เป็นของขวัญได้แล้ว
 แผนมีสามแบบแล้ว ฟรี จดจำ และ Pro
 เลือกได้ทั้งรายปีหรือตลอดชีพ
-สมาชิกเปลี่ยนเป็นตลอดชีพได้ทุกเมื่อ
+รวมแผน ทิป และของขวัญไว้ที่เดียว
 พาสตลอดกาลใบเดียวเปิดทุกแอปของเรา
 
 ### 앱스토어 (튀르키예어)
 
-Önce her şeyi deneyin, sonra karar verin.
+Hafıza veya Pro'yu hediye edin.
 Üç plan var: Ücretsiz, Hafıza ve Pro.
 Yıllık ya da ömür boyu, sen seç.
-Aboneysen istediğin an ömür boyuya geç.
+Planlar, bahşiş ve hediyeler tek yerde.
 Sonsuz Geçiş tüm uygulamalarımızı açar.
 
 ### 앱스토어 (베트남어)
 
-Hãy thử mọi tính năng trước rồi quyết định.
+Tặng gói Ghi nhớ hoặc Pro cho người khác.
 Nay có ba gói: Miễn phí, Ghi nhớ và Pro.
 Chọn theo năm hoặc trọn đời.
-Người đăng ký có thể đổi sang trọn đời.
+Gói, tiền tip và quà tặng ở cùng một chỗ.
 Vé trọn đời mở khóa mọi ứng dụng.
 
 ## 2.3.4

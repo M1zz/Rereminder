@@ -1,7 +1,7 @@
 Rereminder 2.3.6
 
-Prova allt först och bestäm dig sedan.
+Ge bort Minne eller Pro i present.
 Nu tre nivåer: Gratis, Minne och Pro.
 Välj årsvis eller livstid.
-Prenumererar du? Byt till livstid.
+Nivåer, dricks och presenter på ett ställe.
 Ett Evighetspass öppnar alla våra appar.

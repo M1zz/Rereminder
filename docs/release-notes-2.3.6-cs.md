@@ -1,7 +1,7 @@
 Rereminder 2.3.6
 
-Nejdřív vše vyzkoušejte, pak se rozhodněte.
+Darujte Paměť nebo Pro někomu blízkému.
 Nově tři plány: Zdarma, Paměť a Pro.
 U každého zvolte ročně, nebo doživotně.
-Předplatné změníte kdykoli na doživotní.
+Plány, spropitné a dárky na jednom místě.
 Pas navždy odemkne všechny aplikace.

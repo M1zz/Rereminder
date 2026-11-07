@@ -1,7 +1,7 @@
 Rereminder 2.3.6
 
-Önce her şeyi deneyin, sonra karar verin.
+Hafıza veya Pro'yu hediye edin.
 Üç plan var: Ücretsiz, Hafıza ve Pro.
 Yıllık ya da ömür boyu, sen seç.
-Aboneysen istediğin an ömür boyuya geç.
+Planlar, bahşiş ve hediyeler tek yerde.
 Sonsuz Geçiş tüm uygulamalarımızı açar.

@@ -1,7 +1,7 @@
 Rereminder 2.3.6
 
-Essayez tout d’abord, décidez ensuite.
+Offrez Mémoire ou Pro à un proche.
 Trois formules : Gratuit, Mémoire, Pro.
 Annuel ou à vie, vous choisissez.
-Abonné ? Passez à vie quand vous voulez.
+Formules, pourboires et cadeaux réunis.
 Un Pass à vie ouvre toutes nos apps.

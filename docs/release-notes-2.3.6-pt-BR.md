@@ -1,7 +1,7 @@
 Rereminder 2.3.6
 
-Teste tudo primeiro e depois decida.
+Dê Memória ou Pro de presente.
 Três planos: Grátis, Memória e Pro.
 Escolha anual ou vitalício.
-Assinante pode mudar para o vitalício.
+Planos, gorjetas e presentes num só lugar.
 Um Passe para sempre abre todos os apps.
