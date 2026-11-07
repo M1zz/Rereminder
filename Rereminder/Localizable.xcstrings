@@ -91117,6 +91117,602 @@
           }
         }
       }
+    },
+    "Keep every timer setup you use, ready in one tap" : {
+      "comment" : "Paywall showcase detail",
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uložte si všechna nastavení časovače, připravená jedním klepnutím"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gem alle dine timerindstillinger, klar med ét tryk"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speichere jede Timer-Einstellung und starte sie mit einem Tipp"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κράτησε όλες τις ρυθμίσεις χρονομέτρου, έτοιμες με ένα άγγιγμα"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep every timer setup you use, ready in one tap"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guarda todos tus ajustes de temporizador, listos con un toque"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tallenna kaikki ajastinasetuksesi, valmiina yhdellä napautuksella"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gardez tous vos réglages de minuteur, prêts en un toucher"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simpan semua pengaturan timer, siap dengan sekali ketuk"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salva tutte le impostazioni del timer, pronte con un tocco"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "よく使うタイマー設定をすべて保存して、ワンタップで呼び出せます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "자주 쓰는 타이머 설정을 모두 담아 두고 한 번에 꺼내요"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lagre alle timeroppsettene dine, klare med ett trykk"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewaar al je timerinstellingen, klaar met één tik"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zapisz wszystkie ustawienia minutnika, gotowe jednym dotknięciem"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guarde todas as configurações de timer, prontas com um toque"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guarde todas as definições de temporizador, prontas num toque"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сохраняйте все настройки таймера и запускайте их одним касанием"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spara alla timerinställningar, redo med ett tryck"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "เก็บการตั้งค่าตัวจับเวลาทั้งหมดไว้ ใช้ได้ในแตะเดียว"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tüm zamanlayıcı ayarlarını sakla, tek dokunuşla hazır"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lưu mọi cài đặt hẹn giờ, sẵn sàng chỉ với một chạm"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存所有常用的计时设置，一点就能用"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存所有常用的計時設定，一點就能用"
+          }
+        }
+      }
+    },
+    "See all your past timers and stats, with no time limit" : {
+      "comment" : "Paywall showcase detail",
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prohlížejte všechny dřívější časovače a statistiky bez časového omezení"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se alle tidligere timere og statistik uden tidsgrænse"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sieh alle bisherigen Timer und Statistiken ohne Zeitlimit"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δες όλα τα προηγούμενα χρονόμετρα και στατιστικά χωρίς χρονικό όριο"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See all your past timers and stats, with no time limit"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consulta todos tus temporizadores y estadísticas sin límite de tiempo"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Näe kaikki aiemmat ajastimet ja tilastot ilman aikarajaa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consultez tous vos minuteurs passés et statistiques, sans limite de durée"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lihat semua timer dan statistik sebelumnya tanpa batas waktu"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consulta tutti i timer passati e le statistiche senza limiti di tempo"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "過去のタイマー記録と統計を期間の制限なく見られます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지난 타이머 기록과 통계를 기간 제한 없이 봐요"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se alle tidligere timere og statistikk uten tidsbegrensning"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekijk al je eerdere timers en statistieken, zonder tijdslimiet"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przeglądaj wszystkie wcześniejsze minutniki i statystyki bez limitu czasu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veja todos os timers e estatísticas anteriores, sem limite de tempo"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veja todos os temporizadores e estatísticas anteriores, sem limite de tempo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Смотрите все прошлые таймеры и статистику без ограничения по времени"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se alla tidigare timers och statistik utan tidsgräns"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ดูประวัติตัวจับเวลาและสถิติย้อนหลังได้ไม่จำกัดเวลา"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geçmiş tüm zamanlayıcıları ve istatistikleri süre sınırı olmadan gör"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xem mọi hẹn giờ và thống kê trước đây, không giới hạn thời gian"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不限时间查看过去的计时记录和统计"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不限時間查看過去的計時紀錄和統計"
+          }
+        }
+      }
+    },
+    "Run a talk or class section by section, each with its own time" : {
+      "comment" : "Paywall showcase detail",
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veďte přednášku nebo hodinu po částech, každou s vlastním časem"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hold et oplæg eller en time afsnit for afsnit, hvert med sin egen tid"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Halte Vorträge oder Kurse Abschnitt für Abschnitt, jeder mit eigener Zeit"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κάνε μια ομιλία ή ένα μάθημα ανά ενότητα, καθεμία με τον χρόνο της"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Run a talk or class section by section, each with its own time"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Da una charla o clase por secciones, cada una con su tiempo"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pidä esitys tai tunti osa kerrallaan, jokaisella oma aikansa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menez un exposé ou un cours par sections, chacune avec son temps"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bawakan presentasi atau kelas per bagian, masing-masing dengan waktunya"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestisci un intervento o una lezione per sezioni, ognuna con il suo tempo"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "発表や授業を、区間ごとに時間を分けて進められます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "발표나 수업을 구간마다 시간을 나눠 진행해요"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hold et foredrag eller en time del for del, hver med sin egen tid"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geef een praatje of les per onderdeel, elk met een eigen tijd"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prowadź wystąpienie lub lekcję częściami, każda z własnym czasem"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conduza uma palestra ou aula por seções, cada uma com seu tempo"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conduza uma apresentação ou aula por secções, cada uma com o seu tempo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ведите выступление или урок по частям, у каждой своё время"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Håll ett föredrag eller en lektion i avsnitt, vart och ett med egen tid"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "จัดการพรีเซนต์หรือการสอนเป็นช่วง ๆ แต่ละช่วงมีเวลาของตัวเอง"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir sunumu ya da dersi bölüm bölüm, her biri kendi süresiyle yürüt"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trình bày hoặc dạy học theo từng phần, mỗi phần có thời gian riêng"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "把演讲或课程分成几段，每段各有时间"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "把簡報或課程分成幾段，每段各有時間"
+          }
+        }
+      }
+    },
+    "Keep the notes for each section on screen as you go" : {
+      "comment" : "Paywall showcase detail",
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poznámky ke každé části máte stále na obrazovce"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hav noterne til hvert afsnit på skærmen, mens du går frem"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deine Notizen für jeden Abschnitt bleiben im Blick"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κράτα τις σημειώσεις κάθε ενότητας στην οθόνη καθώς προχωράς"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep the notes for each section on screen as you go"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ten a la vista las notas de cada sección mientras avanzas"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pidä kunkin osan muistiinpanot näytöllä edetessäsi"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gardez les notes de chaque section à l'écran pendant que vous parlez"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catatan tiap bagian tetap tampil di layar selama berjalan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tieni sullo schermo gli appunti di ogni sezione mentre procedi"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "区間ごとのメモを画面に出したまま進められます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구간마다 할 말을 화면에 띄워 두고 진행해요"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ha notatene for hver del på skjermen mens du holder på"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Houd de aantekeningen van elk onderdeel in beeld terwijl je verdergaat"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notatki do każdej części masz na ekranie przez cały czas"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantenha as anotações de cada seção na tela enquanto avança"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantenha as notas de cada secção no ecrã enquanto avança"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Заметки к каждой части всегда перед глазами"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ha anteckningarna för varje avsnitt på skärmen medan du går vidare"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "โน้ตของแต่ละช่วงแสดงบนหน้าจอระหว่างพูด"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Her bölümün notları ilerlerken ekranda kalsın"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ghi chú của từng phần luôn hiện trên màn hình khi bạn trình bày"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每一段的讲稿都显示在屏幕上，边讲边看"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每一段的講稿都顯示在螢幕上，邊講邊看"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

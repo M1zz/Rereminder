@@ -45,11 +45,25 @@ struct PaywallView: View {
     /// App Store 의 코드 사용 시트(오퍼 코드·인앱결제 프로모션 코드).
     @State private var showRedeemCode = false
 
+    /// 고른 칸. 처음에는 들어온 자리의 칸(기억 자리는 기억, 세션 자리는 Pro). 이미 가진 칸은 고를 수 없다.
+    @State private var chosenTier: ProTier?
+
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: 28) {
-                    headerSection
+            // 그림으로 파는 틀(LeeoKit `LeeoShowcasePaywall`, 골드위크 · 클립키보드와 같다):
+            // 기억 | Pro → 기능 그림(옆으로 넘김) → 연 구독 · 평생 → 늘 떠 있는 구매 단추.
+            // 머리말(왕관 · 앱 이름 · 미사여구)은 두지 않는다. 지금까지 한 것 · 비교표 · 복원 · 약관은 스크롤한 아래에.
+            LeeoShowcasePaywall(showcases: showcases) {
+                if purchasableTiers.count > 1 { tierSwitch }
+            } plans: {
+                plans
+            } button: {
+                if !store.isPro, let tier = selectedTier {
+                    buyButton(tier, product: offer(tier, termBinding(tier).wrappedValue))
+                }
+            } details: {
+                VStack(spacing: 24) {
+                    purchaseSection
                     if let receipt = PaywallReceipt.pick(
                         completions: Int(UsageMetrics.value(.timerCompletions)),
                         sessions: Int(UsageMetrics.value(.presentationRuns)),
@@ -57,30 +71,13 @@ struct PaywallView: View {
                     ), !store.isPro {
                         receiptLine(receipt)
                     }
-                    if let feature = triggeredBy {
-                        triggerBanner(feature: feature)
-                    }
-                    if !store.isPro {
-                        planCards
-                    }
                     // 언제나 평생 패스. 이미 Pro 인 사람도 다른 앱까지 열고 싶을 수 있다.
                     LeeoForeverPassLine(pass: store.foreverPass, ownsLifetimePro: StoreManager.storedPurchaseFlag)
-                    featureComparisonSection
-                    purchaseSection
                     restoreSection
                     legalSection
+                    featureComparisonSection
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 40)
             }
-            .background(
-                LinearGradient(
-                    colors: [Color.accentColor.opacity(0.05), Color(uiColor: .systemBackground)],
-                    startPoint: .top,
-                    endPoint: .center
-                )
-                .ignoresSafeArea()
-            )
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
@@ -98,7 +95,7 @@ struct PaywallView: View {
             if store.ownsLifetimeRemember { proTerm = .lifetime }
         }
         .task {
-            // ⚠️ 호출부가 한 곳도 없어 상품이 로드되지 않았다 — 가격(`proPrice`)이 빈 문자열로
+            // ⚠️ 호출부가 한 곳도 없어 상품이 로드되지 않았다 — 가격이 빈 문자열로
             //    뜨는 페이월은 "얼마인지 모르고 누르라"는 화면이다.
             //    권한도 함께 확인한다: 페이월을 여는 순간이 "이미 샀는데 왜 또"를 잡을 마지막 기회다.
             await store.loadProducts()
@@ -128,73 +125,18 @@ struct PaywallView: View {
         }
     }
 
-    // MARK: - Header
-
-    private var headerSection: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "crown.fill")
-                .dsScaledFont(56, relativeTo: .largeTitle, maxSize: 76)
-                .foregroundStyle(
-                    LinearGradient(
-                        colors: [.yellow, .orange],
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    )
-                )
-                .padding(.top, 20)
-                .accessibilityHidden(true)
-
-            Text(AppName.pro)
-                .dsScaledFont(32, weight: .bold, design: .rounded, relativeTo: .title, maxSize: 44)
-
-            Text(headerSubtitle)
-                .font(.title3)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-
-            // 핵심 메시지 — 이미 Pro 인 사람에게는 파는 말을 하지 않는다(`ProBenefitsView` 의 "전체 보기"로 온다).
-            if !store.isPro {
-                purchasePromise
-            }
-        }
-    }
-
-    /// 이미 산 사람도 "무엇이 열려 있는지" 보러 온다(설정 ▸ 내 혜택 ▸ 전체 보기). 그 사람에게는 파는 말 대신
-    /// 지금 자리를 말한다. 기억만 가진 사람에게는 여전히 Pro 를 고르는 화면이라 원래 문장을 둔다.
-    private var headerSubtitle: LocalizedStringKey {
-        store.isPro ? "All Pro features are unlocked" : "The app remembers your setups"
-    }
-
-    private var purchasePromise: some View {
-            HStack(spacing: 8) {
-                Image(systemName: "infinity")
-                    .font(.headline)
-                Text("Yearly or lifetime, your choice")
-                    .font(.headline)
-            }
-            .foregroundStyle(Color.accentColor)
-            .padding(.horizontal, 20)
-            .padding(.vertical, 10)
-            .background(
-                Capsule()
-                    .fill(Color.accentColor.opacity(0.1))
-            )
-    }
-
-    // MARK: - 세 칸
+    // MARK: - 칸
 
     private var focusTier: ProTier { focus ?? triggeredBy?.tier ?? .session }
 
-    /// 무료 · 기억(Plus) · Pro. 위 칸은 아래 칸을 전부 포함하므로 사다리 순서 그대로 둔다.
-    /// 들어온 자리의 칸은 테두리로 앞에 세운다(기억 자리는 기억, 세션 자리는 Pro).
-    private var planCards: some View {
-        VStack(spacing: 12) {
-            ForEach(ProTier.allCases, id: \.self) { tier in
-                planCard(tier)
-            }
-            LeeoLifetimePriceNotice()
-                .frame(maxWidth: .infinity, alignment: .leading)
-        }
+    /// 살 수 있는 칸(기억 · Pro). 이미 가진 칸은 빠진다.
+    private var purchasableTiers: [ProTier] { [.plus, .session].filter { !owns($0) } }
+
+    /// 지금 보고 있는 칸. 고른 것이 없으면 들어온 자리의 칸, 그것도 살 수 없으면 살 수 있는 첫 칸.
+    private var selectedTier: ProTier? {
+        if let chosenTier, purchasableTiers.contains(chosenTier) { return chosenTier }
+        if purchasableTiers.contains(focusTier) { return focusTier }
+        return purchasableTiers.first
     }
 
     private func owns(_ tier: ProTier) -> Bool {
@@ -220,33 +162,52 @@ struct PaywallView: View {
         }
     }
 
-    @ViewBuilder
-    private func planCard(_ tier: ProTier) -> some View {
-        let owned = owns(tier)
-        let highlighted = tier == focusTier && !owned
+    private func planName(_ tier: ProTier) -> String {
+        switch tier {
+        case .free: return String(localized: "Free")
+        case .plus: return String(localized: "Remember")
+        case .session: return AppName.pro
+        }
+    }
 
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(spacing: 6) {
-                Text(planName(tier))
-                    .font(.headline)
-                    .foregroundStyle(tier == .session ? Color.accentColor : .primary)
-                if owned {
-                    Text("Owned")
-                        .font(.caption2.weight(.bold))
-                        .foregroundStyle(.green)
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .background(Capsule().fill(Color.green.opacity(0.15)))
+    /// 기억 | Pro. 고른 칸의 그림과 요금이 아래에 선다.
+    private var tierSwitch: some View {
+        HStack(spacing: 4) {
+            ForEach(purchasableTiers, id: \.self) { tier in
+                let selected = tier == selectedTier
+                Button {
+                    withAnimation(.snappy(duration: 0.25)) { chosenTier = tier }
+                } label: {
+                    Text(planName(tier))
+                        .font(.body.weight(.bold))
+                        .foregroundStyle(selected ? Color.primary : Color.secondary)
+                        .frame(maxWidth: .infinity, minHeight: 40)
+                        .background {
+                            if selected {
+                                Capsule().fill(Color(uiColor: .systemBackground))
+                                    .shadow(color: .black.opacity(0.08), radius: 3, y: 1)
+                            }
+                        }
+                        .contentShape(Capsule())
                 }
-                Spacer(minLength: 0)
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(selected ? .isSelected : [])
             }
-            Text(planSummary(tier))
-                .font(.caption)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.leading)
-                .fixedSize(horizontal: false, vertical: true)
+        }
+        .padding(4)
+        .background(Color(uiColor: .secondarySystemBackground), in: Capsule())
+    }
 
-            if tier != .free, !owned {
+    /// 고른 칸의 연 구독 · 평생. 이미 Pro 면 파는 말 대신 지금 자리를 말한다.
+    @ViewBuilder
+    private var plans: some View {
+        if store.isPro {
+            Text("All Pro features are unlocked")
+                .font(.headline)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+        } else if let tier = selectedTier {
+            VStack(alignment: .leading, spacing: 12) {
                 let term = termBinding(tier)
                 let lifetime = offer(tier, .lifetime)
                 LeeoTermPicker(term: term,
@@ -258,37 +219,37 @@ struct PaywallView: View {
                         .foregroundStyle(Color.accentColor)
                         .fixedSize(horizontal: false, vertical: true)
                 }
-                buyButton(tier, product: offer(tier, term.wrappedValue))
+                LeeoLifetimePriceNotice()
             }
         }
-        .padding(16)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(
-            RoundedRectangle(cornerRadius: 14)
-                .fill(highlighted ? Color.accentColor.opacity(0.08)
-                                  : Color(uiColor: .secondarySystemBackground).opacity(0.5))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 14)
-                .strokeBorder(highlighted ? Color.accentColor : Color(uiColor: .separator).opacity(0.3),
-                              lineWidth: highlighted ? 2 : 1)
-        )
     }
 
-    private func planName(_ tier: ProTier) -> String {
-        switch tier {
-        case .free: return String(localized: "Free")
-        case .plus: return String(localized: "Remember")
-        case .session: return AppName.pro
-        }
-    }
+    // MARK: - 그림 장
 
-    private func planSummary(_ tier: ProTier) -> String {
-        switch tier {
-        case .free: return String(localized: "Timer, unlimited pre-alerts, Live Activity, Apple Watch and widgets")
-        case .plus: return String(localized: "Unlimited saved setups and full history")
-        case .session: return String(localized: "Everything in Remember, plus Session Mode and scripts")
+    /// 넘겨 볼 장 — 고른 칸에서 열리는 것만. 들어온 기능이 있으면 그 장이 맨 앞. 이미 Pro 면 전부.
+    private var showcases: [LeeoShowcase] {
+        let remember = [
+            LeeoShowcase(id: ProGate.Feature.unlimitedTemplates.rawValue, title: String(localized: "Saved setups"),
+                         detail: String(localized: "Keep every timer setup you use, ready in one tap")) { SetupsArt() },
+            LeeoShowcase(id: ProGate.Feature.timerHistory.rawValue, title: String(localized: "Timer History"),
+                         detail: String(localized: "See all your past timers and stats, with no time limit")) { HistoryArt() },
+        ]
+        let pro = [
+            LeeoShowcase(id: ProGate.Feature.presentationMode.rawValue, title: String(localized: "Session Mode"),
+                         detail: String(localized: "Run a talk or class section by section, each with its own time")) { SessionArt() },
+            LeeoShowcase(id: "scripts", title: String(localized: "Section Scripts"),
+                         detail: String(localized: "Keep the notes for each section on screen as you go")) { ScriptsArt() },
+        ]
+        var pages: [LeeoShowcase]
+        switch selectedTier {
+        case .plus: pages = remember
+        case .session: pages = pro
+        default: pages = remember + pro
         }
+        if let lead = triggeredBy?.rawValue, let i = pages.firstIndex(where: { $0.id == lead }) {
+            pages.insert(pages.remove(at: i), at: 0)
+        }
+        return pages
     }
 
     private func buyButton(_ tier: ProTier, product: StoreManager.ProductID) -> some View {
@@ -306,16 +267,8 @@ struct PaywallView: View {
                 }
             }
             .foregroundStyle(.white)
-            .frame(maxWidth: .infinity, minHeight: 44)
-            .padding(.vertical, 6)
-            .background(
-                LinearGradient(
-                    colors: [Color.accentColor, Color.accentColor.opacity(0.8)],
-                    startPoint: .leading,
-                    endPoint: .trailing
-                )
-            )
-            .cornerRadius(12)
+            .frame(maxWidth: .infinity, minHeight: 54)
+            .background(Color.accentColor, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
         }
         .disabled(store.purchaseState == .purchasing || store.product(product) == nil)
         .accessibilityLabel(title)
@@ -337,39 +290,6 @@ struct PaywallView: View {
         }
         .padding(14)
         .background(RoundedRectangle(cornerRadius: 14).fill(Color.accentColor.opacity(0.08)))
-    }
-
-    // MARK: - Trigger Banner
-
-    private func triggerBanner(feature: ProGate.Feature) -> some View {
-        HStack(spacing: 12) {
-            Image(systemName: feature.icon)
-                .font(.title2)
-                .foregroundStyle(.orange)
-
-            VStack(alignment: .leading, spacing: 4) {
-                // 기억 자리에서 "Pro 가 필요합니다"라고 하면 $2.99 카드와 말이 어긋난다.
-                // 기능이 아니라 **앞에 세운 트림**으로 말한다 — 전날 안내는 기능은 기억이지만 Pro 를 앞에 세운다.
-                Text(focusTier == .plus
-                     ? String(localized: "Included in Remember")
-                     : String(localized: "This feature requires Pro"))
-                    .font(.subheadline.weight(.semibold))
-                Text(LocalizedStringKey(feature.displayName))
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-            }
-
-            Spacer()
-        }
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 14)
-                .fill(Color.orange.opacity(0.1))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 14)
-                        .strokeBorder(Color.orange.opacity(0.3), lineWidth: 1)
-                )
-        )
     }
 
     // MARK: - Feature Comparison
@@ -700,4 +620,122 @@ struct ProBadge: View {
 
 #Preview("Pro Badge") {
     ProBadge()
+}
+
+// MARK: - 그림 장 (LeeoKit `LeeoShowcase`)
+//
+// 그 기능이 적용된 화면을 SwiftUI 로 줄여 그린다. 스크린샷이 아니라 언어 · 다크 모드를 따라가고 용량이 들지 않는다.
+// ⚠️ 그림 속 글자는 숫자 · 기호만. 문장은 그림 아래 한 줄이 맡는다.
+
+private struct ArtCard<Content: View>: View {
+    @ViewBuilder var content: Content
+    var body: some View {
+        content
+            .padding(12)
+            .background(Color(uiColor: .systemBackground), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .shadow(color: .black.opacity(0.06), radius: 6, y: 2)
+    }
+}
+
+/// 저장한 설정: 시간과 미리 알림이 담긴 줄들
+private struct SetupsArt: View {
+    private let rows: [(String, [String])] = [("25:00", ["5:00", "1:00"]), ("10:00", ["2:00"]), ("45:00", ["10:00", "5:00", "1:00"])]
+    var body: some View {
+        VStack(spacing: 8) {
+            ForEach(rows.indices, id: \.self) { i in
+                ArtCard {
+                    HStack(spacing: 10) {
+                        Image(systemName: "bookmark.fill").foregroundStyle(Color.accentColor)
+                        Text(verbatim: rows[i].0).font(.headline.monospacedDigit())
+                        Spacer()
+                        ForEach(rows[i].1, id: \.self) { alert in
+                            Label { Text(verbatim: alert) } icon: { Image(systemName: "bell.fill") }
+                                .font(.caption2.weight(.bold).monospacedDigit())
+                                .foregroundStyle(.orange)
+                                .padding(.horizontal, 6).padding(.vertical, 3)
+                                .background(Color.orange.opacity(0.14), in: Capsule())
+                        }
+                    }
+                }
+            }
+        }
+        .padding(16)
+    }
+}
+
+/// 기록: 한 주의 막대와 끝낸 타이머 수
+private struct HistoryArt: View {
+    private let bars: [CGFloat] = [0.4, 0.7, 0.55, 0.9, 0.6, 1, 0.35]
+    var body: some View {
+        ArtCard {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Image(systemName: "chart.bar.fill").foregroundStyle(Color.accentColor)
+                    Spacer()
+                    Label { Text(verbatim: "42") } icon: { Image(systemName: "checkmark.circle.fill").foregroundStyle(.green) }
+                        .font(.headline.monospacedDigit())
+                }
+                HStack(alignment: .bottom, spacing: 10) {
+                    ForEach(bars.indices, id: \.self) { i in
+                        RoundedRectangle(cornerRadius: 4)
+                            .fill(Color.accentColor.opacity(i == 5 ? 1 : 0.4))
+                            .frame(width: 20, height: 100 * bars[i])
+                    }
+                }
+                .frame(height: 100, alignment: .bottom)
+            }
+        }
+        .padding(16)
+    }
+}
+
+/// 세션 모드: 구간마다 나뉜 막대와 지금 구간의 남은 시간
+private struct SessionArt: View {
+    private let parts: [CGFloat] = [0.2, 0.35, 0.3, 0.15]
+    var body: some View {
+        VStack(spacing: 16) {
+            Text(verbatim: "04:12")
+                .font(.system(size: 52, weight: .bold, design: .rounded).monospacedDigit())
+            GeometryReader { g in
+                HStack(spacing: 4) {
+                    ForEach(parts.indices, id: \.self) { i in
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(i < 1 ? Color.secondary.opacity(0.3) : i == 1 ? Color.accentColor : Color.accentColor.opacity(0.25))
+                            .frame(width: (g.size.width - 12) * parts[i])
+                            .overlay {
+                                Text(verbatim: "\(i + 1)").font(.caption.weight(.bold))
+                                    .foregroundStyle(i == 1 ? .white : .secondary)
+                            }
+                    }
+                }
+            }
+            .frame(height: 30)
+        }
+        .padding(20)
+    }
+}
+
+/// 구간 대본: 지금 구간의 할 말이 시간 아래에
+private struct ScriptsArt: View {
+    var body: some View {
+        VStack(spacing: 12) {
+            HStack {
+                Text(verbatim: "2/4").font(.caption.weight(.bold)).foregroundStyle(.white)
+                    .padding(.horizontal, 8).padding(.vertical, 3).background(Color.accentColor, in: Capsule())
+                Spacer()
+                Text(verbatim: "02:30").font(.title2.weight(.bold).monospacedDigit())
+            }
+            ArtCard {
+                VStack(alignment: .leading, spacing: 8) {
+                    Image(systemName: "text.alignleft").foregroundStyle(Color.accentColor)
+                    ForEach([0.9, 0.75, 0.85, 0.5], id: \.self) { w in
+                        Capsule().fill(Color.secondary.opacity(0.35)).frame(height: 7)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .scaleEffect(x: w, anchor: .leading)
+                    }
+                }
+            }
+        }
+        .padding(16)
+    }
 }
