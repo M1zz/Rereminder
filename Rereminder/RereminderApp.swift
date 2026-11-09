@@ -123,6 +123,8 @@ struct RereminderApp: App {
                 .environmentObject(themeManager)
                 // 연 구독 중인 사람에게 때가 되면 평생으로 바꾸는 길을 한 번 보인다.
                 .subscriptionGraduationPrompt()
+                // 개발자가 보낸 의견에 답장하면, 앱이 앞으로 올 때 답장을 시트로 보여 준다 (LeeoKit).
+                .leeoFeedbackReplyNotice(RereminderSpec.self)
     }
 
     // MARK: - SwiftData
