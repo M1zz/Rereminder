@@ -410,6 +410,9 @@ Pro 가 파는 한 문장이 "앱이 설정을 기억한다"인데 무료 사용
 - 지표: 스냅샷 `flag.subscribed`, `flag.isPaid` 는 구독도 결제로 센다. 테스트: `PricingLadderTests`.
 - `RereminderSpec.monetization` 은 `.freemiumSubscription` 이다(구독을 팔면 약관 URL 이 필수).
 - 사람이 할 일(상품 생성 · 가격 · 구독 그룹 · 첫 해 할인): `docs/OPERATIONS_CHECKLIST.md` 9번.
+- ⚠️ **구독을 파는 앱은 `APPSTORE.md` 의 모든 언어 설명 끝에 표준 EULA 링크**
+  (`https://www.apple.com/legal/internet-services/itunes/dev/stdeula/`)와 개인정보처리방침 링크가 있어야 한다.
+  2.3.6 이 "Terms of Use (EULA) 링크 없음"으로 메타데이터 거절됐다(2026-11-09). 설명을 다시 쓸 때 그 두 줄을 빼지 말 것.
 
 2.3.3 의 기록(트림을 처음 나눈 이유):
 
