@@ -59,6 +59,9 @@ Fokusarbeit: sanft zum Ende kommen, statt abrupt unterbrochen zu werden
 Über Pro
 Solange du die App ausprobierst, sind alle Funktionen offen. Danach bleiben Vorwarnungen, dein letztes Setup und gespeicherte Vorlagen kostenlos. Merken ergänzt unbegrenzte Vorlagen und den gesamten Verlauf, Pro den Session-Modus. Beides gibt es als Jahresabo oder Einmalkauf.
 
+Nutzungsbedingungen: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Datenschutzerklärung: https://m1zz.github.io/Rereminder/de/privacy.html
+
 ### 지원 URL
 
 https://m1zz.github.io/Rereminder/de/support.html
@@ -123,6 +126,9 @@ Travail concentré : sortez en douceur au lieu d’être coupé net
 
 À propos de Pro
 Tant que vous essayez l’app, toutes les fonctions sont ouvertes. Ensuite, les pré-alertes, votre dernier réglage et vos modèles enregistrés restent gratuits. Mémoire ajoute les modèles illimités et l’historique complet, Pro le mode Séance. Chaque formule existe à l’année ou en achat unique.
+
+Conditions d'utilisation: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Politique de confidentialité: https://m1zz.github.io/Rereminder/fr/privacy.html
 
 ### 지원 URL
 
@@ -189,6 +195,9 @@ Trabajo concentrado: sal poco a poco en lugar de cortar de golpe
 Sobre Pro
 Mientras pruebas la app, todas las funciones están abiertas. Después, los avisos previos, tu última configuración y las plantillas guardadas siguen gratis. Memoria añade plantillas ilimitadas y todo el historial, y Pro añade el Modo sesión. Cada plan se ofrece por año o en compra única.
 
+Términos de uso: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Política de privacidad: https://m1zz.github.io/Rereminder/es/privacy.html
+
 ### 지원 URL
 
 https://m1zz.github.io/Rereminder/es/support.html
@@ -253,6 +262,9 @@ Trabalho focado: saia da concentração aos poucos, em vez de ser interrompido
 
 Sobre o Pro
 Enquanto você experimenta o app, todos os recursos ficam abertos. Depois, os pré-alertas, sua última configuração e os modelos salvos continuam grátis. O Memória adiciona modelos ilimitados e todo o histórico, e o Pro adiciona o Modo Sessão. Cada plano pode ser anual ou compra única.
+
+Termos de Uso: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Política de Privacidade: https://m1zz.github.io/Rereminder/pt-BR/privacy.html
 
 ### 지원 URL
 
@@ -319,6 +331,9 @@ Trabalho concentrado: saia da concentração aos poucos, em vez de ser interromp
 Sobre o Pro
 Enquanto experimenta a app, todas as funcionalidades estão abertas. Depois, os pré-alertas, a sua última configuração e os modelos guardados continuam grátis. O plano Memória acrescenta modelos ilimitados e todo o histórico, e o Pro acrescenta o Modo Sessão. Cada plano pode ser anual ou compra única.
 
+Termos de Utilização: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Política de Privacidade: https://m1zz.github.io/Rereminder/pt-PT/privacy.html
+
 ### 지원 URL
 
 https://m1zz.github.io/Rereminder/pt-PT/support.html
@@ -383,6 +398,9 @@ Lavoro concentrato: non un taglio brusco, ma una chiusura graduale
 
 Informazioni su Pro
 Mentre provi l’app, tutte le funzioni sono aperte. Dopo, i preavvisi, l’ultima configurazione e i modelli salvati restano gratis. Memoria aggiunge modelli illimitati e tutta la cronologia, Pro la modalità Sessione. Ogni piano è annuale o con acquisto unico.
+
+Termini di utilizzo: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Informativa sulla privacy: https://m1zz.github.io/Rereminder/it/privacy.html
 
 ### 지원 URL
 
@@ -469,6 +487,9 @@ re + reminder = 한 번 더 알려주다
 써 보는 동안에는 모든 기능이 열려 있습니다. 그 뒤에도 예비 알림, 마지막 설정, 저장한 템플릿은 무료입니다. 기억은 템플릿 무제한과 전체 기록을, Pro는 세션 모드를 더합니다. 각각 연 구독 또는 한 번 결제로 고를 수 있습니다.
 
 광고 없음 · 구독 강요 없음 · 인터넷 연결 불필요
+
+이용약관: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+개인정보처리방침: https://m1zz.github.io/Rereminder/ko/privacy.html
 
 ### 지원 URL
 
@@ -557,6 +578,9 @@ We remind you before it's too late — again and again.
 Every feature is open while you try the app. After that, pre-alerts, your last setup and saved templates stay free. Remember adds unlimited templates and your full history. Pro adds Session Mode. Each comes yearly or as a one-time purchase.
 
 No ads · No forced subscriptions · No internet required
+
+Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Privacy Policy: https://m1zz.github.io/Rereminder/en/privacy.html
 
 ### 지원 URL
 
@@ -648,6 +672,9 @@ Every feature is open while you try the app. After that, pre-alerts, your last s
 
 No ads · No forced subscriptions · No internet required
 
+Terms of Use: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Privacy Policy: https://m1zz.github.io/Rereminder/en/privacy.html
+
 ### 지원 URL
 
 https://m1zz.github.io/Rereminder/en/support.html
@@ -730,6 +757,9 @@ re + reminder = もう一度知らせる
 
 広告なし・サブスクの押し売りなし・インターネット接続不要
 
+利用規約: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+プライバシーポリシー: https://m1zz.github.io/Rereminder/ja/privacy.html
+
 ### 지원 URL
 
 https://m1zz.github.io/Rereminder/ja/support.html
@@ -793,6 +823,9 @@ Rereminder 让你在结束之前就被提醒 —— 想放几次就放几次。
 关于 Pro
 试用期间所有功能都开放。之后，提前提醒、上次的设置和已保存的模板依然免费。记忆增加不限数量的模板和完整历史记录，Pro 增加分段模式。都可以选择按年订阅或一次买断。
 
+使用条款: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+隐私政策: https://m1zz.github.io/Rereminder/zh-Hans/privacy.html
+
 ### 지원 URL
 
 https://m1zz.github.io/Rereminder/zh-Hans/support.html
@@ -855,6 +888,9 @@ Rereminder 讓你在結束之前就被提醒 —— 想放幾次就放幾次。
 
 關於 Pro
 試用期間所有功能都開放。之後，提前提醒、上次的設定和已儲存的範本依然免費。記憶增加不限數量的範本和完整歷史記錄，Pro 增加分段模式。都可以選擇按年訂閱或一次買斷。
+
+使用條款: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+隱私權政策: https://m1zz.github.io/Rereminder/zh-Hant/privacy.html
 
 ### 지원 URL
 
@@ -921,6 +957,9 @@ Rereminder предупреждает заранее, и столько раз, 
 О Pro
 Пока вы пробуете приложение, открыты все функции. Затем предупреждения, последняя настройка и сохранённые шаблоны остаются бесплатными. Тариф «Память» добавляет неограниченные шаблоны и всю историю, Pro добавляет режим этапов. Каждый тариф можно взять на год или купить разово.
 
+Условия использования: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Политика конфиденциальности: https://m1zz.github.io/Rereminder/ru/privacy.html
+
 ### 지원 URL
 
 https://m1zz.github.io/Rereminder/ru/support.html
@@ -985,6 +1024,9 @@ Soustředěná práce: v klidu dokončit, místo abyste byli náhle přerušeni
 
 O verzi Pro
 Dokud aplikaci zkoušíte, jsou otevřené všechny funkce. Potom zůstanou zdarma upozornění předem, poslední nastavení i uložené šablony. Plán Paměť přidává neomezené šablony a celou historii, Pro přidává režim sezení. Každý plán je na rok nebo jako jednorázový nákup.
+
+Podmínky použití: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Zásady ochrany osobních údajů: https://m1zz.github.io/Rereminder/cs/privacy.html
 
 ### 지원 URL
 
@@ -1051,6 +1093,9 @@ Fokusarbejde: glid roligt ud af arbejdet i stedet for at blive afbrudt brat
 Om Pro
 Mens du prøver appen, er alle funktioner åbne. Derefter er forvarsler, din seneste opsætning og gemte skabeloner stadig gratis. Husk tilføjer ubegrænsede skabeloner og hele historikken, Pro tilføjer Sessionstilstand. Begge fås årligt eller som engangskøb.
 
+Vilkår for brug: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Privatlivspolitik: https://m1zz.github.io/Rereminder/da/privacy.html
+
 ### 지원 URL
 
 https://m1zz.github.io/Rereminder/da/support.html
@@ -1115,6 +1160,9 @@ Rereminder: Χρονόμετρο ομιλίας
 
 Σχετικά με το Pro
 Όσο δοκιμάζετε την εφαρμογή, όλες οι λειτουργίες είναι ανοιχτές. Μετά, οι προειδοποιήσεις, η τελευταία ρύθμιση και τα αποθηκευμένα πρότυπα μένουν δωρεάν. Το Μνήμη προσθέτει απεριόριστα πρότυπα και όλο το ιστορικό, το Pro τη Λειτουργία συνεδρίας. Κάθε πρόγραμμα είναι ετήσιο ή εφάπαξ αγορά.
+
+Όροι χρήσης: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Πολιτική απορρήτου: https://m1zz.github.io/Rereminder/el/privacy.html
 
 ### 지원 URL
 
@@ -1181,6 +1229,9 @@ Keskittynyt työ: lopettele rauhassa sen sijaan, että aika katkaisee työn kesk
 Tietoa Prosta
 Kun kokeilet appia, kaikki toiminnot ovat auki. Sen jälkeen ennakkohälytykset, viimeisin asetus ja tallennetut mallit pysyvät ilmaisina. Muisti lisää rajattomat mallit ja koko historian, Pro lisää Sessiotilan. Kumpikin on saatavilla vuodeksi tai kertaostoksena.
 
+Käyttöehdot: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Tietosuojakäytäntö: https://m1zz.github.io/Rereminder/fi/privacy.html
+
 ### 지원 URL
 
 https://m1zz.github.io/Rereminder/fi/support.html
@@ -1245,6 +1296,9 @@ Kerja fokus: keluar dengan pelan, bukan terputus tiba-tiba
 
 Tentang Pro
 Selama Anda mencoba app, semua fitur terbuka. Setelah itu, peringatan awal, pengaturan terakhir, dan templat tersimpan tetap gratis. Ingat menambahkan templat tanpa batas dan seluruh riwayat, Pro menambahkan Mode Sesi. Keduanya tersedia tahunan atau sekali beli.
+
+Ketentuan Penggunaan: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Kebijakan Privasi: https://m1zz.github.io/Rereminder/id/privacy.html
 
 ### 지원 URL
 
@@ -1311,6 +1365,9 @@ Fokusarbeid: gli rolig ut av arbeidet i stedet for å bli brått avbrutt
 Om Pro
 Mens du prøver appen, er alle funksjoner åpne. Etterpå er forvarsler, siste oppsett og lagrede maler fortsatt gratis. Husk legger til ubegrensede maler og hele historikken, Pro legger til Øktmodus. Begge fås årlig eller som engangskjøp.
 
+Vilkår for bruk: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Personvernerklæring: https://m1zz.github.io/Rereminder/nb/privacy.html
+
 ### 지원 URL
 
 https://m1zz.github.io/Rereminder/nb/support.html
@@ -1375,6 +1432,9 @@ Focuswerk: rustig afronden in plaats van abrupt onderbroken worden
 
 Over Pro
 Zolang je de app uitprobeert, staan alle functies open. Daarna blijven voorwaarschuwingen, je laatste instelling en bewaarde sjablonen gratis. Onthouden voegt onbeperkt sjablonen en de volledige geschiedenis toe, Pro voegt Sessiemodus toe. Beide zijn er per jaar of als eenmalige aankoop.
+
+Gebruiksvoorwaarden: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Privacybeleid: https://m1zz.github.io/Rereminder/nl/privacy.html
 
 ### 지원 URL
 
@@ -1441,6 +1501,9 @@ Skupiona praca: spokojnie kończysz zamiast gwałtownie przerywać
 O wersji Pro
 Gdy wypróbowujesz aplikację, wszystkie funkcje są otwarte. Potem wcześniejsze alerty, ostatnie ustawienie i zapisane szablony pozostają bezpłatne. Plan Pamięć dodaje szablony bez limitu i pełną historię, a Pro dodaje Tryb sesji. Każdy plan jest roczny lub jako zakup jednorazowy.
 
+Warunki użytkowania: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Polityka prywatności: https://m1zz.github.io/Rereminder/pl/privacy.html
+
 ### 지원 URL
 
 https://m1zz.github.io/Rereminder/pl/support.html
@@ -1505,6 +1568,9 @@ Fokusarbete: avsluta lugnt i stället för att bli avbruten tvärt
 
 Om Pro
 Medan du provar appen är alla funktioner öppna. Sedan är förvarningar, din senaste inställning och sparade mallar fortfarande gratis. Minne lägger till obegränsat med mallar och hela historiken, Pro lägger till Sessionsläge. Båda finns per år eller som engångsköp.
+
+Användarvillkor: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Integritetspolicy: https://m1zz.github.io/Rereminder/sv/privacy.html
 
 ### 지원 URL
 
@@ -1571,6 +1637,9 @@ Rereminder เตือนคุณล่วงหน้าแต่เนิ่
 เกี่ยวกับ Pro
 ระหว่างที่ลองใช้ ทุกฟีเจอร์เปิดให้ใช้ทั้งหมด หลังจากนั้นการแจ้งเตือนล่วงหน้า การตั้งค่าล่าสุด และเทมเพลตที่บันทึกไว้ยังฟรี จดจำเพิ่มเทมเพลตไม่จำกัดและประวัติทั้งหมด Pro เพิ่มโหมดเซสชัน เลือกได้ทั้งรายปีหรือซื้อครั้งเดียว
 
+ข้อกำหนดการใช้งาน: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+นโยบายความเป็นส่วนตัว: https://m1zz.github.io/Rereminder/th/privacy.html
+
 ### 지원 URL
 
 https://m1zz.github.io/Rereminder/th/support.html
@@ -1636,6 +1705,9 @@ Odaklı çalışma: aniden kesilmek yerine sakince toparla
 Pro hakkında
 Uygulamayı denerken tüm özellikler açıktır. Sonrasında ön uyarılar, son ayarın ve kayıtlı şablonlar ücretsiz kalır. Hafıza sınırsız şablon ve tüm geçmişi, Pro ise Oturum Modu’nu ekler. Her ikisi de yıllık veya tek seferlik alınabilir.
 
+Kullanım Koşulları: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Gizlilik Politikası: https://m1zz.github.io/Rereminder/tr/privacy.html
+
 ### 지원 URL
 
 https://m1zz.github.io/Rereminder/tr/support.html
@@ -1700,6 +1772,9 @@ Làm việc tập trung: kết thúc nhẹ nhàng thay vì bị cắt ngang đ�
 
 Về Pro
 Trong lúc dùng thử, mọi tính năng đều mở. Sau đó, cảnh báo trước, cài đặt gần nhất và mẫu đã lưu vẫn miễn phí. Ghi nhớ thêm mẫu không giới hạn và toàn bộ lịch sử, Pro thêm Chế độ Phiên. Mỗi gói có thể mua theo năm hoặc một lần.
+
+Điều khoản sử dụng: https://www.apple.com/legal/internet-services/itunes/dev/stdeula/
+Chính sách quyền riêng tư: https://m1zz.github.io/Rereminder/vi/privacy.html
 
 ### 지원 URL
 
