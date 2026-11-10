@@ -31,7 +31,7 @@ struct RereminderApp: App {
 
     init() {
         #if DEBUG
-        CloudKitSchemaWarmup.runIfRequested(Self.sharedModelContainer) {
+        CloudKitSchemaWarmup.runIfRequested(Self.sharedModelContainer, cloudContainer: Self.cloudContainer) {
             let template = Timer(name: "표본", mainSeconds: 60, prealertOffsetsSec: [10])
             let run = TimerRecord(finished: true, elapsedSeconds: 60, snapshotMainSeconds: 60,
                                   snapshotPrealertOffsetsSec: [10], template: template)
