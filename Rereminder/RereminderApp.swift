@@ -30,6 +30,14 @@ struct RereminderApp: App {
                                          category: "launch")
 
     init() {
+        #if DEBUG
+        CloudKitSchemaWarmup.runIfRequested(Self.sharedModelContainer) {
+            let template = Timer(name: "표본", mainSeconds: 60, prealertOffsetsSec: [10])
+            let run = TimerRecord(finished: true, elapsedSeconds: 60, snapshotMainSeconds: 60,
+                                  snapshotPrealertOffsetsSec: [10], template: template)
+            return [template, run]
+        }
+        #endif
         // 백업 금고는 맨 먼저 — 예약된 복원을 저장소(SwiftData · 앱 그룹 defaults)가 열리기 전에 적용한다.
         LeeoVault.start(RereminderSpec.self)
 
