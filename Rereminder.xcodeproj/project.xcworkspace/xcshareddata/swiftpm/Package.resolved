@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/M1zz/LeeoKit.git",
       "state" : {
-        "revision" : "20e6563217599349a38063c1dccebb5912d0f73a",
-        "version" : "3.40.0"
+        "revision" : "b81a6a1728e793435e266d532e5c6c17745450a5",
+        "version" : "3.42.0"
       }
     }
   ],

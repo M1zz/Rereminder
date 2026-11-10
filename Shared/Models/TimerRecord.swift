@@ -10,14 +10,15 @@ import SwiftData
 
 @Model
 final class TimerRecord {
-    @Attribute(.unique) var id: UUID
-    var date: Date
-    var finished: Bool
-    var elapsedSeconds: Int
+    // CloudKit 동기화 규칙(→ Timer.swift): 기본값을 두고 `.unique` 는 쓰지 않는다.
+    var id: UUID = UUID()
+    var date: Date = Date.now
+    var finished: Bool = false
+    var elapsedSeconds: Int = 0
 
     // timer templete Save할 수 있게 값 snapshot
-    var snapshotMainSeconds: Int
-    var snapshotPrealertOffsetsSec: [Int]
+    var snapshotMainSeconds: Int = 0
+    var snapshotPrealertOffsetsSec: [Int] = []
     var isPresentation: Bool = false
 
     var template: Timer?

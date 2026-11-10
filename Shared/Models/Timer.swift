@@ -10,10 +10,12 @@ import SwiftData
 
 @Model
 final class Timer {
-    @Attribute(.unique) var id: UUID
-    var name: String
-    var mainSeconds: Int  // main timer time
-    var prealertOffsetsSec: [Int]  // prealert offset time from mainSeconds
+    // CloudKit 동기화 규칙: 모든 속성은 옵셔널이거나 기본값이 있고, 관계는 옵셔널이며, `.unique` 는 쓰지 않는다.
+    // id 의 고유함은 CloudKit 이 보장하지 못하니(두 기기가 같은 id 를 만들 일은 UUID 라 사실상 없다) 코드가 조회로 찾는다.
+    var id: UUID = UUID()
+    var name: String = ""
+    var mainSeconds: Int = 60  // main timer time
+    var prealertOffsetsSec: [Int] = []  // prealert offset time from mainSeconds
     var prealertMessages: [Int: String] = [:]  // 각 Pre-alerts의 커스텀 메시지 (오프셋 sec: 메시지)
     var finishMessage: String?  // 종료 알림 커스텀 메시지 (nil이면 기본 메시지)
     var label: String = ""  // Label (예: "Presentation", "Mentoring", "Meeting")
@@ -21,10 +23,10 @@ final class Timer {
     var isFavorite: Bool = false  // 즐겨찾기 여부
     var isPresentation: Bool = false  // 발표 모드 여부
     var sectionsData: Data?  // JSON 인코딩된 [PresentationSection]
-    var createdAt: Date
+    var createdAt: Date = Date.now
     var lastUsedAt: Date?  // 마지막 사용 시간
     @Relationship(deleteRule: .cascade, inverse: \TimerRecord.template)
-    var runs: [TimerRecord] = []
+    var runs: [TimerRecord]? = []
 
     init(
         id: UUID = UUID(),
@@ -149,12 +151,12 @@ extension Timer {
 
     /// 사용 횟수
     var usageCount: Int {
-        runs.count
+        runs?.count ?? 0
     }
 
     /// Done 횟수
     var completedCount: Int {
-        runs.filter { $0.finished }.count
+        runs?.filter { $0.finished }.count ?? 0
     }
 }
 

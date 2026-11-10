@@ -129,30 +129,39 @@ struct RereminderApp: App {
 
     // MARK: - SwiftData
 
-    /// 템플릿·기록 저장소. **CloudKit 동기화는 꺼 둔다.**
+    /// 템플릿·기록 저장소. **사용자 본인의 iCloud(앱 자체 컨테이너의 개인 데이터베이스)와 맞춘다.**
     ///
-    /// ⚠️ `.modelContainer(for:)` 의 기본값은 `cloudKitDatabase: .automatic` 이라,
-    ///    앱에 iCloud(CloudKit) 엔타이틀먼트가 있으면 이 **로컬** 스토어까지 CloudKit 스키마
-    ///    규칙을 따지게 된다: 모든 속성이 optional 이거나 기본값이 있어야 하고, 관계도 optional
-    ///    이어야 하며, `@Attribute(.unique)` 는 쓸 수 없다. `Timer`·`TimerRecord` 는 셋 다
-    ///    어기므로 **스토어가 통째로 로드에 실패했고, 템플릿·기록이 하나도 저장되지 않았다**
-    ///    (피드백 허브용 iCloud 엔타이틀먼트가 붙은 2026-07-19 이후 조용히. 화면에는 아무
-    ///    오류도 뜨지 않고 콘솔에만 "Store failed to load" 가 찍힌다 — "저장이 안 된다"는
-    ///    제보의 정체다).
+    /// 2026-11 까지는 꺼 두었다. `Timer`·`TimerRecord` 가 CloudKit 규칙(옵셔널이거나 기본값,
+    /// 옵셔널 관계, `.unique` 금지)을 어겨 `.automatic` 이면 스토어가 통째로 열리지 않았기 때문이다.
+    /// 이제 모델이 규칙을 지키므로 컨테이너를 이름으로 못박아 연다 — 비워 두면(.automatic)
+    /// entitlements 의 첫 컨테이너가 잡히는데, 그 순서에 기대지 않는다.
     ///
-    /// 기기 간 타이머 동기화는 CloudKit 이 아니라 `CloudTimerSyncManager`(iCloud KVS)가 한다.
-    /// 나중에 템플릿까지 동기화하고 싶다면 엔타이틀먼트가 아니라 **모델을 먼저** 위 규칙에
-    /// 맞춰야 한다(unique 제거 + 마이그레이션).
+    /// 실행 중인 타이머 상태는 전처럼 `CloudTimerSyncManager`(iCloud KVS)가 맞춘다. 여기는 템플릿과 기록이다.
     static let sharedModelContainer: ModelContainer = {
         let schema = Schema([Timer.self, TimerRecord.self])
-        // 앱 그룹 컨테이너 — 위젯·인텐트와 같은 자리를 쓰던 기존 스토어 경로를 유지한다
+        let state = RereminderApp.signposter.beginInterval("ModelContainer")
+        defer { RereminderApp.signposter.endInterval("ModelContainer", state) }
+
+        // 1. iCloud. 기기에 있던 템플릿·기록은 그대로 올라가고, 새 기기는 계정에 있던 것을 받아 온다.
+        //    앱 그룹 컨테이너 — 위젯·인텐트와 같은 자리를 쓰던 기존 스토어 경로를 유지한다.
+        if let synced = try? ModelContainer(
+            for: schema,
+            configurations: ModelConfiguration(
+                schema: schema,
+                groupContainer: .identifier("group.leeo.toki"),
+                cloudKitDatabase: .private(cloudContainer)
+            )
+        ) {
+            usesCloud = true
+            return synced
+        }
+
+        // 2. 같은 파일을 기기 안에서만. entitlement 가 없는 빌드(시험 · CI)도 기록은 잃지 않는다.
         let configuration = ModelConfiguration(
             schema: schema,
             groupContainer: .identifier("group.leeo.toki"),
             cloudKitDatabase: .none
         )
-        let state = RereminderApp.signposter.beginInterval("ModelContainer")
-        defer { RereminderApp.signposter.endInterval("ModelContainer", state) }
         do {
             return try ModelContainer(for: schema, configurations: configuration)
         } catch {
@@ -162,6 +171,11 @@ struct RereminderApp: App {
             return StoreFallback.memoryContainer(schema: schema, after: error)
         }
     }()
+
+    /// 앱 자체 iCloud 컨테이너. iOS · Catalyst entitlements 둘 다에 이 이름이 있다.
+    static let cloudContainer = "iCloud.com.xa.toki"
+    /// 이번 실행이 iCloud 와 이어져 열렸는가 (sharedModelContainer 가 한 번 정한다).
+    private(set) static var usesCloud = false
 }
 
 // MARK: - 저장소를 못 연 날
