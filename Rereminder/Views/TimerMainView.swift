@@ -235,6 +235,9 @@ struct TimerMainView: View {
             let clusterGap = max(DSSpacing.sm, gapUnit * 0.6)
 
             VStack(spacing: 0) {
+                // **구간 이름을 적는 동안에는 원을 치운다.** 그때 봐야 하는 것은 지금 고치는 카드뿐인데,
+                // 키보드가 화면 절반을 먹어 원을 줄여 남겨 두면 카드가 두세 장밖에 안 보였다.
+                if !isEditingSectionName {
                 // 원 위는 비워 둔다. 주인공은 원과 시작 버튼이고, 알림 칩은 원 아래 묶음에 있다.
                 Color.clear
                     .frame(height: availableHeight * 0.08)
@@ -265,6 +268,10 @@ struct TimerMainView: View {
                 // 원 **아래** 신축 공간. 위 것과 같은 몫을 갖는다.
                 // 묶음 뒤에는 Spacer 가 없으므로 묶음은 그대로 화면 아래에 붙는다.
                 Spacer(minLength: stackGap)
+                } else {
+                    // 원이 빠진 자리. 목록이 내비게이션 막대에 붙지 않게 한 칸 띄운다.
+                    Color.clear.frame(height: stackGap)
+                }
 
                 // ── 원 아래 묶음: 구간 길이 → 기기 연결 → 템플릿·초기화 ─────────────────
                 // 셋이 **같은 간격**(clusterGap)으로 한 덩이처럼 붙는다. 각자 padding 을
@@ -307,7 +314,7 @@ struct TimerMainView: View {
                             screenVM: screenVM,
                             focusedSectionIndex: $focusedSectionIndex,
                             segments: derivedSegments,
-                            maxHeight: availableHeight * (isEditingSectionName ? 0.55 : 0.4),
+                            maxHeight: isEditingSectionName ? .infinity : availableHeight * 0.4,
                             isEditable: isTimeEditable
                         )
                             .transition(.move(edge: .bottom).combined(with: .opacity))
@@ -346,9 +353,12 @@ struct TimerMainView: View {
                     }
                 }
                 .padding(.bottom, stackGap)
+
+                // 원이 없을 때는 목록을 위에 붙인다(카드가 적으면 가운데에 떠 보인다)
+                if isEditingSectionName { Spacer(minLength: 0) }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            // 리스트가 커지면 원이 작아진다 — 두 변화가 한 몸으로 움직여야 매끄럽다
+            // 원이 빠지고 목록이 커진다 — 두 변화가 한 몸으로 움직여야 매끄럽다
             .animation(.easeInOut(duration: 0.28), value: isEditingSectionName)
             // ⚠️ 이게 없으면 Spacer·여백처럼 아무것도 그리지 않은 자리는 탭이 잡히지 않아
             //    "화면 아무 데나 눌러 키보드 내리기"가 원·카드 위에서만 동작한다.

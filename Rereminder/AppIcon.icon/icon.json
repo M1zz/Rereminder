@@ -1,0 +1,127 @@
+{
+  "color-space-for-untagged-svg-colors": "display-p3",
+  "fill-specializations": [
+    {
+      "value": {
+        "linear-gradient": [
+          "display-p3:1.00000,1.00000,1.00000,1.00000",
+          "display-p3:0.90588,0.92157,0.96471,1.00000"
+        ],
+        "orientation": {
+          "start": {
+            "x": 0.5,
+            "y": 0.0
+          },
+          "stop": {
+            "x": 0.5,
+            "y": 1.0
+          }
+        }
+      }
+    },
+    {
+      "appearance": "dark",
+      "value": {
+        "linear-gradient": [
+          "display-p3:0.07843,0.09020,0.15686,1.00000",
+          "display-p3:0.01569,0.01961,0.04314,1.00000"
+        ],
+        "orientation": {
+          "start": {
+            "x": 0.5,
+            "y": 0.0
+          },
+          "stop": {
+            "x": 0.5,
+            "y": 1.0
+          }
+        }
+      }
+    }
+  ],
+  "groups": [
+    {
+      "layers": [
+        {
+          "glass": true,
+          "image-name-specializations": [
+            {
+              "value": "bells.svg"
+            }
+          ],
+          "name": "Bells"
+        }
+      ],
+      "lighting": "individual",
+      "name": "Bells",
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.5
+      },
+      "specular": true,
+      "translucency": {
+        "enabled": false,
+        "value": 0.35
+      }
+    },
+    {
+      "layers": [
+        {
+          "glass": true,
+          "image-name-specializations": [
+            {
+              "value": "digits.svg"
+            },
+            {
+              "appearance": "dark",
+              "value": "digits-dark.svg"
+            },
+            {
+              "appearance": "tinted",
+              "value": "digits-dark.svg"
+            }
+          ],
+          "name": "Time"
+        }
+      ],
+      "lighting": "individual",
+      "name": "Time",
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.0
+      },
+      "specular": true,
+      "translucency": {
+        "enabled": false,
+        "value": 0.35
+      }
+    },
+    {
+      "layers": [
+        {
+          "glass": true,
+          "image-name-specializations": [
+            {
+              "value": "ring.svg"
+            }
+          ],
+          "name": "Ring"
+        }
+      ],
+      "lighting": "individual",
+      "name": "Ring",
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.5
+      },
+      "specular": true,
+      "translucency": {
+        "enabled": true,
+        "value": 0.3
+      }
+    }
+  ],
+  "supported-platforms": {
+    "squares": "shared"
+  }
+}

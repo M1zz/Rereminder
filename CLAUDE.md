@@ -1239,6 +1239,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
   대본이 없던 시절 템플릿도 그대로 열린다.
 - 적는 곳: 구간 카드 **오른쪽의 심볼 버튼**(비었으면 연필, 적었으면 구간 색 말풍선) → `SectionScriptSheet`(시트). 카드마다 "대본 적기" 글자 줄을 다시 세우지 말 것 — 안 쓰는 사람의 목록이 그 말로 찼다. 적어 둔 대본만 미리보기 줄로 보인다. 구간의 시간 범위는 링과 같은 구간 색이다. 카드 안에 여러 줄 입력을 넣으면
   목록이 키보드마다 출렁인다.
+- ⚠️ **구간 이름을 적는 동안에는 원을 그리지 않는다**(`TimerMainView` 의 `isEditingSectionName`). 키보드가 화면 절반을 먹어, 원을 줄여 남겨 두면 정작 고치는 카드가 두세 장밖에 안 보였다. 목록이 화면을 다 쓴다.
 - 보는 곳: `PresentationScriptPanel` — **발표가 도는 동안** 구간 목록 대신 선다(목록은 고칠 때
   필요한 것이고, 도는 동안에는 읽을 것만 남는다). 대본이 비어 있으면 목록이 그대로 선다.
 - ⚠️ 발표 화면은 **`TimerMainView` 하나뿐**이다(앱은 `TimerUnifiedView` → `TimerMainView` 로 돈다).
@@ -1599,6 +1600,14 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
   나간다.** ASC 의 인앱결제 > 현지화에서 영어를 추가해야 한다(코드로는 못 고친다).
   앱 안에서는 안 샌다 — 페이월은 지역화된 `AppName.pro` 를 쓰고, ASC 이름을 읽는
   `StoreManager.proDisplayName` 은 어느 화면에서도 쓰이지 않는다.
+
+### 앱 아이콘 — Icon Composer 문서 (`Rereminder/AppIcon.icon`)
+앱의 링 그대로다: 구간 색 링(파랑·초록·보라) + 흰 종 둘 + 가운데 `4:59`. 유리 질감·다크·틴트·투명은 시스템이 이 문서에서 만든다.
+- 레이어는 `Assets/` 의 SVG 넷(`ring`·`bells`·`digits`·`digits-dark`)이고 `scripts/app_icon/build_icon.py` 가 다시 만든다
+  (숫자 윤곽선은 `glyphs.swift "4:59" 172 > digits.path` 로 먼저 뽑는다. 아이콘 레이어는 글꼴을 싣지 못한다).
+- 확인: `…/Icon Composer.app/Contents/Executables/ictool AppIcon.icon --export-image --output-file out.png --platform iOS --rendition <Default|Dark|TintedDark|TintedLight|ClearLight|ClearDark> --width 512 --height 512 --scale 1`
+- ⚠️ 숫자 레이어는 틴트에서 흰 글자(`digits-dark.svg`)를 쓴다. 어두운 글자를 그대로 두면 틴트·투명 모드에서 숫자가 사라진다.
+- ⚠️ 메인 앱의 `AppIcon.appiconset` 은 지웠다(둘이 같은 이름이면 어느 쪽이 나가는지 헷갈린다). **워치·위젯·App Clip 은 아직 옛 자명종 아이콘**이다.
 
 ### 지원 언어는 10개다 (2.3.0)
 `ko`·`en`·`ja`·`zh-Hans`·`zh-Hant` 에 **`de`·`fr`·`es`·`pt-BR`·`it`** 를 더했다(2026-09-30).
