@@ -24,6 +24,8 @@ struct TimerMainView: View {
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
     /// 동작 줄이기 — 켜 두었으면 가운데 숫자가 굴러가지 않고 그냥 바뀐다.
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    /// 가로로 눕힌 아이폰(높이가 좁다)에서는 원과 나머지를 좌우로 나눈다.
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
 
     /// 구간 이름 입력 포커스 (키보드 내리기 제어용)
     @FocusState private var focusedSectionIndex: Int?
@@ -214,10 +216,15 @@ struct TimerMainView: View {
         GeometryReader { geometry in
             let availableHeight = geometry.size.height
             let availableWidth = geometry.size.width
-            // 발표 모드: 하단 구간 리스트 공간 확보를 위해 원을 축소
-            let fullClockSize = min(availableWidth * clockWidthRatio,
-                                    availableHeight * clockHeightRatio)
-            let clockSize = fullClockSize * (isPresentationMode ? 0.72 : 1.0)
+            // **가로로 눕힌 화면**: 원은 왼쪽 절반, 나머지(알림 문장·구간 목록·카운트다운)는 오른쪽 절반.
+            // 위아래로 쌓으면 높이 400pt 남짓을 원과 목록이 나눠 가져 둘 다 읽을 수 없게 작아진다.
+            let isSideBySide = availableWidth > availableHeight && verticalSizeClass == .compact
+            // 발표 모드: 하단 구간 리스트 공간 확보를 위해 원을 축소(세로일 때만. 가로에서는 목록이 옆에 선다)
+            let fullClockSize = isSideBySide
+                // 세션 모드는 바깥에 얇은 구간 링이 하나 더 있어 그 몫만큼 덜 쓴다(다 쓰면 위가 잘린다)
+                ? min(availableWidth * 0.5 * 0.86, availableHeight * (isPresentationMode ? 0.76 : 0.84))
+                : min(availableWidth * clockWidthRatio, availableHeight * clockHeightRatio)
+            let clockSize = fullClockSize * (isPresentationMode && !isSideBySide ? 0.72 : 1.0)
             let lineWidth = clockSize * 0.083
             let spacing = availableHeight * 0.01
             // 링의 **보이는** 아래 끝은 레이아웃 프레임보다 아래에 있다 — 흰 핸들(지름 lineWidth)과
@@ -234,128 +241,146 @@ struct TimerMainView: View {
             // 셋이 같은 값을 쓰는 것은 그대로다(균등).
             let clusterGap = max(DSSpacing.sm, gapUnit * 0.6)
 
-            VStack(spacing: 0) {
-                // **구간 이름을 적는 동안에는 원을 치운다.** 그때 봐야 하는 것은 지금 고치는 카드뿐인데,
-                // 키보드가 화면 절반을 먹어 원을 줄여 남겨 두면 카드가 두세 장밖에 안 보였다.
-                if !isEditingSectionName {
-                // 원 위는 비워 둔다. 주인공은 원과 시작 버튼이고, 알림 칩은 원 아래 묶음에 있다.
-                Color.clear
-                    .frame(height: availableHeight * 0.08)
+            // 드래그 배지가 원 밖으로 나가므로 아래쪽 템플릿 바·구간 리스트보다 위에 그린다
+            // ⚠️ 원은 언제나 온 크기로 그리고 **통째로** 줄인다. 크기를 값으로 넘기면 프레임은 보간되는데
+            //    선 두께·종 자리는 뛰어서 크기가 바뀌는 동안 링이 깨져 보인다.
+            let dial = clockView(size: fullClockSize,
+                      lineWidth: fullClockSize * 0.083,
+                      geometry: geometry,
+                      buttonSize: fullClockSize * 0.18)
+                .scaleEffect(clockSize / fullClockSize)
+                .frame(width: clockSize, height: clockSize)
+                .geometryGroup()
+                // ⚠️ 노브가 프레임 밖으로 나가는 몫은 **위아래 대칭**으로 비운다.
+                //    아래만 비우면 노브 기준으로 위가 그만큼 좁아진다 —
+                //    실제로 위 3pt / 아래 79pt 까지 어긋났다.
+                .padding(.vertical, knobOverflow)
+                .zIndex(1)
 
-                // 원 **위** 신축 공간. 아래 것과 짝을 이뤄 남는 세로를 반씩 나눠 갖는다
-                // → 원의 위아래 여백이 같아진다.
-                // ⚠️ `minLength` 가 최소 여백의 **보장**이다. 구간 칩·카운트다운이 각자
-                //    갖고 있던 여백은 이 대칭을 깨뜨려서(아래만 6pt 더) 걷어냈다 —
-                //    다시 넣지 말고 이 값을 조절할 것.
-                Spacer(minLength: stackGap)
+            let cluster = VStack(spacing: clusterGap) {
+                // 알림 권한이 꺼져 있으면 **어느 상태에서든** 맨 위에 선다 — 이 앱의 전부가
+                // 알림인데, 꺼져 있으면 화면을 끄는 순간 아무것도 울리지 않는다.
+                // 도는 중에도 빼지 않는다: 지금 화면을 끄려는 사람이 가장 알아야 한다.
+                notificationOffLine
 
-                // 드래그 배지가 원 밖으로 나가므로 아래쪽 템플릿 바·구간 리스트보다 위에 그린다
-                // ⚠️ 원은 언제나 온 크기로 그리고 **통째로** 줄인다. 크기를 값으로 넘기면 프레임은 보간되는데
-                //    선 두께·종 자리는 뛰어서 크기가 바뀌는 동안 링이 깨져 보인다.
-                clockView(size: fullClockSize,
-                          lineWidth: fullClockSize * 0.083,
-                          geometry: geometry,
-                          buttonSize: fullClockSize * 0.18)
-                    .scaleEffect(clockSize / fullClockSize)
-                    .frame(width: clockSize, height: clockSize)
-                    .geometryGroup()
-                    // ⚠️ 노브가 프레임 밖으로 나가는 몫은 **위아래 대칭**으로 비운다.
-                    //    아래만 비우면 노브 기준으로 위가 그만큼 좁아진다 —
-                    //    실제로 위 3pt / 아래 79pt 까지 어긋났다.
-                    .padding(.vertical, knobOverflow)
-                    .zIndex(1)
+                // **걸기 전에도 구간이 몇 분짜리인지 보인다.** 종을 옮기는 조작은 각도라
+                // "그래서 첫 구간이 몇 분이지?"를 머리로 계산하게 되는데, 그 답을 바로 아래 둔다.
+                // 실행 중에는 세우지 않는다 — 그 자리는 줄어드는 숫자(SectionCountdownList) 몫이다.
 
-                // 원 **아래** 신축 공간. 위 것과 같은 몫을 갖는다.
-                // 묶음 뒤에는 Spacer 가 없으므로 묶음은 그대로 화면 아래에 붙는다.
-                Spacer(minLength: stackGap)
+                // "손목에서도 볼 수 있나?"는 **걸기 전에** 알아야 고칠 수 있다.
+                // 그래서 대기 중에도 그대로 둔다(설정 화면에만 두면 아무도 안 본다).
+                // 발표 모드에서만 뺀다 — 구간 리스트가 화면 절반을 쓰는 자리라 한 줄이 아쉽다.
+                if !isPresentationMode && stage >= .everything {
+                    DeviceLinkChips(watchStatus: watchLink.linkStatus, macStatus: macLinkStatus)
+                        .transition(.opacity)
+                }
+
+                // 마지막 칸 — 상태에 따라 하나만 선다
+                if isPresentationMode, isProgressMode, let panel = currentScript {
+                    // 발표 중에는 **지금 구간의 대본**이 그 자리를 쓴다 — 목록은 고칠 때 필요한 것이고,
+                    // 도는 동안에는 읽을 것만 남는다.
+                    PresentationScriptPanel(sectionIndex: panel.index,
+                                            sectionName: panel.name,
+                                            script: panel.script,
+                                            nextName: panel.nextName,
+                                            maxHeight: availableHeight * (isSideBySide ? 0.9 : 0.26))
+                        .transition(.opacity)
+                } else if isPresentationMode {
+                    // 알림 지점 기준 파생 구간 리스트 (원 밖 아래쪽)
+                    // 이름을 편집하는 동안에는 키보드가 화면을 절반 가까이 먹으므로 리스트 몫을 늘린다
+                    // (원은 그만큼 작아지지만, 그때 중요한 건 지금 고치는 구간이 보이는 것이다)
+                    PresentationSectionList(
+                        screenVM: screenVM,
+                        focusedSectionIndex: $focusedSectionIndex,
+                        segments: derivedSegments,
+                        maxHeight: isEditingSectionName || isSideBySide ? .infinity : availableHeight * 0.4,
+                        isEditable: isTimeEditable
+                    )
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                } else if isProgressMode && derivedSegments.count > 1 && !fold.isUnfolded {
+                    // 구간별 카운트다운 (원 밖 아래쪽) — 링이 "전체가 얼마나 남았나"라면
+                    // 이건 "지금 이 구간이 얼마 남았나"다. 다음 알림까지의 시간이 곧 지금 구간의
+                    // 남은 시간이라 `nextAlertInfo` 자리를 대신한다(둘 다 두면 같은 말이 두 번).
+                    SectionCountdownList(
+                        segments: derivedSegments,
+                        elapsedSec: elapsedSec,
+                        maxHeight: availableHeight * (isSideBySide ? 0.9 : 0.22)
+                    )
+                        .transition(.opacity)
+                } else if isProgressMode && !screenVM.nextAlertText.isEmpty
+                            && !(fold.isUnfolded && derivedSegments.count > 1) {
+                    // Next 알림 Info (원 밖 아래쪽) — 알림이 하나뿐이라 구간 리스트가 무의미할 때
+                    nextAlertInfo
+                } else if screenVM.state == .idle || screenVM.state == .finished {
+                    rememberLines
+                    // 끝까지 마친 직후, 이미 Pro 를 가진 사람에게 드물게 — 팁 부탁(`TipAskLine`).
+                    if screenVM.state == .finished, let moment = tipAsk.moment, let tipJar = store.tipJar {
+                        TipAskLine(moment: moment, tipJar: tipJar)
+                            .padding(.horizontal)
+                            .transition(.opacity)
+                    }
+                    // 백지로 시작한 사람에게는 다음에 할 일 한 줄뿐이다(`BlankStart`).
+                    // ⚠️ 종을 지웠거나 하나도 없으면 문장 줄을 세운다 — 한 줄뿐이면 되돌리기도 다시 더하기도 없어 갇힌다.
+                    //    종을 끄는 동안은 지우는 법을 말한다(지우는 길이 화면에 보이지 않는다).
+                    if isSimpleStart, screenVM.justRemovedAlert == nil, !screenVM.selectedOffsets.isEmpty {
+                        coachLine(liveOffsets != screenVM.selectedOffsets
+                            ? String(localized: "Double-tap a bell to remove it.")
+                            : String(localized: "Drag the bell to choose when you hear it, then press start"))
+                    } else {
+                        DialAlertLine(screenVM: screenVM, liveOffsets: liveOffsets)
+                    }
+                }
+            }
+
+            Group {
+                if isSideBySide {
+                    HStack(spacing: stackGap) {
+                        // 이름을 적는 동안에는 가로에서도 원을 치운다(키보드가 높이를 거의 다 먹는다).
+                        if !isEditingSectionName {
+                            dial.frame(maxWidth: .infinity, maxHeight: .infinity)
+                        }
+                        cluster
+                            .frame(maxWidth: .infinity, maxHeight: .infinity,
+                                   alignment: isEditingSectionName ? .top : .center)
+                    }
                 } else {
-                    // 원이 빠진 자리. 목록이 내비게이션 막대에 붙지 않게 한 칸 띄운다.
-                    Color.clear.frame(height: stackGap)
-                }
+                VStack(spacing: 0) {
+                    // **구간 이름을 적는 동안에는 원을 치운다.** 그때 봐야 하는 것은 지금 고치는 카드뿐인데,
+                    // 키보드가 화면 절반을 먹어 원을 줄여 남겨 두면 카드가 두세 장밖에 안 보였다.
+                    if !isEditingSectionName {
+                    // 원 위는 비워 둔다. 주인공은 원과 시작 버튼이고, 알림 칩은 원 아래 묶음에 있다.
+                    Color.clear
+                        .frame(height: availableHeight * 0.08)
 
-                // ── 원 아래 묶음: 구간 길이 → 기기 연결 → 템플릿·초기화 ─────────────────
-                // 셋이 **같은 간격**(clusterGap)으로 한 덩이처럼 붙는다. 각자 padding 을
-                // 갖지 않는 이유가 이것이다 — 여백을 한 곳에서만 정해야 균등이 유지된다.
-                // ⚠️ 이 묶음 안에 Spacer 를 끼워 넣지 말 것. 예전에 구간 칩 바로 아래에
-                //    Spacer() 가 있어서 칩이 원에 달라붙고 그 아래만 휑하게 벌어졌다.
-                VStack(spacing: clusterGap) {
-                    // 알림 권한이 꺼져 있으면 **어느 상태에서든** 맨 위에 선다 — 이 앱의 전부가
-                    // 알림인데, 꺼져 있으면 화면을 끄는 순간 아무것도 울리지 않는다.
-                    // 도는 중에도 빼지 않는다: 지금 화면을 끄려는 사람이 가장 알아야 한다.
-                    notificationOffLine
+                    // 원 **위** 신축 공간. 아래 것과 짝을 이뤄 남는 세로를 반씩 나눠 갖는다
+                    // → 원의 위아래 여백이 같아진다.
+                    // ⚠️ `minLength` 가 최소 여백의 **보장**이다. 구간 칩·카운트다운이 각자
+                    //    갖고 있던 여백은 이 대칭을 깨뜨려서(아래만 6pt 더) 걷어냈다 —
+                    //    다시 넣지 말고 이 값을 조절할 것.
+                    Spacer(minLength: stackGap)
 
-                    // **걸기 전에도 구간이 몇 분짜리인지 보인다.** 종을 옮기는 조작은 각도라
-                    // "그래서 첫 구간이 몇 분이지?"를 머리로 계산하게 되는데, 그 답을 바로 아래 둔다.
-                    // 실행 중에는 세우지 않는다 — 그 자리는 줄어드는 숫자(SectionCountdownList) 몫이다.
+                    dial
 
-                    // "손목에서도 볼 수 있나?"는 **걸기 전에** 알아야 고칠 수 있다.
-                    // 그래서 대기 중에도 그대로 둔다(설정 화면에만 두면 아무도 안 본다).
-                    // 발표 모드에서만 뺀다 — 구간 리스트가 화면 절반을 쓰는 자리라 한 줄이 아쉽다.
-                    if !isPresentationMode && stage >= .everything {
-                        DeviceLinkChips(watchStatus: watchLink.linkStatus, macStatus: macLinkStatus)
-                            .transition(.opacity)
+                    // 원 **아래** 신축 공간. 위 것과 같은 몫을 갖는다.
+                    // 묶음 뒤에는 Spacer 가 없으므로 묶음은 그대로 화면 아래에 붙는다.
+                    Spacer(minLength: stackGap)
+                    } else {
+                        // 원이 빠진 자리. 목록이 내비게이션 막대에 붙지 않게 한 칸 띄운다.
+                        Color.clear.frame(height: stackGap)
                     }
 
-                    // 마지막 칸 — 상태에 따라 하나만 선다
-                    if isPresentationMode, isProgressMode, let panel = currentScript {
-                        // 발표 중에는 **지금 구간의 대본**이 그 자리를 쓴다 — 목록은 고칠 때 필요한 것이고,
-                        // 도는 동안에는 읽을 것만 남는다.
-                        PresentationScriptPanel(sectionIndex: panel.index,
-                                                sectionName: panel.name,
-                                                script: panel.script,
-                                                nextName: panel.nextName,
-                                                maxHeight: availableHeight * 0.26)
-                            .transition(.opacity)
-                    } else if isPresentationMode {
-                        // 알림 지점 기준 파생 구간 리스트 (원 밖 아래쪽)
-                        // 이름을 편집하는 동안에는 키보드가 화면을 절반 가까이 먹으므로 리스트 몫을 늘린다
-                        // (원은 그만큼 작아지지만, 그때 중요한 건 지금 고치는 구간이 보이는 것이다)
-                        PresentationSectionList(
-                            screenVM: screenVM,
-                            focusedSectionIndex: $focusedSectionIndex,
-                            segments: derivedSegments,
-                            maxHeight: isEditingSectionName ? .infinity : availableHeight * 0.4,
-                            isEditable: isTimeEditable
-                        )
-                            .transition(.move(edge: .bottom).combined(with: .opacity))
-                    } else if isProgressMode && derivedSegments.count > 1 && !fold.isUnfolded {
-                        // 구간별 카운트다운 (원 밖 아래쪽) — 링이 "전체가 얼마나 남았나"라면
-                        // 이건 "지금 이 구간이 얼마 남았나"다. 다음 알림까지의 시간이 곧 지금 구간의
-                        // 남은 시간이라 `nextAlertInfo` 자리를 대신한다(둘 다 두면 같은 말이 두 번).
-                        SectionCountdownList(
-                            segments: derivedSegments,
-                            elapsedSec: elapsedSec,
-                            maxHeight: availableHeight * 0.22
-                        )
-                            .transition(.opacity)
-                    } else if isProgressMode && !screenVM.nextAlertText.isEmpty
-                                && !(fold.isUnfolded && derivedSegments.count > 1) {
-                        // Next 알림 Info (원 밖 아래쪽) — 알림이 하나뿐이라 구간 리스트가 무의미할 때
-                        nextAlertInfo
-                    } else if screenVM.state == .idle || screenVM.state == .finished {
-                        rememberLines
-                        // 끝까지 마친 직후, 이미 Pro 를 가진 사람에게 드물게 — 팁 부탁(`TipAskLine`).
-                        if screenVM.state == .finished, let moment = tipAsk.moment, let tipJar = store.tipJar {
-                            TipAskLine(moment: moment, tipJar: tipJar)
-                                .padding(.horizontal)
-                                .transition(.opacity)
-                        }
-                        // 백지로 시작한 사람에게는 다음에 할 일 한 줄뿐이다(`BlankStart`).
-                        // ⚠️ 종을 지웠거나 하나도 없으면 문장 줄을 세운다 — 한 줄뿐이면 되돌리기도 다시 더하기도 없어 갇힌다.
-                        //    종을 끄는 동안은 지우는 법을 말한다(지우는 길이 화면에 보이지 않는다).
-                        if isSimpleStart, screenVM.justRemovedAlert == nil, !screenVM.selectedOffsets.isEmpty {
-                            coachLine(liveOffsets != screenVM.selectedOffsets
-                                ? String(localized: "Double-tap a bell to remove it.")
-                                : String(localized: "Drag the bell to choose when you hear it, then press start"))
-                        } else {
-                            DialAlertLine(screenVM: screenVM, liveOffsets: liveOffsets)
-                        }
-                    }
-                }
-                .padding(.bottom, stackGap)
+                    // ── 원 아래 묶음: 구간 길이 → 기기 연결 → 템플릿·초기화 ─────────────────
+                    // 셋이 **같은 간격**(clusterGap)으로 한 덩이처럼 붙는다. 각자 padding 을
+                    // 갖지 않는 이유가 이것이다 — 여백을 한 곳에서만 정해야 균등이 유지된다.
+                    // ⚠️ 이 묶음 안에 Spacer 를 끼워 넣지 말 것. 예전에 구간 칩 바로 아래에
+                    //    Spacer() 가 있어서 칩이 원에 달라붙고 그 아래만 휑하게 벌어졌다.
+                    cluster
+                    .padding(.bottom, stackGap)
 
-                // 원이 없을 때는 목록을 위에 붙인다(카드가 적으면 가운데에 떠 보인다)
-                if isEditingSectionName { Spacer(minLength: 0) }
+                    // 원이 없을 때는 목록을 위에 붙인다(카드가 적으면 가운데에 떠 보인다)
+                    if isEditingSectionName { Spacer(minLength: 0) }
+                }
+                }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             // 원이 빠지고 목록이 커진다 — 두 변화가 한 몸으로 움직여야 매끄럽다
