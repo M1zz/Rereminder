@@ -22,7 +22,13 @@ struct BlankStartPractice: View {
     /// 가로로 눕힌 아이폰에서는 원을 줄이고, 안내 한 줄과 시작 버튼을 원 옆에 둔다.
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     private var isCompactHeight: Bool { verticalSizeClass == .compact }
-    private var ringSize: CGFloat { isCompactHeight ? 190 : 260 }
+    /// 화면 높이(안전 영역 안쪽). 작은 아이폰에서는 원을 줄여야 아래 버튼이 화면 안에 선다.
+    @State private var screenHeight: CGFloat = 800
+    /// 세로에서 원 말고 쓰는 높이: 문장(96) + 배너 자리 + 안내 한 줄 + 시작 버튼 + 아래 버튼 + 간격들.
+    private static let portraitChrome: CGFloat = 450
+    private var ringSize: CGFloat {
+        isCompactHeight ? 190 : max(170, min(260, screenHeight - Self.portraitChrome))
+    }
 
     @State private var step: Step = .drag
     @State private var alert = 60
@@ -36,7 +42,7 @@ struct BlankStartPractice: View {
         case .drag: return String(localized: "Drag the bell to when you want a heads-up")
         case .start: return String(localized: "Now press start")
         case .watch: return String(localized: "It's sped up. Watch for the bell")
-        case .remove: return String(localized: "Double-tap the extra bell to remove it")
+        case .remove: return String(localized: "Double-tap a bell to remove it.")
         case .done: return String(localized: "The real timer is set up the same way")
         }
     }
@@ -72,6 +78,7 @@ struct BlankStartPractice: View {
             }
         }
         .animation(.easeInOut(duration: 0.25), value: step)
+        .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { screenHeight = $0 }
     }
 
     private var dial: some View {
@@ -96,16 +103,24 @@ struct BlankStartPractice: View {
             .animation(.easeOut(duration: 0.2), value: extraBell)
     }
 
-    /// 본 화면과 같은 손짓: 종을 **두 번** 눌러 지운다. 종 근처(±20°)를 눌러야 한다.
+    /// 본 화면과 같은 손짓: 종을 **두 번** 눌러 지운다. **어느 종이든** 지워진다.
+    /// 얹은 종만 받으면, 자기가 고른 종을 두 번 눌렀는데 아무 일도 없는 것이 고장으로 읽힌다.
     private var doubleTap: some Gesture {
         SpatialTapGesture(count: 2, coordinateSpace: .named(Self.coordinateName))
             .onEnded { value in
                 guard let extraBell else { return }
                 let center = CGPoint(x: ringSize / 2, y: ringSize / 2)
                 let tapped = TimeMapper.ringAngle(at: value.location, center: center)
-                let bell = Double(extraBell) / Double(Self.total) * 360
-                let gap = abs(tapped - bell).truncatingRemainder(dividingBy: 360)
-                if min(gap, 360 - gap) <= 20 { removeExtraBell() }
+                func distance(to bell: Int) -> Double {
+                    let gap = abs(tapped - Double(bell) / Double(Self.total) * 360).truncatingRemainder(dividingBy: 360)
+                    return min(gap, 360 - gap)
+                }
+                // 종 근처(±25°)를 눌러야 한다. 둘 다 닿으면 가까운 쪽이다.
+                let nearest = [alert, extraBell].min { distance(to: $0) < distance(to: $1) } ?? extraBell
+                guard distance(to: nearest) <= 25 else { return }
+                // 고른 종을 지웠으면 남은 종이 다이얼에 올라갈 자리다
+                if nearest == alert { alert = extraBell }
+                removeExtraBell()
             }
     }
 
@@ -210,11 +225,15 @@ struct LessonShell<Stage: View>: View {
                 } else {
                     VStack(spacing: 0) {
                         // ⚠️ 위에서부터 고정이다. 가운데 정렬이면 아래에 버튼 하나만 생겨도 원이 움직인다.
+                        // 위 여백은 남는 만큼만 쓴다(최대 72). 고정이면 작은 화면에서 아래 버튼이 화면 밖으로 밀린다.
+                        // 아래 Spacer 보다 먼저 채워져, 자리가 넉넉한 화면에서는 예전과 같은 자리에 선다.
+                        Spacer(minLength: DSSpacing.lg)
+                            .frame(maxHeight: 72)
+                            .layoutPriority(1)
                         VStack(spacing: DSSpacing.xxl) {
                             lineText.frame(minHeight: 96)
                             stage
                         }
-                        .padding(.top, 72)
                         Spacer(minLength: 0)
                         doneButton
                     }

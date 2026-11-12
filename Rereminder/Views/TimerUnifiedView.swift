@@ -83,7 +83,12 @@ struct TimerUnifiedView: View {
 
     @State private var showHistory = false
     @State private var templatesLessonPending = false
+    #if DEBUG
+    /// 화면 확인용: `-introPractice YES` 로 그림을 건너뛰고 해 보기부터 연다.
+    @State private var showIntroPractice = UserDefaults.standard.bool(forKey: "introPractice")
+    #else
     @State private var showIntroPractice = false
+    #endif
     @State private var activeLesson: FeatureLesson?
     /// 다 드러나기 전이나 수업 중에는 말풍선을 띄우지 않는다.
     private var tipsAllowed: Bool { hasSettledLaunch && activeLesson == nil && stage >= .everything }

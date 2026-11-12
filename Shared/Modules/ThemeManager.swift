@@ -87,8 +87,10 @@ final class ThemeManager: ObservableObject {
     private init() {
         let savedID = UserDefaults.standard.string(forKey: "selectedThemeID") ?? "blue"
         currentTheme = Theme.presets.first { $0.id == savedID } ?? Theme.presets[0]
-        let savedMode = UserDefaults.standard.string(forKey: "appearanceMode") ?? "dark"
-        appearanceMode = AppearanceMode(rawValue: savedMode) ?? .dark
+        // 고른 적이 없으면 **기기의 라이트·다크 설정을 따른다.** 예전 기본값은 "dark" 고정이라
+        // 기기를 라이트로 쓰는 사람에게도 배경이 언제나 검정이었다(설정 ▸ 화면 모드에서 고른 값은 그대로다).
+        let savedMode = UserDefaults.standard.string(forKey: "appearanceMode") ?? AppearanceMode.system.rawValue
+        appearanceMode = AppearanceMode(rawValue: savedMode) ?? .system
         // ⚠️ init 에서는 didSet 이 돌지 않는다 — 여기서 한 번 써 주지 않으면 테마를 바꾸기 전까지
         //    확장은 기본색만 보게 된다(업데이트 직후 라이브 액티비티가 혼자 파란색으로 남는다).
         SharedAccent.write(hex: currentTheme.hex)
