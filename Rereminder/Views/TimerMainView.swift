@@ -338,7 +338,7 @@ struct TimerMainView: View {
                         //    종을 끄는 동안은 지우는 법을 말한다(지우는 길이 화면에 보이지 않는다).
                         if isSimpleStart, screenVM.justRemovedAlert == nil, !screenVM.selectedOffsets.isEmpty {
                             coachLine(liveOffsets != screenVM.selectedOffsets
-                                ? String(localized: "Tap a bell to remove it.")
+                                ? String(localized: "Double-tap a bell to remove it.")
                                 : String(localized: "Drag the bell to choose when you hear it, then press start"))
                         } else {
                             DialAlertLine(screenVM: screenVM, liveOffsets: liveOffsets)
@@ -1062,8 +1062,9 @@ struct TimerMainView: View {
                 .offset(x: ringSize(forAngle: displayAngle, size: size, lineWidth: lineWidth) / 2)
                 .animation(Self.lapChangeAnimation, value: isSecondLap(displayAngle))
                 .rotationEffect(.degrees(displayAngle))
-                    // 탭하면 지운다. 되돌리기는 `DialAlertLine` 이 잠깐 띄운다.
-                    .onTapGesture {
+                    // **두 번** 눌러야 지운다. 한 번 탭으로 지우면 종을 잡으려다 스친 손가락에 알림이 사라진다.
+                    // 되돌리기는 `DialAlertLine` 이 잠깐 띄운다.
+                    .onTapGesture(count: 2) {
                         guard isTimeEditable else { return }
                         finishDialFill()
                         withAnimation(.easeInOut(duration: 0.2)) {

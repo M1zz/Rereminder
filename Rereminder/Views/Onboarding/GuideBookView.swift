@@ -64,3 +64,24 @@ struct GuideBookView: View {
         .foregroundStyle(.primary)
     }
 }
+
+/// 첫 실행을 처음부터 다시 본다: 그림 → 해 보기. 고른 자리를 다이얼에 올리지는 않는다(지금 설정을 덮지 않는다).
+struct IntroReplayView: View {
+    let onClose: () -> Void
+
+    @State private var showPractice = false
+
+    var body: some View {
+        Group {
+            if showPractice {
+                BlankStartPractice(onFinish: { _ in onClose() })
+                    .transition(.opacity)
+            } else {
+                BlankStartIntro(onFinish: {
+                    withAnimation(.easeInOut(duration: 0.35)) { showPractice = true }
+                })
+                .transition(.opacity)
+            }
+        }
+    }
+}

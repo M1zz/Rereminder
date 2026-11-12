@@ -452,32 +452,29 @@ struct TimerUnifiedView: View {
 
     @ToolbarContentBuilder
     private var bottomToolbar: some ToolbarContent {
-        ToolbarItemGroup(placement: .bottomBar) {
+        // 세션 모드는 **켜고 끄는 토글 하나**다. 예전의 두 칸 세그먼트(타이머 | 세션)는 탭 막대처럼 보여
+        // 화면이 둘인 앱으로 읽혔다. 실제로는 같은 다이얼에 구간 이름과 대본이 얹히는 것이라 켜고 끄는 쪽이 맞다.
+        ToolbarItem(placement: .bottomBar) {
             // 백지로 시작한 사람에게는 단계마다 하나씩 열린다(`BlankStart`).
             // ⚠️ 세션 모드에 들어가 있으면 단계와 상관없이 둔다. 없으면 나올 길이 없다.
             if stage >= .session || screenVM.currentMode == .presentation {
-                // ⚠️ Picker("", …)는 빈 문자열을 문자열 카탈로그에 추출시켜 다국어 검사를 막는다.
-                //    라벨은 제대로 주고 화면에서만 숨긴다.
-                Picker(selection: modeBinding) {
-                    // 심볼로만 가른다. 글자는 언어마다 길이가 달라 막대가 넘치면 설정 버튼이 `…` 메뉴로 숨었다.
-                    Label(String(localized: "Timer"), systemImage: "timer")
-                        .labelStyle(.iconOnly)
-                        .tag(AppMode.timer)
+                // 판정(실행 중 차단·무료 횟수·페이월)은 예전 그대로 `modeBinding` 한 곳이 한다.
+                Toggle(isOn: Binding(
+                    get: { modeBinding.wrappedValue == .presentation },
+                    set: { modeBinding.wrappedValue = $0 ? .presentation : .timer }
+                )) {
                     Label(String(localized: "Session Mode"), systemImage: FeatureLesson.session.symbol)
                         .labelStyle(.iconOnly)
-                        .tag(AppMode.presentation)
-                } label: {
-                    Text(String(localized: "Mode"))
                 }
-                .pickerStyle(.segmented)
-                .labelsHidden()
-                .frame(width: 128)
+                .toggleStyle(.button)
                 // 타이머를 두 번 이상 완주한 뒤, 발표 모드를 아직 안 써 봤을 때만 알려준다
                 .modifier(PresentationModeTipAnchor(isAllowed: tipsAllowed))
             }
+        }
 
-            Spacer()
+        ToolbarSpacer(.flexible, placement: .bottomBar)
 
+        ToolbarItemGroup(placement: .bottomBar) {
             // 🔖 는 단계와 상관없이 처음부터 있다. 맞춘 설정을 저장하고 싶은 순간은 첫날에도 온다 —
             // 숨겨 두면 "저장해서 시작하고 싶은데 길이 없다"가 되고, 위젯도 "앱에서 저장하라"고 말하는데 버튼이 없었다.
             Button {

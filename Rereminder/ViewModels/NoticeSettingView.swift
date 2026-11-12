@@ -37,6 +37,7 @@ struct NoticeSettingView: View {
     @State private var lostProRecovered = false
     /// 달라진 점 안내에서 "Pro 알아보기"를 눌렀다 — 시트가 닫힌 뒤 페이월을 연다.
     @State private var showFeedback = false
+    @State private var showIntroReplay = false
     /// App Store 코드 사용 시트(오퍼 코드·인앱결제 프로모션 코드).
     @State private var showRedeemCode = false
     /// App Store 의 구독 관리 시트.
@@ -329,6 +330,16 @@ struct NoticeSettingView: View {
             }
 
             Section(header: Text("Help")) {
+                // 첫 실행의 그림과 해 보기를 그대로 다시 본다. 활용법 안쪽에도 있지만 한 겹 들어가야 해서 못 찾는다.
+                Button {
+                    showIntroReplay = true
+                } label: {
+                    Label("Watch the intro again", systemImage: "play.circle.fill")
+                }
+                .fullScreenCover(isPresented: $showIntroReplay) {
+                    IntroReplayView { showIntroReplay = false }
+                }
+
                 NavigationLink {
                     GuideBookView()
                 } label: {

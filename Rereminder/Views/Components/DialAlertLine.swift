@@ -89,7 +89,7 @@ struct DialAlertLine: View {
                 .accessibilityAddTraits(.updatesFrequently)
 
             if removeHintToken > 0, screenVM.justRemovedAlert == nil {
-                Text(String(localized: "Tap a bell to remove it."))
+                Text(String(localized: "Double-tap a bell to remove it."))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .transition(.opacity)

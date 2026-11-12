@@ -4,6 +4,7 @@
 //
 //  온보딩의 **체험 모드** — 고른 상황의 타이머를 **10초 만에** 돌려 보여 준다.
 //  (배속은 길이를 따라 정해진다: 10분이면 60배, 30분이면 180배)
+//  알림이 있는 체험은 `Pacing.slowNearAlerts` 로 돌린다. 빈 구간만 빨리 감고 종이 울리는 앞뒤는 실제 속도다.
 //
 //  왜 굴려 보여 주나: "끝나기 전에 여러 번 알려 드려요"는 글로 읽으면 그냥 문장이다.
 //  10분 타이머가 10초 만에 도는 걸 보면, 5분 전에 한 번·1분 전에 한 번 **울리는 걸 눈으로**
@@ -44,13 +45,55 @@ final class OnboardingDemoTimer: ObservableObject {
     private var ranAlerts: Set<Int> = []
     private var bannerTask: Task<Void, Never>?
 
-    init(totalSeconds: Int, alerts: [Int], demoSeconds: Double = OnboardingDemoTimer.demoSeconds) {
+    /// 시간이 흐르는 빠르기.
+    enum Pacing {
+        /// 처음부터 끝까지 같은 배속
+        case linear
+        /// 아무 일도 없는 구간은 빨리 감고, **알림과 종료 앞뒤는 실제 속도로** 흐른다.
+        /// 한 배속으로 쭉 줄이면 종이 울리는 순간이 숫자에 묻혀 지나가 버린다.
+        case slowNearAlerts
+    }
+
+    let pacing: Pacing
+
+    /// 실제 속도로 흐르는 몫(초): 울리기 전과 울린 뒤
+    nonisolated static let slowLead: Double = 2.5
+    nonisolated static let slowTail: Double = 1.5
+    /// 실제 속도 구간에서 멀어질수록 빨라지는 정도. 클수록 빈 구간을 빨리 건넌다.
+    nonisolated static let warpGain: Double = 6
+
+    init(totalSeconds: Int, alerts: [Int], demoSeconds: Double = OnboardingDemoTimer.demoSeconds,
+         pacing: Pacing = .linear) {
         self.totalSeconds = totalSeconds
         self.alerts = alerts.filter { $0 > 0 && $0 < totalSeconds }
         self.speed = max(1, Double(max(1, totalSeconds)) / max(1, demoSeconds))
+        self.pacing = pacing
+    }
+
+    /// 남은 시간이 `remaining` 일 때의 배속. **순수 함수.**
+    /// 알림(과 종료) 앞뒤는 1배속이고, 거기서 멀어질수록 빨라졌다가 다음 알림에 다가가며 다시 느려진다.
+    /// 시작 지점도 느린 자리로 쳐서 처음에는 천천히 떠난다.
+    nonisolated static func warpSpeed(remaining: Double, total: Double, alerts: [Int]) -> Double {
+        // 울리는 지점들: 예비 알림과 종료(0). 종료 뒤에는 흐를 시간이 없다.
+        var distance = total - remaining
+        for mark in alerts.map(Double.init) + [0] {
+            let zoneStart = mark + slowLead
+            let zoneEnd = mark - slowTail
+            if remaining <= zoneStart && remaining >= zoneEnd { return 1 }
+            distance = min(distance, remaining > zoneStart ? remaining - zoneStart : zoneEnd - remaining)
+        }
+        return 1 + warpGain * max(0, distance)
     }
 
     var remaining: Double { max(0, Double(totalSeconds) - elapsed) }
+
+    private var currentSpeed: Double {
+        switch pacing {
+        case .linear: return speed
+        case .slowNearAlerts:
+            return Self.warpSpeed(remaining: remaining, total: Double(totalSeconds), alerts: alerts)
+        }
+    }
 
     func start() {
         guard !isRunning else { return }
@@ -61,7 +104,7 @@ final class OnboardingDemoTimer: ObservableObject {
             while !Task.isCancelled {
                 try? await Task.sleep(for: .seconds(step))
                 guard let self, self.isRunning else { return }
-                self.advance(by: step * self.speed)
+                self.advance(by: step * self.currentSpeed)
                 if self.remaining <= 0 { return }
             }
         }
@@ -105,8 +148,10 @@ final class OnboardingDemoTimer: ObservableObject {
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         #endif
         bannerTask?.cancel()
+        // 실제 속도로 흐르는 동안은 배너가 떠 있다. 배너가 먼저 사라지면 느려진 이유가 안 보인다.
+        let shown = pacing == .slowNearAlerts ? Self.slowTail : 1.1
         bannerTask = Task { [weak self] in
-            try? await Task.sleep(for: .seconds(1.1))
+            try? await Task.sleep(for: .seconds(shown))
             guard !Task.isCancelled else { return }
             self?.ringingLabel = nil
         }

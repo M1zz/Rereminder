@@ -15,21 +15,28 @@ struct BlankStartPractice: View {
     /// 고른 알림 지점(초)을 넘긴다. 건너뛰면 nil.
     let onFinish: (Int?) -> Void
 
-    private enum Step { case drag, start, watch, done }
+    private enum Step { case drag, start, watch, remove, done }
     private static let total = 600
-    private static let ringSize: CGFloat = 260
     private static let coordinateName = "blankStart.practice"
+
+    /// 가로로 눕힌 아이폰에서는 원을 줄이고, 안내 한 줄과 시작 버튼을 원 옆에 둔다.
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    private var isCompactHeight: Bool { verticalSizeClass == .compact }
+    private var ringSize: CGFloat { isCompactHeight ? 190 : 260 }
 
     @State private var step: Step = .drag
     @State private var alert = 60
     @State private var tracker = DialDragTracker()
     @State private var demo: OnboardingDemoTimer?
+    /// 지우기 단계에서 하나 더 얹어 두는 종. 두 번 눌러 지우면 nil 로 돌아온다.
+    @State private var extraBell: Int?
 
     private var line: String {
         switch step {
         case .drag: return String(localized: "Drag the bell to when you want a heads-up")
         case .start: return String(localized: "Now press start")
         case .watch: return String(localized: "It's sped up. Watch for the bell")
+        case .remove: return String(localized: "Double-tap the extra bell to remove it")
         case .done: return String(localized: "The real timer is set up the same way")
         }
     }
@@ -37,45 +44,90 @@ struct BlankStartPractice: View {
     var body: some View {
         LessonShell(line: line, isDone: step == .drag || step == .done,
                     doneTitle: step == .done ? String(localized: "Get Started") : String(localized: "Next"),
-                    alwaysSkippable: step == .drag,
-                    onDone: advance, onSkip: { onFinish(nil) }) {
-            VStack(spacing: DSSpacing.xl) {
+                    alwaysSkippable: step == .drag || step == .remove, scrollsStageWhenCompact: false,
+                    onDone: advance,
+                    // 지우기까지 왔으면 종은 이미 골랐다. 여기서 건너뛰어도 고른 자리는 다이얼에 올린다.
+                    onSkip: { onFinish(step == .remove ? alert : nil) }) {
+            // 세로는 위아래로, 가로는 원 옆에 안내와 시작 버튼을 둔다(높이가 모자라다).
+            let layout = isCompactHeight
+                ? AnyLayout(HStackLayout(spacing: DSSpacing.xl))
+                : AnyLayout(VStackLayout(spacing: DSSpacing.xl))
+            layout {
                 if let demo {
-                    DemoStage(demo: demo, size: Self.ringSize) { step = .done }
+                    DemoStage(demo: demo, size: ringSize) { showRemoveStep() }
                 } else {
                     // 무대의 배너 자리(`DemoStage`)와 같은 몫을 비워, 시작해도 원이 움직이지 않게 한다
                     dial.padding(.top, DemoStage.bannerSpace)
                 }
-                Text(String(localized: "You'll get a heads-up with \(TimeMapper.durationText(alert)) left"))
-                    .font(.body)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-                LessonPlayButton(action: run)
-                    .opacity(step == .start ? 1 : 0)
-                    .disabled(step != .start)
-                    .accessibilityHidden(step != .start)
+                VStack(spacing: DSSpacing.xl) {
+                    Text(String(localized: "You'll get a heads-up with \(TimeMapper.durationText(alert)) left"))
+                        .font(.body)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                    LessonPlayButton(action: run)
+                        .opacity(step == .start ? 1 : 0)
+                        .disabled(step != .start)
+                        .accessibilityHidden(step != .start)
+                }
             }
         }
         .animation(.easeInOut(duration: 0.25), value: step)
     }
 
     private var dial: some View {
-        OnboardingDemoRing(totalSeconds: Self.total, alerts: [alert], elapsed: 0, size: Self.ringSize)
+        OnboardingDemoRing(totalSeconds: Self.total, alerts: [alert] + (extraBell.map { [$0] } ?? []),
+                           elapsed: 0, size: ringSize)
             .coordinateSpace(name: Self.coordinateName)
             .contentShape(Circle().inset(by: -24))
-            .gesture(drag)
+            // 끄는 단계에서만 끈다. 지우는 단계에 끌기까지 받으면 두 번 누르기가 끌기에 먹힌다.
+            .gesture(drag, isEnabled: step == .drag)
+            .simultaneousGesture(doubleTap, isEnabled: step == .remove)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(line)
             .accessibilityValue(TimeMapper.durationText(alert))
             .accessibilityAdjustableAction { direction in
+                guard step == .drag else { return }
                 move(to: alert + (direction == .increment ? 60 : -60))
             }
+            // VoiceOver 는 종을 골라 두 번 누를 수 없다. 같은 일을 동작 하나로 한다.
+            .accessibilityAction(named: Text("Remove the extra bell")) {
+                if step == .remove { removeExtraBell() }
+            }
+            .animation(.easeOut(duration: 0.2), value: extraBell)
+    }
+
+    /// 본 화면과 같은 손짓: 종을 **두 번** 눌러 지운다. 종 근처(±20°)를 눌러야 한다.
+    private var doubleTap: some Gesture {
+        SpatialTapGesture(count: 2, coordinateSpace: .named(Self.coordinateName))
+            .onEnded { value in
+                guard let extraBell else { return }
+                let center = CGPoint(x: ringSize / 2, y: ringSize / 2)
+                let tapped = TimeMapper.ringAngle(at: value.location, center: center)
+                let bell = Double(extraBell) / Double(Self.total) * 360
+                let gap = abs(tapped - bell).truncatingRemainder(dividingBy: 360)
+                if min(gap, 360 - gap) <= 20 { removeExtraBell() }
+            }
+    }
+
+    /// 체험이 끝나면 종 하나를 더 얹어 지워 보게 한다. 고른 종에서 멀리 떨어진 자리에 둔다.
+    private func showRemoveStep() {
+        extraBell = alert <= Self.total / 2 ? alert + 240 : alert - 240
+        demo = nil
+        step = .remove
+    }
+
+    private func removeExtraBell() {
+        extraBell = nil
+        step = .done
+        #if canImport(UIKit)
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        #endif
     }
 
     private var drag: some Gesture {
         DragGesture(minimumDistance: 0, coordinateSpace: .named(Self.coordinateName))
             .onChanged { value in
-                let center = CGPoint(x: Self.ringSize / 2, y: Self.ringSize / 2)
+                let center = CGPoint(x: ringSize / 2, y: ringSize / 2)
                 if !tracker.isActive {
                     tracker.begin(at: value.startLocation, center: center,
                                   knobAngle: Double(alert) / Double(Self.total) * 360)
@@ -106,7 +158,7 @@ struct BlankStartPractice: View {
 
     private func run() {
         step = .watch
-        let timer = OnboardingDemoTimer(totalSeconds: Self.total, alerts: [alert], demoSeconds: 6)
+        let timer = OnboardingDemoTimer(totalSeconds: Self.total, alerts: [alert], pacing: .slowNearAlerts)
         demo = timer
         timer.start()
     }
@@ -121,40 +173,55 @@ struct LessonShell<Stage: View>: View {
     let doneTitle: String
     /// 버튼이 떠 있어도 건너뛰기를 함께 둔다(아직 끝난 단계가 아닐 때).
     var alwaysSkippable = false
+    /// 가로로 눕혔을 때 무대가 화면보다 길면 밀 수 있게 한다. 무대 안에서 끄는 조작이 있으면 끈다(해 보기의 종).
+    var scrollsStageWhenCompact = true
     let onDone: () -> Void
     let onSkip: () -> Void
     @ViewBuilder let stage: Stage
 
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    private var isCompactHeight: Bool { verticalSizeClass == .compact }
+
     var body: some View {
         ZStack(alignment: .topTrailing) {
             Color(.systemBackground).ignoresSafeArea()
-            VStack(spacing: 0) {
-                // ⚠️ 위에서부터 고정이다. 가운데 정렬이면 아래에 버튼 하나만 생겨도 원이 움직인다.
-                VStack(spacing: DSSpacing.xxl) {
-                    Text(line)
-                        .font(.title2.weight(.bold))
-                        .multilineTextAlignment(.center)
-                        .frame(minHeight: 96)
-                        .id(line)
-                        .transition(.opacity)
-                    stage
-                }
-                .padding(.top, 72)
-                Spacer(minLength: 0)
-                Button(action: onDone) {
-                    Text(doneTitle)
-                        .font(.headline)
-                        .foregroundStyle(.white)
+            Group {
+                if isCompactHeight {
+                    // 가로: 왼쪽에 문장과 버튼, 오른쪽에 무대. 위아래로 쌓으면 원이 화면 밖으로 나간다.
+                    HStack(spacing: DSSpacing.xl) {
+                        VStack(spacing: DSSpacing.lg) {
+                            Spacer(minLength: 0)
+                            lineText
+                            Spacer(minLength: 0)
+                            doneButton
+                        }
+                        .containerRelativeFrame(.horizontal) { width, _ in width * 0.38 }
+                        Group {
+                            if scrollsStageWhenCompact {
+                                ScrollView { stage.frame(maxWidth: .infinity) }
+                                    .scrollBounceBehavior(.basedOnSize)
+                            } else {
+                                stage
+                            }
+                        }
                         .frame(maxWidth: .infinity)
-                        .padding(.vertical, DSSpacing.lg)
-                        .background(Capsule().fill(Color.accentColor))
+                    }
+                    .padding(.top, DSSpacing.lg)
+                } else {
+                    VStack(spacing: 0) {
+                        // ⚠️ 위에서부터 고정이다. 가운데 정렬이면 아래에 버튼 하나만 생겨도 원이 움직인다.
+                        VStack(spacing: DSSpacing.xxl) {
+                            lineText.frame(minHeight: 96)
+                            stage
+                        }
+                        .padding(.top, 72)
+                        Spacer(minLength: 0)
+                        doneButton
+                    }
                 }
-                .opacity(isDone ? 1 : 0)
-                .disabled(!isDone)
-                .accessibilityHidden(!isDone)
             }
             .padding(.horizontal, DSSpacing.xl)
-            .padding(.bottom, DSSpacing.xxl)
+            .padding(.bottom, isCompactHeight ? DSSpacing.lg : DSSpacing.xxl)
 
             if !isDone || alwaysSkippable {
                 Button(action: onSkip) {
@@ -167,6 +234,28 @@ struct LessonShell<Stage: View>: View {
         }
         .animation(.easeInOut(duration: 0.25), value: line)
         .animation(.easeOut(duration: 0.3), value: isDone)
+    }
+
+    private var lineText: some View {
+        Text(line)
+            .font(.title2.weight(.bold))
+            .multilineTextAlignment(.center)
+            .id(line)
+            .transition(.opacity)
+    }
+
+    private var doneButton: some View {
+        Button(action: onDone) {
+            Text(doneTitle)
+                .font(.headline)
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, isCompactHeight ? DSSpacing.md : DSSpacing.lg)
+                .background(Capsule().fill(Color.accentColor))
+        }
+        .opacity(isDone ? 1 : 0)
+        .disabled(!isDone)
+        .accessibilityHidden(!isDone)
     }
 }
 
@@ -188,8 +277,10 @@ struct LessonPlayButton: View {
 /// 장난감 타이머를 보는 무대: 링과 울릴 때 뜨는 배너.
 /// ⚠️ 관찰은 이 서브뷰의 `@ObservedObject` 가 맡는다. 부모가 들고 있기만 하면 숫자가 멈춘 채로 보인다.
 struct DemoStage: View {
-    /// 링 위에 비워 두는 배너 자리
-    static let bannerSpace: CGFloat = 52
+    /// 링 위에 비워 두는 배너 자리.
+    /// ⚠️ 배너 높이(46쯤)에 링과의 틈을 더한 값이다. 링의 선과 12시의 종은 틀 밖으로 조금 나오므로,
+    ///    딱 맞추면 배너가 링에 얹혀 답답해 보인다.
+    static let bannerSpace: CGFloat = 80
 
     @ObservedObject var demo: OnboardingDemoTimer
     var size: CGFloat = 230
@@ -204,13 +295,13 @@ struct DemoStage: View {
                                elapsed: demo.elapsed, size: size, fill: fill)
                 .padding(.top, Self.bannerSpace)
             if let label = demo.ringingLabel {
-                HStack(spacing: DSSpacing.sm) {
+                HStack(spacing: DSSpacing.md) {
                     Image(systemName: "bell.fill")
                     Text(label).font(.body.weight(.semibold))
                 }
                 .foregroundStyle(.white)
-                .padding(.horizontal, DSSpacing.lg)
-                .padding(.vertical, DSSpacing.sm)
+                .padding(.horizontal, DSSpacing.xxl)
+                .padding(.vertical, DSSpacing.md)
                 .background(Capsule().fill(DSColor.marker))
                 .transition(.move(edge: .top).combined(with: .opacity))
             }

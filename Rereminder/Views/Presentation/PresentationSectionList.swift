@@ -78,43 +78,43 @@ struct PresentationSectionList: View {
         return custom.isEmpty ? String(localized: "Section \(index + 1)") : custom
     }
 
-    // MARK: - 대본 한 줄
+    // MARK: - 대본
 
-    /// 카드 맨 아래 **대본 미리보기**. 눌러서 시트로 고친다.
+    private func script(of segment: TimerSections.Segment) -> String {
+        (screenVM.sectionScripts[segment.index] ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    /// 카드 오른쪽의 **대본 버튼**. 글자 없이 심볼만 둔다.
+    /// 예전에는 카드마다 "대본 적기" 한 줄이 서 있어, 대본을 안 쓰는 사람의 목록이 그 말로 가득 찼다.
+    /// 적어 둔 구간은 심볼이 구간 색으로 채워져 어디에 대본이 있는지 한눈에 보인다.
+    private func scriptButton(_ segment: TimerSections.Segment, color: Color) -> some View {
+        let hasScript = !script(of: segment).isEmpty
+        return Button {
+            scriptTarget = ScriptTarget(id: segment.index)
+        } label: {
+            Image(systemName: hasScript ? "text.bubble.fill" : "square.and.pencil")
+                .font(.body.weight(.semibold))
+                .foregroundStyle(hasScript ? color : Color.secondary)
+                .frame(width: 36, height: 36)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(hasScript ? String(localized: "Script") : String(localized: "Add script"))
+    }
+
+    /// 적어 둔 대본의 미리보기. 비어 있으면 줄 자체가 없다.
     /// 발표가 도는 중에는 고칠 수 없지만 **읽히기는 해야 한다** — 그때가 정작 볼 때다.
     @ViewBuilder
-    private func scriptRow(_ segment: TimerSections.Segment, color: Color) -> some View {
-        let script = (screenVM.sectionScripts[segment.index] ?? "")
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-
-        if isEditable {
-            Button {
-                scriptTarget = ScriptTarget(id: segment.index)
-            } label: {
-                HStack(spacing: DSSpacing.xs) {
-                    Image(systemName: script.isEmpty ? "square.and.pencil" : "text.quote")
-                        .font(.caption)
-                    Text(script.isEmpty ? String(localized: "Add script") : script)
-                        .font(DSFont.caption)
-                        .lineLimit(2)
-                        .multilineTextAlignment(.leading)
-                    Spacer(minLength: 0)
-                }
-                .foregroundStyle(script.isEmpty ? Color.secondary : color)
-            }
-            .buttonStyle(.plain)
-            .padding(.top, DSSpacing.xxs)
-        } else if !script.isEmpty {
-            HStack(alignment: .top, spacing: DSSpacing.xs) {
-                Image(systemName: "text.quote")
-                    .font(.caption)
-                Text(script)
-                    .font(DSFont.caption)
-                    .lineLimit(3)
-                Spacer(minLength: 0)
-            }
-            .foregroundStyle(.secondary)
-            .padding(.top, DSSpacing.xxs)
+    private func scriptPreview(_ segment: TimerSections.Segment) -> some View {
+        let script = script(of: segment)
+        if !script.isEmpty {
+            Text(script)
+                .font(DSFont.body)
+                .lineLimit(isEditable ? 2 : 3)
+                .multilineTextAlignment(.leading)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, DSSpacing.xxs)
         }
     }
 
@@ -153,7 +153,7 @@ struct PresentationSectionList: View {
             .accessibilityHidden(true)
 
             VStack(alignment: .leading, spacing: DSSpacing.xs) {
-                HStack(alignment: .firstTextBaseline, spacing: DSSpacing.sm) {
+                HStack(alignment: .center, spacing: DSSpacing.sm) {
                     TextField(
                         String(localized: "Section \(segment.index + 1)"),
                         text: nameBinding(segment.index)
@@ -172,13 +172,18 @@ struct PresentationSectionList: View {
                         .padding(.horizontal, DSSpacing.sm)
                         .padding(.vertical, DSSpacing.xxs)
                         .background(Capsule().fill(DSColor.marker.opacity(DSOpacity.subtle)))
+
+                    if isEditable {
+                        scriptButton(segment, color: color)
+                    }
                 }
 
+                // 링의 그 구간과 같은 색이다. 회색이면 어느 호의 시간인지 번호를 다시 찾아야 한다.
                 Text("\(rangeStartText(segment.startSec)) – \(rangeEndText(segment.endSec))")
-                    .font(DSFont.caption.monospacedDigit())
-                    .foregroundStyle(.secondary)
+                    .font(DSFont.body.monospacedDigit())
+                    .foregroundStyle(color)
 
-                scriptRow(segment, color: color)
+                scriptPreview(segment)
             }
         }
         .padding(.horizontal, DSSpacing.lg)

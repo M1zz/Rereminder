@@ -149,316 +149,6 @@
         }
       }
     },
-    "Plan & Support" : {
-      "comment" : "Settings section header: plan, tip and gifts",
-      "localizations" : {
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tarif a podpora"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abonnement og støtte"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tarif & Unterstützung"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Πρόγραμμα και υποστήριξη"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plan & Support"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plan & Support"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plan y apoyo"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tilaus ja tuki"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Forfait et soutien"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Paket & Dukungan"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Piano e supporto"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "プランと応援"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "요금제와 응원"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abonnement og støtte"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abonnement en steun"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plan i wsparcie"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plano e apoio"
-          }
-        },
-        "pt-PT" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Planos e apoio"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Тариф и поддержка"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Abonnemang och stöd"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "แพ็กเกจและการสนับสนุน"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plan ve Destek"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gói và ủng hộ"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "方案与支持"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "方案與支持"
-          }
-        }
-      }
-    },
-    "Send a Gift" : {
-      "comment" : "Settings: row that opens the gift page (send Remember or Pro as a gift)",
-      "localizations" : {
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Darovat"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Giv en gave"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Verschenken"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Στείλτε δώρο"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Send a Gift"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Send a Gift"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enviar un regalo"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lähetä lahja"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Offrir un cadeau"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Kirim hadiah"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fai un regalo"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ギフトを贈る"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "선물하기"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Send en gave"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cadeau geven"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wyślij prezent"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enviar um presente"
-          }
-        },
-        "pt-PT" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Oferecer um presente"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Подарить"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Skicka en present"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ส่งของขวัญ"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hediye gönder"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gửi quà tặng"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "送礼物"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "送禮物"
-          }
-        }
-      }
-    },
     "· %lld alerts" : {
       "localizations" : {
         "cs" : {
@@ -12808,154 +12498,6 @@
         }
       }
     },
-    "By then, it's already too late" : {
-      "localizations" : {
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "To už je pozdě"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Så er det allerede for sent"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dann ist es schon zu spät"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Τότε είναι ήδη αργά"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "By then, it's already too late"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Entonces ya es demasiado tarde"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Silloin on jo liian myöhäistä"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Et là, il est déjà trop tard"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Saat itu sudah terlambat"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "A quel punto è già tardi"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "その時にはもう手遅れです"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "그때는 이미 늦었어요"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Da er det allerede for sent"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dan is het al te laat"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Wtedy jest już za późno"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aí já é tarde demais"
-          }
-        },
-        "pt-PT" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nessa altura já é tarde demais"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Тогда уже слишком поздно"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Då är det redan för sent"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ถึงตอนนั้นก็สายเกินไปแล้ว"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "O zaman artık çok geçtir"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lúc đó đã quá muộn"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "那时已经来不及了"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "那時已經來不及了"
-          }
-        }
-      }
-    },
     "Can't go shorter than your alerts" : {
       "comment" : "Toast when the timer can't be shortened below an existing alert",
       "localizations" : {
@@ -13841,6 +13383,154 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "選擇儲存的設定"
+          }
+        }
+      }
+    },
+    "Choose which saved setup the button starts." : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vyberte, které uložené nastavení tlačítko spustí."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vælg, hvilken gemt opsætning knappen starter."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wähle, welches gesicherte Setup die Taste startet."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Επιλέξτε ποια αποθηκευμένη ρύθμιση ξεκινά το κουμπί."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose which saved setup the button starts."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elige qué configuración guardada inicia el botón."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valitse, minkä tallennetun asetuksen painike käynnistää."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez le réglage enregistré que lance le bouton."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pilih pengaturan tersimpan yang dimulai oleh tombol."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scegli quale configurazione salvata avvia il pulsante."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ボタンで開始する保存した設定を選びます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "버튼을 누르면 시작할 저장한 설정을 골라요."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Velg hvilket lagret oppsett knappen starter."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kies welke bewaarde setup de knop start."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wybierz, którą zapisaną konfigurację uruchamia przycisk."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escolha qual configuração salva o botão inicia."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Escolha que configuração guardada o botão inicia."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Выберите, какую сохранённую настройку запускает кнопка."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Välj vilket sparat upplägg knappen startar."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "เลือกชุดตั้งค่าที่บันทึกไว้ที่ปุ่มจะเริ่ม"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düğmenin hangi kayıtlı ayarı başlatacağını seçin."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chọn cài đặt đã lưu mà nút sẽ bắt đầu."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择按钮要开始的保存的设置。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選擇按鈕要開始的儲存的設定。"
           }
         }
       }
@@ -21400,6 +21090,7 @@
       }
     },
     "Everything in Remember, plus Session Mode and scripts" : {
+      "extractionState" : "stale",
       "localizations" : {
         "cs" : {
           "stringUnit" : {
@@ -32812,6 +32503,154 @@
         }
       }
     },
+    "How long the timer runs, in minutes. Leave at 0 to use the time already set." : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Délka časovače v minutách. Nechte 0, pokud chcete použít už nastavený čas."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvor mange minutter timeren kører. Lad den stå på 0 for at bruge den tid, der allerede er indstillet."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wie viele Minuten der Timer läuft. Bei 0 wird die bereits eingestellte Zeit verwendet."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Πόσα λεπτά διαρκεί το χρονόμετρο. Αφήστε το 0 για να χρησιμοποιηθεί ο χρόνος που έχει ήδη οριστεί."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "How long the timer runs, in minutes. Leave at 0 to use the time already set."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuántos minutos dura el temporizador. Déjalo en 0 para usar el tiempo que ya está puesto."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kuinka monta minuuttia ajastin käy. Jätä nollaksi, niin käytetään jo asetettua aikaa."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durée du minuteur, en minutes. Laissez 0 pour garder la durée déjà réglée."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Berapa menit timer berjalan. Biarkan 0 untuk memakai waktu yang sudah diatur."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quanti minuti dura il timer. Lascia 0 per usare il tempo già impostato."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーの長さ（分）。0のままにすると、いま設定されている時間で始まります。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머를 몇 분 돌릴지 정해요. 0으로 두면 이미 맞춰 둔 시간으로 시작해요."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hvor mange minutter timeren går. La den stå på 0 for å bruke tiden som allerede er stilt inn."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hoeveel minuten de timer loopt. Laat op 0 staan om de al ingestelde tijd te gebruiken."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Na ile minut ustawić minutnik. Zostaw 0, aby użyć już ustawionego czasu."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quantos minutos o timer vai durar. Deixe em 0 para usar o tempo que já está definido."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quantos minutos dura o temporizador. Deixe a 0 para usar o tempo já definido."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сколько минут будет идти таймер. Оставьте 0, чтобы использовать уже выставленное время."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hur många minuter timern ska gå. Låt den stå på 0 för att använda tiden som redan är inställd."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ระยะเวลาของตัวจับเวลาเป็นนาที ปล่อยไว้ที่ 0 เพื่อใช้เวลาที่ตั้งไว้แล้ว"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zamanlayıcının kaç dakika süreceği. Önceden ayarlanmış süreyi kullanmak için 0 bırakın."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hẹn giờ chạy bao nhiêu phút. Để 0 để dùng thời gian đã đặt sẵn."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "计时器的时长（分钟）。保留为 0 则使用已设好的时间。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "計時器的長度（分鐘）。保留為 0 就會使用已設定好的時間。"
+          }
+        }
+      }
+    },
     "How to Enable Notifications" : {
       "localizations" : {
         "cs" : {
@@ -35182,6 +35021,7 @@
       }
     },
     "Included in Remember" : {
+      "extractionState" : "stale",
       "localizations" : {
         "cs" : {
           "stringUnit" : {
@@ -36218,6 +36058,155 @@
         }
       }
     },
+    "Just ask Siri" : {
+      "comment" : "Roadmap item: Siri without the app name",
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stačí říct Siri"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spørg bare Siri"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einfach Siri fragen"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Απλώς πείτε το στη Siri"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Just ask Siri"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pídeselo a Siri"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pyydä vain Siriä"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Demandez simplement à Siri"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cukup minta Siri"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chiedi a Siri"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siriに頼むだけ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siri에게 말만 하면"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bare spør Siri"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vraag het gewoon aan Siri"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Po prostu poproś Siri"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "É só pedir à Siri"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basta pedir à Siri"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Просто попросите Siri"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fråga bara Siri"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "แค่บอก Siri"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siri’ye söylemeniz yeterli"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chỉ cần nhờ Siri"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "告诉 Siri 就行"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "跟 Siri 說就好"
+          }
+        }
+      }
+    },
     "Keep alerting until I answer" : {
       "localizations" : {
         "cs" : {
@@ -36366,6 +36355,155 @@
         }
       }
     },
+    "Keep every timer setup you use, ready in one tap" : {
+      "comment" : "Paywall showcase detail",
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uložte si všechna nastavení časovače, připravená jedním klepnutím"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gem alle dine timerindstillinger, klar med ét tryk"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Speichere jede Timer-Einstellung und starte sie mit einem Tipp"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κράτησε όλες τις ρυθμίσεις χρονομέτρου, έτοιμες με ένα άγγιγμα"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep every timer setup you use, ready in one tap"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guarda todos tus ajustes de temporizador, listos con un toque"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tallenna kaikki ajastinasetuksesi, valmiina yhdellä napautuksella"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gardez tous vos réglages de minuteur, prêts en un toucher"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Simpan semua pengaturan timer, siap dengan sekali ketuk"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Salva tutte le impostazioni del timer, pronte con un tocco"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "よく使うタイマー設定をすべて保存して、ワンタップで呼び出せます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "자주 쓰는 타이머 설정을 모두 담아 두고 한 번에 꺼내요"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lagre alle timeroppsettene dine, klare med ett trykk"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewaar al je timerinstellingen, klaar met één tik"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zapisz wszystkie ustawienia minutnika, gotowe jednym dotknięciem"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guarde todas as configurações de timer, prontas com um toque"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guarde todas as definições de temporizador, prontas num toque"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сохраняйте все настройки таймера и запускайте их одним касанием"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spara alla timerinställningar, redo med ett tryck"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "เก็บการตั้งค่าตัวจับเวลาทั้งหมดไว้ ใช้ได้ในแตะเดียว"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tüm zamanlayıcı ayarlarını sakla, tek dokunuşla hazır"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lưu mọi cài đặt hẹn giờ, sẵn sàng chỉ với một chạm"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存所有常用的计时设置，一点就能用"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存所有常用的計時設定，一點就能用"
+          }
+        }
+      }
+    },
     "Keep repeating" : {
       "localizations" : {
         "cs" : {
@@ -36510,6 +36648,155 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "重複時長"
+          }
+        }
+      }
+    },
+    "Keep the notes for each section on screen as you go" : {
+      "comment" : "Paywall showcase detail",
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poznámky ke každé části máte stále na obrazovce"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hav noterne til hvert afsnit på skærmen, mens du går frem"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deine Notizen für jeden Abschnitt bleiben im Blick"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κράτα τις σημειώσεις κάθε ενότητας στην οθόνη καθώς προχωράς"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep the notes for each section on screen as you go"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ten a la vista las notas de cada sección mientras avanzas"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pidä kunkin osan muistiinpanot näytöllä edetessäsi"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gardez les notes de chaque section à l'écran pendant que vous parlez"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catatan tiap bagian tetap tampil di layar selama berjalan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tieni sullo schermo gli appunti di ogni sezione mentre procedi"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "区間ごとのメモを画面に出したまま進められます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구간마다 할 말을 화면에 띄워 두고 진행해요"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ha notatene for hver del på skjermen mens du holder på"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Houd de aantekeningen van elk onderdeel in beeld terwijl je verdergaat"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notatki do każdej części masz na ekranie przez cały czas"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantenha as anotações de cada seção na tela enquanto avança"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantenha as notas de cada secção no ecrã enquanto avança"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Заметки к каждой части всегда перед глазами"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ha anteckningarna för varje avsnitt på skärmen medan du går vidare"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "โน้ตของแต่ละช่วงแสดงบนหน้าจอระหว่างพูด"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Her bölümün notları ilerlerken ekranda kalsın"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ghi chú của từng phần luôn hiện trên màn hình khi bạn trình bày"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每一段的讲稿都显示在屏幕上，边讲边看"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每一段的講稿都顯示在螢幕上，邊講邊看"
           }
         }
       }
@@ -50464,6 +50751,154 @@
         }
       }
     },
+    "Opens the app and starts the saved setup you pick." : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otevře aplikaci a spustí vybrané uložené nastavení."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Åbner appen og starter den gemte opsætning, du vælger."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öffnet die App und startet das gewählte gesicherte Setup."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ανοίγει την εφαρμογή και ξεκινά την αποθηκευμένη ρύθμιση που επιλέγετε."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens the app and starts the saved setup you pick."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre la app e inicia la configuración guardada que elijas."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avaa apin ja käynnistää valitsemasi tallennetun asetuksen."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvre l’app et lance le réglage enregistré de votre choix."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Membuka app dan memulai pengaturan tersimpan yang Anda pilih."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apre l’app e avvia la configurazione salvata che scegli."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリを開いて、選んだ保存した設定を開始します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "앱을 열고 고른 저장한 설정을 바로 시작해요."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Åpner appen og starter det lagrede oppsettet du velger."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opent de app en start de bewaarde setup die je kiest."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otwiera aplikację i uruchamia wybraną zapisaną konfigurację."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre o app e inicia a configuração salva que você escolher."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre a app e inicia a configuração guardada que escolher."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Открывает приложение и запускает выбранную сохранённую настройку."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Öppnar appen och startar det sparade upplägg du väljer."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "เปิดแอปและเริ่มชุดตั้งค่าที่บันทึกไว้ที่คุณเลือก"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uygulamayı açar ve seçtiğiniz kayıtlı ayarı başlatır."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mở ứng dụng và bắt đầu cài đặt đã lưu mà bạn chọn."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开 App 并开始你选的保存的设置。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打開 App 並開始你選的儲存的設定。"
+          }
+        }
+      }
+    },
     "Overtime" : {
       "localizations" : {
         "cs" : {
@@ -50910,6 +51345,7 @@
       }
     },
     "Owned" : {
+      "extractionState" : "stale",
       "localizations" : {
         "cs" : {
           "stringUnit" : {
@@ -51941,6 +52377,161 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "已暫停"
+          }
+        }
+      }
+    },
+    "Plan & Support" : {
+      "comment" : "Settings section header: plan, tip and gifts",
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tarif a podpora"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abonnement og støtte"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tarif & Unterstützung"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Πρόγραμμα και υποστήριξη"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan & Support"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan & Support"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan y apoyo"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tilaus ja tuki"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forfait et soutien"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paket & Dukungan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Piano e supporto"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プランと応援"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "요금제와 응원"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abonnement og støtte"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abonnement en steun"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan i wsparcie"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plano e apoio"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Planos e apoio"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Тариф и поддержка"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abonnemang och stöd"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "แพ็กเกจและการสนับสนุน"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Plan ve Destek"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gói và ủng hộ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "方案与支持"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "方案與支持"
           }
         }
       }
@@ -59052,6 +59643,155 @@
         }
       }
     },
+    "Run a talk or class section by section, each with its own time" : {
+      "comment" : "Paywall showcase detail",
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veďte přednášku nebo hodinu po částech, každou s vlastním časem"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hold et oplæg eller en time afsnit for afsnit, hvert med sin egen tid"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Halte Vorträge oder Kurse Abschnitt für Abschnitt, jeder mit eigener Zeit"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Κάνε μια ομιλία ή ένα μάθημα ανά ενότητα, καθεμία με τον χρόνο της"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Run a talk or class section by section, each with its own time"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Da una charla o clase por secciones, cada una con su tiempo"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pidä esitys tai tunti osa kerrallaan, jokaisella oma aikansa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menez un exposé ou un cours par sections, chacune avec son temps"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bawakan presentasi atau kelas per bagian, masing-masing dengan waktunya"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestisci un intervento o una lezione per sezioni, ognuna con il suo tempo"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "発表や授業を、区間ごとに時間を分けて進められます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "발표나 수업을 구간마다 시간을 나눠 진행해요"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hold et foredrag eller en time del for del, hver med sin egen tid"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geef een praatje of les per onderdeel, elk met een eigen tijd"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prowadź wystąpienie lub lekcję częściami, każda z własnym czasem"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conduza uma palestra ou aula por seções, cada uma com seu tempo"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conduza uma apresentação ou aula por secções, cada uma com o seu tempo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ведите выступление или урок по частям, у каждой своё время"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Håll ett föredrag eller en lektion i avsnitt, vart och ett med egen tid"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "จัดการพรีเซนต์หรือการสอนเป็นช่วง ๆ แต่ละช่วงมีเวลาของตัวเอง"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bir sunumu ya da dersi bölüm bölüm, her biri kendi süresiyle yürüt"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trình bày hoặc dạy học theo từng phần, mỗi phần có thời gian riêng"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "把演讲或课程分成几段，每段各有时间"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "把簡報或課程分成幾段，每段各有時間"
+          }
+        }
+      }
+    },
     "Running" : {
       "localizations" : {
         "cs" : {
@@ -62310,6 +63050,155 @@
         }
       }
     },
+    "See all your past timers and stats, with no time limit" : {
+      "comment" : "Paywall showcase detail",
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prohlížejte všechny dřívější časovače a statistiky bez časového omezení"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se alle tidligere timere og statistik uden tidsgrænse"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sieh alle bisherigen Timer und Statistiken ohne Zeitlimit"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Δες όλα τα προηγούμενα χρονόμετρα και στατιστικά χωρίς χρονικό όριο"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "See all your past timers and stats, with no time limit"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consulta todos tus temporizadores y estadísticas sin límite de tiempo"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Näe kaikki aiemmat ajastimet ja tilastot ilman aikarajaa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consultez tous vos minuteurs passés et statistiques, sans limite de durée"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lihat semua timer dan statistik sebelumnya tanpa batas waktu"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consulta tutti i timer passati e le statistiche senza limiti di tempo"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "過去のタイマー記録と統計を期間の制限なく見られます"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지난 타이머 기록과 통계를 기간 제한 없이 봐요"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se alle tidligere timere og statistikk uten tidsbegrensning"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bekijk al je eerdere timers en statistieken, zonder tijdslimiet"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Przeglądaj wszystkie wcześniejsze minutniki i statystyki bez limitu czasu"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veja todos os timers e estatísticas anteriores, sem limite de tempo"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veja todos os temporizadores e estatísticas anteriores, sem limite de tempo"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Смотрите все прошлые таймеры и статистику без ограничения по времени"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se alla tidigare timers och statistik utan tidsgräns"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ดูประวัติตัวจับเวลาและสถิติย้อนหลังได้ไม่จำกัดเวลา"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geçmiş tüm zamanlayıcıları ve istatistikleri süre sınırı olmadan gör"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xem mọi hẹn giờ và thống kê trước đây, không giới hạn thời gian"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不限时间查看过去的计时记录和统计"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不限時間查看過去的計時紀錄和統計"
+          }
+        }
+      }
+    },
     "See plans" : {
       "localizations" : {
         "cs" : {
@@ -63342,6 +64231,161 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "已選顏色："
+          }
+        }
+      }
+    },
+    "Send a Gift" : {
+      "comment" : "Settings: row that opens the gift page (send Remember or Pro as a gift)",
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Darovat"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Giv en gave"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verschenken"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Στείλτε δώρο"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send a Gift"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send a Gift"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enviar un regalo"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lähetä lahja"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Offrir un cadeau"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kirim hadiah"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fai un regalo"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ギフトを贈る"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "선물하기"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send en gave"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cadeau geven"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wyślij prezent"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enviar um presente"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oferecer um presente"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Подарить"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skicka en present"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ส่งของขวัญ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hediye gönder"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gửi quà tặng"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "送礼物"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "送禮物"
           }
         }
       }
@@ -71495,6 +72539,155 @@
         }
       }
     },
+    "Tell Siri what you need without saying the app name, and it starts your saved setup or timer." : {
+      "comment" : "Roadmap item detail: Siri without the app name",
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Řekněte Siri, co potřebujete, i bez názvu aplikace, a spustí vaše uložené nastavení nebo časovač."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sig til Siri, hvad du har brug for, uden at nævne appens navn, så starter den din gemte opsætning eller timer."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sag Siri, was du brauchst, ohne den App-Namen zu nennen, und sie startet dein gesichertes Setup oder deinen Timer."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Πείτε στη Siri τι χρειάζεστε χωρίς να αναφέρετε το όνομα της εφαρμογής, και θα ξεκινήσει την αποθηκευμένη ρύθμιση ή το χρονόμετρό σας."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tell Siri what you need without saying the app name, and it starts your saved setup or timer."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dile a Siri lo que necesitas sin decir el nombre de la app y pondrá en marcha tu configuración guardada o tu temporizador."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kerro Sirille, mitä tarvitset, sanomatta apin nimeä, niin se käynnistää tallennetun asetuksesi tai ajastimesi."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dites à Siri ce dont vous avez besoin sans nommer l’app, et il lance votre réglage enregistré ou votre minuteur."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Katakan kepada Siri apa yang Anda perlukan tanpa menyebut nama app, dan Siri akan memulai pengaturan tersimpan atau timer Anda."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Di’ a Siri cosa ti serve senza nominare l’app e avvierà la tua configurazione salvata o il timer."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリ名を言わなくても、Siriに頼むだけで保存した設定やタイマーを始められます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "앱 이름을 말하지 않아도 Siri에게 말하면 저장한 설정이나 타이머를 바로 시작해요."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si til Siri hva du trenger uten å nevne appnavnet, så starter den det lagrede oppsettet eller timeren din."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vertel Siri wat je nodig hebt zonder de appnaam te noemen, en je bewaarde setup of timer start."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Powiedz Siri, czego potrzebujesz, bez podawania nazwy aplikacji, a uruchomi zapisaną konfigurację lub minutnik."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diga à Siri o que você precisa sem falar o nome do app, e ela inicia sua configuração salva ou o timer."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diga à Siri o que precisa sem dizer o nome da app, e ela inicia a sua configuração guardada ou o temporizador."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Скажите Siri, что нужно, не называя приложение, — и она запустит сохранённую настройку или таймер."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Säg till Siri vad du behöver utan att nämna appens namn, så startar den ditt sparade upplägg eller din timer."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "บอก Siri ว่าต้องการอะไรโดยไม่ต้องเอ่ยชื่อแอป แล้ว Siri จะเริ่มชุดตั้งค่าที่บันทึกไว้หรือตัวจับเวลาให้"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uygulamanın adını söylemeden Siri’ye ne istediğinizi söyleyin, kayıtlı ayarınızı ya da zamanlayıcınızı başlatsın."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nói với Siri điều bạn cần mà không cần nhắc tên ứng dụng, Siri sẽ bắt đầu cài đặt đã lưu hoặc hẹn giờ cho bạn."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不用说出 App 名称，告诉 Siri 你要什么，它就会开始你保存的设置或计时器。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不必說出 App 名稱，跟 Siri 說你需要什麼，它就會開始你儲存的設定或計時器。"
+          }
+        }
+      }
+    },
     "Tell us what you need or what felt off — the developer reads every message." : {
       "comment" : "Feedback nudge message",
       "localizations" : {
@@ -73422,6 +74615,7 @@
       }
     },
     "The app remembers your setups" : {
+      "extractionState" : "stale",
       "localizations" : {
         "cs" : {
           "stringUnit" : {
@@ -74310,6 +75504,302 @@
         }
       }
     },
+    "The saved setup to start." : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uložené nastavení, které se spustí."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Den gemte opsætning, der skal startes."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das gesicherte Setup, das gestartet wird."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Η αποθηκευμένη ρύθμιση που θα ξεκινήσει."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The saved setup to start."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La configuración guardada que se va a iniciar."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tallennettu asetus, joka käynnistetään."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le réglage enregistré à lancer."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pengaturan tersimpan yang akan dimulai."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La configurazione salvata da avviare."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開始する保存した設定。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "시작할 저장한 설정이에요."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det lagrede oppsettet som skal startes."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De bewaarde setup die wordt gestart."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zapisana konfiguracja do uruchomienia."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A configuração salva que será iniciada."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A configuração guardada a iniciar."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Сохранённая настройка, которую нужно запустить."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Det sparade upplägget som ska startas."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ชุดตั้งค่าที่บันทึกไว้ที่จะเริ่ม"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Başlatılacak kayıtlı ayar."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cài đặt đã lưu sẽ được bắt đầu."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要开始的保存的设置。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要開始的儲存的設定。"
+          }
+        }
+      }
+    },
+    "The timer this button controls." : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Časovač, který toto tlačítko ovládá."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Den timer, som knappen styrer."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Timer, den diese Taste steuert."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το χρονόμετρο που ελέγχει αυτό το κουμπί."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The timer this button controls."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El temporizador que controla este botón."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajastin, jota tämä painike ohjaa."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le minuteur que ce bouton contrôle."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timer yang dikendalikan tombol ini."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Il timer controllato da questo pulsante."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このボタンで操作するタイマー。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이 버튼이 다루는 타이머예요."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timeren denne knappen styrer."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "De timer die deze knop bedient."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minutnik, którym steruje ten przycisk."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O timer que este botão controla."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O temporizador que este botão controla."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Таймер, которым управляет эта кнопка."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Timern som knappen styr."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ตัวจับเวลาที่ปุ่มนี้ควบคุม"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu düğmenin kontrol ettiği zamanlayıcı."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hẹn giờ mà nút này điều khiển."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此按钮控制的计时器。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "此按鈕控制的計時器。"
+          }
+        }
+      }
+    },
     "Theme" : {
       "localizations" : {
         "cs" : {
@@ -74607,6 +76097,7 @@
       }
     },
     "This feature requires Pro" : {
+      "extractionState" : "stale",
       "localizations" : {
         "cs" : {
           "stringUnit" : {
@@ -74750,154 +76241,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "這個功能需要 Pro"
-          }
-        }
-      }
-    },
-    "This one tells you before the end" : {
-      "localizations" : {
-        "cs" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tento vás upozorní před koncem"
-          }
-        },
-        "da" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Denne siger til inden slutningen"
-          }
-        },
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dieser sagt dir vorher Bescheid"
-          }
-        },
-        "el" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Αυτός σας ειδοποιεί πριν από το τέλος"
-          }
-        },
-        "en-GB" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This one tells you before the end"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este te avisa antes del final"
-          }
-        },
-        "fi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tämä kertoo ennen loppua"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Celui-ci vous prévient avant la fin"
-          }
-        },
-        "id" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Yang ini memberi tahu sebelum selesai"
-          }
-        },
-        "it" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Questo ti avvisa prima della fine"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rereminderは終わる前に知らせます"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "두번알림은 끝나기 전에 알려 줘요"
-          }
-        },
-        "nb" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Denne sier fra før slutten"
-          }
-        },
-        "nl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Deze waarschuwt je vóór het eind"
-          }
-        },
-        "pl" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ten ostrzeże Cię przed końcem"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este avisa você antes do fim"
-          }
-        },
-        "pt-PT" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Este avisa-o antes do fim"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Этот предупредит вас до конца"
-          }
-        },
-        "sv" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Den här säger till före slutet"
-          }
-        },
-        "th" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ตัวนี้แจ้งเตือนก่อนจบ"
-          }
-        },
-        "tr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bu, bitmeden önce haber verir"
-          }
-        },
-        "vi" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ứng dụng này báo trước khi kết thúc"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rereminder 会在结束前提醒你"
-          }
-        },
-        "zh-Hant" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Rereminder 會在結束前提醒你"
           }
         }
       }
@@ -78905,6 +80248,7 @@
       }
     },
     "Timer, unlimited pre-alerts, Live Activity, Apple Watch and widgets" : {
+      "extractionState" : "stale",
       "localizations" : {
         "cs" : {
           "stringUnit" : {
@@ -82650,6 +83994,7 @@
       }
     },
     "Unlimited saved setups and full history" : {
+      "extractionState" : "stale",
       "localizations" : {
         "cs" : {
           "stringUnit" : {
@@ -86808,6 +88153,7 @@
       }
     },
     "Yearly or lifetime, your choice" : {
+      "extractionState" : "stale",
       "localizations" : {
         "cs" : {
           "stringUnit" : {
@@ -90242,1784 +91588,1926 @@
         }
       }
     },
-    "Tap a bell to remove it." : {
+    "When the timer rings, you've already failed to keep time" : {
       "localizations" : {
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Klepnutím na zvonek ho odstraníte."
+            "value" : "Když časovač zazvoní, čas jste už neuhlídali"
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tryk på en klokke for at fjerne den."
+            "value" : "Når timeren ringer, har du allerede mistet styr på tiden"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tippe auf eine Glocke, um sie zu entfernen."
+            "value" : "Wenn der Timer klingelt, ist dein Zeitplan schon gescheitert"
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Πατήστε ένα καμπανάκι για να το αφαιρέσετε."
+            "value" : "Όταν χτυπήσει ο χρονομετρητής, έχετε ήδη χάσει τον έλεγχο του χρόνου"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tap a bell to remove it."
+            "value" : "When the timer rings, you've already failed to keep time"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Toca una campana para quitarla."
+            "value" : "Cuando suena el temporizador, ya has perdido el control del tiempo"
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Poista kello napauttamalla sitä."
+            "value" : "Kun ajastin soi, ajanhallinta on jo pettänyt"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Touchez une cloche pour la retirer."
+            "value" : "Quand le minuteur sonne, vous avez déjà perdu la maîtrise du temps"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ketuk lonceng untuk menghapusnya."
+            "value" : "Saat timer berbunyi, Anda sudah gagal mengatur waktu"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tocca una campanella per rimuoverla."
+            "value" : "Quando il timer suona, hai già perso il controllo del tempo"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ベルをタップすると削除できます。"
+            "value" : "タイマーが鳴ったときには、もう時間管理に失敗しています"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "종을 누르면 지워집니다."
+            "value" : "타이머가 울리면 이미 시간 관리에 실패한 거예요"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Trykk på en bjelle for å fjerne den."
+            "value" : "Når timeren ringer, har du allerede mistet kontroll på tiden"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tik op een bel om hem te verwijderen."
+            "value" : "Als de timer afgaat, heb je de tijd al niet meer in de hand"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stuknij dzwonek, aby go usunąć."
+            "value" : "Gdy minutnik dzwoni, czas już wymknął się spod kontroli"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Toque em um sino para removê-lo."
+            "value" : "Quando o timer toca, você já perdeu o controle do tempo"
           }
         },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Toque num sino para o remover."
+            "value" : "Quando o temporizador toca, já perdeu o controlo do tempo"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Нажмите на колокольчик, чтобы удалить его."
+            "value" : "Когда таймер звонит, вы уже не уложились во время"
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tryck på en klocka för att ta bort den."
+            "value" : "När timern ringer har du redan tappat kontrollen över tiden"
           }
         },
         "th" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "แตะกระดิ่งเพื่อลบออก"
+            "value" : "เมื่อตัวจับเวลาดัง แปลว่าคุมเวลาพลาดไปแล้ว"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kaldırmak için bir zile dokunun."
+            "value" : "Zamanlayıcı çaldığında zamanı yönetmeyi çoktan kaçırmışsınızdır"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Chạm vào chuông để xoá."
+            "value" : "Khi hẹn giờ reo, bạn đã không còn kiểm soát được thời gian"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "轻点铃铛即可删除。"
+            "value" : "计时器响起时，时间管理已经失败了"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "點一下鈴鐺即可刪除。"
+            "value" : "計時器響起時，時間管理已經失敗了"
           }
         }
       }
     },
-    "How long the timer runs, in minutes. Leave at 0 to use the time already set." : {
+    "To stay on time, you need a heads-up before the end" : {
       "localizations" : {
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Délka časovače v minutách. Nechte 0, pokud chcete použít už nastavený čas."
+            "value" : "Aby se to nestalo, potřebujete upozornění předem"
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hvor mange minutter timeren kører. Lad den stå på 0 for at bruge den tid, der allerede er indstillet."
+            "value" : "For at undgå det skal du have et forvarsel inden slutningen"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wie viele Minuten der Timer läuft. Bei 0 wird die bereits eingestellte Zeit verwendet."
+            "value" : "Damit das nicht passiert, brauchst du eine Vorwarnung vor dem Ende"
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Πόσα λεπτά διαρκεί το χρονόμετρο. Αφήστε το 0 για να χρησιμοποιηθεί ο χρόνος που έχει ήδη οριστεί."
+            "value" : "Για να μη συμβεί αυτό, χρειάζεστε προειδοποίηση πριν από το τέλος"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "How long the timer runs, in minutes. Leave at 0 to use the time already set."
+            "value" : "To stay on time, you need a heads-up before the end"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cuántos minutos dura el temporizador. Déjalo en 0 para usar el tiempo que ya está puesto."
+            "value" : "Para evitarlo, necesitas un aviso previo antes del final"
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kuinka monta minuuttia ajastin käy. Jätä nollaksi, niin käytetään jo asetettua aikaa."
+            "value" : "Jotta niin ei käy, tarvitset ennakkomuistutuksen ennen loppua"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Durée du minuteur, en minutes. Laissez 0 pour garder la durée déjà réglée."
+            "value" : "Pour l’éviter, il vous faut une pré-alerte avant la fin"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Berapa menit timer berjalan. Biarkan 0 untuk memakai waktu yang sudah diatur."
+            "value" : "Agar tidak gagal, Anda perlu peringatan awal sebelum waktu habis"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Quanti minuti dura il timer. Lascia 0 per usare il tempo già impostato."
+            "value" : "Per evitarlo, ti serve un preavviso prima della fine"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "タイマーの長さ（分）。0のままにすると、いま設定されている時間で始まります。"
+            "value" : "失敗しないためには、終わる前に知らせる事前アラートが必要です"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "타이머를 몇 분 돌릴지 정해요. 0으로 두면 이미 맞춰 둔 시간으로 시작해요."
+            "value" : "실패하지 않으려면 그 전에 알려 주는 예비 알림이 필요해요"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hvor mange minutter timeren går. La den stå på 0 for å bruke tiden som allerede er stilt inn."
+            "value" : "For å unngå det trenger du et forvarsel før slutten"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hoeveel minuten de timer loopt. Laat op 0 staan om de al ingestelde tijd te gebruiken."
+            "value" : "Om dat te voorkomen heb je een voorwaarschuwing nodig vóór het eind"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Na ile minut ustawić minutnik. Zostaw 0, aby użyć już ustawionego czasu."
+            "value" : "Żeby tak się nie stało, potrzebujesz ostrzeżenia przed końcem"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Quantos minutos o timer vai durar. Deixe em 0 para usar o tempo que já está definido."
+            "value" : "Para evitar isso, você precisa de um pré-alerta antes do fim"
           }
         },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Quantos minutos dura o temporizador. Deixe a 0 para usar o tempo já definido."
+            "value" : "Para o evitar, precisa de um pré-alerta antes do fim"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Сколько минут будет идти таймер. Оставьте 0, чтобы использовать уже выставленное время."
+            "value" : "Чтобы этого не случилось, нужно предупреждение до конца"
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hur många minuter timern ska gå. Låt den stå på 0 för att använda tiden som redan är inställd."
+            "value" : "För att undvika det behöver du en förvarning före slutet"
           }
         },
         "th" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ระยะเวลาของตัวจับเวลาเป็นนาที ปล่อยไว้ที่ 0 เพื่อใช้เวลาที่ตั้งไว้แล้ว"
+            "value" : "ถ้าไม่อยากพลาด ต้องมีแจ้งเตือนล่วงหน้าก่อนหมดเวลา"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zamanlayıcının kaç dakika süreceği. Önceden ayarlanmış süreyi kullanmak için 0 bırakın."
+            "value" : "Bunu önlemek için bitmeden önce bir ön uyarıya ihtiyacınız var"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hẹn giờ chạy bao nhiêu phút. Để 0 để dùng thời gian đã đặt sẵn."
+            "value" : "Để không lỡ, bạn cần được báo trước khi hết giờ"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "计时器的时长（分钟）。保留为 0 则使用已设好的时间。"
+            "value" : "想不失败，就需要在结束前提醒你的提前提醒"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "計時器的長度（分鐘）。保留為 0 就會使用已設定好的時間。"
+            "value" : "想不失敗，就需要在結束前提醒你的提前提醒"
           }
         }
       }
     },
-    "The saved setup to start." : {
+    "Time to start wrapping up" : {
       "localizations" : {
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uložené nastavení, které se spustí."
+            "value" : "Je čas začít končit"
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Den gemte opsætning, der skal startes."
+            "value" : "Tid til at begynde at runde af"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Das gesicherte Setup, das gestartet wird."
+            "value" : "Zeit, zum Schluss zu kommen"
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Η αποθηκευμένη ρύθμιση που θα ξεκινήσει."
+            "value" : "Ώρα να αρχίσετε να ολοκληρώνετε"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The saved setup to start."
+            "value" : "Time to start wrapping up"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La configuración guardada que se va a iniciar."
+            "value" : "Es hora de empezar a cerrar"
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tallennettu asetus, joka käynnistetään."
+            "value" : "Aika alkaa lopetella"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Le réglage enregistré à lancer."
+            "value" : "Il est temps de commencer à conclure"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pengaturan tersimpan yang akan dimulai."
+            "value" : "Saatnya mulai menutup"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La configurazione salvata da avviare."
+            "value" : "È ora di avviarti alla conclusione"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "開始する保存した設定。"
+            "value" : "そろそろまとめに入る時間です"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "시작할 저장한 설정이에요."
+            "value" : "이제 마무리를 시작할 시간이에요"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Det lagrede oppsettet som skal startes."
+            "value" : "På tide å begynne å runde av"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "De bewaarde setup die wordt gestart."
+            "value" : "Tijd om af te ronden"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zapisana konfiguracja do uruchomienia."
+            "value" : "Czas zacząć kończyć"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A configuração salva que será iniciada."
+            "value" : "Hora de começar a encerrar"
           }
         },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "A configuração guardada a iniciar."
+            "value" : "Está na hora de começar a concluir"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Сохранённая настройка, которую нужно запустить."
+            "value" : "Пора начинать закругляться"
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Det sparade upplägget som ska startas."
+            "value" : "Dags att börja runda av"
           }
         },
         "th" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ชุดตั้งค่าที่บันทึกไว้ที่จะเริ่ม"
+            "value" : "ได้เวลาเริ่มสรุปแล้ว"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Başlatılacak kayıtlı ayar."
+            "value" : "Toparlamaya başlama zamanı"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cài đặt đã lưu sẽ được bắt đầu."
+            "value" : "Đã đến lúc bắt đầu kết lại"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "要开始的保存的设置。"
+            "value" : "该开始收尾了"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "要開始的儲存的設定。"
+            "value" : "該開始收尾了"
           }
         }
       }
     },
-    "The timer this button controls." : {
+    "Just finish what you're on" : {
       "localizations" : {
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Časovač, který toto tlačítko ovládá."
+            "value" : "Jen dokončete, co právě děláte"
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Den timer, som knappen styrer."
+            "value" : "Gør bare det færdigt, du er i gang med"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Der Timer, den diese Taste steuert."
+            "value" : "Bring nur noch zu Ende, was du gerade machst"
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Το χρονόμετρο που ελέγχει αυτό το κουμπί."
+            "value" : "Απλώς ολοκληρώστε αυτό που κάνετε τώρα"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The timer this button controls."
+            "value" : "Just finish what you're on"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "El temporizador que controla este botón."
+            "value" : "Solo termina lo que estás haciendo"
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ajastin, jota tämä painike ohjaa."
+            "value" : "Vie vain loppuun se, mitä olet tekemässä"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Le minuteur que ce bouton contrôle."
+            "value" : "Terminez simplement ce que vous êtes en train de faire"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Timer yang dikendalikan tombol ini."
+            "value" : "Selesaikan saja yang sedang Anda kerjakan"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Il timer controllato da questo pulsante."
+            "value" : "Finisci solo quello che stai facendo"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "このボタンで操作するタイマー。"
+            "value" : "いまの話だけ終わらせましょう"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "이 버튼이 다루는 타이머예요."
+            "value" : "하던 것만 마무리하면 돼요"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Timeren denne knappen styrer."
+            "value" : "Bare gjør ferdig det du holder på med"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "De timer die deze knop bedient."
+            "value" : "Maak alleen af waar je mee bezig bent"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Minutnik, którym steruje ten przycisk."
+            "value" : "Dokończ tylko to, co właśnie robisz"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O timer que este botão controla."
+            "value" : "Só termine o que você está fazendo"
           }
         },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "O temporizador que este botão controla."
+            "value" : "Termine apenas o que está a fazer"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Таймер, которым управляет эта кнопка."
+            "value" : "Просто закончите то, что делаете сейчас"
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Timern som knappen styr."
+            "value" : "Avsluta bara det du håller på med"
           }
         },
         "th" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ตัวจับเวลาที่ปุ่มนี้ควบคุม"
+            "value" : "แค่ทำสิ่งที่ทำอยู่ให้จบ"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu düğmenin kontrol ettiği zamanlayıcı."
+            "value" : "Yalnızca elinizdekini bitirin"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hẹn giờ mà nút này điều khiển."
+            "value" : "Chỉ cần làm xong việc đang dở"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "此按钮控制的计时器。"
+            "value" : "把手头这一段收完就好"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "此按鈕控制的計時器。"
+            "value" : "把手邊這一段收完就好"
           }
         }
       }
     },
-    "Opens the app and starts the saved setup you pick." : {
+    "What do you need a timer for?" : {
       "localizations" : {
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Otevře aplikaci a spustí vybrané uložené nastavení."
+            "value" : "K čemu časovač potřebujete?"
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Åbner appen og starter den gemte opsætning, du vælger."
+            "value" : "Hvad skal du bruge en timer til?"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Öffnet die App und startet das gewählte gesicherte Setup."
+            "value" : "Wofür brauchst du einen Timer?"
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ανοίγει την εφαρμογή και ξεκινά την αποθηκευμένη ρύθμιση που επιλέγετε."
+            "value" : "Για ποιον λόγο χρειάζεστε χρονομετρητή;"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Opens the app and starts the saved setup you pick."
+            "value" : "What do you need a timer for?"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Abre la app e inicia la configuración guardada que elijas."
+            "value" : "¿Para qué necesitas un temporizador?"
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Avaa apin ja käynnistää valitsemasi tallennetun asetuksen."
+            "value" : "Mihin tarvitset ajastinta?"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ouvre l’app et lance le réglage enregistré de votre choix."
+            "value" : "Pour quoi avez-vous besoin d’un minuteur ?"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Membuka app dan memulai pengaturan tersimpan yang Anda pilih."
+            "value" : "Untuk apa Anda memerlukan timer?"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Apre l’app e avvia la configurazione salvata che scegli."
+            "value" : "Per cosa ti serve un timer?"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アプリを開いて、選んだ保存した設定を開始します。"
+            "value" : "タイマーは何に使いますか？"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "앱을 열고 고른 저장한 설정을 바로 시작해요."
+            "value" : "타이머를 쓰실 일이 있으신가요?"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Åpner appen og starter det lagrede oppsettet du velger."
+            "value" : "Hva trenger du en timer til?"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Opent de app en start de bewaarde setup die je kiest."
+            "value" : "Waarvoor heb je een timer nodig?"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Otwiera aplikację i uruchamia wybraną zapisaną konfigurację."
+            "value" : "Do czego potrzebujesz minutnika?"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Abre o app e inicia a configuração salva que você escolher."
+            "value" : "Para que você precisa de um timer?"
           }
         },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Abre a app e inicia a configuração guardada que escolher."
+            "value" : "Para que precisa de um temporizador?"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Открывает приложение и запускает выбранную сохранённую настройку."
+            "value" : "Для чего вам нужен таймер?"
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Öppnar appen och startar det sparade upplägg du väljer."
+            "value" : "Vad behöver du en timer till?"
           }
         },
         "th" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "เปิดแอปและเริ่มชุดตั้งค่าที่บันทึกไว้ที่คุณเลือก"
+            "value" : "คุณจะใช้ตัวจับเวลาทำอะไร"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uygulamayı açar ve seçtiğiniz kayıtlı ayarı başlatır."
+            "value" : "Zamanlayıcıya ne için ihtiyacınız var?"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mở ứng dụng và bắt đầu cài đặt đã lưu mà bạn chọn."
+            "value" : "Bạn cần hẹn giờ để làm gì?"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "打开 App 并开始你选的保存的设置。"
+            "value" : "你要用计时器做什么？"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "打開 App 並開始你選的儲存的設定。"
+            "value" : "你要用計時器做什麼？"
           }
         }
       }
     },
-    "Choose which saved setup the button starts." : {
+    "Class" : {
       "localizations" : {
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vyberte, které uložené nastavení tlačítko spustí."
+            "value" : "Výuka"
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vælg, hvilken gemt opsætning knappen starter."
+            "value" : "Undervisning"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wähle, welches gesicherte Setup die Taste startet."
+            "value" : "Unterricht"
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Επιλέξτε ποια αποθηκευμένη ρύθμιση ξεκινά το κουμπί."
+            "value" : "Μάθημα"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Choose which saved setup the button starts."
+            "value" : "Class"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Elige qué configuración guardada inicia el botón."
+            "value" : "Clase"
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Valitse, minkä tallennetun asetuksen painike käynnistää."
+            "value" : "Oppitunti"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Choisissez le réglage enregistré que lance le bouton."
+            "value" : "Cours"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pilih pengaturan tersimpan yang dimulai oleh tombol."
+            "value" : "Kelas"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Scegli quale configurazione salvata avvia il pulsante."
+            "value" : "Lezione"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ボタンで開始する保存した設定を選びます。"
+            "value" : "授業"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "버튼을 누르면 시작할 저장한 설정을 골라요."
+            "value" : "수업"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Velg hvilket lagret oppsett knappen starter."
+            "value" : "Undervisning"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kies welke bewaarde setup de knop start."
+            "value" : "Les"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Wybierz, którą zapisaną konfigurację uruchamia przycisk."
+            "value" : "Zajęcia"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Escolha qual configuração salva o botão inicia."
+            "value" : "Aula"
           }
         },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Escolha que configuração guardada o botão inicia."
+            "value" : "Aula"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Выберите, какую сохранённую настройку запускает кнопка."
+            "value" : "Занятие"
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Välj vilket sparat upplägg knappen startar."
+            "value" : "Lektion"
           }
         },
         "th" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "เลือกชุดตั้งค่าที่บันทึกไว้ที่ปุ่มจะเริ่ม"
+            "value" : "การสอน"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Düğmenin hangi kayıtlı ayarı başlatacağını seçin."
+            "value" : "Ders"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Chọn cài đặt đã lưu mà nút sẽ bắt đầu."
+            "value" : "Lớp học"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "选择按钮要开始的保存的设置。"
+            "value" : "上课"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "選擇按鈕要開始的儲存的設定。"
+            "value" : "上課"
           }
         }
       }
     },
-    "Just ask Siri" : {
-      "comment" : "Roadmap item: Siri without the app name",
+    "Workout" : {
       "localizations" : {
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Stačí říct Siri"
+            "value" : "Cvičení"
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spørg bare Siri"
+            "value" : "Træning"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Einfach Siri fragen"
+            "value" : "Training"
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Απλώς πείτε το στη Siri"
+            "value" : "Προπόνηση"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Just ask Siri"
+            "value" : "Workout"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pídeselo a Siri"
+            "value" : "Entrenamiento"
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pyydä vain Siriä"
+            "value" : "Treeni"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Demandez simplement à Siri"
+            "value" : "Entraînement"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Cukup minta Siri"
+            "value" : "Olahraga"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Chiedi a Siri"
+            "value" : "Allenamento"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Siriに頼むだけ"
+            "value" : "運動"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Siri에게 말만 하면"
+            "value" : "운동"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bare spør Siri"
+            "value" : "Trening"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vraag het gewoon aan Siri"
+            "value" : "Training"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Po prostu poproś Siri"
+            "value" : "Trening"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "É só pedir à Siri"
+            "value" : "Treino"
           }
         },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Basta pedir à Siri"
+            "value" : "Treino"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Просто попросите Siri"
+            "value" : "Тренировка"
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fråga bara Siri"
+            "value" : "Träning"
           }
         },
         "th" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "แค่บอก Siri"
+            "value" : "ออกกำลังกาย"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Siri’ye söylemeniz yeterli"
+            "value" : "Antrenman"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Chỉ cần nhờ Siri"
+            "value" : "Tập luyện"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "告诉 Siri 就行"
+            "value" : "运动"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "跟 Siri 說就好"
+            "value" : "運動"
           }
         }
       }
     },
-    "Tell Siri what you need without saying the app name, and it starts your saved setup or timer." : {
-      "comment" : "Roadmap item detail: Siri without the app name",
+    "Type it here" : {
       "localizations" : {
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Řekněte Siri, co potřebujete, i bez názvu aplikace, a spustí vaše uložené nastavení nebo časovač."
+            "value" : "Napište sem"
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sig til Siri, hvad du har brug for, uden at nævne appens navn, så starter den din gemte opsætning eller timer."
+            "value" : "Skriv det her"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sag Siri, was du brauchst, ohne den App-Namen zu nennen, und sie startet dein gesichertes Setup oder deinen Timer."
+            "value" : "Hier eingeben"
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Πείτε στη Siri τι χρειάζεστε χωρίς να αναφέρετε το όνομα της εφαρμογής, και θα ξεκινήσει την αποθηκευμένη ρύθμιση ή το χρονόμετρό σας."
+            "value" : "Γράψτε το εδώ"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tell Siri what you need without saying the app name, and it starts your saved setup or timer."
+            "value" : "Type it here"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dile a Siri lo que necesitas sin decir el nombre de la app y pondrá en marcha tu configuración guardada o tu temporizador."
+            "value" : "Escríbelo aquí"
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Kerro Sirille, mitä tarvitset, sanomatta apin nimeä, niin se käynnistää tallennetun asetuksesi tai ajastimesi."
+            "value" : "Kirjoita tähän"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dites à Siri ce dont vous avez besoin sans nommer l’app, et il lance votre réglage enregistré ou votre minuteur."
+            "value" : "Saisissez ici"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Katakan kepada Siri apa yang Anda perlukan tanpa menyebut nama app, dan Siri akan memulai pengaturan tersimpan atau timer Anda."
+            "value" : "Ketik di sini"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Di’ a Siri cosa ti serve senza nominare l’app e avvierà la tua configurazione salvata o il timer."
+            "value" : "Scrivilo qui"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "アプリ名を言わなくても、Siriに頼むだけで保存した設定やタイマーを始められます。"
+            "value" : "ここに入力"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "앱 이름을 말하지 않아도 Siri에게 말하면 저장한 설정이나 타이머를 바로 시작해요."
+            "value" : "여기에 적어 주세요"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Si til Siri hva du trenger uten å nevne appnavnet, så starter den det lagrede oppsettet eller timeren din."
+            "value" : "Skriv det her"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Vertel Siri wat je nodig hebt zonder de appnaam te noemen, en je bewaarde setup of timer start."
+            "value" : "Typ het hier"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Powiedz Siri, czego potrzebujesz, bez podawania nazwy aplikacji, a uruchomi zapisaną konfigurację lub minutnik."
+            "value" : "Wpisz tutaj"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diga à Siri o que você precisa sem falar o nome do app, e ela inicia sua configuração salva ou o timer."
+            "value" : "Digite aqui"
           }
         },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diga à Siri o que precisa sem dizer o nome da app, e ela inicia a sua configuração guardada ou o temporizador."
+            "value" : "Escreva aqui"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Скажите Siri, что нужно, не называя приложение, — и она запустит сохранённую настройку или таймер."
+            "value" : "Введите здесь"
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Säg till Siri vad du behöver utan att nämna appens namn, så startar den ditt sparade upplägg eller din timer."
+            "value" : "Skriv här"
           }
         },
         "th" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "บอก Siri ว่าต้องการอะไรโดยไม่ต้องเอ่ยชื่อแอป แล้ว Siri จะเริ่มชุดตั้งค่าที่บันทึกไว้หรือตัวจับเวลาให้"
+            "value" : "พิมพ์ที่นี่"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uygulamanın adını söylemeden Siri’ye ne istediğinizi söyleyin, kayıtlı ayarınızı ya da zamanlayıcınızı başlatsın."
+            "value" : "Buraya yazın"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Nói với Siri điều bạn cần mà không cần nhắc tên ứng dụng, Siri sẽ bắt đầu cài đặt đã lưu hoặc hẹn giờ cho bạn."
+            "value" : "Nhập vào đây"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "不用说出 App 名称，告诉 Siri 你要什么，它就会开始你保存的设置或计时器。"
+            "value" : "在这里输入"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "不必說出 App 名稱，跟 Siri 說你需要什麼，它就會開始你儲存的設定或計時器。"
+            "value" : "在這裡輸入"
           }
         }
       }
     },
-    "Keep every timer setup you use, ready in one tap" : {
-      "comment" : "Paywall showcase detail",
+    "Write my own" : {
       "localizations" : {
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uložte si všechna nastavení časovače, připravená jedním klepnutím"
+            "value" : "Napsat vlastní"
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gem alle dine timerindstillinger, klar med ét tryk"
+            "value" : "Skriv selv"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Speichere jede Timer-Einstellung und starte sie mit einem Tipp"
+            "value" : "Selbst eingeben"
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Κράτησε όλες τις ρυθμίσεις χρονομέτρου, έτοιμες με ένα άγγιγμα"
+            "value" : "Να το γράψω εγώ"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Keep every timer setup you use, ready in one tap"
+            "value" : "Write my own"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Guarda todos tus ajustes de temporizador, listos con un toque"
+            "value" : "Escribirlo yo"
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tallenna kaikki ajastinasetuksesi, valmiina yhdellä napautuksella"
+            "value" : "Kirjoita itse"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gardez tous vos réglages de minuteur, prêts en un toucher"
+            "value" : "Écrire moi-même"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Simpan semua pengaturan timer, siap dengan sekali ketuk"
+            "value" : "Tulis sendiri"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Salva tutte le impostazioni del timer, pronte con un tocco"
+            "value" : "Scrivo io"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "よく使うタイマー設定をすべて保存して、ワンタップで呼び出せます"
+            "value" : "自分で入力"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "자주 쓰는 타이머 설정을 모두 담아 두고 한 번에 꺼내요"
+            "value" : "직접 적기"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lagre alle timeroppsettene dine, klare med ett trykk"
+            "value" : "Skriv selv"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bewaar al je timerinstellingen, klaar met één tik"
+            "value" : "Zelf invullen"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zapisz wszystkie ustawienia minutnika, gotowe jednym dotknięciem"
+            "value" : "Wpisz własne"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Guarde todas as configurações de timer, prontas com um toque"
+            "value" : "Escrever o meu"
           }
         },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Guarde todas as definições de temporizador, prontas num toque"
+            "value" : "Escrever o meu"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Сохраняйте все настройки таймера и запускайте их одним касанием"
+            "value" : "Написать своё"
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Spara alla timerinställningar, redo med ett tryck"
+            "value" : "Skriv själv"
           }
         },
         "th" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "เก็บการตั้งค่าตัวจับเวลาทั้งหมดไว้ ใช้ได้ในแตะเดียว"
+            "value" : "พิมพ์เอง"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tüm zamanlayıcı ayarlarını sakla, tek dokunuşla hazır"
+            "value" : "Kendim yazayım"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lưu mọi cài đặt hẹn giờ, sẵn sàng chỉ với một chạm"
+            "value" : "Tự nhập"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "保存所有常用的计时设置，一点就能用"
+            "value" : "自己填写"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "保存所有常用的計時設定，一點就能用"
+            "value" : "自己填寫"
           }
         }
       }
     },
-    "See all your past timers and stats, with no time limit" : {
-      "comment" : "Paywall showcase detail",
+    "Watch the intro again" : {
       "localizations" : {
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Prohlížejte všechny dřívější časovače a statistiky bez časového omezení"
+            "value" : "Přehrát úvod znovu"
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Se alle tidligere timere og statistik uden tidsgrænse"
+            "value" : "Se introen igen"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sieh alle bisherigen Timer und Statistiken ohne Zeitlimit"
+            "value" : "Einführung noch einmal ansehen"
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Δες όλα τα προηγούμενα χρονόμετρα και στατιστικά χωρίς χρονικό όριο"
+            "value" : "Δείτε ξανά την εισαγωγή"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "See all your past timers and stats, with no time limit"
+            "value" : "Watch the intro again"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Consulta todos tus temporizadores y estadísticas sin límite de tiempo"
+            "value" : "Ver la introducción otra vez"
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Näe kaikki aiemmat ajastimet ja tilastot ilman aikarajaa"
+            "value" : "Katso esittely uudelleen"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Consultez tous vos minuteurs passés et statistiques, sans limite de durée"
+            "value" : "Revoir l’introduction"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Lihat semua timer dan statistik sebelumnya tanpa batas waktu"
+            "value" : "Tonton lagi pengantar"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Consulta tutti i timer passati e le statistiche senza limiti di tempo"
+            "value" : "Rivedi l’introduzione"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "過去のタイマー記録と統計を期間の制限なく見られます"
+            "value" : "最初の案内をもう一度見る"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "지난 타이머 기록과 통계를 기간 제한 없이 봐요"
+            "value" : "첫 안내 다시 보기"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Se alle tidligere timere og statistikk uten tidsbegrensning"
+            "value" : "Se introen på nytt"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bekijk al je eerdere timers en statistieken, zonder tijdslimiet"
+            "value" : "Bekijk de intro opnieuw"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Przeglądaj wszystkie wcześniejsze minutniki i statystyki bez limitu czasu"
+            "value" : "Obejrzyj wprowadzenie ponownie"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veja todos os timers e estatísticas anteriores, sem limite de tempo"
+            "value" : "Ver a introdução de novo"
           }
         },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veja todos os temporizadores e estatísticas anteriores, sem limite de tempo"
+            "value" : "Ver a introdução novamente"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Смотрите все прошлые таймеры и статистику без ограничения по времени"
+            "value" : "Посмотреть вступление ещё раз"
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Se alla tidigare timers och statistik utan tidsgräns"
+            "value" : "Se introt igen"
           }
         },
         "th" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ดูประวัติตัวจับเวลาและสถิติย้อนหลังได้ไม่จำกัดเวลา"
+            "value" : "ดูการแนะนำอีกครั้ง"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geçmiş tüm zamanlayıcıları ve istatistikleri süre sınırı olmadan gör"
+            "value" : "Tanıtımı yeniden izle"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Xem mọi hẹn giờ và thống kê trước đây, không giới hạn thời gian"
+            "value" : "Xem lại phần giới thiệu"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "不限时间查看过去的计时记录和统计"
+            "value" : "再看一次入门介绍"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "不限時間查看過去的計時紀錄和統計"
+            "value" : "再看一次入門介紹"
           }
         }
       }
     },
-    "Run a talk or class section by section, each with its own time" : {
-      "comment" : "Paywall showcase detail",
+    "Double-tap a bell to remove it." : {
       "localizations" : {
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Veďte přednášku nebo hodinu po částech, každou s vlastním časem"
+            "value" : "Zvonek odeberete dvojím klepnutím."
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hold et oplæg eller en time afsnit for afsnit, hvert med sin egen tid"
+            "value" : "Dobbelttryk på en klokke for at fjerne den."
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Halte Vorträge oder Kurse Abschnitt für Abschnitt, jeder mit eigener Zeit"
+            "value" : "Doppeltippe auf eine Glocke, um sie zu entfernen."
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Κάνε μια ομιλία ή ένα μάθημα ανά ενότητα, καθεμία με τον χρόνο της"
+            "value" : "Πατήστε δύο φορές ένα καμπανάκι για να το αφαιρέσετε."
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Run a talk or class section by section, each with its own time"
+            "value" : "Double-tap a bell to remove it."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Da una charla o clase por secciones, cada una con su tiempo"
+            "value" : "Toca dos veces una campana para quitarla."
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pidä esitys tai tunti osa kerrallaan, jokaisella oma aikansa"
+            "value" : "Poista kello kaksoisnapauttamalla sitä."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Menez un exposé ou un cours par sections, chacune avec son temps"
+            "value" : "Touchez deux fois une cloche pour la supprimer."
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bawakan presentasi atau kelas per bagian, masing-masing dengan waktunya"
+            "value" : "Ketuk lonceng dua kali untuk menghapusnya."
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gestisci un intervento o una lezione per sezioni, ognuna con il suo tempo"
+            "value" : "Tocca due volte una campana per rimuoverla."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "発表や授業を、区間ごとに時間を分けて進められます"
+            "value" : "ベルをダブルタップすると削除されます。"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "발표나 수업을 구간마다 시간을 나눠 진행해요"
+            "value" : "종을 두 번 누르면 지워집니다."
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hold et foredrag eller en time del for del, hver med sin egen tid"
+            "value" : "Dobbelttrykk på en klokke for å fjerne den."
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Geef een praatje of les per onderdeel, elk met een eigen tijd"
+            "value" : "Tik dubbel op een bel om hem te verwijderen."
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Prowadź wystąpienie lub lekcję częściami, każda z własnym czasem"
+            "value" : "Stuknij dzwonek dwukrotnie, aby go usunąć."
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conduza uma palestra ou aula por seções, cada uma com seu tempo"
+            "value" : "Toque duas vezes em um sino para removê-lo."
           }
         },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Conduza uma apresentação ou aula por secções, cada uma com o seu tempo"
+            "value" : "Toque duas vezes num sino para o remover."
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ведите выступление или урок по частям, у каждой своё время"
+            "value" : "Дважды коснитесь колокольчика, чтобы удалить его."
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Håll ett föredrag eller en lektion i avsnitt, vart och ett med egen tid"
+            "value" : "Dubbeltryck på en klocka för att ta bort den."
           }
         },
         "th" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "จัดการพรีเซนต์หรือการสอนเป็นช่วง ๆ แต่ละช่วงมีเวลาของตัวเอง"
+            "value" : "แตะกระดิ่งสองครั้งเพื่อลบออก"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bir sunumu ya da dersi bölüm bölüm, her biri kendi süresiyle yürüt"
+            "value" : "Bir zili kaldırmak için ona iki kez dokunun."
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Trình bày hoặc dạy học theo từng phần, mỗi phần có thời gian riêng"
+            "value" : "Chạm hai lần vào chuông để xóa."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "把演讲或课程分成几段，每段各有时间"
+            "value" : "轻点两下铃铛即可删除。"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "把簡報或課程分成幾段，每段各有時間"
+            "value" : "點兩下鈴鐺即可刪除。"
           }
         }
       }
     },
-    "Keep the notes for each section on screen as you go" : {
-      "comment" : "Paywall showcase detail",
+    "Double-tap the extra bell to remove it" : {
       "localizations" : {
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Poznámky ke každé části máte stále na obrazovce"
+            "value" : "Zvonek navíc odeberte dvojím klepnutím"
           }
         },
         "da" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Hav noterne til hvert afsnit på skærmen, mens du går frem"
+            "value" : "Dobbelttryk på den ekstra klokke for at fjerne den"
           }
         },
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Deine Notizen für jeden Abschnitt bleiben im Blick"
+            "value" : "Doppeltippe auf die überflüssige Glocke, um sie zu entfernen"
           }
         },
         "el" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Κράτα τις σημειώσεις κάθε ενότητας στην οθόνη καθώς προχωράς"
+            "value" : "Πατήστε δύο φορές το περιττό καμπανάκι για να το αφαιρέσετε"
           }
         },
         "en-GB" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Keep the notes for each section on screen as you go"
+            "value" : "Double-tap the extra bell to remove it"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ten a la vista las notas de cada sección mientras avanzas"
+            "value" : "Toca dos veces la campana que sobra para quitarla"
           }
         },
         "fi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Pidä kunkin osan muistiinpanot näytöllä edetessäsi"
+            "value" : "Poista ylimääräinen kello kaksoisnapauttamalla"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Gardez les notes de chaque section à l'écran pendant que vous parlez"
+            "value" : "Touchez deux fois la cloche en trop pour la supprimer"
           }
         },
         "id" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Catatan tiap bagian tetap tampil di layar selama berjalan"
+            "value" : "Ketuk dua kali lonceng tambahan untuk menghapusnya"
           }
         },
         "it" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Tieni sullo schermo gli appunti di ogni sezione mentre procedi"
+            "value" : "Tocca due volte la campana in più per rimuoverla"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "区間ごとのメモを画面に出したまま進められます"
+            "value" : "いらないベルはダブルタップで消してみましょう"
           }
         },
         "ko" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "구간마다 할 말을 화면에 띄워 두고 진행해요"
+            "value" : "필요 없는 종은 두 번 눌러 지워 보세요"
           }
         },
         "nb" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ha notatene for hver del på skjermen mens du holder på"
+            "value" : "Dobbelttrykk på den ekstra klokken for å fjerne den"
           }
         },
         "nl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Houd de aantekeningen van elk onderdeel in beeld terwijl je verdergaat"
+            "value" : "Tik dubbel op de extra bel om hem te verwijderen"
           }
         },
         "pl" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Notatki do każdej części masz na ekranie przez cały czas"
+            "value" : "Stuknij dwukrotnie dodatkowy dzwonek, aby go usunąć"
           }
         },
         "pt-BR" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mantenha as anotações de cada seção na tela enquanto avança"
+            "value" : "Toque duas vezes no sino que sobra para removê-lo"
           }
         },
         "pt-PT" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mantenha as notas de cada secção no ecrã enquanto avança"
+            "value" : "Toque duas vezes no sino a mais para o remover"
           }
         },
         "ru" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Заметки к каждой части всегда перед глазами"
+            "value" : "Дважды коснитесь лишнего колокольчика, чтобы убрать его"
           }
         },
         "sv" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ha anteckningarna för varje avsnitt på skärmen medan du går vidare"
+            "value" : "Dubbeltryck på den extra klockan för att ta bort den"
           }
         },
         "th" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "โน้ตของแต่ละช่วงแสดงบนหน้าจอระหว่างพูด"
+            "value" : "แตะสองครั้งที่กระดิ่งที่ไม่ต้องการเพื่อลบออก"
           }
         },
         "tr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Her bölümün notları ilerlerken ekranda kalsın"
+            "value" : "Fazla zili kaldırmak için ona iki kez dokunun"
           }
         },
         "vi" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ghi chú của từng phần luôn hiện trên màn hình khi bạn trình bày"
+            "value" : "Chạm hai lần vào chuông thừa để xóa"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "每一段的讲稿都显示在屏幕上，边讲边看"
+            "value" : "轻点两下，删掉多余的铃铛"
           }
         },
         "zh-Hant" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "每一段的講稿都顯示在螢幕上，邊講邊看"
+            "value" : "點兩下，刪掉多餘的鈴鐺"
+          }
+        }
+      }
+    },
+    "Remove the extra bell" : {
+      "localizations" : {
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Odebrat zvonek navíc"
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fjern den ekstra klokke"
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überflüssige Glocke entfernen"
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Αφαίρεση του περιττού καμπανακιού"
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove the extra bell"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quitar la campana que sobra"
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Poista ylimääräinen kello"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer la cloche en trop"
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hapus lonceng tambahan"
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rimuovi la campana in più"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "余分なベルを削除"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "남는 종 지우기"
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fjern den ekstra klokken"
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwijder de extra bel"
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usuń dodatkowy dzwonek"
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remover o sino que sobra"
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remover o sino a mais"
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Убрать лишний колокольчик"
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta bort den extra klockan"
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ลบกระดิ่งที่ไม่ต้องการ"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fazla zili kaldır"
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xóa chuông thừa"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "删除多余的铃铛"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "刪除多餘的鈴鐺"
           }
         }
       }
