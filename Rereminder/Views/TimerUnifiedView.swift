@@ -477,7 +477,9 @@ struct TimerUnifiedView: View {
             }
         }
 
+        #if !os(visionOS)  // visionOS 의 아래 막대는 장식 띠(ornament)라 간격을 스스로 잡는다
         ToolbarSpacer(.flexible, placement: .bottomBar)
+        #endif
 
         ToolbarItemGroup(placement: .bottomBar) {
             // 🔖 는 단계와 상관없이 처음부터 있다. 맞춘 설정을 저장하고 싶은 순간은 첫날에도 온다 —

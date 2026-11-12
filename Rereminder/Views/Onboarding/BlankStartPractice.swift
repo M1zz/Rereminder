@@ -134,7 +134,7 @@ struct BlankStartPractice: View {
     private func removeExtraBell() {
         extraBell = nil
         step = .done
-        #if canImport(UIKit)
+        #if os(iOS)
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         #endif
     }
@@ -166,7 +166,7 @@ struct BlankStartPractice: View {
         let snapped = max(60, min(Self.total - 60, seconds))
         guard snapped != alert else { return }
         alert = snapped
-        #if canImport(UIKit)
+        #if os(iOS)
         UISelectionFeedbackGenerator().selectionChanged()
         #endif
     }

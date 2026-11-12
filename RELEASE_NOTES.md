@@ -9,6 +9,208 @@ DeployBar 가 배포할 때 아래 버전 절의 언어별 문구를 읽어 스�
 사용자에게 무엇이 좋아졌는지만 쓴다. 내부 구조나 빌드 설정 이야기는 쓰지 않는다.
 언어마다 다시 쓴다. 기계번역하지 말고 항목 수와 순서만 맞춘다.
 
+## 2.3.7
+
+### 앱스토어 (한국어)
+
+이제 Apple Vision Pro에서도 쓸 수 있어요.
+저장한 타이머와 기록이 iCloud로 이어져요.
+아이콘이 앱의 링 모양으로 새로워졌어요.
+화면을 눕히면 원과 설정이 나란히 놓여요.
+화면 모드가 기기의 라이트·다크 설정을 따라요.
+
+### App Store (English)
+
+Now available on Apple Vision Pro.
+Templates and history sync via iCloud.
+A new icon based on the app’s ring.
+Landscape puts the dial beside settings.
+Light or dark now follows your device.
+
+### App Store (en-GB)
+
+Now available on Apple Vision Pro.
+Templates and history sync via iCloud.
+A new icon based on the app’s ring.
+Landscape puts the dial beside settings.
+Light or dark now follows your device.
+
+### App Store (日本語)
+
+Apple Vision Proでも使えるようになりました。
+テンプレートと履歴がiCloudで同期されます。
+アイコンがアプリのリングの形になりました。
+横向きでは円と設定が横に並びます。
+外観が端末のライト・ダーク設定に従います。
+
+### 앱스토어 (중국어 간체)
+
+现在也可以在 Apple Vision Pro 上使用。
+模板和记录通过 iCloud 同步。
+图标换成了 App 的圆环造型。
+横屏时，圆盘和设置并排显示。
+外观跟随设备的浅色或深色设置。
+
+### 앱스토어 (중국어 번체)
+
+現在也可以在 Apple Vision Pro 上使用。
+範本和記錄透過 iCloud 同步。
+圖示換成了 App 的圓環造型。
+橫向時，圓盤和設定並排顯示。
+外觀跟隨裝置的淺色或深色設定。
+
+### App Store (Deutsch)
+
+Jetzt auch auf Apple Vision Pro.
+iCloud gleicht Vorlagen und Verlauf ab.
+Neues Icon im Stil des App-Rings.
+Im Querformat: Kreis links, Rest rechts.
+Hell oder Dunkel folgt jetzt dem Gerät.
+
+### App Store (Français)
+
+Désormais sur Apple Vision Pro.
+Modèles et historique : synchro iCloud.
+Nouvelle icône : l’anneau de l’app.
+Paysage : le cadran à côté des réglages.
+Clair ou sombre selon votre appareil.
+
+### App Store (Español)
+
+Ya disponible en Apple Vision Pro.
+Plantillas e historial ya en iCloud.
+Nuevo icono con el anillo de la app.
+Horizontal: círculo junto a los ajustes.
+Claro u oscuro según tu dispositivo.
+
+### App Store (Português do Brasil)
+
+Agora também no Apple Vision Pro.
+iCloud sincroniza modelos e histórico.
+Novo ícone inspirado no anel do app.
+Horizontal: círculo ao lado dos ajustes.
+Claro ou escuro conforme o aparelho.
+
+### 앱스토어 (포르투갈어(포르투갈))
+
+Agora também no Apple Vision Pro.
+O iCloud sincroniza modelos e histórico.
+Novo ícone inspirado no anel da app.
+Horizontal: círculo junto às definições.
+Claro ou escuro conforme o dispositivo.
+
+### App Store (Italiano)
+
+Ora disponibile su Apple Vision Pro.
+iCloud sincronizza modelli e cronologia.
+Nuova icona con l’anello dell’app.
+Orizzontale: cerchio accanto al resto.
+Chiaro o scuro come sul dispositivo.
+
+### 앱스토어 (러시아어)
+
+Теперь и на Apple Vision Pro.
+iCloud синхронизирует шаблоны и историю.
+Новая иконка в виде кольца приложения.
+В альбомном виде круг и настройки рядом.
+Оформление следует настройке устройства.
+
+### 앱스토어 (체코어)
+
+Nově také na Apple Vision Pro.
+iCloud synchronizuje šablony a historii.
+Nová ikona ve tvaru kruhu aplikace.
+Na šířku je ciferník vedle nastavení.
+Vzhled se řídí nastavením zařízení.
+
+### 앱스토어 (덴마크어)
+
+Nu også på Apple Vision Pro.
+iCloud synker skabeloner og historik.
+Nyt ikon formet som appens ring.
+På tværs: cirklen ved indstillingerne.
+Lys eller mørk følger nu din enhed.
+
+### 앱스토어 (그리스어)
+
+Τώρα και στο Apple Vision Pro.
+Πρότυπα και ιστορικό μέσω iCloud.
+Νέο εικονίδιο σε σχήμα δακτυλίου.
+Οριζόντια: κύκλος και ρυθμίσεις δίπλα.
+Ανοιχτό ή σκούρο όπως στη συσκευή.
+
+### 앱스토어 (핀란드어)
+
+Nyt myös Apple Vision Prolla.
+Mallit ja historia synkassa iCloudissa.
+Uusi kuvake sovelluksen renkaasta.
+Vaakana ympyrä ja asetukset vierekkäin.
+Ulkoasu seuraa laitteen asetusta.
+
+### 앱스토어 (인도네시아어)
+
+Kini tersedia di Apple Vision Pro.
+Templat dan riwayat sinkron via iCloud.
+Ikon baru berbentuk cincin aplikasi.
+Lanskap: lingkaran di sisi pengaturan.
+Mode terang atau gelap ikut perangkat.
+
+### 앱스토어 (Norsk bokmål)
+
+Nå også på Apple Vision Pro.
+iCloud synkroniserer maler og historikk.
+Nytt ikon formet som appens ring.
+Liggende: sirkelen ved innstillingene.
+Lys eller mørk følger nå enheten.
+
+### 앱스토어 (네덜란드어)
+
+Nu ook op Apple Vision Pro.
+Sjablonen en geschiedenis in iCloud.
+Nieuw icoon in de vorm van de ring.
+Liggend: cirkel naast de instellingen.
+Licht of donker volgt je apparaat.
+
+### 앱스토어 (폴란드어)
+
+Teraz także na Apple Vision Pro.
+iCloud łączy szablony i historię.
+Nowa ikona z pierścieniem aplikacji.
+Poziomo: tarcza obok ustawień.
+Wygląd zgodny z ustawieniem urządzenia.
+
+### 앱스토어 (스웨덴어)
+
+Nu även på Apple Vision Pro.
+Mallar och historik synkas via iCloud.
+Ny symbol i form av appens ring.
+Liggande: cirkel bredvid inställningar.
+Ljust eller mörkt följer nu enheten.
+
+### 앱스토어 (태국어)
+
+ใช้งานบน Apple Vision Pro ได้แล้ว
+เทมเพลตและประวัติซิงค์ผ่าน iCloud
+ไอคอนใหม่ตามรูปวงแหวนของแอป
+แนวนอนจะวางวงกลมคู่กับการตั้งค่า
+โหมดสว่างหรือมืดเป็นไปตามอุปกรณ์
+
+### 앱스토어 (튀르키예어)
+
+Artık Apple Vision Pro'da da.
+Şablon ve geçmiş iCloud ile eşitlenir.
+Yeni simge, uygulamanın halkasından.
+Yatayda daire ve ayarlar yan yana durur.
+Açık veya koyu görünüm cihazı izler.
+
+### 앱스토어 (베트남어)
+
+Nay đã dùng được trên Apple Vision Pro.
+Mẫu và lịch sử đồng bộ qua iCloud.
+Biểu tượng mới theo vòng của ứng dụng.
+Xoay ngang: vòng tròn cạnh phần cài đặt.
+Giao diện sáng tối theo cài đặt máy.
+
 ## 2.3.6
 
 ### 앱스토어 (한국어)

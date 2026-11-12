@@ -144,7 +144,7 @@ final class OnboardingDemoTimer: ObservableObject {
 
     private func ring(_ label: String) {
         ringingLabel = label
-        #if canImport(UIKit)
+        #if os(iOS)
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         #endif
         bannerTask?.cancel()

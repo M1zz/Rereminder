@@ -988,7 +988,9 @@ extension NoticeSettingView {
         guard versionTapCount >= 7 else { return }
         versionTapCount = 0
         masterModeEnabled.toggle()
+        #if os(iOS)
         UINotificationFeedbackGenerator().notificationOccurred(.success)
+        #endif
     }
 
     /// 프리셋 초 → "1:00" 표기 (M:SS 통일)

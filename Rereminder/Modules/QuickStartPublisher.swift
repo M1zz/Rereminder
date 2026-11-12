@@ -61,7 +61,7 @@ enum QuickStartPublisher {
         SavedSetupEntity.reindex(templates)
         guard QuickStartShelf.write(items(from: templates)) else { return }
         WidgetCenter.shared.reloadTimelines(ofKind: QuickStartShelf.widgetKind)
-        #if !targetEnvironment(macCatalyst)
+        #if os(iOS) && !targetEnvironment(macCatalyst)
         ControlCenter.shared.reloadControls(ofKind: QuickStartShelf.controlKind)
         #endif
     }

@@ -85,7 +85,8 @@ struct TimerAlertView: View {
                 String(localized: "Timer finished. Time is up.")
             ).post()
 
-            // Vibration
+            // Vibration (visionOS 에는 진동이 없다)
+            #if os(iOS)
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.warning)
 
@@ -93,6 +94,7 @@ struct TimerAlertView: View {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 generator.notificationOccurred(.warning)
             }
+            #endif
         }
     }
 }

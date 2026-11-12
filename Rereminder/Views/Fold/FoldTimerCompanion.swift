@@ -98,7 +98,9 @@ struct FoldTimerCompanion: View {
             }
             .padding(DSSpacing.lg)
         }
+        #if !os(visionOS)
         .scrollDismissesKeyboard(.interactively)
+        #endif
     }
 
     /// 구간 길이를 폭으로 — 20분과 1분이 눈으로 20:1 로 보인다.

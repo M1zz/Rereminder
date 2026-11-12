@@ -46,7 +46,9 @@ struct PresentationSectionList: View {
             }
             .frame(maxHeight: maxHeight)
             // 리스트를 끌면 키보드가 따라 내려감
+            #if !os(visionOS)
             .scrollDismissesKeyboard(.interactively)
+            #endif
             // 편집을 시작하면 그 카드를 보이는 자리로 끌어온다.
             // 두 번 스크롤하는 이유: 누른 즉시 한 번(반응이 바로 보이게), 키보드가 다 올라와
             // 리스트 높이가 줄어든 뒤에 또 한 번(줄어든 창 기준으로 다시 맞춰야 실제로 보인다).

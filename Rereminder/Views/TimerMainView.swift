@@ -423,6 +423,7 @@ struct TimerMainView: View {
             TapGesture().onEnded { focusedSectionIndex = nil },
             including: focusedSectionIndex == nil ? .none : .all
         )
+        #if !os(visionOS)  // visionOS 에는 키보드 위 막대가 없다
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
@@ -431,6 +432,7 @@ struct TimerMainView: View {
                 }
             }
         }
+        #endif
         .sheet(isPresented: $showTimeInput) {
             TimeInputSheet(screenVM: screenVM, isPresented: $showTimeInput)
                 .presentationDetents([.height(300)])

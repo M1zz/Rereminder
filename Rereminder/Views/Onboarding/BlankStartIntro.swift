@@ -314,7 +314,9 @@ private struct OccasionQuestion: View {
                 .padding(.top, isCompactHeight ? DSSpacing.xxxl : 72)
             }
             .scrollBounceBehavior(.basedOnSize)
+            #if !os(visionOS)
             .scrollDismissesKeyboard(.interactively)
+            #endif
 
             Button {
                 if let answer { onPick(answer) }
