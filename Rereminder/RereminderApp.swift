@@ -29,6 +29,17 @@ struct RereminderApp: App {
     static let signposter = OSSignposter(subsystem: Bundle.main.bundleIdentifier ?? "com.xa.toki",
                                          category: "launch")
 
+    /// 스크린샷 장면으로 켠 실행(DEBUG)인가 — 그때는 iCloud · CloudKit · 허브 서비스를 하나도 시작하지 않는다.
+    /// 맥에서는 진짜 앱과 같은 맥에서 찍으므로, 권한 없는 복사본으로 따로 돌린다(`scripts/capture_mac_screenshots.sh`).
+    /// 그 복사본에서 `CKContainer` 를 열면 바로 죽는다.
+    static var isScreenshotRun: Bool {
+        #if DEBUG
+        ScreenshotScene.isActive
+        #else
+        false
+        #endif
+    }
+
     init() {
         #if DEBUG
         CloudKitSchemaWarmup.runIfRequested(Self.sharedModelContainer, cloudContainer: Self.cloudContainer) {
@@ -39,7 +50,7 @@ struct RereminderApp: App {
         }
         #endif
         // 백업 금고는 맨 먼저 — 예약된 복원을 저장소(SwiftData · 앱 그룹 defaults)가 열리기 전에 적용한다.
-        LeeoVault.start(RereminderSpec.self)
+        if !Self.isScreenshotRun { LeeoVault.start(RereminderSpec.self) }
 
         // 분석 이벤트 → 익명 사용 허브 전송 훅 — 다른 어떤 로그보다 먼저 꽂아야 유실이 없다
         AnalyticsManager.eventSink = { ActivityReporter.log($0) }
@@ -49,14 +60,16 @@ struct RereminderApp: App {
         if safeLaunch {
             Self.log.error("직전 실행이 연달아 끝나지 못했다 — 세이프 모드로 연다")
         }
-        if LeeoRemoteFlags.isEnabled(RereminderFlag.usageReportingEnabled) {
+        if LeeoRemoteFlags.isEnabled(RereminderFlag.usageReportingEnabled), !Self.isScreenshotRun {
             // 끝나지 못한 실행 수를 허브로 보낸다(설치당 소수, 보내면 0 으로 돌아간다).
             Task { await Self.launchGuard.reportIncompleteLaunches(to: LeeoUsageReporter(spec: RereminderSpec.self)) }
         }
 
         // 원격 킬스위치 갱신 — 이번 실행은 캐시로 동작, 다음 실행부터 반영 (6시간 쓰로틀)
-        LeeoRemoteFlags(spec: RereminderSpec.self, appGroupSuiteName: "group.leeo.toki")
-            .refreshInBackground(RereminderFlag.self)
+        if !Self.isScreenshotRun {
+            LeeoRemoteFlags(spec: RereminderSpec.self, appGroupSuiteName: "group.leeo.toki")
+                .refreshInBackground(RereminderFlag.self)
+        }
 
         // MetricKit 크래시/행 수집 — 구독만 하고 즉시 반환 (런치 비용 0)
         LeeoDiagnostics.shared.start(
@@ -75,7 +88,7 @@ struct RereminderApp: App {
 
         // iCloud KVS 동기화 초기화 (iPhone ↔ Mac 타이머 동기화) — 킬스위치로 차단 가능
         // 세이프 모드에서는 쉰다 — 다른 기기의 상태를 받아 덮는 길이 시작에서 가장 많은 것을 건드린다.
-        if LeeoRemoteFlags.isEnabled(RereminderFlag.cloudSyncEnabled), !safeLaunch {
+        if LeeoRemoteFlags.isEnabled(RereminderFlag.cloudSyncEnabled), !safeLaunch, !Self.isScreenshotRun {
             _ = CloudTimerSyncManager.shared
         }
 
@@ -149,6 +162,18 @@ struct RereminderApp: App {
         let schema = Schema([Timer.self, TimerRecord.self])
         let state = RereminderApp.signposter.beginInterval("ModelContainer")
         defer { RereminderApp.signposter.endInterval("ModelContainer", state) }
+
+        #if DEBUG
+        // 스크린샷 장면은 메모리에서만 연다 — 맥에서는 진짜 앱의 앱 그룹·iCloud 와 같은 자리라,
+        // 장면이 심는 예시 템플릿이 사용자 계정으로 올라간다(`scripts/capture_mac_screenshots.sh`).
+        if ScreenshotScene.isActive,
+           let isolated = try? ModelContainer(
+               for: schema,
+               configurations: ModelConfiguration(schema: schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none)
+           ) {
+            return isolated
+        }
+        #endif
 
         // 1. iCloud. 기기에 있던 템플릿·기록은 그대로 올라가고, 새 기기는 계정에 있던 것을 받아 온다.
         //    앱 그룹 컨테이너 — 위젯·인텐트와 같은 자리를 쓰던 기존 스토어 경로를 유지한다.

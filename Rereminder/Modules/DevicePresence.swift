@@ -132,6 +132,7 @@ enum DevicePresence {
     /// 앱이 앞에 있는 동안 주기적으로 표시를 남긴다. 여러 번 불러도 타이머는 하나만 돈다.
     @MainActor
     static func beginHeartbeat() {
+        if RereminderApp.isScreenshotRun { return }
         write()
         guard timer == nil else { return }
         // ⚠️ 이 앱에는 자체 `Timer` 모델(Shared/Models/Timer.swift)이 있다 — 반드시 Foundation.Timer.

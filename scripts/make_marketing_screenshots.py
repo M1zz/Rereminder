@@ -15,6 +15,9 @@ import subprocess, sys, pathlib
 # --duo: 아이폰 듀오 바깥 화면. 입력 docs/screenshots/raw-duo/<언어>/
 #        출력 docs/screenshots/marketing/<언어>/duo-<원본 이름> (1398x2034, DeployBar 가 픽셀로 듀오 칸에 넣는다)
 #        장면·순서·헤드라인은 아이폰과 같다. 배치만 넓고 낮은 화면에 맞춘다(DUO_LAYOUTS).
+# --mac: 맥 창. 입력 docs/screenshots/raw-mac/<언어>/ (scripts/capture_mac_screenshots.sh)
+#        출력 docs/screenshots/marketing/<언어>/mac-<원본 이름> (2880×1800, Mac App Store 규격)
+#        가로 화면이라 글과 창을 옆으로 놓는다(MAC_LAYOUTS). 창은 레티나 원본 그대로(키우지 않는다).
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 RAW = ROOT / "docs/screenshots/raw"             # scripts/capture_screenshots.sh 가 찍은 원본
@@ -26,7 +29,11 @@ DUO = "--duo" in sys.argv[1:]
 if DUO:
     RAW = ROOT / "docs/screenshots/raw-duo"     # DEVICE=duo scripts/capture_screenshots.sh 가 찍은 원본
     W, H = 1398, 2034                           # 듀오 바깥 화면 제출 규격(시뮬레이터 원본과 같은 크기)
-PREFIX = "duo-" if DUO else ""
+MAC = "--mac" in sys.argv[1:]
+if MAC:
+    RAW = ROOT / "docs/screenshots/raw-mac"     # scripts/capture_mac_screenshots.sh 가 찍은 창
+    W, H = 2880, 1800                           # Mac App Store 규격(16:10)
+PREFIX = "duo-" if DUO else "mac-" if MAC else ""
 
 # (원본 파일, 레이아웃) — 순서가 곧 스토어에 보이는 순서다
 SLIDES = [
@@ -281,6 +288,28 @@ body { background:#131316; }
 """,
 }
 
+# 맥: 창은 폰 틀 없이 그대로(모서리가 투명이라 그림자는 drop-shadow 로 모양을 따라간다).
+# 글과 창을 옆으로 둔다 — 같은 레이아웃 이름에 좌우를 번갈아 붙여 넘길 때 단조롭지 않게.
+MAC_CSS = """
+body { display:flex; align-items:center; justify-content:center; gap:200px; padding:0 160px; }
+.text { width:1240px; }
+.headline { line-height:1.2; }
+.sub { font-size:64px; margin-top:56px; line-height:1.35; }
+.phone { background:none; border:none; padding:0; border-radius:0; box-shadow:none; }
+.phone img { width:920px; border-radius:0; filter: drop-shadow(0 40px 80px rgba(0,0,0,.22)) drop-shadow(0 8px 20px rgba(0,0,0,.12)); }
+"""
+MAC_LAYOUTS = {
+    "hero-bleed": "",
+    "left-text": "body { flex-direction:row-reverse; }",
+    "text-bottom": "",
+    "dark": """
+body { background:#131316; flex-direction:row-reverse; }
+.headline { color:#f5f5f7; } .sub { color:#77777d; }
+.phone img { filter: drop-shadow(0 0 120px rgba(80,140,255,.25)) drop-shadow(0 40px 80px rgba(0,0,0,.5)); }
+""",
+}
+BODY_MAC = '<div class="text"><div class="headline">{headline}</div><div class="sub">{sub}</div></div><div class="phone"><img src="{img}"></div>'
+
 # text-bottom 은 폰이 먼저 오는 DOM 순서
 BODY_TEXT_FIRST = '<div class="headline">{headline}</div><div class="sub">{sub}</div><div class="wrap"><div class="phone"><img src="{img}"></div></div>'
 BODY_PHONE_FIRST = '<div class="wrap"><div class="phone"><img src="{img}"></div></div><div class="headline">{headline}</div><div class="sub">{sub}</div>'
@@ -302,14 +331,22 @@ def render(lang):
     for (fname, layout), (headline, sub) in zip(SLIDES, COPY[lang]):
         src = RAW / lang / fname
         if not src.exists():
-            sys.exit(f"원본 없음: {src}, 먼저 {'DEVICE=duo ' if DUO else ''}scripts/capture_screenshots.sh {lang}")
-        body_tpl = BODY_PHONE_FIRST if layout == "text-bottom" else BODY_TEXT_FIRST
+            how = f"scripts/capture_mac_screenshots.sh {lang}" if MAC else \
+                f"{'DEVICE=duo ' if DUO else ''}scripts/capture_screenshots.sh {lang}"
+            sys.exit(f"원본 없음: {src}, 먼저 {how}")
+        if MAC:
+            body_tpl = BODY_MAC
+        else:
+            body_tpl = BODY_PHONE_FIRST if layout == "text-bottom" else BODY_TEXT_FIRST
         body = body_tpl.format(headline=headline, sub=sub, img=src.as_uri())
         html_path = WORK / f"{lang}-{PREFIX}{fname.replace('.png', '.html')}"
-        layout_css = DUO_CSS + DUO_LAYOUTS[layout] if DUO else LAYOUTS[layout]
+        if MAC:
+            layout_css = MAC_CSS + MAC_LAYOUTS[layout]
+        else:
+            layout_css = DUO_CSS + DUO_LAYOUTS[layout] if DUO else LAYOUTS[layout]
         html_path.write_text(HTML.format(
             lang=lang, base=BASE_CSS, layout=layout_css, body=body,
-            headline_px=HEADLINE_PX.get(lang, LATIN_HEADLINE_PX)), encoding="utf-8")
+            headline_px=round(HEADLINE_PX.get(lang, LATIN_HEADLINE_PX) * (1.3 if MAC else 1))), encoding="utf-8")
         out_png = out_dir / f"{PREFIX}{fname}"
         out_png.unlink(missing_ok=True)
         # ⚠️ 기계가 바쁘면 Chrome 이 그림을 다 쓴 뒤 정리 단계에서 죽어(Teardown watchdog) 0 이 아닌 값을 낸다.
@@ -324,5 +361,5 @@ def render(lang):
 
 
 if __name__ == "__main__":
-    for lang in ([a for a in sys.argv[1:] if a != "--duo"] or COPY):
+    for lang in ([a for a in sys.argv[1:] if a not in ("--duo", "--mac")] or COPY):
         render(lang)

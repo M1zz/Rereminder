@@ -1670,6 +1670,10 @@ python3 scripts/make_marketing_screenshots.py [언어 ...]  # → docs/screensho
   ⚠️ `marketing/` 바로 아래나 `appstore-65/` 처럼 **언어 없는 제출본 폴더를 다시 만들지 말 것** — 옛 한국어
   한 벌(2.3.0 에 지웠다, "발표 모드" 시절 화면)이 그런 폴더였다.
 - 헤드라인은 `make_marketing_screenshots.py` 의 `COPY` 에 언어별로 있다. 세션 모드 이름은 앱 안 번역과 같은 말을 쓴다.
+- **맥**: `scripts/capture_mac_screenshots.sh` → `raw-mac/<언어>/`(창 920×1240), `make_marketing_screenshots.py --mac` → `marketing/<언어>/mac-*.png`(2880×1800).
+  시뮬레이터가 아니라 **이 맥에서 진짜 앱과 같은 컨테이너로** 띄운다. 그래서 장면 실행(`RereminderApp.isScreenshotRun`, DEBUG)은
+  저장소를 메모리로만 열고 iCloud 타이머 동기화·기기 표시·알림 예약·사용 통계·백업 금고를 건너뛰며, 스크립트가 진짜 앱 설정을 떠 두었다가 되돌린다.
+  ⚠️ 번들 ID 를 바꾼 권한 없는 복사본으로 찍으려 하지 말 것 — LeeoKit 이 CloudKit 을 여는 순간 죽는다.
 
 ### 중국어(간체·번체) 지원 — 두 언어이지 한 언어가 아니다
 `zh-Hans`(중국 간체)와 `zh-Hant`(대만·홍콩 번체) 를 2026-09-08 에 넣었다. 언어 목록은 네 곳이

@@ -96,6 +96,10 @@ final class CloudTimerSyncManager: ObservableObject {
 
     private func push(state: CloudTimerSnapshot.State, mainSeconds: Int, prealertOffsets: [Int],
                       name: String, endDate: Date?, remaining: TimeInterval) {
+        #if DEBUG
+        // 스크린샷 장면(`ScreenshotScene`)은 맥에서 진짜 앱과 같은 자리로 돈다 — 그 타이머를 남에게 알리지 않는다.
+        if UserDefaults.standard.string(forKey: "screenshotScene") != nil { return }
+        #endif
         var dict: [String: Any] = [
             "state": state.rawValue,
             "mainSeconds": mainSeconds,

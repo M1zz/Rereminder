@@ -414,6 +414,10 @@ final class TimerEngine {
     // MARK: - UNNotificationRequest 스케줄 (백그라운드 보장)
 
     private func scheduleNotifications(duration: TimeInterval, offsets: [TimeInterval]) {
+        #if DEBUG
+        // 스크린샷 장면(`ScreenshotScene`)은 맥에서 진짜 앱과 같은 자리로 돈다 — 그 타이머를 남에게 알리지 않는다.
+        if UserDefaults.standard.string(forKey: "screenshotScene") != nil { return }
+        #endif
         let center = UNUserNotificationCenter.current()
 
         // Pre-alert 알림

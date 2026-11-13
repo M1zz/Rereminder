@@ -38,8 +38,9 @@ enum ActivityReporter {
     }
 
     /// 원격 킬스위치 — 끄면 스냅샷·이벤트 수집이 즉시 중단된다. 조회 실패 = 켬(가용성 우선).
+    /// 스크린샷 장면 실행(`RereminderApp.isScreenshotRun`)은 사람이 쓴 것이 아니라 보내지 않는다.
     private static var isReportingEnabled: Bool {
-        LeeoRemoteFlags.isEnabled(RereminderFlag.usageReportingEnabled)
+        LeeoRemoteFlags.isEnabled(RereminderFlag.usageReportingEnabled) && !RereminderApp.isScreenshotRun
     }
 
     // MARK: - 전송
