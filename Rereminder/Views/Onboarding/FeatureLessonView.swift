@@ -123,7 +123,8 @@ private struct SessionStage: View {
     }
 
     var body: some View {
-        VStack(spacing: DSSpacing.lg) {
+        // 원과 목록 사이는 넉넉히 — 6시의 종이 원 밖으로 나와 첫 줄에 얹혀 보였다.
+        VStack(spacing: DSSpacing.xxl) {
             DemoStage(demo: demo, size: 170) {
                 line = String(localized: "You can also write a script for each part")
                 isDone = true
@@ -134,6 +135,7 @@ private struct SessionStage: View {
                     line = String(localized: "Press start when the parts are named")
                 }
             }
+            .padding(.top, DSSpacing.lg)
             if named.count == names.count, !isRunning {
                 LessonPlayButton {
                     isRunning = true
@@ -152,6 +154,15 @@ private struct SessionRows: View {
     let named: Set<Int>
     let isRunning: Bool
     let onName: (Int) -> Void
+
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var pulse = false
+
+    /// 다음에 누를 줄. 무엇을 눌러야 하는지 보이게 이 줄만 테두리가 숨 쉰다.
+    private var nextToName: Int? {
+        guard !isRunning else { return nil }
+        return names.indices.first { !named.contains($0) }
+    }
 
     private var current: Int? {
         guard isRunning else { return nil }
@@ -173,14 +184,29 @@ private struct SessionRows: View {
                             .font(.body.weight(.semibold))
                             .foregroundStyle(.primary)
                         Spacer()
+                        if !named.contains(index) {
+                            Image(systemName: "pencil")
+                                .foregroundStyle(SectionPalette.color(index))
+                        }
                     }
                     .padding(DSSpacing.md)
                     .background(RoundedRectangle(cornerRadius: DSRadius.md)
                         .fill(current == index ? SectionPalette.color(index).opacity(0.25) : Color(.systemGray6)))
+                    .overlay {
+                        if nextToName == index {
+                            RoundedRectangle(cornerRadius: DSRadius.md)
+                                .strokeBorder(SectionPalette.color(index), lineWidth: 2)
+                                .opacity(reduceMotion ? 1 : (pulse ? 1 : 0.25))
+                        }
+                    }
                 }
                 .buttonStyle(.plain)
                 .disabled(isRunning)
             }
+        }
+        .onAppear {
+            guard !reduceMotion else { return }
+            withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) { pulse = true }
         }
     }
 }

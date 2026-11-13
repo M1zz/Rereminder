@@ -253,6 +253,15 @@ struct TimerUnifiedView: View {
             .fullScreenCover(item: $activeLesson) { lesson in
                 FeatureLessonView(lesson: lesson, onClose: { activeLesson = nil })
             }
+            #if DEBUG
+            // `-screenshotLesson session` 처럼 주면 그 기능 수업을 바로 연다(수업 화면을 확인할 때).
+            .task {
+                if let raw = UserDefaults.standard.string(forKey: "screenshotLesson"),
+                   let lesson = FeatureLesson(rawValue: raw) {
+                    activeLesson = lesson
+                }
+            }
+            #endif
             .paywallGate(
                 isPresented: $showProPaywall,
                 feature: .presentationMode,

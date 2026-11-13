@@ -46,6 +46,8 @@ struct TimerDialRings: View {
         var fillLaps: CGFloat = DialFillMask.noMask
         /// 구간 번호(1·2·3)를 붙일 때인가. 움직이는 동안에는 붙이지 않는다.
         var showsSectionNumbers: Bool
+        /// 타이머가 걸려 있는가. 걸기 전(절대 각도)과 뒤(남은 비율)는 좌표가 다르다.
+        var isProgress: Bool = false
     }
 
     let plan: Plan
@@ -181,6 +183,9 @@ struct TimerDialRings: View {
                 }
             }
         }
+        // ⚠️ 걸고 멈추는 순간에는 좌표가 통째로 바뀐다(절대 각도 ↔ 남은 비율). 그 변화까지 아래 애니메이션을 태우면
+        //    링이 12시에서부터 다시 차오르듯 휘감아 돌았다. 그 순간만 애니메이션 없이 바로 바꾼다.
+        .transaction(value: plan.isProgress) { $0.animation = nil }
         .animation(.easeInOut(duration: 0.2), value: plan.markers)
         .animation(.easeInOut(duration: 0.2), value: plan.focusedSectionIndex)
         .animation(.easeInOut(duration: 0.3), value: plan.activeSectionIndex)
@@ -278,55 +283,3 @@ struct DialFillMask: Shape {
     }
 }
 
-// MARK: - 발표 모드의 바깥 얇은 링
-
-/// 알림 지점을 경계로 나뉜 **바깥쪽 얇은 구간 링** (발표 모드 진행 중).
-/// 본 링은 진행 중에 남은 시간만 그리므로, 구간 전체의 지도 역할을 이 링이 맡는다.
-struct SectionOuterRing: View {
-    let size: CGFloat
-    let lineWidth: CGFloat
-    /// 설정 시간까지의 길이(0~1).
-    let arcEnd: CGFloat
-    let markers: [CGFloat]
-    let focusedSectionIndex: Int?
-
-    private let gap: CGFloat = 0.004
-
-    var body: some View {
-        let ringWidth = lineWidth * 0.45
-        let ringSize = size + lineWidth * 1.9
-        let bounds = [0] + markers.filter { $0 > 0 && $0 < arcEnd }.sorted() + [arcEnd]
-
-        return ZStack {
-            ForEach(0..<max(0, bounds.count - 1), id: \.self) { i in
-                // 링은 "남은 시간" 좌표라 경과 순서와 반대 → 리스트 인덱스로 역매핑
-                let sectionIndex = bounds.count - 2 - i
-                let isEditingThis = focusedSectionIndex == sectionIndex
-                let trimFrom = bounds[i] + gap
-                let trimTo = max(bounds[i] + gap, bounds[i + 1] - gap)
-
-                // 편집 중인 호는 리스트 행과 같은 문법의 테두리를 두른다
-                if isEditingThis {
-                    Circle()
-                        .trim(from: trimFrom, to: trimTo)
-                        .stroke(Color.primary.opacity(0.85),
-                                style: StrokeStyle(lineWidth: ringWidth * 1.8 + 4, lineCap: .butt))
-                        .frame(width: ringSize, height: ringSize)
-                        .rotationEffect(.degrees(-90))
-                }
-
-                Circle()
-                    .trim(from: trimFrom, to: trimTo)
-                    .stroke(
-                        SectionPalette.color(sectionIndex).opacity(isEditingThis ? 1.0 : 0.85),
-                        // 편집 중인 구간의 호는 굵어져서 위치가 바로 보임
-                        style: StrokeStyle(lineWidth: ringWidth * (isEditingThis ? 1.8 : 1.0), lineCap: .butt)
-                    )
-                    .frame(width: ringSize, height: ringSize)
-                    .rotationEffect(.degrees(-90))
-            }
-        }
-        .animation(.easeInOut(duration: 0.2), value: focusedSectionIndex)
-        .accessibilityHidden(true)
-    }
-}

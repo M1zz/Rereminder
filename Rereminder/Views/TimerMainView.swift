@@ -128,11 +128,16 @@ struct TimerMainView: View {
         screenVM.currentMode == .presentation
     }
 
+    /// 링이 그리는 남은 시간. 가운데 숫자가 00:00 이 되는 순간(반올림해 0초) 링도 비운다.
+    /// 숫자는 반올림하고 링은 실제 값을 그려서, 끝나기 직전 숫자는 00:00 인데 링에 마지막 1초 몫의 호가
+    /// 남아 있다가 끝나는 순간 뚝 사라졌다.
+    private var ringRemaining: TimeInterval { remaining < 0.5 ? 0 : remaining }
+
     private var ratio: CGFloat {
         if isProgressMode {
             // 설정 시간 = 100%에서 감소
             let total = TimeInterval(max(1, screenVM.configuredMainSeconds))
-            return CGFloat(max(0, min(1, remaining / total)))
+            return CGFloat(max(0, min(1, ringRemaining / total)))
         }
         return CGFloat(max(0, min(1, remaining / TimeInterval(TimeMapper.maxSeconds))))
     }
@@ -147,7 +152,7 @@ struct TimerMainView: View {
     }
 
     /// 남은 시간을 링 좌표로 (1.0 = 한 바퀴). 절대 각도로 그릴 때 쓴다.
-    private var remainingLaps: CGFloat { DialRing.laps(ofSeconds: remaining) }
+    private var remainingLaps: CGFloat { DialRing.laps(ofSeconds: ringRemaining) }
 
     /// 지금 두 줄로 그려지는가 (60분을 넘겼는가)
     /// 링에 구간 번호를 붙일지.
@@ -223,8 +228,7 @@ struct TimerMainView: View {
             let isSideBySide = availableWidth > availableHeight && verticalSizeClass == .compact
             // 발표 모드: 하단 구간 리스트 공간 확보를 위해 원을 축소(세로일 때만. 가로에서는 목록이 옆에 선다)
             let fullClockSize = isSideBySide
-                // 세션 모드는 바깥에 얇은 구간 링이 하나 더 있어 그 몫만큼 덜 쓴다(다 쓰면 위가 잘린다)
-                ? min(availableWidth * 0.5 * 0.86, availableHeight * (isPresentationMode ? 0.76 : 0.84))
+                ? min(availableWidth * 0.5 * 0.86, availableHeight * 0.84)
                 : min(availableWidth * clockWidthRatio, availableHeight * clockHeightRatio)
             let clockSize = fullClockSize * (isPresentationMode && !isSideBySide ? 0.72 : 1.0)
             let lineWidth = clockSize * 0.083
@@ -314,22 +318,35 @@ struct TimerMainView: View {
                     // Next 알림 Info (원 밖 아래쪽) — 알림이 하나뿐이라 구간 리스트가 무의미할 때
                     nextAlertInfo
                 } else if screenVM.state == .idle || screenVM.state == .finished {
-                    rememberLines
-                    // 끝까지 마친 직후, 이미 Pro 를 가진 사람에게 드물게 — 팁 부탁(`TipAskLine`).
-                    if screenVM.state == .finished, let moment = tipAsk.moment, let tipJar = store.tipJar {
-                        TipAskLine(moment: moment, tipJar: tipJar)
-                            .padding(.horizontal)
-                            .transition(.opacity)
-                    }
-                    // 백지로 시작한 사람에게는 다음에 할 일 한 줄뿐이다(`BlankStart`).
-                    // ⚠️ 종을 지웠거나 하나도 없으면 문장 줄을 세운다 — 한 줄뿐이면 되돌리기도 다시 더하기도 없어 갇힌다.
-                    //    종을 끄는 동안은 지우는 법을 말한다(지우는 길이 화면에 보이지 않는다).
-                    if isSimpleStart, screenVM.justRemovedAlert == nil, !screenVM.selectedOffsets.isEmpty {
-                        coachLine(liveOffsets != screenVM.selectedOffsets
-                            ? String(localized: "Double-tap a bell to remove it.")
-                            : String(localized: "Drag the bell to choose when you hear it, then press start"))
-                    } else {
-                        DialAlertLine(screenVM: screenVM, liveOffsets: liveOffsets)
+                    // ⚠️ 시작하면 이 자리가 구간 카운트다운으로 바뀐다. 높이가 다르면 원이 남는 높이의 가운데에
+                    //    서 있다가 시작·끝마다 한 프레임 만에 위아래로 뛰었다. 그래서 대기 중에도 카운트다운 몫의 높이를
+                    //    보이지 않게 맡아 두고, 글은 그 자리의 아래에 붙인다 — 원은 걸 때도 끝날 때도 제자리다.
+                    ZStack(alignment: .bottom) {
+                        if reservesCountdownSpace {
+                            SectionCountdownList(segments: derivedSegments, elapsedSec: 0,
+                                                 maxHeight: availableHeight * 0.22)
+                                .hidden()
+                                .accessibilityHidden(true)
+                        }
+                        VStack(spacing: clusterGap) {
+                            rememberLines
+                            // 끝까지 마친 직후, 이미 Pro 를 가진 사람에게 드물게 — 팁 부탁(`TipAskLine`).
+                            if screenVM.state == .finished, let moment = tipAsk.moment, let tipJar = store.tipJar {
+                                TipAskLine(moment: moment, tipJar: tipJar)
+                                    .padding(.horizontal)
+                                    .transition(.opacity)
+                            }
+                            // 백지로 시작한 사람에게는 다음에 할 일 한 줄뿐이다(`BlankStart`).
+                            // ⚠️ 종을 지웠거나 하나도 없으면 문장 줄을 세운다 — 한 줄뿐이면 되돌리기도 다시 더하기도 없어 갇힌다.
+                            //    종을 끄는 동안은 지우는 법을 말한다(지우는 길이 화면에 보이지 않는다).
+                            if isSimpleStart, screenVM.justRemovedAlert == nil, !screenVM.selectedOffsets.isEmpty {
+                                coachLine(liveOffsets != screenVM.selectedOffsets
+                                    ? String(localized: "Double-tap a bell to remove it.")
+                                    : String(localized: "Drag the bell to choose when you hear it, then press start"))
+                            } else {
+                                DialAlertLine(screenVM: screenVM, liveOffsets: liveOffsets)
+                            }
+                        }
                     }
                 }
             }
@@ -476,24 +493,13 @@ struct TimerMainView: View {
                            buttonSize: CGFloat) -> some View {
         ZStack {
             TimerDialRings(plan: ringPlan(size: size, lineWidth: lineWidth))
+                // 걸고 멈출 때(상태가 바뀔 때)는 초 줄어드는 애니메이션을 태우지 않는다 — 대기 링이 실행 링으로
+                // 바뀌는 것까지 보간돼 호가 3시 쪽에서 휘감아 돌았다.
+                .transaction(value: screenVM.state) { $0.animation = nil }
                 .animation(ringTickAnimation, value: remaining)
                 // 화면을 돌리면 크기 변화가 애니메이션된다. 호마다 따로 보간되면 회전하는 동안 한 호만
                 // 원 밖으로 부풀었다 — 링 전체를 한 덩이로 움직인다.
                 .geometryGroup()
-
-            // 얇은 바깥 구간 링은 **진행 중에만**.
-            // 대기 중에는 본 링이 이미 알림 경계로 구간 색이라(alertSectionRing) 같은 정보가
-            // 두 겹으로 겹쳐 보인다. 진행 중에는 본 링이 남은 시간만 그리므로 이 링이 필요하다.
-            if isPresentationMode && isProgressMode {
-                SectionOuterRing(size: size,
-                                 lineWidth: lineWidth,
-                                 arcEnd: isProgressMode
-                                     ? 1.0
-                                     : CGFloat(min(1.0, max(0, screenVM.mainAngle) / 360.0)),
-                                 markers: markers,
-                                 focusedSectionIndex: focusedSectionIndex)
-                    .transition(.opacity)
-            }
 
             firstShrinkHint(size: size, lineWidth: lineWidth)
 
@@ -765,6 +771,9 @@ struct TimerMainView: View {
                 // 호 끝과 같이 돌아야 도는 동안 함께 움직인다
                 .offset(y: -radius)
                 .rotationEffect(.degrees(headAngle - gap))
+                // 걸고 멈출 때(상태가 바뀔 때)는 초 줄어드는 애니메이션을 태우지 않는다 — 대기 링이 실행 링으로
+                // 바뀌는 것까지 보간돼 호가 3시 쪽에서 휘감아 돌았다.
+                .transaction(value: screenVM.state) { $0.animation = nil }
                 .animation(ringTickAnimation, value: remaining)
                 .allowsHitTesting(false)
                 .accessibilityHidden(true)
@@ -844,12 +853,21 @@ struct TimerMainView: View {
             .animation(Self.lapChangeAnimation, value: isSecondLap(angle))
             .rotationEffect(.degrees(angle))
             .rotationEffect(.degrees(-90))
+            // 걸고 멈출 때(상태가 바뀔 때)는 초 줄어드는 애니메이션을 태우지 않는다 — 대기 링이 실행 링으로
+            // 바뀌는 것까지 보간돼 호가 3시 쪽에서 휘감아 돌았다.
+            .transaction(value: screenVM.state) { $0.animation = nil }
             .animation(ringTickAnimation, value: remaining)
             .accessibilityHidden(true)
     }
 
     /// 엔진은 0.5초마다 값을 준다(`TimerEngine`). 짧은 타이머는 그 한 칸이 커서(40초면 4.5°) 링이 뚝뚝 끊긴다.
     /// 다음 값까지 같은 길이로 이어 준다. 30분이 넘으면 한 칸이 눈에 보이지 않아 다시 그리지 않는다(배터리).
+    /// 대기 화면에서 시작 뒤의 구간 카운트다운 몫 높이를 맡아 둘 때인가(세로·타이머 모드·구간이 둘 이상).
+    private var reservesCountdownSpace: Bool {
+        !isPresentationMode && derivedSegments.count > 1 && !fold.isUnfolded
+            && verticalSizeClass != .compact
+    }
+
     private var ringTickAnimation: Animation? {
         guard screenVM.state == .running, screenVM.configuredMainSeconds <= 1800, !reduceMotion else { return nil }
         return .linear(duration: 0.5)
@@ -950,7 +968,8 @@ struct TimerMainView: View {
             focusedSectionIndex: focusedSectionIndex,
             activeSectionIndex: activeSectionIndex,
             fillLaps: dialFillAngle.map { CGFloat($0 / 360) } ?? DialFillMask.noMask,
-            showsSectionNumbers: showsSectionNumbers
+            showsSectionNumbers: showsSectionNumbers,
+            isProgress: isProgressMode
         )
     }
 
