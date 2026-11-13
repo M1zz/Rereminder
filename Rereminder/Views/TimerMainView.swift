@@ -11,6 +11,8 @@ import LeeoKit
 struct TimerMainView: View {
     /// 앱을 열 때 뜨는 안내가 떠 있다. 닫힌 뒤에 다이얼을 채운다. 가려진 채 재생하면 본 적 없이 지나간다.
     var holdsDialFill = false
+    /// 눕힌 화면에서 아래 막대(🔖·⚙︎)가 덮는 높이 — 화면이 막대 밑까지 깔린다(`TimerUnifiedView`). 세로는 0.
+    var bottomBarInset: CGFloat = 0
 
     @EnvironmentObject var screenVM: TimerScreenViewModel
     private var remaining: TimeInterval { screenVM.remaining }
@@ -342,6 +344,9 @@ struct TimerMainView: View {
                         cluster
                             .frame(maxWidth: .infinity, maxHeight: .infinity,
                                    alignment: isEditingSectionName ? .top : .center)
+                            // 화면은 아래 막대 밑까지 깔려 있다 — 목록이 막대에 덮이지 않게 비우되,
+                            // 위에도 같은 만큼 비워 원과 같은 가운데에 선다.
+                            .padding(.vertical, bottomBarInset)
                     }
                 } else {
                 VStack(spacing: 0) {

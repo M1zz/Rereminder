@@ -40,16 +40,23 @@ struct SectionCountdownList: View {
     private let barHeight: CGFloat = 7
 
     var body: some View {
-        ScrollView(.vertical, showsIndicators: false) {
-            VStack(spacing: 6) {
-                ForEach(segments) { segment in
-                    row(segment)
-                }
-            }
-            .padding(.vertical, 2)
+        // 들어가면 내용 높이만큼만, 넘칠 때만 스크롤한다. 늘 스크롤뷰면 `maxHeight` 를 다 차지하고 줄은 위에 붙어,
+        // 가운데에 세운 자리(눕힌 화면의 오른쪽)에서 목록만 위로 쏠린다.
+        ViewThatFits(in: .vertical) {
+            rows
+            ScrollView(.vertical, showsIndicators: false) { rows }
         }
         .frame(maxHeight: maxHeight)
         .padding(.horizontal, 24)
+    }
+
+    private var rows: some View {
+        VStack(spacing: 6) {
+            ForEach(segments) { segment in
+                row(segment)
+            }
+        }
+        .padding(.vertical, 2)
     }
 
     private func row(_ segment: TimerSections.Segment) -> some View {

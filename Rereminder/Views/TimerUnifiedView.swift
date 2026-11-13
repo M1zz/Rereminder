@@ -75,6 +75,9 @@ private struct MultiDeviceTipAnchor: ViewModifier {
 struct TimerUnifiedView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    /// 아래 막대(와 홈 인디케이터)가 덮는 높이. 눕힌 화면에서 위에도 같은 만큼 비운다.
+    @State private var bottomBarInset: CGFloat = 0
 
     @StateObject private var screenVM = TimerScreenViewModel()
     @State private var showOnboarding = !UserDefaults.standard.bool(forKey: "hasSeenOnboarding")
@@ -426,8 +429,21 @@ struct TimerUnifiedView: View {
     private var dialScreen: some View {
         NavigationStack {
             // 두 모드 모두 다이얼 화면 사용 — 발표 모드는 구간 링·구간 편집 모달이 추가됨
-            TimerMainView(holdsDialFill: isShowingLaunchNotice)
+            TimerMainView(holdsDialFill: isShowingLaunchNotice,
+                          bottomBarInset: verticalSizeClass == .compact ? bottomBarInset : 0)
                 .padding()
+                // **눕힌 화면은 아래 막대(🔖·⚙︎) 밑까지 깐다.** 막대 위 영역의 가운데에 두면 막대가 아래만
+                // 차지해 원과 글이 막대 절반만큼 위로 쏠렸다(원 중심이 화면 높이 41% 자리).
+                // 원은 막대가 없는 왼쪽에 있어 화면 가운데에 크게 서고, 막대를 피해야 하는 오른쪽 묶음은
+                // 다이얼 화면이 위아래로 막대만큼 똑같이 비운다(`bottomBarInset`). 세로는 예전 그대로.
+                // ⚠️ 키보드는 계속 피한다(.container 만 무시).
+                .ignoresSafeArea(.container, edges: verticalSizeClass == .compact ? .bottom : [])
+                // 막대 몫 재기 — 안전 영역을 무시한 칸이라야 막대가 얼마나 덮는지 읽힌다.
+                .background {
+                    Color.clear
+                        .ignoresSafeArea()
+                        .onGeometryChange(for: CGFloat.self, of: { $0.safeAreaInsets.bottom }) { bottomBarInset = $0 }
+                }
                 .toolbar { bottomToolbar }
                 // 타이머 화면 어디를 탭해도 키보드 내림 (버튼·드래그 등 기존 조작은 그대로)
                 // NavigationStack 전체에 붙이면 push된 설정 Form의 행 탭과 경합해 터치가 씹힘

@@ -18,6 +18,11 @@ struct ContentView: View {
             .onAppear {
                 configureMacWindowIfNeeded()
                 #if DEBUG
+                // `-screenshotLandscape YES`: 가로로 눕혀 연다 — 시뮬레이터를 명령줄로 돌릴 길이 없다.
+                if UserDefaults.standard.bool(forKey: "screenshotLandscape"),
+                   let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+                    scene.requestGeometryUpdate(.iOS(interfaceOrientations: .landscapeRight))
+                }
                 // 스크린샷 장면에서는 권한 창이 화면을 가린다.
                 if ScreenshotScene.isActive { return }
                 #endif
