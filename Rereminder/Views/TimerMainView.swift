@@ -334,58 +334,60 @@ struct TimerMainView: View {
                 }
             }
 
-            Group {
-                if isSideBySide {
-                    HStack(spacing: stackGap) {
-                        // 이름을 적는 동안에는 가로에서도 원을 치운다(키보드가 높이를 거의 다 먹는다).
-                        if !isEditingSectionName {
-                            dial.frame(maxWidth: .infinity, maxHeight: .infinity)
-                        }
-                        cluster
-                            .frame(maxWidth: .infinity, maxHeight: .infinity,
-                                   alignment: isEditingSectionName ? .top : .center)
-                            // 화면은 아래 막대 밑까지 깔려 있다 — 목록이 막대에 덮이지 않게 비우되,
-                            // 위에도 같은 만큼 비워 원과 같은 가운데에 선다.
-                            .padding(.vertical, bottomBarInset)
-                    }
-                } else {
-                VStack(spacing: 0) {
-                    // **구간 이름을 적는 동안에는 원을 치운다.** 그때 봐야 하는 것은 지금 고치는 카드뿐인데,
-                    // 키보드가 화면 절반을 먹어 원을 줄여 남겨 두면 카드가 두세 장밖에 안 보였다.
+            // ⚠️ 가로·세로는 **하나의 배치**(AnyLayout)다. HStack/VStack 을 if/else 로 갈라 두면 화면을 돌리는 순간
+            //    원과 묶음이 새로 만들어져 뚝 바뀐다. 같은 뷰로 남아 있어야 회전하는 동안 새 자리로 미끄러져 간다.
+            //    그래서 원(`dial`)과 묶음(`cluster`)은 두 배치에서 같은 자리에 두고, 배치마다 다른 여백만 if 로 끼운다.
+            let layout = isSideBySide
+                ? AnyLayout(HStackLayout(spacing: stackGap))
+                : AnyLayout(VStackLayout(spacing: 0))
+            layout {
+                // **구간 이름을 적는 동안에는 원을 치운다**(가로에서도). 그때 봐야 하는 것은 지금 고치는 카드뿐인데,
+                // 키보드가 화면을 크게 먹어 원을 줄여 남겨 두면 카드가 두세 장밖에 안 보였다.
+                if !isSideBySide {
                     if !isEditingSectionName {
-                    // 원 위는 비워 둔다. 주인공은 원과 시작 버튼이고, 알림 칩은 원 아래 묶음에 있다.
-                    Color.clear
-                        .frame(height: availableHeight * 0.08)
+                        // 세로: 원 위는 비워 둔다. 주인공은 원과 시작 버튼이고, 알림 칩은 원 아래 묶음에 있다.
+                        Color.clear
+                            .frame(height: availableHeight * 0.08)
+                        // 원 **위** 신축 공간. 아래 것과 짝을 이뤄 남는 세로를 반씩 나눠 갖는다
+                        // → 원의 위아래 여백이 같아진다.
+                        // ⚠️ `minLength` 가 최소 여백의 **보장**이다. 구간 칩·카운트다운이 각자
+                        //    갖고 있던 여백은 이 대칭을 깨뜨려서(아래만 6pt 더) 걷어냈다 —
+                        //    다시 넣지 말고 이 값을 조절할 것.
+                        Spacer(minLength: stackGap)
+                    }
+                }
 
-                    // 원 **위** 신축 공간. 아래 것과 짝을 이뤄 남는 세로를 반씩 나눠 갖는다
-                    // → 원의 위아래 여백이 같아진다.
-                    // ⚠️ `minLength` 가 최소 여백의 **보장**이다. 구간 칩·카운트다운이 각자
-                    //    갖고 있던 여백은 이 대칭을 깨뜨려서(아래만 6pt 더) 걷어냈다 —
-                    //    다시 넣지 말고 이 값을 조절할 것.
-                    Spacer(minLength: stackGap)
+                if !isEditingSectionName {
+                    // 가로: 왼쪽 절반의 가운데. 세로: 위아래 Spacer 사이.
+                    dial.frame(maxWidth: isSideBySide ? .infinity : nil,
+                               maxHeight: isSideBySide ? .infinity : nil)
+                }
 
-                    dial
-
-                    // 원 **아래** 신축 공간. 위 것과 같은 몫을 갖는다.
-                    // 묶음 뒤에는 Spacer 가 없으므로 묶음은 그대로 화면 아래에 붙는다.
-                    Spacer(minLength: stackGap)
+                if !isSideBySide {
+                    // 세로: 원 **아래** 신축 공간(위 것과 같은 몫). 원이 빠졌으면 목록이 막대에 붙지 않게 한 칸만.
+                    if !isEditingSectionName {
+                        Spacer(minLength: stackGap)
                     } else {
-                        // 원이 빠진 자리. 목록이 내비게이션 막대에 붙지 않게 한 칸 띄운다.
                         Color.clear.frame(height: stackGap)
                     }
-
-                    // ── 원 아래 묶음: 구간 길이 → 기기 연결 → 템플릿·초기화 ─────────────────
-                    // 셋이 **같은 간격**(clusterGap)으로 한 덩이처럼 붙는다. 각자 padding 을
-                    // 갖지 않는 이유가 이것이다 — 여백을 한 곳에서만 정해야 균등이 유지된다.
-                    // ⚠️ 이 묶음 안에 Spacer 를 끼워 넣지 말 것. 예전에 구간 칩 바로 아래에
-                    //    Spacer() 가 있어서 칩이 원에 달라붙고 그 아래만 휑하게 벌어졌다.
-                    cluster
-                    .padding(.bottom, stackGap)
-
-                    // 원이 없을 때는 목록을 위에 붙인다(카드가 적으면 가운데에 떠 보인다)
-                    if isEditingSectionName { Spacer(minLength: 0) }
                 }
-                }
+
+                // ── 원 아래(가로면 오른쪽) 묶음: 구간 길이 → 기기 연결 → 템플릿·초기화 ─────────────────
+                // 셋이 **같은 간격**(clusterGap)으로 한 덩이처럼 붙는다. 각자 padding 을
+                // 갖지 않는 이유가 이것이다 — 여백을 한 곳에서만 정해야 균등이 유지된다.
+                // ⚠️ 이 묶음 안에 Spacer 를 끼워 넣지 말 것. 예전에 구간 칩 바로 아래에
+                //    Spacer() 가 있어서 칩이 원에 달라붙고 그 아래만 휑하게 벌어졌다.
+                cluster
+                    .frame(maxWidth: isSideBySide ? .infinity : nil,
+                           maxHeight: isSideBySide ? .infinity : nil,
+                           alignment: isEditingSectionName ? .top : .center)
+                    // 가로: 화면은 아래 막대 밑까지 깔려 있다 — 목록이 막대에 덮이지 않게 비우되,
+                    // 위에도 같은 만큼 비워 원과 같은 가운데에 선다. 세로: 묶음은 화면 아래에 붙는다.
+                    .padding(.vertical, isSideBySide ? bottomBarInset : 0)
+                    .padding(.bottom, isSideBySide ? 0 : stackGap)
+
+                // 세로에서 원이 없을 때는 목록을 위에 붙인다(카드가 적으면 가운데에 떠 보인다)
+                if !isSideBySide && isEditingSectionName { Spacer(minLength: 0) }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             // 원이 빠지고 목록이 커진다 — 두 변화가 한 몸으로 움직여야 매끄럽다
@@ -475,6 +477,9 @@ struct TimerMainView: View {
         ZStack {
             TimerDialRings(plan: ringPlan(size: size, lineWidth: lineWidth))
                 .animation(ringTickAnimation, value: remaining)
+                // 화면을 돌리면 크기 변화가 애니메이션된다. 호마다 따로 보간되면 회전하는 동안 한 호만
+                // 원 밖으로 부풀었다 — 링 전체를 한 덩이로 움직인다.
+                .geometryGroup()
 
             // 얇은 바깥 구간 링은 **진행 중에만**.
             // 대기 중에는 본 링이 이미 알림 경계로 구간 색이라(alertSectionRing) 같은 정보가

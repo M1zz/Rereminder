@@ -256,6 +256,15 @@ struct NoticeSettingView: View {
                 Text("Plan & Support")
             }
 
+            // 기능이 단계마다 드러나는 화면에서 **전부 여는 스위치.** 예전에는 '화면 모드' 섹션 안에 있어서
+            // 기능을 찾는 사람(특히 단순하게 보기를 골랐던 기존 사용자)이 화면 설정으로 읽고 지나쳤다.
+            // 요금제 바로 아래, 혼자 선 줄로 둔다.
+            Section {
+                Toggle(isOn: showAllFeatures) {
+                    Label("Show all features", systemImage: "square.grid.2x2")
+                }
+            }
+
             Section {
                 HStack(spacing: 16){
                     Text("Notification Style")
@@ -285,8 +294,6 @@ struct NoticeSettingView: View {
             }
 
             Section(header: Text("Appearance")) {
-                Toggle("Show all features", isOn: showAllFeatures)
-
                 HStack(spacing: 16) {
                     Text("Mode")
                     Picker("Mode", selection: $themeManager.appearanceMode) {
