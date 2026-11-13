@@ -413,6 +413,9 @@ struct TimerMainView: View {
             //    "화면 아무 데나 눌러 키보드 내리기"가 원·카드 위에서만 동작한다.
             .contentShape(Rectangle())
             .onAppear(perform: prepareDialFill)
+            .onChange(of: isProgressMode) { wasRunning, isRunning in
+                if wasRunning && !isRunning { refillDialOnReturn() }
+            }
             // 안내가 닫히고 앱이 앞에 있을 때 시작한다(알림 권한 창이 떠 있으면 기다린다).
             .task(id: !holdsDialFill && scenePhase == .active && dialFillAngle != nil) {
                 guard !holdsDialFill, scenePhase == .active, dialFillAngle != nil else { return }
@@ -493,9 +496,9 @@ struct TimerMainView: View {
                            buttonSize: CGFloat) -> some View {
         ZStack {
             TimerDialRings(plan: ringPlan(size: size, lineWidth: lineWidth))
-                // 걸고 멈출 때(상태가 바뀔 때)는 초 줄어드는 애니메이션을 태우지 않는다 — 대기 링이 실행 링으로
-                // 바뀌는 것까지 보간돼 호가 3시 쪽에서 휘감아 돌았다.
-                .transaction(value: screenVM.state) { $0.animation = nil }
+                // 걸고 멈추는 순간은 바로 바꾼다 — 초 애니메이션을 태우면 대기 링 ↔ 실행 링이 보간돼 휘감아 돌았다.
+                // 끝·정지로 돌아올 때는 빈 원이 다시 차오른다(`refillDialOnReturn`).
+                .transaction(value: isProgressMode) { $0.animation = nil }
                 .animation(ringTickAnimation, value: remaining)
                 // 화면을 돌리면 크기 변화가 애니메이션된다. 호마다 따로 보간되면 회전하는 동안 한 호만
                 // 원 밖으로 부풀었다 — 링 전체를 한 덩이로 움직인다.
@@ -689,6 +692,21 @@ struct TimerMainView: View {
         dialFillAngle = 0
     }
 
+    /// 끝나거나 멈춰 대기로 돌아오면, 빈 원이 12시에서 핸들까지 다시 차오르며 종이 제자리에 하나씩 선다.
+    /// 끝날 때 링은 이미 비어 있어 그대로 이어진다. 좌표를 그냥 바꾸면 링이 뚝 튀어 제자리를 잃은 듯 보였고,
+    /// 보간하면 호가 거꾸로 휘감겼다. 처음 열 때와 같은 연출이라 "이게 다시 걸 설정"으로 읽힌다.
+    private func refillDialOnReturn() {
+        guard !reduceMotion, screenVM.state == .idle || screenVM.state == .finished,
+              dialFillAngle == nil, !mainDrag.isActive else { return }
+        var transaction = Transaction()
+        transaction.disablesAnimations = true
+        withTransaction(transaction) {
+            dialFillArrived = false
+            dialFillBellAngle = 0
+            dialFillAngle = 0
+        }
+    }
+
     /// 안쪽 줄까지 가면 두 번에 나눈다. 핸들이 줄을 옮기는 자리가 호가 도착하는 자리와 같아야 한다.
     /// ⚠️ 종은 호와 함께 와야 해서 곡선 없이 일정한 속도다. 곡선을 넣으면 종 시각도 다시 계산해야 한다.
     private func playDialFill() async {
@@ -771,9 +789,9 @@ struct TimerMainView: View {
                 // 호 끝과 같이 돌아야 도는 동안 함께 움직인다
                 .offset(y: -radius)
                 .rotationEffect(.degrees(headAngle - gap))
-                // 걸고 멈출 때(상태가 바뀔 때)는 초 줄어드는 애니메이션을 태우지 않는다 — 대기 링이 실행 링으로
-                // 바뀌는 것까지 보간돼 호가 3시 쪽에서 휘감아 돌았다.
-                .transaction(value: screenVM.state) { $0.animation = nil }
+                // 걸고 멈추는 순간은 바로 바꾼다 — 초 애니메이션을 태우면 대기 링 ↔ 실행 링이 보간돼 휘감아 돌았다.
+                // 끝·정지로 돌아올 때는 빈 원이 다시 차오른다(`refillDialOnReturn`).
+                .transaction(value: isProgressMode) { $0.animation = nil }
                 .animation(ringTickAnimation, value: remaining)
                 .allowsHitTesting(false)
                 .accessibilityHidden(true)
@@ -853,9 +871,9 @@ struct TimerMainView: View {
             .animation(Self.lapChangeAnimation, value: isSecondLap(angle))
             .rotationEffect(.degrees(angle))
             .rotationEffect(.degrees(-90))
-            // 걸고 멈출 때(상태가 바뀔 때)는 초 줄어드는 애니메이션을 태우지 않는다 — 대기 링이 실행 링으로
-            // 바뀌는 것까지 보간돼 호가 3시 쪽에서 휘감아 돌았다.
-            .transaction(value: screenVM.state) { $0.animation = nil }
+            // 걸고 멈추는 순간은 바로 바꾼다 — 초 애니메이션을 태우면 대기 링 ↔ 실행 링이 보간돼 휘감아 돌았다.
+            // 끝·정지로 돌아올 때는 빈 원이 다시 차오른다(`refillDialOnReturn`).
+            .transaction(value: isProgressMode) { $0.animation = nil }
             .animation(ringTickAnimation, value: remaining)
             .accessibilityHidden(true)
     }
