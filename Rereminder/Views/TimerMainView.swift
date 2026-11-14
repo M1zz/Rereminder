@@ -230,7 +230,12 @@ struct TimerMainView: View {
             let fullClockSize = isSideBySide
                 ? min(availableWidth * 0.5 * 0.86, availableHeight * 0.84)
                 : min(availableWidth * clockWidthRatio, availableHeight * clockHeightRatio)
-            let clockSize = fullClockSize * (isPresentationMode && !isSideBySide ? 0.72 : 1.0)
+            // **대본을 읽는 동안**(세션이 돌고 대본이 있다)은 원이 작게 위로 비켜서고 글이 화면을 쓴다.
+            // 시간은 한눈에 읽을 만큼이면 되고, 프롬프터는 글이 커야 읽힌다. 가로에서도 원을 키우지 않는다.
+            let isPrompting = isPresentationMode && isProgressMode && currentScript != nil
+            let clockSize = fullClockSize * (isPrompting
+                ? (isSideBySide ? 0.62 : 0.5)
+                : (isPresentationMode && !isSideBySide ? 0.72 : 1.0))
             let lineWidth = clockSize * 0.083
             let spacing = availableHeight * 0.01
             // 링의 **보이는** 아래 끝은 레이아웃 프레임보다 아래에 있다 — 흰 핸들(지름 lineWidth)과
@@ -289,7 +294,7 @@ struct TimerMainView: View {
                                             sectionName: panel.name,
                                             script: panel.script,
                                             nextName: panel.nextName,
-                                            maxHeight: availableHeight * (isSideBySide ? 0.9 : 0.26))
+                                            maxHeight: availableHeight * (isSideBySide ? 0.9 : 0.6))
                         .transition(.opacity)
                 } else if isPresentationMode {
                     // 알림 지점 기준 파생 구간 리스트 (원 밖 아래쪽)
@@ -360,7 +365,10 @@ struct TimerMainView: View {
             layout {
                 // **구간 이름을 적는 동안에는 원을 치운다**(가로에서도). 그때 봐야 하는 것은 지금 고치는 카드뿐인데,
                 // 키보드가 화면을 크게 먹어 원을 줄여 남겨 두면 카드가 두세 장밖에 안 보였다.
-                if !isSideBySide {
+                if !isSideBySide && isPrompting {
+                    // 대본을 읽는 동안: 원은 위에 바로 붙는다. 남는 높이는 전부 글 몫이다.
+                    Color.clear.frame(height: stackGap)
+                } else if !isSideBySide {
                     if !isEditingSectionName {
                         // 세로: 원 위는 비워 둔다. 주인공은 원과 시작 버튼이고, 알림 칩은 원 아래 묶음에 있다.
                         Color.clear
@@ -376,11 +384,15 @@ struct TimerMainView: View {
 
                 if !isEditingSectionName {
                     // 가로: 왼쪽 절반의 가운데. 세로: 위아래 Spacer 사이.
-                    dial.frame(maxWidth: isSideBySide ? .infinity : nil,
+                    // 대본을 읽는 가로 화면: 원은 제 몫만 차지하고 나머지 폭은 글이 쓴다.
+                    dial.frame(maxWidth: isSideBySide && !isPrompting ? .infinity : nil,
                                maxHeight: isSideBySide ? .infinity : nil)
+                        .padding(.leading, isSideBySide && isPrompting ? stackGap * 2 : 0)
                 }
 
-                if !isSideBySide {
+                if !isSideBySide && isPrompting {
+                    Color.clear.frame(height: stackGap)
+                } else if !isSideBySide {
                     // 세로: 원 **아래** 신축 공간(위 것과 같은 몫). 원이 빠졌으면 목록이 막대에 붙지 않게 한 칸만.
                     if !isEditingSectionName {
                         Spacer(minLength: stackGap)
@@ -396,8 +408,8 @@ struct TimerMainView: View {
                 //    Spacer() 가 있어서 칩이 원에 달라붙고 그 아래만 휑하게 벌어졌다.
                 cluster
                     .frame(maxWidth: isSideBySide ? .infinity : nil,
-                           maxHeight: isSideBySide ? .infinity : nil,
-                           alignment: isEditingSectionName ? .top : .center)
+                           maxHeight: isSideBySide || isPrompting ? .infinity : nil,
+                           alignment: isEditingSectionName || isPrompting ? .top : .center)
                     // 가로: 화면은 아래 막대 밑까지 깔려 있다 — 목록이 막대에 덮이지 않게 비우되,
                     // 위에도 같은 만큼 비워 원과 같은 가운데에 선다. 세로: 묶음은 화면 아래에 붙는다.
                     .padding(.vertical, isSideBySide ? bottomBarInset : 0)

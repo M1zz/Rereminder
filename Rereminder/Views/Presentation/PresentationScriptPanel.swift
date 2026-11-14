@@ -63,6 +63,8 @@ struct PresentationScriptPanel: View {
             }
             .frame(maxHeight: maxHeight)
         }
+        // 글이 짧아도 상자는 남는 자리를 채운다 — 상자가 글 길이마다 늘었다 줄었다 하면 읽던 자리가 흔들린다.
+        .frame(maxHeight: .infinity, alignment: .top)
         .padding(DSSpacing.lg)
         .background(
             RoundedRectangle(cornerRadius: DSRadius.md)
