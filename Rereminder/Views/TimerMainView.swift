@@ -294,6 +294,7 @@ struct TimerMainView: View {
                                             sectionName: panel.name,
                                             script: panel.script,
                                             nextName: panel.nextName,
+                                            progress: panel.progress,
                                             maxHeight: availableHeight * (isSideBySide ? 0.9 : 0.6))
                         .transition(.opacity)
                 } else if isPresentationMode {
@@ -1523,7 +1524,7 @@ extension TimerMainView {
     }
 
     /// 발표 중 화면에 펴 놓을 **지금 구간의 대본**. 적어 둔 글이 없으면 nil(그러면 구간 목록이 선다).
-    private var currentScript: (index: Int, name: String, script: String, nextName: String?)? {
+    private var currentScript: (index: Int, name: String, script: String, nextName: String?, progress: Double)? {
         guard let progress = sectionProgress ?? TimerSections.progress(
                 mainSeconds: screenVM.configuredMainSeconds,
                 alertOffsets: screenVM.selectedOffsets,
@@ -1536,7 +1537,11 @@ extension TimerMainView {
         let next = progress.index + 1 < progress.totalCount
             ? sectionDisplayName(progress.index + 1)
             : nil
-        return (progress.index, sectionDisplayName(progress.index), script, next)
+        // 이 구간을 얼마나 썼나(0 → 1). 초 단위로 반올림하지 않은 남은 시간으로 재서 글이 매끄럽게 흐른다.
+        let seg = progress.segment
+        let elapsedNow = Double(screenVM.configuredMainSeconds) - max(0, screenVM.remaining)
+        let used = (elapsedNow - Double(seg.startSec)) / Double(max(1, seg.durationSec))
+        return (progress.index, sectionDisplayName(progress.index), script, next, min(1, max(0, used)))
     }
 
     /// 구간 표시 이름 — 사용자 지정 이름이 있으면 그것, 없으면 placeholder

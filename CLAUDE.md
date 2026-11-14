@@ -1242,6 +1242,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - 저장은 이름과 같은 방식 — `TimerScreenViewModel.sectionScripts[구간 번호]`.
   ⚠️ 이름·대본은 고치는 즉시 기기에 남고(`rereminder.sectionText.v1`) 실행할 때 되살린다. 🔖 로 저장하면 템플릿 `sectionsData` 에 실리고, 불러오면 돌아온다.
   예전에는 메모리에만 있어 "대본이 저장 안 된다"는 제보가 났다.
+- 대본은 **구간 시간에 맞춰 저절로 흐른다**(`PresentationScriptPanel.follow`) — 구간을 절반 썼으면 글도 절반, 끝 10% 는 마지막 줄에 머문다. 속도 설정은 두지 않는다. 손으로 밀면 3초 쉬었다 다시 따라간다.
 - 도는 동안 대본은 **프롬프터로 읽는다** — 글씨는 `.title` 굵게(`PresentationScriptPanel`). 세션 모드 심볼은 `scroll`(두루마리, 대본으로 읽힌다).
   구간은 알림 경계에서 파생되므로 **글도 번호를 따라간다**(알림을 옮겨 구간이 줄면 그 번호의
   글은 화면에서 사라진다. 지워지지는 않는다).
