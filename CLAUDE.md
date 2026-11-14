@@ -1577,7 +1577,10 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - **App Clip 은 iOS 전용이다.** 임베드 항목에 `platformFilter = ios;` 가 붙어 있어야 한다.
   없으면 Catalyst 빌드가 *"target is built for macOS but contains embedded content built for
   the iOS platform (RereminderClip.app)"* 로 실패한다.
-- ⚠️ **iPad 는 지원하지 않는다. `TARGETED_DEVICE_FAMILY` 는 SDK 조건으로 갈라 둔다.**
+- **iPad 를 지원한다(2026-11-15).** 메인 앱 `TARGETED_DEVICE_FAMILY = "1,2,7"`, 위젯 `"1,2"`. 아이패드 방향 네 개가 다 적혀 있어 멀티태스킹이 된다.
+  App Store 에 **아이패드 스크린샷**이 필요하다. 화면은 아이폰과 같은 `TimerMainView` 이고, 가로로 넓으면(`horizontalSizeClass == .regular`) 원 | 내용으로 선다(접는 아이폰을 편 화면은 빼고).
+  아래는 지원하지 않던 시절의 기록이다.
+- ~~iPad 는 지원하지 않는다. `TARGETED_DEVICE_FAMILY` 는 SDK 조건으로 갈라 둔다.~~
   ```
   TARGETED_DEVICE_FAMILY = 1;                      // iOS 빌드 = iPhone 전용
   "TARGETED_DEVICE_FAMILY[sdk=macosx*]" = "2,6";   // Catalyst 빌드에서만 iPad+Mac
@@ -1630,7 +1633,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
   (숫자 윤곽선은 `glyphs.swift "4:59" 172 > digits.path` 로 먼저 뽑는다. 아이콘 레이어는 글꼴을 싣지 못한다).
 - 확인: `…/Icon Composer.app/Contents/Executables/ictool AppIcon.icon --export-image --output-file out.png --platform iOS --rendition <Default|Dark|TintedDark|TintedLight|ClearLight|ClearDark> --width 512 --height 512 --scale 1`
 - ⚠️ 숫자 레이어는 틴트에서 흰 글자(`digits-dark.svg`)를 쓴다. 어두운 글자를 그대로 두면 틴트·투명 모드에서 숫자가 사라진다.
-- ⚠️ 메인 앱의 `AppIcon.appiconset` 은 지웠다(둘이 같은 이름이면 어느 쪽이 나가는지 헷갈린다). **워치·위젯·App Clip 은 아직 옛 자명종 아이콘**이다.
+- ⚠️ 메인 앱의 `AppIcon.appiconset` 은 지웠다(둘이 같은 이름이면 어느 쪽이 나가는지 헷갈린다). 워치(어두운 판)·App Clip(밝음·어두움·틴트)은 같은 SVG 로 만든 꽉 찬 사각 PNG 다 — `scripts/app_icon/flat_icon.swift`. 웹의 `docs/icon.png`·`app-icon.jpeg` 도 새 아이콘이다(2026-11-15). 옛 자명종 그림은 레포에 남아 있지 않다. 아이콘을 바꾸면 이 넷도 다시 뽑을 것.
 
 ### 지원 언어는 10개다 (2.3.0)
 `ko`·`en`·`ja`·`zh-Hans`·`zh-Hant` 에 **`de`·`fr`·`es`·`pt-BR`·`it`** 를 더했다(2026-09-30).

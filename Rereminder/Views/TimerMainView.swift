@@ -28,6 +28,7 @@ struct TimerMainView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     /// 가로로 눕힌 아이폰(높이가 좁다)에서는 원과 나머지를 좌우로 나눈다.
     @Environment(\.verticalSizeClass) private var verticalSizeClass
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     /// 구간 이름 입력 포커스 (키보드 내리기 제어용)
     @FocusState private var focusedSectionIndex: Int?
@@ -225,7 +226,9 @@ struct TimerMainView: View {
             let availableWidth = geometry.size.width
             // **가로로 눕힌 화면**: 원은 왼쪽 절반, 나머지(알림 문장·구간 목록·카운트다운)는 오른쪽 절반.
             // 위아래로 쌓으면 높이 400pt 남짓을 원과 목록이 나눠 가져 둘 다 읽을 수 없게 작아진다.
-            let isSideBySide = availableWidth > availableHeight && verticalSizeClass == .compact
+            // 아이패드·맥 창은 가로로 넓어도 높이가 compact 가 아니다 — 넓은 쪽(regular)이면 같이 옆으로 놓는다.
+            let isSideBySide = availableWidth > availableHeight
+                && (verticalSizeClass == .compact || (horizontalSizeClass == .regular && !fold.isUnfolded))
             // 발표 모드: 하단 구간 리스트 공간 확보를 위해 원을 축소(세로일 때만. 가로에서는 목록이 옆에 선다)
             let fullClockSize = isSideBySide
                 ? min(availableWidth * 0.5 * 0.86, availableHeight * 0.84)
