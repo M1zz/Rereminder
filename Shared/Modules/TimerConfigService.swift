@@ -120,6 +120,7 @@ final class TimerConfigService {
         offsets: [Int],
         prealertMessages: [Int: String],
         finishMessage: String?,
+        sectionsData: Data? = nil,
         automatic: Bool = false
     ) -> Bool {
         if automatic {
@@ -140,20 +141,28 @@ final class TimerConfigService {
         let normalizedOffsets = Array(Set(offsets.filter { $0 > 0 && $0 < mainSec })).sorted()
 
         // 중복 체크 — 이미 같은 설정이 있으면 저장한 것과 같다
-        let existing = fetchRecents().contains { template in
+        let existing = fetchRecents().first { template in
             template.mainSeconds == mainSec
                 && template.prealertOffsetsSec == normalizedOffsets
                 && template.prealertMessages == prealertMessages
                 && template.finishMessage == normalizedFinish
         }
-        if existing { return true }
+        if let existing {
+            // 같은 설정에 구간 이름·대본만 고쳐 다시 저장했으면 그 글을 새로 싣는다.
+            if let sectionsData, existing.sectionsData != sectionsData {
+                existing.sectionsData = sectionsData
+                try? ctx.save()
+            }
+            return true
+        }
 
         let entry = Timer(
             name: makeTemplateName(mainSec: mainSec, offsets: normalizedOffsets),
             mainSeconds: mainSec,
             prealertOffsetsSec: normalizedOffsets,
             prealertMessages: prealertMessages,
-            finishMessage: normalizedFinish
+            finishMessage: normalizedFinish,
+            sectionsData: sectionsData
         )
         ctx.insert(entry)
         do {

@@ -46,11 +46,11 @@ final class TimerScreenViewModel: ObservableObject {
     @Published var currentMode: AppMode = .timer
     @Published var presentationSections: [PresentationSection] = []
     /// 파생 구간의 사용자 지정 이름 (구간 인덱스 → 이름, 비어있으면 placeholder 사용)
-    @Published var sectionNames: [Int: String] = [:]
+    @Published var sectionNames: [Int: String] = [:] { didSet { persistSectionText() } }
     /// 구간별 대본·메모 (구간 인덱스 → 글). 발표 중 화면에 그 구간의 글이 뜬다.
     /// 이름과 같은 방식으로 **구간 번호에 매단다** — 알림을 옮기면 구간이 다시 나뉘므로,
     /// 글도 그 번호를 따라간다(구간을 지우면 그 번호의 글은 화면에서 사라진다).
-    @Published var sectionScripts: [Int: String] = [:]
+    @Published var sectionScripts: [Int: String] = [:] { didSet { persistSectionText() } }
 
     let timerVM: TimerViewModel
     let configService = TimerConfigService()
@@ -70,6 +70,8 @@ final class TimerScreenViewModel: ObservableObject {
         vm.objectWillChange
             .sink { [weak self] _ in self?.objectWillChange.send() }
             .store(in: &bag)
+
+        restoreSectionText()
 
         vm.onTimerFinish = { [weak self] in
             self?.showTimerAlert = true
@@ -264,6 +266,7 @@ final class TimerScreenViewModel: ObservableObject {
         selectedOffsets = Set(t.prealertOffsetsSec)
         prealertMessages = t.prealertMessages
         finishMessage = t.finishMessage ?? ""
+        applySectionText(from: t)
         persistLastUsedConfig(mainSec: t.mainSeconds, offsets: t.prealertOffsetsSec)
         showTemplateApplyToast(for: t)
         if holdForPermissionWarning(then: { [weak self] in self?.timerVM.start() }) { return }
@@ -356,7 +359,8 @@ final class TimerScreenViewModel: ObservableObject {
             mainSec: cfg.mainSec,
             offsets: cfg.offsets,
             prealertMessages: prealertMessages,
-            finishMessage: finishMessage.isEmpty ? nil : finishMessage
+            finishMessage: finishMessage.isEmpty ? nil : finishMessage,
+            sectionsData: currentSectionsData
         )
         guard saved else { return }
         showToast?(String(localized: "Template saved"))
@@ -370,6 +374,7 @@ final class TimerScreenViewModel: ObservableObject {
         selectedOffsets = Set(t.prealertOffsetsSec)
         prealertMessages = t.prealertMessages
         finishMessage = t.finishMessage ?? ""
+        applySectionText(from: t)
         initialConfiguration()
     }
 
@@ -384,6 +389,60 @@ final class TimerScreenViewModel: ObservableObject {
         selectedOffsets = Set(offsets.filter { $0 > 0 && $0 < mainSec })
         initialConfiguration()
         if toast { showToast?(String(localized: "Set up your usual timer")) }
+    }
+
+    // MARK: - 구간 이름·대본 (사용자가 쓴 글)
+
+    /// ⚠️ 구간 이름·대본은 사용자가 쓴 글이다. 예전에는 메모리에만 있어 앱을 다시 열면 사라졌고,
+    ///    🔖 로 저장해도 템플릿에 실리지 않아 불러와도 비어 있었다 — "대본이 저장 안 된다".
+    ///    고치는 즉시 남기고, 실행할 때 되살리고, 템플릿에도 싣는다.
+    private static let sectionTextKey = "rereminder.sectionText.v1"
+
+    private struct SectionText: Codable {
+        let names: [Int: String]
+        let scripts: [Int: String]
+    }
+
+    private func persistSectionText() {
+        guard !isRestoringSectionText else { return }
+        let text = SectionText(names: sectionNames, scripts: sectionScripts)
+        if let data = try? JSONEncoder().encode(text) {
+            Self.lastUsedDefaults.set(data, forKey: Self.sectionTextKey)
+        }
+    }
+
+    private var isRestoringSectionText = false
+
+    private func restoreSectionText() {
+        guard let data = Self.lastUsedDefaults.data(forKey: Self.sectionTextKey),
+              let text = try? JSONDecoder().decode(SectionText.self, from: data) else { return }
+        isRestoringSectionText = true
+        sectionNames = text.names
+        sectionScripts = text.scripts
+        isRestoringSectionText = false
+    }
+
+    /// 지금 구간 이름·대본을 템플릿에 실을 모양. 아무것도 안 썼으면 nil.
+    private var currentSectionsData: Data? {
+        let hasText = (Array(sectionNames.values) + Array(sectionScripts.values))
+            .contains { !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
+        guard hasText else { return nil }
+        syncSectionsFromAlerts()
+        return try? JSONEncoder().encode(presentationSections)
+    }
+
+    /// 템플릿에 실린 구간 이름·대본을 되살린다. 실린 게 없으면 지금 글을 그대로 둔다.
+    private func applySectionText(from t: Timer) {
+        let sections = t.sections
+        guard !sections.isEmpty else { return }
+        var names: [Int: String] = [:]
+        var scripts: [Int: String] = [:]
+        for (i, section) in sections.enumerated() {
+            if section.name != String(localized: "Section \(i + 1)") { names[i] = section.name }
+            if !section.script.isEmpty { scripts[i] = section.script }
+        }
+        sectionNames = names
+        sectionScripts = scripts
     }
 
     // MARK: - Last Used Config (재실행 시 다이얼 복원)

@@ -53,8 +53,10 @@ struct PresentationScriptPanel: View {
             }
 
             ScrollView {
+                // 프롬프터로 읽는다 — 화면을 내려다보는 짧은 순간에 한 줄이 잡혀야 한다.
                 Text(script)
-                    .font(DSFont.body)
+                    .font(.system(.title, design: .rounded).weight(.semibold))
+                    .lineSpacing(6)
                     // 대본 속 링크·숫자·한 문장을 길게 눌러 복사해 채팅에 붙일 수 있게.
                     .textSelection(.enabled)
                     .frame(maxWidth: .infinity, alignment: .leading)

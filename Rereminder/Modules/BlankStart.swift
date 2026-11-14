@@ -157,7 +157,7 @@ enum FeatureLesson: String, CaseIterable, Identifiable {
         switch self {
         case .moreAlerts: return "bell.badge.fill"
         case .templates: return "bookmark.fill"
-        case .session: return "person.and.background.dotted"
+        case .session: return "text.rectangle.page"
         case .overtime: return "timer.circle.fill"
         }
     }

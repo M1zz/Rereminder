@@ -615,7 +615,7 @@ enum PaywallReceipt: Equatable {
 
     var icon: String {
         switch self {
-        case .sessions: return "person.and.background.dotted"
+        case .sessions: return "text.rectangle.page"
         case .timers: return "checkmark.circle.fill"
         }
     }

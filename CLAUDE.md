@@ -1237,6 +1237,9 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 구간에 **대본·메모**를 적어 두면 발표 중 그 구간 차례에 원 아래에 펴진다.
 
 - 저장은 이름과 같은 방식 — `TimerScreenViewModel.sectionScripts[구간 번호]`.
+  ⚠️ 이름·대본은 고치는 즉시 기기에 남고(`rereminder.sectionText.v1`) 실행할 때 되살린다. 🔖 로 저장하면 템플릿 `sectionsData` 에 실리고, 불러오면 돌아온다.
+  예전에는 메모리에만 있어 "대본이 저장 안 된다"는 제보가 났다.
+- 도는 동안 대본은 **프롬프터로 읽는다** — 글씨는 `.title` 굵게(`PresentationScriptPanel`). 세션 모드 심볼은 `text.rectangle.page`.
   구간은 알림 경계에서 파생되므로 **글도 번호를 따라간다**(알림을 옮겨 구간이 줄면 그 번호의
   글은 화면에서 사라진다. 지워지지는 않는다).
 - 시작할 때 `syncSectionsFromAlerts()` 가 `PresentationSection.script` 로 실어 보내고,
