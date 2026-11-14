@@ -2,7 +2,10 @@
 //  TimerAlertView.swift
 //  Rereminder
 //
-//  Timer Finished 시 전체 화면 알림
+//  타이머가 끝나면 **아래에서 버튼 하나가 올라온다** — "시간이 다 됐어요 · 확인".
+//
+//  ⚠️ 예전에는 화면 전체를 검게 덮는 알림이었다. 발표·수업 중에 화면이 통째로 바뀌면 지금 보던 것
+//     (대본·구간·시간)이 사라지고 청중에게도 크게 보인다. 끝났다는 사실과 끄는 버튼만 있으면 된다.
 //
 
 import SwiftUI
@@ -10,87 +13,48 @@ import SwiftUI
 struct TimerAlertView: View {
     let onDismiss: () -> Void
 
-    @State private var isAnimating = false
-    @State private var scale: CGFloat = 0.5
+    @State private var pulse = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
-        ZStack {
-            // 배경
-            Color.black.opacity(DSOpacity.strong)
-                .ignoresSafeArea()
-
-            VStack(spacing: 40) {
-                // Timer 아이콘
-                ZStack {
-                    Circle()
-                        .fill(Color.red.opacity(0.2))
-                        .frame(width: 200, height: 200)
-                        .scaleEffect(isAnimating ? 1.2 : 1.0)
-                        .opacity(isAnimating ? 0 : 1)
-
-                    Image(systemName: "timer")
-                        .dsScaledFont(100, relativeTo: .largeTitle, maxSize: 130)
-                        .foregroundColor(.red)
-                }
-                .scaleEffect(scale)
-                .accessibilityHidden(true)
-
-                // 메시지
-                VStack(spacing: DSSpacing.lg) {
-                    Text("Timer Finished", comment: "Timer alert title")
-                        .dsScaledFont(40, weight: .bold, design: .rounded, relativeTo: .largeTitle, maxSize: 60)
-                        .foregroundColor(.white)
-
-                    Text("Time is up", comment: "Timer alert subtitle")
-                        .dsScaledFont(20, weight: .medium, relativeTo: .title3, maxSize: 32)
-                        .foregroundColor(.white.opacity(0.8))
-                }
-                .scaleEffect(scale)
-                .accessibilityElement(children: .combine)
-
-                // OK 버튼
-                Button(action: onDismiss) {
-                    Text("OK", comment: "Timer alert dismiss button")
-                        .dsScaledFont(24, weight: .semibold, design: .rounded, relativeTo: .title2, maxSize: 36)
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .frame(minHeight: 60)
-                        .background(Color.red)
-                        .cornerRadius(DSRadius.lg)
-                        .padding(.horizontal, 50)
-                }
-                .scaleEffect(scale)
-                .accessibilityLabel(String(localized: "Dismiss timer alert"))
-                // 음성 제어: 화면에 보이는 "OK" 로도 부른다.
-                .accessibilityInputLabels([Text("OK"), Text("Stop")])
+        Button(action: onDismiss) {
+            HStack(spacing: DSSpacing.md) {
+                Image(systemName: "timer")
+                    .font(.title2.weight(.semibold))
+                    .scaleEffect(pulse ? 1.12 : 1.0)
+                    .accessibilityHidden(true)
+                Text("Time is up", comment: "Timer alert subtitle")
+                    .font(.system(.title3, design: .rounded).weight(.bold))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                Spacer(minLength: DSSpacing.sm)
+                Text("OK", comment: "Timer alert dismiss button")
+                    .font(.system(.headline, design: .rounded).weight(.bold))
+                    .padding(.horizontal, DSSpacing.lg)
+                    .padding(.vertical, DSSpacing.sm)
+                    .background(Capsule().fill(.white.opacity(0.25)))
             }
+            .foregroundStyle(.white)
+            .padding(.horizontal, DSSpacing.xl)
+            .frame(maxWidth: 520, minHeight: 64)
+            .background(Capsule().fill(Color.red))
+            .shadow(color: .black.opacity(0.2), radius: 12, y: 4)
         }
-        .accessibilityAddTraits(.isModal)
+        .buttonStyle(.plain)
+        .padding(.horizontal, DSSpacing.lg)
+        .accessibilityLabel(String(localized: "Dismiss timer alert"))
+        // 음성 제어: 화면에 보이는 "OK" 로도 부른다.
+        .accessibilityInputLabels([Text("OK"), Text("Stop")])
         .onAppear {
-            // 애니메이션 (동작 줄이기 시 즉시 표시)
-            if reduceMotion {
-                scale = 1.0
-            } else {
-                withAnimation(.spring(response: 0.6, dampingFraction: 0.6)) {
-                    scale = 1.0
-                }
-                withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
-                    isAnimating = true
-                }
+            if !reduceMotion {
+                withAnimation(.easeInOut(duration: 0.6).repeatForever(autoreverses: true)) { pulse = true }
             }
-
-            // VoiceOver 안내
             AccessibilityNotification.Announcement(
                 String(localized: "Timer finished. Time is up.")
             ).post()
-
-            // Vibration (visionOS 에는 진동이 없다)
             #if os(iOS)
             let generator = UINotificationFeedbackGenerator()
             generator.notificationOccurred(.warning)
-
-            // 연속 Vibration
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 generator.notificationOccurred(.warning)
             }
@@ -100,5 +64,8 @@ struct TimerAlertView: View {
 }
 
 #Preview {
-    TimerAlertView(onDismiss: {})
+    ZStack(alignment: .bottom) {
+        Color(.systemBackground)
+        TimerAlertView(onDismiss: {})
+    }
 }

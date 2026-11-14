@@ -467,12 +467,19 @@ struct TimerMainView: View {
             TimeInputSheet(screenVM: screenVM, isPresented: $showTimeInput)
                 .presentationDetents([.height(300)])
         }
-        .fullScreenCover(isPresented: $screenVM.showTimerAlert) {
-            TimerAlertView {
-                screenVM.showTimerAlert = false
+        // 끝나면 화면을 덮지 않고 **아래에서 버튼 하나**가 올라온다(`TimerAlertView`).
+        .overlay(alignment: .bottom) {
+            if screenVM.showTimerAlert {
+                TimerAlertView {
+                    withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                        screenVM.showTimerAlert = false
+                    }
+                }
+                .padding(.bottom, DSSpacing.lg)
+                .transition(.move(edge: .bottom).combined(with: .opacity))
             }
-            .foldConfined()
         }
+        .animation(reduceMotion ? nil : .spring(response: 0.45, dampingFraction: 0.8), value: screenVM.showTimerAlert)
         .alert("Notification permission is required", isPresented: $screenVM.showPermissionWarning) {
             Button("Go to Settings", role: .none) {
                 // 앱 설정 첫 화면이 아니라 **알림 설정**으로 바로 보낸다 — 한 단계라도 더 들어가야
