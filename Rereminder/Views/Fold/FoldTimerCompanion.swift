@@ -199,11 +199,13 @@ struct FoldTimerCompanion: View {
                             .allowsHitTesting(false)
                     }
                 }
-            Button("Done") {
+            Button {
                 scriptFocused = false
                 withAnimation(.easeInOut(duration: 0.2)) { editingScript = nil }
+            } label: {
+                Image(systemName: "checkmark.circle.fill").font(.title3)
             }
-            .font(DSFont.callout.weight(.semibold))
+            .accessibilityLabel(Text("Done"))
         }
     }
 

@@ -450,16 +450,7 @@ struct TimerMainView: View {
             TapGesture().onEnded { focusedSectionIndex = nil },
             including: focusedSectionIndex == nil ? .none : .all
         )
-        #if !os(visionOS)  // visionOS 에는 키보드 위 막대가 없다
-        .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    focusedSectionIndex = nil
-                }
-            }
-        }
-        #endif
+        // ⚠️ 키보드 위 "Done" 막대는 지웠다 — 눌러도 닫히지 않았다. 구간 카드의 ✓ 가 마친다(`PresentationSectionList`).
         .sheet(isPresented: $showTimeInput) {
             TimeInputSheet(screenVM: screenVM, isPresented: $showTimeInput)
                 .presentationDetents([.height(300)])

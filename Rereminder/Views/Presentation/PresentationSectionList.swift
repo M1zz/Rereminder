@@ -29,6 +29,9 @@ struct PresentationSectionList: View {
 
     private struct ScriptTarget: Identifiable { let id: Int }
 
+    /// 방금 고치기를 마친 구간 — 잠깐 ✓ 를 보여 "저장됐다"를 알린다. 저장은 글자마다 이미 된다.
+    @State private var justSavedIndex: Int?
+
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView {
@@ -52,7 +55,8 @@ struct PresentationSectionList: View {
             // 편집을 시작하면 그 카드를 보이는 자리로 끌어온다.
             // 두 번 스크롤하는 이유: 누른 즉시 한 번(반응이 바로 보이게), 키보드가 다 올라와
             // 리스트 높이가 줄어든 뒤에 또 한 번(줄어든 창 기준으로 다시 맞춰야 실제로 보인다).
-            .onChange(of: focusedSectionIndex) { _, index in
+            .onChange(of: focusedSectionIndex) { old, index in
+                if let old, old != index { flashSaved(old) }
                 guard let index else { return }
                 scrollTo(index, using: proxy)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
@@ -168,6 +172,26 @@ struct PresentationSectionList: View {
 
                     Spacer(minLength: DSSpacing.sm)
 
+                    // 고치는 동안은 ✓ 가 마치는 버튼이다(키보드 위 "Done" 대신). 마친 뒤 잠깐 남아 저장됐음을 알린다.
+                    if isEditingThis {
+                        Button {
+                            focusedSectionIndex = nil
+                        } label: {
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.title3)
+                                .foregroundStyle(color)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(String(localized: "Done"))
+                        .transition(.opacity)
+                    } else if justSavedIndex == segment.index {
+                        Image(systemName: "checkmark")
+                            .font(DSFont.callout.weight(.bold))
+                            .foregroundStyle(DSColor.positive)
+                            .accessibilityHidden(true)
+                            .transition(.opacity)
+                    }
+
                     Text(TimeMapper.mmss(segment.durationSec))
                         .font(DSFont.callout.weight(.bold).monospacedDigit())
                         .foregroundStyle(DSColor.marker)
@@ -203,6 +227,14 @@ struct PresentationSectionList: View {
         .opacity(focusedSectionIndex == nil || isEditingThis ? 1.0 : 0.55)
         .accessibilityElement(children: .combine)
         .transition(.opacity.combined(with: .move(edge: .bottom)))
+    }
+
+    private func flashSaved(_ index: Int) {
+        withAnimation(.easeInOut(duration: 0.2)) { justSavedIndex = index }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            guard justSavedIndex == index else { return }
+            withAnimation(.easeInOut(duration: 0.35)) { justSavedIndex = nil }
+        }
     }
 
     // MARK: - 표기

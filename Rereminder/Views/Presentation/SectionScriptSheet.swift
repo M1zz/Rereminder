@@ -71,7 +71,9 @@ struct SectionScriptSheet: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { dismiss() }
+                    // 글은 쓰는 대로 저장된다. ✓ 는 닫기다.
+                    Button { dismiss() } label: { Image(systemName: "checkmark") }
+                        .accessibilityLabel(Text("Done"))
                 }
             }
             .onAppear { isFocused = true }
