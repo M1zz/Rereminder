@@ -183,8 +183,11 @@ final class TemplateSaveTests: XCTestCase {
         // 메모리 폴백으로 떨어지면 아래 save 는 통과해 버린다 — 진짜 스토어인지 먼저 본다
         let configuration = try XCTUnwrap(container.configurations.first)
         XCTAssertFalse(configuration.isStoredInMemoryOnly, "실제 파일 스토어가 열려야 한다")
-        XCTAssertNil(configuration.cloudKitContainerIdentifier,
-                     "CloudKit 동기화가 켜지면 이 모델은 스토어를 열 수 없다")
+        // 2.3.7 부터 모델이 CloudKit 규칙을 지키고(unique 없음·기본값·옵셔널 관계) 사용자 iCloud 와 맞춘다(1e9d5fa).
+        // iCloud 가 안 되면 기기 안에서만 연다 — 어느 쪽이든 **파일 스토어가 열리고 저장되는 것**이 이 테스트의 몫이다.
+        if let id = configuration.cloudKitContainerIdentifier {
+            XCTAssertEqual(id, "iCloud.com.xa.toki")
+        }
 
         let context = ModelContext(container)
         let probe = TimerTemplate(name: "probe", mainSeconds: 123, prealertOffsetsSec: [60])

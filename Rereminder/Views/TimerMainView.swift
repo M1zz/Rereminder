@@ -1416,7 +1416,8 @@ extension TimerMainView {
     private func coachLine(_ text: String) -> some View {
         Text(text)
             .font(.body)
-            .foregroundStyle(.secondary)
+            // `.secondary` 는 흰 바탕에서 대비가 기준(4.5:1)에 살짝 못 미쳤다(접근성 점검). 조금 진하게.
+            .foregroundStyle(Color(.label).opacity(0.72))
             .multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true)
             .padding(.horizontal)

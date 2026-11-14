@@ -600,6 +600,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 ### 저장소 (SwiftData) — ⚠️ CloudKit 자동 동기화를 켜지 말 것
 템플릿(`Timer`)·기록(`TimerRecord`)은 앱 그룹 안의 로컬 SwiftData 스토어에 저장된다.
 컨테이너는 `RereminderApp.sharedModelContainer` **하나**이고, `cloudKitDatabase: .none` 이다.
+⚠️ **2.3.7 에서 바뀌었다**(`1e9d5fa`): 모델이 CloudKit 규칙을 지키게 고친 뒤 `.private(iCloud.com.xa.toki)` 로 열고, 안 되면 `.none` 으로 연다. 아래는 그 전의 기록이다.
 
 - ⚠️ **`.modelContainer(for:)` 를 쓰지 말 것.** 기본값이 `cloudKitDatabase: .automatic` 이라,
   앱에 iCloud(CloudKit) 엔타이틀먼트가 있으면 로컬 스토어에도 CloudKit 스키마 규칙을 강요한다:
