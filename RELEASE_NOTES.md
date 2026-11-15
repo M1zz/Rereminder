@@ -9,6 +9,158 @@ DeployBar 가 배포할 때 아래 버전 절의 언어별 문구를 읽어 스�
 사용자에게 무엇이 좋아졌는지만 쓴다. 내부 구조나 빌드 설정 이야기는 쓰지 않는다.
 언어마다 다시 쓴다. 기계번역하지 말고 항목 수와 순서만 맞춘다.
 
+## 2.3.8
+
+### 앱스토어 (한국어)
+
+이제 아이패드에서도 쓸 수 있어요.
+홈 화면 위젯이 앱 아이콘처럼 링으로 보여요.
+애플워치 앱 아이콘도 새 링 모양이에요.
+
+### App Store (English)
+
+Now available on iPad.
+Widgets now look like the app icon.
+The Apple Watch app has the new icon.
+
+### App Store (en-GB)
+
+Now available on iPad.
+Widgets now look like the app icon.
+The Apple Watch app has the new icon.
+
+### App Store (日本語)
+
+iPadでも使えるようになりました。
+ホーム画面ウィジェットがアイコンと同じリングに。
+Apple Watchアプリも新しいアイコンに。
+
+### 앱스토어 (중국어 간체)
+
+现在可以在 iPad 上使用。
+主屏幕小组件换成和图标一样的圆环。
+Apple Watch App 也换上了新图标。
+
+### 앱스토어 (중국어 번체)
+
+現在可以在 iPad 上使用。
+主畫面小工具換成和圖示一樣的圓環。
+Apple Watch App 也換上了新圖示。
+
+### App Store (Deutsch)
+
+Jetzt auch auf dem iPad.
+Widgets sehen aus wie das App-Symbol.
+Neues Symbol auch auf der Apple Watch.
+
+### App Store (Français)
+
+Désormais disponible sur iPad.
+Les widgets reprennent l’icône de l’app.
+Nouvelle icône aussi sur Apple Watch.
+
+### App Store (Español)
+
+Ahora también en el iPad.
+Los widgets se ven como el icono.
+Nuevo icono también en el Apple Watch.
+
+### App Store (Português do Brasil)
+
+Agora também no iPad.
+Os widgets agora parecem o ícone do app.
+Novo ícone também no Apple Watch.
+
+### 앱스토어 (포르투갈어(포르투갈))
+
+Agora também no iPad.
+Os widgets parecem agora o ícone da app.
+Novo ícone também no Apple Watch.
+
+### App Store (Italiano)
+
+Ora disponibile anche su iPad.
+I widget riprendono l’icona dell’app.
+Nuova icona anche su Apple Watch.
+
+### 앱스토어 (러시아어)
+
+Теперь и на iPad.
+Виджеты выглядят как иконка приложения.
+Новая иконка и на Apple Watch.
+
+### 앱스토어 (체코어)
+
+Nově i na iPadu.
+Widgety vypadají jako ikona aplikace.
+Nová ikona i na Apple Watch.
+
+### 앱스토어 (덴마크어)
+
+Nu også på iPad.
+Widgets ligner nu app-ikonet.
+Nyt ikon også på Apple Watch.
+
+### 앱스토어 (그리스어)
+
+Τώρα και στο iPad.
+Τα widget μοιάζουν με το εικονίδιο.
+Νέο εικονίδιο και στο Apple Watch.
+
+### 앱스토어 (핀란드어)
+
+Nyt myös iPadilla.
+Widgetit näyttävät sovelluskuvakkeelta.
+Uusi kuvake myös Apple Watchissa.
+
+### 앱스토어 (인도네시아어)
+
+Kini tersedia juga di iPad.
+Widget kini mirip ikon app.
+Ikon baru juga di Apple Watch.
+
+### 앱스토어 (Norsk bokmål)
+
+Nå også på iPad.
+Widgeter ser nå ut som app-symbolet.
+Nytt symbol også på Apple Watch.
+
+### 앱스토어 (네덜란드어)
+
+Nu ook op de iPad.
+Widgets lijken nu op het app-symbool.
+Nieuw symbool ook op Apple Watch.
+
+### 앱스토어 (폴란드어)
+
+Teraz także na iPadzie.
+Widżety wyglądają jak ikona aplikacji.
+Nowa ikona także na Apple Watch.
+
+### 앱스토어 (스웨덴어)
+
+Nu även på iPad.
+Widgetar ser ut som appsymbolen.
+Ny symbol även på Apple Watch.
+
+### 앱스토어 (태국어)
+
+ใช้งานบน iPad ได้แล้ว
+วิดเจ็ตหน้าตาเหมือนไอคอนแอป
+Apple Watch ก็ได้ไอคอนใหม่ด้วย
+
+### 앱스토어 (튀르키예어)
+
+Artık iPad’de de kullanılabilir.
+Widget’lar uygulama simgesine benziyor.
+Apple Watch’ta da yeni simge.
+
+### 앱스토어 (베트남어)
+
+Giờ đã dùng được trên iPad.
+Tiện ích giờ giống biểu tượng app.
+Biểu tượng mới cả trên Apple Watch.
+
 ## 2.3.7
 
 ### 앱스토어 (한국어)
