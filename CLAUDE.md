@@ -764,7 +764,8 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 + `Rereminder/Modules/QuickStartPublisher.swift`(앱이 목록을 적는다) + `RereminderAlarm/QuickStartControl.swift`.
 
 - 제어센터 버튼 하나 = 저장한 설정 하나(길게 눌러 고른다, 안 고르면 가장 자주 쓰는 것). 홈 화면 위젯은
-  **쉬는 동안** 저장한 설정을 칸으로 보여 준다(작은 1 · 중간 2 · 큰 4, `SetupTile`: 구간 색 작은 링(`SetupRing`, 가운데 재생) + 큰 시간 + 이름). ⚠️ 칸을 늘리지 말 것 — 2·4·6 일 때 찌그러져 보였다. 앱이 지은 이름이면 둘째 줄은 알림 시각만이다(`QuickStartPublisher.tileName`), 제어센터 제목은 시간이다. 도는 동안은 예전처럼 카운트다운이다.
+  **쉬는 동안** 저장한 설정을 칸으로 보여 준다(작은 1 · 중간 2 · 큰 4, `SetupTile`: 앱 아이콘과 같은 링(`IconDial`) 가운데 큰 시간 + 아래 ▶ 이름). ⚠️ 칸을 늘리지 말 것 — 2·4·6 일 때 찌그러져 보였다. 앱이 지은 이름이면 둘째 줄은 알림 시각만이다(`QuickStartPublisher.tileName`), 제어센터 제목은 시간이다. 도는 동안은 같은 링이 남은 만큼만 색을 남기고(1분마다 타임라인 항목) 가운데 `Text(timerInterval:)` 이 센다.
+  ⚠️ **위젯은 앱 아이콘과 같은 그림이다**(`RereminderAlarm/IconDial.swift`, 2026-11-15): 아이콘 바탕(`IconBackdrop`), 굵은 구간 색 링, 알림 자리의 흰 노브 + 그 구간 색 종, 둥근 양 끝. 아이콘을 바꾸면 이것도 맞출 것.
   순서는 즐겨찾기 → 쓴 횟수 → 최근 사용(`QuickStartPublisher.ordered`).
 - ⚠️ **시작은 🔖 시트에서 누른 것과 똑같은 길(`apply(template:)`)이다.** 결제·권한 판정을 위젯 쪽에 따로 두지 말 것 —
   같은 템플릿이 앱과 위젯에서 다르게 동작하게 된다. 불러오기는 누구에게나 열려 있어 판정이 없다(`QuickStartTests`).
@@ -1686,6 +1687,9 @@ python3 scripts/make_marketing_screenshots.py [언어 ...]  # → docs/screensho
   ⚠️ `marketing/` 바로 아래나 `appstore-65/` 처럼 **언어 없는 제출본 폴더를 다시 만들지 말 것** — 옛 한국어
   한 벌(2.3.0 에 지웠다, "발표 모드" 시절 화면)이 그런 폴더였다.
 - 헤드라인은 `make_marketing_screenshots.py` 의 `COPY` 에 언어별로 있다. 세션 모드 이름은 앱 안 번역과 같은 말을 쓴다.
+- **아이패드**: `DEVICE=ipad scripts/capture_screenshots.sh` → `raw-ipad/<언어>/`(2064×2752), `make_marketing_screenshots.py --ipad` → `marketing/<언어>/ipad-*.png`.
+  한 장면만 다시: `ONLY=02:running`. 도는 숫자가 바뀌는 순간에 걸려 번지면 `SHOT_DELAY=6.5` 로 그 언어만 다시 찍는다.
+  ⚠️ 구간 이름·대본은 기기에 남으므로 타이머 장면(`dial`·`running`)은 그것을 비운다 — 안 비우면 앞 언어의 이름이 가운데에 남는다.
 - **맥**: `scripts/capture_mac_screenshots.sh` → `raw-mac/<언어>/`(창 920×1240), `make_marketing_screenshots.py --mac` → `marketing/<언어>/mac-*.png`(2880×1800).
   시뮬레이터가 아니라 **이 맥에서 진짜 앱과 같은 컨테이너로** 띄운다. 그래서 장면 실행(`RereminderApp.isScreenshotRun`, DEBUG)은
   저장소를 메모리로만 열고 iCloud 타이머 동기화·기기 표시·알림 예약·사용 통계·백업 금고를 건너뛰며, 스크립트가 진짜 앱 설정을 떠 두었다가 되돌린다.

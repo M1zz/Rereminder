@@ -6,6 +6,7 @@
 #   UDID=<기기> scripts/capture_screenshots.sh ru  # 기기를 정해서
 #   scripts/capture_screenshots.sh de fr           # 일부 언어만
 #   DEVICE=duo UDID=<듀오 기기> scripts/capture_screenshots.sh   # 아이폰 듀오 바깥 화면
+#   DEVICE=ipad scripts/capture_screenshots.sh                   # 아이패드 13" (2064×2752 → raw-ipad/)
 #
 # 결과: docs/screenshots/raw/<언어>/<번호>-<장면>.png  (1320×2868, 6.9" 원본)
 #       DEVICE=duo 면 docs/screenshots/raw-duo/<언어>/ (1398x2034, 듀오 바깥 화면 그대로가 제출 규격)
@@ -22,8 +23,13 @@ ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT"
 
 BUNDLE_ID="com.xa.toki"
-DEVICE="${DEVICE:-iphone}"   # iphone | duo
-DEVICE_NAME="${DEVICE_NAME:-$([[ "$DEVICE" == duo ]] && echo "iPhone Duo" || echo "iPhone 17 Pro Max")}"
+DEVICE="${DEVICE:-iphone}"   # iphone | duo | ipad
+case "$DEVICE" in
+  duo)  DEFAULT_NAME="iPhone Duo" ;;
+  ipad) DEFAULT_NAME="iPad Pro 13-inch (M5)" ;;
+  *)    DEFAULT_NAME="iPhone 17 Pro Max" ;;
+esac
+DEVICE_NAME="${DEVICE_NAME:-$DEFAULT_NAME}"
 DERIVED="${DERIVED:-$ROOT/build/screenshots}"
 OUT="$ROOT/docs/screenshots/raw"
 DISPLAY_ARG=""
@@ -33,9 +39,15 @@ if [[ "$DEVICE" == duo ]]; then
   OUT="$ROOT/docs/screenshots/raw-duo"
   DISPLAY_ARG="--display=1"
 fi
+if [[ "$DEVICE" == ipad ]]; then
+  # 아이패드 13" 세로 원본이 곧 제출 규격(2064×2752)
+  OUT="$ROOT/docs/screenshots/raw-ipad"
+fi
 
 # 번호-장면 (파일 이름 순서가 스토어에 보이는 순서다)
 SCENES=("01:dial" "02:running" "03:session" "04:sessionRunning")
+# 한 장면만 다시 찍을 때: ONLY=02:running scripts/capture_screenshots.sh
+[[ -n "${ONLY:-}" ]] && SCENES=("$ONLY")
 
 # 언어 코드 → 로케일 (시간·숫자 표기가 그 나라 것으로 나오게)
 locale_for() {
@@ -92,7 +104,7 @@ for lang in "${LANGS[@]}"; do
       -AppleLanguages "($lang)" -AppleLocale "$(locale_for "$lang")" \
       -hasSeenOnboarding YES >/dev/null
     # 실행 중 장면은 몇 초 흘러야 "도는 중"으로 보인다.
-    sleep 6
+    sleep "${SHOT_DELAY:-6}"
     xcrun simctl io "$UDID" screenshot --type=png $DISPLAY_ARG "$OUT/$lang/$num-$scene.png" >/dev/null 2>&1
     echo "📸 $lang/$num-$scene.png"
   done

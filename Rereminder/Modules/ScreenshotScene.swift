@@ -43,6 +43,10 @@ enum ScreenshotScene: String {
             screenVM.mainMinutes = 30
             screenVM.mainSeconds = 0
             screenVM.selectedOffsets = [600, 300, 60]
+            // 구간 이름·대본은 기기에 남는다(`rereminder.sectionText.v1`) — 비우지 않으면 바로 앞 언어로 찍은
+            // 세션 장면의 이름이 타이머 화면 가운데에 남는다.
+            screenVM.sectionNames = [:]
+            screenVM.sectionScripts = [:]
             screenVM.initialConfiguration()
             if self == .running { screenVM.timerVM.start() }
 
