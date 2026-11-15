@@ -17,7 +17,7 @@ ROOT="$(git rev-parse --show-toplevel)"
 cd "$ROOT"
 
 BUNDLE_ID="com.xa.toki.watchkitapp"
-WATCH_NAME="${WATCH_NAME:-Apple Watch Series 11 (46mm)}"   # ASC 규격 416×496 을 내는 기기
+WATCH_NAME="${WATCH_NAME:-Apple Watch Series 12 (46mm)}"   # ASC 규격 416×496 을 내는 기기
 DERIVED="${DERIVED:-$ROOT/build/watch-screenshots}"
 OUT="$ROOT/docs/screenshots/watch"
 
@@ -29,7 +29,7 @@ LANGS=("$@")
 
 # 페어링된(active) 워치 중 이름이 맞는 것 + 그 짝 아이폰
 UDID="${UDID:-}"; PHONE="${PHONE:-}"
-[[ -z "$UDID" ]] && read -r UDID PHONE < <(xcrun simctl list pairs -j | python3 -c "
+[[ -z "$UDID" ]] && { read -r UDID PHONE || true; } < <(xcrun simctl list pairs -j | python3 -c "
 import json, sys
 name = sys.argv[1]
 pairs = [p for p in json.load(sys.stdin)['pairs'].values()
@@ -61,8 +61,13 @@ for lang in "${LANGS[@]}"; do
   for entry in "${SCENES[@]}"; do
     IFS=: read -r num scene wait <<< "$entry"
     xcrun simctl terminate "$UDID" "$BUNDLE_ID" 2>/dev/null || true
-    xcrun simctl launch "$UDID" "$BUNDLE_ID" -screenshotScene "$scene" \
-      -AppleLanguages "($lang)" -AppleLocale "$lang" >/dev/null
+    # 끝낸 직후 다시 띄우면 워치가 가끔 거절한다(FBSOpenApplicationServiceErrorDomain 4) — 잠깐 쉬고 다시.
+    for try in 1 2 3; do
+      xcrun simctl launch "$UDID" "$BUNDLE_ID" -screenshotScene "$scene" \
+        -AppleLanguages "($lang)" -AppleLocale "$lang" >/dev/null 2>&1 && break
+      [[ $try -eq 3 ]] && { echo "❌ $lang/$num-$scene 실행 실패"; exit 1; }
+      sleep 3
+    done
     sleep "$wait"
     # 설치 직후 첫 장은 화면이 덜 떠서 실패할 때가 있다 — 세 번까지 다시 찍는다.
     for try in 1 2 3; do

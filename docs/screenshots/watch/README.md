@@ -5,8 +5,9 @@ App Store Connect 의 watchOS 스크린샷 슬롯에 올리는 원본. 언어별
 - **규격**: 416 × 496 px — Apple Watch Series 10/11 (46mm). ASC 가 문서화한 워치 규격이라
   다른 크기로 자동 축소된다.
   ⚠️ Ultra 3(49mm) 시뮬레이터는 **422 × 514** 를 뱉는데 이건 ASC 규격 표에 없다. 쓰지 말 것.
-- **기기**: Apple Watch Series 11 (46mm), watchOS 26.2 시뮬레이터
-- **언어**: 24개 — `ko` `en` `ja` `zh-Hans` `zh-Hant` `de` `fr` `es` `pt-BR` `pt-PT` `it` `ru` `cs` `da` `el` `fi` `id` `nb` `nl` `pl` `sv` `th` `tr` `vi`.
+- **기기**: Apple Watch Series 12 (46mm), watchOS 27.2 시뮬레이터 (416×496)
+  ⚠️ watchOS 27 시뮬레이터는 상태 막대 시계 고정(`status_bar override --time`)을 받지 않는다 — 시계는 찍은 시각 그대로다.
+- **언어**: 25개 — `ko` `en` `en-GB` `ja` `zh-Hans` `zh-Hant` `de` `fr` `es` `pt-BR` `pt-PT` `it` `ru` `cs` `da` `el` `fi` `id` `nb` `nl` `pl` `sv` `th` `tr` `vi`.
   같은 화면 같은 순서. 새 언어를 늘리면 폴더도 는다(`deploy.env` 의 `LOCALES` 참고).
 
 | 파일 | 화면 | 파는 것 |
