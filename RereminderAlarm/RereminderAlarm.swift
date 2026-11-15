@@ -77,7 +77,15 @@ struct TimerWidgetProvider: TimelineProvider {
 
         if entry.isRunning, let endDate = entry.endDate {
             // 타이머 실행 중: endDate에 다시 업데이트하여 "종료" 상태 반영
+            // 링이 남은 만큼 줄어들게 1분마다 항목을 미리 세운다(숫자는 시스템이 센다). 많아도 90개.
             var entries = [entry]
+            var t = entry.date.addingTimeInterval(60)
+            while t < endDate && entries.count < 90 {
+                entries.append(TimerWidgetEntry(date: t, isRunning: true, isPaused: false, endDate: endDate,
+                                                totalDuration: entry.totalDuration, timerName: entry.timerName,
+                                                prealertOffsets: entry.prealertOffsets, setups: entry.setups))
+                t = t.addingTimeInterval(60)
+            }
             let finishedEntry = TimerWidgetEntry(
                 date: endDate,
                 isRunning: false,
@@ -154,39 +162,65 @@ struct TimerWidgetEntryView: View {
 
     // MARK: - Active Timer
 
+    /// 남은 비율 — 링이 아이콘처럼 남은 만큼만 색을 남긴다(타임라인 항목마다 다시 그린다).
+    private var remainingFraction: Double {
+        guard entry.totalDuration > 0, let endDate = entry.endDate else { return 1 }
+        return min(1, max(0, endDate.timeIntervalSince(entry.date) / entry.totalDuration))
+    }
+
+    /// 앱 아이콘 그대로의 링 + 가운데 카운트다운
+    private var runningDial: some View {
+        ZStack {
+            IconDial(mainSeconds: Int(entry.totalDuration), offsets: entry.prealertOffsets, remaining: remainingFraction)
+            IconDialTime { timerDisplay }
+        }
+    }
+
+    private var statusLine: some View {
+        HStack(spacing: 4) {
+            Image(systemName: entry.isPaused ? "pause.fill" : "play.fill")
+            Text(entry.timerName.isEmpty
+                 ? (entry.isPaused ? String(localized: "Paused") : String(localized: "Running"))
+                 : entry.timerName)
+                .lineLimit(1)
+        }
+        .font(.caption.weight(.semibold))
+        .foregroundStyle(entry.isPaused ? Color.orange : Color.secondary)
+    }
+
+    @ViewBuilder
     private var activeTimerView: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            HStack {
-                Image(systemName: entry.isPaused ? "pause.circle.fill" : "timer")
-                    .font(.caption)
-                    .foregroundStyle(entry.isPaused ? .orange : .green)
-                Text(entry.isPaused
-                     ? String(localized: "Paused")
-                     : String(localized: "Running"))
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundStyle(entry.isPaused ? .orange : .green)
-                Spacer()
-                if !entry.timerName.isEmpty {
-                    Text(entry.timerName)
-                        .font(.caption2)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
+        if family == .systemSmall {
+            VStack(spacing: 6) {
+                runningDial
+                statusLine
+            }
+        } else {
+            HStack(spacing: 16) {
+                runningDial
+                VStack(alignment: .leading, spacing: 6) {
+                    statusLine
+                    nextAlertLine
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
+        }
+    }
 
-            Spacer()
-
-            timerDisplay
-                .dsScaledFont(family == .systemSmall ? 28 : 36,
-                              weight: .bold, design: .rounded, relativeTo: .title,
-                              maxSize: family == .systemSmall ? 32 : 42)
-                .monospacedDigit()
-                .minimumScaleFactor(0.6)
-
-            if entry.totalDuration > 0 {
-                progressBar
+    /// 다음 알림 — 이 앱이 기본 타이머와 다른 이유라 빼지 않는다.
+    @ViewBuilder
+    private var nextAlertLine: some View {
+        if let endDate = entry.endDate,
+           let next = entry.prealertOffsets.sorted(by: >).first(where: { endDate.addingTimeInterval(-TimeInterval($0)) > entry.date }) {
+            let at = endDate.addingTimeInterval(-TimeInterval(next))
+            HStack(spacing: 4) {
+                Image(systemName: "bell.fill")
+                Text(formatOffsetLabel(next))
+                Text(at, style: .time).foregroundStyle(.secondary)
             }
+            .font(.footnote.weight(.medium))
+            .lineLimit(1)
+            .minimumScaleFactor(0.7)
         }
     }
 
@@ -194,71 +228,23 @@ struct TimerWidgetEntryView: View {
     private var timerDisplay: some View {
         if entry.isPaused, let endDate = entry.endDate {
             // 일시정지: 남은 시간 정적 표시
-            let remaining = max(0, endDate.timeIntervalSinceNow)
-            Text(formatTime(remaining))
-        } else if let endDate = entry.endDate, endDate > Date() {
-            // 실행 중: 실시간 카운트다운
-            Text(endDate, style: .timer)
+            Text(iconClockText(Int(max(0, endDate.timeIntervalSince(entry.date)).rounded())))
+        } else if let endDate = entry.endDate, endDate > entry.date {
+            // 실행 중: 시스템이 센다(잠금화면처럼 "8 minutes" 로 바뀌지 않게 timerInterval 로)
+            Text(timerInterval: entry.date...endDate, countsDown: true)
         } else {
-            Text("00:00")
+            Text(iconClockText(0))
         }
-    }
-
-    private var progressBar: some View {
-        GeometryReader { geo in
-            let progress: Double = {
-                guard entry.totalDuration > 0, let endDate = entry.endDate else { return 0 }
-                let remaining = max(0, endDate.timeIntervalSinceNow)
-                return min(1, remaining / entry.totalDuration)
-            }()
-
-            ZStack(alignment: .leading) {
-                Capsule()
-                    .fill(.quaternary)
-                    .frame(height: 4)
-                Capsule()
-                    .fill(entry.isPaused ? .orange : .green)
-                    .frame(width: geo.size.width * progress, height: 4)
-            }
-        }
-        .frame(height: 4)
     }
 
     // MARK: - Large Active Timer
 
     private var largeActiveView: some View {
         VStack(alignment: .leading, spacing: 10) {
-            // 상단: 상태 + 이름
-            HStack {
-                Image(systemName: entry.isPaused ? "pause.circle.fill" : "timer")
-                    .font(.subheadline)
-                    .foregroundStyle(entry.isPaused ? .orange : .green)
-                Text(entry.isPaused
-                     ? String(localized: "Paused")
-                     : String(localized: "Running"))
-                    .font(.subheadline)
-                    .fontWeight(.medium)
-                    .foregroundStyle(entry.isPaused ? .orange : .green)
-                Spacer()
-                if !entry.timerName.isEmpty {
-                    Text(entry.timerName)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                        .lineLimit(1)
-                }
-            }
-
-            // 카운트다운
-            timerDisplay
-                .dsScaledFont(48, weight: .bold, design: .rounded, relativeTo: .largeTitle, maxSize: 56)
-                .monospacedDigit()
-                .minimumScaleFactor(0.6)
-                .frame(maxWidth: .infinity, alignment: .center)
-
-            // 진행률 바
-            if entry.totalDuration > 0 {
-                progressBar
-            }
+            runningDial
+                .frame(maxWidth: .infinity, maxHeight: 190)
+            statusLine
+                .frame(maxWidth: .infinity)
 
             Divider()
 
@@ -331,7 +317,7 @@ struct TimerWidgetEntryView: View {
             .frame(maxWidth: .infinity)
         } else if family == .systemSmall, let only = setups.first {
             // 작은 위젯은 위젯 전체가 버튼 하나다 — 안에 상자를 또 그리면 상자 속 상자가 된다.
-            setupButton(only) { SetupTile(item: only, size: .large, framed: false) }
+            setupButton(only) { SetupTile(item: only) }
         } else {
             let rows = (setups.count + 1) / 2
             Grid(horizontalSpacing: 10, verticalSpacing: 10) {
@@ -340,7 +326,7 @@ struct TimerWidgetEntryView: View {
                         ForEach(0..<2, id: \.self) { col in
                             let index = row * 2 + col
                             if index < setups.count {
-                                setupButton(setups[index]) { SetupTile(item: setups[index], size: .regular, framed: true) }
+                                setupButton(setups[index]) { SetupTile(item: setups[index]) }
                             } else {
                                 Color.clear
                             }
@@ -473,7 +459,7 @@ struct RereminderAlarm: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: TimerWidgetProvider()) { entry in
             TimerWidgetEntryView(entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
+                .containerBackground(for: .widget) { IconBackdrop() }
         }
         .configurationDisplayName(String(localized: "Timer"))
         .description(String(localized: "Start a saved setup, or see the running timer."))
@@ -484,82 +470,28 @@ struct RereminderAlarm: Widget {
 // MARK: - Preview
 
 
-/// 칸 속 작은 링. 한 바퀴가 그 설정의 전체 시간이고, 알림이 나눈 구간마다 `SectionPalette` 색이다.
-/// 12시에서 시계 방향으로 "남은 시간" 좌표 — 앱 다이얼과 같다. 링 정보가 없는 옛 목록이면 강조색 한 바퀴다.
-struct SetupRing: View {
-    let mainSeconds: Int
-    let offsets: [Int]
-
-    /// (시작, 끝, 구간 번호) 비율. 구간 번호는 경과 순서(`TimerSections.derive`)와 같다.
-    private var arcs: [(from: Double, to: Double, index: Int)] {
-        guard mainSeconds > 0 else { return [] }
-        let points = [mainSeconds] + offsets.filter { $0 > 0 && $0 < mainSeconds }.sorted(by: >) + [0]
-        return (0..<(points.count - 1)).map { i in
-            (Double(points[i + 1]) / Double(mainSeconds), Double(points[i]) / Double(mainSeconds), i)
-        }
-    }
-
-    var body: some View {
-        GeometryReader { geo in
-            let line = geo.size.width * 0.14
-            ZStack {
-                if arcs.isEmpty {
-                    Circle().stroke(SharedAccent.color, lineWidth: line)
-                } else {
-                    ForEach(arcs, id: \.index) { arc in
-                        Circle()
-                            .trim(from: arc.from, to: arc.to)
-                            .stroke(SectionPalette.color(arc.index), style: StrokeStyle(lineWidth: line, lineCap: .butt))
-                    }
-                }
-            }
-            .rotationEffect(.degrees(-90))
-            .padding(line / 2)
-        }
-    }
-}
-
 // MARK: - 저장한 설정 칸
 
-/// 위에 작은 링(가운데 재생), 아래에 시간(가장 크게)과 이름(또는 알림 시각).
-/// 시간이 주인공이다. 이름은 사용자가 지은 말이라 길이가 제각각이고, 시간은 한눈에 읽혀야 한다.
+/// 앱 아이콘 모양의 링(가운데 시간) + 아래 이름. 누르면 그 설정으로 시작한다.
 struct SetupTile: View {
-    enum Size { case regular, large }
-
     let item: QuickStartItem
-    let size: Size
-    /// 칸마다 상자를 그리나(중간·큰 위젯). 작은 위젯은 위젯 자체가 상자다.
-    let framed: Bool
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            // 앱의 다이얼을 작게 — 알림이 나눈 구간이 링에서와 같은 색이다. 가운데가 재생 버튼이다.
-            SetupRing(mainSeconds: item.mainSeconds ?? 0, offsets: item.alertOffsets ?? [])
-                .frame(width: size == .large ? 72 : 58, height: size == .large ? 72 : 58)
-                .overlay {
-                    Image(systemName: "play.fill")
-                        .font(.system(size: size == .large ? 18 : 15, weight: .bold))
-                        .foregroundStyle(SharedAccent.color)
-                }
-            Spacer(minLength: 6)
-            Text(item.durationText)
-                .font(.system(size: size == .large ? 30 : 24, weight: .bold, design: .rounded))
-                .foregroundStyle(.primary)
-                .lineLimit(1)
-                .minimumScaleFactor(0.6)
-            // 사용자가 지은 이름, 또는 알림 시각("5분 전, 1분 전")
-            Text(item.name.isEmpty ? " " : item.name)
-                .font(.footnote.weight(.medium))
-                .foregroundStyle(.secondary)
-                .lineLimit(1)
-        }
-        .padding(framed ? 12 : 0)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .background {
-            if framed {
-                ContainerRelativeShape().fill(SharedAccent.color.opacity(0.16))
+        VStack(spacing: 6) {
+            ZStack {
+                IconDial(mainSeconds: item.mainSeconds ?? 0, offsets: item.alertOffsets ?? [])
+                IconDialTime { Text(item.mainSeconds.map(iconClockText) ?? item.durationText) }
             }
+            // 사용자가 지은 이름, 또는 알림 시각("5분 전, 1분 전"). 재생 표시가 '누르면 시작'을 말한다.
+            HStack(spacing: 4) {
+                Image(systemName: "play.fill").foregroundStyle(SharedAccent.color)
+                Text(item.name.isEmpty ? item.durationText : item.name).foregroundStyle(.secondary)
+            }
+            .font(.caption.weight(.semibold))
+            .lineLimit(1)
+            .minimumScaleFactor(0.8)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
