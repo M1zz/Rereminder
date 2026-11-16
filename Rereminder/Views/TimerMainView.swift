@@ -21,7 +21,7 @@ struct TimerMainView: View {
     private var remaining: TimeInterval { screenVM.remaining }
 
     @State private var showTimeInput = false
-    /// 도는 동안 버튼은 잠깐 보이다 물러난다. 화면을 누르면 돌아온다(`revealControls`).
+    /// 도는 동안 버튼은 잠깐 보이다 물러난다. 화면을 누르면 돌아오고, 다시 누르면 숨는다(`toggleControls`).
     @State private var controlsHidden = false
     @State private var controlsHideTask: Task<Void, Never>?
     /// 시작을 누른 자리에서 켠다. 알약이 원으로 줄어드는 동안은 아직 재생 버튼(파란 ▶)이고,
@@ -114,9 +114,9 @@ struct TimerMainView: View {
     @State private var dialFillArrived = false
     /// 정지한 뒤 링이 되감기는 중이면 그 상태. nil 이면 평소 화면이다.
     @State private var rewind: DialRewind?
-    /// 이번 실행의 펼치기를 시작했나. 아직이면 첫 화면부터 걸기 전 좌표로 그린다 —
-    /// 펼치기는 상태가 바뀐 **뒤**(`onChange`)에 시작하므로, 그 한 번을 진행 중 좌표로 그리면 종이 팅 하고 튀었다가 돌아왔다.
-    @State private var unfoldHandled = true
+    /// 마지막으로 링을 진행 중 좌표로 그렸나. 상태가 바뀐 그 화면에서는 아직 이전 좌표로 그린다 —
+    /// 장면은 상태가 바뀐 **뒤**(`onChange`)에 걸리므로, 그 한 화면을 새 좌표로 그리면 시작·정지·끝마다 종이 탁 튀었다가 돌아왔다.
+    @State private var drawnAsProgress = false
     @State private var rewindTask: Task<Void, Never>?
     /// 마지막으로 그린 진행 중 링 — 정지하는 순간에는 남은 시간이 이미 초기화돼 있어 따로 들고 있는다.
     /// 화면을 다시 그리지 않도록 상태가 아니라 상자에 둔다.
@@ -452,8 +452,8 @@ struct TimerMainView: View {
             // ⚠️ 이게 없으면 Spacer·여백처럼 아무것도 그리지 않은 자리는 탭이 잡히지 않아
             //    "화면 아무 데나 눌러 키보드 내리기"가 원·카드 위에서만 동작한다.
             .contentShape(Rectangle())
-            // 화면 어디를 눌러도 물러난 버튼이 돌아온다. 버튼·링의 제 손짓은 그대로 받는다.
-            .simultaneousGesture(TapGesture().onEnded { revealControls() })
+            // 화면 어디를 눌러도 물러난 버튼이 돌아오고, 나와 있을 때 누르면 바로 숨는다. 버튼·링의 제 손짓은 그대로 받는다.
+            .simultaneousGesture(TapGesture().onEnded { toggleControls() })
             .onAppear { scheduleControlsHide() }
             .onChange(of: screenVM.state) { old, new in
                 let started = (old == .idle || old == .finished) && new == .running
@@ -471,16 +471,17 @@ struct TimerMainView: View {
             }
             .onAppear(perform: prepareDialFill)
             .onChange(of: isProgressMode) { wasRunning, isRunning in
+                // 멈췄든 끝났든 남은 호가 설정 자리까지 되감긴다. 끝났으면 빈 원에서 차오르는 것과 같다.
                 if wasRunning && !isRunning {
-                    if screenVM.state == .idle { rewindDialOnStop() } else { refillDialOnReturn() }
+                    rewindDialOnStop()
                 } else if !wasRunning && isRunning {
                     unfoldDialOnStart()
                 }
-                unfoldHandled = isRunning
+                drawnAsProgress = isRunning
             }
             .onAppear {
                 // 도는 타이머를 되살려 열었으면 펼치지 않는다
-                unfoldHandled = isProgressMode
+                drawnAsProgress = isProgressMode
             }
             .onChange(of: ringRemaining) { _, value in
                 if isProgressMode { lastProgressRing.update(seconds: value, lapsPerSecond: progressLapsPerSecond) }
@@ -582,7 +583,7 @@ struct TimerMainView: View {
         ZStack {
             TimerDialRings(plan: ringPlan(size: size, lineWidth: lineWidth))
                 // 걸고 멈추는 순간은 바로 바꾼다 — 초 애니메이션을 태우면 대기 링 ↔ 실행 링이 보간돼 휘감아 돌았다.
-                // 끝나서 돌아올 때는 빈 원이 다시 차오르고(`refillDialOnReturn`), 정지하면 남은 호가 되감긴다(`rewindDialOnStop`).
+                // 시작하면 펼쳐지고(`unfoldDialOnStart`), 멈추거나 끝나면 남은 호가 되감긴다(`rewindDialOnStop`).
                 .transaction(value: isProgressMode) { $0.animation = nil }
                 .animation(ringTickAnimation, value: remaining)
                 // 화면을 돌리면 크기 변화가 애니메이션된다. 호마다 따로 보간되면 회전하는 동안 한 호만
@@ -787,28 +788,14 @@ struct TimerMainView: View {
         dialFillAngle = 0
     }
 
-    /// 끝나면 빈 원이 12시에서 핸들까지 다시 차오르며 종이 제자리에 하나씩 선다.
-    /// 끝날 때 링은 이미 비어 있어 그대로 이어진다. 처음 열 때와 같은 연출이라 "이게 다시 걸 설정"으로 읽힌다.
-    /// ⚠️ 정지는 차오르지 않고 남은 호가 되감긴다(`rewindDialOnStop`).
-    private func refillDialOnReturn() {
-        guard !reduceMotion, screenVM.state == .finished,
-              dialFillAngle == nil, !mainDrag.isActive else { return }
-        var transaction = Transaction()
-        transaction.disablesAnimations = true
-        withTransaction(transaction) {
-            dialFillArrived = false
-            dialFillBellAngle = 0
-            dialFillAngle = 0
-        }
-    }
-
     /// 진행 중 링의 좌표 — 1초가 몇 바퀴인가. 짧은 타이머는 설정 시간이 한 바퀴, 60분을 넘으면 절대 각도다.
     private var progressLapsPerSecond: Double {
         let total = Double(max(1, screenVM.configuredMainSeconds))
         return total > Double(TimeMapper.secondsPerLap) ? 1 / Double(TimeMapper.secondsPerLap) : 1 / total
     }
 
-    /// 정지하면 남은 호가 링을 따라 설정한 자리까지 되감긴다. 핸들과 종도 함께 간다.
+    /// 멈추거나 끝나면 남은 호가 링을 따라 설정한 자리까지 되감긴다. 핸들과 종도 함께 간다.
+    /// 끝났으면 남은 호가 0 이라 12시에서 핸들까지 차오르는 모습이 된다.
     /// 진행 중 링(설정 시간 = 한 바퀴)과 걸기 전 링(1° = 10초)은 좌표가 달라서, 남은 시간과 좌표를
     /// 같이 옮겨 가며 그린다. 바로 바꾸면 호가 순간이동했고, 비웠다가 다시 채우면 처음부터 다시 시작하는 것처럼 보였다.
     private func rewindDialOnStop() {
@@ -862,11 +849,18 @@ struct TimerMainView: View {
     /// 지금 그리는 좌표 장면. 막 시작해 펼치기가 아직 걸리지 않은 순간도 출발점(걸기 전 좌표)으로 그린다.
     private var activeMorph: DialRewind? {
         if let rewind { return rewind }
-        guard isProgressMode, !unfoldHandled, !reduceMotion else { return nil }
+        guard isProgressMode != drawnAsProgress, !reduceMotion else { return nil }
         let total = Double(max(1, screenVM.configuredMainSeconds))
-        return DialRewind(followsLive: true, fromSeconds: total, toSeconds: total,
-                          fromLapsPerSecond: 1 / Double(TimeMapper.secondsPerLap),
-                          toLapsPerSecond: progressLapsPerSecond, progress: 0)
+        let idleScale = 1 / Double(TimeMapper.secondsPerLap)
+        if isProgressMode {
+            // 막 시작했다: 아직 걸기 전 좌표
+            return DialRewind(followsLive: true, fromSeconds: total, toSeconds: total,
+                              fromLapsPerSecond: idleScale, toLapsPerSecond: progressLapsPerSecond, progress: 0)
+        }
+        // 막 멈췄거나 끝났다: 아직 마지막으로 그린 진행 중 링
+        return DialRewind(fromSeconds: min(total, max(0, lastProgressRing.seconds ?? total)), toSeconds: total,
+                          fromLapsPerSecond: lastProgressRing.lapsPerSecond ?? progressLapsPerSecond,
+                          toLapsPerSecond: idleScale, progress: 0)
     }
 
     /// 장면이 그리는 남은 시간 — 시작할 때는 실제로 줄어드는 값을 그대로 쓴다.
@@ -967,7 +961,7 @@ struct TimerMainView: View {
                 .offset(y: -radius)
                 .rotationEffect(.degrees(headAngle - gap))
                 // 걸고 멈추는 순간은 바로 바꾼다 — 초 애니메이션을 태우면 대기 링 ↔ 실행 링이 보간돼 휘감아 돌았다.
-                // 끝나서 돌아올 때는 빈 원이 다시 차오르고(`refillDialOnReturn`), 정지하면 남은 호가 되감긴다(`rewindDialOnStop`).
+                // 시작하면 펼쳐지고(`unfoldDialOnStart`), 멈추거나 끝나면 남은 호가 되감긴다(`rewindDialOnStop`).
                 .transaction(value: isProgressMode) { $0.animation = nil }
                 .animation(ringTickAnimation, value: remaining)
                 .allowsHitTesting(false)
@@ -1050,7 +1044,7 @@ struct TimerMainView: View {
             .rotationEffect(.degrees(angle))
             .rotationEffect(.degrees(-90))
             // 걸고 멈추는 순간은 바로 바꾼다 — 초 애니메이션을 태우면 대기 링 ↔ 실행 링이 보간돼 휘감아 돌았다.
-            // 끝나서 돌아올 때는 빈 원이 다시 차오르고(`refillDialOnReturn`), 정지하면 남은 호가 되감긴다(`rewindDialOnStop`).
+            // 시작하면 펼쳐지고(`unfoldDialOnStart`), 멈추거나 끝나면 남은 호가 되감긴다(`rewindDialOnStop`).
             .transaction(value: isProgressMode) { $0.animation = nil }
             .animation(ringTickAnimation, value: remaining)
             .accessibilityHidden(true)
@@ -1734,14 +1728,18 @@ extension TimerMainView {
         }
     }
 
-    private func revealControls() {
+    /// 탭할 때마다 버튼이 나왔다 숨었다 한다. 나와 있을 때 다시 누르면 기다리지 않고 바로 물러난다.
+    private func toggleControls() {
         guard screenVM.state == .running else { return }
         if controlsHidden {
             withAnimation(reduceMotion ? .easeOut(duration: 0.2) : .spring(response: 0.3, dampingFraction: 0.8)) {
                 controlsHidden = false
             }
+            scheduleControlsHide()
+        } else if canHideControls {
+            controlsHideTask?.cancel()
+            withAnimation(.easeInOut(duration: 0.3)) { controlsHidden = true }
         }
-        scheduleControlsHide()
     }
 
     /// 스토어 스크린샷은 버튼이 있는 화면을 찍는다.

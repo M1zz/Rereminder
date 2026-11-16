@@ -8,6 +8,7 @@
 //  ⚠️ `+ 알림 추가` 버튼은 지웠다 — 되살리지 말 것. 누른 자리가 곧 시각이라 버튼이 고르는 "다음 시간"보다 빠르다.
 //  두 손짓 모두 화면에 보이지 않아서, 버튼 자리에 한 줄로 말한다(더하기는 한 번 해 볼 때까지, 지우기는 종을 만진 직후 4초).
 //  문장은 두 줄이다: "시작 9:40 이후에 알려 줘요" / "종료 19:20 전에 알려 줘요". 같은 종은 같은 색이다.
+//  "시작"은 노랑, "종료"는 빨강이다(`tinted`). 강조색(파랑)은 첫 구간 색과 같아 종으로 읽혀서 쓰지 않는다.
 //  ⚠️ 칩을 다시 늘어놓지 말 것. 종이 이미 알림을 보여 주고 조작까지 받는데 같은 일을 하는 칩이 또 있어서 화면이 복잡했다.
 //  ⚠️ 문장과 버튼 자리는 지우기 전후가 같다. 되돌리기가 떠도 원 아래가 흔들리면 안 된다.
 //
@@ -36,14 +37,16 @@ struct DialAlertLine: View {
     private var startLine: AttributedString {
         let offsets = firingOrder
         guard !offsets.isEmpty else { return AttributedString(String(localized: "No alerts")) }
-        return sentence(offsets.map { ($0, totalSeconds - $0) }) { String(localized: "Alerts you \($0) after the start") }
+        return Self.tinted(sentence(offsets.map { ($0, totalSeconds - $0) }) { String(localized: "Alerts you \($0) after the start") },
+                           word: String(localized: "dial.startWord", defaultValue: "start"), color: Self.startColor)
     }
 
     /// 둘째 줄 — 끝나기 **몇 분 전**인가. "종료 19:20 전에 알려 줘요"
     private var endLine: AttributedString? {
         let offsets = firingOrder
         guard !offsets.isEmpty else { return nil }
-        return sentence(offsets.map { ($0, $0) }) { String(localized: "Alerts you \($0) before the end") }
+        return Self.tinted(sentence(offsets.map { ($0, $0) }) { String(localized: "Alerts you \($0) before the end") },
+                           word: String(localized: "dial.endWord", defaultValue: "end"), color: DSColor.negative)
     }
 
     /// (종, 문장에 쓸 초) 목록을 한 문장으로. 시간만 나열하고 "시작 … 이후"·"종료 … 전"은 문장이 한 번 말한다.
@@ -58,6 +61,22 @@ struct DialAlertLine: View {
                                             color: SectionPalette.color(AlertPresets.bellSectionIndex(
                                                 of: item.bell, among: liveOffsets)))
                                })
+    }
+
+    /// 시작 낱말의 색. 구간 색(파랑·초록·보라…)과 겹치지 않는 노랑이고, 밝은 화면에서는 읽히게 진하다.
+    private static let startColor = Color(UIColor { $0.userInterfaceStyle == .dark
+        ? .systemYellow
+        : UIColor(red: 0.62, green: 0.45, blue: 0.0, alpha: 1) })
+
+    /// "시작"·"종료" 낱말을 칠한다 — 시작은 노랑(구간 색과 겹치지 않게), 종료는 끝날 때 올라오는 빨간 버튼의 색.
+    /// 낱말은 언어마다 문장 속 모양 그대로 카탈로그에 있다(`dial.startWord`·`dial.endWord`). 못 찾으면 그대로 둔다.
+    private static func tinted(_ text: AttributedString, word: String, color: Color) -> AttributedString {
+        var text = text
+        if !word.isEmpty, let range = text.range(of: word) {
+            text[range].foregroundColor = color
+            text[range].inlinePresentationIntent = .stronglyEmphasized
+        }
+        return text
     }
 
     struct Emphasis {
