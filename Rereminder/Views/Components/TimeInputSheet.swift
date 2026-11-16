@@ -8,6 +8,8 @@
 //   • 전체 시간 — 휠로 총 시간만.
 //   • 구간 목록 — 구간 길이를 위에서부터 적으면 총 시간과 알림이 저절로 선다(`IntervalList`).
 //     원에서 종을 각도로 맞추는 대신, 길이를 이미 아는 사람이 숫자로 빠르게 만든다(2026-11-16 제보).
+//     길이는 − 5:00 + (1분, 1분 아래는 10초) 와 숫자를 눌러 고르는 자주 쓰는 길이. 세션 모드면 줄마다 구간 이름을 적고,
+//     이름·대본은 줄을 따라 다닌다(지우면 뒤 구간의 글이 앞으로 당겨진다).
 //
 
 import SwiftUI
@@ -25,10 +27,18 @@ struct TimeInputSheet: View {
     private enum Mode: Hashable { case total, intervals }
     @State private var detent: PresentationDetent = .medium
 
+    /// 구간 하나. 세션 모드의 이름·대본도 함께 들고 다닌다 — 줄을 지우거나 더해도 글이 제 구간을 따라간다.
     private struct Interval: Identifiable, Equatable {
         let id = UUID()
         var seconds: Int
+        var name: String = ""
+        var script: String = ""
     }
+
+    private var isSession: Bool { screenVM.currentMode == .presentation }
+
+    /// 숫자를 누르면 고르는 자주 쓰는 길이
+    private static let presetSeconds = [60, 120, 180, 300, 600, 900, 1200, 1800]
 
     init(screenVM: TimerScreenViewModel, isPresented: Binding<Bool>) {
         self.screenVM = screenVM
@@ -39,7 +49,11 @@ struct TimeInputSheet: View {
         self._inputSeconds = State(initialValue: current.seconds)
         let lengths = IntervalList.lengths(total: screenVM.mainMinutes * 60 + screenVM.mainSeconds,
                                            offsets: screenVM.selectedOffsets)
-        self._intervals = State(initialValue: lengths.map { Interval(seconds: $0) })
+        self._intervals = State(initialValue: lengths.enumerated().map { index, length in
+            Interval(seconds: length,
+                     name: screenVM.sectionNames[index] ?? "",
+                     script: screenVM.sectionScripts[index] ?? "")
+        })
         #if DEBUG
         if UserDefaults.standard.string(forKey: "screenshotTimeInput") == "intervals" {
             self._mode = State(initialValue: .intervals)
@@ -148,6 +162,7 @@ struct TimeInputSheet: View {
                     // 두 칸은 같은 설정이다 — 구간 칸에서 고친 것이 있으면 그것까지 함께 올린다
                     if let setup = intervalSetup, intervals.count > 1 {
                         screenVM.applyRepeatConfig(mainSec: setup.total, offsets: Array(setup.offsets), toast: false)
+                        if isSession { applySectionText() }
                     } else {
                         let applied = TimeMapper.clampedInput(minutes: inputMinutes, seconds: inputSeconds)
                         screenVM.setMainSeconds(applied.minutes * 60 + applied.seconds)
@@ -178,43 +193,49 @@ struct TimeInputSheet: View {
 
     private var intervalPage: some View {
         VStack(spacing: DSSpacing.lg) {
+            // 합계·안내는 목록 꼬리말이다. 목록 밖에 두면 가로 화면에서 목록이 한 줄로 눌렸다.
             List {
-                ForEach(Array(intervals.enumerated()), id: \.element.id) { index, interval in
-                    intervalRow(index: index, interval: interval)
-                }
-                .onDelete { intervals.remove(atOffsets: $0) }
+                Section {
+                    ForEach(Array(intervals.enumerated()), id: \.element.id) { index, interval in
+                        intervalRow(index: index, interval: interval)
+                    }
+                    .onDelete { intervals.remove(atOffsets: $0) }
 
-                Button {
-                    // 같은 길이를 되풀이하는 경우가 많다(5분씩 네 번). 마지막 길이를 그대로 하나 더.
-                    intervals.append(Interval(seconds: intervals.last?.seconds ?? 300))
-                } label: {
-                    Label("Add interval", systemImage: "plus.circle.fill")
-                        .font(.body.weight(.semibold))
+                    Button {
+                        // 같은 길이를 되풀이하는 경우가 많다(5분씩 네 번). 마지막 길이를 그대로 하나 더.
+                        withAnimation { intervals.append(Interval(seconds: intervals.last?.seconds ?? 300)) }
+                    } label: {
+                        Label("Add interval", systemImage: "plus.circle.fill")
+                            .font(.body.weight(.semibold))
+                    }
+                    .disabled(intervalTotal >= TimeMapper.maxSeconds)
+                } footer: {
+                    VStack(spacing: DSSpacing.xs) {
+                        Text("Total: \(TimeMapper.clockText(intervalTotal))")
+                            .font(.body.weight(.semibold))
+                            .monospacedDigit()
+                            .foregroundStyle(.primary)
+                        if intervalTotal > TimeMapper.maxSeconds {
+                            Text("Up to \(TimeMapper.maxMinutes) min in total")
+                                .font(.body)
+                                .foregroundStyle(DSColor.negativeSoft)
+                        } else {
+                            Text("An alert rings where each interval ends.")
+                                .font(.body)
+                                .foregroundStyle(.secondary)
+                                .multilineTextAlignment(.center)
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, DSSpacing.sm)
                 }
-                .disabled(intervalTotal >= TimeMapper.maxSeconds)
             }
             .listStyle(.insetGrouped)
-
-            VStack(spacing: DSSpacing.xs) {
-                Text("Total: \(TimeMapper.clockText(intervalTotal))")
-                    .font(.body.weight(.semibold))
-                    .monospacedDigit()
-                if intervalTotal > TimeMapper.maxSeconds {
-                    Text("Up to \(TimeMapper.maxMinutes) min in total")
-                        .font(.body)
-                        .foregroundStyle(DSColor.negativeSoft)
-                } else {
-                    Text("An alert rings where each interval ends.")
-                        .font(.body)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-                }
-            }
-            .padding(.horizontal)
 
             Button {
                 guard let setup = intervalSetup else { return }
                 screenVM.applyRepeatConfig(mainSec: setup.total, offsets: Array(setup.offsets), toast: false)
+                if isSession { applySectionText() }
                 isPresented = false
             } label: {
                 Text("Apply")
@@ -230,6 +251,26 @@ struct TimeInputSheet: View {
         }
     }
 
+    /// 줄을 옮기거나 지운 뒤에도 이름·대본이 제 구간에 남게 번호를 다시 매겨 적는다.
+    private func applySectionText() {
+        var names: [Int: String] = [:]
+        var scripts: [Int: String] = [:]
+        for (index, interval) in intervals.enumerated() {
+            let name = interval.name.trimmingCharacters(in: .whitespaces)
+            if !name.isEmpty { names[index] = name }
+            if !interval.script.isEmpty { scripts[index] = interval.script }
+        }
+        screenVM.sectionNames = names
+        screenVM.sectionScripts = scripts
+    }
+
+    /// 1분 아래는 10초씩, 그 위는 1분씩 — 짧은 구간도 맞출 수 있고 긴 구간은 몇 번이면 닿는다.
+    private static func step(from seconds: Int, up: Bool) -> Int {
+        if up { return seconds < 60 ? seconds + 10 : (seconds / 60 + 1) * 60 }
+        if seconds <= 60 { return max(10, seconds - 10) }
+        return seconds % 60 == 0 ? seconds - 60 : seconds / 60 * 60
+    }
+
     private func intervalRow(index: Int, interval: Interval) -> some View {
         let binding = Binding<Int>(
             get: { intervals.first { $0.id == interval.id }?.seconds ?? interval.seconds },
@@ -237,30 +278,71 @@ struct TimeInputSheet: View {
                 if let i = intervals.firstIndex(where: { $0.id == interval.id }) { intervals[i].seconds = newValue }
             }
         )
+        let name = Binding<String>(
+            get: { intervals.first { $0.id == interval.id }?.name ?? "" },
+            set: { newValue in
+                if let i = intervals.firstIndex(where: { $0.id == interval.id }) { intervals[i].name = newValue }
+            }
+        )
         return HStack(spacing: DSSpacing.md) {
             Circle()
                 .fill(SectionPalette.color(index))
                 .frame(width: 12, height: 12)
-            Text("Interval \(index + 1)")
-                .font(.body)
+            // 세션 모드는 그 자리에서 구간 이름을 적는다. 비워 두면 번호로 남는다.
+            if isSession {
+                TextField(String(localized: "Interval \(index + 1)"), text: name)
+                    .font(.body)
+                    .submitLabel(.next)
+            } else {
+                Text("Interval \(index + 1)")
+                    .font(.body)
+            }
             Spacer(minLength: DSSpacing.sm)
-            Picker(selection: Binding(get: { binding.wrappedValue / 60 },
-                                      set: { binding.wrappedValue = $0 * 60 + binding.wrappedValue % 60 })) {
-                ForEach(0...TimeMapper.maxMinutes, id: \.self) { Text("\($0) min").tag($0) }
-            } label: {
-                Text("Minutes")
-            }
-            .pickerStyle(.menu)
-            .labelsHidden()
-            Picker(selection: Binding(get: { binding.wrappedValue % 60 },
-                                      set: { binding.wrappedValue = binding.wrappedValue / 60 * 60 + $0 })) {
-                ForEach(Array(stride(from: 0, to: 60, by: 5)), id: \.self) { Text("\($0) sec").tag($0) }
-            } label: {
-                Text("Seconds")
-            }
-            .pickerStyle(.menu)
-            .labelsHidden()
+            lengthStepper(binding, index: index)
         }
         .accessibilityElement(children: .contain)
+    }
+
+    /// − 5:00 + . 숫자를 누르면 자주 쓰는 길이를 바로 고른다.
+    private func lengthStepper(_ seconds: Binding<Int>, index: Int) -> some View {
+        HStack(spacing: 2) {
+            stepButton("minus", enabled: seconds.wrappedValue > 10) {
+                seconds.wrappedValue = Self.step(from: seconds.wrappedValue, up: false)
+            }
+            Menu {
+                ForEach(Self.presetSeconds, id: \.self) { preset in
+                    Button(TimeMapper.durationText(preset)) { seconds.wrappedValue = preset }
+                }
+            } label: {
+                Text(TimeMapper.clockText(seconds.wrappedValue))
+                    .font(.body.weight(.semibold))
+                    .monospacedDigit()
+                    .frame(minWidth: 56)
+                    .padding(.vertical, 6)
+                    .background(Color.secondary.opacity(0.12), in: Capsule())
+            }
+            stepButton("plus", enabled: intervalTotal < TimeMapper.maxSeconds) {
+                seconds.wrappedValue = Self.step(from: seconds.wrappedValue, up: true)
+            }
+        }
+        .sensoryFeedback(.selection, trigger: seconds.wrappedValue)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Interval \(index + 1)"))
+        .accessibilityValue(Text(TimeMapper.durationText(seconds.wrappedValue)))
+        .accessibilityAdjustableAction { direction in
+            seconds.wrappedValue = Self.step(from: seconds.wrappedValue, up: direction == .increment)
+        }
+    }
+
+    private func stepButton(_ symbol: String, enabled: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: symbol)
+                .font(.body.weight(.semibold))
+                .frame(width: 36, height: 36)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.borderless)
+        .buttonRepeatBehavior(.enabled)
+        .disabled(!enabled)
     }
 }
