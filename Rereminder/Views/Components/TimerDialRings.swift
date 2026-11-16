@@ -184,7 +184,7 @@ struct TimerDialRings: View {
             }
         }
         // ⚠️ 걸고 멈추는 순간에는 좌표가 통째로 바뀐다(절대 각도 ↔ 남은 비율). 그 변화까지 아래 애니메이션을 태우면
-        //    링이 휘감아 돌았다 — 바로 바꾼다. 끝나서 돌아올 때는 화면이 빈 원을 다시 채운다(`TimerMainView.refillDialOnReturn`). 정지는 바로 바꾼다.
+        //    링이 휘감아 돌았다 — 바로 바꾼다. 끝나서 돌아올 때는 화면이 빈 원을 다시 채운다(`TimerMainView.refillDialOnReturn`), 정지하면 남은 호가 되감긴다(`rewindDialOnStop`).
         .transaction(value: plan.isProgress) { $0.animation = nil }
         .animation(.easeInOut(duration: 0.2), value: plan.markers)
         .animation(.easeInOut(duration: 0.2), value: plan.focusedSectionIndex)
