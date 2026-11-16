@@ -34,13 +34,19 @@ struct WatchTimerState: Equatable, Sendable {
     var accumulatedPause: TimeInterval
     /// 지금 멈춰 있다면 멈춘 시각. 멈춰 있지 않으면 nil.
     var pauseDate: Date?
+    /// 반복 횟수(`RoundSchedule`). `mainDuration` 은 한 회의 길이다.
+    /// ⚠️ 아래 파생값은 **처음부터 끝까지**를 센다 — 위젯은 회가 바뀔 때 깨어나지 못하므로 전체를 그린다.
+    ///    회 안의 남은 시간은 워치 앱이 따로 센다(`RoundSchedule.roundRemaining`).
+    var rounds: Int = 1
 
     init(mainDuration: Int,
          prealertOffsets: [Int],
          startDate: Date,
          isPaused: Bool = false,
          accumulatedPause: TimeInterval = 0,
-         pauseDate: Date? = nil) {
+         pauseDate: Date? = nil,
+         rounds: Int = 1) {
+        self.rounds = max(1, rounds)
         self.mainDuration = mainDuration
         self.prealertOffsets = prealertOffsets
         self.startDate = startDate
@@ -51,6 +57,11 @@ struct WatchTimerState: Equatable, Sendable {
 
     // MARK: - 파생값
 
+    /// 처음부터 끝까지
+    var totalDuration: Int { mainDuration * max(1, rounds) }
+    /// 위젯이 그릴 알림 — 반복이면 회 안의 알림 자리가 전체 링에 맞지 않아 그리지 않는다.
+    private var wholeOffsets: [Int] { rounds > 1 ? [] : prealertOffsets }
+
     /// 시작 후 경과 초. 멈춰 있으면 **멈춘 순간에 고정**된다.
     func elapsedSeconds(at now: Date = Date()) -> Int {
         // 멈춰 있는데 멈춘 시각을 모르면(있을 수 없지만) 지금으로 본다 — 복원이 통째로 깨지는 것보다 낫다.
@@ -60,7 +71,7 @@ struct WatchTimerState: Equatable, Sendable {
 
     /// 남은 초. 다 지났으면 0 이하가 된다.
     func remainingSeconds(at now: Date = Date()) -> Int {
-        mainDuration - elapsedSeconds(at: now)
+        totalDuration - elapsedSeconds(at: now)
     }
 
     /// 아직 끝나지 않았나 — 위젯이 "돌고 있음"과 "끝남"을 가르는 기준.
@@ -74,7 +85,7 @@ struct WatchTimerState: Equatable, Sendable {
     ///    (일시정지 화면은 고정된 숫자를 그려야 한다.)
     var endDate: Date? {
         guard !isPaused else { return nil }
-        return startDate.addingTimeInterval(accumulatedPause + TimeInterval(mainDuration))
+        return startDate.addingTimeInterval(accumulatedPause + TimeInterval(totalDuration))
     }
 
     /// 아직 울리지 않은 예비 알림 중 **가장 먼저** 울릴 것이 울리는 시각.
@@ -84,15 +95,15 @@ struct WatchTimerState: Equatable, Sendable {
     func nextAlertDate(at now: Date = Date()) -> Date? {
         let remaining = remainingSeconds(at: now)
         guard remaining > 0,
-              let offset = prealertOffsets.filter({ $0 > 0 && $0 < remaining }).max()
+              let offset = wholeOffsets.filter({ $0 > 0 && $0 < remaining }).max()
         else { return nil }
         return now.addingTimeInterval(TimeInterval(remaining - offset))
     }
 
     /// 지금 지나는 중인 구간 — iPhone·워치 화면과 **같은 함수**(`TimerSections`)를 쓴다.
     func section(at now: Date = Date()) -> TimerSections.Progress? {
-        TimerSections.progress(mainSeconds: mainDuration,
-                               alertOffsets: Set(prealertOffsets),
+        TimerSections.progress(mainSeconds: totalDuration,
+                               alertOffsets: Set(wholeOffsets),
                                elapsedSec: elapsedSeconds(at: now))
     }
 
@@ -102,8 +113,8 @@ struct WatchTimerState: Equatable, Sendable {
     /// ("다음 알림"이 다음 것으로 넘어갈 때, 그리고 끝날 때).
     func refreshDates(after now: Date = Date()) -> [Date] {
         guard !isPaused, let end = endDate else { return [] }
-        let boundaries = prealertOffsets
-            .filter { $0 > 0 && $0 < mainDuration }
+        let boundaries = wholeOffsets
+            .filter { $0 > 0 && $0 < totalDuration }
             .map { end.addingTimeInterval(-TimeInterval($0)) }
         return (boundaries + [end])
             .filter { $0 > now }
@@ -128,6 +139,7 @@ enum WatchTimerStore {
         static let isPaused = "watchTimer.isPaused"
         static let accumulatedPause = "watchTimer.accumulatedPause"
         static let pauseDate = "watchTimer.pauseDate"
+        static let rounds = "watchTimer.rounds"
     }
 
     /// 앱 그룹 저장소. 엔타이틀먼트가 빠지면 앱 전용 저장소로 물러선다 —
@@ -163,7 +175,8 @@ enum WatchTimerStore {
             startDate: Date(timeIntervalSince1970: startEpoch),
             isPaused: store.bool(forKey: Key.isPaused),
             accumulatedPause: store.double(forKey: Key.accumulatedPause),
-            pauseDate: pauseEpoch > 0 ? Date(timeIntervalSince1970: pauseEpoch) : nil
+            pauseDate: pauseEpoch > 0 ? Date(timeIntervalSince1970: pauseEpoch) : nil,
+            rounds: max(1, store.integer(forKey: Key.rounds))
         )
     }
 
@@ -180,6 +193,7 @@ enum WatchTimerStore {
         store.set(state.isPaused, forKey: Key.isPaused)
         store.set(state.accumulatedPause, forKey: Key.accumulatedPause)
         store.set(state.pauseDate?.timeIntervalSince1970 ?? 0, forKey: Key.pauseDate)
+        store.set(state.rounds, forKey: Key.rounds)
     }
 
     /// ⚠️ **양쪽을 다 지운다.** 옛 저장소를 남겨 두면 `load()` 의 되돌아보기가 이미 끝난
@@ -187,7 +201,7 @@ enum WatchTimerStore {
     static func clear() {
         for store in [shared, legacy] {
             for key in [Key.active, Key.mainDuration, Key.prealertOffsets,
-                        Key.startDate, Key.isPaused, Key.accumulatedPause, Key.pauseDate] {
+                        Key.startDate, Key.isPaused, Key.accumulatedPause, Key.pauseDate, Key.rounds] {
                 store.removeObject(forKey: key)
             }
         }

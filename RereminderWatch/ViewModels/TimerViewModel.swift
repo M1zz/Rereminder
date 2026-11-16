@@ -17,6 +17,11 @@ class TimerViewModel: ObservableObject, Identifiable {
     let mainDuration: Int
     let notificationTime: Int
     let prealertOffsets: [Int]  // 여러 개의 Pre-alerts
+    /// 반복 횟수(`RoundSchedule`). `mainDuration` 은 한 회의 길이이고 `timeRemaining` 은 그 회에 남은 시간이다.
+    let rounds: Int
+    /// 지금 몇 번째 회인가(0부터)
+    @Published private(set) var currentRound = 0
+    private var totalDuration: Int { mainDuration * rounds }
 
     private var startDate: Date?        // Start Timer 시각
     private var pauseDate: Date?        // Pause한 시각
@@ -28,15 +33,18 @@ class TimerViewModel: ObservableObject, Identifiable {
         self.timeRemaining = mainDuration
         self.notificationTime = notificationDuration
         self.prealertOffsets = []
+        self.rounds = 1
         self.notificationService = notificationService
     }
 
     // 다중 알림용 sec기화
-    init(mainDuration: Int, prealertOffsets: [Int], notificationService: NotificationService = .init()) {
+    init(mainDuration: Int, prealertOffsets: [Int], rounds: Int = 1,
+         notificationService: NotificationService = .init()) {
         self.mainDuration = mainDuration
         self.timeRemaining = mainDuration
         self.notificationTime = 0
         self.prealertOffsets = prealertOffsets
+        self.rounds = max(1, rounds)
         self.notificationService = notificationService
     }
 
@@ -61,15 +69,17 @@ class TimerViewModel: ObservableObject, Identifiable {
 
         // 알림 sec기화
         notificationService.removeAllNotifications()
-        scheduleNotifications(for: mainDuration)
+        scheduleNotifications(elapsed: 0)
 
         saveState()
 
-        // iOS로 Start Timer 메시지 전송
+        // iOS로 Start Timer 메시지 전송 — 반복이면 아이폰은 회를 모르므로 전체 길이 한 번으로 보낸다
+        let duration = totalDuration
+        let offsets = rounds > 1 ? [] : prealertOffsets
         Task { @MainActor in
             WatchConnectivityManager.shared.sendTimerStart(
-                duration: TimeInterval(mainDuration),
-                prealertOffsets: prealertOffsets
+                duration: TimeInterval(duration),
+                prealertOffsets: offsets
             )
         }
     }
@@ -80,6 +90,7 @@ class TimerViewModel: ObservableObject, Identifiable {
         pauseDate = nil
         accumulatedPause = 0
         timeRemaining = mainDuration
+        currentRound = 0
 
         notificationService.removeAllNotifications()
         // 앱 안의 정지도 "확인했다"이다 — 폰에서 뒤늦게 합류할 알림까지 멈춘다.
@@ -115,16 +126,18 @@ class TimerViewModel: ObservableObject, Identifiable {
 
             // 알림 재Settings
             notificationService.removeAllNotifications()
-            if timeRemaining > 0 {
-                scheduleNotifications(for: timeRemaining)
+            let elapsed = elapsedSeconds
+            if totalDuration - elapsed > 0 {
+                scheduleNotifications(elapsed: elapsed)
             }
 
             startTimer()
             saveState()
 
-            // iOS로 Resume Timer 메시지 전송
+            // iOS로 Resume Timer 메시지 전송 (아이폰은 전체를 센다)
+            let left = totalDuration - elapsed
             Task { @MainActor in
-                WatchConnectivityManager.shared.sendTimerResume(remainingDuration: TimeInterval(timeRemaining))
+                WatchConnectivityManager.shared.sendTimerResume(remainingDuration: TimeInterval(left))
             }
         }
     }
@@ -144,20 +157,40 @@ class TimerViewModel: ObservableObject, Identifiable {
         timer = nil
     }
 
+    /// 처음부터 잰 경과(초). 멈춰 있으면 멈춘 시각까지.
+    private var elapsedSeconds: Int {
+        guard let startDate else { return 0 }
+        let reference = pauseDate ?? Date()
+        return Int(reference.timeIntervalSince(startDate) - accumulatedPause)
+    }
+
+    /// 경과로 이 회의 남은 시간을 센다. 마지막 회가 끝나면 음수로 이어진다(오버타임).
+    private func applyElapsed(_ elapsed: Int) {
+        let totalLeft = totalDuration - elapsed
+        let round = RoundSchedule.roundIndex(elapsed: TimeInterval(elapsed),
+                                             roundSeconds: TimeInterval(mainDuration), rounds: rounds)
+        timeRemaining = totalLeft <= 0
+            ? totalLeft
+            : Int(RoundSchedule.roundRemaining(elapsed: TimeInterval(elapsed),
+                                               roundSeconds: TimeInterval(mainDuration), rounds: rounds))
+        if round != currentRound {
+            currentRound = round
+            // 울린 만큼 예약을 다시 채운다 — 같은 이름은 덮어써져 겹치지 않는다
+            if totalLeft > 0, !isPaused { topUpRoundNotifications(elapsed: elapsed) }
+        }
+    }
+
     private func updateTimeRemaining() {
-        guard let startDate else { return }
-
-        // 실제 경과 시간 = (현재 - Start) - 멈췄던 시간
-        let elapsed = Date().timeIntervalSince(startDate) - accumulatedPause
-        let remaining = mainDuration - Int(elapsed)  // max 제거 - 음수도 허용
-
-        self.timeRemaining = remaining
+        guard startDate != nil else { return }
+        applyElapsed(elapsedSeconds)
 
         // 0sec가 되어도 Timer는 계속 실행 (음수로 진행)
         // stopTimer()를 호출하지 않음
     }
 
-    private func scheduleNotifications(for duration: Int) {
+    /// 경과 `elapsed` 뒤에 울릴 것을 예약한다. 종료는 언제나, 회 안의 알림은 가까운 것부터 몫만큼.
+    private func scheduleNotifications(elapsed: Int) {
+        let duration = totalDuration - elapsed
         // 메인 Done 알림
         // ⚠️ 문구는 되풀이 알림(`EscalatingAlert`)과 **같아야** 한다. 예전에는 여기만 영어
         //    리터럴이라, 되풀이를 켜면 첫 알림은 영어로 뜨고 두 번째부터 한국어로 바뀌었다.
@@ -175,20 +208,8 @@ class TimerViewModel: ObservableObject, Identifiable {
                                  role: .primary,
                                  finishFireAfter: TimeInterval(duration))
 
-        // 다중 Pre-alerts
-        if !prealertOffsets.isEmpty {
-            for offset in prealertOffsets {
-                if duration > offset {
-                    let pointTime = duration - offset
-                    notificationService.scheduleNotification(
-                        timeInterval: TimeInterval(pointTime),
-                        title: AppName.notification,
-                        // iPhone(`TimerEngine`)과 같은 키 — 두 기기가 다른 말을 하면 안 된다.
-                        body: String(localized: "\(offset / 60) min remaining"),
-                        identifier: "prealert_\(offset)"
-                    )
-                }
-            }
+        if !prealertOffsets.isEmpty || rounds > 1 {
+            topUpRoundNotifications(elapsed: elapsed)
         }
         // 단일 종료 before alert (하위 호환성)
         else if notificationTime > 0 && duration > notificationTime {
@@ -200,6 +221,39 @@ class TimerViewModel: ObservableObject, Identifiable {
                 identifier: "point_timer_notification"
             )
         }
+    }
+
+    /// 예비 알림·회 끝을 가까운 것부터 예약 몫만큼(`RoundSchedule`). 반복이 없으면 예비 알림 몇 개가 전부다.
+    /// ⚠️ 워치도 앱이 멈춰 있으면 다시 채우지 못한다 — 처음 깔아 둔 만큼만 울린다.
+    private func topUpRoundNotifications(elapsed: Int) {
+        let escalation = EscalationSchedule.offsets(policy: EscalationPolicy.current(), role: .primary).count
+        let events = RoundSchedule.upcoming(roundSeconds: TimeInterval(mainDuration), rounds: rounds,
+                                            offsets: prealertOffsets.map(TimeInterval.init),
+                                            after: TimeInterval(elapsed),
+                                            limit: RoundSchedule.budget(escalationCount: escalation))
+        for event in events {
+            let body: String
+            switch event.kind {
+            case .prealert(let offset):
+                // iPhone(`TimerEngine`)과 같은 키 — 두 기기가 다른 말을 하면 안 된다.
+                body = offset < 60
+                    ? String(localized: "\(offset) sec remaining")
+                    : String(localized: "\(offset / 60) min remaining")
+            case .roundEnd:
+                body = String(localized: "Round \(event.round + 1) of \(rounds) done")
+            }
+            notificationService.scheduleNotification(
+                timeInterval: event.at - TimeInterval(elapsed),
+                title: AppName.notification,
+                body: body,
+                identifier: rounds > 1 ? event.identifierSuffix : "prealert_\(offsetID(event))"
+            )
+        }
+    }
+
+    private func offsetID(_ event: RoundSchedule.Event) -> Int {
+        if case .prealert(let offset) = event.kind { return offset }
+        return 0
     }
 
     // MARK: - Cold Launch State Persistence
@@ -216,7 +270,8 @@ class TimerViewModel: ObservableObject, Identifiable {
             startDate: startDate,
             isPaused: isPaused,
             accumulatedPause: accumulatedPause,
-            pauseDate: pauseDate
+            pauseDate: pauseDate,
+            rounds: rounds
         ))
     }
 
@@ -259,21 +314,25 @@ class TimerViewModel: ObservableObject, Identifiable {
         }
 
         let vm = TimerViewModel(mainDuration: saved.mainDuration,
-                                prealertOffsets: saved.prealertOffsets)
+                                prealertOffsets: saved.prealertOffsets,
+                                rounds: saved.rounds)
         vm.startDate = saved.startDate
         vm.accumulatedPause = saved.accumulatedPause
         vm.isPaused = saved.isPaused
         vm.pauseDate = saved.pauseDate
         // 남은 시간은 저장된 숫자가 아니라 **지금** 다시 센다 — 앱이 꺼져 있던 동안에도 시간은 갔다.
         // (위젯도 같은 계산을 쓴다 — `WatchTimerState.remainingSeconds`.)
-        vm.timeRemaining = saved.remainingSeconds()
+        let elapsed = saved.elapsedSeconds()
+        vm.currentRound = RoundSchedule.roundIndex(elapsed: TimeInterval(elapsed),
+                                                   roundSeconds: TimeInterval(saved.mainDuration), rounds: vm.rounds)
+        vm.applyElapsed(elapsed)
 
         if !saved.isPaused {
             vm.startTimer()
 
             // 남은 알림 재스케줄
-            if vm.timeRemaining > 0 {
-                vm.scheduleNotifications(for: vm.timeRemaining)
+            if saved.remainingSeconds() > 0 {
+                vm.scheduleNotifications(elapsed: elapsed)
             }
         }
 

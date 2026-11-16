@@ -22,15 +22,26 @@ enum TimerState: Equatable { case idle, running, paused, finished, overtime }
 final class TimerEngine {
 
     struct Configuration: Equatable {
+        /// 한 회의 길이. 반복이 없으면 곧 전체 길이다.
         var mainDuration: TimeInterval
         var prealertOffsetsSec: [TimeInterval]
         var name: String = ""
+        /// 몇 번 돌리나(`RoundSchedule`). 1 이면 반복 없음.
+        var rounds: Int = 1
+
+        /// 처음부터 끝까지
+        var totalDuration: TimeInterval { RoundSchedule.total(roundSeconds: mainDuration, rounds: rounds) }
     }
 
     // MARK: - Callbacks (UI 업데이트용)
     var onTick: ((TimeInterval) -> Void)?
     var onPreAlert: ((Int) -> Void)?   // 포그라운드일 때 인앱 토스트용
     var onFinish: (() -> Void)?
+    /// 반복 중 다음 회로 넘어갔다(새 회 번호, 0부터). 마지막 회가 끝나면 이게 아니라 `onFinish` 다.
+    var onRoundChange: ((Int) -> Void)?
+
+    /// 지금 몇 번째 회인가(0부터)
+    private(set) var currentRound = 0
 
     /// Test Mode용 Time Multiplier (기본값 1.0 = 실시간)
     var timeMultiplier: Double = 1.0
@@ -50,10 +61,14 @@ final class TimerEngine {
             let isRunning = (state == .running || state == .overtime)
             shared?.set(isRunning, forKey: "timerIsRunning")
             shared?.set(endDate?.timeIntervalSince1970 ?? 0, forKey: "timerEndDate")
-            shared?.set(config?.mainDuration ?? 0, forKey: "timerMainDuration")
+            // 위젯은 처음부터 끝까지를 그린다 — 반복이면 전체 길이, 회 길이는 따로 둔다.
+            shared?.set(config?.totalDuration ?? 0, forKey: "timerMainDuration")
+            shared?.set(config?.mainDuration ?? 0, forKey: "timerRoundDuration")
+            shared?.set(config?.rounds ?? 1, forKey: "timerRounds")
             shared?.set(state == .paused, forKey: "timerIsPaused")
             shared?.set(startDate?.timeIntervalSince1970 ?? 0, forKey: "timerStartDate")
-            let offsets = config?.prealertOffsetsSec.map { Int($0) } ?? []
+            // 반복이면 위젯의 전체 링에 회 안의 알림 자리가 맞지 않는다 — 싣지 않는다.
+            let offsets = (config?.rounds ?? 1) > 1 ? [] : (config?.prealertOffsetsSec.map { Int($0) } ?? [])
             shared?.set(offsets, forKey: "timerPrealertOffsets")
             shared?.set(config?.name ?? "", forKey: "timerName")
             WidgetCenter.shared.reloadAllTimelines()
@@ -84,22 +99,52 @@ final class TimerEngine {
 
     // MARK: - Public API
 
-    func configure(mainSeconds: Int, prealertOffsetsSec: [Int], name: String = "") {
+    func configure(mainSeconds: Int, prealertOffsetsSec: [Int], name: String = "", rounds: Int = 1) {
         let dur = TimeInterval(max(1, mainSeconds))
         let offsets = prealertOffsetsSec
             .filter { $0 > 0 && $0 < Int(dur) }
             .sorted(by: >)
             .map(TimeInterval.init)
-        config = .init(mainDuration: dur, prealertOffsetsSec: offsets, name: name)
+        config = .init(mainDuration: dur, prealertOffsetsSec: offsets, name: name, rounds: max(1, rounds))
+        currentRound = 0
         state = .idle
+    }
+
+    /// 처음부터 끝까지 남은 시간. 잠금화면·다른 기기는 회가 아니라 이것을 센다 —
+    /// 앱이 멈춰 있으면 회가 바뀔 때 표시를 고칠 수 없지만 전체 카운트다운은 끝까지 맞다.
+    var totalRemaining: TimeInterval {
+        guard let cfg = config else { return 0 }
+        if state == .paused { return remainingWhenPaused ?? 0 }
+        guard let e = elapsedNow() else { return cfg.totalDuration }
+        return cfg.totalDuration - e
+    }
+
+    /// 처음부터 잰 경과(테스트 배속 포함). 도는 중에만 뜻이 있다.
+    private func elapsedNow() -> TimeInterval? {
+        guard let start = startDate else { return nil }
+        return Date().timeIntervalSince(start) * timeMultiplier + pausedElapsed
+    }
+
+    /// 회 안의 알림 하나를 기억하는 열쇠 — 같은 1분 전이라도 회마다 따로다.
+    private static func firedKey(round: Int, offset: Int) -> Int { round * 1_000_000 + offset }
+
+    /// 경과 e 에서 이미 지나간 알림을 표시해 둔다(돌아왔을 때 몰아서 울리지 않게).
+    private func markPassedAlerts(elapsed e: TimeInterval, config cfg: Configuration) {
+        let round = RoundSchedule.roundIndex(elapsed: e, roundSeconds: cfg.mainDuration, rounds: cfg.rounds)
+        let remain = RoundSchedule.roundRemaining(elapsed: e, roundSeconds: cfg.mainDuration, rounds: cfg.rounds)
+        currentRound = round
+        for off in cfg.prealertOffsetsSec where remain <= off {
+            firedOffsets.insert(Self.firedKey(round: round, offset: Int(off)))
+        }
     }
 
     func start() {
         guard let cfg = config else { return }
         firedOffsets.removeAll()
         pausedElapsed = 0
+        currentRound = 0
         startDate = Date()
-        endDate = Date().addingTimeInterval(cfg.mainDuration)
+        endDate = Date().addingTimeInterval(cfg.totalDuration / timeMultiplier)
         state = .running
 
         onTick?(cfg.mainDuration)
@@ -109,7 +154,7 @@ final class TimerEngine {
         #endif
 
         // 백그라운드 알림 스케줄
-        scheduleNotifications(duration: cfg.mainDuration, offsets: cfg.prealertOffsetsSec)
+        scheduleNotifications(elapsed: 0)
 
         // UI tick 시작
         startUITick()
@@ -131,7 +176,7 @@ final class TimerEngine {
 
         let actualElapsed = Date().timeIntervalSince(start)
         pausedElapsed += actualElapsed * timeMultiplier
-        remainingWhenPaused = cfg.mainDuration - pausedElapsed
+        remainingWhenPaused = cfg.totalDuration - pausedElapsed
 
         stopUITick()
         cancelScheduledNotifications()
@@ -144,13 +189,10 @@ final class TimerEngine {
               let cfg = config else { return }
 
         startDate = Date()
-        endDate = Date().addingTimeInterval(r)
+        endDate = Date().addingTimeInterval(r / timeMultiplier)
 
-        // 아직 발생하지 않은 알림만 다시 스케줄
-        let remainingOffsets = cfg.prealertOffsetsSec.filter {
-            !firedOffsets.contains(Int($0)) && $0 < r
-        }
-        scheduleNotifications(duration: r, offsets: remainingOffsets)
+        // 아직 발생하지 않은 알림만 다시 스케줄 (지금 경과 뒤의 것)
+        scheduleNotifications(elapsed: cfg.totalDuration - r)
 
         startUITick()
         state = r > 0 ? .running : .overtime
@@ -161,7 +203,7 @@ final class TimerEngine {
         let remainingForCancel: Int = {
             guard wasActive, let cfg = config, let start = startDate else { return 0 }
             let elapsed = Date().timeIntervalSince(start) * timeMultiplier + pausedElapsed
-            return max(0, Int(cfg.mainDuration - elapsed))
+            return max(0, Int(cfg.totalDuration - elapsed))
         }()
 
         stopUITick()
@@ -171,6 +213,7 @@ final class TimerEngine {
         pausedElapsed = 0
         remainingWhenPaused = nil
         firedOffsets.removeAll()
+        currentRound = 0
         state = .idle
 
         if wasActive {
@@ -192,7 +235,11 @@ final class TimerEngine {
 
         guard isRunning || isPaused else { return false }
 
-        let mainDuration = shared?.double(forKey: "timerMainDuration") ?? 0
+        // 반복이면 회 길이를 따로 남겨 두었다. 없으면 예전 그대로 한 번짜리다.
+        let storedRounds = max(1, shared?.integer(forKey: "timerRounds") ?? 1)
+        let storedRound = shared?.double(forKey: "timerRoundDuration") ?? 0
+        let mainDuration = storedRound > 0 ? storedRound : (shared?.double(forKey: "timerMainDuration") ?? 0)
+        let rounds = storedRound > 0 ? storedRounds : 1
         guard mainDuration > 0 else { return false }
 
         let endEpoch = shared?.double(forKey: "timerEndDate") ?? 0
@@ -207,7 +254,9 @@ final class TimerEngine {
             .filter { $0 > 0 && $0 < Int(dur) }
             .sorted(by: >)
             .map(TimeInterval.init)
-        config = .init(mainDuration: dur, prealertOffsetsSec: offsetTIs)
+        // 위젯 몫으로 반복일 때는 알림을 비워 두었다 — 회 안의 알림은 되살리지 못하고, 회 끝 알림만 남는다.
+        config = .init(mainDuration: dur, prealertOffsetsSec: offsetTIs, rounds: rounds)
+        let total = RoundSchedule.total(roundSeconds: dur, rounds: rounds)
 
         let restoredEndDate = Date(timeIntervalSince1970: endEpoch)
         let restoredStartDate = Date(timeIntervalSince1970: startEpoch)
@@ -217,28 +266,27 @@ final class TimerEngine {
             let remaining = restoredEndDate.timeIntervalSinceNow
             startDate = nil
             endDate = restoredEndDate
-            pausedElapsed = dur - max(0, remaining)
+            pausedElapsed = total - max(0, remaining)
             remainingWhenPaused = max(0, remaining)
+            currentRound = RoundSchedule.roundIndex(elapsed: pausedElapsed, roundSeconds: dur, rounds: rounds)
             state = .paused
-            onTick?(max(0, remaining))
+            onTick?(max(0, RoundSchedule.roundRemaining(elapsed: pausedElapsed, roundSeconds: dur, rounds: rounds)))
             return true
         }
 
-        // 실행 중 복원
-        startDate = restoredStartDate
+        // 실행 중 복원 — 끝나는 시각에서 거꾸로 잰다. 저장된 시작 시각은 일시정지가 있었으면 재개한 때라 맞지 않는다.
+        _ = restoredStartDate
+        startDate = restoredEndDate.addingTimeInterval(-total)
         endDate = restoredEndDate
         pausedElapsed = 0
         firedOffsets.removeAll()
 
         let remaining = restoredEndDate.timeIntervalSinceNow
+        let elapsed = total - remaining
 
         // 이미 지나간 pre-alert 마킹
-        for off in offsetTIs {
-            let offInt = Int(off)
-            if remaining <= off {
-                firedOffsets.insert(offInt)
-            }
-        }
+        markPassedAlerts(elapsed: elapsed, config: config!)
+        let roundRemain = RoundSchedule.roundRemaining(elapsed: elapsed, roundSeconds: dur, rounds: rounds)
 
         if remaining <= 0 {
             state = .overtime
@@ -246,8 +294,10 @@ final class TimerEngine {
             DispatchQueue.main.async { self.onFinish?() }
         } else {
             state = .running
-            onTick?(remaining)
+            onTick?(roundRemain)
             startUITick()
+            // 앱이 멈춰 있는 동안 울린 만큼 회 알림을 다시 채운다
+            topUpRoundNotifications(elapsed: elapsed)
         }
 
         return true
@@ -278,8 +328,9 @@ final class TimerEngine {
         let remaining = remoteEndDate.timeIntervalSinceNow
 
         // 이미 지나간 pre-alert 마킹
+        currentRound = 0
         for off in offsets where remaining <= off {
-            firedOffsets.insert(Int(off))
+            firedOffsets.insert(Self.firedKey(round: 0, offset: Int(off)))
         }
 
         if remaining <= 0 {
@@ -295,8 +346,7 @@ final class TimerEngine {
         #endif
 
         // 이 기기에서도 알림이 울리도록 남은 시점 기준으로 스케줄
-        let futureOffsets = offsets.filter { $0 < remaining }
-        scheduleNotifications(duration: remaining, offsets: futureOffsets)
+        scheduleNotifications(elapsed: dur - remaining)
 
         state = .running
         onTick?(remaining)
@@ -321,8 +371,9 @@ final class TimerEngine {
         pausedElapsed = dur - r
         remainingWhenPaused = r
         firedOffsets.removeAll()
+        currentRound = 0
         for off in offsets where r <= off {
-            firedOffsets.insert(Int(off))
+            firedOffsets.insert(Self.firedKey(round: 0, offset: Int(off)))
         }
         // 복원 규칙과 동일: paused 상태의 endDate는 "지금 기준 남은 시간"을 담는다
         endDate = Date().addingTimeInterval(r)
@@ -333,24 +384,28 @@ final class TimerEngine {
     /// 앱이 포그라운드로 돌아왔을 때 호출 — endDate 기반 재계산
     func recalculateOnForeground() {
         guard state == .running || state == .overtime,
-              let start = startDate,
+              let e = elapsedNow(),
               let cfg = config else { return }
 
-        let actualElapsed = Date().timeIntervalSince(start)
-        let acceleratedElapsed = actualElapsed * timeMultiplier + pausedElapsed
-        let remain = cfg.mainDuration - acceleratedElapsed
+        let remainTotal = cfg.totalDuration - e
+        let previousRound = currentRound
 
-        // 포그라운드에 없는 동안 지나간 pre-alert 처리
-        for off in cfg.prealertOffsetsSec {
-            let offInt = Int(off)
-            if !firedOffsets.contains(offInt) && remain <= off {
-                firedOffsets.insert(offInt)
-            }
+        // 포그라운드에 없는 동안 지나간 pre-alert·회 처리 (몰아서 울리지 않는다)
+        markPassedAlerts(elapsed: e, config: cfg)
+        let remain = remainTotal <= 0
+            ? remainTotal
+            : RoundSchedule.roundRemaining(elapsed: e, roundSeconds: cfg.mainDuration, rounds: cfg.rounds)
+        if currentRound != previousRound, remainTotal > 0 {
+            let round = currentRound
+            DispatchQueue.main.async { self.onRoundChange?(round) }
         }
 
-        if remain <= 0 && state == .running {
+        if remainTotal <= 0 && state == .running {
             state = .overtime
             DispatchQueue.main.async { self.onFinish?() }
+        } else if remainTotal > 0 {
+            // 멈춰 있는 동안 울린 만큼 다시 채운다
+            topUpRoundNotifications(elapsed: e)
         }
 
         DispatchQueue.main.async { self.onTick?(remain) }
@@ -369,28 +424,39 @@ final class TimerEngine {
         )
         t.setEventHandler { [weak self] in
             guard let self,
-                  let start = self.startDate,
+                  let e = self.elapsedNow(),
                   let cfg = self.config else { return }
 
-            let actualElapsed = Date().timeIntervalSince(start)
-            let acceleratedElapsed = actualElapsed * self.timeMultiplier + self.pausedElapsed
-            let remain = cfg.mainDuration - acceleratedElapsed
+            let remainTotal = cfg.totalDuration - e
+            let round = RoundSchedule.roundIndex(elapsed: e, roundSeconds: cfg.mainDuration, rounds: cfg.rounds)
+            // 화면은 이 회 안에서 남은 시간을 본다. 마지막 회가 끝나면 음수로 이어진다(오버타임).
+            let remain = remainTotal <= 0
+                ? remainTotal
+                : RoundSchedule.roundRemaining(elapsed: e, roundSeconds: cfg.mainDuration, rounds: cfg.rounds)
+
+            // 다음 회로 넘어갔다 — 알리고, 울린 만큼 예약을 다시 채운다
+            if round > self.currentRound, remainTotal > 0 {
+                self.currentRound = round
+                DispatchQueue.main.async { self.onRoundChange?(round) }
+                self.topUpRoundNotifications(elapsed: e)
+            }
 
             // 포그라운드 인앱 pre-alert (토스트 + 사운드)
             for off in cfg.prealertOffsetsSec {
                 let offInt = Int(off)
-                if !self.firedOffsets.contains(offInt), remain <= off, remain > 0 {
-                    self.firedOffsets.insert(offInt)
+                let key = Self.firedKey(round: self.currentRound, offset: offInt)
+                if !self.firedOffsets.contains(key), remain <= off, remain > 0 {
+                    self.firedOffsets.insert(key)
                     DispatchQueue.main.async { self.onPreAlert?(offInt) }
                 }
             }
 
-            if remain <= 0 && self.state == .running {
+            if remainTotal <= 0 && self.state == .running {
                 self.state = .overtime
                 DispatchQueue.main.async { self.onFinish?() }
                 #if !APPCLIP
                 AnalyticsManager.log(.timerCompleted(
-                    durationSeconds: Int(cfg.mainDuration),
+                    durationSeconds: Int(cfg.totalDuration),
                     // 걸어 둔 개수가 아니라 **실제로 울린 개수**다 — 중간에 알림을 지나치지 않고
                     // 끝까지 간 실행만이 "이 앱이 도움이 됐다"의 증거다.
                     firedAlertCount: self.firedOffsets.count
@@ -413,34 +479,17 @@ final class TimerEngine {
 
     // MARK: - UNNotificationRequest 스케줄 (백그라운드 보장)
 
-    private func scheduleNotifications(duration: TimeInterval, offsets: [TimeInterval]) {
+    /// 경과 `elapsed` 뒤에 울릴 것을 전부 예약한다 — 회 안의 알림은 가까운 것부터 예약 몫만큼, 종료는 언제나.
+    private func scheduleNotifications(elapsed: TimeInterval) {
         #if DEBUG
         // 스크린샷 장면(`ScreenshotScene`)은 맥에서 진짜 앱과 같은 자리로 돈다 — 그 타이머를 남에게 알리지 않는다.
         if UserDefaults.standard.string(forKey: "screenshotScene") != nil { return }
         #endif
+        guard let cfg = config else { return }
         let center = UNUserNotificationCenter.current()
+        let duration = cfg.totalDuration - elapsed
 
-        // Pre-alert 알림
-        for off in offsets {
-            let offInt = Int(off)
-            let fireAfter = duration - off  // 시작으로부터 N초 후 발생
-            guard fireAfter > 0 else { continue }
-
-            let content = UNMutableNotificationContent()
-            content.title = AppName.notification
-            content.body = offInt < 60
-                ? String(localized: "\(offInt) sec remaining")
-                : String(localized: "\(offInt / 60) min remaining")
-            content.sound = RingMode.notificationSound
-
-            let trigger = UNTimeIntervalNotificationTrigger(
-                timeInterval: fireAfter / timeMultiplier,  // test mode 보정
-                repeats: false
-            )
-            let id = "\(Self.notificationPrefix)prealert.\(offInt)"
-            let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
-            center.add(request)
-        }
+        topUpRoundNotifications(elapsed: elapsed)
 
         // 종료 알림
         let finishFireAfter = duration / timeMultiplier
@@ -478,6 +527,47 @@ final class TimerEngine {
             adoptAlarmKitFinishIfPossible(fireAfter: finishFireAfter)
             #endif
         }
+    }
+
+    /// 회 안의 알림(예비 알림·회 끝)을 가까운 것부터 예약 몫만큼 깐다. 같은 일은 같은 이름이라 다시 깔아도 겹치지 않는다.
+    /// 반복이 없으면 예비 알림 몇 개가 전부라 몫 안에 다 들어간다.
+    private func topUpRoundNotifications(elapsed e: TimeInterval) {
+        #if DEBUG
+        if UserDefaults.standard.string(forKey: "screenshotScene") != nil { return }
+        #endif
+        guard let cfg = config else { return }
+        let events = RoundSchedule.upcoming(roundSeconds: cfg.mainDuration, rounds: cfg.rounds,
+                                            offsets: cfg.prealertOffsetsSec, after: e,
+                                            limit: RoundSchedule.budget(escalationCount: Self.escalationCount))
+        let center = UNUserNotificationCenter.current()
+        for event in events {
+            let content = UNMutableNotificationContent()
+            content.title = AppName.notification
+            switch event.kind {
+            case .prealert(let offInt):
+                content.body = offInt < 60
+                    ? String(localized: "\(offInt) sec remaining")
+                    : String(localized: "\(offInt / 60) min remaining")
+            case .roundEnd:
+                content.body = String(localized: "Round \(event.round + 1) of \(cfg.rounds) done")
+            }
+            content.sound = RingMode.notificationSound
+            let trigger = UNTimeIntervalNotificationTrigger(
+                timeInterval: max(0.5, (event.at - e) / timeMultiplier),  // test mode 보정
+                repeats: false
+            )
+            let id = "\(Self.notificationPrefix)\(event.identifierSuffix)"
+            center.add(UNNotificationRequest(identifier: id, content: content, trigger: trigger))
+        }
+    }
+
+    /// 되풀이 알림이 쓰는 예약 몫
+    private static var escalationCount: Int {
+        #if APPCLIP
+        return 0
+        #else
+        return EscalationSchedule.offsets(policy: EscalationPolicy.current(), role: .primary).count
+        #endif
     }
 
     #if !APPCLIP

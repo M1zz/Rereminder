@@ -121,6 +121,7 @@ final class TimerConfigService {
         prealertMessages: [Int: String],
         finishMessage: String?,
         sectionsData: Data? = nil,
+        rounds: Int = 1,
         automatic: Bool = false
     ) -> Bool {
         if automatic {
@@ -146,6 +147,7 @@ final class TimerConfigService {
                 && template.prealertOffsetsSec == normalizedOffsets
                 && template.prealertMessages == prealertMessages
                 && template.finishMessage == normalizedFinish
+                && template.rounds == max(1, rounds)
         }
         if let existing {
             // 같은 설정에 구간 이름·대본만 고쳐 다시 저장했으면 그 글을 새로 싣는다.
@@ -162,7 +164,8 @@ final class TimerConfigService {
             prealertOffsetsSec: normalizedOffsets,
             prealertMessages: prealertMessages,
             finishMessage: normalizedFinish,
-            sectionsData: sectionsData
+            sectionsData: sectionsData,
+            rounds: rounds
         )
         ctx.insert(entry)
         do {

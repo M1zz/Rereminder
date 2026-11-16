@@ -956,6 +956,20 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - 테스트: `RereminderTests/EscalatingAlertTests.swift` (15개),
   `RereminderTests/RoundedRectRingTests.swift` (9개)
 
+### 반복 — 링 한 바퀴 × N회 (RoundSchedule)
+`Shared/Modules/RoundSchedule.swift`(순수 계산) + `TimerEngine` + 시간 입력 시트 ▸ 구간 목록 ▸ **반복**. 제보(2026-11-16): 운동 1:00 + 휴식 0:30 을 40분.
+- 링은 **한 회**만 정하고 횟수(`rounds`, 1~99)만 적는다. 종 54개를 늘어놓지 않는다. 시간은 처음부터 잰 경과 하나로 세고, 회 번호·회 안의 남은 시간은 거기서 나온다.
+- 화면(가운데 숫자·링·구간 목록)은 **이 회**를 그린다. 원 위에 `3 / 27`(걸기 전 `× 27`). 회가 넘어가면 울리고 토스트 `Round 3 of 27`.
+- 회 끝은 짧은 알림(`Round 3 of 27 done`), **마지막 회만** 종료 알림·되풀이·AlarmKit 이다.
+- ⚠️ **예약 알림은 앱당 64개다.** 회 알림은 가까운 것부터 `RoundSchedule.budget`(64 − 여유 4 − 종료 1 − 되풀이 몫)만큼만 깔고,
+  회가 바뀔 때·앞으로 돌아올 때·복원할 때 지나간 만큼 다시 채운다(`topUpRoundNotifications`, 같은 일은 같은 식별자라 겹치지 않는다).
+  앱이 멈춰 있으면 채울 수 없다 — 다 안 들어가면 시트가 "앱을 닫아 두면 N회째까지 울려요"라고 말한다(`lastCoveredRound`).
+- ⚠️ 잠금화면 Live Activity·Mac(iCloud)·워치로는 **전체 길이 한 번, 알림 없이** 보낸다(`TimerViewModel.syncShape`). 받는 쪽은 회를 모르고, 앱이 멈춰 있으면 회가 바뀔 때 표시를 고칠 수 없다.
+- 세션 모드에는 없다(구간을 한 번 지나가는 일이다). 템플릿 `Timer.rounds`(기본 1)·마지막 설정에 함께 저장된다.
+- 워치: 손목 목록(`PhoneSetup.rounds`)에서 반복 설정을 고르면 알림 화면을 건너뛰고 바로 건다(알림 화면은 분 단위라 0:30 을 담지 못한다).
+  워치 `TimerViewModel` 도 같은 `RoundSchedule` 로 세고 예약한다. 스마트 스택 위젯은 전체를 센다(`WatchTimerState.rounds`).
+- 테스트: `RoundScheduleTests`
+
 ### 알림 권한이 꺼져 있으면 — 앱을 보는 동안엔 멀쩡해 보인다
 제보(2026-10-05): *"화면을 끄면 잠금 화면이 울리지 않는다."* 권한이 거부돼 있으면 앱이 앞에 있는
 동안은 토스트·소리가 나서 잘 되는 줄 알고, **화면을 끄는 순간 아무것도 울리지 않는다.**

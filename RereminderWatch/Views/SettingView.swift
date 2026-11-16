@@ -15,6 +15,8 @@ enum NavigationTarget: Hashable {
     case phoneSetups
     /// 아이폰 설정 하나를 알림 화면에 채워 연다 — 거기서 고치고 시작한다
     case phoneSetup(PhoneSetup)
+    /// 아이폰에서 반복으로 맞춘 설정을 그대로 건다. 알림 화면은 분 단위라 1:30 + 0:30 같은 값을 담지 못한다.
+    case timerViewRounds(mainDuration: Int, prealertOffsets: [Int], rounds: Int)
 }
 
 struct SettingView: View {
@@ -171,6 +173,15 @@ struct SettingView: View {
             PhoneSetupListView(setups: phoneSetups, path: $path)
         case .phoneSetup(let setup):
             SetNotiView(viewModel: makeSetNotiViewModel(from: setup), path: $path)
+        case .timerViewRounds(let mainDuration, let prealertOffsets, let rounds):
+            TimerView(
+                timerViewModel: TimerViewModel(
+                    mainDuration: mainDuration,
+                    prealertOffsets: prealertOffsets,
+                    rounds: rounds
+                ),
+                path: $path
+            )
         case .timerViewMultiple(let mainDuration, let prealertOffsets):
             TimerView(
                 timerViewModel: TimerViewModel(

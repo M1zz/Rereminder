@@ -76,9 +76,10 @@ enum QuickStartPublisher {
     private static var currentDial: PhoneSetup?
 
     /// 아이폰 다이얼에 맞춘 설정이 바뀌었다(`TimerScreenViewModel.persistLastUsedConfig`). 손목 목록 맨 위에 선다.
-    static func updateCurrentDial(mainSeconds: Int, offsets: [Int]) {
+    static func updateCurrentDial(mainSeconds: Int, offsets: [Int], rounds: Int = 1) {
         let dial = PhoneSetup(id: PhoneSetup.currentDialID, name: "", mainSeconds: mainSeconds,
-                              offsets: offsets.filter { $0 > 0 && $0 < mainSeconds }.sorted(by: >))
+                              offsets: offsets.filter { $0 > 0 && $0 < mainSeconds }.sorted(by: >),
+                              rounds: rounds > 1 ? rounds : nil)
         guard dial != currentDial else { return }
         currentDial = dial
         sendToWatch()
@@ -89,7 +90,8 @@ enum QuickStartPublisher {
             .prefix(maxWatchSetups)
             .map { t in
                 PhoneSetup(id: t.id.uuidString, name: t.displayName, mainSeconds: t.mainSeconds,
-                           offsets: t.prealertOffsetsSec.filter { $0 > 0 && $0 < t.mainSeconds }.sorted(by: >))
+                           offsets: t.prealertOffsetsSec.filter { $0 > 0 && $0 < t.mainSeconds }.sorted(by: >),
+                           rounds: t.rounds > 1 ? t.rounds : nil)
             }
         sendToWatch()
     }

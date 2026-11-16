@@ -37,6 +37,8 @@ final class TimerScreenViewModel: ObservableObject {
     }
     private(set) var sortedOffsetsDesc: [Int] = DefaultSetup.offsets.sorted(by: >)
     @Published private(set) var configuredMainSeconds: Int = DefaultSetup.mainSeconds
+    /// 링을 몇 번 돌리나(`RoundSchedule`). 1 이면 반복 없음. 시간 입력 시트에서 고른다.
+    @Published var rounds: Int = 1
     @Published var showTimerAlert: Bool = false
     @Published var prealertMessages: [Int: String] = [:]
     @Published var finishMessage: String = ""
@@ -266,6 +268,7 @@ final class TimerScreenViewModel: ObservableObject {
         selectedOffsets = Set(t.prealertOffsetsSec)
         prealertMessages = t.prealertMessages
         finishMessage = t.finishMessage ?? ""
+        rounds = t.rounds
         applySectionText(from: t)
         persistLastUsedConfig(mainSec: t.mainSeconds, offsets: t.prealertOffsetsSec)
         showTemplateApplyToast(for: t)
@@ -322,6 +325,7 @@ final class TimerScreenViewModel: ObservableObject {
             && Set(cfg.offsets) == DefaultSetup.offsets
             && prealertMessages.isEmpty
             && finishMessage.isEmpty
+            && rounds == 1
     }
 
     /// 다이얼을 갓 설치했을 때의 설정으로 되돌린다.
@@ -332,6 +336,7 @@ final class TimerScreenViewModel: ObservableObject {
         selectedOffsets = DefaultSetup.offsets
         prealertMessages = [:]
         finishMessage = ""
+        rounds = 1
         sectionNames = [:]
         sectionScripts = [:]
         initialConfiguration()
@@ -362,7 +367,8 @@ final class TimerScreenViewModel: ObservableObject {
             offsets: cfg.offsets,
             prealertMessages: prealertMessages,
             finishMessage: finishMessage.isEmpty ? nil : finishMessage,
-            sectionsData: currentSectionsData
+            sectionsData: currentSectionsData,
+            rounds: rounds
         )
         guard saved else { return }
         showToast?(String(localized: "Template saved"))
@@ -376,6 +382,7 @@ final class TimerScreenViewModel: ObservableObject {
         selectedOffsets = Set(t.prealertOffsetsSec)
         prealertMessages = t.prealertMessages
         finishMessage = t.finishMessage ?? ""
+        rounds = t.rounds
         applySectionText(from: t)
         initialConfiguration()
     }
@@ -462,6 +469,8 @@ final class TimerScreenViewModel: ObservableObject {
         let offsets: [Int]
         let prealertMessages: [Int: String]
         let finishMessage: String
+        /// 옛 기록에는 없다(nil = 반복 없음)
+        var rounds: Int?
     }
 
     /// 마지막으로 쓴 설정(시간 + 알림 지점). **무료에서도 읽을 수 있다** — 복원은 하지 않지만
@@ -487,13 +496,14 @@ final class TimerScreenViewModel: ObservableObject {
             mainSeconds: mainSec,
             offsets: offsets,
             prealertMessages: prealertMessages,
-            finishMessage: finishMessage
+            finishMessage: finishMessage,
+            rounds: rounds
         )
         if let data = try? JSONEncoder().encode(cfg) {
             Self.lastUsedDefaults.set(data, forKey: Self.lastUsedConfigKey)
         }
         // 손목 목록 맨 위의 "아이폰 다이얼"(`PhoneSetups`)
-        QuickStartPublisher.updateCurrentDial(mainSeconds: mainSec, offsets: offsets)
+        QuickStartPublisher.updateCurrentDial(mainSeconds: mainSec, offsets: offsets, rounds: rounds)
     }
 
     /// 앱 시작 시 마지막으로 사용한 타이머 설정을 다이얼에 복원한다 (타이머 시작은 하지 않음).
@@ -514,6 +524,7 @@ final class TimerScreenViewModel: ObservableObject {
         selectedOffsets = Set(cfg.offsets)
         prealertMessages = cfg.prealertMessages
         finishMessage = cfg.finishMessage
+        rounds = max(1, cfg.rounds ?? 1)
         initialConfiguration()
     }
 
@@ -532,7 +543,8 @@ final class TimerScreenViewModel: ObservableObject {
             mainSeconds: mainSec,
             prealertOffsetsSec: normalizedOffsets,
             prealertMessages: prealertMessages,
-            finishMessage: finishMessage.isEmpty ? nil : finishMessage
+            finishMessage: finishMessage.isEmpty ? nil : finishMessage,
+            rounds: rounds
         )
         timerVM.configure(from: temp)
         configuredMainSeconds = mainSec
@@ -545,6 +557,7 @@ final class TimerScreenViewModel: ObservableObject {
                     offsets: normalizedOffsets,
                     prealertMessages: prealertMessages,
                     finishMessage: finishMessage.isEmpty ? nil : finishMessage,
+                    rounds: rounds,
                     automatic: true
                 )
             }

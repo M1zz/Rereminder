@@ -173,6 +173,7 @@
 				Modules/AppName.swift,
 				Modules/DialDragTracker.swift,
 				Modules/ring.swift,
+				Modules/RoundSchedule.swift,
 				Modules/ThemeManager.swift,
 				Modules/TimerEngine.swift,
 			);
@@ -201,6 +202,7 @@
 				Modules/EscalatingAlert.swift,
 				Modules/PhoneSetups.swift,
 				Modules/ring.swift,
+				Modules/RoundSchedule.swift,
 				Modules/TimerSections.swift,
 				Modules/WatchConnectivityManager.swift,
 				Modules/WatchTimerState.swift,

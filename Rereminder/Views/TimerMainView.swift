@@ -645,6 +645,17 @@ struct TimerMainView: View {
                             .minimumScaleFactor(0.6)
                     }
                     .animation(.easeInOut(duration: 0.3), value: segment.index)
+                } else if let roundText {
+                    // 반복: 도는 동안 "3 / 27", 걸기 전에는 "× 27". 가운데 숫자는 이 회의 남은 시간이다.
+                    Label(roundText, systemImage: "repeat")
+                        .font(.system(size: fontSize * 0.45, weight: .semibold, design: .rounded))
+                        .monospacedDigit()
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
+                        .contentTransition(.numericText())
+                        .animation(.snappy, value: roundText)
+                        .accessibilityLabel(String(localized: "Round \(screenVM.timerVM.currentRound + 1) of \(screenVM.timerVM.rounds)"))
                 } else if isProgressMode && !screenVM.timerVM.currentLabel.isEmpty {
                     // 타이머 라벨(예: "Mentoring")만 표시 — 상태 텍스트는 표시하지 않음
                     Text(screenVM.timerVM.currentLabel)
@@ -1499,6 +1510,16 @@ struct TimerMainView: View {
     /// 아래 줄 앞의 점은 링의 그 구간 색이라 "저 링 = 이 숫자"가 이어진다.
     ///
     /// ⚠️ 버튼은 원 밖에 있다(`body`). 안에 두면 이 두 줄이 들어갈 자리가 없다.
+    /// 반복 표시. 세션 모드에는 없다.
+    private var roundText: String? {
+        guard !isPresentationMode else { return nil }
+        if isProgressMode {
+            let rounds = screenVM.timerVM.rounds
+            return rounds > 1 ? "\(screenVM.timerVM.currentRound + 1) / \(rounds)" : nil
+        }
+        return screenVM.rounds > 1 ? "× \(screenVM.rounds)" : nil
+    }
+
     private func centerTimeDisplay(fontSize: CGFloat) -> some View {
         let isTicking = screenVM.state == .running || screenVM.state == .overtime
         // 멈춰 있는 동안에도 남은 시간이다. 설정 시간으로 돌아가면 처음부터 다시 도는 줄 안다.

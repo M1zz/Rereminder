@@ -23,6 +23,8 @@ struct TimeInputSheet: View {
     @State private var mode: Mode = .total
     /// 구간 길이(초), 위에서부터 먼저 지나가는 순서
     @State private var intervals: [Interval]
+    /// 위 구간들을 몇 번 돌리나 — 운동 1:00 + 휴식 0:30 을 27번(`RoundSchedule`). 세션 모드에는 없다.
+    @State private var rounds: Int
 
     private enum Mode: Hashable { case total, intervals }
     @State private var detent: PresentationDetent = .medium
@@ -47,6 +49,7 @@ struct TimeInputSheet: View {
         let current = TimeMapper.clampedInput(minutes: screenVM.mainMinutes, seconds: screenVM.mainSeconds)
         self._inputMinutes = State(initialValue: current.minutes)
         self._inputSeconds = State(initialValue: current.seconds)
+        self._rounds = State(initialValue: screenVM.rounds)
         let lengths = IntervalList.lengths(total: screenVM.mainMinutes * 60 + screenVM.mainSeconds,
                                            offsets: screenVM.selectedOffsets)
         self._intervals = State(initialValue: lengths.enumerated().map { index, length in
@@ -160,6 +163,7 @@ struct TimeInputSheet: View {
                     // 상한(120:00)을 넘는 조합은 다이얼이 조용히 잘라 버리므로 여기서 맞춰 준다.
                     // 아래쪽(켜 둔 알림보다 짧게)은 setMainSeconds 가 막고 이유를 알려준다.
                     // 두 칸은 같은 설정이다 — 구간 칸에서 고친 것이 있으면 그것까지 함께 올린다
+                    screenVM.rounds = isSession ? 1 : rounds
                     if let setup = intervalSetup, intervals.count > 1 {
                         screenVM.applyRepeatConfig(mainSec: setup.total, offsets: Array(setup.offsets), toast: false)
                         if isSession { applySectionText() }
@@ -178,6 +182,12 @@ struct TimeInputSheet: View {
                         .cornerRadius(DSRadius.md)
                 }
                 .padding(.horizontal)
+            if rounds > 1, !isSession {
+                // 이 칸에는 반복 칸이 없다 — 걸려 있다는 것만 말한다(구간 칸에서 바꾼다)
+                Text("Repeats \(rounds) times")
+                    .font(.body)
+                    .foregroundStyle(.secondary)
+            }
             Spacer(minLength: 0)
         }
         .padding(.horizontal)
@@ -229,11 +239,20 @@ struct TimeInputSheet: View {
                     .frame(maxWidth: .infinity)
                     .padding(.top, DSSpacing.sm)
                 }
+
+                if !isSession {
+                    Section {
+                        repeatRow
+                    } footer: {
+                        repeatFooter
+                    }
+                }
             }
             .listStyle(.insetGrouped)
 
             Button {
                 guard let setup = intervalSetup else { return }
+                screenVM.rounds = isSession ? 1 : rounds
                 screenVM.applyRepeatConfig(mainSec: setup.total, offsets: Array(setup.offsets), toast: false)
                 if isSession { applySectionText() }
                 isPresented = false
@@ -249,6 +268,75 @@ struct TimeInputSheet: View {
             .disabled(intervalSetup == nil)
             .padding(.horizontal)
         }
+    }
+
+    // MARK: - 반복
+
+    /// 반복 − 27 + . 1 이면 한 번만 돈다.
+    private var repeatRow: some View {
+        HStack(spacing: DSSpacing.md) {
+            Image(systemName: "repeat")
+                .foregroundStyle(.secondary)
+            Text("Repeat")
+                .font(.body)
+            Spacer(minLength: DSSpacing.sm)
+            HStack(spacing: 2) {
+                stepButton("minus", enabled: rounds > 1) { rounds -= 1 }
+                Text(rounds > 1 ? "× \(rounds)" : String(localized: "Once"))
+                    .font(.body.weight(.semibold))
+                    .monospacedDigit()
+                    .frame(minWidth: 56)
+                    .padding(.vertical, 6)
+                    .background(Color.secondary.opacity(0.12), in: Capsule())
+                stepButton("plus", enabled: rounds < Self.maxRounds) { rounds += 1 }
+            }
+            .sensoryFeedback(.selection, trigger: rounds)
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Repeat"))
+        .accessibilityValue(Text(rounds > 1 ? String(localized: "\(rounds) times") : String(localized: "Once")))
+        .accessibilityAdjustableAction { direction in
+            rounds = min(Self.maxRounds, max(1, rounds + (direction == .increment ? 1 : -1)))
+        }
+    }
+
+    private static let maxRounds = 99
+
+    /// 다 합친 시간과, 앱을 열지 않으면 몇 회째까지 울리는지.
+    @ViewBuilder private var repeatFooter: some View {
+        if rounds > 1 {
+            VStack(spacing: DSSpacing.xs) {
+                Text("All rounds: \(TimeMapper.clockText(intervalTotal * rounds))")
+                    .font(.body.weight(.semibold))
+                    .monospacedDigit()
+                    .foregroundStyle(.primary)
+                if let covered = coveredRound {
+                    Text("With the app closed, alerts ring through round \(covered). Open the app to keep them going.")
+                        .font(.body)
+                        .foregroundStyle(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.top, DSSpacing.sm)
+        } else {
+            Text("Run the whole ring again, e.g. 1:00 work and 0:30 rest, 27 times.")
+                .font(.body)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .frame(maxWidth: .infinity)
+                .padding(.top, DSSpacing.sm)
+        }
+    }
+
+    /// 예약 몫(64개)에 다 들어가지 않으면 앱을 열지 않고 울리는 마지막 회
+    private var coveredRound: Int? {
+        guard let setup = intervalSetup else { return nil }
+        return RoundSchedule.lastCoveredRound(
+            roundSeconds: TimeInterval(setup.total), rounds: rounds,
+            offsets: setup.offsets.map(TimeInterval.init),
+            budget: RoundSchedule.budget(escalationCount:
+                EscalationSchedule.offsets(policy: EscalationPolicy.current(), role: .primary).count))
     }
 
     /// 줄을 옮기거나 지운 뒤에도 이름·대본이 제 구간에 남게 번호를 다시 매겨 적는다.

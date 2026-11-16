@@ -26,6 +26,8 @@ struct PhoneSetup: Codable, Hashable, Identifiable {
     let mainSeconds: Int
     /// 끝나기 몇 초 전
     let offsets: [Int]
+    /// 반복 횟수(`RoundSchedule`). 옛 아이폰이 보낸 것에는 없다(nil = 한 번).
+    var rounds: Int? = nil
 
     static let currentDialID = "iphone.currentDial"
     var isCurrentDial: Bool { id == Self.currentDialID }
@@ -51,7 +53,8 @@ enum PhoneSetups {
             guard setup.mainSeconds > 0, setup.mainSeconds <= 86_400 else { return nil }
             let offsets = setup.offsets.filter { $0 > 0 && $0 < setup.mainSeconds }
             return PhoneSetup(id: setup.id, name: setup.name, mainSeconds: setup.mainSeconds,
-                              offsets: Array(Set(offsets)).sorted(by: >))
+                              offsets: Array(Set(offsets)).sorted(by: >),
+                              rounds: setup.rounds.map { min(99, max(1, $0)) })
         }
     }
 

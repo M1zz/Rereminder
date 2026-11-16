@@ -23,6 +23,8 @@ final class Timer {
     var isFavorite: Bool = false  // 즐겨찾기 여부
     var isPresentation: Bool = false  // 발표 모드 여부
     var sectionsData: Data?  // JSON 인코딩된 [PresentationSection]
+    /// 링 한 바퀴를 몇 번 돌리나(`RoundSchedule`). 1 이면 반복 없음. 기본값이 있어 옛 템플릿도 그대로 열린다.
+    var rounds: Int = 1
     var createdAt: Date = Date.now
     var lastUsedAt: Date?  // 마지막 사용 시간
     @Relationship(deleteRule: .cascade, inverse: \TimerRecord.template)
@@ -40,6 +42,7 @@ final class Timer {
         isFavorite: Bool = false,
         isPresentation: Bool = false,
         sectionsData: Data? = nil,
+        rounds: Int = 1,
         createdAt: Date = .now,
         lastUsedAt: Date? = nil
     ) {
@@ -54,6 +57,7 @@ final class Timer {
         self.isFavorite = isFavorite
         self.isPresentation = isPresentation
         self.sectionsData = sectionsData
+        self.rounds = max(1, rounds)
         self.createdAt = createdAt
         self.lastUsedAt = lastUsedAt
         _ = validateInPlace()
@@ -117,6 +121,7 @@ extension Timer {
               isFavorite: isFavorite,
               isPresentation: isPresentation,
               sectionsData: sectionsData,
+              rounds: rounds,
               createdAt: createdAt,
               lastUsedAt: lastUsedAt)
     }

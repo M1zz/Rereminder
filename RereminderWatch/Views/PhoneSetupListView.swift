@@ -15,7 +15,13 @@ struct PhoneSetupListView: View {
     var body: some View {
         List(setups) { setup in
             Button {
-                path.append(.phoneSetup(setup))
+                if let rounds = setup.rounds, rounds > 1 {
+                    // 반복은 아이폰에서 맞춘 그대로 건다 — 알림 화면에서 고칠 수 없는 값이다
+                    path.append(.timerViewRounds(mainDuration: setup.mainSeconds,
+                                                 prealertOffsets: setup.offsets, rounds: rounds))
+                } else {
+                    path.append(.phoneSetup(setup))
+                }
             } label: {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title(setup))
@@ -38,7 +44,8 @@ struct PhoneSetupListView: View {
     }
 
     private func detail(_ setup: PhoneSetup) -> String {
-        let clock = TimeModel.clock(setup.mainSeconds)
+        var clock = TimeModel.clock(setup.mainSeconds)
+        if let rounds = setup.rounds, rounds > 1 { clock += " × \(rounds)" }
         guard !setup.offsets.isEmpty else { return clock }
         return "\(clock) \(String(localized: "· \(setup.offsets.count) alerts"))"
     }

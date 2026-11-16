@@ -201,6 +201,18 @@ public struct TimerView: View {
                     .dsScaledFont(11, weight: .medium, design: .rounded, relativeTo: .caption2, maxSize: 16)
                     .foregroundStyle(.secondary)
             }
+            if timerViewModel.rounds > 1 {
+                // 반복 — 아이폰과 같은 "3/27". 큰 숫자는 이 회에 남은 시간이다.
+                Label {
+                    Text(verbatim: "\(timerViewModel.currentRound + 1)/\(timerViewModel.rounds)")
+                } icon: {
+                    Image(systemName: "repeat")
+                }
+                .dsScaledFont(11, weight: .medium, design: .rounded, relativeTo: .caption2, maxSize: 16)
+                .monospacedDigit()
+                .foregroundStyle(.secondary)
+                .accessibilityLabel(String(localized: "Round \(timerViewModel.currentRound + 1) of \(timerViewModel.rounds)"))
+            }
         }
         .lineLimit(1)
         .accessibilityElement(children: .combine)

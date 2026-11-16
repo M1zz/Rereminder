@@ -20,6 +20,10 @@ import ActivityKit
 final class TimerViewModel: ObservableObject {
     @Published private(set) var state: TimerState = .idle
     @Published private(set) var remaining: TimeInterval = 0
+    /// 반복 중 지금 몇 번째 회인가(0부터). 반복이 없으면 늘 0.
+    @Published private(set) var currentRound = 0
+    /// 이번 실행의 회 수(`RoundSchedule`). 1 이면 반복 없음.
+    var rounds: Int { engine.config?.rounds ?? 1 }
 
     let engine = TimerEngine()
     var showToast: ((String) -> Void)?
@@ -63,6 +67,15 @@ final class TimerViewModel: ObservableObject {
             guard let self, let template = self.currentTemplate else { return }
             ring()
             let message = template.getPrealertMessage(for: sec)
+            self.showToast?(message)
+            self.appStateManager?.sendNotificationIfNeeded(message)
+        }
+
+        engine.onRoundChange = { [weak self] round in
+            guard let self else { return }
+            self.currentRound = round
+            ring()
+            let message = String(localized: "Round \(round + 1) of \(self.rounds)")
             self.showToast?(message)
             self.appStateManager?.sendNotificationIfNeeded(message)
         }
@@ -143,7 +156,12 @@ final class TimerViewModel: ObservableObject {
         guard restored else { return false }
 
         state = engine.state
-        remaining = max(0, engine.endDate?.timeIntervalSinceNow ?? 0)
+        currentRound = engine.currentRound
+        if state == .paused {
+            remaining = max(0, RoundSchedule.roundRemaining(elapsed: (engine.config?.totalDuration ?? 0) - engine.totalRemaining,
+                                                            roundSeconds: engine.config?.mainDuration ?? 0,
+                                                            rounds: rounds))
+        }
 
         // 실행 중이면 Live Activity도 복원
         if state == .running || state == .overtime {
@@ -151,10 +169,11 @@ final class TimerViewModel: ObservableObject {
                 let temp = Timer(
                     name: "",
                     mainSeconds: Int(cfg.mainDuration),
-                    prealertOffsetsSec: cfg.prealertOffsetsSec.map { Int($0) }
+                    prealertOffsetsSec: cfg.prealertOffsetsSec.map { Int($0) },
+                    rounds: cfg.rounds
                 )
                 use(temp)
-                startLiveActivity(template: temp, adoptExisting: true)
+                startLiveActivity(template: temp, endDate: engine.endDate, adoptExisting: true)
             }
         }
 
@@ -168,8 +187,11 @@ final class TimerViewModel: ObservableObject {
         engine.configure(
             mainSeconds: template.mainSeconds,
             prealertOffsetsSec: template.prealertOffsetsSec,
-            name: template.displayName
+            name: template.displayName,
+            // 세션 모드는 구간을 한 번 지나가는 일이라 반복하지 않는다
+            rounds: template.isPresentation ? 1 : template.rounds
         )
+        currentRound = 0
         state = .idle
         remaining = TimeInterval(template.mainSeconds)
     }
@@ -186,6 +208,7 @@ final class TimerViewModel: ObservableObject {
         engine.timeMultiplier = multiplier
 
         engine.start()
+        currentRound = 0
         state = .running
 
         // 같은 설정을 여러 날 반복해서 거는지 남긴다 — 그 반복을 앱이 먼저 알아채고
@@ -202,9 +225,10 @@ final class TimerViewModel: ObservableObject {
 
         // Watch 동기화 (전송만, 수신 콜백은 TimerScreenViewModel에서 관리)
         if let template = currentTemplate {
+            let sync = syncShape
             WatchConnectivityManager.shared.sendTimerStart(
-                duration: TimeInterval(template.mainSeconds),
-                prealertOffsets: template.prealertOffsetsSec
+                duration: TimeInterval(sync.mainSeconds),
+                prealertOffsets: sync.offsets
             )
         }
 
@@ -219,12 +243,13 @@ final class TimerViewModel: ObservableObject {
 
         // 테스트 모드(가속) 타이머는 endDate 의미가 달라 동기화 제외
         if engine.timeMultiplier == 1.0, let cfg = engine.config {
+            let sync = syncShape
             CloudTimerSyncManager.shared.pushPaused(
-                mainSeconds: Int(cfg.mainDuration),
-                prealertOffsets: cfg.prealertOffsetsSec.map { Int($0) },
+                mainSeconds: sync.mainSeconds,
+                prealertOffsets: sync.offsets,
                 name: Timer.displayName(stored: cfg.name, mainSeconds: Int(cfg.mainDuration),
                                        offsets: cfg.prealertOffsetsSec.map { Int($0) }),
-                remaining: max(0, remaining)
+                remaining: max(0, rounds > 1 ? engine.totalRemaining : remaining)
             )
         }
     }
@@ -233,7 +258,7 @@ final class TimerViewModel: ObservableObject {
         engine.resume()
         state = .running
         updateLiveActivity()
-        WatchConnectivityManager.shared.sendTimerResume(remainingDuration: remaining)
+        WatchConnectivityManager.shared.sendTimerResume(remainingDuration: rounds > 1 ? engine.totalRemaining : remaining)
         pushCloudRunning()
     }
 
@@ -241,6 +266,7 @@ final class TimerViewModel: ObservableObject {
         let wasSyncable = engine.timeMultiplier == 1.0
         saveTimerRecord(finished: state == .overtime || state == .finished)
         engine.stop()
+        currentRound = 0
         state = .idle
         endLiveActivity()
         WatchConnectivityManager.shared.sendTimerStop()
@@ -255,13 +281,22 @@ final class TimerViewModel: ObservableObject {
         guard engine.timeMultiplier == 1.0,
               let cfg = engine.config,
               let end = engine.endDate else { return }
+        let sync = syncShape
         CloudTimerSyncManager.shared.pushRunning(
-            mainSeconds: Int(cfg.mainDuration),
-            prealertOffsets: cfg.prealertOffsetsSec.map { Int($0) },
+            mainSeconds: sync.mainSeconds,
+            prealertOffsets: sync.offsets,
             name: Timer.displayName(stored: cfg.name, mainSeconds: Int(cfg.mainDuration),
                                        offsets: cfg.prealertOffsetsSec.map { Int($0) }),
             endDate: end
         )
+    }
+
+    /// 다른 기기에 보내는 모양. 반복이면 **전체 길이 한 번**으로 보내고 회 안의 알림은 싣지 않는다 —
+    /// 받는 쪽은 회를 모르므로 한 바퀴 길이를 보내면 첫 회가 끝날 때 끝난 줄 안다. 회 알림은 건 기기가 울린다.
+    private var syncShape: (mainSeconds: Int, offsets: [Int]) {
+        guard let cfg = engine.config else { return (0, []) }
+        if cfg.rounds > 1 { return (Int(cfg.totalDuration), []) }
+        return (Int(cfg.mainDuration), cfg.prealertOffsetsSec.map { Int($0) })
     }
 
     // MARK: - Cloud Sync 적용 (다른 기기에서 제어된 상태 반영, 재전송 없음)
@@ -394,9 +429,10 @@ final class TimerViewModel: ObservableObject {
                                    endDate remoteEndDate: Date? = nil,
                                    adoptExisting: Bool = false) {
         #if os(iOS) && !targetEnvironment(macCatalyst)
-        let duration = TimeInterval(template.mainSeconds)
+        // 반복이면 잠금화면은 전체를 센다 — 앱이 멈춰 있으면 회가 바뀔 때 고칠 수 없다(`TimerEngine.totalRemaining`).
+        let duration = RoundSchedule.total(roundSeconds: TimeInterval(template.mainSeconds), rounds: rounds)
         let endDate = remoteEndDate ?? Date().addingTimeInterval(duration)
-        let name = template.displayName
+        let name = rounds > 1 ? "\(template.displayName) × \(rounds)" : template.displayName
 
         if adoptExisting {
             LiveActivityController.adoptOrStart(name: name, duration: duration, endDate: endDate)
@@ -409,10 +445,11 @@ final class TimerViewModel: ObservableObject {
     private func updateLiveActivity() {
         #if os(iOS) && !targetEnvironment(macCatalyst)
         let isPaused = state == .paused
+        let left = rounds > 1 ? engine.totalRemaining : remaining
         LiveActivityController.update(
-            remaining: remaining,
+            remaining: left,
             isPaused: isPaused,
-            endDate: isPaused ? nil : Date().addingTimeInterval(remaining)
+            endDate: isPaused ? nil : Date().addingTimeInterval(left)
         )
         #endif
     }
