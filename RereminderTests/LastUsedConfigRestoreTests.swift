@@ -86,7 +86,7 @@ final class LastUsedConfigRestoreTests: XCTestCase {
 
         XCTAssertEqual(vm.mainMinutes, 10)
         XCTAssertEqual(vm.mainSeconds, 0)
-        XCTAssertEqual(vm.selectedOffsets, [60])
+        XCTAssertEqual(vm.selectedOffsets, TimerScreenViewModel.DefaultSetup.offsets)
     }
 
     func test_restore_isOneShot_doesNotOverwriteUserEdits() {

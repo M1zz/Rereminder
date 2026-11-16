@@ -251,10 +251,10 @@ public struct TimerView: View {
         } else {
             HStack(spacing: DSSpacing.lg) {
                 Button { exitTimer() } label: {
-                    Image(systemName: "xmark")
+                    Image(systemName: "stop.fill")
                         .font(.system(size: 14, weight: .semibold))
                 }
-                .buttonStyle(WatchRoundButtonStyle(tint: timerViewModel.isPaused ? DSColor.negative : DSColor.plain))
+                .buttonStyle(WatchRoundButtonStyle(tint: DSColor.negative))
                 .accessibilityLabel(String(localized: "Stop timer"))
 
                 Button {

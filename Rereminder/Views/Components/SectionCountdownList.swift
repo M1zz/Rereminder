@@ -64,7 +64,8 @@ struct SectionCountdownList: View {
         let color = SectionPalette.color(segment.index)
         let remaining = TimerSections.remainingSeconds(of: segment, elapsedSec: elapsedSec)
 
-        return HStack(spacing: 10) {
+        return VStack(alignment: .leading, spacing: 1) {
+          HStack(spacing: 10) {
             marker(phase: phase, color: color)
 
             Text(verbatim: Self.mmss(remaining))
@@ -89,6 +90,15 @@ struct SectionCountdownList: View {
 
             // 길이에 비례한 막대 — 숫자가 못 하는 "이 구간이 저 구간의 두 배"를 눈으로 보여준다.
             bar(segment: segment, remaining: remaining, color: color)
+          }
+            // 이 구간이 끝나며 울릴 알림이 언제인가 — 숫자(남은 시간)만으로는 "그게 몇 분 지점이지"를 다시 세야 한다.
+            Text(verbatim: boundaryText(of: segment))
+                .font(.body)
+                .foregroundStyle(.primary.opacity(0.75))
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                // 점 폭 + 간격만큼 들여 시간 글자와 왼쪽을 맞춘다.
+                .padding(.leading, 24)
         }
         .opacity(dimming(for: phase))
         .padding(.horizontal, 12)
@@ -99,9 +109,22 @@ struct SectionCountdownList: View {
         )
         .accessibilityElement(children: .combine)
         .accessibilityLabel(Text("Section \(segment.index + 1)"))
-        .accessibilityValue(Text(verbatim: Self.mmss(remaining)))
+        .accessibilityValue(Text(verbatim: "\(Self.mmss(remaining)), \(boundaryText(of: segment))"))
         // 지금 구간은 진하기로만 갈린다 — VoiceOver 에는 "선택됨"으로 알려 준다.
         .accessibilityAddTraits(phase == .active ? .isSelected : [])
+    }
+
+    /// 구간이 끝나는 자리를 두 가지로 읽는다: "시작 20분 후 · 종료 10분 전". 마지막 구간은 끝이 곧 종료다.
+    private func boundaryText(of segment: TimerSections.Segment) -> String {
+        Self.boundaryText(endSec: segment.endSec, totalSec: segments.last?.endSec ?? segment.endSec)
+    }
+
+    static func boundaryText(endSec: Int, totalSec: Int) -> String {
+        let beforeEnd = totalSec - endSec
+        guard beforeEnd > 0 else { return String(localized: "End") }
+        let after = String(localized: "\(AlertPresets.timePart(endSec)) after start")
+        let before = String(localized: "\(AlertPresets.timePart(beforeEnd)) before end")
+        return "\(after) · \(before)"
     }
 
     /// 구간 길이에 비례한 막대. **오른쪽 정렬**이고 남은 만큼만 칠해진다 —

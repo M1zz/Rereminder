@@ -3,6 +3,7 @@
 //  Rereminder
 //
 //  **첫 실행의 해 보기.** 그림을 본 뒤 종을 직접 옮기고 시작을 눌러, 자기가 고른 자리에서 우는 것을 본다.
+//  그다음 링을 두 번 눌러 종을 더하고, 종을 두 번 눌러 지운다(전부 지워도 된다). 둘 다 화면에 보이지 않는 손짓이다.
 //
 //  ⚠️ 진짜 타이머가 아니다(`OnboardingDemoTimer`). 끝나면 고른 자리만 진짜 다이얼에 올린다.
 //  ⚠️ 드래그 산술은 `DialDragTracker` 하나만 쓴다. 다이얼을 새로 계산하지 말 것.
@@ -12,10 +13,12 @@
 import SwiftUI
 
 struct BlankStartPractice: View {
-    /// 고른 알림 지점(초)을 넘긴다. 건너뛰면 nil.
-    let onFinish: (Int?) -> Void
+    /// 남은 알림 지점(초)들을 넘긴다. 다 지웠으면 빈 배열, 건너뛰면 nil.
+    let onFinish: ([Int]?) -> Void
 
-    private enum Step { case drag, start, watch, remove, done }
+    /// 옮기기 → 시작 → 보기 → **두 번 눌러 더하기** → **두 번 눌러 지우기**(전부 지워도 된다) → 끝.
+    /// 더하기·지우기는 화면에 보이지 않는 손짓이라 여기서 한 번씩 해 보게 한다.
+    private enum Step { case drag, start, watch, add, remove, done }
     private static let total = 600
     private static let coordinateName = "blankStart.practice"
 
@@ -31,42 +34,52 @@ struct BlankStartPractice: View {
     }
 
     @State private var step: Step = .drag
+    /// 옮기기 단계에서 끄는 종(첫 종).
     @State private var alert = 60
+    /// 더하기 단계부터의 종들. 첫 종도 여기 들어 있다.
+    @State private var bells: [Int] = []
+    /// 더하기·지우기 단계에서 한 번이라도 해 봤나. 해 봐야 다음 버튼이 나온다.
+    @State private var didAct = false
     @State private var tracker = DialDragTracker()
     @State private var demo: OnboardingDemoTimer?
-    /// 지우기 단계에서 하나 더 얹어 두는 종. 두 번 눌러 지우면 nil 로 돌아온다.
-    @State private var extraBell: Int?
 
     private var line: String {
         switch step {
         case .drag: return String(localized: "Drag the bell to when you want a heads-up")
         case .start: return String(localized: "Now press start")
         case .watch: return String(localized: "It's sped up. Watch for the bell")
-        case .remove: return String(localized: "Double-tap a bell to remove it.")
+        case .add: return String(localized: "Double-tap the ring to add an alert.")
+        case .remove: return bells.isEmpty
+            ? String(localized: "All removed. Double-tap the ring to add one back.")
+            : String(localized: "Double-tap a bell to remove it. You can remove them all.")
         case .done: return String(localized: "The real timer is set up the same way")
         }
     }
 
+    private var shownBells: [Int] { step == .add || step == .remove || step == .done ? bells : [alert] }
+
+    private var isActing: Bool { step == .add || step == .remove }
+
     var body: some View {
-        LessonShell(line: line, isDone: step == .drag || step == .done,
+        LessonShell(line: line, isDone: step == .drag || step == .done || (isActing && didAct),
                     doneTitle: step == .done ? String(localized: "Get Started") : String(localized: "Next"),
-                    alwaysSkippable: step == .drag || step == .remove, scrollsStageWhenCompact: false,
+                    alwaysSkippable: step == .drag || isActing, scrollsStageWhenCompact: false,
                     onDone: advance,
-                    // 지우기까지 왔으면 종은 이미 골랐다. 여기서 건너뛰어도 고른 자리는 다이얼에 올린다.
-                    onSkip: { onFinish(step == .remove ? alert : nil) }) {
+                    // 더하기까지 왔으면 종은 이미 골랐다. 여기서 건너뛰어도 남은 종은 다이얼에 올린다.
+                    onSkip: { onFinish(isActing ? bells.sorted(by: >) : nil) }) {
             // 세로는 위아래로, 가로는 원 옆에 안내와 시작 버튼을 둔다(높이가 모자라다).
             let layout = isCompactHeight
                 ? AnyLayout(HStackLayout(spacing: DSSpacing.xl))
                 : AnyLayout(VStackLayout(spacing: DSSpacing.xl))
             layout {
                 if let demo {
-                    DemoStage(demo: demo, size: ringSize) { showRemoveStep() }
+                    DemoStage(demo: demo, size: ringSize) { showAddStep() }
                 } else {
                     // 무대의 배너 자리(`DemoStage`)와 같은 몫을 비워, 시작해도 원이 움직이지 않게 한다
                     dial.padding(.top, DemoStage.bannerSpace)
                 }
                 VStack(spacing: DSSpacing.xl) {
-                    Text(String(localized: "You'll get a heads-up with \(TimeMapper.durationText(alert)) left"))
+                    Text(summary)
                         .font(.body)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
@@ -78,62 +91,93 @@ struct BlankStartPractice: View {
             }
         }
         .animation(.easeInOut(duration: 0.25), value: step)
+        .animation(.easeOut(duration: 0.2), value: didAct)
         .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { screenHeight = $0 }
     }
 
+    private var summary: String {
+        let list = shownBells.sorted(by: >)
+        guard !list.isEmpty else { return String(localized: "No alerts") }
+        let joined = ListFormatter.localizedString(byJoining: list.map { TimeMapper.durationText($0) })
+        return String(localized: "You'll get a heads-up with \(joined) left")
+    }
+
     private var dial: some View {
-        OnboardingDemoRing(totalSeconds: Self.total, alerts: [alert] + (extraBell.map { [$0] } ?? []),
+        OnboardingDemoRing(totalSeconds: Self.total, alerts: shownBells,
                            elapsed: 0, size: ringSize)
             .coordinateSpace(name: Self.coordinateName)
             .contentShape(Circle().inset(by: -24))
-            // 끄는 단계에서만 끈다. 지우는 단계에 끌기까지 받으면 두 번 누르기가 끌기에 먹힌다.
+            // 끄는 단계에서만 끈다. 더하기·지우기 단계에 끌기까지 받으면 두 번 누르기가 끌기에 먹힌다.
             .gesture(drag, isEnabled: step == .drag)
-            .simultaneousGesture(doubleTap, isEnabled: step == .remove)
+            .simultaneousGesture(doubleTap, isEnabled: isActing)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(line)
-            .accessibilityValue(TimeMapper.durationText(alert))
+            .accessibilityValue(summary)
             .accessibilityAdjustableAction { direction in
                 guard step == .drag else { return }
                 move(to: alert + (direction == .increment ? 60 : -60))
             }
-            // VoiceOver 는 종을 골라 두 번 누를 수 없다. 같은 일을 동작 하나로 한다.
-            .accessibilityAction(named: Text("Remove the extra bell")) {
-                if step == .remove { removeExtraBell() }
+            // VoiceOver 는 링의 한 자리를 골라 두 번 누를 수 없다. 같은 일을 동작 하나씩으로 한다.
+            .accessibilityAction(named: Text("Add an alert")) {
+                guard isActing, let free = (1...9).map({ $0 * 60 }).first(where: { !bells.contains($0) }) else { return }
+                add(free)
             }
-            .animation(.easeOut(duration: 0.2), value: extraBell)
+            .accessibilityAction(named: Text("Remove an alert")) {
+                guard step == .remove, let last = bells.last else { return }
+                remove(last)
+            }
+            .animation(.easeOut(duration: 0.2), value: bells)
     }
 
-    /// 본 화면과 같은 손짓: 종을 **두 번** 눌러 지운다. **어느 종이든** 지워진다.
-    /// 얹은 종만 받으면, 자기가 고른 종을 두 번 눌렀는데 아무 일도 없는 것이 고장으로 읽힌다.
+    /// 본 화면과 같은 손짓: **종 위**를 두 번 누르면 지우고(지우기 단계), **빈 링**을 두 번 누르면 그 자리에 더한다.
+    /// 지우기 단계에서도 빈 링을 누르면 더해진다 — 전부 지운 뒤 되돌아갈 길이 있어야 한다.
     private var doubleTap: some Gesture {
         SpatialTapGesture(count: 2, coordinateSpace: .named(Self.coordinateName))
             .onEnded { value in
-                guard let extraBell else { return }
                 let center = CGPoint(x: ringSize / 2, y: ringSize / 2)
+                let radius = ringSize / 2
+                let distanceFromCenter = hypot(value.location.x - center.x, value.location.y - center.y)
+                // 링 근처만. 가운데를 누른 것은 알림을 만들 뜻이 아니다.
+                guard abs(distanceFromCenter - radius) <= 40 else { return }
                 let tapped = TimeMapper.ringAngle(at: value.location, center: center)
                 func distance(to bell: Int) -> Double {
                     let gap = abs(tapped - Double(bell) / Double(Self.total) * 360).truncatingRemainder(dividingBy: 360)
                     return min(gap, 360 - gap)
                 }
-                // 종 근처(±25°)를 눌러야 한다. 둘 다 닿으면 가까운 쪽이다.
-                let nearest = [alert, extraBell].min { distance(to: $0) < distance(to: $1) } ?? extraBell
-                guard distance(to: nearest) <= 25 else { return }
-                // 고른 종을 지웠으면 남은 종이 다이얼에 올라갈 자리다
-                if nearest == alert { alert = extraBell }
-                removeExtraBell()
+                if step == .remove,
+                   let nearest = bells.min(by: { distance(to: $0) < distance(to: $1) }),
+                   distance(to: nearest) <= 25 {
+                    remove(nearest)
+                    return
+                }
+                // 종과 너무 가까우면 더하지 않는다(두 종이 겹쳐 집을 수 없다)
+                let seconds = Int((tapped / 360 * Double(Self.total) / 60).rounded()) * 60
+                guard seconds > 0, seconds < Self.total,
+                      bells.allSatisfy({ distance(to: $0) > 15 }) else { return }
+                add(seconds)
             }
     }
 
-    /// 체험이 끝나면 종 하나를 더 얹어 지워 보게 한다. 고른 종에서 멀리 떨어진 자리에 둔다.
-    private func showRemoveStep() {
-        extraBell = alert <= Self.total / 2 ? alert + 240 : alert - 240
+    /// 체험이 끝나면 고른 종 하나로 더하기를 해 보게 한다.
+    private func showAddStep() {
+        bells = [alert]
+        didAct = false
         demo = nil
-        step = .remove
+        step = .add
     }
 
-    private func removeExtraBell() {
-        extraBell = nil
-        step = .done
+    private func add(_ seconds: Int) {
+        guard !bells.contains(seconds) else { return }
+        bells.append(seconds)
+        if step == .add { didAct = true }
+        #if os(iOS)
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        #endif
+    }
+
+    private func remove(_ seconds: Int) {
+        bells.removeAll { $0 == seconds }
+        didAct = true
         #if os(iOS)
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         #endif
@@ -155,10 +199,14 @@ struct BlankStartPractice: View {
 
     /// 화면은 사람이 눌러야 넘어간다. 종을 옮겼다고 저절로 다음 단계로 가지 않는다.
     private func advance() {
-        if step == .done {
-            onFinish(alert)
-        } else {
-            step = .start
+        switch step {
+        case .drag: step = .start
+        case .add:
+            didAct = false
+            step = .remove
+        case .remove: step = .done
+        case .done: onFinish(bells.sorted(by: >))
+        case .start, .watch: break
         }
     }
 
@@ -188,7 +236,8 @@ struct LessonShell<Stage: View>: View {
     let doneTitle: String
     /// 버튼이 떠 있어도 건너뛰기를 함께 둔다(아직 끝난 단계가 아닐 때).
     var alwaysSkippable = false
-    /// 가로로 눕혔을 때 무대가 화면보다 길면 밀 수 있게 한다. 무대 안에서 끄는 조작이 있으면 끈다(해 보기의 종).
+    /// 무대가 화면보다 길면 밀 수 있게 한다(가로·세로 모두). 무대 안에서 끄는 조작이 있으면 끈다(해 보기의 종) —
+    /// 그쪽은 원 크기를 화면 높이에 맞춰 넘치지 않게 한다.
     var scrollsStageWhenCompact = true
     let onDone: () -> Void
     let onSkip: () -> Void
@@ -222,6 +271,23 @@ struct LessonShell<Stage: View>: View {
                         .frame(maxWidth: .infinity)
                     }
                     .padding(.top, DSSpacing.lg)
+                } else if scrollsStageWhenCompact {
+                    // 세로에서도 무대가 화면보다 길면 민다. 예전에는 넘친 만큼 묶음 전체가 위로 밀려
+                    // **맨 위 안내 문장이 화면 밖으로 잘렸다**(세션 수업: 구간 셋 + 시작 버튼). 버튼은 늘 아래에 고정.
+                    VStack(spacing: 0) {
+                        ScrollView {
+                            VStack(spacing: DSSpacing.xxl) {
+                                lineText.frame(minHeight: 96)
+                                stage
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding(.top, DSSpacing.xxl)
+                            .padding(.bottom, DSSpacing.lg)
+                        }
+                        .scrollBounceBehavior(.basedOnSize)
+                        .scrollIndicators(.hidden)
+                        doneButton
+                    }
                 } else {
                     VStack(spacing: 0) {
                         // ⚠️ 위에서부터 고정이다. 가운데 정렬이면 아래에 버튼 하나만 생겨도 원이 움직인다.

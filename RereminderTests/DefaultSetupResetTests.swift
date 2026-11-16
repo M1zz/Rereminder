@@ -36,15 +36,15 @@ final class DefaultSetupResetTests: XCTestCase {
         )
     }
 
-    func test_defaultSetup_is10MinutesWithOneAlert() {
+    func test_defaultSetup_is10MinutesWithTwoAlerts() {
         XCTAssertEqual(TimerScreenViewModel.DefaultSetup.mainSeconds, 600)
-        XCTAssertEqual(TimerScreenViewModel.DefaultSetup.offsets, [60])
+        XCTAssertEqual(TimerScreenViewModel.DefaultSetup.offsets, [180, 60])
 
         // @Published 초기값도 같은 상수를 써야 한다 (정의가 두 곳으로 갈라지지 않도록)
         let vm = TimerScreenViewModel()
         XCTAssertEqual(vm.mainMinutes, 10)
         XCTAssertEqual(vm.mainSeconds, 0)
-        XCTAssertEqual(vm.selectedOffsets, [60])
+        XCTAssertEqual(vm.selectedOffsets, TimerScreenViewModel.DefaultSetup.offsets)
         XCTAssertEqual(vm.configuredMainSeconds, 600)
     }
 
@@ -59,7 +59,7 @@ final class DefaultSetupResetTests: XCTestCase {
 
     func test_addingAlert_leavesDefaultSetup() {
         let vm = TimerScreenViewModel()
-        vm.selectedOffsets = [60, 180]
+        vm.selectedOffsets = [60, 180, 300]
 
         XCTAssertFalse(vm.isAtDefaultSetup)
     }
@@ -86,7 +86,7 @@ final class DefaultSetupResetTests: XCTestCase {
 
         XCTAssertEqual(vm.mainMinutes, 10)
         XCTAssertEqual(vm.mainSeconds, 0)
-        XCTAssertEqual(vm.selectedOffsets, [60])
+        XCTAssertEqual(vm.selectedOffsets, TimerScreenViewModel.DefaultSetup.offsets)
         XCTAssertEqual(vm.configuredMainSeconds, 600)
         XCTAssertTrue(vm.prealertMessages.isEmpty)
         XCTAssertTrue(vm.finishMessage.isEmpty)
@@ -107,7 +107,7 @@ final class DefaultSetupResetTests: XCTestCase {
         relaunched.restoreLastUsedConfigIfNeeded()
 
         XCTAssertEqual(relaunched.mainMinutes, 10)
-        XCTAssertEqual(relaunched.selectedOffsets, [60])
+        XCTAssertEqual(relaunched.selectedOffsets, TimerScreenViewModel.DefaultSetup.offsets)
         XCTAssertTrue(relaunched.isAtDefaultSetup)
     }
 }

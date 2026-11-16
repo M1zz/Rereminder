@@ -175,6 +175,12 @@ class WatchConnectivityManager: NSObject, ObservableObject {
     nonisolated static var settingsPayload: [String: Any] {
         var payload = EscalationPolicy.current().syncPayload
         payload["ringMode"] = RingMode.current.rawValue
+        #if os(iOS)
+        // 아이폰에서 맞춘 설정 — 손목에서 고르고 고쳐 쓴다(`PhoneSetups`)
+        if let setups = PhoneSetups.outgoing, let data = PhoneSetups.encode(setups) {
+            payload[PhoneSetups.payloadKey] = data
+        }
+        #endif
         return payload
     }
 
@@ -188,6 +194,7 @@ class WatchConnectivityManager: NSObject, ObservableObject {
         return false
         #else
         var applied = EscalationPolicy.applySyncPayload(payload)
+        if PhoneSetups.store(from: payload) { applied = true }
         if let ringMode = payload["ringMode"] as? String,
            RingMode(rawValue: ringMode) != nil {
             UserDefaults.standard.set(ringMode, forKey: "ringMode")

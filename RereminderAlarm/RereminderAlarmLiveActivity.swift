@@ -166,10 +166,10 @@ struct RereminderAlarmLiveActivity: Widget {
     @ViewBuilder
     func controlButtons(context: ActivityViewContext<TimerActivityAttributes>) -> some View {
         HStack(spacing: DSSpacing.sm) {
-            // 정지가 **왼쪽** — 앱의 원 안 배치와 같다(왼쪽 ✕, 오른쪽 재생/일시정지).
+            // 정지가 **왼쪽** — 앱의 원 안 배치와 같다(왼쪽 ■, 오른쪽 재생/일시정지).
             circleButton(intent: StopIntent(alarmID: ""),
-                         systemImage: "xmark",
-                         tint: context.state.isPaused ? DSColor.negative : DSColor.plain,
+                         systemImage: "stop.fill",
+                         tint: DSColor.negative,
                          label: String(localized: "Stop timer"))
 
             if context.state.isPaused {

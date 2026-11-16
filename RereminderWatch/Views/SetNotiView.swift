@@ -18,7 +18,8 @@ struct SetNotiView: View {
     @State private var customPresets: [Int] = []
 
     var body: some View {
-        let maxMinute = viewModel.maxSelectableTimeModel.minute
+        // ⚠️ 시간을 빼먹지 말 것 — 아이폰에서 온 90분 설정이면 `minute` 만으로는 30 이 된다
+        let maxMinute = viewModel.maxSelectableSeconds / 60
 
         VStack(spacing: DSSpacing.lg) {
             // 타이틀
@@ -36,6 +37,12 @@ struct SetNotiView: View {
         .padding(.top, DSSpacing.xs)
         .background(.clear)
         .sheet(isPresented: $showingCustomSheet) { customMinutesSheet(maxMinute: maxMinute) }
+        // 아이폰에서 채워 온 알림이 기본 칸(1·3·5·10·15·30)에 없으면 칸을 더해 보이게 한다 — 안 보이면 끌 수도 없다
+        .onAppear {
+            let defaultPresets = [1, 3, 5, 10, 15, 30]
+            let extra = viewModel.selectedMinutes.filter { !defaultPresets.contains($0) && !customPresets.contains($0) }
+            if !extra.isEmpty { customPresets = (customPresets + extra).sorted() }
+        }
     }
 
     // MARK: - Subviews

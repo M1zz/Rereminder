@@ -5,6 +5,7 @@
 //  Created by Oh Seojin on 9/24/25.
 //
 
+import SwiftData
 import SwiftUI
 import LeeoKit
 
@@ -15,9 +16,19 @@ struct TimerMainView: View {
     var bottomBarInset: CGFloat = 0
 
     @EnvironmentObject var screenVM: TimerScreenViewModel
+    /// 시작 버튼을 길게 눌렀을 때 고르는 저장한 설정(`startMenu`).
+    @Query private var savedSetups: [Timer]
     private var remaining: TimeInterval { screenVM.remaining }
 
     @State private var showTimeInput = false
+    /// 도는 동안 버튼은 잠깐 보이다 물러난다. 화면을 누르면 돌아온다(`revealControls`).
+    @State private var controlsHidden = false
+    @State private var controlsHideTask: Task<Void, Never>?
+    /// 시작을 누른 자리에서 켠다. 알약이 원으로 줄어드는 동안은 아직 재생 버튼(파란 ▶)이고,
+    /// 다 줄어든 뒤에 일시정지로 바뀐다. 한꺼번에 바꾸면 모양·색·심볼이 같이 움직여 어수선하다.
+    @State private var launchArmed = false
+    @Environment(\.accessibilityVoiceOverEnabled) private var voiceOverEnabled
+    @Environment(\.accessibilitySwitchControlEnabled) private var switchControlEnabled
 
     /// 원 아래 묶음의 최소 여백 — 글자 크기 설정을 키우면 함께 커진다.
     @ScaledMetric(relativeTo: .body) private var gapUnit: CGFloat = 14
@@ -319,7 +330,7 @@ struct TimerMainView: View {
                     SectionCountdownList(
                         segments: derivedSegments,
                         elapsedSec: elapsedSec,
-                        maxHeight: availableHeight * (isSideBySide ? 0.9 : 0.22)
+                        maxHeight: availableHeight * (isSideBySide ? 0.9 : 0.32)
                     )
                         .transition(.opacity)
                 } else if isProgressMode && !screenVM.nextAlertText.isEmpty
@@ -333,7 +344,7 @@ struct TimerMainView: View {
                     ZStack(alignment: .bottom) {
                         if reservesCountdownSpace {
                             SectionCountdownList(segments: derivedSegments, elapsedSec: 0,
-                                                 maxHeight: availableHeight * 0.22)
+                                                 maxHeight: availableHeight * 0.32)
                                 .hidden()
                                 .accessibilityHidden(true)
                         }
@@ -428,6 +439,23 @@ struct TimerMainView: View {
             // ⚠️ 이게 없으면 Spacer·여백처럼 아무것도 그리지 않은 자리는 탭이 잡히지 않아
             //    "화면 아무 데나 눌러 키보드 내리기"가 원·카드 위에서만 동작한다.
             .contentShape(Rectangle())
+            // 화면 어디를 눌러도 물러난 버튼이 돌아온다. 버튼·링의 제 손짓은 그대로 받는다.
+            .simultaneousGesture(TapGesture().onEnded { revealControls() })
+            .onAppear { scheduleControlsHide() }
+            .onChange(of: screenVM.state) { old, new in
+                let started = (old == .idle || old == .finished) && new == .running
+                if started && launchArmed {
+                    // 동그래진 다음에 일시정지로 바뀐다.
+                    Task { @MainActor in
+                        try? await Task.sleep(for: .seconds(0.4))
+                        withAnimation(.easeInOut(duration: 0.25)) { launchArmed = false }
+                    }
+                } else {
+                    launchArmed = false
+                }
+                withAnimation(.easeOut(duration: 0.2)) { controlsHidden = false }
+                scheduleControlsHide()
+            }
             .onAppear(perform: prepareDialFill)
             .onChange(of: isProgressMode) { wasRunning, isRunning in
                 if wasRunning && !isRunning { refillDialOnReturn() }
@@ -467,10 +495,20 @@ struct TimerMainView: View {
             including: focusedSectionIndex == nil ? .none : .all
         )
         // ⚠️ 키보드 위 "Done" 막대는 지웠다 — 눌러도 닫히지 않았다. 구간 카드의 ✓ 가 마친다(`PresentationSectionList`).
+        // 높이는 시트가 스스로 정한다(전체 시간 = 반, 구간 목록 = 전체). 예전 300pt 고정은 칸 고르기와
+        // 구간 목록이 들어오며 내용이 잘려 빈 반쪽 모달로 보였다.
         .sheet(isPresented: $showTimeInput) {
             TimeInputSheet(screenVM: screenVM, isPresented: $showTimeInput)
-                .presentationDetents([.height(300)])
         }
+        #if DEBUG
+        // `-screenshotTimeInput total|intervals` — 시간 입력 시트를 바로 연다(시트를 확인할 때)
+        .task {
+            if let raw = UserDefaults.standard.string(forKey: "screenshotTimeInput"), !raw.isEmpty {
+                try? await Task.sleep(for: .seconds(1))
+                showTimeInput = true
+            }
+        }
+        #endif
         // 끝나면 화면을 덮지 않고 **아래에서 버튼 하나**가 올라온다(`TimerAlertView`).
         .overlay(alignment: .bottom) {
             if screenVM.showTimerAlert {
@@ -519,6 +557,11 @@ struct TimerMainView: View {
                 .geometryGroup()
 
             firstShrinkHint(size: size, lineWidth: lineWidth)
+
+            // 링의 빈 자리를 두 번 누르면 그 시각에 알림이 생긴다. 종·핸들은 이 위에 있어 제 손짓을 먼저 받는다.
+            if isTimeEditable {
+                ringAddTarget(size: size, lineWidth: lineWidth)
+            }
 
             // 실행/일시정지 중: 줄어드는 호의 끝점을 동그라미로 표시
             if screenVM.state == .running || screenVM.state == .paused {
@@ -579,6 +622,9 @@ struct TimerMainView: View {
                 // ⚠️ 종을 끄는 동안 가운데가 그 종의 값을 말한다. 링 옆 배지는 손가락에 가려 지웠다.
                 //    자리는 그대로 쓴다. 시간과 버튼을 치우고 끼우면 원 안이 흔들린다.
                 centerTimeDisplay(fontSize: fontSize)
+                    // 버튼이 물러나면 시간이 원 한가운데로 내려와 커진다. 자리(레이아웃)는 그대로라 돌아올 때 흔들리지 않는다.
+                    .scaleEffect(controlsHidden ? bigTimeScale(fontSize: fontSize, centerDiameter: centerDiameter) : 1)
+                    .offset(y: controlsHidden ? bigTimeOffset(fontSize: fontSize, buttonSize: buttonSize) : 0)
                     .opacity(bellReadoutVisible ? 0 : 1)
                     .overlay {
                         if let seconds = bellReadoutSeconds {
@@ -599,6 +645,8 @@ struct TimerMainView: View {
                         }
                     }
                 buttonRow(buttonSize: buttonSize)
+                    // 안 보이는 버튼은 눌리지 않는다 — 첫 탭은 꺼내기만 한다(발표 중 스친 손에 멈추지 않게).
+                    .allowsHitTesting(!controlsHidden)
                     .opacity(bellReadoutVisible ? 0 : 1)
                     .overlay {
                         if let seconds = bellReadoutSeconds, seconds > 0 {
@@ -1040,6 +1088,55 @@ struct TimerMainView: View {
         .accessibilityHidden(true)
     }
 
+    /// **링을 두 번 눌러 알림을 더한다**(예전의 `+ 알림 추가` 버튼 자리). 누른 각도가 곧 그 알림의 시각이다.
+    /// ⚠️ 링 근처만 받는다. 원 가운데는 시간·버튼 자리라 거기서 두 번 누른 것은 알림을 만들 뜻이 아니다.
+    /// ⚠️ **개수 한도는 없다** — 게이트를 다시 끼워 넣지 말 것(`ProGate` 머리말).
+    private func ringAddTarget(size: CGFloat, lineWidth: CGFloat) -> some View {
+        Circle()
+            .fill(Color.clear)
+            .frame(width: size + lineWidth * 2, height: size + lineWidth * 2)
+            .contentShape(Circle())
+            .gesture(
+                SpatialTapGesture(count: 2)
+                    .onEnded { value in
+                        let side = size + lineWidth * 2
+                        addAlert(at: value.location, center: CGPoint(x: side / 2, y: side / 2),
+                                 size: size, lineWidth: lineWidth)
+                    }
+            )
+            .accessibilityHidden(true)
+    }
+
+    private func addAlert(at point: CGPoint, center: CGPoint, size: CGFloat, lineWidth: CGFloat) {
+        let distance = hypot(point.x - center.x, point.y - center.y)
+        let outer = size / 2
+        let inner = innerRingSize(size, lineWidth: lineWidth) / 2
+        let total = screenVM.mainMinutes * 60 + screenVM.mainSeconds
+        // 60분을 넘으면 두 번째 바퀴가 안쪽 줄이다. 어느 줄을 눌렀는지로 바퀴를 고른다.
+        let hasSecondLap = usesAbsoluteRing && TimeMapper.secondsToAngle(from: total) > 360
+        let onInnerLap = hasSecondLap && abs(distance - inner) < abs(distance - outer)
+        let ringRadius = onInnerLap ? inner : outer
+        guard abs(distance - ringRadius) <= lineWidth * 1.6 else { return }
+
+        var angle = TimeMapper.ringAngle(at: point, center: center)
+        if onInnerLap { angle += 360 }
+        let seconds = usesAbsoluteRing
+            ? TimeMapper.angleToSeconds(from: angle)
+            // 비율 링(60분 초과가 아닌 실행 좌표)일 때는 10초 단위로만 맞춘다
+            : Int((Double(total) * angle / 360 / 10).rounded()) * 10
+        guard seconds > 0, seconds < total, !screenVM.selectedOffsets.contains(seconds) else { return }
+
+        finishDialFill()
+        withAnimation(.easeInOut(duration: 0.2)) {
+            _ = screenVM.selectedOffsets.insert(seconds)
+            screenVM.justRemovedAlert = nil
+            screenVM.lastAddedAlert = seconds
+        }
+        #if os(iOS)
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        #endif
+    }
+
     private func dragGesture(size: CGFloat) -> some Gesture {
         let center = CGPoint(x: size / 2, y: size / 2)
 
@@ -1353,11 +1450,14 @@ extension TimerMainView {
                     screenVM.cancel()
                 }
             }) {
-                Image(systemName: "xmark")
+                Image(systemName: "stop.fill")
                     .font(.title2)
                     .imageScale(.medium)
             }
-            .buttonStyle(TimerButtonStyle(tint: screenVM.state == .paused ? DSColor.negative : DSColor.plain, size: buttonSize))
+            // 정지는 언제나 빨강이다(워치·잠금화면도 같다). 꺼내야 보이는 버튼이라 늘 떠 있을 때처럼 눈을 끌 걱정이 없다.
+            .buttonStyle(TimerButtonStyle(tint: DSColor.negative, size: buttonSize))
+            .opacity(controlsHidden ? 0 : 1)
+            .scaleEffect(controlsHidden && !reduceMotion ? 0.8 : 1)
             .accessibilityLabel(String(localized: "Cancel Timer"))
             // 음성 제어로 "정지 누르기"처럼 짧게 부를 수 있게 — 화면에는 아이콘뿐이라 부를 이름이 없다.
             .accessibilityInputLabels([Text("Cancel Timer"), Text("Stop"), Text("Cancel")])
@@ -1365,53 +1465,180 @@ extension TimerMainView {
     }
 
     /// 오른쪽 버튼 (시작 / 일시정지 / 재개)
-    @ViewBuilder
+    ///
+    /// ⚠️ 상태마다 다른 버튼을 갈아 끼우지 않고 **버튼 하나**가 모양을 바꾼다. 갈아 끼우면
+    ///    알약이 원으로 줄어드는 것도, ▶ 가 ⏸ 로 바뀌는 것도 이어지지 않고 뚝 바뀐다.
     private func rightButton(buttonSize: CGFloat) -> some View {
-        switch screenVM.state {
-        case .idle, .finished:
-            Button(action: startTapped) {
-                Image(systemName: "play.fill")
-                    .font(.title2)
-                    .imageScale(.medium)
-            }
-            .buttonStyle(TimerButtonStyle(tint: Color.accentColor, size: buttonSize))
-            .accessibilityLabel(isPresentationMode
-                                ? String(localized: "Start Session")
-                                : String(localized: "Start Timer"))
-            .accessibilityInputLabels([isPresentationMode ? Text("Start Session") : Text("Start Timer"),
-                                       Text("Start"), Text("Play")])
+        let state = screenVM.state
+        // 알약이 원으로 줄어드는 동안은 아직 재생 버튼이다(`launchArmed`).
+        let isRunning = (state == .running || state == .overtime) && !launchArmed
+        return Button(action: primaryTapped) {
+            Image(systemName: isRunning ? "pause.fill" : "play.fill")
+                .font(.title2)
+                .imageScale(.medium)
+                .contentTransition(reduceMotion ? .identity : .symbolEffect(.replace))
+        }
+        .buttonStyle(TimerButtonStyle(tint: isRunning ? DSColor.negativeSoft : Color.accentColor,
+                                      size: buttonSize,
+                                      // 대기 중에는 버튼 줄 폭을 혼자 다 쓴다. 정지가 서는 순간 원이 된다.
+                                      width: state == .idle ? buttonRowWidth(buttonSize) : nil))
+        // 아이패드 키보드·맥: 스페이스 = 시작·일시정지·재개(재생 조작의 관례).
+        // 글자를 적는 동안에는 입력 칸이 스페이스를 먼저 받는다.
+        .keyboardShortcut(.space, modifiers: [])
+        .accessibilityLabel(primaryLabel)
+        .accessibilityInputLabels(primaryInputLabels)
+        .timerActionFeedback(state)
+        .scaleEffect(controlsHidden && !reduceMotion ? 0.8 : 1)
+        .opacity(controlsHidden ? 0 : 1)
+        // 조건으로 붙였다 떼면 버튼이 새로 만들어져 알약 → 원 전환이 끊긴다. 늘 붙이고 내용만 비운다.
+        .contextMenu { startMenu }
+    }
 
-        case .running, .overtime:
-            Button(action: {
-                withAnimation(.easeInOut(duration: 0.25)) { screenVM.pause() }
-            }) {
-                Image(systemName: "pause.fill")
-                    .font(.title2)
-                    .imageScale(.medium)
+    /// 시작 버튼을 길게 누르면: 저장한 설정을 골라 **바로 건다**(메일의 보내기 버튼을 길게 누르는 것과 같은 문법).
+    /// 🔖 시트를 열고 → 고르는 두 걸음이 한 걸음이 된다. 대기 중에만, 저장한 것이 있을 때만 나온다.
+    ///
+    /// ⚠️ 🔖 시트에서 누른 것과 **똑같은 길**(`apply(template:)`)이다. 판정을 여기 따로 두지 말 것.
+    ///    순서도 위젯·제어센터와 같다(`QuickStartPublisher.ordered`). 숨은 손짓이라 여기에만 있는 기능은 두지 않는다.
+    @ViewBuilder
+    private var startMenu: some View {
+        if screenVM.state == .idle {
+            let setups = QuickStartPublisher.ordered(savedSetups.filter { $0.mainSeconds > 0 })
+                .prefix(QuickStartShelf.maxItems)
+            if !setups.isEmpty {
+                Section(String(localized: "Saved setups")) {
+                    ForEach(Array(setups), id: \.id) { setup in
+                        Button {
+                            ActivityReporter.log("start_menu_used")
+                            launchArmed = !reduceMotion
+                            withAnimation(.easeInOut(duration: 0.4)) {
+                                screenVM.apply(template: setup)
+                            }
+                            OpenSavedSetupIntent.donate(setup)
+                        } label: {
+                            // 앱이 지은 이름이면 시간이 제목, 알림 시각이 둘째 줄. 사람이 지은 이름이면 이름 + 시간.
+                            if Timer.isGeneratedName(setup.name) {
+                                Text(verbatim: TimeMapper.durationText(setup.mainSeconds))
+                                Text(verbatim: QuickStartPublisher.tileName(setup))
+                            } else {
+                                Text(verbatim: setup.displayName)
+                                Text(verbatim: TimeMapper.durationText(setup.mainSeconds))
+                            }
+                        }
+                    }
+                }
             }
-            .buttonStyle(TimerButtonStyle(tint: DSColor.negativeSoft, size: buttonSize))
-            .accessibilityLabel(String(localized: "Pause Timer"))
-            .accessibilityInputLabels([Text("Pause Timer"), Text("Pause")])
-
-        case .paused:
-            Button(action: {
-                withAnimation(.easeInOut(duration: 0.25)) { screenVM.resume() }
-            }) {
-                Image(systemName: "play.fill")
-                    .font(.title2)
-                    .imageScale(.medium)
-            }
-            .buttonStyle(TimerButtonStyle(tint: Color.accentColor, size: buttonSize))
-            .accessibilityLabel(String(localized: "Resume Timer"))
-            .accessibilityInputLabels([Text("Resume Timer"), Text("Resume"), Text("Start")])
         }
     }
 
+    private var primaryLabel: String {
+        switch screenVM.state {
+        case .idle, .finished:
+            return isPresentationMode ? String(localized: "Start Session") : String(localized: "Start Timer")
+        case .running, .overtime:
+            return String(localized: "Pause Timer")
+        case .paused:
+            return String(localized: "Resume Timer")
+        }
+    }
+
+    /// 음성 제어로 짧게 부를 이름들 — 화면에는 아이콘뿐이라 부를 이름이 없다.
+    private var primaryInputLabels: [Text] {
+        switch screenVM.state {
+        case .idle, .finished:
+            return [isPresentationMode ? Text("Start Session") : Text("Start Timer"), Text("Start"), Text("Play")]
+        case .running, .overtime:
+            return [Text("Pause Timer"), Text("Pause")]
+        case .paused:
+            return [Text("Resume Timer"), Text("Resume"), Text("Start")]
+        }
+    }
+
+    private func primaryTapped() {
+        switch screenVM.state {
+        case .idle, .finished:
+            startTapped()
+        case .running, .overtime:
+            withAnimation(.easeInOut(duration: 0.25)) { screenVM.pause() }
+        case .paused:
+            withAnimation(.easeInOut(duration: 0.25)) { screenVM.resume() }
+        }
+    }
+
+    // MARK: 도는 동안 버튼 물러나기
+    //
+    // 걸면: 재생 알약이 그 자리에서 원으로 줄어든 뒤 일시정지로 바뀌고, 왼쪽에 정지(빨강)가 생긴다.
+    // 4초 뒤 버튼이 물러나며 시간이 원 한가운데에서 커진다. 화면을 누르면 시간이 작아지며 버튼이 돌아온다.
+    // 영상 재생 화면과 같은 문법이다. 도는 동안 볼 것은 남은 시간이고, 버튼이 늘 떠 있으면 발표 중 스친 손에 멈춘다.
+    // ⚠️ 물러나는 것은 `running` 뿐이다. 일시정지·오버타임·끝남은 버튼을 눌러야 풀리는 상태라 늘 보인다.
+    // ⚠️ VoiceOver·스위치 제어에서는 물러나지 않는다(안 보이는 것을 누를 길이 없다). 스페이스 키는 물러나 있어도 먹는다.
+
+    /// 버튼이 보이는 시간. 걸고 나서, 그리고 다시 꺼낸 뒤.
+    private static let controlsLingerSeconds: Double = 4
+
+    /// 버튼이 물러난 동안 시간이 커지는 배율. 가장 긴 표기도 링 안쪽 지름의 86% 를 넘지 않는다.
+    private func bigTimeScale(fontSize: CGFloat, centerDiameter: CGFloat) -> CGFloat {
+        let characters = CGFloat(screenVM.timeString(from: screenVM.timerVM.remaining).count)
+        let widthShare = 0.6 * characters * fontSize / max(centerDiameter, 1)
+        return max(1, min(hasCenterCaption ? 1.25 : 1.45, 0.86 / max(widthShare, 0.01)))
+    }
+
+    /// 시간을 원 한가운데로 내리는 거리(버튼 줄이 차지하던 몫의 절반, 위에 이름 줄이 있으면 그만큼 덜).
+    private func bigTimeOffset(fontSize: CGFloat, buttonSize: CGFloat) -> CGFloat {
+        let spacing = fontSize * 0.45
+        let caption = hasCenterCaption ? fontSize * 0.55 + spacing : 0
+        return (spacing + buttonSize - caption) / 2
+    }
+
+    /// 가운데 시간 위에 구간 이름·타이머 라벨이 서 있는가.
+    private var hasCenterCaption: Bool {
+        currentSegment != nil || (isProgressMode && !screenVM.timerVM.currentLabel.isEmpty)
+    }
+
+    private var canHideControls: Bool {
+        !voiceOverEnabled && !switchControlEnabled && !Self.keepsControlsForScreenshot
+    }
+
+    private func scheduleControlsHide() {
+        controlsHideTask?.cancel()
+        guard screenVM.state == .running, canHideControls else { return }
+        controlsHideTask = Task { @MainActor in
+            try? await Task.sleep(for: .seconds(Self.controlsLingerSeconds))
+            guard !Task.isCancelled, screenVM.state == .running else { return }
+            withAnimation(.easeInOut(duration: 0.45)) { controlsHidden = true }
+        }
+    }
+
+    private func revealControls() {
+        guard screenVM.state == .running else { return }
+        if controlsHidden {
+            withAnimation(reduceMotion ? .easeOut(duration: 0.2) : .spring(response: 0.3, dampingFraction: 0.8)) {
+                controlsHidden = false
+            }
+        }
+        scheduleControlsHide()
+    }
+
+    /// 스토어 스크린샷은 버튼이 있는 화면을 찍는다.
+    private static var keepsControlsForScreenshot: Bool {
+        #if DEBUG
+        // 물러나는 모습을 확인할 때는 `-screenshotHidesControls YES` 를 함께 준다.
+        return ScreenshotScene.current != nil && !UserDefaults.standard.bool(forKey: "screenshotHidesControls")
+        #else
+        return false
+        #endif
+    }
+
+    /// 버튼 둘 + 사이 간격. 대기 중 알약도 이 폭이라 걸고 끝낼 때 버튼 줄이 차지하는 자리가 같다.
+    private func buttonRowWidth(_ buttonSize: CGFloat) -> CGFloat { buttonSize * 2.5 }
+
     private func buttonRow(buttonSize: CGFloat) -> some View {
         HStack(spacing: buttonSize * 0.5) {
+            // 알약이 오른쪽 원으로 줄어들며 비는 왼쪽 자리에 정지가 자라난다.
             leftButton(buttonSize: buttonSize)
+                .transition(reduceMotion ? .opacity : .scale(scale: 0.4).combined(with: .opacity))
             rightButton(buttonSize: buttonSize)
         }
+        .frame(width: buttonRowWidth(buttonSize), alignment: .trailing)
     }
 
     /// 다음 알림 안내 — **알림이 하나뿐이라 구간 리스트가 무의미할 때만** 선다
@@ -1587,6 +1814,7 @@ extension TimerMainView {
 
     /// 시작 버튼이 하는 일 — 발표 모드는 구간을 먼저 만들고 시작한다.
     private func startTapped() {
+        launchArmed = !reduceMotion
         if isPresentationMode {
             // 알림 경계로부터 구간을 생성한 뒤 발표 시작
             screenVM.syncSectionsFromAlerts()

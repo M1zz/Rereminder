@@ -749,7 +749,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
   (자기 컨테이너를 본다) 앱이 테마를 바꿀 때마다 **앱 그룹에 hex 를 한 벌 적어 둔다**
   (`SharedAccent`). `ThemeManager` 의 `didSet` **과 `init` 양쪽**에서 쓴다 — init 에서는 didSet 이
   돌지 않아, 그것만 빼먹으면 업데이트 직후 잠금화면만 기본색으로 남는다.
-- 버튼은 **동그라미**, 색도 앱과 같다: 정지 `DSColor.plain`(회색, 왼쪽, 일시정지 중에는 빨강) / 일시정지
+- 버튼은 **동그라미**, 색도 앱과 같다: 정지 `DSColor.negative`(빨강 ■, 왼쪽) / 일시정지
   `DSColor.negativeSoft`(주황) / 재개 `DSColor.positive`. 배치도 앱의 원 안과 같은 순서다.
 - ⚠️ **주황을 진행 표시에 쓰지 말 것** — 이 앱에서 주황은 알림 종의 색이다.
 - ⚠️ 카운트다운은 **`Text(timerInterval:countsDown:)`** 으로 그린다.
@@ -996,6 +996,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
   찾지 못하고 다음 되풀이까지 기다려야 했다.
 
 ### 아이폰에서 건 타이머와 손목
+- **아이폰 설정을 손목에서 고르고 고친다**(`Shared/Modules/PhoneSetups.swift`, 제보 2026-11-16): 아이폰이 저장한 설정(최대 12) + 지금 다이얼을 설정 payload 에 얹어 보내고(`QuickStartPublisher.publishToWatch`·`updateCurrentDial`), 워치 첫 화면의 **iPhone에서** 줄 → 목록(`PhoneSetupListView`) → 고르면 알림 화면이 그 값으로 채워져 열린다. 방향은 아이폰 → 워치 하나, 워치 알림 화면은 분 단위라 초가 붙은 알림은 가까운 분으로 맞춘다. ⚠️ 이 파일은 pbxproj 의 워치 예외 목록에 들어 있다.
 - ⚠️ **아이폰에서 건 타이머는 워치 앱으로 넘어가지 않는다.** 워치는 `onTimerStart` 를 받지 않고(콜백은 아이폰 `TimerScreenViewModel` 만 건다), 손목에 닿는 길은 iOS 알림 전달뿐이다. 그 전달은 아이폰이 잠겨 있을 때만 일어나는데 타이머가 도는 동안 화면을 켜 둔다(`isIdleTimerDisabled`). 그래서 앱을 띄워 둔 채로는 손목이 조용하다(제보 2026-11-01). 사용자 문구에 "워치에서 따라 보세요"라고 쓰지 말 것.
 
 ### 끝나면 알람으로 울리기 (AlarmKit) — "크게" 는 소리 파일로 되는 일이 아니다
@@ -1132,7 +1133,8 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 
 ### 메인 화면 위계 (2.3.5)
 ⚠️ **걸고 끝날 때 원은 제자리다.** 대기 중에도 원 아래에 구간 카운트다운 몫의 높이를 보이지 않게 맡아 둔다(`reservesCountdownSpace`) — 안 그러면 원이 남는 높이의 가운데에 서 있다가 시작·끝마다 위아래로 뛰었다. 걸 때 링은 애니메이션 없이 바뀐다(`isProgress`, `transaction(value: isProgressMode)`). 끝·정지로 돌아올 때는 빈 원이 12시에서 핸들까지 다시 차오른다(`refillDialOnReturn`, 처음 열 때의 연출과 같다) — 그냥 바꾸면 뚝 튀고, 보간하면 호가 거꾸로 휘감겼다. 링은 숫자와 같이 반올림한 남은 시간을 그린다(`ringRemaining`).
-주인공은 원과 시작 버튼이다. 강한 색은 시작 버튼(테마 강조색) 하나다. 원 위는 비운다. 원 아래는 문장 하나와 버튼 하나다(`DialAlertLine`). 알림 조작은 셋뿐: `+ 알림 추가`(길이에 맞는 다음 시간, `AlertPresets.nextAlert`), 종 끌기, 종을 **두 번 눌러** 지우기(되돌리기 4초. 한 번 탭으로 지우면 종을 잡으려다 스친 손가락에 알림이 사라진다). 지우는 길은 화면에 안 보여서, 한 번 지워 보기 전까지는 종을 더하거나 끌 때 "종을 두 번 누르면 지워집니다"를 4초 말한다(`DialAlertLine`, 백지 단계에서는 할 일 한 줄이 그 말로 바뀐다). 저장·초기화·불러오기는 🔖 시트(`TimerTemplateView`) 안이다. 칩 줄과 `TemplateQuickBar` 는 지웠다 — 되살리지 말 것.
+주인공은 원과 시작 버튼이다. 강한 색은 시작 버튼(테마 강조색) 하나다. 원 위는 비운다. 원 아래는 문장 두 줄과 버튼 자리 하나다(`DialAlertLine`). 첫 줄은 시작하고 몇 분 뒤("시작 7분, 9분 이후에 알려 줘요"), 둘째 줄은 끝나기 몇 분 전("종료 3분, 1분 전에 알려 줘요"). 시간만 나열하고 "시작 … 이후"·"종료 … 전"은 문장이 한 번 말한다(키 `Alerts you %@ after the start` / `… before the end`). 같은 종은 두 줄에서 같은 색이다. 알림 조작은 셋뿐: **링의 빈 자리를 두 번 눌러 더하기**(누른 각도가 그 시각, `TimerMainView.ringAddTarget`. 개수 한도 없음. ⚠️ `+ 알림 추가` 버튼은 2026-11-16 에 지웠다 — 되살리지 말 것), 종 끌기, 종을 **두 번 눌러** 지우기(되돌리기 4초. 한 번 탭으로 지우면 종을 잡으려다 스친 손가락에 알림이 사라진다). 지우는 길은 화면에 안 보여서, 한 번 지워 보기 전까지는 종을 더하거나 끌 때 "종을 두 번 누르면 지워집니다"를 4초 말한다(`DialAlertLine`, 백지 단계에서는 할 일 한 줄이 그 말로 바뀐다). 버튼 자리에는 더해 보기 전까지 "링을 두 번 누르면 알림이 생겨요"가 선다. 저장·초기화·불러오기는 🔖 시트(`TimerTemplateView`) 안이다.
+**구간 목록**: 가운데 시간을 눌러 여는 시트(`TimeInputSheet`)의 둘째 칸에서 구간 길이를 위에서부터 적으면 총 시간과 경계 알림이 선다(`IntervalList`, 테스트 `IntervalListTests`). 구간을 따로 저장하지 않는다 — 저장되는 것은 총 시간과 알림이다(제보 2026-11-16). 칩 줄과 `TemplateQuickBar` 는 지웠다 — 되살리지 말 것.
 종은 주황 하나가 아니라 **그 종이 끝내는 구간의 색**이다(`AlertPresets.bellSectionIndex`). 링 조각·종·문장의 시간 글자가 같은 색이라 어느 종이 어느 시간인지 읽힌다. 문장에서는 시간만 칠한다("전"은 그대로).
 **어디부터 줄어드는지 걸기 전에 보인다.** 먼저 줄어들 구간(1구간)만 진하고 나머지는 40%, 핸들 앞에 줄어드는 방향의 ‹‹ 가 있다(`activeSectionIndex`, `firstShrinkHint`). 도는 동안에는 지금 구간이 진하다. 끄는 동안은 경계를 봐야 해서 전부 진하다.
 **종을 끄는 동안 원 가운데는 천천히 바뀐다**(`bellReadoutVisible`, 0.4초). 놓으면 값을 0.6초 보여 준 뒤 돌아온다. 손을 떼는 자리는 애니메이션을 끄므로(아래 "다이얼 드래그") 화면을 `draggingMarkerOffset` 에 바로 묶으면 뚝 바뀐다. 종과 링 자체는 손가락을 바로 따라간다.
@@ -1173,9 +1175,21 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 `TimerShape`·`TimerActionBar`·`SectionProgressBar`·`SectionBarLayout`·`SnakeTimerView`·
 `TimerShapeSilhouette`·`TotalTimelineStrip` 은 삭제됐다 — **되살리지 말 것.**
 
+- **대기 중 시작 버튼은 넓은 알약이다**(2026-11-16, `TimerButtonStyle.width`). 폭은 도는 동안 버튼 둘이 쓰는 폭(`buttonRowWidth` = 버튼 × 2.5)과
+  같아서 걸고 끝낼 때 버튼 줄의 자리가 그대로다. 걸면 알약이 오른쪽 원(일시정지)으로 줄고 정지가 왼쪽에 선다.
+  ⚠️ 오른쪽 버튼은 **버튼 하나**가 모양·심볼을 바꾼다(`rightButton`). 상태마다 다른 버튼으로 갈아 끼우면 전환이 뚝 끊긴다.
+  **길게 누르면 저장한 설정을 골라 바로 건다**(`startMenu`, 대기 중에만, 최대 6개, 순서 `QuickStartPublisher.ordered`). ⚠️ 🔖 시트와 같은 길(`apply(template:)`)이고,
+  숨은 손짓이라 여기에만 있는 기능은 두지 않는다. `contextMenu` 는 조건으로 붙였다 떼지 말 것(버튼이 새로 만들어져 전환이 끊긴다). 지표: `start_menu_used`.
+  **걸면**: 재생 알약이 그 자리에서 오른쪽 원으로 줄어든 뒤 일시정지로 바뀌고(`launchArmed`, 줄어드는 동안은 아직 파란 ▶), 왼쪽에 정지가 자라난다.
+  ⚠️ 재생 원을 링의 시작점으로 날려 보내는 연출은 넣었다가 뺐다(2026-11-16) — 되살리지 말 것.
+  **도는 동안 버튼은 4초 보이다 물러나고 시간이 원 한가운데에서 커진다**(`controlsHidden`, `bigTimeScale`, 링 안쪽 지름의 86% 까지). 화면을 누르면 시간이 작아지며 버튼이 돌아온다(`revealControls`).
+  자리(레이아웃)는 그대로 두고 배율·위치·투명도만 바꾼다(치우면 가운데가 흔들린다).
+  ⚠️ 물러나는 것은 `running` 뿐이다(일시정지·오버타임·끝남은 버튼을 눌러야 풀린다). 물러난 버튼은 눌리지 않아 첫 탭은 꺼내기만 한다. VoiceOver·스위치 제어에서는 물러나지 않는다.
+  스크린샷 장면에서는 물러나지 않는다(확인할 때 `-screenshotHidesControls YES`). **정지는 언제나 빨강 ■**(`stop.fill`, `DSColor.negative`)이고 워치·잠금화면도 같다.
+  걸고 멈출 때 햅틱(`timerActionFeedback`, 끝나서 바뀔 때는 울리지 않는다), 스페이스 = 시작·일시정지·재개. 글자 라벨은 달지 않는다(25개 언어 폭이 제각각이다).
 - **버튼은 원 안에 있다**(`TimerButtonStyle`, `buttonRow`) — 가운데 시간 바로 아래.
   원 밖으로 뺐던 이유는 가운데를 두 줄(전체 + 구간)로 쓰려던 것인데, 그 두 줄이 없어졌으므로
-  버튼이 다시 안으로 들어왔다. 정지는 회색 원(`DSColor.plain`, 대기 중에는 없다. 일시정지 중에는 빨강으로 눈에 띄게 — 워치·잠금화면도 같다),
+  버튼이 다시 안으로 들어왔다. 정지는 빨간 원 ■(`DSColor.negative`, 대기 중에는 없다 — 워치·잠금화면도 같다),
   시작·재개는 `DSColor.positive`, 일시정지는 `DSColor.negativeSoft`(주황).
 - **가운데는 전체 남은 시간 한 줄뿐이다.** "지금 구간이 얼마 남았나"는 원 아래 리스트가 답한다.
 - **SectionCountdownList** (`Rereminder/Views/Components/SectionCountdownList.swift`):
@@ -1197,8 +1211,8 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - ⚠️ 울릴 때 뜨는 주황 배너는 링과 틈을 둔다(`DemoStage.bannerSpace`). 링의 선과 12시의 종이 틀 밖으로 나와, 딱 맞추면 얹혀 보인다.
 - ⚠️ 그림·해 보기·수업 틀(`LessonShell`)은 **가로로 눕힌 아이폰**(`verticalSizeClass == .compact`)에서 글과 버튼을 왼쪽, 원을 오른쪽에 둔다. 위아래로 쌓으면 원이 화면 밖으로 나간다. 새 수업 화면도 `LessonShell` 을 쓸 것.
 - 다시 보기: 설정 ▸ 도움말 ▸ **첫 안내 다시 보기**(`IntroReplayView`, 그림 → 해 보기. 고른 자리를 다이얼에 올리지 않는다). 활용법 안쪽(`GuideBookView`)에도 따로 있다.
-- 흐름: 그림(`BlankStartIntro`, 30초쯤) → 해 보기(`BlankStartPractice`, 종을 옮기고 시작을 눌러 빠르게 본 뒤, 종이 하나 더 얹히고 **어느 종이든 두 번 눌러 지워 본다**(고른 종을 지우면 남은 종이 다이얼에 올라간다). 지우는 손짓은 화면에 안 보여서 여기서 한 번 해 보게 한다. 고른 자리가 진짜 다이얼에 올라간다) → 앱. 덮개라 뒤 화면이 비치지 않는다.
-- 단계(`BlankStart.Stage`, 완주 횟수): 0 다이얼·설정·할 일 한 줄 → 1 알림 문장·`+ 알림 추가` → 2 저장 수업 → 3 세션 전환 → 5 전부(기기 칩·기기 질문·팁). ⚠️ 🔖 는 단계와 무관하게 처음부터 보인다 — 숨겼더니 "설정을 저장해 시작하고 싶은데 길이 없다"가 됐고 위젯은 앱에서 저장하라고 말했다. 백지 단계에서 종을 지웠거나 하나도 없으면 문장 줄(되돌리기·`+`)을 세운다. 시드 템플릿은 심지 않는다. 설정 첫 화면 요금제 바로 아래의 **모든 기능 보기**로 언제든 전부 연다(예전엔 화면 모드 섹션 안이라 기존 사용자가 못 찾았다)(세션 모드가 당장 필요한 발표자의 길이다).
+- 흐름: 그림(`BlankStartIntro`, 30초쯤) → 해 보기(`BlankStartPractice`, 종을 옮기고 시작을 눌러 빠르게 본 뒤, **링을 두 번 눌러 종을 더하고**, **종을 두 번 눌러 지워 본다**(전부 지워도 된다. 다 지우면 빈 다이얼로 들어간다). 두 손짓 모두 화면에 안 보여서 여기서 한 번씩 해 보게 한다. 남은 종이 진짜 다이얼에 올라간다) → 앱. 덮개라 뒤 화면이 비치지 않는다.
+- 단계(`BlankStart.Stage`, 완주 횟수): 0 다이얼·설정·할 일 한 줄 → 1 알림 문장(두 번 눌러 더하기) → 2 저장 수업 → 3 세션 전환 → 5 전부(기기 칩·기기 질문·팁). ⚠️ 🔖 는 단계와 무관하게 처음부터 보인다 — 숨겼더니 "설정을 저장해 시작하고 싶은데 길이 없다"가 됐고 위젯은 앱에서 저장하라고 말했다. 백지 단계에서 종을 지웠거나 하나도 없으면 문장 줄(되돌리기·더하기 안내)을 세운다. 시드 템플릿은 심지 않는다. 설정 첫 화면 요금제 바로 아래의 **모든 기능 보기**로 언제든 전부 연다(예전엔 화면 모드 섹션 안이라 기존 사용자가 못 찾았다)(세션 모드가 당장 필요한 발표자의 길이다).
 - 기능 수업(`FeatureLessonView`): 직접 눌러 보는 장난감이다. 확인할 때는 DEBUG 빌드에 `-screenshotLesson session`(moreAlerts·templates·overtime)을 주면 바로 열린다. 세션 수업은 다음에 누를 구간 줄의 테두리가 숨 쉰다 — 무엇을 눌러야 하는지 몰랐다. 새로 설치한 사람에게 완주 뒤 하나씩(`dueLesson`: 1 알림 더하기 · 2 저장 · 4 오버타임, 양보해서 놓치면 다음 완주에). 세션 모드는 첫 진입에 배우고, 3회째에는 토스트로 자리만 알린다. 설정 ▸ 이 앱 활용법 보기(`GuideBookView`)에서 언제든 다시 본다.
 - **빈 원이 차오른다**(`dialFillAngle`, `DialFillMask`): 12시에서 핸들까지 차며 지나는 자리에 종이 나타나고, 도착하면 햅틱 뒤 1구간 강조와 ‹‹ 로 이어진다. 줄어드는 길을 거꾸로 먼저 보여 준다. 첫 시작 전에는 열 때마다, 이미 쓰던 사람에게는 한 번(`shouldPlayDialFill`). 손이 닿거나 시작하면 바로 끝난 모습이 된다. 동작 줄이기면 재생하지 않는다. ⚠️ 호마다 `trim` 을 움직이면 구간이 동시에 자란다. 가림막 하나를 움직일 것. ⚠️ 앱을 열 때 뜨는 안내가 닫힌 뒤에 재생한다(`holdsDialFill`).
 - **기존 사용자에게는 묻는다**: 기능은 그대로 전부 보이고, 업데이트 뒤 첫 완주를 닫을 때 "너무 복잡하지 않나요?"를 한 번 묻는다(`shouldAskComplexity`). 단순하게 고르면 저장까지 보이고, 세션 모드를 써 본 사람은 세션 전환도 남는다. 지표: `complexity_answered:{simpler|fine}`.
@@ -1293,7 +1307,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - 메인 앱(`TimerMainView.alertKnobs`)과 App Clip(`ClipClock.alertKnobs`) **둘 다 같은 규칙**입니다.
 
 ### 기본 타이머 설정 (초기화의 기준점)
-`TimerScreenViewModel.DefaultSetup` — **10분 + 종료 1분 전 알림 하나**.
+`TimerScreenViewModel.DefaultSetup` — **10분 + 종료 3분 전·1분 전 알림 둘**(2026-11-16, 하나뿐이면 "여러 번"이 첫 화면에서 안 보였다).
 앱을 갓 설치했을 때 보이는 설정이고, 다음 세 가지가 전부 이 상수 하나를 따라갑니다:
 
 1. `@Published` 초기값 (`mainMinutes`·`selectedOffsets`·`configuredMainSeconds`)
@@ -1333,7 +1347,8 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 
 ### UI Components
 - **SectionCountdownList** (`Rereminder/Views/Components/SectionCountdownList.swift`): 실행 중
-  원 아래 구간별 카운트다운 목록. 앞 구간이 줄어드는 동안 뒤 구간은 제자리에 서 있다가 경계를
+  원 아래 구간별 카운트다운 목록. 줄마다 둘째 줄에 그 구간이 끝나며 울릴 알림을 **"시작 20분 후 · 종료 10분 전"** 으로 적는다
+  (`boundaryText`, 키 `%@ after start` · `%@ before end`, 마지막 구간은 "종료"). 그래서 목록 높이 몫이 0.32 다(대기 중 맡아 두는 자리도 같은 값이어야 원이 안 뛴다). 앞 구간이 줄어드는 동안 뒤 구간은 제자리에 서 있다가 경계를
   지나면 줄기 시작한다. 색은 링의 구간 색(`SectionPalette`)과 같고 **지금 구간만 100%**.
   길이 비례 막대(`trackWidth`/`fillRatio`)가 함께 붙어 4분/8분/8분이 폭 1:2:2 로 보인다.
   남은 시간은 `TimerSections.remainingSeconds` 하나만 본다.
@@ -1342,7 +1357,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
      **파일도 없다 — 되살리지 말 것.** 같은 시간을 원과 막대 두 군데에 그리면 볼 때마다
      어느 쪽이 무엇인지 골라야 해서 오히려 느리다.
 - **DeviceLinkChips** (`Rereminder/Views/Components/DeviceLinkChips.swift`): 원 아래 기기 연결
-  상태 칩. **"있어요"라고 답한 기기만**, 그리고 **안 될 때만 글자**를 붙인다(연결됨은 초록 심볼만).
+  상태 칩. **"있어요"라고 답한 기기만**, 안 되면 빗금 심볼이 남고, **연결되면 초록 체크가 2.5초 떴다가 사라진다**(자리는 투명하게 남겨 원 아래가 뛰지 않게).
   **대기 중에도 보인다** — 연결은 타이머를 걸기 *전에* 고쳐야 의미가 있다. 발표 모드에서만 뺀다
   (구간 리스트가 화면 절반을 쓰는 자리라 한 줄이 아쉽다).
   누르면 `DeviceConnectionHelpView` 로 들어간다.

@@ -10,7 +10,9 @@
 //
 //  규칙
 //   • **있다고 답한 기기만** 나온다(설정 > 내 기기). 없는 기기의 연결 상태는 소음일 뿐이다.
-//   • **글자 없이 심볼만.** 연결됨은 초록 심볼, 안 됨은 빗금(slash) 심볼 + 회색.
+//   • **글자 없이 심볼만.** 안 됨은 빗금(slash) 심볼 + 회색이고 고칠 때까지 남는다.
+//     연결됨은 **초록 체크가 한 번** 떴다가(`connectedFlashSeconds`) 사라진다 — 되는 것을 계속 말할 필요는 없다.
+//     ⚠️ 사라질 때도 자리는 그대로 둔다(투명). 빼면 원 아래 묶음이 그때마다 위아래로 뛴다.
 //     "Not connected" 라는 문장은 화면 아래 절반에서 가장 눈에 띄는 실패 문구가 됐고,
 //     빗금 심볼이 이미 같은 말을 한다. 무엇을 하면 되는지는 눌러서 여는 안내가 답한다.
 //     ⚠️ 글자를 다시 붙이지 말 것 — 접근성 라벨(VoiceOver)에는 그대로 남아 있다.
@@ -35,6 +37,10 @@ struct DeviceLinkChips: View {
 
     /// 눌러서 연 안내 화면의 대상 기기.
     @State private var helpDevice: DeviceOwnership.Device?
+    /// 연결됨 체크를 아직 보여 주는 중인 기기. 보여 준 뒤에는 빠진다.
+    @State private var flashingDevices: Set<DeviceOwnership.Device> = []
+    /// 연결됐다는 체크가 떠 있는 시간.
+    private static let connectedFlashSeconds: Double = 2.5
 
     /// 칩 안쪽 높이 — 두 칩의 키를 같게 맞춘다.
     /// (글자 크기 설정을 키우면 이 값도 같이 커지되, 아래 심볼 상한만큼만 커진다)
@@ -65,6 +71,13 @@ struct DeviceLinkChips: View {
             .sheet(item: $helpDevice) { device in
                 DeviceConnectionHelpView(device: device)
             }
+            // 화면에 들어올 때 이미 연결돼 있거나, 보는 중에 연결되면 체크를 한 번 띄운다
+            .task(id: watchStatus == .connected) {
+                await flashIfConnected(.watch, isConnected: watchStatus == .connected)
+            }
+            .task(id: isMacConnected) {
+                await flashIfConnected(.mac, isConnected: isMacConnected)
+            }
         }
     }
 
@@ -88,12 +101,28 @@ struct DeviceLinkChips: View {
                             symbol: String,
                             isConnected: Bool,
                             deviceName: LocalizedStringKey) -> some View {
-        Button {
+        let isHidden = isConnected && !flashingDevices.contains(device)
+        return Button {
             helpDevice = device
         } label: {
-            chip(symbol: symbol, isConnected: isConnected, deviceName: deviceName)
+            chip(symbol: isConnected ? "checkmark.circle.fill" : symbol,
+                 isConnected: isConnected, deviceName: deviceName)
         }
         .buttonStyle(.plain)
+        .opacity(isHidden ? 0 : 1)
+        .allowsHitTesting(!isHidden)
+        .accessibilityHidden(isHidden)
+    }
+
+    private func flashIfConnected(_ device: DeviceOwnership.Device, isConnected: Bool) async {
+        guard isConnected else {
+            flashingDevices.remove(device)
+            return
+        }
+        withAnimation(.easeOut(duration: 0.2)) { _ = flashingDevices.insert(device) }
+        try? await Task.sleep(for: .seconds(Self.connectedFlashSeconds))
+        guard !Task.isCancelled else { return }
+        withAnimation(.easeInOut(duration: 0.5)) { _ = flashingDevices.remove(device) }
     }
 
     private var isMacConnected: Bool {

@@ -11,6 +11,10 @@ enum NavigationTarget: Hashable {
     case setNotiView
     case timerView(mainDuration: Int, NotificationDuration: Int)
     case timerViewMultiple(mainDuration: Int, prealertOffsets: [Int])
+    /// 아이폰에서 맞춘 설정 목록(`PhoneSetups`)
+    case phoneSetups
+    /// 아이폰 설정 하나를 알림 화면에 채워 연다 — 거기서 고치고 시작한다
+    case phoneSetup(PhoneSetup)
 }
 
 struct SettingView: View {
@@ -18,6 +22,8 @@ struct SettingView: View {
     @State private var path: [NavigationTarget] = []
     @State private var isNavigating = false
     @State private var restoredTimerVM: TimerViewModel?
+    /// 아이폰에서 받아 둔 설정. 있으면 첫 화면에 그 목록으로 가는 줄이 선다.
+    @State private var phoneSetups: [PhoneSetup] = PhoneSetups.received
 
     var totalTime: Int {
         settingViewModel.time.convertedSecond
@@ -37,6 +43,19 @@ struct SettingView: View {
                 TimePicker()
 
                 Spacer()
+
+                if !phoneSetups.isEmpty {
+                    NavigationLink(value: NavigationTarget.phoneSetups) {
+                        Label {
+                            Text("From iPhone")
+                        } icon: {
+                            Image(systemName: "iphone")
+                        }
+                        .font(.body)
+                        .frame(maxWidth: .infinity)
+                    }
+                    .padding(.horizontal, DSSpacing.md)
+                }
 
                 NextButton()
                     .buttonStyle(.borderedProminent)
@@ -71,6 +90,13 @@ struct SettingView: View {
             }
             .navigationDestination(for: NavigationTarget.self) { target in
                 destination(for: target)
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .phoneSetupsChanged)) { _ in
+                phoneSetups = PhoneSetups.received
+            }
+            .task {
+                // 워치 앱을 열 때 아이폰에 지금 설정을 물어본다(목록도 그 답에 실려 온다)
+                WatchConnectivityManager.shared.requestSettingsFromPhone()
             }
         }
     }
@@ -141,6 +167,10 @@ struct SettingView: View {
                 ),
                 path: $path
             )
+        case .phoneSetups:
+            PhoneSetupListView(setups: phoneSetups, path: $path)
+        case .phoneSetup(let setup):
+            SetNotiView(viewModel: makeSetNotiViewModel(from: setup), path: $path)
         case .timerViewMultiple(let mainDuration, let prealertOffsets):
             TimerView(
                 timerViewModel: TimerViewModel(
@@ -150,6 +180,15 @@ struct SettingView: View {
                 path: $path
             )
         }
+    }
+
+    /// 아이폰 설정으로 채운 알림 화면. 알림 화면은 분 단위라 초가 붙은 알림은 가까운 분으로 맞춘다.
+    private func makeSetNotiViewModel(from setup: PhoneSetup) -> SetNotiViewModel {
+        let vm = SetNotiViewModel(maxTimeInSeconds: setup.mainSeconds)
+        let maxMinute = vm.maxSelectableSeconds / 60
+        vm.selectedMinutes = Set(setup.offsets.map { max(1, Int((Double($0) / 60).rounded())) }
+            .filter { $0 <= maxMinute })
+        return vm
     }
 
     private func makeSetNotiViewModel() -> SetNotiViewModel {

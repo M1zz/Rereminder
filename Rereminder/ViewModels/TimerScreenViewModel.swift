@@ -26,8 +26,8 @@ final class TimerScreenViewModel: ObservableObject {
     enum DefaultSetup {
         /// 10분
         static let mainSeconds = 600
-        /// 종료 1분 전 알림 하나 (무료 기본)
-        static let offsets: Set<Int> = [60]
+        /// 종료 3분 전·1분 전 두 개. 하나뿐이면 "끝나기 전에 **여러 번**"이 처음 화면에서 안 보인다.
+        static let offsets: Set<Int> = [180, 60]
     }
 
     @Published var mainMinutes: Int = DefaultSetup.mainSeconds / 60
@@ -351,6 +351,8 @@ final class TimerScreenViewModel: ObservableObject {
     var onTemplateSaved: (() -> Void)?
     /// 방금 탭해서 지운 알림. 잠깐 되돌리기를 보여 준다(`DialAlertLine`).
     @Published var justRemovedAlert: Int?
+    /// 방금 링을 두 번 눌러 더한 알림. 더하는 법을 알았으니 그 안내를 거둔다(`DialAlertLine`).
+    @Published var lastAddedAlert: Int?
 
     func saveCurrentAsTemplate() {
         let cfg = normalizedCurrentConfig
@@ -490,6 +492,8 @@ final class TimerScreenViewModel: ObservableObject {
         if let data = try? JSONEncoder().encode(cfg) {
             Self.lastUsedDefaults.set(data, forKey: Self.lastUsedConfigKey)
         }
+        // 손목 목록 맨 위의 "아이폰 다이얼"(`PhoneSetups`)
+        QuickStartPublisher.updateCurrentDial(mainSeconds: mainSec, offsets: offsets)
     }
 
     /// 앱 시작 시 마지막으로 사용한 타이머 설정을 다이얼에 복원한다 (타이머 시작은 하지 않음).

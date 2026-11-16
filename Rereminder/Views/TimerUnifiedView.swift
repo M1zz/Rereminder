@@ -648,9 +648,10 @@ struct TimerUnifiedView: View {
     }
 
     /// 첫 실행을 끝냈다. 해 보기에서 고른 자리를 진짜 다이얼에 올리고, 알림 권한은 여기서 묻는다.
-    private func finishIntro(alert: Int?) {
-        if let alert {
-            screenVM.selectedOffsets = [alert]
+    private func finishIntro(alerts: [Int]?) {
+        if let alerts {
+            // 해 보기에서 전부 지웠으면 빈 다이얼이다 — 그것도 그 사람이 고른 것이다
+            screenVM.selectedOffsets = Set(alerts)
             screenVM.initialConfiguration()
             AnalyticsManager.log(.onboardingCompleted)
         } else {

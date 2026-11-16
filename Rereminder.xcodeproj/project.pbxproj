@@ -199,6 +199,7 @@
 				DesignSystem/SectionPalette.swift,
 				Modules/AppName.swift,
 				Modules/EscalatingAlert.swift,
+				Modules/PhoneSetups.swift,
 				Modules/ring.swift,
 				Modules/TimerSections.swift,
 				Modules/WatchConnectivityManager.swift,
@@ -1007,6 +1008,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Rereminder/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "두번알림";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -1046,6 +1048,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Rereminder/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "두번알림";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

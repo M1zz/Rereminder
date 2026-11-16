@@ -136,13 +136,17 @@ private struct SessionStage: View {
                 }
             }
             .padding(.top, DSSpacing.lg)
-            if named.count == names.count, !isRunning {
-                LessonPlayButton {
-                    isRunning = true
-                    line = String(localized: "Each part shows its name as time runs")
-                    demo.start()
-                }
+            // ⚠️ 자리는 처음부터 맡아 둔다. 다 붙인 순간 버튼이 끼어들면 묶음이 64pt 늘어 화면이 위로 밀렸다.
+            let canStart = named.count == names.count && !isRunning
+            LessonPlayButton {
+                isRunning = true
+                line = String(localized: "Each part shows its name as time runs")
+                demo.start()
             }
+            .opacity(canStart ? 1 : 0)
+            .disabled(!canStart)
+            .accessibilityHidden(!canStart)
+            .animation(.easeOut(duration: 0.2), value: canStart)
         }
         .onAppear { line = String(localized: "Tap each part to name it") }
     }

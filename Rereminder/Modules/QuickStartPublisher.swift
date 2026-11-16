@@ -59,11 +59,46 @@ enum QuickStartPublisher {
     static func publish(context: ModelContext) {
         guard let templates = try? context.fetch(FetchDescriptor<Timer>()) else { return }
         SavedSetupEntity.reindex(templates)
+        publishToWatch(templates: templates)
         guard QuickStartShelf.write(items(from: templates)) else { return }
         WidgetCenter.shared.reloadTimelines(ofKind: QuickStartShelf.widgetKind)
         #if os(iOS) && !targetEnvironment(macCatalyst)
         ControlCenter.shared.reloadControls(ofKind: QuickStartShelf.controlKind)
         #endif
+    }
+
+    // MARK: - 워치 (`PhoneSetups`)
+
+    /// 워치에 보내는 저장한 설정 수. 손목 목록은 길면 못 쓴다.
+    static let maxWatchSetups = 12
+    /// 마지막으로 보낸 템플릿 목록 — 지금 다이얼만 바뀌었을 때 다시 읽지 않고 쓴다.
+    private static var lastWatchTemplates: [PhoneSetup] = []
+    private static var currentDial: PhoneSetup?
+
+    /// 아이폰 다이얼에 맞춘 설정이 바뀌었다(`TimerScreenViewModel.persistLastUsedConfig`). 손목 목록 맨 위에 선다.
+    static func updateCurrentDial(mainSeconds: Int, offsets: [Int]) {
+        let dial = PhoneSetup(id: PhoneSetup.currentDialID, name: "", mainSeconds: mainSeconds,
+                              offsets: offsets.filter { $0 > 0 && $0 < mainSeconds }.sorted(by: >))
+        guard dial != currentDial else { return }
+        currentDial = dial
+        sendToWatch()
+    }
+
+    private static func publishToWatch(templates: [Timer]) {
+        lastWatchTemplates = ordered(templates.filter { $0.mainSeconds > 0 })
+            .prefix(maxWatchSetups)
+            .map { t in
+                PhoneSetup(id: t.id.uuidString, name: t.displayName, mainSeconds: t.mainSeconds,
+                           offsets: t.prealertOffsetsSec.filter { $0 > 0 && $0 < t.mainSeconds }.sorted(by: >))
+            }
+        sendToWatch()
+    }
+
+    private static func sendToWatch() {
+        let setups = (currentDial.map { [$0] } ?? []) + lastWatchTemplates
+        guard setups != PhoneSetups.outgoing else { return }
+        PhoneSetups.outgoing = setups
+        Task { @MainActor in WatchConnectivityManager.shared.syncSettings() }
     }
 
     /// 요청받은 템플릿을 스토어에서 다시 읽는다(목록의 이름·시간은 그리기용일 뿐이다).

@@ -61,4 +61,15 @@ extension View {
             Haptics.isEnabled ? .impact(weight: .light) : nil
         }
     }
+
+    /// 시작·일시정지·재개·정지. 화면을 보지 않고 눌러도(발표대, 주머니에서 꺼내며) 걸렸는지 손으로 안다.
+    /// 거는 순간은 또렷하게, 나머지는 가볍게. 끝나서 바뀌는 것(`finished`)은 알림이 말하므로 울리지 않는다.
+    func timerActionFeedback(_ state: TimerState) -> some View {
+        sensoryFeedback(trigger: state) { old, new in
+            guard Haptics.isEnabled, new != .finished, new != .overtime else { return nil }
+            return (old == .idle || old == .finished) && new == .running
+                ? .impact(weight: .medium)
+                : .impact(weight: .light)
+        }
+    }
 }
