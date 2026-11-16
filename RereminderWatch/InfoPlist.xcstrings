@@ -167,6 +167,18 @@
           }
         }
       }
+    },
+    "NSAlarmKitUsageDescription" : {
+      "comment" : "Privacy - Alarm Kit Usage Description",
+      "extractionState" : "extracted_with_value",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "사용자에게 알림을 주기 위해서 알림을 사용합니다."
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

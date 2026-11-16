@@ -16,150 +16,200 @@ DeployBar 가 배포할 때 아래 버전 절의 언어별 문구를 읽어 스�
 이제 아이패드에서도 쓸 수 있어요.
 홈 화면 위젯이 앱 아이콘처럼 링으로 보여요.
 애플워치 앱 아이콘도 새 링 모양이에요.
+세션 대본을 장표별로 나눠 넘겨 볼 수 있어요.
+타이머를 걸고 멈출 때 링이 부드럽게 움직여요.
 
 ### App Store (English)
 
 Now available on iPad.
 Widgets now look like the app icon.
 The Apple Watch app has the new icon.
+Session scripts now split into slides.
+The ring now moves smoothly.
 
 ### App Store (en-GB)
 
 Now available on iPad.
 Widgets now look like the app icon.
 The Apple Watch app has the new icon.
+Session scripts now split into slides.
+The ring now moves smoothly.
 
 ### App Store (日本語)
 
 iPadでも使えるようになりました。
 ホーム画面ウィジェットがアイコンと同じリングに。
 Apple Watchアプリも新しいアイコンに。
+セッションの台本をスライドごとに分けられます。
+開始と停止でリングがなめらかに動きます。
 
 ### 앱스토어 (중국어 간체)
 
 现在可以在 iPad 上使用。
 主屏幕小组件换成和图标一样的圆环。
 Apple Watch App 也换上了新图标。
+分段模式的讲稿可以按幻灯片分页了。
+开始和停止时圆环会平滑移动。
 
 ### 앱스토어 (중국어 번체)
 
 現在可以在 iPad 上使用。
 主畫面小工具換成和圖示一樣的圓環。
 Apple Watch App 也換上了新圖示。
+分段模式的講稿可以依投影片分頁了。
+開始和停止時圓環會平順移動。
 
 ### App Store (Deutsch)
 
 Jetzt auch auf dem iPad.
 Widgets sehen aus wie das App-Symbol.
 Neues Symbol auch auf der Apple Watch.
+Skripte lassen sich in Folien teilen.
+Der Ring bewegt sich jetzt weich.
 
 ### App Store (Français)
 
 Désormais disponible sur iPad.
 Les widgets reprennent l’icône de l’app.
 Nouvelle icône aussi sur Apple Watch.
+Vos notes se découpent par diapositive.
+L’anneau bouge en douceur au départ.
 
 ### App Store (Español)
 
 Ahora también en el iPad.
 Los widgets se ven como el icono.
 Nuevo icono también en el Apple Watch.
+El guion se divide por diapositivas.
+El anillo se mueve suave al iniciar.
 
 ### App Store (Português do Brasil)
 
 Agora também no iPad.
 Os widgets agora parecem o ícone do app.
 Novo ícone também no Apple Watch.
+O roteiro agora se divide por slides.
+O anel se move suave ao iniciar.
 
 ### 앱스토어 (포르투갈어(포르투갈))
 
 Agora também no iPad.
 Os widgets parecem agora o ícone da app.
 Novo ícone também no Apple Watch.
+O guião divide-se por diapositivos.
+O anel move-se suavemente ao iniciar.
 
 ### App Store (Italiano)
 
 Ora disponibile anche su iPad.
 I widget riprendono l’icona dell’app.
 Nuova icona anche su Apple Watch.
+Il copione si divide per slide.
+L’anello ora si muove fluido.
 
 ### 앱스토어 (러시아어)
 
 Теперь и на iPad.
 Виджеты выглядят как иконка приложения.
 Новая иконка и на Apple Watch.
+Сценарий сессии можно делить на слайды.
+Кольцо плавно движется при старте.
 
 ### 앱스토어 (체코어)
 
 Nově i na iPadu.
 Widgety vypadají jako ikona aplikace.
 Nová ikona i na Apple Watch.
+Scénář lze rozdělit podle snímků.
+Kruh se při spuštění plynule pohne.
 
 ### 앱스토어 (덴마크어)
 
 Nu også på iPad.
 Widgets ligner nu app-ikonet.
 Nyt ikon også på Apple Watch.
+Manuskriptet kan deles op i slides.
+Ringen bevæger sig blødt ved start.
 
 ### 앱스토어 (그리스어)
 
 Τώρα και στο iPad.
 Τα widget μοιάζουν με το εικονίδιο.
 Νέο εικονίδιο και στο Apple Watch.
+Το σενάριο χωρίζεται ανά διαφάνεια.
+Ο δακτύλιος κινείται ομαλά.
 
 ### 앱스토어 (핀란드어)
 
 Nyt myös iPadilla.
 Widgetit näyttävät sovelluskuvakkeelta.
 Uusi kuvake myös Apple Watchissa.
+Käsikirjoituksen voi jakaa dioihin.
+Rengas liikkuu pehmeästi alussa.
 
 ### 앱스토어 (인도네시아어)
 
 Kini tersedia juga di iPad.
 Widget kini mirip ikon app.
 Ikon baru juga di Apple Watch.
+Naskah sesi bisa dibagi per slide.
+Cincin bergerak halus saat mulai.
 
 ### 앱스토어 (Norsk bokmål)
 
 Nå også på iPad.
 Widgeter ser nå ut som app-symbolet.
 Nytt symbol også på Apple Watch.
+Manuset kan deles opp i lysbilder.
+Ringen beveger seg mykt ved start.
 
 ### 앱스토어 (네덜란드어)
 
 Nu ook op de iPad.
 Widgets lijken nu op het app-symbool.
 Nieuw symbool ook op Apple Watch.
+Je script is nu per dia te verdelen.
+De ring beweegt soepel bij starten.
 
 ### 앱스토어 (폴란드어)
 
 Teraz także na iPadzie.
 Widżety wyglądają jak ikona aplikacji.
 Nowa ikona także na Apple Watch.
+Scenariusz podzielisz na slajdy.
+Pierścień płynnie rusza i staje.
 
 ### 앱스토어 (스웨덴어)
 
 Nu även på iPad.
 Widgetar ser ut som appsymbolen.
 Ny symbol även på Apple Watch.
+Manuset kan delas upp i bilder.
+Ringen rör sig mjukt vid start.
 
 ### 앱스토어 (태국어)
 
 ใช้งานบน iPad ได้แล้ว
 วิดเจ็ตหน้าตาเหมือนไอคอนแอป
 Apple Watch ก็ได้ไอคอนใหม่ด้วย
+แบ่งบทพูดของเซสชันเป็นสไลด์ได้แล้ว
+วงแหวนเคลื่อนไหวนุ่มนวลขึ้น
 
 ### 앱스토어 (튀르키예어)
 
 Artık iPad’de de kullanılabilir.
 Widget’lar uygulama simgesine benziyor.
 Apple Watch’ta da yeni simge.
+Oturum metnini slaytlara bölebilirsin.
+Halka başlarken yumuşakça hareket eder.
 
 ### 앱스토어 (베트남어)
 
 Giờ đã dùng được trên iPad.
 Tiện ích giờ giống biểu tượng app.
 Biểu tượng mới cả trên Apple Watch.
+Kịch bản phiên chia được theo slide.
+Vòng tròn chuyển động mượt mà hơn.
 
 ## 2.3.7
 
