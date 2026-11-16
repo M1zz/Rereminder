@@ -255,7 +255,8 @@ struct TimerMainView: View {
             let isPrompting = isPresentationMode && isProgressMode && currentScript != nil
             let clockSize = fullClockSize * (isPrompting
                 ? (isSideBySide ? 0.62 : 0.5)
-                : (isPresentationMode && !isSideBySide ? 0.72 : 1.0))
+                // 세션 모드는 원 위 여백을 덜어 원을 올리고, 그만큼 덜 줄인다(목록 몫은 그대로 남는다).
+                : (isPresentationMode && !isSideBySide ? 0.86 : 1.0))
             let lineWidth = clockSize * 0.083
             let spacing = availableHeight * 0.01
             // 링의 **보이는** 아래 끝은 레이아웃 프레임보다 아래에 있다 — 흰 핸들(지름 lineWidth)과
@@ -393,7 +394,7 @@ struct TimerMainView: View {
                     if !isEditingSectionName {
                         // 세로: 원 위는 비워 둔다. 주인공은 원과 시작 버튼이고, 알림 칩은 원 아래 묶음에 있다.
                         Color.clear
-                            .frame(height: availableHeight * 0.08)
+                            .frame(height: availableHeight * (isPresentationMode ? 0.015 : 0.08))
                         // 원 **위** 신축 공간. 아래 것과 짝을 이뤄 남는 세로를 반씩 나눠 갖는다
                         // → 원의 위아래 여백이 같아진다.
                         // ⚠️ `minLength` 가 최소 여백의 **보장**이다. 구간 칩·카운트다운이 각자
@@ -442,6 +443,9 @@ struct TimerMainView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             // 원이 빠지고 목록이 커진다 — 두 변화가 한 몸으로 움직여야 매끄럽다
             .animation(.easeInOut(duration: 0.28), value: isEditingSectionName)
+            // 세션 모드를 켜고 끄거나 대본이 펼쳐질 때 원이 제 크기·자리로 미끄러져 간다(뚝 바뀌지 않게)
+            .animation(reduceMotion ? nil : .spring(response: 0.45, dampingFraction: 0.9), value: isPresentationMode)
+            .animation(reduceMotion ? nil : .spring(response: 0.45, dampingFraction: 0.9), value: isPrompting)
             // ⚠️ 이게 없으면 Spacer·여백처럼 아무것도 그리지 않은 자리는 탭이 잡히지 않아
             //    "화면 아무 데나 눌러 키보드 내리기"가 원·카드 위에서만 동작한다.
             .contentShape(Rectangle())
@@ -466,6 +470,8 @@ struct TimerMainView: View {
             .onChange(of: isProgressMode) { wasRunning, isRunning in
                 if wasRunning && !isRunning {
                     if screenVM.state == .idle { rewindDialOnStop() } else { refillDialOnReturn() }
+                } else if !wasRunning && isRunning {
+                    unfoldDialOnStart()
                 }
             }
             .onChange(of: ringRemaining) { _, value in
@@ -475,7 +481,10 @@ struct TimerMainView: View {
                 if running { lastProgressRing.update(seconds: ringRemaining, lapsPerSecond: progressLapsPerSecond) }
             }
             .onChange(of: mainDrag.isActive) { _, active in if active { stopRewind() } }
-            .onChange(of: screenVM.state) { _, newState in if newState != .idle { stopRewind() } }
+            .onChange(of: screenVM.state) { _, newState in
+                // 시작할 때 펼치는 장면은 도는 동안의 것이라 남긴다
+                if newState != .idle, rewind?.followsLive != true { stopRewind() }
+            }
             // 안내가 닫히고 앱이 앞에 있을 때 시작한다(알림 권한 창이 떠 있으면 기다린다).
             .task(id: !holdsDialFill && scenePhase == .active && dialFillAngle != nil) {
                 guard !holdsDialFill, scenePhase == .active, dialFillAngle != nil else { return }
@@ -796,20 +805,39 @@ struct TimerMainView: View {
     /// 같이 옮겨 가며 그린다. 바로 바꾸면 호가 순간이동했고, 비웠다가 다시 채우면 처음부터 다시 시작하는 것처럼 보였다.
     private func rewindDialOnStop() {
         let total = Double(max(1, screenVM.configuredMainSeconds))
+        // 펼치는 도중에 멈췄으면 그 순간 그려진 좌표에서 되감는다
+        let unfolding = rewind.flatMap { $0.followsLive ? $0 : nil }
         let fromSeconds = min(total, max(0, lastProgressRing.seconds ?? total))
-        let fromScale = lastProgressRing.lapsPerSecond ?? progressLapsPerSecond
+        let fromScale = unfolding?.lapsPerSecond ?? lastProgressRing.lapsPerSecond ?? progressLapsPerSecond
         let toScale = 1 / Double(TimeMapper.secondsPerLap)
         guard !reduceMotion, dialFillAngle == nil, !mainDrag.isActive else { return }
-        stopRewind()
         lastProgressRing.clear()
-        let start = DialRewind(fromSeconds: fromSeconds, toSeconds: total,
-                               fromLapsPerSecond: fromScale, toLapsPerSecond: toScale, progress: 0)
+        let distance = abs(total * toScale - fromSeconds * fromScale)
+        // 많이 되감을수록 조금 더 길게, 그래도 한 호흡 안에.
+        play(DialRewind(fromSeconds: fromSeconds, toSeconds: total,
+                        fromLapsPerSecond: fromScale, toLapsPerSecond: toScale, progress: 0),
+             duration: 0.35 + 0.35 * min(1, distance))
+    }
+
+    /// 시작하면 걸기 전 링(1° = 10초)이 진행 중 링(설정 시간 = 한 바퀴)으로 펼쳐진다. 정지의 되감기를 거꾸로 돈다.
+    /// 바로 바꾸면 10분짜리 호가 한 프레임 만에 꽉 찬 원이 되어 턱 하고 시작했다.
+    private func unfoldDialOnStart() {
+        guard !reduceMotion, screenVM.state == .running else { return }
+        let total = Double(max(1, screenVM.configuredMainSeconds))
+        let fromScale = 1 / Double(TimeMapper.secondsPerLap)
+        let toScale = progressLapsPerSecond
+        guard abs(toScale - fromScale) > .ulpOfOne else { return }
+        play(DialRewind(followsLive: true, fromSeconds: total, toSeconds: total,
+                        fromLapsPerSecond: fromScale, toLapsPerSecond: toScale, progress: 0),
+             duration: 0.35 + 0.35 * min(1, abs(total * toScale - total * fromScale)))
+    }
+
+    /// 좌표를 갈아타는 장면 하나를 끝까지 돌린다.
+    private func play(_ scene: DialRewind, duration: Double) {
+        stopRewind()
         var transaction = Transaction()
         transaction.disablesAnimations = true
-        withTransaction(transaction) { rewind = start }
-        // 많이 되감을수록 조금 더 길게, 그래도 한 호흡 안에.
-        let distance = abs(total * toScale - fromSeconds * fromScale)
-        let duration = 0.35 + 0.35 * min(1, distance)
+        withTransaction(transaction) { rewind = scene }
         rewindTask = Task { @MainActor in
             let began = Date()
             while !Task.isCancelled {
@@ -821,6 +849,11 @@ struct TimerMainView: View {
             guard !Task.isCancelled else { return }
             withTransaction(transaction) { rewind = nil }
         }
+    }
+
+    /// 장면이 그리는 남은 시간 — 시작할 때는 실제로 줄어드는 값을 그대로 쓴다.
+    private func morphSeconds(_ scene: DialRewind) -> Double {
+        scene.followsLive ? ringRemaining : scene.seconds
     }
 
     private func stopRewind() {
@@ -905,7 +938,8 @@ struct TimerMainView: View {
             .map { Double($0) * degreesPerSecond }
             .filter { $0 < headAngle }
             .max() ?? 0
-        if isTimeEditable || (isRunning && !runningHintExpired), dialFillAngle == nil, !bellReadoutVisible, !mainDrag.isActive,
+        if isTimeEditable || (isRunning && !runningHintExpired), dialFillAngle == nil, rewind == nil,
+           !bellReadoutVisible, !mainDrag.isActive,
            headAngle - sectionEnd > gap * 2 {
             Image(systemName: "chevron.left.2")
                 .font(.system(size: lineWidth * 0.55, weight: .heavy))
@@ -986,7 +1020,8 @@ struct TimerMainView: View {
 
     /// 줄어드는 호의 움직이는 끝점 표시 — 대기 중 드래그 핸들과 같은 시각 언어(흰 원)
     private func progressEdgeDot(size: CGFloat, lineWidth: CGFloat) -> some View {
-        let angle = Double(usesAbsoluteRing ? remainingLaps : ratio) * 360.0
+        let angle = rewind.map { morphSeconds($0) * $0.lapsPerSecond * 360 }
+            ?? Double(usesAbsoluteRing ? remainingLaps : ratio) * 360.0
         return Circle()
             .fill(.white)
             .frame(width: lineWidth * 0.9, height: lineWidth * 0.9)
@@ -1082,7 +1117,7 @@ struct TimerMainView: View {
 
         if let rewind {
             // 정지 뒤 되감기: 남은 시간과 좌표 둘 다 설정 쪽으로 옮겨 가며 같은 링을 그린다.
-            let rows = DialRing.rows(laps: CGFloat(rewind.seconds * rewind.lapsPerSecond))
+            let rows = DialRing.rows(laps: CGFloat(morphSeconds(rewind) * rewind.lapsPerSecond))
             (outer, inner, color) = (rows.outer, rows.inner, Color.accentColor)
         } else if screenVM.state == .running || screenVM.state == .paused {
             // 실행/Pause 중: 남은 시간이 줄어드는 링.
@@ -1129,7 +1164,7 @@ struct TimerMainView: View {
 
     /// 흰 핸들이 서는 각도 — 차오르는 중이면 차오른 자리, 되감는 중이면 되감긴 자리.
     private var handleAngle: Double {
-        dialFillAngle ?? rewind.map { $0.seconds * $0.lapsPerSecond * 360 } ?? screenVM.mainAngle
+        dialFillAngle ?? rewind.map { morphSeconds($0) * $0.lapsPerSecond * 360 } ?? screenVM.mainAngle
     }
 
     private func dragPointer(size: CGFloat, lineWidth: CGFloat) -> some View {
@@ -1911,8 +1946,11 @@ extension TimerMainView {
 }
 
 
-/// 정지한 뒤 링이 되감기는 한 장면. 남은 시간과 좌표(1초 = 몇 바퀴)를 함께 옮긴다.
+/// 링이 좌표를 갈아타는 한 장면. 정지하면 남은 시간과 좌표(1초 = 몇 바퀴)를 함께 되감고,
+/// 시작하면 남은 시간은 그대로 두고 좌표만 걸기 전(1° = 10초)에서 진행 중(설정 시간 = 한 바퀴)으로 펼친다.
 private struct DialRewind {
+    /// 시작할 때처럼 남은 시간은 실제 값을 따르고 좌표만 옮겨 가는가
+    var followsLive = false
     let fromSeconds: Double
     let toSeconds: Double
     let fromLapsPerSecond: Double
