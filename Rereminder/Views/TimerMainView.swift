@@ -114,6 +114,9 @@ struct TimerMainView: View {
     @State private var dialFillArrived = false
     /// 정지한 뒤 링이 되감기는 중이면 그 상태. nil 이면 평소 화면이다.
     @State private var rewind: DialRewind?
+    /// 이번 실행의 펼치기를 시작했나. 아직이면 첫 화면부터 걸기 전 좌표로 그린다 —
+    /// 펼치기는 상태가 바뀐 **뒤**(`onChange`)에 시작하므로, 그 한 번을 진행 중 좌표로 그리면 종이 팅 하고 튀었다가 돌아왔다.
+    @State private var unfoldHandled = true
     @State private var rewindTask: Task<Void, Never>?
     /// 마지막으로 그린 진행 중 링 — 정지하는 순간에는 남은 시간이 이미 초기화돼 있어 따로 들고 있는다.
     /// 화면을 다시 그리지 않도록 상태가 아니라 상자에 둔다.
@@ -473,6 +476,11 @@ struct TimerMainView: View {
                 } else if !wasRunning && isRunning {
                     unfoldDialOnStart()
                 }
+                unfoldHandled = isRunning
+            }
+            .onAppear {
+                // 도는 타이머를 되살려 열었으면 펼치지 않는다
+                unfoldHandled = isProgressMode
             }
             .onChange(of: ringRemaining) { _, value in
                 if isProgressMode { lastProgressRing.update(seconds: value, lapsPerSecond: progressLapsPerSecond) }
@@ -851,6 +859,16 @@ struct TimerMainView: View {
         }
     }
 
+    /// 지금 그리는 좌표 장면. 막 시작해 펼치기가 아직 걸리지 않은 순간도 출발점(걸기 전 좌표)으로 그린다.
+    private var activeMorph: DialRewind? {
+        if let rewind { return rewind }
+        guard isProgressMode, !unfoldHandled, !reduceMotion else { return nil }
+        let total = Double(max(1, screenVM.configuredMainSeconds))
+        return DialRewind(followsLive: true, fromSeconds: total, toSeconds: total,
+                          fromLapsPerSecond: 1 / Double(TimeMapper.secondsPerLap),
+                          toLapsPerSecond: progressLapsPerSecond, progress: 0)
+    }
+
     /// 장면이 그리는 남은 시간 — 시작할 때는 실제로 줄어드는 값을 그대로 쓴다.
     private func morphSeconds(_ scene: DialRewind) -> Double {
         scene.followsLive ? ringRemaining : scene.seconds
@@ -938,7 +956,7 @@ struct TimerMainView: View {
             .map { Double($0) * degreesPerSecond }
             .filter { $0 < headAngle }
             .max() ?? 0
-        if isTimeEditable || (isRunning && !runningHintExpired), dialFillAngle == nil, rewind == nil,
+        if isTimeEditable || (isRunning && !runningHintExpired), dialFillAngle == nil, activeMorph == nil,
            !bellReadoutVisible, !mainDrag.isActive,
            headAngle - sectionEnd > gap * 2 {
             Image(systemName: "chevron.left.2")
@@ -1020,7 +1038,7 @@ struct TimerMainView: View {
 
     /// 줄어드는 호의 움직이는 끝점 표시 — 대기 중 드래그 핸들과 같은 시각 언어(흰 원)
     private func progressEdgeDot(size: CGFloat, lineWidth: CGFloat) -> some View {
-        let angle = rewind.map { morphSeconds($0) * $0.lapsPerSecond * 360 }
+        let angle = activeMorph.map { morphSeconds($0) * $0.lapsPerSecond * 360 }
             ?? Double(usesAbsoluteRing ? remainingLaps : ratio) * 360.0
         return Circle()
             .fill(.white)
@@ -1115,7 +1133,7 @@ struct TimerMainView: View {
         let inner: CGFloat
         let color: Color
 
-        if let rewind {
+        if let rewind = activeMorph {
             // 정지 뒤 되감기: 남은 시간과 좌표 둘 다 설정 쪽으로 옮겨 가며 같은 링을 그린다.
             let rows = DialRing.rows(laps: CGFloat(morphSeconds(rewind) * rewind.lapsPerSecond))
             (outer, inner, color) = (rows.outer, rows.inner, Color.accentColor)
@@ -1140,11 +1158,11 @@ struct TimerMainView: View {
             outerFraction: outer,
             innerFraction: inner,
             // 설정 시간 전체 길이(바퀴 수 포함) — 구간 색 분할이 바퀴를 걸쳐도 이어지도록
-            totalFraction: isProgressMode || rewind != nil
+            totalFraction: isProgressMode || activeMorph != nil
                 ? outer + inner
                 : CGFloat(max(0, screenVM.mainAngle) / 360.0),
             innerRingReveal: innerRingReveal,
-            markers: rewind.map { r in liveOffsets.sorted().map { CGFloat(Double($0) * r.lapsPerSecond) } } ?? markers,
+            markers: activeMorph.map { r in liveOffsets.sorted().map { CGFloat(Double($0) * r.lapsPerSecond) } } ?? markers,
             showsSectionColors: showsAlertSectionColors,
             plainColor: color,
             focusedSectionIndex: focusedSectionIndex,
@@ -1164,7 +1182,7 @@ struct TimerMainView: View {
 
     /// 흰 핸들이 서는 각도 — 차오르는 중이면 차오른 자리, 되감는 중이면 되감긴 자리.
     private var handleAngle: Double {
-        dialFillAngle ?? rewind.map { morphSeconds($0) * $0.lapsPerSecond * 360 } ?? screenVM.mainAngle
+        dialFillAngle ?? activeMorph.map { morphSeconds($0) * $0.lapsPerSecond * 360 } ?? screenVM.mainAngle
     }
 
     private func dragPointer(size: CGFloat, lineWidth: CGFloat) -> some View {
@@ -1321,7 +1339,7 @@ struct TimerMainView: View {
         let isHighlighting = highlightedMarker != nil
         return ZStack {
             ForEach(sortedOffsets, id: \.self) { offsetSec in
-                let baseAngle: Double = rewind.map { Double(offsetSec) * $0.lapsPerSecond * 360 }
+                let baseAngle: Double = activeMorph.map { Double(offsetSec) * $0.lapsPerSecond * 360 }
                     ?? (usesAbsoluteRing
                         ? Double(offsetSec) / TimeMapper.secondsPerDegree
                         : Double(CGFloat(offsetSec) / total) * 360.0)
