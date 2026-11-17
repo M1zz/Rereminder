@@ -179,6 +179,37 @@ final class RereminderUITests: XCTestCase {
         pause(2)
     }
 
+    /// 가로로 눕힌 화면을 눈으로 확인할 때 쓴다(시뮬레이터를 명령줄로 돌릴 길이 없다).
+    /// `LANDSCAPE_SCENE=<dial|running|session|sessionRunning>` 일 때만 돌고, 눕힌 채 40초 머문다 —
+    /// 그동안 `xcrun simctl io <기기> screenshot` 으로 찍는다.
+    func testLandscapeHold() throws {
+        let scene = ProcessInfo.processInfo.environment["LANDSCAPE_SCENE"] ?? ""
+        try XCTSkipIf(scene.isEmpty, "가로 확인 때만")
+        app.terminate()
+        app.launchArguments = ["-screenshotScene", scene,
+                               "-hasSeenOnboarding", "YES",
+                               "-blankStart.completions", "9",
+                               "-blankStart.complexityAsked", "YES",
+                               "-AppleLanguages", "(ko)",
+                               "-AppleLocale", "ko_KR"]
+        app.launch()
+        XCUIDevice.shared.orientation = .landscapeLeft
+        pause(40)
+    }
+
+    /// 링을 두 번 눌러 종이 그 자리에서 생기는지 녹화로 본다. `BELL_APPEAR=1` 일 때만.
+    func testBellAppearInPlace() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["BELL_APPEAR"] == "1", "눈 확인 때만")
+        let time = app.descendants(matching: .any)
+            .matching(NSPredicate(format: "label BEGINSWITH %@", "Timer,")).firstMatch
+        XCTAssertTrue(time.waitForExistence(timeout: 10))
+        pause(3)
+        // 아이패드 13 가로(1376×1032pt)에서 3시 방향 링 위 = 15분
+        let ring = app.coordinate(withNormalizedOffset: .zero).withOffset(CGVector(dx: 636, dy: 497))
+        ring.doubleTap()
+        pause(3)
+    }
+
     private func pause(_ seconds: TimeInterval) {
         Thread.sleep(forTimeInterval: seconds)
     }

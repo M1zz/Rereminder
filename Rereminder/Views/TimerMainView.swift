@@ -1257,7 +1257,8 @@ struct TimerMainView: View {
         guard seconds > 0, seconds < total, !screenVM.selectedOffsets.contains(seconds) else { return }
 
         finishDialFill()
-        withAnimation(.easeInOut(duration: 0.2)) {
+        // 작은 원이 살짝 넘치듯 커지며 자리 잡는다
+        withAnimation(.spring(response: 0.35, dampingFraction: 0.62)) {
             _ = screenVM.selectedOffsets.insert(seconds)
             screenVM.justRemovedAlert = nil
             screenVM.lastAddedAlert = seconds
@@ -1363,6 +1364,13 @@ struct TimerMainView: View {
                 let knobScale: CGFloat = isTimeEditable ? (isFocused ? 2.0 : 1.6) : 1.15
                 // 지금 놓으면 지워지는 자리다. 놓기 전에 미리 흐려서, 놓는 순간이 놀랍지 않게 한다.
                 let willRemove = isDraggingThis && TimeMapper.angleToSeconds(from: markerDragAngle) == 0
+                // 나타나고 사라지는 기준점 = 그 종이 놓인 자리. 바깥 틀은 원 한가운데라,
+                // 기준점을 안 주면 종이 가운데에서 날아왔다(제보 2026-11-17).
+                let knobFrame = lineWidth * 2.8
+                let knobRadius = ringSize(forAngle: displayAngle, size: size, lineWidth: lineWidth) / 2
+                let knobPhi = (displayAngle - 90) * .pi / 180
+                let knobAnchor = UnitPoint(x: 0.5 + knobRadius * cos(knobPhi) / knobFrame,
+                                           y: 0.5 + knobRadius * sin(knobPhi) / knobFrame)
 
                 ZStack {
                     Circle()
@@ -1485,8 +1493,10 @@ struct TimerMainView: View {
                         including: isTimeEditable ? .all : .none
                     )
                     .rotationEffect(.init(degrees: -90))
-                    // 알림 토글 시 노브가 축소+페이드로 나타나고 사라지도록
-                    .transition(.scale.combined(with: .opacity))
+                    // 알림을 더하면 그 자리에서 작은 원이 커지며 생기고, 지우면 그 자리로 줄어든다
+                    .transition(reduceMotion
+                                ? .opacity
+                                : .scale(scale: 0.1, anchor: knobAnchor).combined(with: .opacity))
             }
         }
         .frame(width: size, height: size)
