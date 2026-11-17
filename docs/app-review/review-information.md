@@ -2,28 +2,34 @@
 
 2026-11-17 visionOS 2.3.9 심사에서 "제출 이력이 적은 계정" 추가 정보 요청을 받았다.
 아래 영어 글을 **App Store Connect 답장**과 **앱 심사 정보 ▸ 메모** 두 곳에 같이 넣는다(앞으로의 제출에도 남는다).
-화면 녹화는 Apple Vision Pro 실기기에서 사람이 찍어 답장에 붙인다(아래 "녹화 순서").
+화면 녹화는 실기기가 없어 visionOS 시뮬레이터에서 `RereminderUITests.testReviewDemo` 로 자동으로 찍었다(아래 "녹화 순서").
 
-## 녹화 순서 (Apple Vision Pro, 최신 visionOS)
+## 녹화 순서 (시뮬레이터 자동)
 
-제어 센터 ▸ 나의 화면 기록. 앱 아이콘을 눌러 **켜는 장면부터** 시작한다. 2~3분.
+실기기가 없어 visionOS 시뮬레이터에서 UI 테스트가 앱을 조작하고 그 화면을 녹화한다.
+테스트는 `REVIEW_DEMO=1` 일 때만 돈다(배포 전 검사에서는 건너뛴다). 단위 테스트 묶음이 visionOS 를 지원하지 않아,
+UI 테스트만 든 개인 스킴(`xcuserdata/…/ReviewDemo.xcscheme`)으로 돌린다.
 
-1. 홈에서 두번알림 실행
-2. 흰 핸들을 끌어 시간을 정하고, 링을 두 번 눌러 알림 하나를 더한다
-3. 시작 → 예비 알림이 울리는 것까지(짧게 1분 + 30초 전 알림이면 기다리기 쉽다) → 일시정지 → 정지
-4. 가운데 시간 누르기 ▸ 구간 목록 ▸ 1:00, 0:30 ▸ 반복 × 3 ▸ 적용 → 시작해서 3 / 3 표시 보이기 → 정지
-5. 아래 막대의 세션 모드 → 구간 이름·대본 적기 → 시작해서 대본이 넘어가는 것 보이기 → 정지
-6. 🔖 → 지금 설정 저장 → 저장한 칩으로 시작 → 정지
-7. 설정 ▸ 요금제 줄 → 페이월(무료 · 기억 · Pro, 연 구독·평생) 보이기 → (선택) 샌드박스로 구매 → 구매 복원
+    V=<Apple Vision Pro 시뮬레이터 UDID>
+    O=(SUPPORTED_PLATFORMS="iphoneos iphonesimulator xros xrsimulator" XROS_DEPLOYMENT_TARGET=26.0)
+    xcodebuild build-for-testing -scheme ReviewDemo -destination "id=$V" "${O[@]}"
+    xcrun simctl io $V recordVideo --codec h264 review.mov &      # "Recording started" 뒤
+    TEST_RUNNER_REVIEW_DEMO=1 xcodebuild test-without-building -scheme ReviewDemo -destination "id=$V" "${O[@]}" \
+        -only-testing:RereminderUITests/RereminderUITests/testReviewDemo
+    pkill -INT -f 'simctl io.*recordVideo'
+
+앞의 첫 실행(설정용)과 끝의 홈 화면을 잘라 내고 창 둘레로 확대한다(1920×1080, 2분 23초).
+2026-11-17 본: `~/Desktop/두번알림-심사/Rereminder-visionOS-review.mp4`.
+반복 횟수 + 버튼은 자동 탭이 닿지 않아 영상에서는 반복 칸이 보이기만 한다.
 
 ## 답장 · 메모 (영어, 그대로 붙여 넣기)
 
 Hello App Review team,
 
-Thank you for reviewing Rereminder. A screen recording made on Apple Vision Pro (latest visionOS) is attached. It starts at app launch and shows the main flow, the in-app purchase screen, and restoring purchases. The app has no accounts, no login, and no user-generated content shared with others.
+Thank you for reviewing Rereminder. A screen recording of the visionOS app is attached. It starts at app launch and shows the main flow and the in-app purchase screen. The app has no accounts, no login, and no user-generated content shared with others.
 
 1. Screen recording
-Attached. It shows: launching the app, setting a timer on the dial, adding alerts, starting, a pre-alert firing, pause and stop, interval and repeat setup, Session mode with per-section scripts, saving a setup, and the paywall with Restore Purchases.
+Attached. It was recorded in the visionOS simulator (Xcode, visionOS 26.2) because we do not have an Apple Vision Pro device. The visionOS app is the same SwiftUI app that runs on iPhone and iPad. It shows: launching the app, a 1 minute timer with a pre-alert 30 seconds before the end, pause and resume, the end of the timer, the interval and repeat settings, Session mode with a script for each section, and the paywall with the Plus and Pro plans.
 
 2. Purpose and audience
 Rereminder is a timer that alerts you several times before time runs out, not only at the end. A normal timer rings when it is already too late. Rereminder lets people pace themselves with alerts such as 5 minutes and 1 minute before the end. It is made for presenters and speakers, teachers and instructors, workshop facilitators, and people who exercise or study in timed intervals.

@@ -74,4 +74,112 @@ final class RereminderUITests: XCTestCase {
             return false
         }
     }
+
+    // MARK: - 심사용 녹화
+
+    /// App Review 가 요구한 "앱을 켜는 순간부터 흐름 전체" 녹화를 시뮬레이터에서 찍을 때 쓴다.
+    /// 평소 테스트(배포 전 검사)에서는 건너뛴다 — 1분 타이머를 끝까지 기다려 느리다.
+    /// 찍는 법: `docs/app-review/review-information.md` ▸ 녹화.
+    func testReviewDemo() throws {
+        try XCTSkipUnless(ProcessInfo.processInfo.environment["REVIEW_DEMO"] == "1", "심사 녹화 때만")
+        app.terminate()
+        app.launchArguments = ["-screenshotScene", "reviewDemo",
+                               "-hasSeenOnboarding", "YES",
+                               "-blankStart.completions", "9",
+                               "-blankStart.complexityAsked", "YES",
+                               "-dev.testPaywall", "YES",
+                               "-AppleLanguages", "(en)",
+                               "-AppleLocale", "en_US"]
+        app.launch()
+        pause(3)
+
+        // 1) 1분 타이머 — 시작, 일시정지, 재개, 30초 전 예비 알림, 끝
+        let start = app.buttons["Start Timer"]
+        XCTAssertTrue(start.waitForExistence(timeout: 10))
+        start.tap()
+        dismissPermissionWarningIfShown()
+        pause(2)
+        app.buttons["Pause Timer"].tap()
+        pause(2)
+        app.buttons["Resume Timer"].tap()
+        let done = app.buttons["Dismiss timer alert"]
+        XCTAssertTrue(done.waitForExistence(timeout: 90))
+        pause(3)
+        done.tap()
+        pause(2)
+        // 끝난 뒤에는 넘긴 시간(+00:05)을 센다 — 정지로 처음으로 돌아간다
+        let stop = app.buttons["Cancel Timer"]
+        if stop.waitForExistence(timeout: 3) { stop.tap() }
+        pause(2)
+
+        // 2) 반복 — 구간 목록에서 0:30 + 0:30 을 세 번
+        let time = app.descendants(matching: .any)
+            .matching(NSPredicate(format: "label == %@", "Timer, Ready")).firstMatch
+        XCTAssertTrue(time.waitForExistence(timeout: 5))
+        time.tap()
+        let intervals = app.buttons["Intervals"]
+        XCTAssertTrue(intervals.waitForExistence(timeout: 5))
+        pause(1)
+        intervals.tap()
+        pause(2)
+        let repeatRow = app.descendants(matching: .any)
+            .matching(NSPredicate(format: "label == %@", "Repeat")).firstMatch
+        XCTAssertTrue(repeatRow.waitForExistence(timeout: 5))
+        repeatRow.swipeUp(); pause(1)
+        let plus = repeatRow.coordinate(withNormalizedOffset: CGVector(dx: 1, dy: 0.5))
+            .withOffset(CGVector(dx: -58, dy: 0))
+        plus.tap(); pause(1)
+        plus.tap(); pause(2)
+        app.buttons["Apply"].firstMatch.tap()
+        pause(3)
+        start.tap()
+        dismissPermissionWarningIfShown()
+        pause(3)
+        app.buttons["Cancel Timer"].tap()
+        pause(2)
+
+        // 3) 세션 모드 — 구간 이름과 대본이 도는 동안 보인다
+        let session = app.descendants(matching: .any)
+            .matching(NSPredicate(format: "label == %@", "Session Mode")).firstMatch
+        if session.waitForExistence(timeout: 5) {
+            session.tap()
+            pause(3)
+            let startSession = app.buttons["Start Session"]
+            if startSession.waitForExistence(timeout: 5) {
+                startSession.tap()
+                dismissPermissionWarningIfShown()
+                pause(5)
+                app.buttons["Cancel Timer"].tap()
+                pause(2)
+            }
+            session.tap()
+            pause(2)
+        }
+
+        // 4) 설정 ▸ 요금제 ▸ 페이월(구매 복원)
+        app.buttons["Settings"].firstMatch.tap()
+        pause(2)
+        // 무료면 "Upgrade to …" 줄이, 이미 Pro 면(개발 빌드) "내 혜택 ▸ 기능 전체 보기" 가 같은 페이월을 연다
+        let upgrade = app.descendants(matching: .any)
+            .matching(NSPredicate(format: "label BEGINSWITH %@", "Upgrade to")).firstMatch
+        let proRow = app.descendants(matching: .any)
+            .matching(NSPredicate(format: "label BEGINSWITH %@", "Rereminder Pro")).firstMatch
+        if upgrade.waitForExistence(timeout: 3) {
+            upgrade.tap()
+        } else if proRow.exists {
+            proRow.tap()
+            pause(3)
+            let all = app.descendants(matching: .any)
+                .matching(NSPredicate(format: "label == %@", "See all features")).firstMatch
+            for _ in 0..<5 where !all.isHittable { app.swipeUp(); pause(1) }
+            if all.exists { all.tap() }
+        }
+        pause(3)
+        for _ in 0..<3 { app.swipeUp(); pause(1.5) }
+        pause(2)
+    }
+
+    private func pause(_ seconds: TimeInterval) {
+        Thread.sleep(forTimeInterval: seconds)
+    }
 }

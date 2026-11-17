@@ -28,6 +28,9 @@ enum ScreenshotScene: String {
     case session
     /// 세션 모드로 도는 중 — 지금 구간의 대본이 펴진다
     case sessionRunning
+    /// 심사용 녹화(`RereminderUITests.testReviewDemo`) — 1분 + 끝나기 30초 전 알림 하나.
+    /// 짧아서 녹화 안에 예비 알림과 끝이 다 들어간다. 세션 모드로 바꾸면 이름·대본이 붙은 두 구간이 된다.
+    case reviewDemo
 
     static var current: ScreenshotScene? {
         UserDefaults.standard.string(forKey: "screenshotScene").flatMap(ScreenshotScene.init(rawValue:))
@@ -63,6 +66,17 @@ enum ScreenshotScene: String {
             screenVM.applyPresentationSections()
             screenVM.initialConfiguration()
             if self == .sessionRunning { screenVM.startPresentation() }
+
+        case .reviewDemo:
+            let copy = Self.sessionCopy
+            screenVM.currentMode = .timer
+            screenVM.mainMinutes = 1
+            screenVM.mainSeconds = 0
+            screenVM.selectedOffsets = [30]
+            screenVM.rounds = 1
+            screenVM.sectionNames = [0: copy.names[0], 1: copy.names[2]]
+            screenVM.sectionScripts = [0: copy.scripts[0], 1: copy.scripts[2]]
+            screenVM.initialConfiguration()
         }
     }
 
