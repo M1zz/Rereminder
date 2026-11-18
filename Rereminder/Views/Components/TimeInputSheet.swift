@@ -131,8 +131,7 @@ struct TimeInputSheet: View {
                                 Text("\(minute)").tag(minute)
                             }
                         }
-                        .pickerStyle(.wheel)
-                        .frame(width: 100, height: 140)
+                        .numberWheelStyle(height: 140)
                         .accessibilityLabel(String(localized: "Minutes"))
                         .accessibilityValue(String(localized: "\(inputMinutes) minutes"))
                     }
@@ -152,8 +151,7 @@ struct TimeInputSheet: View {
                                 Text("\(second)").tag(second)
                             }
                         }
-                        .pickerStyle(.wheel)
-                        .frame(width: 100, height: 140)
+                        .numberWheelStyle(height: 140)
                         .accessibilityLabel(String(localized: "Seconds"))
                         .accessibilityValue(String(localized: "\(inputSeconds) seconds"))
                     }

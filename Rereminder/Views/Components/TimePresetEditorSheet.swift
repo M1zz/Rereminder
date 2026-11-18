@@ -76,8 +76,7 @@ struct TimePresetEditorSheet: View {
                     Text("\(value)").tag(value)
                 }
             }
-            .pickerStyle(.wheel)
-            .frame(width: 100)
+            .numberWheelStyle()
         }
     }
 }

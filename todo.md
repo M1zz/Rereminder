@@ -6,6 +6,14 @@
 - [ ] `docs/index.html`·언어별 index 는 공용 생성기 없이 `docs/site/*.json` 과 같은 문구로 직접 고쳤다. 생성기로 다시 만들 때 결과 확인
 - [ ] 소개·지원 페이지의 App Clip 안내(설치 없이 써 보기)는 클립을 다시 넣을지 정한 뒤 고치기
 
+## Mac 심사 추가 정보 요청 (2026-11-18)
+- [x] 맥에서 가운데 시간을 누르면 죽던 것 수정(휠 → 맥에서는 메뉴, `numberWheelStyle()`)
+- [x] 화면 녹화 `~/Desktop/두번알림-심사/Rereminder-macOS-review.mp4`, 녹화 스크립트 `scripts/record_mac_review.sh`
+- [x] 답장·심사 메모 글 `docs/app-review/review-information.md` ▸ Mac 앱
+- [ ] 고친 빌드를 올려 Mac 제출의 빌드를 바꾸기(빌드 42 는 죽는다) → 그 뒤 답장 + 영상 첨부 + 심사 메모에 같은 글
+- [ ] 맥의 시간 입력 시트가 작아 구간 목록의 반복 칸이 스크롤 아래에 있다. 시트 높이 손볼지
+- [ ] `capture_mac_screenshots.sh` 의 설정 떠 두기·되돌리기는 터미널이 컨테이너를 못 읽어 실제로는 빈 값을 다룬다. 고칠지
+
 ## 완료 (이번 라운드)
 - [x] **시작 버튼을 넓은 알약으로** (2026-11-16): 대기 중에는 도는 동안 버튼 둘이 쓰는 폭(버튼 × 2.5)을 혼자 쓰고, 걸면 오른쪽 원(일시정지)으로 줄며 정지가 왼쪽에 선다.
       버튼 하나가 모양·심볼을 바꾼다(`TimerMainView.rightButton`), 걸 때 햅틱(`timerActionFeedback`), 스페이스 = 시작·일시정지·재개, 포인터 강조

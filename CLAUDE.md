@@ -1634,6 +1634,11 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - ⚠️ **App Store Connect 에 macOS 플랫폼을 따로 추가하고 별도 심사를 받아야** 맥에 설치된다.
   빌드 설정만 켠다고 스토어에 나타나지 않는다.
 - 빌드 확인: `xcodebuild -scheme Rereminder -destination 'platform=macOS,variant=Mac Catalyst' build`
+- ⚠️ **맥에서 `.pickerStyle(.wheel)` 을 쓰지 말 것 — 앱이 죽는다.** `UIPickerView` 는 "Mac에 최적화"(기기 종류 6)에서 지원되지 않아
+  화면에 올라가는 순간 예외를 던진다. 2.3.12 빌드 42 까지 맥에서 가운데 시간을 누르면 죽었다(2026-11-18, 심사 녹화를 찍다 발견).
+  휠 자리에는 `numberWheelStyle()`(`Views/Components/NumberWheelStyle.swift`, 맥에서는 메뉴)을 쓴다.
+- 심사용 화면 녹화(맥): `scripts/record_mac_review.sh`. 답장 글은 `docs/app-review/review-information.md`.
+  `-dev.forceFree YES`(DEBUG 전용, `StoreManager.isForcedFree`)는 구매 기록이 있는 기기에서도 화면만 무료 사용자로 본다. 기록은 건드리지 않는다.
 - 맥에서는 자기 자신의 연결 상태를 보여주지 않는다(`DevicePresence` 가 자기 기기를 세지 않으므로
   그대로 두면 "Mac 연결 안 됨"이 늘 떠 있다).
 

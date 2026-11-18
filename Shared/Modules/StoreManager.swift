@@ -364,6 +364,20 @@ final class StoreManager: ObservableObject {
         subscriptionTier = max(Self.subscriptionTier, liveSubscriptionTier)
         isPro = Self.isProUser || live || foreverPass.isActive
         canRemember = isPro || Self.canRememberSetup || rememberLive || subscriptionTier >= .plus
+        #if DEBUG
+        if Self.isForcedFree { subscriptionTier = .free; isPro = false; canRemember = false }
+        #endif
+    }
+
+    /// 개발용(DEBUG 전용): 이 기기에 구매·평생 무료 기록이 있어도 **화면만** 무료 사용자로 본다
+    /// (`-dev.forceFree YES`). 심사용 녹화에서 요금제 화면의 가격·구매 버튼을 보이려고 쓴다.
+    /// 기록(Keychain·UserDefaults)은 읽지도 고치지도 않는다. Release 빌드에는 없다.
+    nonisolated static var isForcedFree: Bool {
+        #if DEBUG
+        return UserDefaults.standard.bool(forKey: "dev.forceFree")
+        #else
+        return false
+        #endif
     }
 
     // MARK: - 연 구독 표식
@@ -788,13 +802,15 @@ extension StoreManager {
 
     /// 이 설치의 트림.
     nonisolated static var tier: ProTier {
-        ProTier.resolve(isFullPro: isProUser, ownsRemember: storedRememberFlag, subscription: subscriptionTier)
+        if isForcedFree { return .free }
+        return ProTier.resolve(isFullPro: isProUser, ownsRemember: storedRememberFlag, subscription: subscriptionTier)
     }
 
     /// **설정을 기억해도 되는가** — 기억 트림 이상. `ProGate.canRememberSetup` 의 근거.
     nonisolated static var canRememberSetup: Bool { tier >= .plus }
 
     nonisolated static var isProUser: Bool {
+        if isForcedFree { return false }
         if isAutoProEnvironment || isGrandfathered || hasLegacyGiftPro { return true }
         // 창단 후원자 표식은 결제·그랜드파더링에만 주어진다 — 앱을 지워도 남으므로 마지막 근거가 된다.
         if hasFounderRecord { return true }
