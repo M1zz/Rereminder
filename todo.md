@@ -6,6 +6,12 @@
 - [ ] `docs/index.html`·언어별 index 는 공용 생성기 없이 `docs/site/*.json` 과 같은 문구로 직접 고쳤다. 생성기로 다시 만들 때 결과 확인
 - [ ] 소개·지원 페이지의 App Clip 안내(설치 없이 써 보기)는 클립을 다시 넣을지 정한 뒤 고치기
 
+## visionOS 2.3.9 (38) 심사 거절 (2026-11-18)
+- [x] Guideline 4 "글자가 읽기 어렵다": 유리 위 색 글자를 밝게(`Color.onGlass`), 검정 카드를 유리에 맞는 바탕으로(`Color.dsCard`), 글자 크기 하한 xxLarge(`ContentView`). `Views/Components/GlassLegibility.swift`
+- [ ] **화면으로 확인하지 못했다** — 이 맥에 visionOS 시뮬레이터 런타임이 없다(빌드만 통과). Xcode ▸ Settings ▸ Components 에서 받아 `scripts/capture_vision_screenshots.sh` 로 찍어 볼 것. 스토어 스크린샷도 다시 찍기
+- [ ] Guideline 2.1(b) "Lifetime $17.99 상품 미제출": `com.xa.toki.pro` 는 승인됨이다. 나머지 상품(평생 패스 넷·구독 둘·graduate·upgrade·remember) 상태 확인 → 전부 승인됨이면 답장으로 알리기
+- [ ] 새 빌드를 올려 visionOS 제출의 빌드 바꾸기(메일이 새 바이너리를 요구한다)
+
 ## Mac 심사 추가 정보 요청 (2026-11-18)
 - [x] 맥에서 가운데 시간을 누르면 죽던 것 수정(휠 → 맥에서는 메뉴, `numberWheelStyle()`)
 - [x] 화면 녹화 `~/Desktop/두번알림-심사/Rereminder-macOS-review.mp4`, 녹화 스크립트 `scripts/record_mac_review.sh`

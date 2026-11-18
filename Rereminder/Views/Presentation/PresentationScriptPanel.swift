@@ -75,7 +75,7 @@ struct PresentationScriptPanel: View {
                     Text(verbatim: "\(slideIndex + 1) / \(slides.count)")
                         .font(DSFont.callout.weight(.semibold))
                         .monospacedDigit()
-                        .foregroundStyle(color)
+                        .foregroundStyle(color.onGlass)
                         .contentTransition(.numericText())
                 } else if let nextName {
                     Text("Next: \(nextName)")
@@ -135,7 +135,7 @@ struct PresentationScriptPanel: View {
         .sensoryFeedback(.selection, trigger: slideIndex)
         .background(
             RoundedRectangle(cornerRadius: DSRadius.md)
-                .fill(Color(.systemGray6))
+                .fill(Color.dsCard)
         )
         .overlay(
             RoundedRectangle(cornerRadius: DSRadius.md)

@@ -81,7 +81,7 @@ struct SectionCountdownList: View {
                 //    양보하는 쪽은 막대다 — 아래 bar(...) 가 남는 폭만 쓴다.
                 .lineLimit(1)
                 .fixedSize(horizontal: true, vertical: false)
-                .foregroundStyle(color)
+                .foregroundStyle(color.onGlass)
                 // 지금 구간의 숫자는 바뀐 자리만 줄어들며 굴러간다(가운데 큰 시간과 같은 문법).
                 .contentTransition(reduceMotion ? .identity : .numericText(countsDown: true))
                 .animation(reduceMotion ? nil : .snappy(duration: 0.25), value: remaining)

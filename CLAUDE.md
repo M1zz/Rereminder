@@ -1600,6 +1600,16 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - 테스트: `FoldLayoutTests`(7, 같은 파일에 `FoldPlanMessageTests` 1)·`FoldPresentationGuardTests`(3)
 - 아직 안 한 것: 실기기 확인, 설정 목록 | 자세히, 펼친 채 바깥 화면을 발표자 쪽 타이머로(API 확인 필요)
 
+## visionOS — 창이 유리다 (GlassLegibility)
+
+`Rereminder/Views/Components/GlassLegibility.swift`. 2.3.9 (38) 이 "글자가 읽기 어렵다"(Guideline 4)로 거절됐다(2026-11-18).
+아이폰 화면이 반투명 유리 창에 그대로 올라가 구간 색 글자(특히 보라)가 뒤 배경에 묻혔고, `systemGray6` 카드는 검은 판으로 떴다.
+
+- **글자·작은 심볼에 쓰는 색은 `.onGlass` 를 붙인다**(visionOS 에서만 흰색을 섞어 밝게, 다른 기기는 그대로). 링·종·점처럼 채운 도형은 구간 색 그대로다.
+- **카드 바탕은 `Color.dsCard` · `Color.dsCardSecondary`** 를 쓴다. ⚠️ 새 화면에 `Color(.systemGray6)`·`secondarySystemBackground` 를 직접 쓰지 말 것.
+- 글자 크기는 하한만 올린다(`ContentView`, `DynamicTypeSize.xxLarge...`). 더 크게 고른 사람의 설정은 따른다.
+- ⚠️ 고칠 때 화면으로 확인하지 못했다(visionOS 시뮬레이터 런타임이 없었다). 확인은 `scripts/capture_vision_screenshots.sh`.
+
 ## Mac (Mac Catalyst)
 
 메인 앱은 **Mac Catalyst 로 함께 빌드된다**(`SUPPORTS_MACCATALYST = YES`,

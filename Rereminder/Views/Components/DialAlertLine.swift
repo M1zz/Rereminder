@@ -73,7 +73,7 @@ struct DialAlertLine: View {
     private static func tinted(_ text: AttributedString, word: String, color: Color) -> AttributedString {
         var text = text
         if !word.isEmpty, let range = text.range(of: word) {
-            text[range].foregroundColor = color
+            text[range].foregroundColor = color.onGlass
             text[range].inlinePresentationIntent = .stronglyEmphasized
         }
         return text
@@ -102,7 +102,7 @@ struct DialAlertLine: View {
             let timeRange = text[labelRange].range(of: item.time) ?? text[labelRange].range(of: String(digits))
             if let timeRange {
                 text[timeRange].inlinePresentationIntent = .stronglyEmphasized
-                text[timeRange].foregroundColor = item.color
+                text[timeRange].foregroundColor = item.color.onGlass
             }
             searchStart = labelRange.upperBound
         }

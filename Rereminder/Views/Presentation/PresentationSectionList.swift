@@ -100,7 +100,7 @@ struct PresentationSectionList: View {
         } label: {
             Image(systemName: hasScript ? "text.bubble.fill" : "square.and.pencil")
                 .font(.body.weight(.semibold))
-                .foregroundStyle(hasScript ? color : Color.secondary)
+                .foregroundStyle(hasScript ? color.onGlass : Color.secondary)
                 .frame(width: 36, height: 36)
                 .contentShape(Rectangle())
         }
@@ -194,7 +194,7 @@ struct PresentationSectionList: View {
 
                     Text(TimeMapper.mmss(segment.durationSec))
                         .font(DSFont.callout.weight(.bold).monospacedDigit())
-                        .foregroundStyle(DSColor.marker)
+                        .foregroundStyle(DSColor.marker.onGlass)
                         .padding(.horizontal, DSSpacing.sm)
                         .padding(.vertical, DSSpacing.xxs)
                         .background(Capsule().fill(DSColor.marker.opacity(DSOpacity.subtle)))
@@ -207,7 +207,7 @@ struct PresentationSectionList: View {
                 // 링의 그 구간과 같은 색이다. 회색이면 어느 호의 시간인지 번호를 다시 찾아야 한다.
                 Text("\(rangeStartText(segment.startSec)) – \(rangeEndText(segment.endSec))")
                     .font(DSFont.body.monospacedDigit())
-                    .foregroundStyle(color)
+                    .foregroundStyle(color.onGlass)
 
                 scriptPreview(segment)
             }
@@ -216,7 +216,7 @@ struct PresentationSectionList: View {
         .padding(.vertical, DSSpacing.md)
         .background(
             RoundedRectangle(cornerRadius: DSRadius.md)
-                .fill(isEditingThis ? color.opacity(DSOpacity.subtle) : Color(.systemGray6))
+                .fill(isEditingThis ? color.opacity(DSOpacity.subtle) : Color.dsCard)
         )
         .overlay(
             // 편집 중인 구간은 구간색 테두리로 포커싱

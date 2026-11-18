@@ -45,7 +45,7 @@ struct SectionScriptSheet: View {
                     .padding(DSSpacing.sm)
                     .background(
                         RoundedRectangle(cornerRadius: DSRadius.md)
-                            .fill(Color(.systemGray6))
+                            .fill(Color.dsCard)
                     )
                     .padding(.horizontal, DSSpacing.lg)
                     .overlay(alignment: .topLeading) {

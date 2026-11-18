@@ -231,7 +231,7 @@ struct PaywallView: View {
             }
         }
         .padding(4)
-        .background(Color(uiColor: .secondarySystemBackground), in: Capsule())
+        .background(Color.dsCardSecondary, in: Capsule())
     }
 
     /// 고른 칸의 연 구독 · 평생. 이미 Pro 면 파는 말 대신 지금 자리를 말한다.
@@ -356,7 +356,7 @@ struct PaywallView: View {
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
-                .background(Color(uiColor: .secondarySystemBackground))
+                .background(Color.dsCardSecondary)
 
                 Divider()
 
@@ -378,7 +378,7 @@ struct PaywallView: View {
                 comparisonRow("Session Mode", free: false, remember: false, pro: true)
                 comparisonRow("Section Scripts", free: false, remember: false, pro: true)
             }
-            .background(Color(uiColor: .secondarySystemBackground).opacity(0.5))
+            .background(Color.dsCardSecondary.opacity(0.5))
             .cornerRadius(14)
             .overlay(
                 RoundedRectangle(cornerRadius: 14)

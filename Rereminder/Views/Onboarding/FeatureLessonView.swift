@@ -190,12 +190,12 @@ private struct SessionRows: View {
                         Spacer()
                         if !named.contains(index) {
                             Image(systemName: "pencil")
-                                .foregroundStyle(SectionPalette.color(index))
+                                .foregroundStyle(SectionPalette.color(index).onGlass)
                         }
                     }
                     .padding(DSSpacing.md)
                     .background(RoundedRectangle(cornerRadius: DSRadius.md)
-                        .fill(current == index ? SectionPalette.color(index).opacity(0.25) : Color(.systemGray6)))
+                        .fill(current == index ? SectionPalette.color(index).opacity(0.25) : Color.dsCard))
                     .overlay {
                         if nextToName == index {
                             RoundedRectangle(cornerRadius: DSRadius.md)

@@ -356,7 +356,7 @@ private struct OccasionQuestion: View {
             .padding(.horizontal, DSSpacing.lg)
             .padding(.vertical, DSSpacing.lg)
             .background(RoundedRectangle(cornerRadius: 16)
-                .fill(isOn ? Color.accentColor : Color(.secondarySystemBackground)))
+                .fill(isOn ? Color.accentColor : Color.dsCardSecondary))
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isOn ? .isSelected : [])

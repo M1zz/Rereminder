@@ -58,7 +58,7 @@ struct SectionLengthBar: View {
                 // 칩 높이가 들쭉날쭉해지고 무엇보다 시간이 시간처럼 안 읽힌다.
                 .lineLimit(1)
                 .fixedSize(horizontal: true, vertical: false)
-                .foregroundStyle(color)
+                .foregroundStyle(color.onGlass)
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 5)

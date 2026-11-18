@@ -33,6 +33,10 @@ struct ContentView: View {
             #if targetEnvironment(macCatalyst)
             // macOS: 큰 화면에 맞춰 글자를 한 단계 키운다
             .environment(\.dynamicTypeSize, .xLarge)
+            #elseif os(visionOS)
+            // visionOS: 창이 한두 걸음 떨어져 떠 있어 아이폰 크기 글자는 읽기 어렵다(2.3.9 심사 거절, Guideline 4).
+            // 하한만 올린다 — 더 큰 글자를 고른 사람의 설정은 그대로 따른다.
+            .dynamicTypeSize(DynamicTypeSize.xxLarge...)
             #endif
     }
 
