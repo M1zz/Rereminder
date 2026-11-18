@@ -10,13 +10,14 @@
 - [x] Guideline 4 "글자가 읽기 어렵다": 유리 위 색 글자를 밝게(`Color.onGlass`), 검정 카드를 유리에 맞는 바탕으로(`Color.dsCard`), 글자 크기 하한 xxLarge(`ContentView`). `Views/Components/GlassLegibility.swift`
 - [ ] **화면으로 확인하지 못했다** — 이 맥에 visionOS 시뮬레이터 런타임이 없다(빌드만 통과). Xcode ▸ Settings ▸ Components 에서 받아 `scripts/capture_vision_screenshots.sh` 로 찍어 볼 것. 스토어 스크린샷도 다시 찍기
 - [ ] Guideline 2.1(b) "Lifetime $17.99 상품 미제출": `com.xa.toki.pro` 는 승인됨이다. 나머지 상품(평생 패스 넷·구독 둘·graduate·upgrade·remember) 상태 확인 → 전부 승인됨이면 답장으로 알리기
-- [ ] 새 빌드를 올려 visionOS 제출의 빌드 바꾸기(메일이 새 바이너리를 요구한다)
+- [x] 새 빌드 올림: visionOS 2.3.12 (44) 업로드(11/18). API 재제출 409 → 웹에서 빌드 44 고르고 [심사에 다시 제출] 남음
 
 ## Mac 심사 추가 정보 요청 (2026-11-18)
 - [x] 맥에서 가운데 시간을 누르면 죽던 것 수정(휠 → 맥에서는 메뉴, `numberWheelStyle()`)
 - [x] 화면 녹화 `~/Desktop/두번알림-심사/Rereminder-macOS-review.mp4`, 녹화 스크립트 `scripts/record_mac_review.sh`
 - [x] 답장·심사 메모 글 `docs/app-review/review-information.md` ▸ Mac 앱
-- [ ] 고친 빌드를 올려 Mac 제출의 빌드를 바꾸기(빌드 42 는 죽는다) → 그 뒤 답장 + 영상 첨부 + 심사 메모에 같은 글
+- [x] 고친 빌드 올림: Mac 2.3.12 (43), 영상 다시 찍음(11/18 20:57, 2분 22초)
+- [ ] 웹에서 Mac 빌드 43 고르고 [심사에 다시 제출] + 답장 + 영상 첨부 + 심사 메모에 같은 글
 - [ ] 맥의 시간 입력 시트가 작아 구간 목록의 반복 칸이 스크롤 아래에 있다. 시트 높이 손볼지
 - [ ] `capture_mac_screenshots.sh` 의 설정 떠 두기·되돌리기는 터미널이 컨테이너를 못 읽어 실제로는 빈 값을 다룬다. 고칠지
 
