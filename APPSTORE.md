@@ -515,7 +515,7 @@ Countdown with multiple alerts
 
 ### 키워드
 
-timekeeper,debate,emcee,workshop,rehearsal,vibration,speech,speaker,teacher,class,sermon,interval
+emcee,workshop,speech,sermon,haptic,presenter,stage,silent,pitch,public speaking,conference,meeting
 
 ### 프로모션 텍스트
 
@@ -699,7 +699,7 @@ Rereminder プレゼンタイマー
 
 ### 키워드
 
-ストップウォッチ,アラーム,カウントダウン,ポモドーロ,スピーチ,講義,講師,ピラティス,ヨガ,筋トレ,インターバル,会議,ワークショップ,リハーサル,集中,勉強,時間管理,バイブ,アップルウォッチ
+リハーサル,授業タイマー,スピーチタイマー,発表タイマー,タイムキーパー,プレゼン練習,発表,残り時間,振動,時間配分,講師,講義,ワークショップ,スピーチ,バイブ,カウントダウン,インターバル,ヨガ
 
 ### 프로모션 텍스트
 
@@ -784,7 +784,7 @@ Rereminder 再提醒
 
 ### 키워드
 
-定时器,倒计时,秒表,闹钟,番茄钟,专注,时间管理,间隔训练,教学,上课,讲课,简报,瑜伽,普拉提,健身,冥想,会议,工作坊,培训,主持,排练,自习,备课
+间隔训练,工作坊,发言计时,路演,主持人,汇报,授课,答辩,计时提醒,倒计时提醒,普拉提,主持,定时器,排练,秒表,闹钟,培训,瑜伽,简报,健身,备课,会议,冥想,讲课,自习,专注,上课,番茄钟,教学
 
 ### 프로모션 텍스트
 
