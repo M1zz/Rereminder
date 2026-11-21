@@ -22,14 +22,14 @@ WORK="$ROOT/build/mac-shots/work"
 WAIT="${WAIT:-4}"
 SCENES=("01:dial" "02:running" "03:session" "04:sessionRunning")
 LANGS=("$@")
-[[ ${#LANGS[@]} -eq 0 ]] && LANGS=(ko en en-GB ja zh-Hans zh-Hant de fr es pt-BR pt-PT it ru cs da el fi id nb nl pl sv th tr vi)
+[[ ${#LANGS[@]} -eq 0 ]] && LANGS=(ko en en-GB ja zh-Hans zh-Hant de fr es pt-BR pt-PT it ru cs da el fi id nb nl pl sv th tr vi ar)
 locale_for() {
   case "$1" in
     ko) echo ko_KR ;; en) echo en_US ;; en-GB) echo en_GB ;; ja) echo ja_JP ;;
     zh-Hans) echo zh_CN ;; zh-Hant) echo zh_TW ;; de) echo de_DE ;; fr) echo fr_FR ;; es) echo es_ES ;;
     pt-BR) echo pt_BR ;; pt-PT) echo pt_PT ;; it) echo it_IT ;; ru) echo ru_RU ;; cs) echo cs_CZ ;;
     da) echo da_DK ;; el) echo el_GR ;; fi) echo fi_FI ;; id) echo id_ID ;; nb) echo nb_NO ;;
-    nl) echo nl_NL ;; pl) echo pl_PL ;; sv) echo sv_SE ;; th) echo th_TH ;; tr) echo tr_TR ;; vi) echo vi_VN ;;
+    nl) echo nl_NL ;; pl) echo pl_PL ;; sv) echo sv_SE ;; th) echo th_TH ;; tr) echo tr_TR ;; vi) echo vi_VN ;; ar) echo ar_SA ;;
   esac
 }
 

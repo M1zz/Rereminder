@@ -27,6 +27,8 @@ PROFILE = pathlib.Path(tempfile.gettempdir()) / "rereminder-creative-chrome"
 
 # 문구 키 → App Store Connect 로케일들 (스토어에 es-ES · es-MX 가 둘 다 있다)
 STORE = {"en": ["en-US"], "en-GB": ["en-GB"], "de": ["de-DE"], "fr": ["fr-FR"], "es": ["es-ES", "es-MX"]}
+# 오른쪽에서 왼쪽으로 쓰는 언어. 검색 결과 그림은 글과 기기 자리를 맞바꾼다.
+RTL = {"ar", "he"}
 # 문구 키 → 기기 화면 원본 폴더(앱 언어)
 SCREEN: dict[str, str] = {}
 
@@ -64,6 +66,7 @@ SEARCH = {
     "th": ("ตัวจับเวลานำเสนอ", "เตือนก่อน<br>ที่เวลาจะหมด", "ก่อนจบ 10, 5 และ 1 นาที<br>คุณเลือกเอง"),
     "tr": ("Sunum zamanlayıcısı", "Süre dolmadan<br>önce uyarı", "10, 5 ve 1 dakika kala.<br>Sen seç."),
     "vi": ("Hẹn giờ thuyết trình", "Báo trước<br>khi hết giờ", "Trước 10, 5 và 1 phút.<br>Tùy bạn chọn."),
+    "ar": ("مؤقت العروض", "تنبيهات متعددة<br>قبل انتهاء الوقت", "قبل 10 دقائق و5 دقائق ودقيقة<br>كما تشاء"),
 }
 
 # 헤더는 한 가지 약속만: 끝나고 나서가 아니라, 끝나기 전에 알려 준다.
@@ -94,6 +97,7 @@ HEADER = {
     "th": ("ตัวจับเวลานำเสนอ", "รู้ตัวก่อน<br>ที่เวลาจะหมด"),
     "tr": ("Sunum zamanlayıcısı", "Süre dolmadan<br>önce bil"),
     "vi": ("Hẹn giờ thuyết trình", "Biết trước<br>khi hết giờ"),
+    "ar": ("مؤقت العروض", "ينبّهك قبل الوقت<br>لا بعد فواته"),
 }
 
 # ⚠️ 바탕 · 글자색은 마케팅 스크린샷(make_marketing_screenshots.py)과 같다: 밝은 회색 바탕, 검은 헤드라인,
@@ -113,6 +117,9 @@ body { background:#f4f4f5; position:relative;
 .sub { font-weight:500; color:#8e8e94; letter-spacing:-0.01em; line-height:1.35; text-wrap:balance; }
 :lang(ja) .headline, :lang(zh) .headline, :lang(th) .headline { letter-spacing:0; }
 :lang(ko) .headline, :lang(ko) .sub, :lang(ko) .eyebrow { word-break:keep-all; }
+/* 아랍어는 글자가 이어 쓰여서, 글자 사이를 좁히면 끊어진다. */
+:lang(ar) .headline, :lang(ar) .eyebrow, :lang(ar) .sub { letter-spacing:0; }
+:lang(ar) .headline { line-height:1.3; }
 .phone { position:absolute; background:#17171a; border:6px solid #3a3a3e; padding:40px; border-radius:190px;
   box-shadow: 60px 90px 160px rgba(0,0,0,.26), 20px 30px 60px rgba(0,0,0,.16); }
 .phone img { width:100%%; display:block; border-radius:152px; }
@@ -186,11 +193,16 @@ def search_html(lang):
     col = int(sw * 0.56)
     ph_w = 1040
     ph_left = l + col + int(sw * 0.04)
+    text_left = l
+    if lang in RTL:
+        # 거울처럼: 글은 안전 영역 오른쪽, 기기는 왼쪽
+        ph_left = W - ph_left - ph_w
+        text_left = r - col
     return f"""
 <div class="glow" style="left:{ph_left - 250}px;top:600px;width:1600px;height:1600px;background:rgba(255,159,10,.22)"></div>
 <div class="glow" style="left:{l - 700}px;top:{t - 500}px;width:1400px;height:1000px;background:rgba(10,132,255,.08)"></div>
 {phone(shot(lang, "01-dial.png"), ph_left, t - 360, ph_w, 0)}
-<div class="text" style="left:{l}px;top:{t}px;width:{col}px;height:{sh}px">
+<div class="text" style="left:{text_left}px;top:{t}px;width:{col}px;height:{sh}px">
   <div class="eyebrow" style="font-size:92px">{eyebrow}</div>
   <div class="headline" data-max="230" data-min="130" style="margin-top:36px">{headline}</div>
   <div class="sub" style="font-size:80px;margin-top:52px">{sub}</div>
@@ -219,7 +231,8 @@ def header_html(lang):
 def render(lang, kind):
     W, H, _ = SPEC[kind]
     body = search_html(lang) if kind == "search" else header_html(lang)
-    page = (f'<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><style>'
+    rtl = ' dir="rtl"' if lang in RTL else ""
+    page = (f'<!doctype html><html lang="{lang}"{rtl}><head><meta charset="utf-8"><style>'
             f'{BASE_CSS % {"W": W, "H": H}}</style></head><body>{body}{FIT_JS}</body></html>')
     html_path = pathlib.Path(tempfile.gettempdir()) / f"rereminder-creative-{lang}-{kind}.html"
     html_path.write_text(page, encoding="utf-8")

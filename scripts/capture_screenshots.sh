@@ -59,12 +59,12 @@ locale_for() {
     ru) echo ru_RU ;; cs) echo cs_CZ ;; da) echo da_DK ;; el) echo el_GR ;;
     fi) echo fi_FI ;; id) echo id_ID ;; nb) echo nb_NO ;; nl) echo nl_NL ;;
     pl) echo pl_PL ;; sv) echo sv_SE ;; th) echo th_TH ;; tr) echo tr_TR ;;
-    vi) echo vi_VN ;;
+    vi) echo vi_VN ;; ar) echo ar_SA ;;
   esac
 }
 
 LANGS=("$@")
-[[ ${#LANGS[@]} -eq 0 ]] && LANGS=(ko en en-GB ja zh-Hans zh-Hant de fr es pt-BR pt-PT it ru cs da el fi id nb nl pl sv th tr vi)
+[[ ${#LANGS[@]} -eq 0 ]] && LANGS=(ko en en-GB ja zh-Hans zh-Hant de fr es pt-BR pt-PT it ru cs da el fi id nb nl pl sv th tr vi ar)
 
 # UDID 를 주면 그 기기를 쓴다 — 다른 작업이 같은 이름의 시뮬레이터를 쓰고 있을 때
 UDID="${UDID:-}"

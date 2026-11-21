@@ -203,10 +203,16 @@ COPY = {
         ("Chia bài nói<br>thành từng phần", "Đặt tên từng phần và thêm ghi chú"),
         ("Ghi chú của bạn,<br>hiện đúng lúc", "Chế độ Phiên giúp bạn đi đúng nhịp"),
     ],
+    "ar": [
+        ("تنبيهات متعددة<br>قبل انتهاء الوقت", "قبل 10 دقائق و5 دقائق ودقيقة. كما تشاء"),
+        ("التنبيه القادم<br>بنظرة واحدة", "كل جزء يعدّ وقته المتبقي وحده"),
+        ("قسّم عرضك<br>إلى أجزاء", "سمِّ كل جزء وأضف ملاحظاتك"),
+        ("ملاحظاتك<br>في وقتها تمامًا", "وضع الجلسة يُبقيك على المسار"),
+    ],
 }
 
 # 한자권은 글자가 빽빽해 같은 크기면 더 커 보이고, 라틴 문자는 단어가 길어 줄이 넘친다.
-HEADLINE_PX = {"ko": 100, "ja": 92, "zh-Hans": 96, "zh-Hant": 96, "th": 92}
+HEADLINE_PX = {"ko": 100, "ja": 92, "zh-Hans": 96, "zh-Hant": 96, "th": 92, "ar": 88}
 LATIN_HEADLINE_PX = 84
 
 BASE_CSS = f"""
@@ -356,7 +362,34 @@ BODY_MAC = '<div class="text"><div class="headline">{headline}</div><div class="
 BODY_TEXT_FIRST = '<div class="headline">{headline}</div><div class="sub">{sub}</div><div class="wrap"><div class="phone"><img src="{img}"></div></div>'
 BODY_PHONE_FIRST = '<div class="wrap"><div class="phone"><img src="{img}"></div></div><div class="headline">{headline}</div><div class="sub">{sub}</div>'
 
-HTML = """<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><style>
+# 오른쪽에서 왼쪽으로 쓰는 언어(아랍어): 글은 오른쪽에 붙이고, 기울인 판은 거울처럼 뒤집는다.
+# 맥은 dir=rtl 만으로 글과 창의 자리가 저절로 바뀐다(flex).
+RTL = {"ar", "he"}
+RTL_CSS = """
+.headline, .sub { letter-spacing:0; }
+.headline { line-height:1.35; }
+"""
+RTL_LAYOUTS = {
+    "left-text": """
+.headline { text-align:right; margin:300px 110px 0 0; }
+.sub { text-align:right; margin:48px 114px 0 0; }
+.wrap { left:auto; right:300px; perspective-origin:70% 30%; }
+.phone { transform:rotateY(-16deg) rotateX(2deg); }
+""",
+    "text-bottom": ".phone { transform:rotateY(10deg) rotateX(2deg); }",
+    "flat-rotate": ".wrap { left:auto; right:120px; } .phone { transform:rotate(6deg); }",
+}
+RTL_IPAD_LAYOUTS = {
+    "left-text": """
+.headline { text-align:right; margin:260px 170px 0 0; }
+.sub { text-align:right; margin:56px 174px 0 0; }
+.wrap { left:auto; right:420px; perspective-origin:70% 30%; }
+.phone { transform:rotateY(-14deg) rotateX(2deg); }
+""",
+    "text-bottom": ".phone { transform:rotateY(9deg) rotateX(2deg); }",
+}
+
+HTML = """<!doctype html><html lang="{lang}"{dir}><head><meta charset="utf-8"><style>
 {base}{layout}
 .headline {{ font-size:{headline_px}px; }}
 :lang(zh-Hant) body {{ font-family:-apple-system, "PingFang TC", sans-serif; }}
@@ -387,8 +420,12 @@ def render(lang):
         else:
             layout_css = DUO_CSS + DUO_LAYOUTS[layout] if DUO else \
                 IPAD_CSS + IPAD_LAYOUTS[layout] if IPAD else LAYOUTS[layout]
+        if lang in RTL:
+            layout_css += RTL_CSS
+            if not MAC and not DUO:
+                layout_css += (RTL_IPAD_LAYOUTS if IPAD else RTL_LAYOUTS).get(layout, "")
         html_path.write_text(HTML.format(
-            lang=lang, base=BASE_CSS, layout=layout_css, body=body,
+            lang=lang, dir=' dir="rtl"' if lang in RTL else "", base=BASE_CSS, layout=layout_css, body=body,
             headline_px=round(HEADLINE_PX.get(lang, LATIN_HEADLINE_PX) * (1.3 if MAC else 1.35 if IPAD else 1))), encoding="utf-8")
         out_png = out_dir / f"{PREFIX}{fname}"
         out_png.unlink(missing_ok=True)

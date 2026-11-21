@@ -216,6 +216,11 @@ enum ScreenshotScene: String {
             scripts: ["Giới thiệu ba điều chúng ta sẽ nói hôm nay.",
                       "Nêu ý chính bằng hai ví dụ. Gom số liệu vào một trang chiếu.",
                       "Trả lời câu hỏi, rồi khép lại bằng một câu."]),
+        "ar": SessionCopy(
+            names: ["المقدمة", "صلب العرض", "الأسئلة"],
+            scripts: ["عرّف بالنقاط الثلاث التي سنتناولها اليوم.",
+                      "اشرح الفكرة الرئيسية بمثالين، واجمع الأرقام في شريحة واحدة.",
+                      "استقبل الأسئلة، واختم بجملة واحدة."]),
     ]
 }
 #endif
