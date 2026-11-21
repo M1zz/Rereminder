@@ -38,7 +38,12 @@ struct IconDial: View {
         return SectionPalette.color(arc.index)
     }
 
+    // 시계처럼 도는 그림이다 — 아랍어처럼 오른쪽에서 왼쪽으로 쓰는 화면에서도 시계 방향을 지킨다.
     var body: some View {
+        dialBody.environment(\.layoutDirection, .leftToRight)
+    }
+
+    @ViewBuilder private var dialBody: some View {
         GeometryReader { geo in
             let d = min(geo.size.width, geo.size.height)
             let line = d * 0.145

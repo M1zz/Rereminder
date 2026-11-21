@@ -54,13 +54,18 @@ struct DialAlertLine: View {
     private func sentence(_ items: [(bell: Int, seconds: Int)], format: (String) -> String) -> AttributedString {
         let shown = Array(items.prefix(3))
         let times = shown.map { Self.unbrokenTime($0.seconds) }
-        let list = times.joined(separator: ", ") + (items.count > 3 ? " +\(items.count - 3)" : "")
+        let list = times.joined(separator: Self.listSeparator) + (items.count > 3 ? " +\(items.count - 3)" : "")
         return Self.emphasized(format(list),
                                items: shown.enumerated().map { index, item in
                                    Emphasis(label: times[index], time: times[index],
                                             color: SectionPalette.color(AlertPresets.bellSectionIndex(
                                                 of: item.bell, among: liveOffsets)))
                                })
+    }
+
+    /// 시간 사이의 쉼표. 아랍어는 아랍 쉼표(،)를 쓴다.
+    private static var listSeparator: String {
+        Bundle.main.preferredLocalizations.first == "ar" ? "، " : ", "
     }
 
     /// 시작 낱말의 색. 구간 색(파랑·초록·보라…)과 겹치지 않는 노랑이고, 밝은 화면에서는 읽히게 진하다.

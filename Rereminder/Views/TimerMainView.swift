@@ -107,6 +107,8 @@ struct TimerMainView: View {
 
     /// 빈 원이 차오르는 중인 각도. 12시에서 핸들까지 간다. nil 이면 평소 화면이다.
     /// 줄어드는 길을 거꾸로 먼저 보여 12시가 끝이고 핸들이 시작이라는 것을 글 없이 전한다.
+    /// 앱의 쓰기 방향. 다이얼은 늘 왼쪽→오른쪽으로 그리고, 그 안의 글만 이 방향으로 되돌린다.
+    @Environment(\.layoutDirection) private var appLayoutDirection
     @State private var dialFillAngle: Double?
     /// 이 각도까지 온 종만 보인다.
     @State private var dialFillBellAngle: Double = 0
@@ -707,7 +709,12 @@ struct TimerMainView: View {
             }
             // 링 안쪽으로 가둔다 — 넘치면 그 부분이 링 위 조작을 먹는다
             .frame(maxWidth: centerDiameter)
+            // 가운데 글(구간 이름·대본)은 앱의 쓰기 방향을 따른다.
+            .environment(\.layoutDirection, appLayoutDirection)
         }
+        // 다이얼은 시계다 — 아랍어처럼 오른쪽에서 왼쪽으로 쓰는 화면에서도 시계 방향으로 돈다
+        // (iOS 시계 앱과 같다). 안 막으면 링·종·끌기 좌표가 거울처럼 뒤집혀 반시계로 돌았다.
+        .environment(\.layoutDirection, .leftToRight)
         // 안쪽 줄이 생기고 사라질 때 빙 둘러 차오르게 한다.
         // 처음 화면에 나올 때(이미 60분이 넘은 설정을 복원한 경우)는 애니메이션 없이 그려 둔다 —
         // 아무 조작도 하지 않았는데 링이 혼자 도는 건 이상하다.

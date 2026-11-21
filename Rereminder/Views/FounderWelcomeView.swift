@@ -163,7 +163,7 @@ struct FounderWelcomeView: View {
                     Text(change.before)
                         .strikethrough()
                         .foregroundStyle(.tertiary)
-                    Image(systemName: "arrow.right")
+                    Image(systemName: "arrow.forward")
                         .font(.caption2)
                         .foregroundStyle(.tertiary)
                     Text(change.after)

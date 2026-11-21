@@ -95,7 +95,7 @@ struct TimerTemplateView: View {
                             Text("Let the app remember your setups")
                                 .font(.subheadline.weight(.medium))
                             Spacer()
-                            Image(systemName: "chevron.right")
+                            Image(systemName: "chevron.forward")
                                 .font(.caption)
                         }
                         .padding(14)

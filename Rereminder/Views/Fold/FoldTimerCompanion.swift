@@ -133,9 +133,14 @@ struct FoldTimerCompanion: View {
                     Text(sectionName(segment.index))
                         .font(DSFont.body.weight(.semibold))
                         .lineLimit(1)
-                    Text(verbatim: "\(TimeMapper.mmss(segment.startSec)) → \(TimeMapper.mmss(segment.endSec))")
-                        .font(DSFont.caption.monospacedDigit())
-                        .foregroundStyle(.secondary)
+                    // 화살표는 forward 그림이라 아랍어처럼 오른쪽에서 왼쪽으로 쓰는 화면에서 저절로 뒤집힌다.
+                    HStack(spacing: 4) {
+                        Text(verbatim: TimeMapper.mmss(segment.startSec))
+                        Image(systemName: "arrow.forward").imageScale(.small)
+                        Text(verbatim: TimeMapper.mmss(segment.endSec))
+                    }
+                    .font(DSFont.caption.monospacedDigit())
+                    .foregroundStyle(.secondary)
                 }
                 Spacer(minLength: DSSpacing.sm)
                 Text(verbatim: TimeMapper.mmss(segment.durationSec))

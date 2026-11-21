@@ -55,7 +55,7 @@ struct GuideBookView: View {
                 Label(title, systemImage: symbol)
                     .foregroundStyle(.primary)
                 Spacer()
-                Image(systemName: "chevron.right")
+                Image(systemName: "chevron.forward")
                     .font(.body)
                     .foregroundStyle(.secondary)
                     .accessibilityHidden(true)

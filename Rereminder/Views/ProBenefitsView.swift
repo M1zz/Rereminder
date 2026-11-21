@@ -225,7 +225,7 @@ struct ProBenefitsView: View {
                 HStack {
                     Text("Upgrade to Pro")
                     Spacer()
-                    Image(systemName: "chevron.right")
+                    Image(systemName: "chevron.forward")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .accessibilityHidden(true)
@@ -255,7 +255,7 @@ struct ProBenefitsView: View {
                             .foregroundStyle(.orange)
                     }
                     Spacer()
-                    Image(systemName: "chevron.right")
+                    Image(systemName: "chevron.forward")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                         .accessibilityHidden(true)

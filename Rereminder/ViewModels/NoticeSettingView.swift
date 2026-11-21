@@ -136,7 +136,7 @@ struct NoticeSettingView: View {
                             HStack {
                                 Text("See what's changing")
                                 Spacer()
-                                Image(systemName: "chevron.right")
+                                Image(systemName: "chevron.forward")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
@@ -204,7 +204,7 @@ struct NoticeSettingView: View {
                             Text(LeeoLadderText.manageSubscription)
                                 .foregroundStyle(.primary)
                             Spacer()
-                            Image(systemName: "chevron.right")
+                            Image(systemName: "chevron.forward")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                                 .accessibilityHidden(true)
@@ -218,7 +218,7 @@ struct NoticeSettingView: View {
                                 Label(LeeoLadderText.switchToLifetimeEntry, systemImage: "infinity")
                                     .foregroundStyle(.primary)
                                 Spacer()
-                                Image(systemName: "chevron.right")
+                                Image(systemName: "chevron.forward")
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                                     .accessibilityHidden(true)
@@ -365,7 +365,7 @@ struct NoticeSettingView: View {
                     HStack {
                         Label("Send Feedback", systemImage: "envelope.fill")
                         Spacer()
-                        Image(systemName: "chevron.right")
+                        Image(systemName: "chevron.forward")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -528,7 +528,7 @@ struct NoticeSettingView: View {
                             Text(presetLabel(sec))
                                 .foregroundStyle(.primary)
                             Spacer()
-                            Image(systemName: "chevron.right")
+                            Image(systemName: "chevron.forward")
                                 .font(.caption)
                                 .foregroundStyle(.tertiary)
                         }
@@ -658,7 +658,7 @@ struct NoticeSettingView: View {
                                 .foregroundStyle(.blue)
                             Text("Send Test Notification")
                             Spacer()
-                            Image(systemName: "arrow.right.circle.fill")
+                            Image(systemName: "arrow.forward.circle.fill")
                                 .foregroundStyle(.blue)
                         }
                     }
@@ -750,7 +750,7 @@ struct NoticeSettingView: View {
                     HStack {
                         Label("What's New", systemImage: "gift")
                         Spacer()
-                        Image(systemName: "chevron.right")
+                        Image(systemName: "chevron.forward")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                             .accessibilityHidden(true)
@@ -807,7 +807,7 @@ struct NoticeSettingView: View {
                     HStack {
                         Label("Share App", systemImage: "square.and.arrow.up")
                         Spacer()
-                        Image(systemName: "chevron.right")
+                        Image(systemName: "chevron.forward")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -820,7 +820,7 @@ struct NoticeSettingView: View {
                     HStack {
                         Label("Rate App", systemImage: "star.fill")
                         Spacer()
-                        Image(systemName: "chevron.right")
+                        Image(systemName: "chevron.forward")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -842,7 +842,7 @@ struct NoticeSettingView: View {
                             Text("Had Pro before but it is gone?")
                                 .foregroundStyle(.primary)
                             Spacer()
-                            Image(systemName: "chevron.right")
+                            Image(systemName: "chevron.forward")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
@@ -856,7 +856,7 @@ struct NoticeSettingView: View {
                             Label("Redeem Code", systemImage: "giftcard")
                                 .foregroundStyle(.primary)
                             Spacer()
-                            Image(systemName: "chevron.right")
+                            Image(systemName: "chevron.forward")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                                 .accessibilityHidden(true)
@@ -1118,7 +1118,7 @@ extension NoticeSettingView {
                 }
             }
             Spacer()
-            Image(systemName: "chevron.right")
+            Image(systemName: "chevron.forward")
                 .font(.caption)
                 .foregroundStyle(.secondary)
         }

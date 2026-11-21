@@ -51,7 +51,12 @@ struct ClipClock: View {
     /// 뷰 프레임을 그만큼 키워 터치가 프레임 밖에서 잘리지 않게 한다.
     private var hitMargin: CGFloat { lineWidth * 1.4 }
 
+    // 시계처럼 도는 그림이다 — 아랍어처럼 오른쪽에서 왼쪽으로 쓰는 화면에서도 시계 방향을 지킨다.
     var body: some View {
+        dialBody.environment(\.layoutDirection, .leftToRight)
+    }
+
+    @ViewBuilder private var dialBody: some View {
         ZStack {
             track
             progressArcs

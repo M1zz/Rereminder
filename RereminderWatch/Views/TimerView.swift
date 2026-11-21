@@ -113,6 +113,8 @@ public struct TimerView: View {
         }
         .frame(width: geometry.size.width, height: geometry.size.height)
         .dsAnimation(.linear(duration: 1), value: progress)
+        // 시계 방향을 지킨다 — 아랍어처럼 오른쪽에서 왼쪽으로 쓰는 화면에서 거울처럼 뒤집히지 않게.
+        .environment(\.layoutDirection, .leftToRight)
     }
 
     /// 알림 종 — 테두리 위에는 라벨을 놓을 자리가 없으므로 **점만** 찍는다.
@@ -136,6 +138,7 @@ public struct TimerView: View {
             }
         }
         .frame(width: geometry.size.width, height: geometry.size.height)
+        .environment(\.layoutDirection, .leftToRight)
         .accessibilityHidden(true)
     }
 

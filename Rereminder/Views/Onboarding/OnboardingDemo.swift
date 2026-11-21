@@ -183,7 +183,12 @@ struct OnboardingDemoRing: View {
         CGFloat(max(0, min(1, (Double(totalSeconds) - elapsed) / Double(max(1, totalSeconds)))))
     }
 
+    // 시계처럼 도는 그림이다 — 아랍어처럼 오른쪽에서 왼쪽으로 쓰는 화면에서도 시계 방향을 지킨다.
     var body: some View {
+        dialBody.environment(\.layoutDirection, .leftToRight)
+    }
+
+    @ViewBuilder private var dialBody: some View {
         ZStack {
             Circle()
                 .stroke(.plain.opacity(0.5), style: StrokeStyle(lineWidth: lineWidth, lineCap: .round))
