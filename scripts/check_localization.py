@@ -17,7 +17,7 @@ CATALOGS = [
     "Rereminder/Localizable.xcstrings",
 ]
 LANGS = ("ko", "ja", "zh-Hans", "zh-Hant", "de", "fr", "es", "pt-BR", "pt-PT", "it", "en-GB",
-         "ru", "cs", "da", "el", "fi", "id", "nb", "nl", "pl", "sv", "th", "tr", "vi")
+         "ru", "cs", "da", "el", "fi", "id", "nb", "nl", "pl", "sv", "th", "tr", "vi", "ar")
 
 # 번역 없이 두는 게 맞는 키 (고유명사·포맷 전용 등)
 #
@@ -47,7 +47,10 @@ def check(path: str) -> list[str]:
             errors.append(f"[untranslated] {key!r} — {'/'.join(LANGS)} 번역 없음")
             continue
         for lang in LANGS:
-            unit = locs.get(lang, {}).get("stringUnit", {})
+            loc = locs.get(lang, {})
+            # 복수형 variations(아랍어 등)는 모든 형태에 값이 있어야 한다.
+            units = [v.get("stringUnit", {}) for v in loc.get("variations", {}).get("plural", {}).values()] or [loc.get("stringUnit", {})]
+            unit = next((u for u in units if not u.get("value") or u.get("state") == "new"), units[0])
             if not unit.get("value"):
                 errors.append(f"[untranslated:{lang}] {key!r}")
             elif unit.get("state") == "new":

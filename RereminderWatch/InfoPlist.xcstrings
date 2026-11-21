@@ -4,6 +4,12 @@
     "CFBundleDisplayName" : {
       "comment" : "Bundle display name",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
+          }
+        },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",

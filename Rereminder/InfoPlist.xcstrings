@@ -4,6 +4,12 @@
     "CFBundleDisplayName" : {
       "comment" : "Bundle display name",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
+          }
+        },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
@@ -159,6 +165,12 @@
     "CFBundleName" : {
       "comment" : "Bundle name",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder"
+          }
+        },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
@@ -315,6 +327,12 @@
       "comment" : "Shown when the app asks to schedule alarms (설정 > 알림 > 끝나면 알람으로 울리기)",
       "extractionState" : "manual",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يستخدم Rereminder المنبّهات لتعرف بانتهاء المؤقت حتى في الوضع الصامت."
+          }
+        },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",

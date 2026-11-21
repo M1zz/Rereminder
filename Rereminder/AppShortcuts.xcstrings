@@ -3,6 +3,12 @@
   "strings" : {
     "${applicationName} timer start" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ابدأ مؤقت ${applicationName}"
+          }
+        },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
@@ -145,6 +151,12 @@
     },
     "${applicationName} timer stop" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أوقف مؤقت ${applicationName}"
+          }
+        },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
@@ -287,6 +299,12 @@
     },
     "${applicationName} 타이머 시작" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شغّل مؤقتًا في ${applicationName}"
+          }
+        },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
@@ -435,6 +453,12 @@
     },
     "${applicationName} 타이머 일시정지" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إيقاف مؤقت في ${applicationName}"
+          }
+        },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
@@ -583,6 +607,12 @@
     },
     "${applicationName} 타이머 재개" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "تابع المؤقت في ${applicationName}"
+          }
+        },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
@@ -731,6 +761,12 @@
     },
     "${applicationName} 타이머 중지" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "إنهاء المؤقت في ${applicationName}"
+          }
+        },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
@@ -879,6 +915,12 @@
     },
     "Pause ${applicationName}" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أوقف ${applicationName} مؤقتًا"
+          }
+        },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1022,6 +1064,12 @@
     "Pause timer in ${applicationName}" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أوقف المؤقت مؤقتًا في ${applicationName}"
+          }
+        },
         "cs" : {
           "stringUnit" : {
             "state" : "needs_review",
@@ -1174,6 +1222,12 @@
     },
     "Resume ${applicationName}" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استأنف ${applicationName}"
+          }
+        },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1317,6 +1371,12 @@
     "Resume timer in ${applicationName}" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "استأنف المؤقت في ${applicationName}"
+          }
+        },
         "cs" : {
           "stringUnit" : {
             "state" : "needs_review",
@@ -1469,6 +1529,12 @@
     },
     "Start ${applicationName}" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "شغّل ${applicationName}"
+          }
+        },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1612,6 +1678,12 @@
     "Start a timer in ${applicationName}" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ابدأ مؤقتًا في ${applicationName}"
+          }
+        },
         "cs" : {
           "stringUnit" : {
             "state" : "needs_review",
@@ -1765,6 +1837,12 @@
     },
     "Stop ${applicationName}" : {
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أوقف ${applicationName}"
+          }
+        },
         "cs" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1908,6 +1986,12 @@
     "Stop timer in ${applicationName}" : {
       "extractionState" : "extracted_with_value",
       "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "أوقف المؤقت في ${applicationName}"
+          }
+        },
         "cs" : {
           "stringUnit" : {
             "state" : "needs_review",
