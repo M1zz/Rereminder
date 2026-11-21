@@ -143,6 +143,11 @@
       "code": "vi",
       "path": "vi/",
       "name": "Tiếng Việt"
+    },
+    {
+      "code": "ar",
+      "path": "ar/",
+      "name": "العربية"
     }
   ]
 }

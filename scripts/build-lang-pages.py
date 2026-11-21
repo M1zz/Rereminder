@@ -8,16 +8,18 @@
     python3 scripts/build-lang-pages.py
 
 - privacy·support: 그 언어의 <div data-lang="…"> 블록만 남긴다.
-- index: 글은 스크립트의 i18n 사전에 있다 — node 로 사전을 읽어 data-i18n 자리에 미리 채우고, 언어를 고정한다.
+- index: DeployBar 의 공용 생성기(sitegen.py)가 docs/site/<lang>.json 으로 언어마다 만든다.
+  이 스크립트는 그 결과에 오른쪽→왼쪽 언어(RTL)의 dir 만 단다 — sitegen 을 돌린 뒤 이것을 돌린다.
+- RTL 언어(ar)는 원본에서 <div data-lang="ar" dir="rtl"> 이고, 언어 페이지에서는 <html dir="rtl"> 이 된다.
 """
-import html, json, pathlib, re, subprocess
+import html, pathlib, re
 
 DOCS = pathlib.Path(__file__).resolve().parent.parent / 'docs'
 BASE = 'https://m1zz.github.io/Rereminder/'
-LANGS = ['ko', 'en', 'ja', 'zh-Hans', 'zh-Hant', 'de', 'fr', 'es', 'pt-BR', 'pt-PT', 'it', 'ru', 'cs', 'da', 'el', 'fi', 'id', 'nb', 'nl', 'pl', 'sv', 'th', 'tr', 'vi']
+LANGS = ['ko', 'en', 'ja', 'zh-Hans', 'zh-Hant', 'de', 'fr', 'es', 'pt-BR', 'pt-PT', 'it', 'ru', 'cs', 'da', 'el', 'fi', 'id', 'nb', 'nl', 'pl', 'sv', 'th', 'tr', 'vi', 'ar']
 NAMES = {'ko': '한국어', 'en': 'English', 'ja': '日本語', 'zh-Hans': '简体中文', 'zh-Hant': '繁體中文',
          'de': 'Deutsch', 'fr': 'Français', 'es': 'Español', 'pt-BR': 'Português (Brasil)',
-         'pt-PT': 'Português (Portugal)', 'it': 'Italiano', 'ru': "Русский", 'cs': "Čeština", 'da': "Dansk", 'el': "Ελληνικά", 'fi': "Suomi", 'id': "Bahasa Indonesia", 'nb': "Norsk bokmål", 'nl': "Nederlands", 'pl': "Polski", 'sv': "Svenska", 'th': "ไทย", 'tr': "Türkçe", 'vi': "Tiếng Việt"}
+         'pt-PT': 'Português (Portugal)', 'it': 'Italiano', 'ru': "Русский", 'cs': "Čeština", 'da': "Dansk", 'el': "Ελληνικά", 'fi': "Suomi", 'id': "Bahasa Indonesia", 'nb': "Norsk bokmål", 'nl': "Nederlands", 'pl': "Polski", 'sv': "Svenska", 'th': "ไทย", 'tr': "Türkçe", 'vi': "Tiếng Việt", 'ar': "العربية"}
 # privacy·support 머리·꼬리의 메뉴 이름
 NAV = {
     'en': ('Home', 'Support', 'Privacy'),
@@ -44,7 +46,9 @@ NAV = {
     'th': ("หน้าแรก", "การสนับสนุน", "ความเป็นส่วนตัว"),
     'tr': ("Ana Sayfa", "Destek", "Gizlilik"),
     'vi': ("Trang chủ", "Hỗ trợ", "Quyền riêng tư"),
+    'ar': ('الرئيسية', 'الدعم', 'الخصوصية'),
 }
+RTL = {'ar'}
 APP_NAME = {'ko': '두번알림'}
 
 
@@ -76,12 +80,17 @@ def strip_root_head(s):
 
 def common(s, page, lang):
     s = strip_root_head(s)
-    s = re.sub(r'<html lang="[^"]*"', f'<html lang="{lang}"', s, count=1)
+    s = html_tag(s, lang)
     s = s.replace('</head>', head_links(page, lang) + '</head>', 1)
     s = re.sub(r'<nav class="lang-links".*?</nav>\n', lang_nav(page, lang), s, count=1, flags=re.S)
     s = s.replace('href="app-icon.jpeg"', 'href="../app-icon.jpeg"').replace('src="app-icon.jpeg"', 'src="../app-icon.jpeg"')
     s = s.replace(f'<option value="{lang}">', f'<option value="{lang}" selected>')
     return s
+
+
+def html_tag(s, lang):
+    dir_attr = ' dir="rtl"' if lang in RTL else ''
+    return re.sub(r'<html lang="[^"]*"(?: dir="[^"]*")?', f'<html lang="{lang}"{dir_attr}', s, count=1)
 
 
 def set_meta(s, title, desc):
@@ -99,7 +108,7 @@ def text_of(fragment):
 
 def build_doc(page):
     src = (DOCS / page).read_text()
-    blocks = {m.group(1): m.group(0) for m in re.finditer(r'^<div data-lang="([^"]+)">\n.*?^</div>\n', src, re.S | re.M)}
+    blocks = {m.group(1): m.group(0) for m in re.finditer(r'^<div data-lang="([^"]+)"[^>]*>\n.*?^</div>\n', src, re.S | re.M)}
     missing = [l for l in LANGS if l not in blocks]
     assert not missing, f'{page}: 언어 블록 없음 {missing}'
     start = src.index('<div class="container">')
@@ -107,7 +116,7 @@ def build_doc(page):
     head, foot = src[:start], src[end:]
     foot = re.sub(r'<script>.*?</script>\n', '', foot, flags=re.S)
     for lang in LANGS:
-        block = blocks[lang].replace(f'<div data-lang="{lang}">', '<div>', 1)
+        block = re.sub(r'^<div data-lang="[^"]+"[^>]*>', '<div>', blocks[lang], count=1)
         h1 = text_of(re.search(r'<h1>(.*?)</h1>', block, re.S).group(1))
         lede = text_of(re.search(r'<p class="lede">(.*?)</p>', block, re.S).group(1))
         out = head + '<div class="container">\n\n' + block + '\n</div>\n' + foot
@@ -122,59 +131,12 @@ def build_doc(page):
         write(lang, page, out)
 
 
-def js_object(src, start_pat):
-    """스크립트 안의 객체 리터럴 하나를 node 로 평가해 JSON 으로 받는다."""
-    i = src.index(start_pat)
-    j = src.index('{', i)
-    depth, k, quote = 0, j, None
-    while True:
-        c = src[k]
-        if quote:
-            if c == '\\':
-                k += 1
-            elif c == quote:
-                quote = None
-        elif c in '"\'`':
-            quote = c
-        elif c == '{':
-            depth += 1
-        elif c == '}':
-            depth -= 1
-            if depth == 0:
-                break
-        k += 1
-    lit = src[j:k + 1]
-    res = subprocess.run(['node', '-e', f'process.stdout.write(JSON.stringify({lit}))'], capture_output=True, text=True, check=True)
-    return json.loads(res.stdout)
-
-
-def build_index():
-    src = (DOCS / 'index.html').read_text()
-    i18n = js_object(src, 'const i18n = {')
-    titles = js_object(src, 'var titleMap = {')
-    descs = js_object(src, 'var descMap = {')
-    for lang in LANGS:
-        assert lang in i18n and lang in titles and lang in descs, f'index.html: {lang} 없음'
-        strings = {**i18n['en'], **i18n[lang]}
-        out = src
-
-        def fill(m, as_html):
-            key = m.group(3)
-            if key not in strings:
-                return m.group(0)
-            inner = strings[key] if as_html else html.escape(strings[key], quote=False)
-            return m.group(1) + inner + m.group(4)
-
-        for attr, as_html in (('data-i18n-html', True), ('data-i18n', False)):
-            pat = re.compile(r'(<([a-zA-Z0-9]+)\b[^>]*\b' + attr + r'="([^"]+)"[^>]*>)(?:(?!<\2\b).)*?(</\2>)', re.S)
-            out = pat.sub(lambda m: fill(m, as_html), out)
-        out = set_meta(out, titles[lang], descs[lang])
-        out = re.sub(r'(<meta property="og:url" content=")[^"]*', lambda m: m.group(1) + BASE + lang + '/', out, count=1)
-        # 이 주소는 언어가 정해져 있다 — 저장된 선택이나 기기 언어를 보지 않는다
-        out = out.replace('function detectLang() {\n', f"function detectLang() {{\n    return '{lang}';\n", 1)
-        out = out.replace("location.href = e.target.value + '/';", "location.href = '../' + e.target.value + '/';")
-        out = common(out, 'index.html', lang)
-        write(lang, 'index.html', out)
+def mark_index_rtl():
+    """sitegen 이 만든 소개 페이지에 RTL 언어의 방향을 단다(sitegen 은 dir 을 모른다)."""
+    for lang in RTL:
+        p = DOCS / lang / 'index.html'
+        assert p.exists(), f'{p} 없음 — 먼저 sitegen 으로 docs/site/{lang}.json 을 만든다'
+        p.write_text(html_tag(p.read_text(), lang))
 
 
 def write(lang, page, text):
@@ -186,5 +148,5 @@ def write(lang, page, text):
 if __name__ == '__main__':
     build_doc('privacy.html')
     build_doc('support.html')
-    build_index()
+    mark_index_rtl()
     print('built:', ', '.join(LANGS))

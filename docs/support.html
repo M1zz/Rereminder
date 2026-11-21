@@ -79,7 +79,7 @@
         h3 { font-size: 16px; font-weight: 600; margin: 26px 0 6px; }
         p, li { color: var(--text2); font-size: 15px; }
         p { margin-bottom: 12px; }
-        ul, ol { padding-left: 22px; margin-bottom: 12px; }
+        ul, ol { padding-inline-start: 22px; margin-bottom: 12px; }
         li { margin-bottom: 7px; }
         strong { color: var(--text); font-weight: 600; }
         a { color: var(--accent); text-decoration: none; }
@@ -115,11 +115,11 @@
         details .body > :last-child { margin-bottom: 0; }
 
         table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 14.5px; }
-        th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text2); }
+        th, td { text-align: start; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; color: var(--text2); }
         th { color: var(--text); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.4px; }
         td:first-child { color: var(--text); white-space: nowrap; }
 
-        .note { border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 10px 10px 0; padding: 14px 18px; margin-bottom: 16px; }
+        .note { border-inline-start: 3px solid var(--accent); background: var(--surface); border-radius: 10px; border-start-start-radius: 0; border-end-start-radius: 0; padding: 14px 18px; margin-bottom: 16px; }
         .note p:last-child { margin-bottom: 0; }
 
         footer { border-top: 1px solid var(--border); padding: 32px 24px 56px; text-align: center; }
@@ -127,10 +127,10 @@
         footer a { color: var(--text2); margin: 0 8px; font-size: 13px; }
 
         [data-lang] { display: none; }
-        body.lang-en [data-lang="en"], body.lang-ko [data-lang="ko"], body.lang-ja [data-lang="ja"], body.lang-zh-Hans [data-lang="zh-Hans"], body.lang-zh-Hant [data-lang="zh-Hant"], body.lang-de [data-lang="de"], body.lang-fr [data-lang="fr"], body.lang-es [data-lang="es"], body.lang-pt-BR [data-lang="pt-BR"], body.lang-pt-PT [data-lang="pt-PT"], body.lang-it [data-lang="it"], body.lang-ru [data-lang="ru"], body.lang-cs [data-lang="cs"], body.lang-da [data-lang="da"], body.lang-el [data-lang="el"], body.lang-fi [data-lang="fi"], body.lang-id [data-lang="id"], body.lang-nb [data-lang="nb"], body.lang-nl [data-lang="nl"], body.lang-pl [data-lang="pl"], body.lang-sv [data-lang="sv"], body.lang-th [data-lang="th"], body.lang-tr [data-lang="tr"], body.lang-vi [data-lang="vi"] { display: block; }
+        body.lang-en [data-lang="en"], body.lang-ko [data-lang="ko"], body.lang-ja [data-lang="ja"], body.lang-zh-Hans [data-lang="zh-Hans"], body.lang-zh-Hant [data-lang="zh-Hant"], body.lang-de [data-lang="de"], body.lang-fr [data-lang="fr"], body.lang-es [data-lang="es"], body.lang-pt-BR [data-lang="pt-BR"], body.lang-pt-PT [data-lang="pt-PT"], body.lang-it [data-lang="it"], body.lang-ru [data-lang="ru"], body.lang-cs [data-lang="cs"], body.lang-da [data-lang="da"], body.lang-el [data-lang="el"], body.lang-fi [data-lang="fi"], body.lang-id [data-lang="id"], body.lang-nb [data-lang="nb"], body.lang-nl [data-lang="nl"], body.lang-pl [data-lang="pl"], body.lang-sv [data-lang="sv"], body.lang-th [data-lang="th"], body.lang-tr [data-lang="tr"], body.lang-vi [data-lang="vi"], body.lang-ar [data-lang="ar"] { display: block; }
         li[data-lang], td[data-lang], span[data-lang] { display: none; }
-        body.lang-en li[data-lang="en"], body.lang-ko li[data-lang="ko"], body.lang-ja li[data-lang="ja"], body.lang-zh-Hans li[data-lang="zh-Hans"], body.lang-zh-Hant li[data-lang="zh-Hant"], body.lang-de li[data-lang="de"], body.lang-fr li[data-lang="fr"], body.lang-es li[data-lang="es"], body.lang-pt-BR li[data-lang="pt-BR"], body.lang-pt-PT li[data-lang="pt-PT"], body.lang-it li[data-lang="it"], body.lang-ru li[data-lang="ru"], body.lang-cs li[data-lang="cs"], body.lang-da li[data-lang="da"], body.lang-el li[data-lang="el"], body.lang-fi li[data-lang="fi"], body.lang-id li[data-lang="id"], body.lang-nb li[data-lang="nb"], body.lang-nl li[data-lang="nl"], body.lang-pl li[data-lang="pl"], body.lang-sv li[data-lang="sv"], body.lang-th li[data-lang="th"], body.lang-tr li[data-lang="tr"], body.lang-vi li[data-lang="vi"] { display: list-item; }
-        body.lang-en span[data-lang="en"], body.lang-ko span[data-lang="ko"], body.lang-ja span[data-lang="ja"], body.lang-zh-Hans span[data-lang="zh-Hans"], body.lang-zh-Hant span[data-lang="zh-Hant"], body.lang-de span[data-lang="de"], body.lang-fr span[data-lang="fr"], body.lang-es span[data-lang="es"], body.lang-pt-BR span[data-lang="pt-BR"], body.lang-pt-PT span[data-lang="pt-PT"], body.lang-it span[data-lang="it"], body.lang-ru span[data-lang="ru"], body.lang-cs span[data-lang="cs"], body.lang-da span[data-lang="da"], body.lang-el span[data-lang="el"], body.lang-fi span[data-lang="fi"], body.lang-id span[data-lang="id"], body.lang-nb span[data-lang="nb"], body.lang-nl span[data-lang="nl"], body.lang-pl span[data-lang="pl"], body.lang-sv span[data-lang="sv"], body.lang-th span[data-lang="th"], body.lang-tr span[data-lang="tr"], body.lang-vi span[data-lang="vi"] { display: inline; }
+        body.lang-en li[data-lang="en"], body.lang-ko li[data-lang="ko"], body.lang-ja li[data-lang="ja"], body.lang-zh-Hans li[data-lang="zh-Hans"], body.lang-zh-Hant li[data-lang="zh-Hant"], body.lang-de li[data-lang="de"], body.lang-fr li[data-lang="fr"], body.lang-es li[data-lang="es"], body.lang-pt-BR li[data-lang="pt-BR"], body.lang-pt-PT li[data-lang="pt-PT"], body.lang-it li[data-lang="it"], body.lang-ru li[data-lang="ru"], body.lang-cs li[data-lang="cs"], body.lang-da li[data-lang="da"], body.lang-el li[data-lang="el"], body.lang-fi li[data-lang="fi"], body.lang-id li[data-lang="id"], body.lang-nb li[data-lang="nb"], body.lang-nl li[data-lang="nl"], body.lang-pl li[data-lang="pl"], body.lang-sv li[data-lang="sv"], body.lang-th li[data-lang="th"], body.lang-tr li[data-lang="tr"], body.lang-vi li[data-lang="vi"], body.lang-ar li[data-lang="ar"] { display: list-item; }
+        body.lang-en span[data-lang="en"], body.lang-ko span[data-lang="ko"], body.lang-ja span[data-lang="ja"], body.lang-zh-Hans span[data-lang="zh-Hans"], body.lang-zh-Hant span[data-lang="zh-Hant"], body.lang-de span[data-lang="de"], body.lang-fr span[data-lang="fr"], body.lang-es span[data-lang="es"], body.lang-pt-BR span[data-lang="pt-BR"], body.lang-pt-PT span[data-lang="pt-PT"], body.lang-it span[data-lang="it"], body.lang-ru span[data-lang="ru"], body.lang-cs span[data-lang="cs"], body.lang-da span[data-lang="da"], body.lang-el span[data-lang="el"], body.lang-fi span[data-lang="fi"], body.lang-id span[data-lang="id"], body.lang-nb span[data-lang="nb"], body.lang-nl span[data-lang="nl"], body.lang-pl span[data-lang="pl"], body.lang-sv span[data-lang="sv"], body.lang-th span[data-lang="th"], body.lang-tr span[data-lang="tr"], body.lang-vi span[data-lang="vi"], body.lang-ar span[data-lang="ar"] { display: inline; }
 
         @media (max-width: 560px) {
             h1 { font-size: 30px; }
@@ -140,9 +140,9 @@
         }
 
         /* No-JS / pre-hydration fallback: show English */
-        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it):not(.lang-ru):not(.lang-cs):not(.lang-da):not(.lang-el):not(.lang-fi):not(.lang-id):not(.lang-nb):not(.lang-nl):not(.lang-pl):not(.lang-sv):not(.lang-th):not(.lang-tr):not(.lang-vi) div[data-lang="en"] { display: block; }
-        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it):not(.lang-ru):not(.lang-cs):not(.lang-da):not(.lang-el):not(.lang-fi):not(.lang-id):not(.lang-nb):not(.lang-nl):not(.lang-pl):not(.lang-sv):not(.lang-th):not(.lang-tr):not(.lang-vi) li[data-lang="en"] { display: list-item; }
-        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it):not(.lang-ru):not(.lang-cs):not(.lang-da):not(.lang-el):not(.lang-fi):not(.lang-id):not(.lang-nb):not(.lang-nl):not(.lang-pl):not(.lang-sv):not(.lang-th):not(.lang-tr):not(.lang-vi) span[data-lang="en"] { display: inline; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it):not(.lang-ru):not(.lang-cs):not(.lang-da):not(.lang-el):not(.lang-fi):not(.lang-id):not(.lang-nb):not(.lang-nl):not(.lang-pl):not(.lang-sv):not(.lang-th):not(.lang-tr):not(.lang-vi):not(.lang-ar) div[data-lang="en"] { display: block; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it):not(.lang-ru):not(.lang-cs):not(.lang-da):not(.lang-el):not(.lang-fi):not(.lang-id):not(.lang-nb):not(.lang-nl):not(.lang-pl):not(.lang-sv):not(.lang-th):not(.lang-tr):not(.lang-vi):not(.lang-ar) li[data-lang="en"] { display: list-item; }
+        body:not(.lang-en):not(.lang-ko):not(.lang-ja):not(.lang-zh-Hans):not(.lang-zh-Hant):not(.lang-de):not(.lang-fr):not(.lang-es):not(.lang-pt-BR):not(.lang-pt-PT):not(.lang-it):not(.lang-ru):not(.lang-cs):not(.lang-da):not(.lang-el):not(.lang-fi):not(.lang-id):not(.lang-nb):not(.lang-nl):not(.lang-pl):not(.lang-sv):not(.lang-th):not(.lang-tr):not(.lang-vi):not(.lang-ar) span[data-lang="en"] { display: inline; }
 
         /* 언어별 페이지 링크 — 같은 글의 다른 언어 주소. scripts/build-lang-pages.py 가 언어 폴더마다 같은 줄을 만든다. */
         .lang-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 14px; margin: 14px auto 0; padding: 0 16px; font-size: 13px; }
@@ -175,6 +175,7 @@
     <link rel="alternate" hreflang="th" href="https://m1zz.github.io/Rereminder/th/support.html">
     <link rel="alternate" hreflang="tr" href="https://m1zz.github.io/Rereminder/tr/support.html">
     <link rel="alternate" hreflang="vi" href="https://m1zz.github.io/Rereminder/vi/support.html">
+    <link rel="alternate" hreflang="ar" href="https://m1zz.github.io/Rereminder/ar/support.html">
     <link rel="alternate" hreflang="x-default" href="https://m1zz.github.io/Rereminder/support.html">
 </head>
 <body>
@@ -185,7 +186,7 @@
             <a href="./">Home</a>
             <a href="support.html" aria-current="page">Support</a>
             <a href="privacy.html">Privacy</a>
-            <select class="lang" id="lang-select" aria-label="Language"><option value="en">English</option><option value="ko">한국어</option><option value="ja">日本語</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="pt-BR">Português (Brasil)</option><option value="pt-PT">Português (Portugal)</option><option value="it">Italiano</option><option value="ru">Русский</option><option value="cs">Čeština</option><option value="da">Dansk</option><option value="el">Ελληνικά</option><option value="fi">Suomi</option><option value="id">Bahasa Indonesia</option><option value="nb">Norsk bokmål</option><option value="nl">Nederlands</option><option value="pl">Polski</option><option value="sv">Svenska</option><option value="th">ไทย</option><option value="tr">Türkçe</option><option value="vi">Tiếng Việt</option></select>
+            <select class="lang" id="lang-select" aria-label="Language"><option value="en">English</option><option value="ko">한국어</option><option value="ja">日本語</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="pt-BR">Português (Brasil)</option><option value="pt-PT">Português (Portugal)</option><option value="it">Italiano</option><option value="ru">Русский</option><option value="cs">Čeština</option><option value="da">Dansk</option><option value="el">Ελληνικά</option><option value="fi">Suomi</option><option value="id">Bahasa Indonesia</option><option value="nb">Norsk bokmål</option><option value="nl">Nederlands</option><option value="pl">Polski</option><option value="sv">Svenska</option><option value="th">ไทย</option><option value="tr">Türkçe</option><option value="vi">Tiếng Việt</option><option value="ar">العربية</option></select>
         </div>
     </div>
 </nav>
@@ -325,7 +326,7 @@
         <summary>Which languages and devices are supported?</summary>
         <div class="body">
             <table>
-                <tr><td>Languages</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>Languages</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 or later</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 or later</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 or later</td></tr>
@@ -479,7 +480,7 @@
         <summary>지원 언어와 기기가 어떻게 되나요?</summary>
         <div class="body">
             <table>
-                <tr><td>언어</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>언어</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 이상</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 이상</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 이상</td></tr>
@@ -633,7 +634,7 @@
         <summary>支持哪些语言和设备？</summary>
         <div class="body">
             <table>
-                <tr><td>语言</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>语言</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 或更新版本</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 或更新版本</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 或更新版本</td></tr>
@@ -787,7 +788,7 @@
         <summary>支援哪些語言和裝置？</summary>
         <div class="body">
             <table>
-                <tr><td>語言</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>語言</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 或更新版本</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 或更新版本</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 或更新版本</td></tr>
@@ -940,7 +941,7 @@
         <summary>対応している言語とデバイスは？</summary>
         <div class="body">
             <table>
-                <tr><td>言語</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>言語</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 以降</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 以降</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 以降</td></tr>
@@ -1093,7 +1094,7 @@
         <summary>Welche Sprachen und Geräte werden unterstützt?</summary>
         <div class="body">
             <table>
-                <tr><td>Sprachen</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>Sprachen</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 oder neuer</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 oder neuer</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 oder neuer</td></tr>
@@ -1246,7 +1247,7 @@
         <summary>Quelles langues et quels appareils sont pris en charge ?</summary>
         <div class="body">
             <table>
-                <tr><td>Langues</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>Langues</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 ou version ultérieure</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 ou version ultérieure</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 ou version ultérieure</td></tr>
@@ -1399,7 +1400,7 @@
         <summary>¿Qué idiomas y dispositivos son compatibles?</summary>
         <div class="body">
             <table>
-                <tr><td>Idiomas</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>Idiomas</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 o posterior</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 o posterior</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 o posterior</td></tr>
@@ -1552,7 +1553,7 @@
         <summary>Quais idiomas e dispositivos são compatíveis?</summary>
         <div class="body">
             <table>
-                <tr><td>Idiomas</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>Idiomas</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 ou posterior</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 ou posterior</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 ou posterior</td></tr>
@@ -1705,7 +1706,7 @@
         <summary>Que idiomas e dispositivos são compatíveis?</summary>
         <div class="body">
             <table>
-                <tr><td>Idiomas</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>Idiomas</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 ou posterior</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 ou posterior</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 ou posterior</td></tr>
@@ -1858,7 +1859,7 @@
         <summary>Quali lingue e dispositivi sono supportati?</summary>
         <div class="body">
             <table>
-                <tr><td>Lingue</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>Lingue</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 o successivo</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 o successivo</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 o successivo</td></tr>
@@ -2014,7 +2015,7 @@
         <summary>Какие языки и устройства поддерживаются?</summary>
         <div class="body">
             <table>
-                <tr><td>Языки</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>Языки</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 или новее</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 или новее</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 или новее</td></tr>
@@ -2169,7 +2170,7 @@
         <summary>Které jazyky a zařízení jsou podporované?</summary>
         <div class="body">
             <table>
-                <tr><td>Jazyky</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>Jazyky</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 nebo novější</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 nebo novější</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 nebo novější</td></tr>
@@ -2324,7 +2325,7 @@
         <summary>Hvilke sprog og enheder understøttes?</summary>
         <div class="body">
             <table>
-                <tr><td>Sprog</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>Sprog</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 eller nyere</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 eller nyere</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 eller nyere</td></tr>
@@ -2479,7 +2480,7 @@
         <summary>Ποιες γλώσσες και συσκευές υποστηρίζονται;</summary>
         <div class="body">
             <table>
-                <tr><td>Γλώσσες</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>Γλώσσες</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 ή νεότερο</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 ή νεότερο</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 ή νεότερο</td></tr>
@@ -2634,7 +2635,7 @@
         <summary>Mitä kieliä ja laitteita tuetaan?</summary>
         <div class="body">
             <table>
-                <tr><td>Kielet</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>Kielet</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 tai uudempi</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 tai uudempi</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 tai uudempi</td></tr>
@@ -2789,7 +2790,7 @@
         <summary>Bahasa dan perangkat apa saja yang didukung?</summary>
         <div class="body">
             <table>
-                <tr><td>Bahasa</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>Bahasa</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 atau lebih baru</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 atau lebih baru</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 atau lebih baru</td></tr>
@@ -2944,7 +2945,7 @@
         <summary>Hvilke språk og enheter støttes?</summary>
         <div class="body">
             <table>
-                <tr><td>Språk</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>Språk</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 eller nyere</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 eller nyere</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 eller nyere</td></tr>
@@ -3099,7 +3100,7 @@
         <summary>Welke talen en apparaten worden ondersteund?</summary>
         <div class="body">
             <table>
-                <tr><td>Talen</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>Talen</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 of nieuwer</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 of nieuwer</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 of nieuwer</td></tr>
@@ -3254,7 +3255,7 @@
         <summary>Jakie języki i urządzenia są obsługiwane?</summary>
         <div class="body">
             <table>
-                <tr><td>Języki</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>Języki</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 lub nowszy</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 lub nowszy</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 lub nowszy</td></tr>
@@ -3409,7 +3410,7 @@
         <summary>Vilka språk och enheter stöds?</summary>
         <div class="body">
             <table>
-                <tr><td>Språk</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>Språk</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 eller senare</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 eller senare</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 eller senare</td></tr>
@@ -3564,7 +3565,7 @@
         <summary>รองรับภาษาและอุปกรณ์ใดบ้าง</summary>
         <div class="body">
             <table>
-                <tr><td>ภาษา</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>ภาษา</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 ขึ้นไป</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 ขึ้นไป</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 ขึ้นไป</td></tr>
@@ -3719,7 +3720,7 @@
         <summary>Hangi diller ve aygıtlar destekleniyor?</summary>
         <div class="body">
             <table>
-                <tr><td>Diller</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>Diller</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 veya daha yenisi</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 veya daha yenisi</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 veya daha yenisi</td></tr>
@@ -3874,7 +3875,7 @@
         <summary>Hỗ trợ những ngôn ngữ và thiết bị nào?</summary>
         <div class="body">
             <table>
-                <tr><td>Ngôn ngữ</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt</td></tr>
+                <tr><td>Ngôn ngữ</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
                 <tr><td>iPhone</td><td>iOS 26.0 trở lên</td></tr>
                 <tr><td>Apple Watch</td><td>watchOS 11.6 trở lên</td></tr>
                 <tr><td>Mac</td><td>macOS 26.0 trở lên</td></tr>
@@ -3894,6 +3895,160 @@
     <h2>Vẫn chưa giải quyết được?</h2>
     <p>Hãy viết cho <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. Cho tôi biết bạn đang định làm gì &mdash; không chỉ điều gì bị sai &mdash; và tôi sẽ phản hồi bạn.</p>
 </div>
+
+<!-- ============================= العربية ============================= -->
+<div data-lang="ar" dir="rtl">
+    <h1>الدعم</h1>
+    <p class="lede">يصنع Rereminder شخص واحد. حين تراسلني فأنت تراسل المطوّر مباشرة &mdash; لا قائمة انتظار للتذاكر.</p>
+    <p class="updated">آخر تحديث: 31 أكتوبر 2026 &middot; إصدار التطبيق 2.3.5</p>
+
+    <h2>تواصل معي</h2>
+    <div class="contact-grid">
+        <div class="card">
+            <h3>البريد الإلكتروني</h3>
+            <p class="big-link"><a href="mailto:leeo@kakao.com">leeo@kakao.com</a></p>
+            <p>الأنسب للأعطال وطلبات الاسترداد وكل ما يحتاج إلى لقطة شاشة.</p>
+        </div>
+        <div class="card">
+            <h3>من داخل التطبيق</h3>
+            <p><span class="ui">الإعدادات &rsaquo; إرسال ملاحظات</span></p>
+            <p>تصل مباشرة إلى بريدي. لا حاجة إلى تطبيق بريد &mdash; يكفي تسجيل الدخول إلى iCloud.</p>
+        </div>
+        <div class="card">
+            <h3>Instagram</h3>
+            <p class="big-link"><a href="https://instagram.com/lee25_ios" target="_blank" rel="noopener">@lee25_ios</a></p>
+            <p>الرسائل الخاصة مفتوحة، وهي مناسبة للأسئلة السريعة.</p>
+        </div>
+        <div class="card">
+            <h3>الأعطال وطلبات الميزات</h3>
+            <p class="big-link"><a href="https://github.com/M1zz/Rereminder/issues" target="_blank" rel="noopener">GitHub Issues</a></p>
+            <p>صفحة عامة، فيجد الآخرون الإجابة أيضًا.</p>
+        </div>
+    </div>
+
+    <div class="note">
+        <p><strong>أردّ عادةً خلال يومين إلى ثلاثة أيام.</strong> إن مرّ أكثر من أسبوع، فاعتبر أن الرسالة ضاعت وأرسلها مرة أخرى &mdash; أفضّل أن أقرأها مرتين على ألا أقرأها أبدًا.</p>
+    </div>
+
+    <h3>ما تذكره عند الإبلاغ عن عطل</h3>
+    <ul>
+        <li><strong>إصدار التطبيق</strong> &mdash; يظهر في أسفل <span class="ui">الإعدادات &rsaquo; معلومات</span>.</li>
+        <li><strong>الجهاز والنظام</strong> &mdash; مثل iPhone 15 Pro بنظام iOS 26.1. واذكر طراز Apple Watch إن كانت المشكلة في الساعة.</li>
+        <li><strong>ما توقعته، وما حدث بدلًا منه.</strong> عبارة «تنبيه الدقائق الخمس لم يصل» تفيدني أكثر بكثير من «الإشعارات لا تعمل».</li>
+        <li><strong>هل يتكرر الأمر في كل مرة</strong> أم حدث مرة واحدة فقط.</li>
+    </ul>
+
+    <h2>أسئلة شائعة</h2>
+
+    <details>
+        <summary>لم تصلني التنبيهات</summary>
+        <div class="body">
+            <p>يستخدم Rereminder <strong>إشعارات محلية</strong>، لذا يكون السبب في الغالب إذنًا أو إعداد التركيز. تحقّق بهذا الترتيب:</p>
+            <ol>
+                <li><strong>إذن الإشعارات.</strong> افتح <span class="ui">الإعدادات &rsaquo; إعدادات الإشعارات &rsaquo; طريقة التنبيه</span> في التطبيق &mdash; تعرض الحالة الحالية وتتيح لك طلب الإذن أو الانتقال إلى إعدادات iOS.</li>
+                <li><strong>التركيز / عدم الإزعاج.</strong> إن كان أحد أوضاع التركيز مفعّلًا، فأضف Rereminder إلى التطبيقات المسموح بها في <span class="ui">الإعدادات &rsaquo; التركيز</span> على iOS.</li>
+                <li><strong>مفتاح الرنين/الصامت ومستوى الصوت.</strong> الوضع الصامت يكتم الصوت، لكن الاهتزاز يبقى.</li>
+                <li><strong>الملخص المجدول.</strong> قد يؤخّر <span class="ui">الإعدادات &rsaquo; الإشعارات &rsaquo; الملخص المجدول</span> في iOS الإشعارات حتى ساعة محددة، ويجب ألا يكون Rereminder ضمنه.</li>
+            </ol>
+            <p>إن كانت الأربعة سليمة وما زالت المشكلة تتكرر، فأخبرني بمدة المؤقت ومواضع التنبيهات &mdash; هذا ما أحتاجه لإعادة المشكلة عندي.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>ساعة Apple Watch لا تتزامن</summary>
+        <div class="body">
+            <p>افتح <span class="ui">الإعدادات &rsaquo; أجهزتي</span> في التطبيق. تخبرك الحالة بجانب Apple Watch بالخطوة الناقصة، والضغط عليها يفتح شرحًا خطوة بخطوة لتلك الحالة بالضبط.</p>
+            <ol>
+                <li>الساعة <strong>مقترنة</strong> بهذا الـ iPhone.</li>
+                <li><strong>Rereminder مثبّت على الساعة.</strong> افتح تطبيق Watch على iPhone، ومرّر إلى Rereminder، وثبّته إن لم يكن موجودًا.</li>
+                <li><strong>افتح Rereminder على الساعة مرة واحدة.</strong> تطبيق الساعة المثبّت حديثًا لم يعمل بعد، والمزامنة الأولى تحتاج إلى تشغيله مرة.</li>
+            </ol>
+            <p>المؤقت الذي تبدؤه على Apple Watch ينبّهك على معصمك. أما المؤقت الذي تبدؤه على iPhone فيصل إلى معصمك فقط حين يكون iPhone مقفلًا. تبقى الشاشة مضاءة أثناء عمل المؤقت، فاضغط الزر الجانبي لقفلها.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>يظهر Mac «غير متصل» رغم أن التطبيق مفتوح</summary>
+        <div class="body">
+            <p>«متصل» هنا تعني أن <strong>التطبيق كان يعمل على ذلك الـ Mac خلال آخر 10 دقائق تقريبًا</strong> &mdash; وليس اتصالًا مباشرًا لحظيًا. تترك الأجهزة علامة في iCloud الخاص بك كل خمس دقائق، ولا يستطيع iCloud إيقاظ تطبيق في وضع السكون، لذا قد يحتاج Mac الذي استيقظ للتو بضع دقائق ليظهر.</p>
+            <p>إن لم يظهر أبدًا: يجب أن يكون الجهازان مسجّلين في <strong>حساب iCloud نفسه</strong> مع <strong>تفعيل iCloud Drive</strong>. وفي <span class="ui">الإعدادات &rsaquo; أجهزتي</span> زر <span class="ui">تحقق مرة أخرى</span> يعيد الفحص فورًا.</p>
+            <p>تتطلب نسخة Mac نظام <strong>macOS 26 أو أحدث</strong>.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>اشتريت Pro لكنه لا يظهر</summary>
+        <div class="body">
+            <p>افتح شاشة Pro واضغط <strong>استعادة المشتريات</strong>. ترتبط المشتريات بحساب Apple الذي تمّت به، فتأكد أنك مسجّل الدخول بالحساب نفسه &mdash; لا بحساب أحد أفراد العائلة، ولا بحساب لمنطقة أخرى.</p>
+            <p>الشراء مدى الحياة لا ينتهي أبدًا، فيبقى بعد إعادة التثبيت وعلى الأجهزة الجديدة. والاشتراك السنوي يبقى فعّالًا ما دام يتجدّد، و<strong>استعادة المشتريات</strong> تعيده أيضًا.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>ماذا يتضمّن Pro بالضبط؟</summary>
+        <div class="body">
+            <p>هناك ثلاث خطط: <strong>المجانية و«الذاكرة» وPro</strong>. وتتوفر «الذاكرة» وPro <strong>باشتراك سنوي أو بشراء مدى الحياة</strong>.</p>
+            <p><strong>خلال تجربتك للتطبيق، تكون كل الميزات مفتوحة.</strong> ويستمر ذلك حتى تُنهي مؤقتات في 14 يومًا مختلفًا أو تُكمل 5 جلسات.</p>
+            <p><strong>المجانية</strong></p>
+            <ul>
+                <li><strong>تنبيهات مسبقة بلا حدود.</strong> ضع على المؤقت منها ما تشاء &mdash; فالميزة التي وُجد التطبيق من أجلها غير محدودة.</li>
+                <li>كل ألوان السمة، ورسائل التنبيه المخصّصة، والنشاط المباشر، و«استمر في التنبيه حتى أستجيب»، و«الرنين كمنبّه عند الانتهاء».</li>
+                <li><strong>تطبيق Apple Watch وتطبيق Mac كاملين</strong>، دون أي قفل خلف الدفع.</li>
+                <li>مجانًا دائمًا: آخر إعداد استخدمته، والقوالب المحفوظة، وحتى 3 قوالب جديدة، والوقت الإضافي</li>
+                <li>السجل من فترتك المجانية مع آخر 30 يومًا، وبضع محاولات إضافية لوضع الجلسة</li>
+            </ul>
+            <p><strong>الذاكرة</strong></p>
+            <ul>
+                <li>قوالب بلا حدود وسجلّك الكامل</li>
+            </ul>
+            <p><strong>Pro</strong></p>
+            <p>كل ما في «الذاكرة»، بالإضافة إلى:</p>
+            <ul>
+                <li><strong>وضع الجلسة</strong> &mdash; سمِّ كل جزء («مقدمة / عرض عملي / أسئلة وأجوبة») واكتب ملاحظات لكل جزء تظهر لك عند بدايته.</li>
+            </ul>
+            <p>القوالب المحفوظة لا تُحذف أبدًا وتبقى مفتوحة دائمًا. بعد الفترة المجانية يمكنك حفظ حتى 3 قوالب جديدة مجانًا، وخطة «الذاكرة» تلغي هذا الحد.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>أريد استرداد المبلغ</summary>
+        <div class="body">
+            <p>يتم الاسترداد عبر Apple لا عبري &mdash; ليس لديّ أي وصول إلى بيانات الدفع ولا أستطيع إصدار استرداد. اطلبه من <a href="https://reportaproblem.apple.com" target="_blank" rel="noopener">reportaproblem.apple.com</a> بحساب Apple الذي تمّ به الشراء.</p>
+            <p>وإن كان السبب خللًا في التطبيق، فأخبرني به أيضًا. الاسترداد يُنهي مشكلتك أنت، لكنه لا يُصلح الخلل لمن يأتي بعدك.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>هل يمكنني تجربته دون تثبيت؟</summary>
+        <div class="body">
+            <p>نعم. افتح <a href="https://m1zz.github.io/rereminder/" target="_blank" rel="noopener">m1zz.github.io/rereminder</a> على iPhone، فيشغّل مقطع التطبيق (App Clip) المؤقت فورًا &mdash; دون الذهاب إلى App Store. يتضمّن القرص والتنبيهات، أما القوالب ووضع الجلسة وتطبيق الساعة ففي التطبيق الكامل.</p>
+        </div>
+    </details>
+
+    <details>
+        <summary>ما اللغات والأجهزة المدعومة؟</summary>
+        <div class="body">
+            <table>
+                <tr><td>اللغات</td><td>English, 한국어, 日本語, 简体中文, 繁體中文, Deutsch, Français, Español, Português (Brasil), Português (Portugal), Italiano, Русский, Čeština, Dansk, Ελληνικά, Suomi, Bahasa Indonesia, Norsk bokmål, Nederlands, Polski, Svenska, ไทย, Türkçe, Tiếng Việt, العربية</td></tr>
+                <tr><td>iPhone</td><td>iOS 26.0 أو أحدث</td></tr>
+                <tr><td>Apple Watch</td><td>watchOS 11.6 أو أحدث</td></tr>
+                <tr><td>Mac</td><td>macOS 26.0 أو أحدث</td></tr>
+                <tr><td>iPad</td><td>غير مدعوم حاليًا</td></tr>
+            </table>
+        </div>
+    </details>
+
+    <details>
+        <summary>كيف أحذف بياناتي؟</summary>
+        <div class="body">
+            <p>كل ما تُنشئه &mdash; المؤقتات والقوالب وأسماء الأجزاء والملاحظات والسجل &mdash; يبقى على جهازك. <strong>حذف التطبيق يزيل كل ذلك.</strong></p>
+            <p>أعداد الاستخدام المجهولة التي يرسلها التطبيق موصوفة بالكامل في <a href="privacy.html">صفحة الخصوصية</a>، بما في ذلك ما يتوقف عند حذف التطبيق.</p>
+        </div>
+    </details>
+
+    <h2>ما زلت تواجه مشكلة؟</h2>
+    <p>راسلني على <a href="mailto:leeo@kakao.com">leeo@kakao.com</a>. أخبرني بما كنت تحاول فعله &mdash; لا بما تعطّل فقط &mdash; وسأعود إليك بالرد.</p>
+</div>
 </div>
 
 <footer>
@@ -3904,15 +4059,15 @@
         <a href="privacy.html">Privacy</a>
         <a href="https://apps.apple.com/us/app/rereminder/id6752551268" target="_blank" rel="noopener">App Store</a>
     </p>
-    <nav class="lang-links" aria-label="Language"><a href="ko/support.html" hreflang="ko" lang="ko">한국어</a><a href="en/support.html" hreflang="en" lang="en">English</a><a href="ja/support.html" hreflang="ja" lang="ja">日本語</a><a href="zh-Hans/support.html" hreflang="zh-Hans" lang="zh-Hans">简体中文</a><a href="zh-Hant/support.html" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a><a href="de/support.html" hreflang="de" lang="de">Deutsch</a><a href="fr/support.html" hreflang="fr" lang="fr">Français</a><a href="es/support.html" hreflang="es" lang="es">Español</a><a href="pt-BR/support.html" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a><a href="pt-PT/support.html" hreflang="pt-PT" lang="pt-PT">Português (Portugal)</a><a href="it/support.html" hreflang="it" lang="it">Italiano</a><a href="ru/support.html" hreflang="ru" lang="ru">Русский</a><a href="cs/support.html" hreflang="cs" lang="cs">Čeština</a><a href="da/support.html" hreflang="da" lang="da">Dansk</a><a href="el/support.html" hreflang="el" lang="el">Ελληνικά</a><a href="fi/support.html" hreflang="fi" lang="fi">Suomi</a><a href="id/support.html" hreflang="id" lang="id">Bahasa Indonesia</a><a href="nb/support.html" hreflang="nb" lang="nb">Norsk bokmål</a><a href="nl/support.html" hreflang="nl" lang="nl">Nederlands</a><a href="pl/support.html" hreflang="pl" lang="pl">Polski</a><a href="sv/support.html" hreflang="sv" lang="sv">Svenska</a><a href="th/support.html" hreflang="th" lang="th">ไทย</a><a href="tr/support.html" hreflang="tr" lang="tr">Türkçe</a><a href="vi/support.html" hreflang="vi" lang="vi">Tiếng Việt</a></nav>
+    <nav class="lang-links" aria-label="Language"><a href="ko/support.html" hreflang="ko" lang="ko">한국어</a><a href="en/support.html" hreflang="en" lang="en">English</a><a href="ja/support.html" hreflang="ja" lang="ja">日本語</a><a href="zh-Hans/support.html" hreflang="zh-Hans" lang="zh-Hans">简体中文</a><a href="zh-Hant/support.html" hreflang="zh-Hant" lang="zh-Hant">繁體中文</a><a href="de/support.html" hreflang="de" lang="de">Deutsch</a><a href="fr/support.html" hreflang="fr" lang="fr">Français</a><a href="es/support.html" hreflang="es" lang="es">Español</a><a href="pt-BR/support.html" hreflang="pt-BR" lang="pt-BR">Português (Brasil)</a><a href="pt-PT/support.html" hreflang="pt-PT" lang="pt-PT">Português (Portugal)</a><a href="it/support.html" hreflang="it" lang="it">Italiano</a><a href="ru/support.html" hreflang="ru" lang="ru">Русский</a><a href="cs/support.html" hreflang="cs" lang="cs">Čeština</a><a href="da/support.html" hreflang="da" lang="da">Dansk</a><a href="el/support.html" hreflang="el" lang="el">Ελληνικά</a><a href="fi/support.html" hreflang="fi" lang="fi">Suomi</a><a href="id/support.html" hreflang="id" lang="id">Bahasa Indonesia</a><a href="nb/support.html" hreflang="nb" lang="nb">Norsk bokmål</a><a href="nl/support.html" hreflang="nl" lang="nl">Nederlands</a><a href="pl/support.html" hreflang="pl" lang="pl">Polski</a><a href="sv/support.html" hreflang="sv" lang="sv">Svenska</a><a href="th/support.html" hreflang="th" lang="th">ไทย</a><a href="tr/support.html" hreflang="tr" lang="tr">Türkçe</a><a href="vi/support.html" hreflang="vi" lang="vi">Tiếng Việt</a><a href="ar/support.html" hreflang="ar" lang="ar">العربية</a></nav>
 </footer>
 
 <script>
 (function () {
     var KEY = 'rereminder-lang';
-    var LANGS = ['en', 'ko', 'ja', 'zh-Hans', 'zh-Hant', 'de', 'fr', 'es', 'pt-BR', 'pt-PT', 'it', 'ru', 'cs', 'da', 'el', 'fi', 'id', 'nb', 'nl', 'pl', 'sv', 'th', 'tr', 'vi'];
+    var LANGS = ['en', 'ko', 'ja', 'zh-Hans', 'zh-Hant', 'de', 'fr', 'es', 'pt-BR', 'pt-PT', 'it', 'ru', 'cs', 'da', 'el', 'fi', 'id', 'nb', 'nl', 'pl', 'sv', 'th', 'tr', 'vi', 'ar'];
     function apply(lang, persist) {
-        document.body.classList.remove('lang-en', 'lang-ko', 'lang-ja', 'lang-zh-Hans', 'lang-zh-Hant', 'lang-de', 'lang-fr', 'lang-es', 'lang-pt-BR', 'lang-pt-PT', 'lang-it', 'lang-ru', 'lang-cs', 'lang-da', 'lang-el', 'lang-fi', 'lang-id', 'lang-nb', 'lang-nl', 'lang-pl', 'lang-sv', 'lang-th', 'lang-tr', 'lang-vi');
+        document.body.classList.remove('lang-en', 'lang-ko', 'lang-ja', 'lang-zh-Hans', 'lang-zh-Hant', 'lang-de', 'lang-fr', 'lang-es', 'lang-pt-BR', 'lang-pt-PT', 'lang-it', 'lang-ru', 'lang-cs', 'lang-da', 'lang-el', 'lang-fi', 'lang-id', 'lang-nb', 'lang-nl', 'lang-pl', 'lang-sv', 'lang-th', 'lang-tr', 'lang-vi', 'lang-ar');
         document.body.classList.add('lang-' + lang);
         document.documentElement.lang = lang;
         var select = document.getElementById('lang-select');
