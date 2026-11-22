@@ -9,6 +9,112 @@ DeployBar 가 배포할 때 아래 버전 절의 언어별 문구를 읽어 스�
 사용자에게 무엇이 좋아졌는지만 쓴다. 내부 구조나 빌드 설정 이야기는 쓰지 않는다.
 언어마다 다시 쓴다. 기계번역하지 말고 항목 수와 순서만 맞춘다.
 
+## 2.3.13
+
+### 앱스토어 (한국어, ko)
+
+App Store 세일 소식에서 바로 요금제가 열려요
+
+### App Store (English, en)
+
+App Store sales open your plans directly
+
+### App Store (en-GB, en-GB)
+
+App Store sales open your plans directly
+
+### App Store (ja, ja)
+
+App Storeのセールから料金プランをすぐ開けます
+
+### App Store (zh-Hans, zh-Hans)
+
+点按 App Store 优惠可直接打开订阅方案
+
+### App Store (zh-Hant, zh-Hant)
+
+點按 App Store 優惠可直接打開訂閱方案
+
+### App Store (de, de)
+
+App-Store-Angebote öffnen die Tarife
+
+### App Store (fr, fr)
+
+Les offres App Store ouvrent les forfaits
+
+### App Store (es, es)
+
+Las ofertas de App Store abren tu plan
+
+### App Store (pt-BR, pt-BR)
+
+Ofertas da App Store abrem os planos
+
+### App Store (pt-PT, pt-PT)
+
+As ofertas da App Store abrem os planos
+
+### App Store (it, it)
+
+Le offerte dell’App Store aprono i piani
+
+### App Store (ru, ru)
+
+Акции в App Store сразу открывают тарифы
+
+### App Store (cs, cs)
+
+Akce v App Storu otevřou předplatné
+
+### App Store (da, da)
+
+Tilbud i App Store åbner abonnementerne
+
+### App Store (el, el)
+
+Οι προσφορές App Store ανοίγουν τα πακέτα
+
+### App Store (fi, fi)
+
+App Storen tarjoukset avaavat tilaukset
+
+### App Store (id, id)
+
+Promo App Store langsung membuka paket
+
+### App Store (nb, nb)
+
+Tilbud i App Store åpner abonnementene
+
+### App Store (nl, nl)
+
+App Store-acties openen de abonnementen
+
+### App Store (pl, pl)
+
+Promocje w App Store otwierają plany
+
+### App Store (sv, sv)
+
+Erbjudanden i App Store öppnar planerna
+
+### App Store (th, th)
+
+ดีลใน App Store เปิดแพ็กเกจได้ทันที
+
+### App Store (tr, tr)
+
+App Store fırsatları planları açar
+
+### App Store (vi, vi)
+
+Ưu đãi trên App Store mở thẳng các gói
+
+### App Store (ar, ar)
+
+عروض App Store تفتح الخطط مباشرة
+
 ## 2.3.12
 
 ### 앱스토어 (한국어)
