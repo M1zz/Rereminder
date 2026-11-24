@@ -404,6 +404,9 @@ final class TimerScreenViewModel: ObservableObject {
     func startPomodoro() {
         guard let setup = IntervalList.setup(from: Pomodoro.lengths) else { return }
         rounds = Pomodoro.rounds
+        // 앞서 쓰던 구간 이름·대본은 이 설정의 것이 아니다 — 템플릿을 불러올 때처럼 갈아 끼운다.
+        sectionNames = [:]
+        sectionScripts = [:]
         applyRepeatConfig(mainSec: setup.total, offsets: Array(setup.offsets), toast: false)
         ActivityReporter.log("pomodoro_started")
         start()

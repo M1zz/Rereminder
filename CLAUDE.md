@@ -787,6 +787,8 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - 메뉴 막대(`RereminderMenuBar/MenuBarController.swift`)는 **열 때마다** 메뉴를 다시 짠다(`menuNeedsUpdate`). 쉬는 동안: 저장한 설정(위젯과 같은 순서·이름) → 포모도로. 도는 동안: 일시정지·정지.
   목록은 `QuickStartPublisher.publish` 가 `MenuBarManager.setSetups` 로 넘긴다(맥은 창이 `.inactive` 로 갈 때도 적는다). 고르면 `RRMenuBarStartTapped` → `TimerUnifiedView` 가 `apply(template:)` 로 건다 — ⚠️ 위젯과 같은 길이다. 도는 타이머는 덮지 않는다.
 - **포모도로**(`Rereminder/Modules/Pomodoro.swift`)는 새 장치가 아니라 구간 25:00 + 5:00 × 4 의 이름이다. 시간 시트 ▸ 구간 칸 맨 위 줄이 채우고(적용은 사람이), 시작 버튼 길게 누르기·메뉴 막대는 바로 건다(`startPomodoro`). 세션 모드에는 없다.
+- **구간 끝의 알림 문구**: 구간 목록의 각 줄 아래 🔔 칸에 그 구간이 끝나며 울릴 말을 적는다. 비워 두면 기본 문구("5분 남았습니다")가 자리표시로 보이고 그대로 나간다. 문구는 구간(`Interval.message`)을 따라다니다 적용할 때 그 자리의 오프셋으로 `prealertMessages` 에 적힌다(세션 모드는 구간 이름이 문구를 만들어 손대지 않는다). 위 "알림 문구는 알림을 켜는 자리에서 쓴다" 절의 그 자리다.
+- 메뉴에서 건 시작을 알림 권한 경고가 붙잡으면 앱 창을 앞으로 가져온다(`bringAppForward`) — 경고는 창에 떠서, 안 그러면 메뉴를 눌렀는데 아무 일도 없는 것처럼 보인다. ⚠️ 창은 `canBecomeMain` 으로 고른다(`windows.first` 는 메뉴 막대 창일 수 있다).
 - 번들의 문구는 `Bundle.main.localizedString` 으로 읽어 카탈로그에 `extractionState: manual` 로 둔다("Open Rereminder"·"Quit Rereminder" 는 이번까지 번역이 없었다).
 - 지표: `menu_bar_start_used`, `pomodoro_started`. 테스트: `IntervalListTests.test_pomodoroIsOneRingWithABreakBell`
 

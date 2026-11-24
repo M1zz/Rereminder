@@ -96,6 +96,12 @@ final class MenuBarManager {
         _ = controller.perform(NSSelectorFromString("setSetups:"), with: setups as NSArray)
     }
 
+    /// 앱 창을 앞으로 가져온다 — 메뉴에서 고른 시작을 경고가 붙잡았을 때. 안 그러면 뒤에 있는 창에 뜬
+    /// 경고를 아무도 못 보고, 메뉴를 눌렀는데 아무 일도 없는 것처럼 보인다.
+    func bringAppForward() {
+        _ = controller?.perform(NSSelectorFromString("activateApp"))
+    }
+
     /// 타이머 상태를 메뉴바에 반영
     func update(remaining: TimeInterval, state: TimerState) {
         guard let controller else { return }

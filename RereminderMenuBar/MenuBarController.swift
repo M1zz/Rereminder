@@ -155,8 +155,16 @@ public final class RRMenuBarController: NSObject {
     }
 
     @objc private func openTapped() {
-        NSApp.activate(ignoringOtherApps: true)
-        NSApp.windows.first?.makeKeyAndOrderFront(nil)
+        activateApp()
+    }
+
+    /// 앱 창을 앞으로 — 메뉴에서 건 타이머를 경고가 붙잡았을 때 앱이 부른다.
+    @objc public func activateApp() {
+        DispatchQueue.main.async {
+            NSApp.activate()
+            // ⚠️ `windows.first` 는 메뉴 막대 자체의 창일 수 있다 — 앱의 주 창을 고른다.
+            NSApp.windows.first { $0.canBecomeMain }?.makeKeyAndOrderFront(nil)
+        }
     }
 
     @objc private func quitTapped() {

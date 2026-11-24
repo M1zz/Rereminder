@@ -765,6 +765,8 @@ struct TimerUnifiedView: View {
                 ActivityReporter.log("menu_bar_start_used")
                 screenVM.apply(template: template)
             }
+            // 알림 권한 경고가 시작을 붙잡았으면 창을 앞으로 — 경고는 창에 뜬다.
+            if screenVM.showPermissionWarning { MenuBarManager.shared.bringAppForward() }
         }
         MenuBarManager.shared.update(remaining: screenVM.remaining, state: screenVM.state)
         #endif

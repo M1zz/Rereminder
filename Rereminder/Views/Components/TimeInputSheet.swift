@@ -35,6 +35,8 @@ struct TimeInputSheet: View {
         var seconds: Int
         var name: String = ""
         var script: String = ""
+        /// 이 구간이 끝날 때 울리는 알림의 문구. 비우면 기본 문구("5분 남음")가 나간다.
+        var message: String = ""
     }
 
     private var isSession: Bool { screenVM.currentMode == .presentation }
@@ -52,10 +54,13 @@ struct TimeInputSheet: View {
         self._rounds = State(initialValue: screenVM.rounds)
         let lengths = IntervalList.lengths(total: screenVM.mainMinutes * 60 + screenVM.mainSeconds,
                                            offsets: screenVM.selectedOffsets)
+        let total = lengths.reduce(0, +)
         self._intervals = State(initialValue: lengths.enumerated().map { index, length in
-            Interval(seconds: length,
-                     name: screenVM.sectionNames[index] ?? "",
-                     script: screenVM.sectionScripts[index] ?? "")
+            let boundary = total - lengths.prefix(index + 1).reduce(0, +)
+            return Interval(seconds: length,
+                            name: screenVM.sectionNames[index] ?? "",
+                            script: screenVM.sectionScripts[index] ?? "",
+                            message: screenVM.prealertMessages[boundary] ?? "")
         })
         #if DEBUG
         if UserDefaults.standard.string(forKey: "screenshotTimeInput") == "intervals" {
@@ -163,6 +168,7 @@ struct TimeInputSheet: View {
                     // 두 칸은 같은 설정이다 — 구간 칸에서 고친 것이 있으면 그것까지 함께 올린다
                     screenVM.rounds = isSession ? 1 : rounds
                     if let setup = intervalSetup, intervals.count > 1 {
+                        applyIntervalMessages()
                         screenVM.applyRepeatConfig(mainSec: setup.total, offsets: Array(setup.offsets), toast: false)
                         if isSession { applySectionText() }
                     } else {
@@ -254,6 +260,7 @@ struct TimeInputSheet: View {
             Button {
                 guard let setup = intervalSetup else { return }
                 screenVM.rounds = isSession ? 1 : rounds
+                applyIntervalMessages()
                 screenVM.applyRepeatConfig(mainSec: setup.total, offsets: Array(setup.offsets), toast: false)
                 if isSession { applySectionText() }
                 isPresented = false
@@ -363,6 +370,26 @@ struct TimeInputSheet: View {
                 EscalationSchedule.offsets(policy: EscalationPolicy.current(), role: .primary).count))
     }
 
+    /// 구간 끝의 문구를 그 자리의 알림(끝나기 몇 초 전)에 적는다 — 구간 길이를 고쳐도 문구는 제 구간을 따라간다.
+    /// 세션 모드는 구간 이름으로 문구를 만들어 덮으므로(`applyPresentationSections`) 여기서 손대지 않는다.
+    private func applyIntervalMessages() {
+        guard !isSession else { return }
+        var messages: [Int: String] = [:]
+        for index in intervals.indices {
+            guard let offset = boundaryOffset(index) else { continue }
+            let text = intervals[index].message.trimmingCharacters(in: .whitespaces)
+            if !text.isEmpty { messages[offset] = text }
+        }
+        screenVM.prealertMessages = messages
+    }
+
+    /// 이 구간이 끝나는 자리 = 끝나기 몇 초 전. 마지막 구간은 종료라 알림이 아니다(nil).
+    private func boundaryOffset(_ index: Int) -> Int? {
+        guard index < intervals.count - 1 else { return nil }
+        let offset = intervalTotal - intervals.prefix(index + 1).map(\.seconds).reduce(0, +)
+        return offset > 0 ? offset : nil
+    }
+
     /// 줄을 옮기거나 지운 뒤에도 이름·대본이 제 구간에 남게 번호를 다시 매겨 적는다.
     private func applySectionText() {
         var names: [Int: String] = [:]
@@ -396,7 +423,33 @@ struct TimeInputSheet: View {
                 if let i = intervals.firstIndex(where: { $0.id == interval.id }) { intervals[i].name = newValue }
             }
         )
-        return HStack(spacing: DSSpacing.md) {
+        let message = Binding<String>(
+            get: { intervals.first { $0.id == interval.id }?.message ?? "" },
+            set: { newValue in
+                if let i = intervals.firstIndex(where: { $0.id == interval.id }) { intervals[i].message = newValue }
+            }
+        )
+        return VStack(alignment: .leading, spacing: DSSpacing.sm) {
+            intervalHeader(index: index, name: name, length: binding)
+            // 구간이 끝나며 울리는 말 — 기본 문구가 자리표시로 보이고, 적으면 그 말이 나간다.
+            if !isSession, let offset = boundaryOffset(index) {
+                HStack(spacing: DSSpacing.md) {
+                    Image(systemName: "bell.fill")
+                        .font(.caption)
+                        .foregroundStyle(SectionPalette.color(index).onGlass)
+                        .frame(width: 12)
+                        .accessibilityHidden(true)
+                    TextField(Timer.prealertMessage(for: offset, custom: [:]), text: message)
+                        .font(.body)
+                        .submitLabel(.done)
+                        .accessibilityLabel(Text("Pre-alert Message"))
+                }
+            }
+        }
+    }
+
+    private func intervalHeader(index: Int, name: Binding<String>, length binding: Binding<Int>) -> some View {
+        HStack(spacing: DSSpacing.md) {
             Circle()
                 .fill(SectionPalette.color(index))
                 .frame(width: 12, height: 12)
