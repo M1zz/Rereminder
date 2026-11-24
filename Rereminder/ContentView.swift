@@ -28,6 +28,8 @@ struct ContentView: View {
                 #endif
                 // 첫 실행의 그림 위에 시스템 창을 띄우지 않는다 — 그림이 끝난 뒤에 묻는다(`TimerUnifiedView`).
                 if !UserDefaults.standard.bool(forKey: "hasSeenOnboarding") { return }
+                // 맥에서 쓰는 법이 곧 뜨면 그 첫 장이 이유와 함께 묻는다(`MacWelcomeView`).
+                if MacWelcome.isDue { return }
                 Self.requestNotificationPermission()
             }
             #if targetEnvironment(macCatalyst)

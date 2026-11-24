@@ -17,36 +17,62 @@ import UIKit
 final class MenuBarManager {
     static let shared = MenuBarManager()
 
-    /// 메뉴바에서 일시정지/재개 눌렀을 때 (앱이 현재 상태에 맞게 처리)
-    var onPauseToggle: (() -> Void)?
-    /// 메뉴바에서 정지 눌렀을 때
-    var onStop: (() -> Void)?
-    /// 메뉴바에서 설정을 골라 바로 걸 때 — 저장한 설정의 id, 또는 `Pomodoro.menuID`
-    var onStart: ((String) -> Void)?
-
     /// 번들이 아직 없을 때 받은 목록 — 번들을 올리면 넘긴다.
     private var setups: [[String: String]] = []
 
+    /// 마지막으로 알린 상태 — 일시정지 버튼이 멈출지 이어 갈지 가른다.
+    private var lastState: TimerState = .idle
+
     private var controller: NSObject?
 
+    /// ⚠️ 메뉴의 버튼은 화면(`TimerUnifiedView`)을 직접 부르지 않는다. 화면은 **창에 묶여 있어서**,
+    ///    창을 닫으면 함께 사라지고 메뉴를 눌러도 아무 일도 없었다. 그래서 위젯·잠금화면 버튼과 같은 길로 보낸다:
+    ///    요청을 남기고(`QuickStartShelf` · `LiveActivityCommandStore`) 알린다. 창이 있으면 그 자리에서 받고,
+    ///    없으면 창을 다시 연다 — 새 창이 뜨면서 저장된 타이머를 되살린 **뒤** 남은 요청을 처리한다.
     private init() {
         let center = NotificationCenter.default
         center.addObserver(
             forName: Notification.Name("RRMenuBarPauseTapped"), object: nil, queue: .main
         ) { [weak self] _ in
-            Task { @MainActor in self?.onPauseToggle?() }
+            Task { @MainActor in self?.send(self?.lastState == .paused ? .resume : .pause) }
         }
         center.addObserver(
             forName: Notification.Name("RRMenuBarStopTapped"), object: nil, queue: .main
         ) { [weak self] _ in
-            Task { @MainActor in self?.onStop?() }
+            Task { @MainActor in self?.send(.stop) }
         }
         center.addObserver(
             forName: Notification.Name("RRMenuBarStartTapped"), object: nil, queue: .main
         ) { [weak self] note in
             guard let id = note.userInfo?["id"] as? String else { return }
-            Task { @MainActor in self?.onStart?(id) }
+            Task { @MainActor in self?.start(id) }
         }
+        center.addObserver(
+            forName: Notification.Name("RRMenuBarOpenTapped"), object: nil, queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in self?.showWindow() }
+        }
+    }
+
+    private func send(_ command: LiveActivityCommand) {
+        if !command.dispatch() { showWindow() }
+    }
+
+    private func start(_ id: String) {
+        QuickStartShelf.request(templateID: id)
+        NotificationCenter.default.post(name: .quickStartRequested, object: nil)
+        if QuickStartShelf.hasPendingRequest { showWindow() }
+    }
+
+    /// 창이 있으면 앞으로, 닫혀 있으면 다시 연다.
+    func showWindow() {
+        let hasWindow = UIApplication.shared.connectedScenes.contains { $0 is UIWindowScene }
+        if !hasWindow {
+            UIApplication.shared.requestSceneSessionActivation(
+                UIApplication.shared.openSessions.first { $0.role == .windowApplication },
+                userActivity: nil, options: nil, errorHandler: nil)
+        }
+        bringAppForward()
     }
 
     /// PlugIns 안의 메뉴바 번들을 로드하고 상태 아이템 생성
@@ -96,7 +122,7 @@ final class MenuBarManager {
         _ = controller.perform(NSSelectorFromString("setSetups:"), with: setups as NSArray)
     }
 
-    /// 앱 창을 앞으로 가져온다 — 메뉴에서 고른 시작을 경고가 붙잡았을 때. 안 그러면 뒤에 있는 창에 뜬
+    /// 앱 창을 앞으로 가져온다 — 메뉴에서 고른 시작을 경고가 붙잡았을 때도. 안 그러면 뒤에 있는 창에 뜬
     /// 경고를 아무도 못 보고, 메뉴를 눌렀는데 아무 일도 없는 것처럼 보인다.
     func bringAppForward() {
         _ = controller?.perform(NSSelectorFromString("activateApp"))
@@ -104,6 +130,7 @@ final class MenuBarManager {
 
     /// 타이머 상태를 메뉴바에 반영
     func update(remaining: TimeInterval, state: TimerState) {
+        lastState = state
         guard let controller else { return }
 
         let stateString: String
@@ -113,9 +140,11 @@ final class MenuBarManager {
         default: stateString = "idle"
         }
 
+        // 끝나는 시각을 함께 넘긴다 — 창을 닫으면 이 값을 보내 줄 화면이 없어서, 메뉴 막대가 스스로 센다.
         let info: [String: Any] = [
             "text": TimeMapper.formatRemaining(remaining),
             "state": stateString,
+            "endDate": Date().addingTimeInterval(remaining).timeIntervalSince1970,
         ]
         _ = controller.perform(NSSelectorFromString("update:"), with: info as NSDictionary)
     }

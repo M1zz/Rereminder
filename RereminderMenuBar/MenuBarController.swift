@@ -7,7 +7,7 @@
 //  통신 규약 (같은 프로세스):
 //  - 앱 → 번들: perform(Selector) 호출 ("show", "hide", "update:", "setSetups:")
 //  - 번들 → 앱: NotificationCenter post ("RRMenuBarPauseTapped", "RRMenuBarStopTapped",
-//              "RRMenuBarStartTapped" userInfo ["id"])
+//              "RRMenuBarStartTapped" userInfo ["id"], "RRMenuBarOpenTapped")
 //  - 문구는 앱 메인 번들의 String Catalog를 그대로 사용 (Bundle.main)
 //
 
@@ -37,20 +37,41 @@ public final class RRMenuBarController: NSObject {
         }
     }
 
-    /// info: ["text": "12:34", "state": "running"|"paused"|"idle"]
+    /// info: ["text": "12:34", "state": "running"|"paused"|"idle", "endDate": 끝나는 시각(1970 기준 초)]
+    ///
+    /// 도는 동안은 끝나는 시각으로 **스스로 센다** — 창을 닫으면 앱의 화면이 사라져 초마다 알려 줄 쪽이 없다.
+    /// 끝난 뒤에는 앱의 오버타임처럼 "+00:12" 로 넘어간다.
     @objc public func update(_ info: [String: Any]) {
         DispatchQueue.main.async {
-            guard let button = self.statusItem?.button else { return }
-            let text = info["text"] as? String ?? ""
             let state = info["state"] as? String ?? "idle"
             self.currentState = state
+            self.ticker?.invalidate()
+            self.ticker = nil
 
             switch state {
-            case "running": button.title = " \(text)"
-            case "paused": button.title = " ⏸ \(text)"
-            default: button.title = ""
+            case "running":
+                guard let end = info["endDate"] as? TimeInterval else { return }
+                self.endDate = Date(timeIntervalSince1970: end)
+                self.renderRunning()
+                let ticker = Timer(timeInterval: 1, repeats: true) { [weak self] _ in self?.renderRunning() }
+                RunLoop.main.add(ticker, forMode: .common)
+                self.ticker = ticker
+            case "paused":
+                self.statusItem?.button?.title = " ⏸ \(info["text"] as? String ?? "")"
+            default:
+                self.statusItem?.button?.title = ""
             }
         }
+    }
+
+    private var endDate = Date()
+    private var ticker: Timer?
+
+    private func renderRunning() {
+        let total = Int(endDate.timeIntervalSinceNow.rounded())
+        let sign = total < 0 ? "+" : ""
+        let value = abs(total)
+        statusItem?.button?.title = " " + sign + String(format: "%02d:%02d", value / 60, value % 60)
     }
 
     /// 메뉴에서 바로 거는 설정. info: ["id", "title", "subtitle"] — 앱이 순서·문구까지 정해 넘긴다.
@@ -154,8 +175,9 @@ public final class RRMenuBarController: NSObject {
         )
     }
 
+    /// 창이 닫혀 있으면 다시 여는 것은 앱(UIKit 장면)만 할 수 있다 — 앱에 맡긴다.
     @objc private func openTapped() {
-        activateApp()
+        NotificationCenter.default.post(name: Notification.Name("RRMenuBarOpenTapped"), object: nil)
     }
 
     /// 앱 창을 앞으로 — 메뉴에서 건 타이머를 경고가 붙잡았을 때 앱이 부른다.

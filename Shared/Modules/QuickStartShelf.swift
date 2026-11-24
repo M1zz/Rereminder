@@ -80,12 +80,22 @@ enum QuickStartShelf {
 
     /// 남아 있는 요청을 꺼낸다(꺼내면 지워진다). 오래된 요청은 버린다.
     static func takeRequest(now: Date = Date()) -> UUID? {
+        takeRequestID(now: now).flatMap(UUID.init(uuidString:))
+    }
+
+    /// 꺼낸 요청 그대로 — 저장한 설정의 id 이거나, 맥 메뉴 막대의 포모도로(`Pomodoro.menuID`).
+    static func takeRequestID(now: Date = Date()) -> String? {
         guard let raw = defaults?.string(forKey: requestIDKey) else { return nil }
         let at = defaults?.double(forKey: requestAtKey) ?? 0
         defaults?.removeObject(forKey: requestIDKey)
         defaults?.removeObject(forKey: requestAtKey)
         guard now.timeIntervalSince1970 - at < requestLifetime else { return nil }
-        return UUID(uuidString: raw)
+        return raw
+    }
+
+    /// 아직 아무도 꺼내지 않은 요청이 있는가 — 맥 메뉴 막대가 "받을 창이 없다"를 아는 길.
+    static var hasPendingRequest: Bool {
+        defaults?.string(forKey: requestIDKey) != nil
     }
 }
 

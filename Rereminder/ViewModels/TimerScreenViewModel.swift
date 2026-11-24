@@ -744,8 +744,9 @@ extension TimerScreenViewModel {
     /// 버튼 인텐트는 앱 프로세스에서 돌지만, 백그라운드로 막 깨어난 참이라 화면이 아직 없으면
     /// 그 자리에서는 아무것도 적용할 수 없다. 앱이 앞으로 나오는 이 순간이 그 명령을 처리할 자리다.
     /// (그 자리에서 처리된 명령은 이미 지워져 있으므로 여기서 두 번 적용되지 않는다.)
+    /// 맥에서는 창을 닫은 채 메뉴 막대에서 누른 일시정지·정지가 이 길로 온다(`MenuBarManager`).
     func applyPendingLiveActivityCommand() {
-        #if os(iOS) && !targetEnvironment(macCatalyst)
+        #if os(iOS)
         guard let command = LiveActivityCommandStore.take() else { return }
         switch command {
         case .pause:  if timerVM.state == .running { pause() }

@@ -126,6 +126,9 @@ struct TimerUnifiedView: View {
 
     /// 업데이트 뒤 처음 열 때 한 번 뜨는 "새로 생긴 것" (`WhatsNewView`).
     @State private var showWhatsNew = false
+    /// 맥에서 쓰는 법 세 장(`MacWelcomeView`) — 맥에서만, 한 번.
+    @State private var showMacWelcome = false
+    private static let macWelcomeDueAtLaunch = MacWelcome.isDue
 
     // 타이머를 실제로 걸었을 때 한 번 물어보는 기기 보유 질문(워치 → 맥).
     // 물어볼지 말지는 DeviceOwnership이 정한다 — "없다"고 한 기기는 다시 꺼내지 않는다.
@@ -300,7 +303,9 @@ struct TimerUnifiedView: View {
             .onAppear(perform: setupOnAppear)
             // 사용 중 적절한 시점에 "즐겁게 쓰고 계신가요?" → 👍 앱스토어 리뷰 / 👎 피드백.
             // 실행 3회·설치 2일·타이머 완료 3회 이상, 버전당 1회, 120일 쿨다운(정책 내장).
-            .leeoSatisfactionCheck(RereminderSpec.self, policy: Self.satisfactionPolicy)
+            // ⚠️ 맥에서 쓰는 법이 뜨는 실행에서는 쉰다 — LeeoKit 이 1.2초 뒤 스스로 한 문장 의견 시트를 띄워
+            //    그 안내를 밀어냈다(실제로 그랬다). 판정은 실행당 한 번(`static let`) — 도중에 바뀌면 화면이 통째로 다시 생긴다.
+            .satisfactionCheck(enabled: !Self.macWelcomeDueAtLaunch, policy: Self.satisfactionPolicy)
             // 만족도 게이트가 뜰 차례가 아닐 때만, 가끔 먼저 "불편한 점 없으세요?"를 묻는다.
             // 통계는 어디서 떨어지는지까지만 말해 준다 — 왜 그런지는 여기로만 들어온다.
             .alert(String(localized: "Anything bothering you?"), isPresented: $showFeedbackNudge) {
@@ -321,6 +326,9 @@ struct TimerUnifiedView: View {
             }
             .sheet(isPresented: $showFeedbackSheet) {
                 FeedbackView()
+            }
+            .sheet(isPresented: $showMacWelcome) {
+                MacWelcomeView(onClose: { showMacWelcome = false })
             }
             .sheet(isPresented: $showWhatsNew) {
                 WhatsNewView(onClose: { showWhatsNew = false })
@@ -596,17 +604,24 @@ struct TimerUnifiedView: View {
             presentWhatsNewIfNeeded()
         }
 
+        // 맥에서 쓰는 법 — 쓰던 사람에게 한 번. 새로 설치한 사람은 첫 그림이 끝난 순간 뜬다(`finishIntro`).
+        // 다른 안내가 뜨는 차례면 다음 실행에 온다.
+        if MacWelcome.isDue, !showOnboarding, !isShowingPlanChangeNotice, !showWhatsNew {
+            // ⚠️ 바로 띄우면 맥에서는 창이 자리 잡는 동안 시스템이 시트를 닫는다(뜨자마자 닫혔다 — 실제로 그랬다).
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { showMacWelcome = true }
+        }
+
         // 실행 횟수를 올린 뒤에 판정한다 — 순서가 뒤바뀌면 10회째가 아니라 11회째에 뜬다.
         // ⚠️ 혜택 변경 안내보다 **뒤에서** 판정하고 양보한다. 알림창이 먼저 뜨면 그 시트가 가려져
         //    뜨지 못한다(시뮬레이터에서 실제로 그랬다). 의견 요청은 다음 차례에 와도 되지만
         //    혜택 변경 안내는 그날이 아니면 의미가 줄어든다.
-        if !isShowingPlanChangeNotice, !showWhatsNew, FeedbackNudge.isDue(policy: Self.satisfactionPolicy) {
+        if !isShowingPlanChangeNotice, !showWhatsNew, !showMacWelcome, FeedbackNudge.isDue(policy: Self.satisfactionPolicy) {
             FeedbackNudge.markShown()
             showFeedbackNudge = true
         }
 
         // 그랜드파더링된 기존 사용자에게 무료 Pro 안내 (최초 1회)
-        if !isShowingPlanChangeNotice, !showWhatsNew,
+        if !isShowingPlanChangeNotice, !showWhatsNew, !showMacWelcome,
            StoreManager.isGrandfathered,
            !UserDefaults.standard.bool(forKey: Self.grandfatherThankedKey) {
             UserDefaults.standard.set(true, forKey: Self.grandfatherThankedKey)
@@ -659,7 +674,12 @@ struct TimerUnifiedView: View {
         }
         UserDefaults.standard.set(true, forKey: "hasSeenOnboarding")
         withAnimation(.easeOut(duration: 0.35)) { showOnboarding = false }
-        ContentView.requestNotificationPermission()
+        // 맥은 알림 권한을 안내의 첫 장에서 이유와 함께 묻는다 — 시스템 창만 덩그러니 띄우면 거절하기 쉽다.
+        if MacWelcome.isDue {
+            showMacWelcome = true
+        } else {
+            ContentView.requestNotificationPermission()
+        }
     }
 
     /// 그 기능을 처음 쓰는 순간의 그림 수업. **새로 설치한 사람에게만** 한 번 뜬다.
@@ -673,7 +693,7 @@ struct TimerUnifiedView: View {
 
     /// 앱을 열 때 뜨는 안내가 떠 있는가. 다이얼의 그림과 다음 안내는 이것이 닫히길 기다린다.
     private var isShowingLaunchNotice: Bool {
-        showOnboarding || showWhatsNew || showFeedbackNudge || showGrandfatherThanks || isShowingPlanChangeNotice
+        showOnboarding || showWhatsNew || showMacWelcome || showFeedbackNudge || showGrandfatherThanks || isShowingPlanChangeNotice
             || repeatProposal != nil || timeSuggestion != nil
     }
 
@@ -745,29 +765,7 @@ struct TimerUnifiedView: View {
 
         // 메뉴바 타이머 (RereminderMenuBar 번들이 임베드된 빌드에서만 동작)
         MenuBarManager.shared.setUpIfAvailable()
-        MenuBarManager.shared.onPauseToggle = {
-            if screenVM.state == .running || screenVM.state == .overtime {
-                screenVM.pause()
-            } else if screenVM.state == .paused {
-                screenVM.resume()
-            }
-        }
-        MenuBarManager.shared.onStop = {
-            screenVM.cancel()
-        }
-        // 메뉴에서 고른 설정을 바로 건다 — 위젯에서 누른 것과 같은 길이고, 도는 타이머는 덮지 않는다.
-        MenuBarManager.shared.onStart = { id in
-            guard isIdle else { return }
-            if id == Pomodoro.menuID {
-                screenVM.startPomodoro()
-            } else if let uuid = UUID(uuidString: id),
-                      let template = QuickStartPublisher.template(id: uuid, context: context) {
-                ActivityReporter.log("menu_bar_start_used")
-                screenVM.apply(template: template)
-            }
-            // 알림 권한 경고가 시작을 붙잡았으면 창을 앞으로 — 경고는 창에 뜬다.
-            if screenVM.showPermissionWarning { MenuBarManager.shared.bringAppForward() }
-        }
+        // 메뉴의 시작·일시정지·정지는 위젯·잠금화면 버튼과 같은 길(요청 기록 + 알림)로 온다 — `MenuBarManager`.
         MenuBarManager.shared.update(remaining: screenVM.remaining, state: screenVM.state)
         #endif
     }
@@ -1108,12 +1106,26 @@ struct TimerUnifiedView: View {
     private func startRequestedSetupIfAny() {
         // 화면 준비 전(콜드 런치에서 활성화가 먼저 온 경우)이면 기록을 남겨 두고 `finishSetupOnAppear` 에서 받는다.
         guard screenVM.timerVM.modelContext != nil else { return }
-        guard let id = QuickStartShelf.takeRequest() else { return }
+        guard let raw = QuickStartShelf.takeRequestID() else { return }
         // 이미 도는 타이머는 덮지 않는다. 앱이 열렸으니 도는 타이머가 그대로 보인다.
-        guard isIdle, let template = QuickStartPublisher.template(id: id, context: context) else { return }
+        guard isIdle else { return }
+        // 맥 메뉴 막대의 포모도로 — 저장한 설정이 아니라 이름 붙은 모양이다.
+        if raw == Pomodoro.menuID {
+            screenVM.startPomodoro()
+            #if targetEnvironment(macCatalyst)
+            if screenVM.showPermissionWarning { MenuBarManager.shared.bringAppForward() }
+            #endif
+            return
+        }
+        guard let id = UUID(uuidString: raw),
+              let template = QuickStartPublisher.template(id: id, context: context) else { return }
         AnalyticsManager.log(.presetUsed(name: template.name))
         ActivityReporter.log("quick_start_used")
         screenVM.apply(template: template)
+        #if targetEnvironment(macCatalyst)
+        // 메뉴 막대에서 건 것이면 창이 뒤에 있다 — 알림 권한 경고가 시작을 붙잡았으면 보이게 앞으로.
+        if screenVM.showPermissionWarning { MenuBarManager.shared.bringAppForward() }
+        #endif
     }
 
     private func handleControlWidgetAction() {
@@ -1146,6 +1158,18 @@ struct TimerUnifiedView: View {
             }
         default:
             break
+        }
+    }
+}
+
+private extension View {
+    /// 만족도·한 문장 의견을 이번 실행에 물을지. `enabled` 는 실행 내내 같은 값이어야 한다(바뀌면 화면이 다시 생긴다).
+    @ViewBuilder
+    func satisfactionCheck(enabled: Bool, policy: LeeoReviewPolicy) -> some View {
+        if enabled {
+            leeoSatisfactionCheck(RereminderSpec.self, policy: policy)
+        } else {
+            self
         }
     }
 }

@@ -38,6 +38,7 @@ struct NoticeSettingView: View {
     /// 달라진 점 안내에서 "Pro 알아보기"를 눌렀다 — 시트가 닫힌 뒤 페이월을 연다.
     @State private var showFeedback = false
     @State private var showIntroReplay = false
+    @State private var showMacWelcome = false
     /// App Store 코드 사용 시트(오퍼 코드·인앱결제 프로모션 코드).
     @State private var showRedeemCode = false
     /// App Store 의 구독 관리 시트.
@@ -346,6 +347,17 @@ struct NoticeSettingView: View {
                 .fullScreenCover(isPresented: $showIntroReplay) {
                     IntroReplayView { showIntroReplay = false }
                 }
+
+                #if targetEnvironment(macCatalyst)
+                Button {
+                    showMacWelcome = true
+                } label: {
+                    Label("Using Rereminder on Mac", systemImage: "macbook")
+                }
+                .sheet(isPresented: $showMacWelcome) {
+                    MacWelcomeView { showMacWelcome = false }
+                }
+                #endif
 
                 NavigationLink {
                     GuideBookView()
