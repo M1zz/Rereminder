@@ -203,6 +203,9 @@ struct TimeInputSheet: View {
         VStack(spacing: DSSpacing.lg) {
             // 합계·안내는 목록 꼬리말이다. 목록 밖에 두면 가로 화면에서 목록이 한 줄로 눌렸다.
             List {
+                if !isSession {
+                    Section { pomodoroRow }
+                }
                 Section {
                     ForEach(Array(intervals.enumerated()), id: \.element.id) { index, interval in
                         intervalRow(index: index, interval: interval)
@@ -266,6 +269,29 @@ struct TimeInputSheet: View {
             .disabled(intervalSetup == nil)
             .padding(.horizontal)
         }
+    }
+
+    // MARK: - 포모도로
+
+    /// 누르면 아래 목록과 반복이 포모도로로 채워진다. 거는 것은 늘 그렇듯 "적용" — 채운 뒤 고칠 수 있게.
+    private var pomodoroRow: some View {
+        Button {
+            withAnimation {
+                intervals = Pomodoro.lengths.map { Interval(seconds: $0) }
+                rounds = Pomodoro.rounds
+            }
+        } label: {
+            HStack {
+                Label("Pomodoro", systemImage: "timer")
+                    .font(.body.weight(.semibold))
+                Spacer(minLength: DSSpacing.sm)
+                Text(verbatim: Pomodoro.shapeText)
+                    .font(.body)
+                    .monospacedDigit()
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .sensoryFeedback(.selection, trigger: intervals.map(\.seconds) == Pomodoro.lengths)
     }
 
     // MARK: - 반복

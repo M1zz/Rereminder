@@ -21,6 +21,11 @@ final class MenuBarManager {
     var onPauseToggle: (() -> Void)?
     /// 메뉴바에서 정지 눌렀을 때
     var onStop: (() -> Void)?
+    /// 메뉴바에서 설정을 골라 바로 걸 때 — 저장한 설정의 id, 또는 `Pomodoro.menuID`
+    var onStart: ((String) -> Void)?
+
+    /// 번들이 아직 없을 때 받은 목록 — 번들을 올리면 넘긴다.
+    private var setups: [[String: String]] = []
 
     private var controller: NSObject?
 
@@ -35,6 +40,12 @@ final class MenuBarManager {
             forName: Notification.Name("RRMenuBarStopTapped"), object: nil, queue: .main
         ) { [weak self] _ in
             Task { @MainActor in self?.onStop?() }
+        }
+        center.addObserver(
+            forName: Notification.Name("RRMenuBarStartTapped"), object: nil, queue: .main
+        ) { [weak self] note in
+            guard let id = note.userInfo?["id"] as? String else { return }
+            Task { @MainActor in self?.onStart?(id) }
         }
     }
 
@@ -62,7 +73,27 @@ final class MenuBarManager {
         let instance = principal.init()
         controller = instance
         _ = instance.perform(NSSelectorFromString("show"))
+        pushSetups()
         NSLog("%@", "🖥️ MenuBar: 상태 아이템 생성 완료")
+    }
+
+    /// 메뉴에서 바로 걸 목록 — 저장한 설정(위젯과 같은 순서·이름) 뒤에 포모도로.
+    /// ⚠️ 거는 길은 위젯과 같다(`apply(template:)`). 메뉴에는 무엇을 보여 줄지만 넘긴다.
+    func setSetups(_ items: [QuickStartItem]) {
+        setups = items.map { item in
+            ["id": item.id, "title": item.durationText, "subtitle": item.name, "symbol": "play.fill"]
+        } + [[
+            "id": Pomodoro.menuID,
+            "title": String(localized: "Pomodoro"),
+            "subtitle": Pomodoro.shapeText,
+            "symbol": "repeat",
+        ]]
+        pushSetups()
+    }
+
+    private func pushSetups() {
+        guard let controller else { return }
+        _ = controller.perform(NSSelectorFromString("setSetups:"), with: setups as NSArray)
     }
 
     /// 타이머 상태를 메뉴바에 반영

@@ -755,6 +755,17 @@ struct TimerUnifiedView: View {
         MenuBarManager.shared.onStop = {
             screenVM.cancel()
         }
+        // 메뉴에서 고른 설정을 바로 건다 — 위젯에서 누른 것과 같은 길이고, 도는 타이머는 덮지 않는다.
+        MenuBarManager.shared.onStart = { id in
+            guard isIdle else { return }
+            if id == Pomodoro.menuID {
+                screenVM.startPomodoro()
+            } else if let uuid = UUID(uuidString: id),
+                      let template = QuickStartPublisher.template(id: uuid, context: context) {
+                ActivityReporter.log("menu_bar_start_used")
+                screenVM.apply(template: template)
+            }
+        }
         MenuBarManager.shared.update(remaining: screenVM.remaining, state: screenVM.state)
         #endif
     }
@@ -769,7 +780,8 @@ struct TimerUnifiedView: View {
             DevicePresence.endHeartbeat()
         }
         // 저장·이름 바꾸기·지우기·사용 기록은 전부 앱이 앞에 있는 동안 일어난다 — 뒤로 갈 때 한 번 옮겨 적는다.
-        if newPhase == .background {
+        // 맥은 창이 뒤로만 가도(다른 앱으로 옮겨도) 적는다 — 그 순간 메뉴 막대 목록을 열 수 있다.
+        if newPhase == .background || (ProcessInfo.processInfo.isMacCatalystApp && newPhase == .inactive) {
             QuickStartPublisher.publish(context: context)
         }
         if newPhase == .active {

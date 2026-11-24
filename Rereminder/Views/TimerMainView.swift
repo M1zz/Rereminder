@@ -1685,6 +1685,16 @@ extension TimerMainView {
                     }
                 }
             }
+            // 포모도로는 시간 시트의 구간 칸에도 있다 — 여기에만 있는 기능이 아니다.
+            if !isPresentationMode {
+                Button {
+                    launchArmed = !reduceMotion
+                    withAnimation(.easeInOut(duration: 0.4)) { screenVM.startPomodoro() }
+                } label: {
+                    Text("Pomodoro")
+                    Text(verbatim: Pomodoro.shapeText)
+                }
+            }
         }
     }
 

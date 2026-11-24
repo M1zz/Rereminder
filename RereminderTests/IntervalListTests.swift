@@ -38,4 +38,13 @@ final class IntervalListTests: XCTestCase {
     func test_alertsOutsideTheTimerAreIgnored() {
         XCTAssertEqual(IntervalList.lengths(total: 600, offsets: [0, 600, 900, 300]), [300, 300])
     }
+
+    /// 포모도로는 30분 링 하나에 "집중이 끝나는" 종 하나(끝나기 5분 전) × 4회다.
+    func test_pomodoroIsOneRingWithABreakBell() {
+        let setup = IntervalList.setup(from: Pomodoro.lengths)
+        XCTAssertEqual(setup?.total, 1800)
+        XCTAssertEqual(setup?.offsets, [300])
+        XCTAssertEqual(Pomodoro.rounds, 4)
+        XCTAssertEqual(IntervalList.lengths(total: 1800, offsets: [300]), Pomodoro.lengths)
+    }
 }

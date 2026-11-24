@@ -400,6 +400,15 @@ final class TimerScreenViewModel: ObservableObject {
         if toast { showToast?(String(localized: "Set up your usual timer")) }
     }
 
+    /// 포모도로(`Pomodoro`)를 다이얼에 올리고 바로 건다 — 메뉴 막대·시작 버튼 메뉴에서 고를 때.
+    func startPomodoro() {
+        guard let setup = IntervalList.setup(from: Pomodoro.lengths) else { return }
+        rounds = Pomodoro.rounds
+        applyRepeatConfig(mainSec: setup.total, offsets: Array(setup.offsets), toast: false)
+        ActivityReporter.log("pomodoro_started")
+        start()
+    }
+
     // MARK: - 구간 이름·대본 (사용자가 쓴 글)
 
     /// ⚠️ 구간 이름·대본은 사용자가 쓴 글이다. 예전에는 메모리에만 있어 앱을 다시 열면 사라졌고,

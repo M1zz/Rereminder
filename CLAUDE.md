@@ -782,6 +782,14 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
   2.3.5 까지의 `RereminderAlarmControl` 은 Xcode 템플릿 그대로라 iOS 26 에서 눌러도 아무 일도 없었다 — 지웠다.
 - 제어센터는 시뮬레이터를 믿을 수 없다. 실기기에서 확인한다. 지표: `quick_start_used`.
 
+### 맥 메뉴 막대에서 바로 걸기 · 포모도로 (2026-11-25)
+제보: "While coding" 한 줄. 코딩하는 사람은 에디터를 떠나지 않고 건다.
+- 메뉴 막대(`RereminderMenuBar/MenuBarController.swift`)는 **열 때마다** 메뉴를 다시 짠다(`menuNeedsUpdate`). 쉬는 동안: 저장한 설정(위젯과 같은 순서·이름) → 포모도로. 도는 동안: 일시정지·정지.
+  목록은 `QuickStartPublisher.publish` 가 `MenuBarManager.setSetups` 로 넘긴다(맥은 창이 `.inactive` 로 갈 때도 적는다). 고르면 `RRMenuBarStartTapped` → `TimerUnifiedView` 가 `apply(template:)` 로 건다 — ⚠️ 위젯과 같은 길이다. 도는 타이머는 덮지 않는다.
+- **포모도로**(`Rereminder/Modules/Pomodoro.swift`)는 새 장치가 아니라 구간 25:00 + 5:00 × 4 의 이름이다. 시간 시트 ▸ 구간 칸 맨 위 줄이 채우고(적용은 사람이), 시작 버튼 길게 누르기·메뉴 막대는 바로 건다(`startPomodoro`). 세션 모드에는 없다.
+- 번들의 문구는 `Bundle.main.localizedString` 으로 읽어 카탈로그에 `extractionState: manual` 로 둔다("Open Rereminder"·"Quit Rereminder" 는 이번까지 번역이 없었다).
+- 지표: `menu_bar_start_used`, `pomodoro_started`. 테스트: `IntervalListTests.test_pomodoroIsOneRingWithABreakBell`
+
 ### 워치 스마트 스택 — 손목에서 앱을 열지 않고 보는 자리
 `RereminderWatchWidget/` (타겟 `RereminderWatchWidgetExtension`, 번들 ID
 `com.xa.toki.watchkitapp.widget`). **워치 앱 안에 임베드된다** — `RereminderWatch.app/PlugIns/`.
@@ -1777,7 +1785,7 @@ python3 scripts/make_marketing_screenshots.py [언어 ...]  # → docs/screensho
 - **Swift Version**: Swift 5.9+
 
 ## 의존성
-- **LeeoKit** (SPM, 3.23.0+, 세 칸 사다리 `Ladder/` 가 3.23.0 에 들어왔다. 그 전 3.14.0+, 3.x 는 `legal`·`monetization` 선언이 필수. 3.14.0 에 새 5개 언어 번역): 공용 StoreKit 2 엔진(LeeoStore)·사용 리포터·원격 킬스위치(LeeoRemoteFlags)·MetricKit 크래시 진단(LeeoDiagnostics) 등 자체 공용 모듈. 킬스위치 플래그는 `Rereminder/Modules/RereminderFlags.swift`, Dashboard 수동 작업은 `docs/OPERATIONS_CHECKLIST.md` 참고
+- **LeeoKit** (SPM, 3.23.0+ — 지금 3.50.0, 세 칸 사다리 `Ladder/` 가 3.23.0 에 들어왔다. 그 전 3.14.0+, 3.x 는 `legal`·`monetization` 선언이 필수. 3.14.0 에 새 5개 언어 번역): 공용 StoreKit 2 엔진(LeeoStore)·사용 리포터·원격 킬스위치(LeeoRemoteFlags)·MetricKit 크래시 진단(LeeoDiagnostics) 등 자체 공용 모듈. 킬스위치 플래그는 `Rereminder/Modules/RereminderFlags.swift`, Dashboard 수동 작업은 `docs/OPERATIONS_CHECKLIST.md` 참고
 - **외부 분석 SDK 없음**: Firebase(2026-07)에 이어 TelemetryDeck(2026-08)도 제거했다.
   App ID 가 비어 있어 실제로 아무것도 보내지 않았고, 사용 통계는 CloudKit 허브가 이미 담당한다.
   이벤트는 `AnalyticsManager` → `ActivityReporter` 한 경로로만 나간다.

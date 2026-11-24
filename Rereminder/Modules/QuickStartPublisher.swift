@@ -60,6 +60,10 @@ enum QuickStartPublisher {
         guard let templates = try? context.fetch(FetchDescriptor<Timer>()) else { return }
         SavedSetupEntity.reindex(templates)
         publishToWatch(templates: templates)
+        #if targetEnvironment(macCatalyst)
+        let menuItems = items(from: templates)
+        Task { @MainActor in MenuBarManager.shared.setSetups(menuItems) }
+        #endif
         guard QuickStartShelf.write(items(from: templates)) else { return }
         WidgetCenter.shared.reloadTimelines(ofKind: QuickStartShelf.widgetKind)
         #if os(iOS) && !targetEnvironment(macCatalyst)
