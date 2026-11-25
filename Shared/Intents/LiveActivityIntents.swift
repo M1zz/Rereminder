@@ -84,6 +84,8 @@ struct StopIntent: LiveActivityIntent {
         // 정지는 눌렀으면 사라져야 한다 — 앱이 못 받았어도 활동은 여기서 끝낸다.
         if !LiveActivityCommand.stop.dispatch() {
             LiveActivityController.endAll()
+            // 표시만 지우면 끝날 시각에 알림이 그대로 울린다 — 걸어 둔 것도 걷는다.
+            LiveActivityCommand.cancelScheduledAlertsWhenUnhandled?()
         }
         return .result()
     }

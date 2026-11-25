@@ -180,7 +180,10 @@ final class TimerConfigService {
         // 최대 개수 초과 시 오래된 것부터 삭제
         let recents = fetchRecents()
         if StoreManager.canRememberSetup, recents.count > maxTemplates {
-            for old in recents.dropFirst(maxTemplates) {
+            // ⚠️ 즐겨찾기와 실행 기록이 달린 템플릿은 지우지 않는다. 기존 사용자는 실행마다 그 설정이 기록에 물려
+            //    템플릿 수에 함께 쌓이므로(`TimerViewModel.recordLink`), 오래 쓴 결제자는 새 설정을 걸 때마다
+            //    아끼던 즐겨찾기가 지워졌고, 템플릿을 지우면 기록도 함께 지워져(`runs` 의 cascade) 지난 기록까지 사라졌다.
+            for old in recents.dropFirst(maxTemplates) where !old.isFavorite && (old.runs ?? []).isEmpty {
                 ctx.delete(old)
             }
             do {

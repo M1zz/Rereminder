@@ -285,7 +285,8 @@ struct TimerMainView: View {
                       lineWidth: fullClockSize * 0.083,
                       geometry: geometry,
                       buttonSize: fullClockSize * 0.18)
-                .scaleEffect(clockSize / fullClockSize)
+                // 첫 배치·아주 작은 창에서 크기가 0 으로 오면 0/0 = NaN 배율이 레이어에 들어간다 — 그때는 그대로 둔다.
+                .scaleEffect(fullClockSize > 0 ? clockSize / fullClockSize : 1)
                 .frame(width: clockSize, height: clockSize)
                 .geometryGroup()
                 // ⚠️ 노브가 프레임 밖으로 나가는 몫은 **위아래 대칭**으로 비운다.
@@ -1376,8 +1377,10 @@ struct TimerMainView: View {
                 let knobFrame = lineWidth * 2.8
                 let knobRadius = ringSize(forAngle: displayAngle, size: size, lineWidth: lineWidth) / 2
                 let knobPhi = (displayAngle - 90) * .pi / 180
-                let knobAnchor = UnitPoint(x: 0.5 + knobRadius * cos(knobPhi) / knobFrame,
-                                           y: 0.5 + knobRadius * sin(knobPhi) / knobFrame)
+                let knobAnchor = knobFrame > 0
+                    ? UnitPoint(x: 0.5 + knobRadius * cos(knobPhi) / knobFrame,
+                                y: 0.5 + knobRadius * sin(knobPhi) / knobFrame)
+                    : .center
 
                 ZStack {
                     Circle()

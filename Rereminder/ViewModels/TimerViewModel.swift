@@ -37,17 +37,19 @@ final class TimerViewModel: ObservableObject {
     ///    지운 객체의 속성을 읽는 순간 SwiftData 가 앱을 죽인다("backing data was detached").
     ///    그 순간이 하필 다음 예비 알림·종료다. 그래서 시작할 때 사본을 떠 두고(`use`) 그것만 읽는다.
     private var currentTemplate: Timer?
-    /// 사본의 원본(저장된 템플릿). 기록을 물릴 때만 쓰고, 그 전에 살아 있는지 본다(`saveTimerRecord`).
-    private var sourceTemplate: Timer?
+    /// 사본의 원본(저장된 템플릿)의 id. 기록을 물릴 때 스토어에서 **다시 찾아** 쓴다(`saveTimerRecord`).
+    /// ⚠️ 원본 객체를 들고 있지 않는다 — 도는 사이 다른 기기에서 지운 것이 iCloud 로 들어오면 그 객체는
+    ///    `isDeleted` 가 거짓인 채로 비어 버려, 기록에 물리거나 `lastUsedAt` 을 적는 순간 SwiftData 가 앱을 죽인다.
+    private var sourceTemplateID: UUID?
     private var timerStartTime: Date?
 
     /// 이번 실행의 설정을 정한다. 저장된 것이면 사본을 읽고 원본은 기록용으로만 둔다.
     private func use(_ template: Timer) {
         if template.modelContext != nil {
-            sourceTemplate = template
+            sourceTemplateID = template.id
             currentTemplate = template.detachedCopy()
         } else {
-            sourceTemplate = nil
+            sourceTemplateID = nil
             currentTemplate = template
         }
     }
@@ -202,9 +204,11 @@ final class TimerViewModel: ObservableObject {
         timerStartTime = Date()
 
         let testModeEnabled = UserDefaults.standard.bool(forKey: "testModeEnabled")
-        let multiplier = testModeEnabled
+        let stored = testModeEnabled
             ? (UserDefaults.standard.object(forKey: "testModeMultiplier") as? Double ?? 1.0)
             : 1.0
+        // 0·음수·NaN 배속은 끝나는 시각을 무한대로 만들어 알림 예약과 메뉴 막대 표시(`Int(...)`)에서 앱을 죽인다.
+        let multiplier = stored.isFinite && stored > 0 ? stored : 1.0
         engine.timeMultiplier = multiplier
 
         engine.start()
@@ -236,6 +240,10 @@ final class TimerViewModel: ObservableObject {
     }
 
     func pause() {
+        // ⚠️ 돌고 있지 않으면 아무것도 하지 않는다. 워치가 보낸 "일시정지"는 이 기기에 타이머가 없을 때도 온다
+        //    (워치에서 건 타이머를 이 기기가 못 받았을 때). 예전에는 엔진은 그대로인데 화면만 "일시정지"가 되고,
+        //    맥에까지 멈춘 타이머를 보내 아무것도 돌지 않는 "일시정지" 화면이 남았다.
+        guard state == .running || state == .overtime else { return }
         engine.pause()
         state = .paused
         updateLiveActivity()
@@ -255,6 +263,8 @@ final class TimerViewModel: ObservableObject {
     }
 
     func resume() {
+        // 멈춰 있지 않으면 이을 것이 없다 — 엔진은 그대로인데 화면만 "도는 중"으로 바뀌어 멈춘 채 남는다.
+        guard state == .paused else { return }
         engine.resume()
         state = .running
         updateLiveActivity()
@@ -372,8 +382,16 @@ final class TimerViewModel: ObservableObject {
     ///   지운 객체를 물리면 저장하다 죽고, 사본을 물리면 지운 템플릿이 칩으로 되살아난다.
     /// - 저장한 적 없는 임시 설정은 물리면 함께 삽입되어 템플릿 칩으로 쌓인다.
     ///   새로 설치한 사람의 칩은 자기가 저장한 것만이다. 기존 사용자는 쓰던 그대로 둔다.
-    private func linkedTemplate(for template: Timer) -> Timer? {
-        Self.recordLink(source: sourceTemplate, running: template, isNewInstall: BlankStart.isNewInstall)
+    private func linkedTemplate(for template: Timer, in context: ModelContext) -> Timer? {
+        guard let sourceID = sourceTemplateID else {
+            return Self.recordLink(source: nil, running: template, isNewInstall: BlankStart.isNewInstall)
+        }
+        // 저장된 템플릿으로 시작했다 — 지금 스토어에 살아 있는 것만 물린다. 없으면(지워졌으면) 물리지 않는다.
+        // 사본을 대신 물리면 지운 템플릿이 칩으로 되살아난다.
+        var descriptor = FetchDescriptor<Timer>(predicate: #Predicate { $0.id == sourceID })
+        descriptor.fetchLimit = 1
+        guard let source = (try? context.fetch(descriptor))?.first else { return nil }
+        return Self.recordLink(source: source, running: template, isNewInstall: BlankStart.isNewInstall)
     }
 
     static func recordLink(source: Timer?, running: Timer, isNewInstall: Bool) -> Timer? {
@@ -397,7 +415,7 @@ final class TimerViewModel: ObservableObject {
             elapsedSeconds: elapsedSeconds,
             snapshotMainSeconds: template.mainSeconds,
             snapshotPrealertOffsetsSec: template.prealertOffsetsSec,
-            template: linkedTemplate(for: template)
+            template: linkedTemplate(for: template, in: context)
         )
 
         context.insert(record)

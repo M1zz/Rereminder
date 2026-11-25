@@ -46,7 +46,9 @@ struct PresentationScriptPanel: View {
     private var autoSlide: (index: Int, within: Double) { ScriptSlides.position(in: slides, progress: progress) }
     private var slideIndex: Int {
         guard isSlideshow else { return 0 }
-        return manual?.resolved(auto: autoSlide.index) ?? autoSlide.index
+        // 손으로 넘긴 자리는 그때의 장표 수로 잰 것이다 — 글이 바뀌어 장표가 줄었으면 범위를 넘는다. 잘라 쓴다.
+        let index = manual?.resolved(auto: autoSlide.index) ?? autoSlide.index
+        return min(slides.count - 1, max(0, index))
     }
     /// 글이 흐르는 위치 — 장표가 있으면 그 장표 안에서, 손으로 넘긴 장표는 처음부터 읽는다.
     private var scrollProgress: Double {

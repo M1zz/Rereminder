@@ -91,17 +91,10 @@ struct SetNotiView: View {
     private var startButton: some View {
         Button {
             guard !viewModel.selectedMinutes.isEmpty else { return }
-            requestNotificationPermissionIfNeeded { _ in
-                // 타이머 종료 N분 전에 알림 (종료 시점 기준으로 계산)
-                let mainDuration = viewModel.maxTimeInSeconds
-                for minute in viewModel.selectedMinutes {
-                    let offsetSeconds = minute * 60
-                    let fireAfter = TimeInterval(mainDuration - offsetSeconds)
-                    if fireAfter > 0 {
-                        schedulePreFinishNotification(after: fireAfter, minutes: minute)
-                    }
-                }
-            }
+            // 권한만 묻는다. 예비 알림은 타이머 화면의 `TimerViewModel.start()` 가 깐다.
+            // ⚠️ 여기서도 깔던 시절에는 권한 확인이 늦게 돌아오면 `start()` 가 걷은 뒤에 다시 깔려 같은 예비 알림이
+            //    두 번 울렸고, 그쪽은 소리 설정(진동 모드)을 따르지 않아 진동 모드에서도 소리가 났다.
+            requestNotificationPermissionIfNeeded { _ in }
             // selectedMinutes를 배열로 변환해서 전달
             let prealertOffsets = Array(viewModel.selectedMinutes.map { $0 * 60 })
             path.append(.timerViewMultiple(mainDuration: viewModel.maxTimeInSeconds, prealertOffsets: prealertOffsets))
@@ -251,26 +244,6 @@ private func requestNotificationPermissionIfNeeded(completion: @escaping (Bool) 
             }
         @unknown default:
             completion(false)
-        }
-    }
-}
-
-private func schedulePreFinishNotification(after seconds: TimeInterval, minutes: Int) {
-    let content = UNMutableNotificationContent()
-    content.title = AppName.notification
-    content.body = String(localized: "\(minutes) min remaining")
-    content.sound = .default
-
-    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: max(1, seconds), repeats: false)
-    let request = UNNotificationRequest(
-        identifier: "prealert-\(minutes)",
-        content: content,
-        trigger: trigger
-    )
-
-    UNUserNotificationCenter.current().add(request) { error in
-        if let error = error {
-            print("Failed to schedule notification: \(error)")
         }
     }
 }

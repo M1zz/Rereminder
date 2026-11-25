@@ -59,6 +59,11 @@ final class RereminderAlarmManager: ObservableObject {
         }
     }
 
+    /// 걷기(`cancelFinishAlarm`)가 몇 번 있었나. 예약은 비동기라 기다리는 사이에 타이머가 멈추거나 다시 걸릴 수 있다.
+    /// ⚠️ 그 사이에 걷기가 지나갔으면 방금 건 알람은 **이미 버려진 타이머의 것**이다 — 그대로 두면
+    ///    정지한 타이머의 알람이 종료 시각에 전체 화면으로 울리고, 일시정지·재개면 옛 종료 시각에 일찍 울린다.
+    private var cancelGeneration = 0
+
     private init() {
         authorizationState = alarmManager.authorizationState
     }
@@ -117,10 +122,14 @@ final class RereminderAlarmManager: ObservableObject {
     func scheduleFinishAlarm(at fireDate: Date, timerName: String?) async -> Bool {
         guard UserDefaults.standard.bool(forKey: Self.enabledKey) else { return false }
         guard fireDate.timeIntervalSinceNow > 0 else { return false }
+        let requestedAt = cancelGeneration
         guard await requestAuthorization() else { return false }
+        // 권한을 기다리는 사이에 이 타이머가 멈췄으면 걸지 않는다.
+        guard requestedAt == cancelGeneration else { return false }
 
         // 이전 것을 남겨 두면 지난 타이머의 알람이 뒤늦게 운다.
         cancelFinishAlarm()
+        let generation = cancelGeneration
 
         let id = UUID()
         let configuration = AlarmManager.AlarmConfiguration(
@@ -133,6 +142,12 @@ final class RereminderAlarmManager: ObservableObject {
 
         do {
             _ = try await alarmManager.schedule(id: id, configuration: configuration)
+            // 기다리는 동안 타이머가 멈췄거나 새로 걸렸다 — 이 알람은 걷고, 부르는 쪽이 UN 알림을 그대로 두게 한다.
+            guard generation == cancelGeneration else {
+                try? alarmManager.stop(id: id)
+                try? alarmManager.cancel(id: id)
+                return false
+            }
             scheduledID = id
             return true
         } catch {
@@ -144,6 +159,8 @@ final class RereminderAlarmManager: ObservableObject {
     /// 걸어 둔 알람을 걷는다 — 아직 울리기 전이면 취소, 울리는 중이면 정지.
     /// ⚠️ 둘 다 해야 한다. `cancel` 은 울리는 알람을 멈추지 못하고, `stop` 은 예약을 지우지 못한다.
     func cancelFinishAlarm() {
+        // 아직 예약이 끝나지 않은 알람도 걷히도록 걷기가 있었다는 것부터 남긴다(`cancelGeneration`).
+        cancelGeneration &+= 1
         guard let id = scheduledID else { return }
         try? alarmManager.stop(id: id)
         try? alarmManager.cancel(id: id)

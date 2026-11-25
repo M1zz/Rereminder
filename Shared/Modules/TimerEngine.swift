@@ -82,7 +82,10 @@ final class TimerEngine {
     private var firedOffsets = Set<Int>()
 
     // MARK: - Timer (UI tick 전용)
-    private let queue = DispatchQueue(label: "timer.engine.queue")
+    // ⚠️ 틱은 **메인 큐**에서 돈다. 예전에는 따로 만든 직렬 큐에서 돌며 `firedOffsets`(Set)·`config`·`state` 를
+    //    고쳤는데, 같은 값을 메인 스레드의 `stop()`·`start()`·`applyRemoteRunning()` 도 고친다.
+    //    `stopUITick()` 은 이미 돌고 있는 틱을 기다리지 않으므로, 정지·다른 기기에서 받은 타이머와 틱이 겹치는 순간
+    //    한 Set·배열을 두 스레드가 동시에 고쳐 앱이 죽을 수 있었다. 틱이 하는 일은 가벼워 메인에서 돌아도 된다.
     private var timer: DispatchSourceTimer?
 
     // MARK: - Notification IDs
@@ -303,6 +306,26 @@ final class TimerEngine {
         return true
     }
 
+    #if !APPCLIP
+    /// 엔진(화면)이 아직 없을 때 들어온 **정지**를 처리한다 — 잠금화면의 정지 버튼이 꺼져 있던 앱을 뒤에서 깨운 경우.
+    /// 걸어 둔 알림·되풀이·AlarmKit 알람을 걷고, 저장된 실행 상태를 내려 다음에 열 때 되살리지 않게 한다.
+    /// ⚠️ 상태를 남겨 두면 명령이 버려진 뒤(10분) 앱을 열었을 때 알림이 모두 걷힌 "도는" 타이머가 되살아났다.
+    @MainActor
+    static func stopWithoutScreen() {
+        EscalatingAlert.acknowledgeEverywhere()
+        RereminderAlarmManager.shared.cancelFinishAlarm()
+        let center = UNUserNotificationCenter.current()
+        center.getPendingNotificationRequests { requests in
+            let ids = requests.map(\.identifier).filter { $0.hasPrefix(Self.notificationPrefix) }
+            if !ids.isEmpty { center.removePendingNotificationRequests(withIdentifiers: ids) }
+        }
+        let shared = UserDefaults(suiteName: Self.sharedSuiteName)
+        shared?.set(false, forKey: "timerIsRunning")
+        shared?.set(false, forKey: "timerIsPaused")
+        WidgetCenter.shared.reloadAllTimelines()
+    }
+    #endif
+
     // MARK: - Remote Sync 적용 (다른 기기에서 제어된 타이머 반영)
 
     /// 다른 기기에서 시작/재개된 타이머를 endDate 절대 시각 기준으로 반영
@@ -416,7 +439,7 @@ final class TimerEngine {
     private func startUITick() {
         stopUITick()
 
-        let t = DispatchSource.makeTimerSource(queue: queue)
+        let t = DispatchSource.makeTimerSource(queue: .main)
         t.schedule(
             deadline: .now(),
             repeating: .milliseconds(500),   // 100ms → 500ms (배터리 절약)

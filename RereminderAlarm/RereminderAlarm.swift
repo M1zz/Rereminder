@@ -97,7 +97,12 @@ struct TimerWidgetProvider: TimelineProvider {
                 setups: entry.setups
             )
             entries.append(finishedEntry)
-            completion(Timeline(entries: entries, policy: .atEnd))
+            // ⚠️ 끝나는 시각이 이미 지났는데 "도는 중"으로 남아 있으면(앱이 정리하기 전에 꺼졌다) `.atEnd` 는
+            //    곧바로 다시 불러 끝없이 새 타임라인을 짠다 — 갱신 예산을 다 써서 정작 다음 타이머에 위젯이 멈춘다.
+            let policy: TimelineReloadPolicy = endDate > entry.date
+                ? .atEnd
+                : .after(entry.date.addingTimeInterval(15 * 60))
+            completion(Timeline(entries: entries, policy: policy))
         } else {
             // 대기/일시정지 상태: 15분 후 다시 확인
             let nextUpdate = Calendar.current.date(byAdding: .minute, value: 15, to: Date())!

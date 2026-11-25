@@ -56,8 +56,11 @@ enum RoundSchedule {
 
     /// 경과 e 에서 몇 번째 회인가(0부터). 끝난 뒤에도 마지막 회다.
     static func roundIndex(elapsed e: TimeInterval, roundSeconds: TimeInterval, rounds: Int) -> Int {
-        guard roundSeconds > 0 else { return 0 }
-        return min(max(1, rounds) - 1, max(0, Int((e / roundSeconds).rounded(.down))))
+        // 경과가 무한대·NaN(시계가 크게 튀었거나 깨진 복원 값)이면 `Int(...)` 가 앱을 죽인다 — 첫 회로 본다.
+        guard roundSeconds > 0, e.isFinite else { return 0 }
+        let index = (e / roundSeconds).rounded(.down)
+        // 아주 큰 경과도 `Int` 로 바꾸기 전에 회 수 안으로 자른다(바꾸는 순간 넘치면 죽는다).
+        return Int(min(Double(max(1, rounds) - 1), max(0, index)))
     }
 
     /// 경과 e 에서 이 회에 남은 시간. 마지막 회가 끝나면 음수(오버타임)로 이어진다.

@@ -19,9 +19,15 @@ enum QuickStartPublisher {
 
     /// "자주 쓰는" 순서 — 즐겨찾기 → 쓴 횟수 → 최근 사용 → 만든 날.
     static func ordered(_ templates: [Timer]) -> [Timer] {
-        templates.sorted { a, b in
+        // 쓴 횟수는 기록 관계를 끌어와 센다 — 비교할 때마다 세면 템플릿이 수백 개인 사람은 앱이 뒤로 갈 때마다
+        // 메인 스레드에서 그만큼 기록을 다시 읽어 화면이 멈칫했다. 한 번씩만 센다.
+        let usage = Dictionary(templates.map { (ObjectIdentifier($0), $0.usageCount) },
+                               uniquingKeysWith: { first, _ in first })
+        return templates.sorted { a, b in
+            let aUsage = usage[ObjectIdentifier(a)] ?? 0
+            let bUsage = usage[ObjectIdentifier(b)] ?? 0
             if a.isFavorite != b.isFavorite { return a.isFavorite }
-            if a.usageCount != b.usageCount { return a.usageCount > b.usageCount }
+            if aUsage != bUsage { return aUsage > bUsage }
             switch (a.lastUsedAt, b.lastUsedAt) {
             case let (x?, y?) where x != y: return x > y
             case (.some, nil): return true

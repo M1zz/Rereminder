@@ -11,6 +11,17 @@ import WatchKit
 #endif
 
 struct NotificationService {
+    /// 걷기(`removeAllNotifications`)가 몇 번 있었나.
+    /// ⚠️ 예약은 권한 확인 콜백 안에서 **나중에** 더해진다. 그 사이에 일시정지·정지가 알림을 다 걷으면,
+    ///    늦게 도착한 예약이 걷힌 뒤에 다시 깔려 멈춘 타이머·정지한 타이머의 알림이 울렸다.
+    ///    콜백에서 이 값이 바뀌었으면 더하지 않는다.
+    private static let generationLock = NSLock()
+    private static var generation = 0
+    private static var currentGeneration: Int {
+        generationLock.lock(); defer { generationLock.unlock() }
+        return generation
+    }
+
     func scheduleNotification(timeInterval: TimeInterval, title: String, body: String, identifier: String) {
         guard timeInterval > 0 else {
             print("알림 예약 실패: \(identifier) - 유효하지 않은 시간 간격 (\(timeInterval))")
@@ -24,11 +35,14 @@ struct NotificationService {
         // 기존 알림 제거
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
 
+        let generation = Self.currentGeneration
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if let error = error {
                 print("알림 Request Permission 실패: \(error.localizedDescription)")
                 return
             }
+            // 기다리는 사이 알림을 다 걷었다(일시정지·정지) — 이 예약은 이미 버려진 것이다.
+            guard generation == Self.currentGeneration else { return }
 
             if granted {
                 let content = self.makeContent(title: title, body: body, identifier: identifier)
@@ -52,11 +66,14 @@ struct NotificationService {
         // 기존 알림 제거
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
 
+        let generation = Self.currentGeneration
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
             if let error = error {
                 print("알림 Request Permission 실패: \(error.localizedDescription)")
                 return
             }
+            // 기다리는 사이 알림을 다 걷었다(일시정지·정지) — 이 예약은 이미 버려진 것이다.
+            guard generation == Self.currentGeneration else { return }
 
             if granted {
                 let content = self.makeContent(title: title, body: body, identifier: identifier)
@@ -115,6 +132,9 @@ struct NotificationService {
     }
 
     func removeAllNotifications() {
+        Self.generationLock.lock()
+        Self.generation &+= 1
+        Self.generationLock.unlock()
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
         UNUserNotificationCenter.current().removeAllDeliveredNotifications()
     }

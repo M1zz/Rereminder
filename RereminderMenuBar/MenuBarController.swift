@@ -50,7 +50,8 @@ public final class RRMenuBarController: NSObject {
 
             switch state {
             case "running":
-                guard let end = info["endDate"] as? TimeInterval else { return }
+                // 끝나는 시각이 무한대·NaN 이면 `renderRunning` 의 `Int(...)` 가 초마다 앱을 죽인다 — 받지 않는다.
+                guard let end = info["endDate"] as? TimeInterval, end.isFinite else { return }
                 self.endDate = Date(timeIntervalSince1970: end)
                 self.renderRunning()
                 let ticker = Timer(timeInterval: 1, repeats: true) { [weak self] _ in self?.renderRunning() }

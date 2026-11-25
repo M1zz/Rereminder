@@ -749,6 +749,8 @@ struct TimerUnifiedView: View {
         // 위젯·제어센터에서 눌러 앱을 연 것이면 시작한다.
         // ⚠️ 복원(`restoreTimerIfNeeded`)이 끝난 **뒤**여야 한다 — 도는 타이머를 모른 채 덮어쓰지 않게.
         startRequestedSetupIfAny()
+        // Siri 로 앱을 연 콜드 런치 — scenePhase 변화가 오지 않아 명령이 다음 복귀까지 남아 있었다.
+        handleControlWidgetAction()
 
         // 화면에 보이지 않는 뒷정리는 첫 프레임 뒤로 미룬다 — 그만큼 앱이 먼저 뜬다.
         DispatchQueue.main.async {
@@ -1130,16 +1132,18 @@ struct TimerUnifiedView: View {
 
     private func handleControlWidgetAction() {
         let shared = UserDefaults(suiteName: "group.leeo.toki")
-        guard let action = shared?.string(forKey: "controlWidgetAction") else { return }
-        shared?.removeObject(forKey: "controlWidgetAction")
+        // 오래된 명령은 버린다(`SiriTimerCommand.lifetime`) — 몇 시간 뒤 앱을 연 순간 적용되면 안 된다.
+        guard let action = SiriTimerCommand.take(from: shared) else { return }
 
         switch action {
         case "start":
             if screenVM.state == .idle || screenVM.state == .finished {
                 if let siriDuration = shared?.object(forKey: "siriTimerDuration") as? Int, siriDuration > 0 {
                     shared?.removeObject(forKey: "siriTimerDuration")
-                    screenVM.mainMinutes = siriDuration / 60
-                    screenVM.mainSeconds = siriDuration % 60
+                    // 다이얼이 담을 수 있는 시간으로 자른다 — 넘는 값이 다이얼·시간 시트에 그대로 들어가지 않게.
+                    let seconds = min(siriDuration, TimeMapper.maxSeconds)
+                    screenVM.mainMinutes = seconds / 60
+                    screenVM.mainSeconds = seconds % 60
                     screenVM.initialConfiguration()
                 }
                 screenVM.start()

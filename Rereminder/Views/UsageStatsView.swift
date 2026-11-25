@@ -690,7 +690,9 @@ struct UsageStatsView: View {
     }
 
     private static func format(_ value: Double) -> String {
-        value == value.rounded() ? String(Int(value)) : String(format: "%.1f", value)
+        // 공개 DB 값은 아무 클라이언트나 쓸 수 있다 — 무한대·아주 큰 값을 `Int` 로 바꾸면 화면을 여는 순간 죽는다.
+        guard value.isFinite, abs(value) < 1e15 else { return String(format: "%.1f", value) }
+        return value == value.rounded() ? String(Int(value)) : String(format: "%.1f", value)
     }
 
     /// 전송 키(고정) → 화면 라벨. 모르는 키는 원본 그대로 보여준다.
