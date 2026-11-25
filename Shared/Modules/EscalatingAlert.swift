@@ -213,10 +213,10 @@ enum EscalatingAlert {
     /// 이 기기의 되풀이를 멈춘다 — **아직 오지 않은 것과 이미 떠 있는 것 둘 다.**
     /// ⚠️ 떠 있는 것을 안 치우면 정지를 눌러도 알림 목록에 그대로 남아 "안 먹혔다"로 읽힌다.
     static func cancel(center: UNUserNotificationCenter = .current()) {
-        center.getPendingNotificationRequests { requests in
-            let ids = requests.map(\.identifier).filter { $0.hasPrefix(escalationPrefix) }
-            if !ids.isEmpty { center.removePendingNotificationRequests(withIdentifiers: ids) }
-        }
+        // ⚠️ 아직 오지 않은 것은 **이름을 정해 바로** 걷는다(이름은 `escalate.0` ~ `maxAlerts - 1` 뿐이다).
+        //    목록을 받아 지우면 콜백이 늦게 와서, 걷자마자 다시 깐 되풀이(다른 기기에서 받은 타이머·재개)까지 지웠다.
+        center.removePendingNotificationRequests(
+            withIdentifiers: (0..<EscalationSchedule.maxAlerts).map { "\(escalationPrefix)\($0)" })
         center.getDeliveredNotifications { delivered in
             let ids = delivered.map(\.request.identifier)
                 .filter { $0.hasPrefix(escalationPrefix) || finishIdentifiers.contains($0) }

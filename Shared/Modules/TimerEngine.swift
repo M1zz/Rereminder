@@ -90,6 +90,8 @@ final class TimerEngine {
 
     // MARK: - Notification IDs
     private static let notificationPrefix = "rereminder.timer."
+    /// 마지막으로 걷은 뒤에 깐 알림 이름 — 늦게 온 걷기 콜백이 이것은 지우지 않는다(메인에서만 만진다).
+    private var idsAddedSinceCancel = Set<String>()
 
     #if !APPCLIP
     /// 되풀이 알림 사슬에서 이 기기가 몇 번째인가.
@@ -310,19 +312,21 @@ final class TimerEngine {
     /// 엔진(화면)이 아직 없을 때 들어온 **정지**를 처리한다 — 잠금화면의 정지 버튼이 꺼져 있던 앱을 뒤에서 깨운 경우.
     /// 걸어 둔 알림·되풀이·AlarmKit 알람을 걷고, 저장된 실행 상태를 내려 다음에 열 때 되살리지 않게 한다.
     /// ⚠️ 상태를 남겨 두면 명령이 버려진 뒤(10분) 앱을 열었을 때 알림이 모두 걷힌 "도는" 타이머가 되살아났다.
+    /// ⚠️ **async 로 기다려야 한다** — 뒤에서 깨운 프로세스는 인텐트가 끝나면 곧 멈춘다.
+    ///    목록을 콜백으로 받아 지우면 그 전에 멈춰 정지했는데도 종료 알림이 울렸다.
     @MainActor
-    static func stopWithoutScreen() {
+    static func stopWithoutScreen() async {
         EscalatingAlert.acknowledgeEverywhere()
         RereminderAlarmManager.shared.cancelFinishAlarm()
-        let center = UNUserNotificationCenter.current()
-        center.getPendingNotificationRequests { requests in
-            let ids = requests.map(\.identifier).filter { $0.hasPrefix(Self.notificationPrefix) }
-            if !ids.isEmpty { center.removePendingNotificationRequests(withIdentifiers: ids) }
-        }
         let shared = UserDefaults(suiteName: Self.sharedSuiteName)
         shared?.set(false, forKey: "timerIsRunning")
         shared?.set(false, forKey: "timerIsPaused")
         WidgetCenter.shared.reloadAllTimelines()
+        let center = UNUserNotificationCenter.current()
+        let ids = await center.pendingNotificationRequests()
+            .map(\.identifier)
+            .filter { $0.hasPrefix(Self.notificationPrefix) }
+        if !ids.isEmpty { center.removePendingNotificationRequests(withIdentifiers: ids) }
     }
     #endif
 
@@ -535,7 +539,7 @@ final class TimerEngine {
             )
             let id = "\(Self.notificationPrefix)finish"
             let request = UNNotificationRequest(identifier: id, content: content, trigger: trigger)
-            center.add(request)
+            addNotification(request, center: center)
 
             #if !APPCLIP
             // 확인할 때까지 다시 부른다. 켠 사람에게만 간다(기본값은 꺼짐).
@@ -580,7 +584,7 @@ final class TimerEngine {
                 repeats: false
             )
             let id = "\(Self.notificationPrefix)\(event.identifierSuffix)"
-            center.add(UNNotificationRequest(identifier: id, content: content, trigger: trigger))
+            addNotification(UNNotificationRequest(identifier: id, content: content, trigger: trigger), center: center)
         }
     }
 
@@ -629,14 +633,31 @@ final class TimerEngine {
         Task { @MainActor in RereminderAlarmManager.shared.cancelFinishAlarm() }
         #endif
 
+        // ⚠️ 목록은 늦게 돌아온다 — 다른 기기에서 받은 타이머·재개는 걷자마자 **같은 이름으로** 다시 깐다.
+        //    늦게 온 콜백이 그대로 지우면 방금 깐 종료·예비 알림까지 지워져 타이머가 소리 없이 끝났다.
+        //    그래서 걷은 뒤에 새로 깐 이름(`idsAddedSinceCancel`)은 빼고 지운다.
+        idsAddedSinceCancel.removeAll()
         let center = UNUserNotificationCenter.current()
-        center.getPendingNotificationRequests { requests in
-            let ids = requests
+        center.getPendingNotificationRequests { [weak self] requests in
+            let pending = requests
                 .map(\.identifier)
                 .filter { $0.hasPrefix(Self.notificationPrefix) }
-            if !ids.isEmpty {
-                center.removePendingNotificationRequests(withIdentifiers: ids)
+            guard !pending.isEmpty else { return }
+            DispatchQueue.main.async {
+                let keep = self?.idsAddedSinceCancel ?? []
+                let ids = pending.filter { !keep.contains($0) }
+                if !ids.isEmpty {
+                    center.removePendingNotificationRequests(withIdentifiers: ids)
+                }
             }
+        }
+    }
+
+    /// 알림을 깔고 실패하면 남긴다 — 예약 예산(64개)을 넘겼거나 권한이 없으면 조용히 안 울린다.
+    private func addNotification(_ request: UNNotificationRequest, center: UNUserNotificationCenter) {
+        idsAddedSinceCancel.insert(request.identifier)
+        center.add(request) { error in
+            if let error { print("❌ 타이머 알림 예약 실패(\(request.identifier)): \(error.localizedDescription)") }
         }
     }
 }

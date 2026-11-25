@@ -85,7 +85,8 @@ struct StopIntent: LiveActivityIntent {
         if !LiveActivityCommand.stop.dispatch() {
             LiveActivityController.endAll()
             // 표시만 지우면 끝날 시각에 알림이 그대로 울린다 — 걸어 둔 것도 걷는다.
-            LiveActivityCommand.cancelScheduledAlertsWhenUnhandled?()
+            // ⚠️ 끝까지 기다린다 — 뒤에서 깨운 실행은 perform 이 돌아오면 곧 멈춰 걷기가 안 끝날 수 있다.
+            await LiveActivityCommand.cancelScheduledAlertsWhenUnhandled?()
         }
         return .result()
     }

@@ -56,7 +56,7 @@ struct RereminderApp: App {
         AnalyticsManager.eventSink = { ActivityReporter.log($0) }
 
         // 잠금화면 정지 버튼이 화면 없이 깨운 실행에서도 걸어 둔 알림을 걷게 한다(`LiveActivityCommand`).
-        LiveActivityCommand.cancelScheduledAlertsWhenUnhandled = { TimerEngine.stopWithoutScreen() }
+        LiveActivityCommand.cancelScheduledAlertsWhenUnhandled = { await TimerEngine.stopWithoutScreen() }
 
         // 크래시 루프 판정은 무엇보다 먼저 — 아래 시작 작업 중 하나가 원인일 수 있다.
         let safeLaunch = Self.launchGuard.beginLaunch()

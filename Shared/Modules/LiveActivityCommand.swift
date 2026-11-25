@@ -35,7 +35,7 @@ enum LiveActivityCommand: String, Codable {
     /// 앱이 켜질 때 채운다(`RereminderApp.init`). 확장에는 알림을 걷는 코드가 없어 앱이 넘겨준다.
     /// ⚠️ 없으면 앱이 꺼진 채 잠금화면에서 정지를 누른 사람에게 활동만 사라지고, 끝날 시각에 종료 알림·알람이
     ///    그대로 울렸다(10분 안에 앱을 열지 않으면 명령도 버려져 끝내 울린다).
-    @MainActor static var cancelScheduledAlertsWhenUnhandled: (() -> Void)?
+    @MainActor static var cancelScheduledAlertsWhenUnhandled: (@MainActor () async -> Void)?
 
     /// 남기고(앱이 화면을 아직 안 만들었어도) 알리고(살아 있으면 즉시) — 버튼이 해야 할 일의 절반이다.
     ///
