@@ -1080,7 +1080,7 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
 - ⚠️ **HomeKit 은 앱이 앞에 있을 때만 기기를 조작한다.** 그래서 `TimerEngine.onPreAlert`·`onFinish` 에만 붙였다(타이머 중 화면이 켜져 있어 대부분 이 경우다).
   화면이 꺼진 뒤를 맡으려면 홈 허브 자동화(`HMTimerTrigger`)인데, SDK 헤더 기준 **초는 0이어야 하고 최대 1분 늦게 돈다** — "1분 전"은 못 맞춘다. 1단계 사용을 본 뒤 정한다.
 - ⚠️ 기본값 꺼짐, 권한은 설정에서 켜는 순간 묻고 거부되면 토글을 되돌린다. 집 목록은 타이머를 걸 때 미리 연다(`activateIfEnabled`) — 첫 종에서 열면 그 종을 놓친다.
-- ⚠️ **아직 숨어 있다**(`HomeLightSettings.entitlementReady = false`). 포털 App ID 에 HomeKit 을 켜기 전에 엔타이틀먼트를 넣으면 서명이 실패한다. 켜는 순서는 `docs/OPERATIONS_CHECKLIST.md` 10번.
+- ⚠️ 포털 App ID(com.xa.toki)에 HomeKit 을 켜고(2026-11-26) 엔타이틀먼트를 넣었다(`entitlementReady = true`). 엔타이틀먼트를 지울 거면 이 값부터 false 로 — 엔타이틀먼트 없이 HomeKit 을 열면 조명이 안 바뀐다.
 - visionOS 는 뺀다. 테스트: `HomeLightPlanTests`
 
 ### 다이얼 햅틱 — 값이 바뀔 때만 딸깍

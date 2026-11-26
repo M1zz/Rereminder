@@ -57,7 +57,7 @@ enum HomeLightSettings {
     /// ⚠️ 포털의 App ID(com.xa.toki)에 HomeKit 을 켜기 전에 엔타이틀먼트를 넣으면 기기·맥 서명이 실패해
     ///    배포가 막힌다(2026-11-26 확인, `-allowProvisioningUpdates` 로도 저절로 켜지지 않는다).
     ///    순서: 포털에서 켜기 → 두 엔타이틀먼트 파일에 키 추가 → 이 값을 true. `docs/OPERATIONS_CHECKLIST.md` 10번.
-    static let entitlementReady = false
+    static let entitlementReady = true
 
     /// 설정에 이 기능을 보일까 (visionOS 는 뺀다).
     static var isSupported: Bool {

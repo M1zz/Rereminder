@@ -150,11 +150,11 @@ CloudKit 허브가 담당). 분석 관련 대시보드 작업은 3번(사용 통
 
 
 ## 10. 조명으로 알리기 (HomeKit) — 켜려면 사람이 할 일 (2026-11-26)
-코드는 들어가 있지만 `HomeLightSettings.entitlementReady = false` 라 설정에 보이지 않는다.
+2026-11-26 에 포털에서 켜고 엔타이틀먼트를 넣어 열었다. 남은 것은 실기기 확인이다.
 ⚠️ 순서를 지킬 것 — 포털보다 엔타이틀먼트를 먼저 넣으면 기기·맥 서명이 실패해 배포가 막힌다
 ("Entitlement com.apple.developer.homekit not found", `-allowProvisioningUpdates` 로도 저절로 안 켜진다).
-- [ ] developer.apple.com ▸ Identifiers ▸ `com.xa.toki` ▸ **HomeKit** 켜기
-- [ ] `Rereminder/Rereminder.entitlements` · `Rereminder/Rereminder-macCatalyst.entitlements` 에 `com.apple.developer.homekit` = true
-- [ ] `Rereminder/Modules/HomeLightAlert.swift` 의 `entitlementReady` 를 true
+- [x] developer.apple.com ▸ Identifiers ▸ `com.xa.toki` ▸ **HomeKit** 켜기
+- [x] `Rereminder/Rereminder.entitlements` · `Rereminder/Rereminder-macCatalyst.entitlements` 에 `com.apple.developer.homekit` = true
+- [x] `Rereminder/Modules/HomeLightAlert.swift` 의 `entitlementReady` 를 true
 - [ ] 기기·맥 빌드 확인 → 실기기에서 설정 ▸ 알림 ▸ 조명으로 알리기 ▸ 전구 고르기 ▸ 시험해 보기
 - [ ] 타이머를 걸어 예비 알림에 구간 색으로, 끝에 빨강으로 바뀌는지, 정지하면 원래 색으로 돌아오는지

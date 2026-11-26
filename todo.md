@@ -4,7 +4,7 @@
 - [x] 예비 알림·회·종료에 고른 전구를 구간 색 / 빨강으로, 정지하면 원래대로(`HomeLightAlert.swift`)
 - [x] 설정 ▸ 알림 ▸ 조명으로 알리기(전구 고르기·방식·시험), 25개 언어, 권한 문구
 - [x] 테스트 `HomeLightPlanTests` 6개
-- [ ] **포털에서 HomeKit 켜기 → 엔타이틀먼트 → `entitlementReady = true`** (`docs/OPERATIONS_CHECKLIST.md` 10번) — 지금은 설정에 안 보인다
+- [x] 포털에서 HomeKit 켜기 → 엔타이틀먼트 → `entitlementReady = true` (iOS 기기·맥 빌드 서명 통과)
 - [ ] 실기기에서 실제 전구로 확인(시뮬레이터에는 전구가 없다)
 - [ ] 2단계(화면 꺼진 뒤, `HMTimerTrigger` 1분 단위)는 쓰는 사람이 있는지 본 뒤 정하기
 
