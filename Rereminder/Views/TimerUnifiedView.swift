@@ -232,6 +232,14 @@ struct TimerUnifiedView: View {
         FeatureTips.markPresentationModeUsed()
     }
 
+    /// 첫 실행 그림 · 스크린샷 장면(UI 시험도 이것으로 연다)에서는 축하 · 감사 카드를 띄우지 않는다.
+    private var showsCelebrations: Bool {
+        #if DEBUG
+        if ScreenshotScene.isActive { return false }
+        #endif
+        return !showOnboarding
+    }
+
     var body: some View {
         mainContent
             // 첫 실행의 그림은 **덮는다** — 시트로 띄우면 뒤의 화면이 먼저 비쳤다가 올라온다.
@@ -255,7 +263,7 @@ struct TimerUnifiedView: View {
             }
             // 유료가 되면 축하, 모든 사용자에게 한 번은 감사 인사 (LeeoKit). 첫 실행 그림이 끝난 뒤에 선다.
             .overlay {
-                if !showOnboarding {
+                if showsCelebrations {
                     Color.clear.leeoCelebrations(appName: RereminderSpec.displayName)
                 }
             }
