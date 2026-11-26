@@ -1,5 +1,13 @@
 # Rereminder 작업 메모
 
+## 조명으로 알리기 (HomeKit) 1단계 (2026-11-26)
+- [x] 예비 알림·회·종료에 고른 전구를 구간 색 / 빨강으로, 정지하면 원래대로(`HomeLightAlert.swift`)
+- [x] 설정 ▸ 알림 ▸ 조명으로 알리기(전구 고르기·방식·시험), 25개 언어, 권한 문구
+- [x] 테스트 `HomeLightPlanTests` 6개
+- [ ] **포털에서 HomeKit 켜기 → 엔타이틀먼트 → `entitlementReady = true`** (`docs/OPERATIONS_CHECKLIST.md` 10번) — 지금은 설정에 안 보인다
+- [ ] 실기기에서 실제 전구로 확인(시뮬레이터에는 전구가 없다)
+- [ ] 2단계(화면 꺼진 뒤, `HMTimerTrigger` 1분 단위)는 쓰는 사람이 있는지 본 뒤 정하기
+
 ## 알림 걷기 경합 — 다른 기기 타이머가 소리 없이 끝남 (2026-11-25)
 - [x] 걷기(`cancelScheduledNotifications`)가 대기 목록을 콜백으로 받아 지워, 걷자마자 같은 이름으로 다시 깐 종료·예비 알림까지 늦게 지웠다(다른 기기에서 받은 타이머·재개) — 걷은 뒤 새로 깐 이름은 빼고 지운다(`TimerEngine.idsAddedSinceCancel`)
 - [x] 되풀이 알림 걷기도 같은 경합 — 이름이 정해져 있어 바로 걷는다(`EscalatingAlert.cancel`)

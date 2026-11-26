@@ -484,6 +484,162 @@
           }
         }
       }
+    },
+    "NSHomeKitUsageDescription" : {
+      "comment" : "Shown when the app asks for Home access (설정 > 알림 > 조명으로 알리기)",
+      "extractionState" : "manual",
+      "localizations" : {
+        "ar" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "يغيّر Rereminder لون الأضواء التي تختارها عندما يرن تنبيه المؤقت."
+          }
+        },
+        "cs" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder mění barvu vybraných světel, když zazní upozornění časovače."
+          }
+        },
+        "da" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder skifter farven på de lamper, du vælger, når en timerpåmindelse lyder."
+          }
+        },
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder ändert die Farbe der ausgewählten Lampen, wenn eine Timer-Erinnerung ertönt."
+          }
+        },
+        "el" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Το Rereminder αλλάζει το χρώμα των φώτων που επιλέγετε όταν χτυπά μια ειδοποίηση χρονομέτρου."
+          }
+        },
+        "en-GB" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder changes the colour of the lights you choose when a timer alert rings."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder cambia el color de las luces que elijas cuando suena un aviso del temporizador."
+          }
+        },
+        "fi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder vaihtaa valitsemiesi valojen väriä, kun ajastimen muistutus soi."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder change la couleur des lumières choisies quand une alerte du minuteur sonne."
+          }
+        },
+        "id" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder mengubah warna lampu yang Anda pilih saat pengingat timer berbunyi."
+          }
+        },
+        "it" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder cambia il colore delle luci che scegli quando suona un avviso del timer."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイマーの通知が鳴ったときに、選んだ照明の色を変えるためにホームデータを使用します。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "타이머 알림이 울릴 때 고른 조명의 색을 바꾸기 위해 홈 데이터에 접근합니다."
+          }
+        },
+        "nb" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder endrer fargen på lysene du velger når et timervarsel ringer."
+          }
+        },
+        "nl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder verandert de kleur van de gekozen lampen als er een timermelding klinkt."
+          }
+        },
+        "pl" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder zmienia kolor wybranych świateł, gdy rozlegnie się alert minutnika."
+          }
+        },
+        "pt-BR" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Rereminder muda a cor das luzes que você escolher quando um alerta do timer tocar."
+          }
+        },
+        "pt-PT" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "O Rereminder muda a cor das luzes que escolher quando um alerta do temporizador toca."
+          }
+        },
+        "ru" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder меняет цвет выбранных светильников, когда звучит сигнал таймера."
+          }
+        },
+        "sv" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder ändrar färgen på lamporna du väljer när en timerpåminnelse ljuder."
+          }
+        },
+        "th" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder จะเปลี่ยนสีไฟที่คุณเลือกเมื่อการแจ้งเตือนของตัวจับเวลาดัง"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder, bir zamanlayıcı uyarısı çaldığında seçtiğiniz ışıkların rengini değiştirir."
+          }
+        },
+        "vi" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rereminder đổi màu các đèn bạn chọn khi lời nhắc hẹn giờ reo."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "计时器提醒响起时，Rereminder 会更改你所选灯光的颜色。"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "計時器提醒響起時，Rereminder 會變更你所選燈光的顏色。"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

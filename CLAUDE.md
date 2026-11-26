@@ -1073,6 +1073,16 @@ false 를 적었다. 그런데 `Transaction.currentEntitlements` 는 **App Store
   않는 죽은 코드였고, 무엇보다 `AlarmAttributes`·`AlarmPresentation`·`AlarmButton` 이라는
   **AlarmKit 의 실제 타입 이름을 그대로 가리고 있었다.**
 
+### 조명으로 알리기 (HomeKit) — 앱이 떠 있을 때만
+`Rereminder/Modules/HomeLightAlert.swift` + `Views/HomeLightSettingsView.swift`(설정 ▸ 알림). 제보(2026-11-26): "조명 색의 변화로 할 일을 알아차리기".
+- 예비 알림이 울리면 고른 전구가 **이제 시작되는 구간의 색**(`HomeLightPlan.sectionShades`, `SectionPalette` 와 같은 순서·개수)으로, 끝나면 빨강. 색이 없는 전구는 두 번 깜빡인다.
+  방식은 둘: 잠깐(4초) 바뀌고 돌아오기(기본) / 다음 알림까지 그대로. 바꾸기 전 값을 한 번만 떠 두었다가 정지할 때 돌려놓는다.
+- ⚠️ **HomeKit 은 앱이 앞에 있을 때만 기기를 조작한다.** 그래서 `TimerEngine.onPreAlert`·`onFinish` 에만 붙였다(타이머 중 화면이 켜져 있어 대부분 이 경우다).
+  화면이 꺼진 뒤를 맡으려면 홈 허브 자동화(`HMTimerTrigger`)인데, SDK 헤더 기준 **초는 0이어야 하고 최대 1분 늦게 돈다** — "1분 전"은 못 맞춘다. 1단계 사용을 본 뒤 정한다.
+- ⚠️ 기본값 꺼짐, 권한은 설정에서 켜는 순간 묻고 거부되면 토글을 되돌린다. 집 목록은 타이머를 걸 때 미리 연다(`activateIfEnabled`) — 첫 종에서 열면 그 종을 놓친다.
+- ⚠️ **아직 숨어 있다**(`HomeLightSettings.entitlementReady = false`). 포털 App ID 에 HomeKit 을 켜기 전에 엔타이틀먼트를 넣으면 서명이 실패한다. 켜는 순서는 `docs/OPERATIONS_CHECKLIST.md` 10번.
+- visionOS 는 뺀다. 테스트: `HomeLightPlanTests`
+
 ### 다이얼 햅틱 — 값이 바뀔 때만 딸깍
 `Rereminder/Modules/Haptics.swift`. 제보: *"Haptics are needed when adjusting timer."*
 

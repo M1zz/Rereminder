@@ -15,5 +15,7 @@
 	</array>
 	<key>NSAlarmKitUsageDescription</key>
 	<string>Rereminder uses alarms so the end of a timer can wake you even in Silent Mode.</string>
+	<key>NSHomeKitUsageDescription</key>
+	<string>Rereminder changes the color of the lights you choose when a timer alert rings.</string>
 </dict>
 </plist>

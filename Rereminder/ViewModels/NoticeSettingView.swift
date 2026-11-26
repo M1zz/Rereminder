@@ -450,6 +450,16 @@ struct NoticeSettingView: View {
 
             PersistentAlertSection()
 
+            if HomeLightSettings.isSupported {
+                Section {
+                    NavigationLink {
+                        HomeLightSettingsView()
+                    } label: {
+                        Label(String(localized: "Alert with lights"), systemImage: "lightbulb")
+                    }
+                }
+            }
+
             // 권한 거부 경고 배너
             if appStateManager.notificationAuthStatus == .denied {
                 Section {

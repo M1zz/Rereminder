@@ -71,6 +71,8 @@ final class TimerViewModel: ObservableObject {
             let message = template.getPrealertMessage(for: sec)
             self.showToast?(message)
             self.appStateManager?.sendNotificationIfNeeded(message)
+            HomeLightController.shared.bellRang(seconds: sec,
+                                                offsets: template.prealertOffsetsSec)
         }
 
         engine.onRoundChange = { [weak self] round in
@@ -80,6 +82,7 @@ final class TimerViewModel: ObservableObject {
             let message = String(localized: "Round \(round + 1) of \(self.rounds)")
             self.showToast?(message)
             self.appStateManager?.sendNotificationIfNeeded(message)
+            HomeLightController.shared.roundBegan()
         }
 
         engine.onFinish = { [weak self] in
@@ -88,6 +91,7 @@ final class TimerViewModel: ObservableObject {
             let message = self.currentTemplate?.getFinishMessage() ?? String(localized: "Timer finished")
             self.showToast?(message)
             self.appStateManager?.sendNotificationIfNeeded(message)
+            HomeLightController.shared.finished()
 
             switch ProGate.evaluate(.overtimeTracking) {
             case .allowed, .allowedWithTrial:
@@ -214,6 +218,8 @@ final class TimerViewModel: ObservableObject {
         engine.start()
         currentRound = 0
         state = .running
+        // 조명을 켜 둔 사람이면 집 목록을 미리 읽어 둔다 — 첫 종에서 열면 그 종은 놓친다.
+        HomeLightController.shared.activateIfEnabled()
 
         // 같은 설정을 여러 날 반복해서 거는지 남긴다 — 그 반복을 앱이 먼저 알아채고
         // "저장해 둘까요?"라고 묻는 근거다(`RepeatDetector`).
@@ -279,6 +285,7 @@ final class TimerViewModel: ObservableObject {
         currentRound = 0
         state = .idle
         endLiveActivity()
+        HomeLightController.shared.timerStopped()
         WatchConnectivityManager.shared.sendTimerStop()
         timerStartTime = nil
 
@@ -372,6 +379,7 @@ final class TimerViewModel: ObservableObject {
         engine.stop()
         state = .idle
         endLiveActivity()
+        HomeLightController.shared.timerStopped()
         timerStartTime = nil
     }
 

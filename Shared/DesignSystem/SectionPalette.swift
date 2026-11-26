@@ -15,6 +15,9 @@ enum SectionPalette {
     private static let colors: [Color] = [.blue, .green, .purple, .teal, .pink, .indigo]
 
     /// 구간 인덱스(경과 순서, 0부터) → 색. 구간이 팔레트보다 많으면 처음부터 다시 쓴다.
+    /// 색 개수 — 조명 색 표(`HomeLightPlan.sectionShades`)가 같은 순서·같은 개수여야 한다.
+    static var count: Int { colors.count }
+
     static func color(_ index: Int) -> Color {
         colors[abs(index) % colors.count]
     }
