@@ -53,6 +53,23 @@ struct TimerMainView: View {
     @State private var isEditingSectionName = false
     @State private var editingHoldTask: Task<Void, Never>?
 
+    /// 원을 비키고 구간 목록이 화면을 다 쓰는 때 — 이름을 고치는 중이고, 그 목록이 실제로 서 있을 때만.
+    ///
+    /// ⚠️ `isEditingSectionName` 을 그대로 읽지 말 것. 그 값은 포커스 변화로만 풀리는데, 설정에 다녀오거나
+    ///    목록이 화면에서 빠지면(세션 모드 끄기·시작) 포커스 변화가 오지 않아 참으로 남는다. 그러면 원이 —
+    ///    그 안의 시작·정지 버튼까지 — 사라진 채 돌아오지 않았다(제보 2026-11-26, 앱을 강제 종료해야 했다).
+    ///    도는 동안 정지 버튼을 가리는 일은 어떤 경우에도 없어야 한다.
+    private var isNamingSections: Bool {
+        isEditingSectionName && isPresentationMode && isTimeEditable
+    }
+
+    /// 이름 고치기를 끝난 것으로 되돌린다(화면에 돌아올 때·시작할 때·세션 모드를 끌 때).
+    private func endSectionNaming() {
+        editingHoldTask?.cancel()
+        focusedSectionIndex = nil
+        isEditingSectionName = false
+    }
+
     /// 구간 번호를 지금 보여도 되는지 — 움직임이 멎고 나서 켠다.
     @State private var sectionNumbersVisible = false
     @State private var sectionNumbersTask: Task<Void, Never>?
@@ -332,7 +349,7 @@ struct TimerMainView: View {
                         screenVM: screenVM,
                         focusedSectionIndex: $focusedSectionIndex,
                         segments: derivedSegments,
-                        maxHeight: isEditingSectionName || isSideBySide ? .infinity : availableHeight * 0.4,
+                        maxHeight: isNamingSections || isSideBySide ? .infinity : availableHeight * 0.4,
                         isEditable: isTimeEditable
                     )
                         .transition(.move(edge: .bottom).combined(with: .opacity))
@@ -397,7 +414,7 @@ struct TimerMainView: View {
                     // 대본을 읽는 동안: 원은 위에 바로 붙는다. 남는 높이는 전부 글 몫이다.
                     Color.clear.frame(height: stackGap)
                 } else if !isSideBySide {
-                    if !isEditingSectionName {
+                    if !isNamingSections {
                         // 세로: 원 위는 비워 둔다. 주인공은 원과 시작 버튼이고, 알림 칩은 원 아래 묶음에 있다.
                         Color.clear
                             .frame(height: availableHeight * (isPresentationMode ? 0.015 : 0.08))
@@ -410,7 +427,7 @@ struct TimerMainView: View {
                     }
                 }
 
-                if !isEditingSectionName {
+                if !isNamingSections {
                     // 가로: 왼쪽 절반의 가운데. 세로: 위아래 Spacer 사이.
                     // 대본을 읽는 가로 화면: 원은 제 몫만 차지하고 나머지 폭은 글이 쓴다.
                     dial.frame(maxWidth: isSideBySide && !isPrompting ? .infinity : nil,
@@ -422,7 +439,7 @@ struct TimerMainView: View {
                     Color.clear.frame(height: stackGap)
                 } else if !isSideBySide {
                     // 세로: 원 **아래** 신축 공간(위 것과 같은 몫). 원이 빠졌으면 목록이 막대에 붙지 않게 한 칸만.
-                    if !isEditingSectionName {
+                    if !isNamingSections {
                         Spacer(minLength: stackGap)
                     } else {
                         Color.clear.frame(height: stackGap)
@@ -437,18 +454,18 @@ struct TimerMainView: View {
                 cluster
                     .frame(maxWidth: isSideBySide ? .infinity : nil,
                            maxHeight: isSideBySide || isPrompting ? .infinity : nil,
-                           alignment: isEditingSectionName || isPrompting ? .top : .center)
+                           alignment: isNamingSections || isPrompting ? .top : .center)
                     // 가로: 화면은 아래 막대 밑까지 깔려 있다 — 목록이 막대에 덮이지 않게 비우되,
                     // 위에도 같은 만큼 비워 원과 같은 가운데에 선다. 세로: 묶음은 화면 아래에 붙는다.
                     .padding(.vertical, isSideBySide ? bottomBarInset : 0)
                     .padding(.bottom, isSideBySide ? 0 : stackGap)
 
                 // 세로에서 원이 없을 때는 목록을 위에 붙인다(카드가 적으면 가운데에 떠 보인다)
-                if !isSideBySide && isEditingSectionName { Spacer(minLength: 0) }
+                if !isSideBySide && isNamingSections { Spacer(minLength: 0) }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             // 원이 빠지고 목록이 커진다 — 두 변화가 한 몸으로 움직여야 매끄럽다
-            .animation(.easeInOut(duration: 0.28), value: isEditingSectionName)
+            .animation(.easeInOut(duration: 0.28), value: isNamingSections)
             // 세션 모드를 켜고 끄거나 대본이 펼쳐질 때 원이 제 크기·자리로 미끄러져 간다(뚝 바뀌지 않게)
             .animation(reduceMotion ? nil : .spring(response: 0.45, dampingFraction: 0.9), value: isPresentationMode)
             .animation(reduceMotion ? nil : .spring(response: 0.45, dampingFraction: 0.9), value: isPrompting)
@@ -724,6 +741,7 @@ struct TimerMainView: View {
             deferSectionNumbers()
             // 되살린 타이머는 막 건 것이 아니다
             runningHintExpired = screenVM.state == .running
+            endSectionNaming()
         }
         // 값이 바뀔 때마다 숫자를 감추고 다시 예약한다 (드래그 중엔 계속 밀린다)
         .onChange(of: screenVM.mainAngle) { _, _ in deferSectionNumbers() }
@@ -737,6 +755,10 @@ struct TimerMainView: View {
         }
         .onChange(of: screenVM.state) { _, state in
             updateRunningHint(to: state)
+            if !isTimeEditable { endSectionNaming() }
+        }
+        .onChange(of: isPresentationMode) { _, on in
+            if !on { endSectionNaming() }
         }
         .onChange(of: focusedSectionIndex) { _, index in
             editingHoldTask?.cancel()
