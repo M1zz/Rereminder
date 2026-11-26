@@ -384,6 +384,16 @@ struct NoticeSettingView: View {
                 }
                 .foregroundStyle(.primary)
 
+                // 보낸 의견 · 답장 · 채택 선물 — 보낸 의견이 있을 때만 선다 (LeeoKit)
+                LeeoSentFeedbackRow<RereminderSpec>()
+
+                // Siri와 단축어 — 이 앱의 단축어 이름과 Siri 에게 할 말 (LeeoKit)
+                if !LeeoShortcuts.current.isEmpty {
+                    NavigationLink { LeeoShortcutsView(appName: RereminderSpec.displayName) } label: {
+                        Label(LeeoShortcutsText.entry, systemImage: "square.2.layers.3d")
+                    }
+                }
+
                 // 백업 및 복원 (LeeoKit 금고) — 문구는 LeeoKit 이 언어마다 갖고 있다.
                 NavigationLink { LeeoVaultView(appName: RereminderSpec.displayName) } label: {
                     Label(LeeoVaultText.entry, systemImage: "externaldrive.badge.timemachine")

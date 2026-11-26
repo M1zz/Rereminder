@@ -9,6 +9,164 @@ DeployBar 가 배포할 때 아래 버전 절의 언어별 문구를 읽어 스�
 사용자에게 무엇이 좋아졌는지만 쓴다. 내부 구조나 빌드 설정 이야기는 쓰지 않는다.
 언어마다 다시 쓴다. 기계번역하지 말고 항목 수와 순서만 맞춘다.
 
+## 2.3.14
+
+### 앱스토어 (한국어)
+
+보낸 의견이 채택되면 감사 선물을 드려요
+더 안정적으로 움직이도록 다듬었어요
+자잘한 문제를 고쳤어요
+
+### App Store (English)
+
+Get a thank-you gift when we use your idea
+Smoother and more reliable overall
+Small fixes and improvements
+
+### App Store (en-GB)
+
+Get a thank-you gift when we use your idea
+Smoother and more reliable overall
+Small fixes and improvements
+
+### App Store (Japanese)
+
+ご意見が採用されるとお礼のギフトが届きます
+全体的に動作がより安定しました
+細かな不具合を修正しました
+
+### App Store (zh-Hans)
+
+你的建议被采纳后，会收到一份感谢礼物
+整体运行更加稳定流畅
+修复了一些小问题
+
+### App Store (zh-Hant)
+
+你的建議被採納後，會收到一份感謝禮物
+整體運作更加穩定流暢
+修正了一些小問題
+
+### App Store (German)
+
+Danke-Geschenk für umgesetzte Vorschläge
+Läuft jetzt stabiler und flüssiger
+Kleine Fehler behoben
+
+### App Store (French)
+
+Un cadeau si nous retenons votre idée
+Plus stable et plus fluide
+Petites corrections et améliorations
+
+### App Store (Spanish)
+
+Si adoptamos tu idea, te enviamos un regalo
+Funciona de forma más estable y fluida
+Correcciones y pequeñas mejoras
+
+### App Store (pt-BR)
+
+Ganhe um presente se usarmos sua ideia
+Mais estável e fluido
+Pequenas correções e melhorias
+
+### App Store (pt-PT)
+
+Receba uma oferta se usarmos a sua ideia
+Funciona de forma mais estável
+Pequenas correções e melhorias
+
+### App Store (Italian)
+
+Un regalo se scegliamo la tua idea
+Più stabile e fluida
+Piccole correzioni e migliorie
+
+### App Store (Russian)
+
+Если мы примем ваш отзыв, вас ждёт подарок
+Приложение работает стабильнее
+Исправлены мелкие ошибки
+
+### App Store (Czech)
+
+Za přijatý návrh dostanete dárek
+Stabilnější a plynulejší chod
+Drobné opravy a vylepšení
+
+### App Store (Danish)
+
+Få en gave, når vi bruger din idé
+Kører mere stabilt og glat
+Små rettelser og forbedringer
+
+### App Store (Greek)
+
+Ένα δώρο αν υιοθετήσουμε την ιδέα σας
+Πιο σταθερή και ομαλή λειτουργία
+Μικρές διορθώσεις και βελτιώσεις
+
+### App Store (Finnish)
+
+Saat lahjan, kun toteutamme ideasi
+Toimii vakaammin ja sujuvammin
+Pieniä korjauksia ja parannuksia
+
+### App Store (Indonesian)
+
+Dapatkan hadiah saat ide Anda kami pakai
+Berjalan lebih stabil dan lancar
+Perbaikan kecil dan peningkatan
+
+### App Store (Norwegian)
+
+Få en gave når vi bruker ideen din
+Kjører mer stabilt og jevnt
+Små rettelser og forbedringer
+
+### App Store (Dutch)
+
+Een cadeau als we jouw idee gebruiken
+Werkt stabieler en soepeler
+Kleine verbeteringen en reparaties
+
+### App Store (Polish)
+
+Prezent, gdy wykorzystamy Twój pomysł
+Działa stabilniej i płynniej
+Drobne poprawki i ulepszenia
+
+### App Store (Swedish)
+
+Få en gåva när vi använder din idé
+Går stabilare och smidigare
+Små rättningar och förbättringar
+
+### App Store (Thai)
+
+รับของขวัญเมื่อเรานำไอเดียของคุณไปใช้
+ทำงานได้ลื่นไหลและเสถียรขึ้น
+แก้ไขปัญหาเล็กน้อย
+
+### App Store (Turkish)
+
+Fikriniz kullanılırsa size bir hediye
+Daha kararlı ve akıcı çalışıyor
+Küçük düzeltmeler ve iyileştirmeler
+
+### App Store (Vietnamese)
+
+Nhận quà khi góp ý của bạn được chọn
+Hoạt động ổn định và mượt mà hơn
+Sửa một số lỗi nhỏ
+
+### App Store (Arabic)
+
+هدية شكر عندما نعتمد اقتراحك
+أداء أكثر ثباتًا وسلاسة
+إصلاحات وتحسينات صغيرة
+
 ## 2.3.13
 
 ### 앱스토어 (한국어, ko)

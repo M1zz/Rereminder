@@ -253,6 +253,12 @@ struct TimerUnifiedView: View {
                         .transition(.opacity)
                 }
             }
+            // 유료가 되면 축하, 모든 사용자에게 한 번은 감사 인사 (LeeoKit). 첫 실행 그림이 끝난 뒤에 선다.
+            .overlay {
+                if !showOnboarding {
+                    Color.clear.leeoCelebrations(appName: RereminderSpec.displayName)
+                }
+            }
             .fullScreenCover(item: $activeLesson) { lesson in
                 FeatureLessonView(lesson: lesson, onClose: { activeLesson = nil })
             }
